@@ -38,24 +38,26 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.wrapper.characters.holder.WrapperCharacterHolder;
 
+//tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         objectType = "demo.WrapperCharacterJdoEntity"
 )
-public class WrapperCharacterJdoEntity
-        implements HasAsciiDocDescription,
-        WrapperCharacterHolder {
+public class WrapperCharacterJdoEntity                                          // <.>
+        implements HasAsciiDocDescription, WrapperCharacterHolder {
 
+//end::class[]
     public WrapperCharacterJdoEntity(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "Character (wrapper) JDO entity: ")
     @Getter @Setter
-    private Character readOnlyProperty;
+    private Character readOnlyProperty;                                         // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -66,9 +68,10 @@ public class WrapperCharacterJdoEntity
     @Getter @Setter
     private Character readWriteProperty;
 
-    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @Column(allowsNull = "true")
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)    // <.>
+    @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private Character readWriteOptionalProperty;
 
 }
+//end::class[]

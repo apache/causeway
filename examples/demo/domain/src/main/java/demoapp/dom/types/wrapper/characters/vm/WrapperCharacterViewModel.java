@@ -50,15 +50,16 @@ import demoapp.dom.types.wrapper.characters.holder.WrapperCharacterHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperCharacterViewModel
-        implements HasAsciiDocDescription,
-        WrapperCharacterHolder {
+        implements HasAsciiDocDescription, WrapperCharacterHolder {
 
-    public WrapperCharacterViewModel(Character initialValue) {                  // <.>
+//end::class[]
+    public WrapperCharacterViewModel(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "Character (wrapper) view model: ")
     @XmlElement(required = true)
     @Getter @Setter
@@ -71,7 +72,7 @@ public class WrapperCharacterViewModel
     private Character readOnlyProperty2;
 
     @Property(editing = Editing.ENABLED)
-    @XmlElement(required = true)                                               // <.>
+    @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private Character readWriteProperty;
 

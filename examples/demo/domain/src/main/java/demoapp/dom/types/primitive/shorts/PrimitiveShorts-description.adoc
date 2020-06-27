@@ -25,7 +25,7 @@ Using `@MemberOrder` positions the properties into the appropriate `<field-set>`
 A number of mixin actions contribute through this interface, demonstrate the use of `short` as a parameter and as a return type.
 For example:
 
-* the `updateReadOnlyProperty` action is:
+* the `updateReadOnlyPropertyPromptStyleInline` action is:
 +
 [source,java]
 ----

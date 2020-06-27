@@ -42,29 +42,38 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+//tag::class[]
 public interface WrapperCharacterHolder {
 
+//end::class[]
     @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
     @Property
     @PropertyLayout
+//tag::class[]
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);
 
+//end::class[]
     @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
     @Property
     @PropertyLayout(describedAs = "associated action uses promptStyle=INLINE_AS_IF_EDIT", hidden = Where.ALL_TABLES) // TODO: doesn't seem to get picked up
+//tag::class[]
     Character getReadOnlyProperty2();
     void setReadOnlyProperty2(Character c);
 
+//end::class[]
     @MemberOrder(name = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
     @Property
     @PropertyLayout
+//tag::class[]
     Character getReadWriteProperty();
     void setReadWriteProperty(Character c);
 
+//end::class[]
     @MemberOrder(name = "editable-properties", sequence = "2") // TODO: doesn't seem to get picked up
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout
+//tag::class[]
     Character getReadWriteOptionalProperty();
     void setReadWriteOptionalProperty(Character c);
 
@@ -89,3 +98,4 @@ public interface WrapperCharacterHolder {
     default Character getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
 
 }
+//end::class[]

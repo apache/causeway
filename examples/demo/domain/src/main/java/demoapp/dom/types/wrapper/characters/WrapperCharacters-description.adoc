@@ -13,38 +13,7 @@ These objects both implement a common interface, `WrapperCharacterHolder`:
 
 [source,java]
 ----
-public interface WrapperCharacterHolder {
-
-    Character getReadOnlyProperty();
-    void setReadOnlyProperty(Character c);
-
-    Character getReadOnlyProperty2();
-    void setReadOnlyProperty2(Character c);
-
-    Character getReadWriteProperty();
-    void setReadWriteProperty(Character c);
-
-    @MemberOrder(name = "label-positions", sequence = "1")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
-    default Character getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "2")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
-    default Character getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "3")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
-    default Character getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "4")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
-    default Character getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
-
-}
+include::holder/WrapperCharacterHolder.java[tags=class]
 ----
 
 The default methods have annotations that automatically inherited.
@@ -56,28 +25,11 @@ Using `@MemberOrder` positions the properties into the appropriate `<field-set>`
 A number of mixin actions contribute through this interface, demonstrate the use of `Character` as a parameter and as a return type.
 For example:
 
-* the `updateReadOnlyProperty` action is:
+* the `updateReadOnlyPropertyPromptStyleInline` action is:
 +
 [source,java]
 ----
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
-)
-@RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty {
-
-    private final WrapperCharacterHolder wrapperCharacterHolder;
-
-    public WrapperCharacterHolder act(Character newValue) {
-        wrapperCharacterHolder.setReadOnlyProperty(newValue);
-        return wrapperCharacterHolder;
-    }
-    public Character default0Act() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
-    }
-}
+include::holder/WrapperCharacterHolder_updateReadOnlyPropertyPromptStyleInline.java[tags=class]
 ----
 +
 There are a number of variants of this action, to demonstrate different prompt layouts.
@@ -86,20 +38,7 @@ There are a number of variants of this action, to demonstrate different prompt l
 +
 [source,java]
 ----
-@Action(
-        semantics = SemanticsOf.SAFE,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "3"
-)
-@RequiredArgsConstructor
-public class WrapperCharacterHolder_actionReturning {
-
-    private final WrapperCharacterHolder wrapperCharacterHolder;
-
-    public Character act() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
-    }
-}
+include::holder/WrapperCharacterHolder_actionReturning.java[tags=class]
 ----
 
 == Mixin properties
@@ -110,18 +49,7 @@ We also use the interface to contribute a number of mixin properties:
 +
 [source,java]
 ----
-@Property()
-@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ")
-@RequiredArgsConstructor
-public class WrapperCharacterHolder_mixinPropertyWithCssClass {
-
-    private final WrapperCharacterHolder wrapperCharacterHolder;
-
-    @MemberOrder(name = "contributed", sequence = "1")
-    public Character prop() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
-    }
-}
+include::holder/WrapperCharacterHolder_mixinPropertyWithCssClass.java[tags=class]
 ----
 +
 TIP: the styling is provided from the `application.css` static resource.
