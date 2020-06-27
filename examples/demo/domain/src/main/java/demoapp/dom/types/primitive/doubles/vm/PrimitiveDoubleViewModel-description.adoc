@@ -2,35 +2,7 @@ JAXB supports `double` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@XmlRootElement(name = "demo.PrimitiveDoubleViewModel")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveDoubleViewModel"
-)
-@lombok.NoArgsConstructor                               // <.>
-public class PrimitiveDoubleViewModel
-        implements HasAsciiDocDescription,
-                   PrimitiveDoubleHolder {
-
-    public PrimitiveDoubleViewModel(double initialValue) {  // <.>
-        // ...
-    }
-
-    @Title(prepend = "double (primitive) view model: ")
-    @Getter @Setter
-    private double readOnlyProperty;                      // <.>
-
-    @Getter @Setter
-    private double readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private double readWriteProperty;
-
-}
+include::PrimitiveDoubleViewModel.java[tags="class"]
 ----
 <.> a no-arg constructor is required by JAXB
-<.> as a convenience
 <.> no additional annotations required.

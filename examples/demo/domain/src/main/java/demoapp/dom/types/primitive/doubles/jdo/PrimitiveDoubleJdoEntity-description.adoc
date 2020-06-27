@@ -2,29 +2,7 @@ JDO supports `double` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        objectType = "demo.PrimitiveDoubleJdoEntity"
-)
-public class PrimitiveDoubleJdoEntity
-    implements HasAsciiDocDescription,   PrimitiveDoubleHolder {          // <.>
-
-    public PrimitiveDoubleJdoEntity(double initialValue) { ... }            // <.>
-
-    @Title(prepend = "double (primitive) JDO entity: ")
-    @Getter @Setter
-    private double readOnlyProperty;                                      // <.>
-
-    @Getter @Setter
-    private double readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private double readWriteProperty;
-
-}
+include::PrimitiveDoubleJdoEntity.java[tags="class"]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
-<.> as a convenience
 <.> no additional annotations required.

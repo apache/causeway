@@ -37,6 +37,7 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.shorts.holder.PrimitiveShortHolder;
 
+//tag::class[]
 @XmlRootElement(name = "demo.PrimitiveShortViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -44,20 +45,21 @@ import demoapp.dom.types.primitive.shorts.holder.PrimitiveShortHolder;
         nature=Nature.VIEW_MODEL,
         objectType = "demo.PrimitiveShortViewModel"
 )
-@lombok.NoArgsConstructor
+@lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveShortViewModel
-        implements HasAsciiDocDescription,
-        PrimitiveShortHolder {
+        implements HasAsciiDocDescription, PrimitiveShortHolder {
 
+//end::class[]
     public PrimitiveShortViewModel(short initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "short (primitive) view model: ")
     @Getter @Setter
-    private short readOnlyProperty;
+    private short readOnlyProperty;                                 // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -69,3 +71,4 @@ public class PrimitiveShortViewModel
     private short readWriteProperty;
 
 }
+//end::class[]

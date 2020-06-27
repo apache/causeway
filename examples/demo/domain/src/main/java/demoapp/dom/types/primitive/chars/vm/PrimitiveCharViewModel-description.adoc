@@ -2,35 +2,7 @@ JAXB supports `char` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@XmlRootElement(name = "demo.PrimitiveCharViewModel")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveCharViewModel"
-)
-@lombok.NoArgsConstructor                               // <.>
-public class PrimitiveCharViewModel
-        implements HasAsciiDocDescription,
-                   PrimitiveCharHolder {
-
-    public PrimitiveCharViewModel(char initialValue) {  // <.>
-        // ...
-    }
-
-    @Title(prepend = "char (primitive) view model: ")
-    @Getter @Setter
-    private char readOnlyProperty;                      // <.>
-
-    @Getter @Setter
-    private char readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private char readWriteProperty;
-
-}
+include::PrimitiveCharViewModel.java[tags="class"]
 ----
 <.> a no-arg constructor is required by JAXB
-<.> as a convenience
 <.> no additional annotations required.

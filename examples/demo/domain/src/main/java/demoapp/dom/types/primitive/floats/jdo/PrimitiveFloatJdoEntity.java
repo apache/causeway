@@ -36,24 +36,26 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.floats.holder.PrimitiveFloatHolder;
 
+//tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         objectType = "demo.PrimitiveFloatJdoEntity"
 )
-public class PrimitiveFloatJdoEntity
-        implements HasAsciiDocDescription,
-        PrimitiveFloatHolder {
+public class PrimitiveFloatJdoEntity                                // <.>
+        implements HasAsciiDocDescription, PrimitiveFloatHolder {
 
+//end::class[]
     public PrimitiveFloatJdoEntity(float initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "float (primitive) JDO entity: ")
     @Getter @Setter
-    private float readOnlyProperty;
+    private float readOnlyProperty;                                 // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -65,3 +67,4 @@ public class PrimitiveFloatJdoEntity
     private float readWriteProperty;
 
 }
+//end::class[]

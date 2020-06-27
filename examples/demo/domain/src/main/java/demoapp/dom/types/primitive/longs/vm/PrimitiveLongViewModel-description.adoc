@@ -2,35 +2,7 @@ JAXB supports `long` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@XmlRootElement(name = "demo.PrimitiveLongViewModel")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveLongViewModel"
-)
-@lombok.NoArgsConstructor                               // <.>
-public class PrimitiveLongViewModel
-        implements HasAsciiDocDescription,
-                   PrimitiveLongHolder {
-
-    public PrimitiveLongViewModel(long initialValue) {  // <.>
-        // ...
-    }
-
-    @Title(prepend = "long (primitive) view model: ")
-    @Getter @Setter
-    private long readOnlyProperty;                      // <.>
-
-    @Getter @Setter
-    private long readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private long readWriteProperty;
-
-}
+include::PrimitiveLongViewModel.java[tags="class"]
 ----
 <.> a no-arg constructor is required by JAXB
-<.> as a convenience
 <.> no additional annotations required.

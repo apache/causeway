@@ -2,29 +2,7 @@ JDO supports `byte` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        objectType = "demo.PrimitiveByteJdoEntity"
-)
-public class PrimitiveByteJdoEntity
-    implements HasAsciiDocDescription,   PrimitiveByteHolder {          // <.>
-
-    public PrimitiveByteJdoEntity(byte initialValue) { ... }            // <.>
-
-    @Title(prepend = "byte (primitive) JDO entity: ")
-    @Getter @Setter
-    private byte readOnlyProperty;                                      // <.>
-
-    @Getter @Setter
-    private byte readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private byte readWriteProperty;
-
-}
+include::PrimitiveByteJdoEntity.java[tags="class"]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
-<.> as a convenience
 <.> no additional annotations required.

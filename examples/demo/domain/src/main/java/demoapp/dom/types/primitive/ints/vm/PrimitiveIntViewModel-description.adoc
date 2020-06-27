@@ -2,35 +2,7 @@ JAXB supports `int` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@XmlRootElement(name = "demo.PrimitiveIntViewModel")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveIntViewModel"
-)
-@lombok.NoArgsConstructor                               // <.>
-public class PrimitiveIntViewModel
-        implements HasAsciiDocDescription,
-                   PrimitiveIntHolder {
-
-    public PrimitiveIntViewModel(int initialValue) {  // <.>
-        // ...
-    }
-
-    @Title(prepend = "int (primitive) view model: ")
-    @Getter @Setter
-    private int readOnlyProperty;                      // <.>
-
-    @Getter @Setter
-    private int readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private int readWriteProperty;
-
-}
+include::PrimitiveIntViewModel.java[tags="class"]
 ----
 <.> a no-arg constructor is required by JAXB
-<.> as a convenience
 <.> no additional annotations required.

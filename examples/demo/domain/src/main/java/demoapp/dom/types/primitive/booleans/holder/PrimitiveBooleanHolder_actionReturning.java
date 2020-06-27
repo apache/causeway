@@ -24,9 +24,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.SAFE
-)
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class PrimitiveBooleanHolder_actionReturning {
 
@@ -35,5 +34,5 @@ public class PrimitiveBooleanHolder_actionReturning {
     public boolean act() {
         return primitiveBooleanHolder.isReadOnlyProperty();
     }
-
 }
+//end::class[]

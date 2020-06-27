@@ -36,7 +36,6 @@ public class WrapperCharacterViewModel
 }
 ----
 <.> a no-arg constructor is required by JAXB
-<.> as a convenience
 <.> no additional annotations required.
 <.> mandatory property as defined to JAXB.
 Note that JAXB's default is that a property is optional, whereas Apache Isis is the opposite, that it is mandatory.

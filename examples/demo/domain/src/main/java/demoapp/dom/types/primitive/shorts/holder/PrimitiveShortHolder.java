@@ -41,23 +41,30 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+//tag::class[]
 public interface PrimitiveShortHolder {
 
+//end::class[]
     @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
     @Property
     @PropertyLayout
+//tag::class[]
     short getReadOnlyProperty();
     void setReadOnlyProperty(short c);
 
+//end::class[]
     @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
     @Property
     @PropertyLayout(describedAs = "associated action uses promptStyle=INLINE_AS_IF_EDIT", hidden = Where.ALL_TABLES) // TODO: doesn't seem to get picked up
+//tag::class[]
     short getReadOnlyProperty2();
     void setReadOnlyProperty2(short c);
 
+//end::class[]
     @MemberOrder(name = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
     @Property
     @PropertyLayout
+//tag::class[]
     short getReadWriteProperty();
     void setReadWriteProperty(short c);
 
@@ -82,3 +89,4 @@ public interface PrimitiveShortHolder {
     default short getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
 
 }
+//end::class[]

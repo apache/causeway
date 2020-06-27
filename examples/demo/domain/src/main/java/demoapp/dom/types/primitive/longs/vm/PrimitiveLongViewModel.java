@@ -37,6 +37,7 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.longs.holder.PrimitiveLongHolder;
 
+//tag::class[]
 @XmlRootElement(name = "demo.PrimitiveLongViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -44,20 +45,21 @@ import demoapp.dom.types.primitive.longs.holder.PrimitiveLongHolder;
         nature=Nature.VIEW_MODEL,
         objectType = "demo.PrimitiveLongViewModel"
 )
-@lombok.NoArgsConstructor
+@lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveLongViewModel
-        implements HasAsciiDocDescription,
-        PrimitiveLongHolder {
+        implements HasAsciiDocDescription, PrimitiveLongHolder {
 
+//end::class[]
     public PrimitiveLongViewModel(long initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "long (primitive) view model: ")
     @Getter @Setter
-    private long readOnlyProperty;
+    private long readOnlyProperty;                                  // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -69,3 +71,4 @@ public class PrimitiveLongViewModel
     private long readWriteProperty;
 
 }
+//end::class[]

@@ -31,7 +31,6 @@ public class WrapperCharacterJdoEntity
 }
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
-<.> as a convenience
 <.> no additional annotations required.
 <.> optional property as defined to Apache Isis
 <.> optional property as defined to JDO/DataNucleus

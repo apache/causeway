@@ -37,6 +37,7 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder;
 
+//tag::class[]
 @XmlRootElement(name = "demo.PrimitiveBooleanViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -44,20 +45,21 @@ import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder;
         nature=Nature.VIEW_MODEL,
         objectType = "demo.PrimitiveBooleanViewModel"
 )
-@lombok.NoArgsConstructor
+@lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveBooleanViewModel
-        implements HasAsciiDocDescription,
-        PrimitiveBooleanHolder {
+        implements HasAsciiDocDescription, PrimitiveBooleanHolder {
 
+//end::class[]
     public PrimitiveBooleanViewModel(boolean initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
+//tag::class[]
 
     @Title(prepend = "boolean (primitive) view model: ")
     @Getter @Setter
-    private boolean readOnlyProperty;
+    private boolean readOnlyProperty;                               // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -69,3 +71,4 @@ public class PrimitiveBooleanViewModel
     private boolean readWriteProperty;
 
 }
+//end::class[]

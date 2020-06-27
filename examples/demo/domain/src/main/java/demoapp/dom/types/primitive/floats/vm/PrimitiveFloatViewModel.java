@@ -37,6 +37,7 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.floats.holder.PrimitiveFloatHolder;
 
+//tag::class[]
 @XmlRootElement(name = "demo.PrimitiveFloatViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -44,20 +45,21 @@ import demoapp.dom.types.primitive.floats.holder.PrimitiveFloatHolder;
         nature=Nature.VIEW_MODEL,
         objectType = "demo.PrimitiveFloatViewModel"
 )
-@lombok.NoArgsConstructor
+@lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveFloatViewModel
-        implements HasAsciiDocDescription,
-        PrimitiveFloatHolder {
+        implements HasAsciiDocDescription, PrimitiveFloatHolder {
 
+//end::class[]
     public PrimitiveFloatViewModel(float initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "float (primitive) view model: ")
     @Getter @Setter
-    private float readOnlyProperty;
+    private float readOnlyProperty;                                 // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -69,3 +71,4 @@ public class PrimitiveFloatViewModel
     private float readWriteProperty;
 
 }
+//end::class[]

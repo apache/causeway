@@ -16,3 +16,13 @@ Such a home page would have a number of repository services injected into it, in
 
 It would probably also have the framework's link:https://isis.apache.org/refguide/${ISIS_VERSION}/applib-svc/UserService.html[`UserService`] injected, in order that the information displayed is relevant to the current user.
 As you can see, this app's home page does actually do this, in order to "personalise" the title.
+
+NOTE: this is a note!
+
+TIP: this is a tip!
+
+CAUTION: this is a caution!
+
+IMPORTANT: this is important!
+
+WARNING: this is a warning!

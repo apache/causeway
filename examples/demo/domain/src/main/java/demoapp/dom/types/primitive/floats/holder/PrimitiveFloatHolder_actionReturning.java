@@ -24,9 +24,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.SAFE
-)
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class PrimitiveFloatHolder_actionReturning {
 
@@ -37,3 +36,4 @@ public class PrimitiveFloatHolder_actionReturning {
     }
 
 }
+//end::class[]

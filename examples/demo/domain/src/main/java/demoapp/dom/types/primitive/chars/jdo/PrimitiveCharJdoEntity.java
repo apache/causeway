@@ -36,24 +36,26 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 
+//tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         objectType = "demo.PrimitiveCharJdoEntity"
 )
-public class PrimitiveCharJdoEntity
-        implements HasAsciiDocDescription,
-        PrimitiveCharHolder {
+public class PrimitiveCharJdoEntity                                 // <.>
+        implements HasAsciiDocDescription, PrimitiveCharHolder {
 
+//end::class[]
     public PrimitiveCharJdoEntity(char initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "char (primitive) JDO entity: ")
     @Getter @Setter
-    private char readOnlyProperty;
+    private char readOnlyProperty;                                  // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -65,3 +67,4 @@ public class PrimitiveCharJdoEntity
     private char readWriteProperty;
 
 }
+//end::class[]

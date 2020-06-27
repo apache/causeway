@@ -2,35 +2,7 @@ JAXB supports `byte` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@XmlRootElement(name = "demo.PrimitiveByteViewModel")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveByteViewModel"
-)
-@lombok.NoArgsConstructor                               // <.>
-public class PrimitiveByteViewModel
-        implements HasAsciiDocDescription,
-                   PrimitiveByteHolder {
-
-    public PrimitiveByteViewModel(byte initialValue) {  // <.>
-        // ...
-    }
-
-    @Title(prepend = "byte (primitive) view model: ")
-    @Getter @Setter
-    private byte readOnlyProperty;                      // <.>
-
-    @Getter @Setter
-    private byte readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private byte readWriteProperty;
-
-}
+include::PrimitiveByteViewModel.java[tags="class"]
 ----
 <.> a no-arg constructor is required by JAXB
-<.> as a convenience
 <.> no additional annotations required.

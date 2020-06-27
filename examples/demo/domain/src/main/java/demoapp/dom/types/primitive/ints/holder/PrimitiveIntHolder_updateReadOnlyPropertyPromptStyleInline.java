@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 
+//tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
@@ -45,5 +46,5 @@ public class PrimitiveIntHolder_updateReadOnlyPropertyPromptStyleInline {
         return primitiveIntHolder.getReadOnlyProperty();
     }
 
-
 }
+//end::class[]

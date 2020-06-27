@@ -2,35 +2,7 @@ JAXB supports `boolean` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@XmlRootElement(name = "demo.PrimitiveBooleanViewModel")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveBooleanViewModel"
-)
-@lombok.NoArgsConstructor                               // <.>
-public class PrimitiveBooleanViewModel
-        implements HasAsciiDocDescription,
-                   PrimitiveBooleanHolder {
-
-    public PrimitiveBooleanViewModel(boolean initialValue) {  // <.>
-        // ...
-    }
-
-    @Title(prepend = "boolean (primitive) view model: ")
-    @Getter @Setter
-    private boolean readOnlyProperty;                      // <.>
-
-    @Getter @Setter
-    private boolean readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private boolean readWriteProperty;
-
-}
+include::PrimitiveBooleanViewModel.java[tags="class"]
 ----
 <.> a no-arg constructor is required by JAXB
-<.> as a convenience
 <.> no additional annotations required.

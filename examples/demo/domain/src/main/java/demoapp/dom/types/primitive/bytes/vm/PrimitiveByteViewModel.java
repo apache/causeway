@@ -37,6 +37,7 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
 
+//tag::class[]
 @XmlRootElement(name = "demo.PrimitiveByteViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -44,20 +45,21 @@ import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
         nature=Nature.VIEW_MODEL,
         objectType = "demo.PrimitiveByteViewModel"
 )
-@lombok.NoArgsConstructor
+@lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveByteViewModel
-        implements HasAsciiDocDescription,
-        PrimitiveByteHolder {
+        implements HasAsciiDocDescription, PrimitiveByteHolder {
 
+//end::class[]
     public PrimitiveByteViewModel(byte initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "byte (primitive) view model: ")
     @Getter @Setter
-    private byte readOnlyProperty;
+    private byte readOnlyProperty;                                  // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -69,3 +71,4 @@ public class PrimitiveByteViewModel
     private byte readWriteProperty;
 
 }
+//end::class[]

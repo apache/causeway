@@ -2,29 +2,7 @@ JDO supports `int` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        objectType = "demo.PrimitiveIntJdoEntity"
-)
-public class PrimitiveIntJdoEntity
-    implements HasAsciiDocDescription,   PrimitiveIntHolder {          // <.>
-
-    public PrimitiveIntJdoEntity(int initialValue) { ... }            // <.>
-
-    @Title(prepend = "int (primitive) JDO entity: ")
-    @Getter @Setter
-    private int readOnlyProperty;                                      // <.>
-
-    @Getter @Setter
-    private int readOnlyProperty2;
-
-    @Property(editing = Editing.ENABLED)
-    @Getter @Setter
-    private int readWriteProperty;
-
-}
+include::PrimitiveIntJdoEntity.java[tags="class"]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
-<.> as a convenience
 <.> no additional annotations required.

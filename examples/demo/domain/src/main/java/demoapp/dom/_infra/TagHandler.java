@@ -16,12 +16,12 @@ class TagHandler {
             return line;
         }
 
-        if (line.startsWith(String.format("//tag::%s[]", tagsValue))) {
+        if (line.contains(String.format("//tag::%s[]", tagsValue))) {
             within = true;
             return null;
         }
 
-        if (line.startsWith(String.format("//end::%s[]", tagsValue))) {
+        if (line.contains(String.format("//end::%s[]", tagsValue))) {
             within = false;
             return null;
         }

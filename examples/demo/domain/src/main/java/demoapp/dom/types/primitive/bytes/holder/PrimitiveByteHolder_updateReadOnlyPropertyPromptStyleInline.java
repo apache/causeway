@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
 
 
+//tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
@@ -47,5 +48,5 @@ public class PrimitiveByteHolder_updateReadOnlyPropertyPromptStyleInline {
         return primitiveByteHolder.getReadOnlyProperty();
     }
 
-
 }
+//end::class[]

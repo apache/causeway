@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Where;
 import lombok.RequiredArgsConstructor;
 
 
+//tag::class[]
 @Property()
 @PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
@@ -37,4 +38,6 @@ public class PrimitiveCharHolder_mixinPropertyWithCssClass {
     public char prop() {
         return primitiveCharHolder.getReadOnlyProperty();
     }
+
 }
+//end::class[]

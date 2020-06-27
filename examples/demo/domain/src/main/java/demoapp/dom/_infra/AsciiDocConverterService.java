@@ -58,6 +58,7 @@ public class AsciiDocConverterService {
                     .toFile(false)
                     .attributes(AttributesBuilder.attributes()
                             .sourceHighlighter("prism")
+                            .icons("font")
                             .get())
                     .get();
         }

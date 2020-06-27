@@ -37,6 +37,7 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder;
 
+//tag::class[]
 @XmlRootElement(name = "demo.PrimitiveDoubleViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -44,20 +45,21 @@ import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder;
         nature=Nature.VIEW_MODEL,
         objectType = "demo.PrimitiveDoubleViewModel"
 )
-@lombok.NoArgsConstructor
+@lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveDoubleViewModel
-        implements HasAsciiDocDescription,
-        PrimitiveDoubleHolder {
+        implements HasAsciiDocDescription, PrimitiveDoubleHolder {
 
+//end::class[]
     public PrimitiveDoubleViewModel(double initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "double (primitive) view model: ")
     @Getter @Setter
-    private double readOnlyProperty;
+    private double readOnlyProperty;                                // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -69,3 +71,4 @@ public class PrimitiveDoubleViewModel
     private double readWriteProperty;
 
 }
+//end::class[]

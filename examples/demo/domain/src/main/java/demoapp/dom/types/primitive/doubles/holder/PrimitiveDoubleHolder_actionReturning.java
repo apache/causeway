@@ -26,9 +26,8 @@ import lombok.RequiredArgsConstructor;
 import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder;
 
 
-@Action(
-        semantics = SemanticsOf.SAFE
-)
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class PrimitiveDoubleHolder_actionReturning {
 
@@ -39,3 +38,4 @@ public class PrimitiveDoubleHolder_actionReturning {
     }
 
 }
+//end::class[]

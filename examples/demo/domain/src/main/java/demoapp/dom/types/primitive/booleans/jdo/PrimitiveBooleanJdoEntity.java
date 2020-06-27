@@ -36,24 +36,26 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder;
 
+//tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         objectType = "demo.PrimitiveBooleanJdoEntity"
 )
-public class PrimitiveBooleanJdoEntity
-        implements HasAsciiDocDescription,
-        PrimitiveBooleanHolder {
+public class PrimitiveBooleanJdoEntity                                  // <.>
+        implements HasAsciiDocDescription, PrimitiveBooleanHolder {
 
+//end::class[]
     public PrimitiveBooleanJdoEntity(boolean initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
+//tag::class[]
     @Title(prepend = "boolean (primitive) JDO entity: ")
     @Getter @Setter
-    private boolean readOnlyProperty;
+    private boolean readOnlyProperty;                                   // <.>
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -65,3 +67,4 @@ public class PrimitiveBooleanJdoEntity
     private boolean readWriteProperty;
 
 }
+//end::class[]

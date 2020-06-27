@@ -13,38 +13,7 @@ These objects both implement a common interface, `PrimitiveFloatHolder`:
 
 [source,java]
 ----
-public interface PrimitiveFloatHolder {
-
-    float getReadOnlyProperty();
-    void setReadOnlyProperty(float c);
-
-    float getReadOnlyProperty2();
-    void setReadOnlyProperty2(float c);
-
-    float getReadWriteProperty();
-    void setReadWriteProperty(float c);
-
-    @MemberOrder(name = "label-positions", sequence = "1")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
-    default float getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "2")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
-    default float getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "3")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
-    default float getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "4")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
-    default float getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
-
-}
+include::holder/PrimitiveFloatHolder.java[tags=class]
 ----
 
 The default methods have annotations that automatically inherited.
@@ -56,28 +25,11 @@ Using `@MemberOrder` positions the properties into the appropriate `<field-set>`
 A number of mixin actions contribute through this interface, demonstrate the use of `float` as a parameter and as a return type.
 For example:
 
-* the `updateReadOnlyProperty` action is:
+* the `updateReadOnlyPropertyPromptStyleInline` action is:
 +
 [source,java]
 ----
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
-)
-@RequiredArgsConstructor
-public class PrimitiveFloatHolder_updateReadOnlyProperty {
-
-    private final PrimitiveFloatHolder primitiveFloatHolder;
-
-    public PrimitiveFloatHolder act(float newValue) {
-        primitiveFloatHolder.setReadOnlyProperty(newValue);
-        return primitiveFloatHolder;
-    }
-    public float default0Act() {
-        return primitiveFloatHolder.getReadOnlyProperty();
-    }
-}
+include::holder/PrimitiveFloatHolder_updateReadOnlyPropertyPromptStyleInline.java[tags=class]
 ----
 +
 There are a number of variants of this action, to demonstrate different prompt layouts.
@@ -86,20 +38,7 @@ There are a number of variants of this action, to demonstrate different prompt l
 +
 [source,java]
 ----
-@Action(
-        semantics = SemanticsOf.SAFE,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "3"
-)
-@RequiredArgsConstructor
-public class PrimitiveFloatHolder_actionReturning {
-
-    private final PrimitiveFloatHolder primitiveFloatHolder;
-
-    public float act() {
-        return primitiveFloatHolder.getReadOnlyProperty();
-    }
-}
+include::holder/PrimitiveFloatHolder_actionReturning.java[tags=class]
 ----
 
 == Mixin properties
@@ -110,18 +49,7 @@ We also use the interface to contribute a number of mixin properties:
 +
 [source,java]
 ----
-@Property()
-@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ")
-@RequiredArgsConstructor
-public class PrimitiveFloatHolder_mixinPropertyWithCssClass {
-
-    private final PrimitiveFloatHolder primitiveFloatHolder;
-
-    @MemberOrder(name = "contributed", sequence = "1")
-    public float prop() {
-        return primitiveFloatHolder.getReadOnlyProperty();
-    }
-}
+include::holder/PrimitiveFloatHolder_mixinPropertyWithCssClass.java[tags=class]
 ----
 +
 TIP: the styling is provided from the `application.css` static resource.
