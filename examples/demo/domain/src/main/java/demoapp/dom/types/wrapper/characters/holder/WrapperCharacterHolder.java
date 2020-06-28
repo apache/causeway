@@ -70,7 +70,15 @@ public interface WrapperCharacterHolder {
     void setReadWriteProperty(Character c);
 
 //end::class[]
-    @MemberOrder(name = "editable-properties", sequence = "2") // TODO: doesn't seem to get picked up
+    @MemberOrder(name = "optional", sequence = "1") // TODO: doesn't seem to get picked up
+    @Property
+    @PropertyLayout
+//tag::class[]
+    Character getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(Character c);
+
+//end::class[]
+    @MemberOrder(name = "optional", sequence = "2") // TODO: doesn't seem to get picked up
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout
 //tag::class[]

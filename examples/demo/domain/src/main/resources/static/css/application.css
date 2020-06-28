@@ -97,7 +97,7 @@
 
 /*
  * colist (callout list) styles
- * (taken from asciidoctor.css)
+ * (taken then adapted from asciidoctor.css)
  */
 .colist > table {
     border: 0;
@@ -109,7 +109,7 @@
 }
 
 .literalblock + .colist, .listingblock + .colist {
-    margin-top: -.5em
+    margin-top: 1.0em
 }
 
 .colist td:not([class]):first-child {
@@ -195,6 +195,3 @@ div.paragraph a.a-has-code:hover {
     text-decoration-color: #c7254e;
 }
 
-div.colist {
-    margin-bottom: 1em;
-}

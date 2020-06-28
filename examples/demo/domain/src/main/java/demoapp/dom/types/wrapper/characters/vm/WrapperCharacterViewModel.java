@@ -61,9 +61,9 @@ public class WrapperCharacterViewModel
 
 //tag::class[]
     @Title(prepend = "Character (wrapper) view model: ")
-    @XmlElement(required = true)
+    @XmlElement(required = true)                                                // <.>
     @Getter @Setter
-    private Character readOnlyProperty;                                         // <.>
+    private Character readOnlyProperty;
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -71,12 +71,16 @@ public class WrapperCharacterViewModel
     @Getter @Setter
     private Character readOnlyProperty2;
 
-    @Property(editing = Editing.ENABLED)
-    @XmlElement(required = true)                                                // <.>
+    @Property(editing = Editing.ENABLED)                                        // <.>
+    @XmlElement(required = true)
     @Getter @Setter
     private Character readWriteProperty;
 
-    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)    // <.>
+    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @Getter @Setter
+    private Character readOnlyOptionalProperty;
+
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @Getter @Setter
     private Character readWriteOptionalProperty;
 

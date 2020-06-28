@@ -56,20 +56,28 @@ public class WrapperCharacterJdoEntity                                          
 
 //tag::class[]
     @Title(prepend = "Character (wrapper) JDO entity: ")
+    @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private Character readOnlyProperty;                                         // <.>
+    private Character readOnlyProperty;
 
     @Property
     @PropertyLayout(hidden = Where.ALL_TABLES)
+    @Column(allowsNull = "false")
     @Getter @Setter
     private Character readOnlyProperty2;
 
-    @Property(editing = Editing.ENABLED)
+    @Property(editing = Editing.ENABLED)                                        // <.>
+    @Column(allowsNull = "false")
     @Getter @Setter
     private Character readWriteProperty;
 
-    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)    // <.>
+    @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @Column(allowsNull = "true")                                                // <.>
+    @Getter @Setter
+    private Character readOnlyOptionalProperty;
+
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @Column(allowsNull = "true")
     @Getter @Setter
     private Character readWriteOptionalProperty;
 

@@ -29,6 +29,9 @@
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Editable Properties" id="editable-properties">
 				<cpt:property id="readWriteProperty" />
+			</cpt:fieldSet>
+			<cpt:fieldSet name="Optional" id="optional">
+				<cpt:property id="readOnlyOptionalProperty" />
 				<cpt:property id="readWriteOptionalProperty" />
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Label Positions" id="label-positions"/>
