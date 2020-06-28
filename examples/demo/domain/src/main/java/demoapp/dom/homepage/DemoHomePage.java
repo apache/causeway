@@ -50,13 +50,14 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
         , objectType = "demo.Homepage"
 )
 @HomePage                                                       // <.>
-public class DemoHomePage implements HasAsciiDocDescription {
+public class DemoHomePage
+        implements HasAsciiDocDescription {                     // <.>
 
     public String title() {                                     // <.>
         return "Hello, " + userService.getUser().getName();
     }
 
-    public AsciiDoc getWelcome() {
+    public AsciiDoc getWelcome() {                              // <.>
         return asciiDocReaderService.readFor(this, "welcome");
     }
 

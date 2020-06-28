@@ -1,12 +1,14 @@
+/*
+ * Demonstrates use of @PropertyLayout(cssClass='red')
+ */
 .property.red label {
     color: red;
 }
 
-.welcome {
-    font-size: 16px;
-}
-
-
+/*
+ * admonitionblock styles (ie, NOTE: TIP: CAUTION: IMPORTANT: WARNING:)
+ * (taken from asciidoctor.css)
+ */
 .admonitionblock td.content > .title {
     line-height: 1.45;
     color: #7a2518;
@@ -93,6 +95,10 @@
     color: #bf0000
 }
 
+/*
+ * colist (callout list) styles
+ * (taken from asciidoctor.css)
+ */
 .colist > table {
     border: 0;
     background: none
@@ -120,6 +126,10 @@
     padding: .25em 0
 }
 
+/*
+ * conum (callout number) styles
+ * (taken from asciidoctor.css)
+ */
 .conum[data-value] {
     display: inline-block;
     color: #fff !important;
@@ -159,4 +169,32 @@ b.conum * {
 
 .conum:not([data-value]):empty {
     display: none
+}
+
+
+/*
+ * Miscellaneous other styles
+ */
+.welcome {
+    font-size: 16px;
+}
+
+div.paragraph a {
+    text-decoration: underline dotted;
+}
+
+div.paragraph a:hover{
+    text-decoration: underline solid;
+}
+
+div.paragraph a.a-has-code {
+    text-decoration-color: #c7254e;
+}
+
+div.paragraph a.a-has-code:hover {
+    text-decoration-color: #c7254e;
+}
+
+div.colist {
+    margin-bottom: 1em;
 }

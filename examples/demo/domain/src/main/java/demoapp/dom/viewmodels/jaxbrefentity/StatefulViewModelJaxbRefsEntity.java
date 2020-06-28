@@ -42,6 +42,7 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+//tag::class[]
 @XmlRootElement(name = "demo.StatefulViewModelJaxbRefsEntity")
 @XmlType(
         propOrder = {"message", "favoriteChild", "children"}
@@ -85,7 +86,9 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
         }
     }
 
-    // using a ediatble property seems to fail, though...
+//end::class[]
+
+// TODO: using a editable property seems to fail, though...
 //    public List<ChildEntity> choicesFavoriteChild() {
 //        return getChildren();
 //    }
@@ -93,6 +96,7 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
 //        return getChildren().isEmpty() ? "no children" : null;
 //    }
 
+//tag::class[]
     @Getter @Setter
     @Collection
     @XmlElementWrapper(name = "children")
@@ -119,3 +123,4 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
     }
 
 }
+//end::class[]

@@ -19,6 +19,7 @@
 package demoapp.dom.viewmodels;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 

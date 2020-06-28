@@ -6,8 +6,10 @@ include::DemoHomePage.java[tags="class"]
 ----
 
 <.> declares this view-model class to be used as the viewer's homepage, there can be only one
-<.> as displayed
-<.> to determine the current user
+<.> contributes the description property on the right hand side (in other words, what you're reading right now).
+<.> customises the title, top left
+<.> the welcome text, on the left handside
+<.> framework-provided service, injected by the framework so that the home page object can find the current user
 
 This application's home page is pretty simple, not much more than a couple of hard-coded text fields that you're reading right now.
 

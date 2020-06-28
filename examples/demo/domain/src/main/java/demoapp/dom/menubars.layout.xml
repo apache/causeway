@@ -8,7 +8,7 @@
         <mb3:menu>
             <mb3:named>View Models</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.ViewModels" id="openStateful"/>
+                <mb3:serviceAction objectType="demo.ViewModels" id="openStateful" cssClassFa="mountain"/>
                 <mb3:serviceAction objectType="demo.ViewModels" id="openStatefulRefsEntity"/>
             </mb3:section>
         </mb3:menu>

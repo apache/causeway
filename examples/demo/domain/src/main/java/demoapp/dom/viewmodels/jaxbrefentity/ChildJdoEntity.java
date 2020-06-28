@@ -19,6 +19,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+//tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(bounding = Bounding.BOUNDED)
@@ -33,3 +34,4 @@ public class ChildJdoEntity {
     @Getter @Setter
     private String name;
 }
+//end::class[]

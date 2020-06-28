@@ -44,10 +44,10 @@ import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@XmlRootElement(name = "demo.StatefulViewModelUsingJaxb")
-@XmlType(
-)
-@XmlAccessorType(XmlAccessType.FIELD)
+//tag::class[]
+@XmlRootElement(name = "demo.StatefulViewModelUsingJaxb")   // <.>
+@XmlType                                                    // <.>
+@XmlAccessorType(XmlAccessType.FIELD)                       // <.>
 @DomainObject(
         nature=Nature.VIEW_MODEL
         , objectType = "demo.StatefulViewModelUsingJaxb"
@@ -61,8 +61,10 @@ public class StatefulViewModelUsingJaxb implements HasAsciiDocDescription {
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
     @XmlElement
-    private String message;
+    private String message;                                 // <.>
 
+//end::class[]
+//tag::child[]
     @XmlRootElement(name = "demo.StatefulViewModelUsingJaxb.Child")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -77,7 +79,9 @@ public class StatefulViewModelUsingJaxb implements HasAsciiDocDescription {
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
     private List<Child> children = new ArrayList<>();
+//end::child[]
 
+//tag::addChild[]
     @Action(associateWith = "children", associateWithSequence = "1", semantics = SemanticsOf.NON_IDEMPOTENT)
     public StatefulViewModelUsingJaxb addChild(final String name) {
         val child = new Child();
@@ -95,5 +99,8 @@ public class StatefulViewModelUsingJaxb implements HasAsciiDocDescription {
     public String disableRemoveChild() {
         return choices0RemoveChild().isEmpty()? "No children to remove" : null;
     }
+//end::addChild[]
 
+    //tag::class[]
 }
+//end::class[]
