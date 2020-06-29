@@ -56,10 +56,11 @@ public class DemoAppJavaFx {
     }
 
     public static void main(String[] args) {
+        
         IsisPresets.logging(IsisInteractionFactoryDefault.class, "debug");
         IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
 
-        IsisPresets.prototyping();
+        IsisPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
         
         JavafxViewer.launch(DemoAppJavaFx.class, args);
     }

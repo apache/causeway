@@ -141,10 +141,10 @@ public class ObjectViewFx extends VBox {
                 _fx.toolbarLayout(uiActionPanel);
                 
                 uiActionPanel.prefWidthProperty().bind(
-                        container.widthProperty().multiply(0.95));
+                        container.widthProperty().multiply(0.98));
                 
                 uiActionPanel.maxWidthProperty().bind(
-                        container.widthProperty().multiply(0.95));
+                        container.widthProperty().multiply(0.98));
                 
                 _fx.backround(uiActionPanel, Color.FLORALWHITE);
                 

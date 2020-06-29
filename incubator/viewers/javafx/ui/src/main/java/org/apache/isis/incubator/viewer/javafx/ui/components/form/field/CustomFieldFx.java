@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.components.field;
+package org.apache.isis.incubator.viewer.javafx.ui.components.form.field;
 
 import java.util.Objects;
 

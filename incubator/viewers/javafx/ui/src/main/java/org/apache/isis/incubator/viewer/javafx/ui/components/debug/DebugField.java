@@ -18,8 +18,9 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.debug;
 
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.field.CustomFieldFx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.form.field.CustomFieldFx;
 import org.apache.isis.viewer.common.model.debug.DebugUiModel;
 
 import lombok.val;
@@ -58,10 +59,11 @@ public class DebugField extends CustomFieldFx<DebugUiModel> {
         model.getKeyValuePairs().forEach((k, v)->{
             _fx.add(detailGrid, new Label(k));
             val text = _fx.add(detailGrid, new TextArea(v));
-//            val prefHeight = 16*(1+(int)_Strings.splitThenStream(v, "\n").count());
-//            text.setPrefHeight(prefHeight);
+            val prefHeight = 16*(1+(int)_Strings.splitThenStream(v, "\n").count());
+            text.setPrefHeight(prefHeight);
+            text.setWrapText(true);
+            text.setEditable(false);
             text.autosize();
-            //text.disableProperty().set(true);
         });
         
         
