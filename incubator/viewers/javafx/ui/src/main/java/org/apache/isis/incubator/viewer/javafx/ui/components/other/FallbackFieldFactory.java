@@ -34,12 +34,12 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryF
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.debug.DebugField;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
+import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 import org.apache.isis.viewer.common.model.debug.DebugUiModel;
 
 import lombok.val;
 
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 @org.springframework.stereotype.Component
@@ -82,24 +82,7 @@ public class FallbackFieldFactory implements UiComponentHandlerFx {
         
         val uiLabel = new Label(request.getFeatureLabel());
         
-        return new FormField() {
-            
-            @Override
-            public Node getUiLabel() {
-                return uiLabel;
-            }
-            
-            @Override
-            public Node getUiField() {
-                return debugField;
-            }
-            
-            @Override
-            public LabelPosition getLabelPosition() {
-                return LabelPosition.TOP;
-            }
-        };
-        
+        return new SimpleFormField(LabelPosition.TOP, uiLabel, debugField);
     }
     
     private String summarize(Facet facet) {
