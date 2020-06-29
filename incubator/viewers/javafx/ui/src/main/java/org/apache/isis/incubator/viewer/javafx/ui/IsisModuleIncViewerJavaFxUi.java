@@ -25,6 +25,7 @@ import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJ
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory;
+import org.apache.isis.incubator.viewer.javafx.ui.components.text.TextFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandler;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
@@ -48,6 +49,7 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         UiController.class,
         
         // component factories
+        TextFieldFactory.class,
         MarkupFieldFactory.class,
         FallbackFieldFactory.class,
         
