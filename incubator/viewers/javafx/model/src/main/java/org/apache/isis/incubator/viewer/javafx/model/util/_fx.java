@@ -27,7 +27,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
@@ -196,13 +195,13 @@ public final class _fx {
         region.setPadding(new Insets(vPadding, hPadding, vPadding, hPadding));
     }
     
-    public static GridPane formLayout(GridPane component) {
-        component.setAlignment(Pos.CENTER);
-        component.setHgap(10);
-        component.setVgap(10);
-        component.setPadding(new Insets(25, 25, 25, 25));    
-        return component;
-    }
+//    public static GridPane formLayout(GridPane component) {
+//        component.setAlignment(Pos.CENTER);
+//        component.setHgap(10);
+//        component.setVgap(10);
+//        component.setPadding(new Insets(25, 25, 25, 25));    
+//        return component;
+//    }
     
     public static void toolbarLayout(FlowPane component) {
         component.setPadding(new Insets(15, 12, 15, 12));

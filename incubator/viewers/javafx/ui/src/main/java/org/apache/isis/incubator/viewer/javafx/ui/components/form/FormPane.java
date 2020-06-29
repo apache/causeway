@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.commons.internal.collections._Lists;
 
 import lombok.NonNull;
@@ -47,7 +46,6 @@ public class FormPane extends GridPane {
         grid.setPadding(new Insets(25, 25, 25, 25));
     }
 
-    @PropertyLayout()
     public FormPane addField(FormField formField) {
         
         fields.add(formField);
@@ -73,6 +71,7 @@ public class FormPane extends GridPane {
         }
         return this;
     }
+
     
     // -- HELPER
     
@@ -90,6 +89,8 @@ public class FormPane extends GridPane {
         grid().add(right, 1, rowCount);
         ++rowCount;
     }
+
+    
     
 
 }

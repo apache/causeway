@@ -25,6 +25,7 @@ import javax.inject.Provider;
 
 import org.springframework.core.annotation.Order;
 
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -32,12 +33,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.debug.DebugField;
+import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 import org.apache.isis.viewer.common.model.debug.DebugUiModel;
 
 import lombok.val;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.LAST)
@@ -51,7 +54,7 @@ public class FallbackFieldFactory implements UiComponentHandlerFx {
     }
 
     @Override
-    public Node handle(Request request) {
+    public FormField handle(Request request) {
         
         val spec = request.getObjectFeature().getSpecification();
         val debugUiModel = DebugUiModel.of(spec.getCorrespondingClass().getSimpleName() + " type not handled")
@@ -74,9 +77,29 @@ public class FallbackFieldFactory implements UiComponentHandlerFx {
         });
         
         
-        val uiField = new DebugField(request.getObjectFeature().getName());
-        uiField.setValue(debugUiModel);
-        return uiField;
+        val debugField = new DebugField(request.getObjectFeature().getName());
+        debugField.setValue(debugUiModel);
+        
+        val uiLabel = new Label(request.getFeatureLabel());
+        
+        return new FormField() {
+            
+            @Override
+            public Node getUiLabel() {
+                return uiLabel;
+            }
+            
+            @Override
+            public Node getUiField() {
+                return debugField;
+            }
+            
+            @Override
+            public LabelPosition getLabelPosition() {
+                return LabelPosition.TOP;
+            }
+        };
+        
     }
     
     private String summarize(Facet facet) {

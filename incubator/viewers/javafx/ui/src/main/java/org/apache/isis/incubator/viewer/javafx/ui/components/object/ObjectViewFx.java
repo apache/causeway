@@ -40,6 +40,7 @@ import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormPane;
 import org.apache.isis.incubator.viewer.javafx.ui.components.panel.TitledPanel;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
@@ -95,10 +96,6 @@ public class ObjectViewFx extends VBox {
             @Override
             protected Pane newRow(Pane container, BS3Row bs3Row) {
                 val uiRow = _fx.newFlowPane(container);
-                //uiRow.setSpacing(4);
-                
-                //uiRow.setWidthFull();
-                //uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
                 return uiRow;
             }
 
@@ -116,22 +113,8 @@ public class ObjectViewFx extends VBox {
                 uiCol.maxWidthProperty().bind(
                         container.widthProperty().multiply(realtiveWidthWithRespectToContainer));
                 
-//                container.minWidthProperty().bind(
-//                        container.widthProperty().multiply(realtiveWidthWithRespectToContainer));
-                
                 uiCol.setFillWidth(true);
                 
-                uiCol.setSpacing(4);
-                
-                //uiCol.setOpaqueInsets(new Insets(10, 10, 10, 10));
-                
-
-//                final int span = bs3col.getSpan();
-//                ((FlexLayout)container).setFlexGrow(span, uiCol);
-//                val widthEm = String.format("%dem", span * 3); // 1em ~ 16px
-//                uiCol.setWidth(null); // clear preset width style
-//                uiCol.setMinWidth(widthEm);
-
                 return uiCol;
             }
 
@@ -177,8 +160,8 @@ public class ObjectViewFx extends VBox {
                     onAction(titledPanel.getUiActionBar(), actionData);
                 }
                 
-                val uiFieldSet = _fx.newGrid(titledPanel);
-                return _fx.formLayout(uiFieldSet);
+                val uiFieldSet = _fx.add(titledPanel, new FormPane());
+                return uiFieldSet;
             }
 
 
@@ -207,16 +190,19 @@ public class ObjectViewFx extends VBox {
                 
                 val owner = objectInteractor.getManagedObject();
                 
+                val formPane = (FormPane) container;
+                
                 PropertyInteraction.start(owner, propertyData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
                     
-                    val uiProperty = _fx.add(container, 
-                            uiComponentFactory.componentFor(
-                                    UiComponentFactory.Request.of(
-                                            Where.OBJECT_FORMS, 
-                                            managedProperty)));
+                    val uiPropertyField = uiComponentFactory.componentFor(
+                            UiComponentFactory.Request.of(
+                                    Where.OBJECT_FORMS,
+                                    managedProperty));
+                    
+                    formPane.addField(uiPropertyField);
                     
                     // handle associated actions
                     for(val actionData : propertyData.getActions()) {

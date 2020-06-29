@@ -27,23 +27,22 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 
 import lombok.Getter;
 
-import javafx.scene.Node;
-
 @Service
-public class UiComponentFactoryFx implements UiComponentFactory<Node> {
+public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
 
-    private final ChainOfResponsibility<Request, Node> chainOfHandlers;
+    private final ChainOfResponsibility<Request, FormField> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
     @Getter 
     private final List<Class<?>> registeredHandlers; 
     
     @Inject
-    private UiComponentFactoryFx(List<Handler<Node>> handlers) {
+    private UiComponentFactoryFx(List<UiComponentHandlerFx> handlers) {
         this.chainOfHandlers = ChainOfResponsibility.of(handlers);
         this.registeredHandlers = handlers.stream()
                 .map(Handler::getClass)
@@ -51,7 +50,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node> {
     }
     
     @Override
-    public Node componentFor(Request request) {
+    public FormField componentFor(Request request) {
         return chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(

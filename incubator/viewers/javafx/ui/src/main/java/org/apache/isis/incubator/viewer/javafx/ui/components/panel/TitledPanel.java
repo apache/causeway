@@ -38,6 +38,7 @@ public class TitledPanel extends VBox {
         uiLabel = _fx.newLabel(uiActionBar, label);
         _fx.h3(uiLabel);
         _fx.toolbarLayout(uiActionBar);
+        super.setFillWidth(true);
     }
     
 }

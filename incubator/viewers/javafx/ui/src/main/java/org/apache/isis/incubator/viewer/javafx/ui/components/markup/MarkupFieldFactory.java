@@ -20,14 +20,17 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.markup;
 
 import org.springframework.core.annotation.Order;
 
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 
 import lombok.val;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
 @org.springframework.stereotype.Component
@@ -40,7 +43,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     }
 
     @Override
-    public Node handle(Request request) {
+    public FormField handle(Request request) {
         
         val markupHtml = request.getFeatureValue(Markup.class)
                 .map(Markup::asString)
@@ -52,7 +55,27 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
         
         val uiComponent = new TextArea(markupHtml);
         uiComponent.setPrefHeight(40);
-        return uiComponent;
+        
+        val uiLabel = new Label(request.getFeatureLabel());
+        
+        return new FormField() {
+            
+            @Override
+            public Node getUiLabel() {
+                return uiLabel;
+            }
+            
+            @Override
+            public Node getUiField() {
+                return uiComponent;
+            }
+            
+            @Override
+            public LabelPosition getLabelPosition() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        };
     }
 
 
