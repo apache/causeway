@@ -40,10 +40,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -80,12 +90,31 @@ public final class _fx {
     public static HBox newHBox(Pane container) {
         val component = new HBox();
         container.getChildren().add(component);
+        _fx.padding(component, 4, 8);
+        _fx.borderDashed(component, Color.BLUE); // debug
         return component;
     }
 
     public static VBox newVBox(Pane container) {
         val component = new VBox();
         container.getChildren().add(component);
+        _fx.padding(component, 4, 8);
+        _fx.borderDashed(component, Color.GREEN); // debug
+        return component;
+    }
+    
+    public static VBox newVBox(TitledPane container) {
+        val component = new VBox();
+        container.setContent(component);
+        return component;
+    }
+    
+    public static FlowPane newFlowPane(Pane container) {
+        val component = new FlowPane();
+        container.getChildren().add(component);
+        //component.prefWrapLengthProperty().bind(container.widthProperty());
+        _fx.padding(component, 4, 8);
+        _fx.borderDashed(component, Color.RED); // debug
         return component;
     }
 
@@ -163,6 +192,10 @@ public final class _fx {
     
     // -- LAYOUTS
     
+    public static void padding(Region region, int hPadding, int vPadding) {
+        region.setPadding(new Insets(vPadding, hPadding, vPadding, hPadding));
+    }
+    
     public static GridPane formLayout(GridPane component) {
         component.setAlignment(Pos.CENTER);
         component.setHgap(10);
@@ -171,21 +204,42 @@ public final class _fx {
         return component;
     }
     
-    public static void toolbarLayout(HBox component) {
+    public static void toolbarLayout(FlowPane component) {
         component.setPadding(new Insets(15, 12, 15, 12));
-        component.setSpacing(10);
+        component.setHgap(10);
+        component.setVgap(10);
+        //component.setSpacing(10);
     }
     
-    public static void h1(Labeled component) {
+    // -- STYLES
+    
+    public static <T extends Labeled> T h1(T component) {
         component.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+        return component;
     }
     
-    public static void h2(Labeled component) {
+    public static <T extends Labeled> T h2(T component) {
         component.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+        return component;
     }
     
-    public static void h3(Labeled component) {
+    public static <T extends Labeled> T h3(T component) {
         component.setFont(Font.font("Verdana", FontWeight.NORMAL, 17));
+        return component;
+    }
+
+    public static <T extends Region> T backround(T region, Color color) {
+        region.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
+        return region;
+    }
+    
+    public static <T extends Region> T borderDashed(T region, Color color) {
+        region.setBorder(new Border(new BorderStroke(
+                color, 
+                BorderStrokeStyle.DASHED, 
+                new CornerRadii(3), 
+                new BorderWidths(1))));
+        return region;
     }
     
 

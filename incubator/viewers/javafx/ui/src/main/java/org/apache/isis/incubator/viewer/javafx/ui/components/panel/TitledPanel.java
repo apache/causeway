@@ -23,35 +23,21 @@ import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import lombok.Getter;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 @Getter
 public class TitledPanel extends VBox {
 
-    private final Label uiLabel = new Label();
-    private final HBox uiActionBar = new HBox();
+    private final Label uiLabel;
+    private final FlowPane uiActionBar;
     
     public TitledPanel(String label) {
         super();
-        _fx.add(this, uiActionBar);
-        _fx.add(uiActionBar, uiLabel);
-        uiLabel.setText(label);
+        uiActionBar = _fx.newFlowPane(this);
+        uiLabel = _fx.newLabel(uiActionBar, label);
         _fx.h3(uiLabel);
         _fx.toolbarLayout(uiActionBar);
-        
-        setBorder(new Border(new BorderStroke(
-                Color.ORANGE, 
-                BorderStrokeStyle.DASHED, 
-                new CornerRadii(3), 
-                new BorderWidths(1))));
-        
     }
     
 }

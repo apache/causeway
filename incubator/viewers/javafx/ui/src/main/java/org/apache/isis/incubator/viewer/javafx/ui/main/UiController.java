@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,10 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -54,12 +57,18 @@ public class UiController {
     @FXML private MenuBar menuBarLeft;
     @FXML private MenuBar menuBarRight;
     @FXML private ScrollPane contentView;
-    @FXML private AnchorPane pageContent;
+    @FXML private VBox contentPane;
     @FXML private TextArea sampleTextArea;
     
     @FXML
     public void initialize() {
         log.info("about to initialize");
+        contentView.setFitToWidth(true);
+        contentView.setFitToHeight(true);
+        contentView.setHbarPolicy(ScrollBarPolicy.NEVER);
+        contentView.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        contentPane.setFillWidth(true);
+        _fx.borderDashed(contentPane, Color.CRIMSON); //debug
         isisInteractionFactory.runAnonymous(this::buildMenu);
     }
     
@@ -81,8 +90,8 @@ public class UiController {
     }
     
     private void replaceContent(Node node) {
-        pageContent.getChildren().clear();
-        pageContent.getChildren().add(node);
+        contentPane.getChildren().clear();
+        contentPane.getChildren().add(node);
     }
     
 }

@@ -52,6 +52,7 @@ import lombok.extern.log4j.Log4j2;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 @Log4j2
 public class ObjectViewFx extends VBox {
@@ -79,19 +80,22 @@ public class ObjectViewFx extends VBox {
         val objectInteractor = ObjectBinding.bind(managedObject);
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
-
+        
+        //this.setFillWidth(true);
+        
         val gridVisistor = new UiGridLayout.Visitor<Pane, TabPane>(this) {
 
             @Override
             protected void onObjectTitle(Pane container, DomainObjectLayoutData domainObjectData) {
-                _fx.h1(_fx.newLabel(container, objectInteractor.getTitle()));
+                val label = _fx.h2(_fx.newLabel(container, objectInteractor.getTitle()));
+                label.maxWidthProperty().bind(
+                        container.widthProperty());
             }
 
             @Override
             protected Pane newRow(Pane container, BS3Row bs3Row) {
-                val uiRow = _fx.newHBox(container);
-                
-                uiRow.setSpacing(4);
+                val uiRow = _fx.newFlowPane(container);
+                //uiRow.setSpacing(4);
                 
                 //uiRow.setWidthFull();
                 //uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
@@ -102,6 +106,20 @@ public class ObjectViewFx extends VBox {
             protected Pane newCol(Pane container, BS3Col bs3col) {
 
                 val uiCol = _fx.newVBox(container);
+                
+                // note: also account for insets and padding, assuming that 98% seems reasonable
+                double realtiveWidthWithRespectToContainer = bs3col.getSpan()*0.98/12; 
+                
+                uiCol.prefWidthProperty().bind(
+                        container.widthProperty().multiply(realtiveWidthWithRespectToContainer));
+                
+                uiCol.maxWidthProperty().bind(
+                        container.widthProperty().multiply(realtiveWidthWithRespectToContainer));
+                
+//                container.minWidthProperty().bind(
+//                        container.widthProperty().multiply(realtiveWidthWithRespectToContainer));
+                
+                uiCol.setFillWidth(true);
                 
                 uiCol.setSpacing(4);
                 
@@ -119,8 +137,16 @@ public class ObjectViewFx extends VBox {
 
             @Override
             protected Pane newActionPanel(Pane container) {
-                val uiActionPanel = _fx.newHBox(container);
+                val uiActionPanel = _fx.newFlowPane(container);
                 _fx.toolbarLayout(uiActionPanel);
+                
+                uiActionPanel.prefWidthProperty().bind(
+                        container.widthProperty().multiply(0.95));
+                
+                uiActionPanel.maxWidthProperty().bind(
+                        container.widthProperty().multiply(0.95));
+                
+                _fx.backround(uiActionPanel, Color.FLORALWHITE);
                 
                 //uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
                 //uiActionPanel.setAlignItems(Alignment.BASELINE);

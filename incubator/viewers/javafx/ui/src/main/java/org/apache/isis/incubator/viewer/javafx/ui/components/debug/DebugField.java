@@ -18,8 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.debug;
 
-import java.util.concurrent.atomic.LongAdder;
-
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.field.CustomFieldFx;
 import org.apache.isis.viewer.common.model.debug.DebugUiModel;
@@ -30,12 +28,12 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class DebugField extends CustomFieldFx<DebugUiModel> {
 
     private DebugUiModel model;
-    private final GridPane detailGrid;
+    private final VBox detailGrid;
     private final TitledPane detailPane;
 
     public DebugField(String label) {
@@ -43,7 +41,7 @@ public class DebugField extends CustomFieldFx<DebugUiModel> {
         setLabel(label);
         val accordion = add(new Accordion());
         detailPane = _fx.newTitledPane(accordion, "Debug");
-        detailGrid = _fx.formLayout(_fx.newGrid(detailPane));
+        detailGrid = _fx.newVBox(detailPane);
     }
 
 
@@ -57,16 +55,13 @@ public class DebugField extends CustomFieldFx<DebugUiModel> {
         this.model = model;
         detailPane.setText(model.getSummaryText());
         
-        val rowIndex = new LongAdder();
-        
         model.getKeyValuePairs().forEach((k, v)->{
-            
-            val row = rowIndex.intValue();
-            
-            _fx.addGridCell(detailGrid, new Label(k), 0, row);
-            _fx.addGridCell(detailGrid, new TextArea(v), 1, row);
-            
-            rowIndex.increment();
+            _fx.add(detailGrid, new Label(k));
+            val text = _fx.add(detailGrid, new TextArea(v));
+//            val prefHeight = 16*(1+(int)_Strings.splitThenStream(v, "\n").count());
+//            text.setPrefHeight(prefHeight);
+            text.autosize();
+            //text.disableProperty().set(true);
         });
         
         
