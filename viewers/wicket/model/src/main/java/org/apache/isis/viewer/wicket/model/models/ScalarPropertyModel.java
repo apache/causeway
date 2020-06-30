@@ -168,8 +168,9 @@ implements PropertyUiModel {
         val proposedNewValue = getObject();
         getManagedProperty().modifyProperty(proposedNewValue);
         val owner = getManagedProperty().getOwner();
-        val result = ManagedObjects.copyIfClonable(owner); //XXX I don't understand, why do we need this?
-        return result;
+//        val result = ManagedObjects.copyIfClonable(owner); //XXX I don't understand, why do we need this?
+//        return result;
+        return owner;
 
     }
     

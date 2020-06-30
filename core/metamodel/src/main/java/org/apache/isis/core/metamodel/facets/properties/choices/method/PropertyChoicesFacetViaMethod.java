@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -73,14 +71,14 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
         
         val elementSpec = getObjectManager().loadSpecification(((FacetedMethod) getFacetHolder()).getType());
         val optionPojos = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
-        
-        if(elementSpec.isEntity()) {
-            _NullSafe.streamAutodetect(optionPojos)
-            .map(pojo->ManagedObject.of(elementSpec, pojo))
-            .filter(adapter->!ManagedObjects.EntityUtil.isAttached(adapter))
-            .forEach(detached->_Probe.errOut("non attached entity from choices method %s detected", method));
-        }
-        
+
+//XXX[ISIS-2383] debugging        
+//        if(elementSpec.isEntity()) {
+//            _NullSafe.streamAutodetect(optionPojos)
+//            .map(pojo->ManagedObject.of(elementSpec, pojo))
+//            .filter(adapter->!ManagedObjects.EntityUtil.isAttached(adapter))
+//            .forEach(detached->_Probe.errOut("non attached entity from choices method %s detected", method));
+//        }
         
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenAttachThenFilterByVisibility(elementSpec, optionPojos, interactionInitiatedBy);
