@@ -64,7 +64,7 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
     private String message;
 
     @Getter @Setter
-    @Property(editing = Editing.DISABLED, optionality = Optionality.OPTIONAL)
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     private ChildJdoEntity favoriteChild = null;
 
@@ -74,7 +74,7 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
         return this;
     }
     public List<ChildJdoEntity> choices0ChangeFavoriteChild() {
-        ArrayList<ChildJdoEntity> children = new ArrayList<>(getChildren());
+        List<ChildJdoEntity> children = new ArrayList<>(getChildren());
         children.remove(getFavoriteChild());
         return children;
     }
@@ -88,13 +88,13 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
 
 //end::class[]
 
-// TODO: using a editable property seems to fail, though...
-//    public List<ChildEntity> choicesFavoriteChild() {
-//        return getChildren();
-//    }
-//    public String disableFavoriteChild() {
-//        return getChildren().isEmpty() ? "no children" : null;
-//    }
+// TODO: using an editable property fails ...
+    public List<ChildJdoEntity> choicesFavoriteChild() {
+        return choices0ChangeFavoriteChild(); // reuse same logic
+    }
+    public String disableFavoriteChild() {
+        return getChildren().isEmpty() ? "no children" : null;
+    }
 
 //tag::class[]
     @Getter @Setter
