@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.function.Predicate;
 
 import org.jmock.Expectations;
@@ -29,6 +26,9 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -85,7 +85,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         @Override
         public String isValid(
                 final InteractionHead head,
-                final Object proposedValue,
+                final ManagedObject proposedValue,
                 final InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }

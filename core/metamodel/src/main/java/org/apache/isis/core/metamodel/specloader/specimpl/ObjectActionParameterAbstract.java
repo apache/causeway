@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -354,23 +355,14 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public String isValid(
             final InteractionHead head,
-            final Object proposedValue,
+            final ManagedObject proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        ManagedObject proposedValueAdapter = null;
-        ObjectSpecification proposedValueSpec;
-        if(proposedValue != null) {
-            proposedValueAdapter = getObjectManager().adapt(proposedValue);
-            if(proposedValueAdapter == null) {
-                return null;
-            }
-            proposedValueSpec = proposedValueAdapter.getSpecification();
-            if(!proposedValueSpec.isOfType(proposedValueSpec)) {
-                return null;
-            }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(proposedValue)) {
+            return null;
         }
 
-        val argumentAdapters = arguments(proposedValueAdapter);
+        val argumentAdapters = arguments(proposedValue);
         val validityContext = createProposedArgumentInteractionContext(
                 head, argumentAdapters, getNumber(), interactionInitiatedBy);
 

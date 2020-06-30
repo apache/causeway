@@ -127,8 +127,8 @@ implements ParameterUiModel {
             
             val head = action.interactionHead(parentAdapter);    
             
-            final String invalidReasonIfAny = parameter.isValid(head, proposedAdapter.getPojo(),
-                    InteractionInitiatedBy.USER);
+            final String invalidReasonIfAny = parameter
+                    .isValid(head, proposedAdapter, InteractionInitiatedBy.USER);
             return invalidReasonIfAny;
         } catch (final Exception ex) {
             return ex.getLocalizedMessage();

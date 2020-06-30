@@ -171,7 +171,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     String isValid(
             InteractionHead head,
-            Object proposedValue,
+            ManagedObject proposedValue,
             InteractionInitiatedBy interactionInitiatedBy);
 
     @Vetoed
