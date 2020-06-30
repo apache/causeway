@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -26,24 +26,25 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 
+//tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty2",
         associateWithSequence = "1"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
+@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT, named = "Inline as if edit", describedAs = "promptStyle = INLINE_AS_IF_EDIT")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty2PromptInlineAsIfEdit {
+public class StringViewModel_update2PromptStyleInlineAsIfEdit {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final StringViewModel stringViewModel;
 
-    public WrapperCharacterHolder act(Character newValue) {
-        wrapperCharacterHolder.setReadOnlyProperty2(newValue);
-        return wrapperCharacterHolder;
+    public StringViewModel act(String newValue) {
+        stringViewModel.setReadOnlyProperty2(newValue);
+        return stringViewModel;
     }
-    public Character default0Act() {
-        return wrapperCharacterHolder.getReadOnlyProperty2();
+    public String default0Act() {
+        return stringViewModel.getReadOnlyProperty2();
     }
-
 
 }
+//end::class[]

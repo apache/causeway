@@ -1,0 +1,34 @@
+TODO
+
+[source,java]
+----
+include::StringViewModel.java[tags=class]
+----
+
+* positioned _below_:
++
+[source,java]
+----
+include::StringViewModel_updatePositionBelow.java[tags=class]
+----
+
+* positioned _right_:
++
+[source,java]
+----
+include::StringViewModel_updatePositionRight.java[tags=class]
+----
+
+* positioned on _panel_:
++
+[source,java]
+----
+include::StringViewModel_updatePositionPanel.java[tags=class]
+----
+
+* positioned on _panel in drop-down_:
++
+[source,java]
+----
+include::StringViewModel_updatePositionPanelDropDown.java[tags=class]
+----

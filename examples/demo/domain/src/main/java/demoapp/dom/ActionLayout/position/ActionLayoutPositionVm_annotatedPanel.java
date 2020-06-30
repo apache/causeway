@@ -16,34 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.ActionLayout.position;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
+//tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
+        associateWith = "readOnlyProperty1",
         associateWithSequence = "2"
 )
-@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL, named = "Modal", describedAs = "promptStyle = MODAL")
+@ActionLayout(position = ActionLayout.Position.PANEL, named = "Positioned on panel", describedAs = "position = PANEL")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyPropertyPromptStyleModal {
+public class ActionLayoutPromptVm_update1PositionPanel {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final ActionLayoutPositionVm stringViewModel;
 
-    public WrapperCharacterHolder act(Character newValue) {
-        wrapperCharacterHolder.setReadOnlyProperty(newValue);
-        return wrapperCharacterHolder;
+    public ActionLayoutPositionVm act(String newValue) {
+        stringViewModel.setReadOnlyProperty1(newValue);
+        return stringViewModel;
     }
-    public Character default0Act() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
+    public String default0Act() {
+        return stringViewModel.getReadOnlyProperty1();
     }
-
 
 }
+//end::class[]

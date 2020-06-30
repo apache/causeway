@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.ActionLayout.position;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -25,24 +25,25 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 
+//tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "2"
+        associateWith = "readOnlyProperty2",
+        associateWithSequence = "1"
 )
-@ActionLayout(position = ActionLayout.Position.PANEL, named = "Position in panel", describedAs = "position = PANEL")
+@ActionLayout(named = "Positioned below", describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=BELOW/></cpt:property>")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyPropertyPositionPanel {
+public class ActionLayoutPromptVm_update2PositionBelow {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final ActionLayoutPositionVm stringViewModel;
 
-    public WrapperCharacterHolder act(Character newValue) {
-        wrapperCharacterHolder.setReadOnlyProperty(newValue);
-        return wrapperCharacterHolder;
+    public ActionLayoutPositionVm act(String newValue) {
+        stringViewModel.setReadOnlyProperty2(newValue);
+        return stringViewModel;
     }
-    public Character default0Act() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
+    public String default0Act() {
+        return stringViewModel.getReadOnlyProperty2();
     }
-
 
 }
+//end::class[]

@@ -16,26 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.ActionLayout.promptStyle;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
+
 //tag::class[]
-@Property()
-@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty4",
+        associateWithSequence = "1"
+)
+@ActionLayout(describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = INLINE_AS_IF_EDIT/></cpt:property>")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_mixinPropertyWithCssClass {
+public class StringViewModel_update4PromptStyleInlineAsIfEdit {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final StringViewModel stringViewModel;
 
-    @MemberOrder(name = "contributed", sequence = "1")
-    public Character prop() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
+    public StringViewModel act(String newValue) {
+        stringViewModel.setReadOnlyProperty4(newValue);
+        return stringViewModel;
+    }
+    public String default0Act() {
+        return stringViewModel.getReadOnlyProperty4();
     }
 
 }

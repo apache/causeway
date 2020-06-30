@@ -16,24 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.ActionLayout.position;
 
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
-//@Property()
-//@PropertyLayout(named = "<i>Named<i/> <b>not</b> escaped property", namedEscaped = false, describedAs = "named = \"(some markup)\", namedEscaped = false") // TODO: this doesn't render, and causes bootlint issues
+//tag::class[]
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty1",
+        associateWithSequence = "1"
+)
+@ActionLayout(position = ActionLayout.Position.BELOW, named = "Positioned below", describedAs = "position = BELOW")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_mixinPropertyNamedNotEscaped {
+public class ActionLayoutPromptVm_update1PositionBelow {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final ActionLayoutPositionVm stringViewModel;
 
-    @MemberOrder(name = "contributed", sequence = "3")
-    public Character prop() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
+    public ActionLayoutPositionVm act(String newValue) {
+        stringViewModel.setReadOnlyProperty1(newValue);
+        return stringViewModel;
+    }
+    public String default0Act() {
+        return stringViewModel.getReadOnlyProperty1();
     }
 
-
 }
+//end::class[]

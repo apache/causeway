@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -29,21 +29,21 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
+        associateWith = "readOnlyProperty3",
+        associateWithSequence = "2"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Inline", describedAs = "promptStyle = INLINE")
+@ActionLayout(describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = DIALOG/></cpt:property>")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyPropertyPromptStyleInline {
+public class StringViewModel_update3PromptStyleDialog {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final StringViewModel stringViewModel;
 
-    public WrapperCharacterHolder act(Character newValue) {
-        wrapperCharacterHolder.setReadOnlyProperty(newValue);
-        return wrapperCharacterHolder;
+    public StringViewModel act(String newValue) {
+        stringViewModel.setReadOnlyProperty3(newValue);
+        return stringViewModel;
     }
-    public Character default0Act() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
+    public String default0Act() {
+        return stringViewModel.getReadOnlyProperty3();
     }
 
 }
