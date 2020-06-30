@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.position;
+package demoapp.dom.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -31,13 +32,13 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty1",
         associateWithSequence = "2"
 )
-@ActionLayout(position = ActionLayout.Position.PANEL, named = "Positioned on panel", describedAs = "position = PANEL")
+@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL, named = "Modal", describedAs = "promptStyle = MODAL")
 @RequiredArgsConstructor
-public class ActionLayoutPositionVm_annotatedPanel {
+public class ActionLayoutPromptStyleVm_annotatedModal {
 
-    private final ActionLayoutPositionVm stringViewModel;
+    private final ActionLayoutPromptStyleVm stringViewModel;
 
-    public ActionLayoutPositionVm act(String newValue) {
+    public ActionLayoutPromptStyleVm act(String newValue) {
         stringViewModel.setReadOnlyProperty1(newValue);
         return stringViewModel;
     }

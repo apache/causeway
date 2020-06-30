@@ -38,7 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder;
 
 //tag::class[]
-@XmlRootElement(name = "demo.PrimitiveBooleanViewModel")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(

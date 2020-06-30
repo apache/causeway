@@ -45,7 +45,7 @@ import lombok.val;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
-@XmlRootElement(name = "demo.StatefulViewModelJaxbRefsEntity")
+@XmlRootElement(name = "root")
 @XmlType(
         propOrder = {"message", "favoriteChild", "children"}
 )

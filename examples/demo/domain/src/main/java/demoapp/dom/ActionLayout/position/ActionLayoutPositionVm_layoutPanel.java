@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(named = "Positioned on panel", describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=PANEL/></cpt:property>")
 @RequiredArgsConstructor
-public class ActionLayoutPromptVm_update2PositionPanel {
+public class ActionLayoutPositionVm_layoutPanel {
 
     private final ActionLayoutPositionVm stringViewModel;
 

@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.wrapper.characters.vm;
 
-import javax.jdo.annotations.Column;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -41,7 +40,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.wrapper.characters.holder.WrapperCharacterHolder;
 
 //tag::class[]
-@XmlRootElement(name = "demo.WrapperCharacterViewModel")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(

@@ -38,7 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.floats.holder.PrimitiveFloatHolder;
 
 //tag::class[]
-@XmlRootElement(name = "demo.PrimitiveFloatViewModel")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(

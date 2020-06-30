@@ -34,11 +34,11 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT, named = "Inline as if edit", describedAs = "promptStyle = INLINE_AS_IF_EDIT")
 @RequiredArgsConstructor
-public class StringViewModel_update2PromptStyleInlineAsIfEdit {
+public class ActionLayoutPromptStyleVm_annotatedInlineAsIfEdit {
 
-    private final StringViewModel stringViewModel;
+    private final ActionLayoutPromptStyleVm stringViewModel;
 
-    public StringViewModel act(String newValue) {
+    public ActionLayoutPromptStyleVm act(String newValue) {
         stringViewModel.setReadOnlyProperty2(newValue);
         return stringViewModel;
     }

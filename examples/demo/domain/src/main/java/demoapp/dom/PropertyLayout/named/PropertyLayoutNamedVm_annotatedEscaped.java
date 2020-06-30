@@ -28,13 +28,13 @@ import lombok.RequiredArgsConstructor;
 @Property()
 @PropertyLayout(named = "<i>Named<i/> escaped mixin property", namedEscaped = true, describedAs = "named = \"(some markup)\", namedEscaped = true")
 @RequiredArgsConstructor
-public class StringViewModel_mixinAnnotatedNamedEscaped {
+public class PropertyLayoutNamedVm_annotatedEscaped {
 
-    private final StringViewModel stringViewModel;
+    private final PropertyLayoutNamedVm propertyLayoutNamedVm;
 
     @MemberOrder(name = "contributed", sequence = "4")
     public String prop() {
-        return stringViewModel.getPropertyUsingAnnotation();
+        return propertyLayoutNamedVm.getPropertyUsingAnnotation();
     }
 
 

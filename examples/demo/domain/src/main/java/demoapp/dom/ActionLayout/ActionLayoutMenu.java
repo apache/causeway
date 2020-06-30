@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.PropertyLayout;
+package demoapp.dom.ActionLayout;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -26,19 +26,19 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyLayoutMenu")
-@DomainObjectLayout(named="PropertyLayout")
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionLayoutMenu")
+@DomainObjectLayout(named="ActionLayout")
 @Log4j2
-public class PropertyLayoutMenu {
+public class ActionLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.PropertyLayout.named.StringViewModel named(){
-        return new demoapp.dom.PropertyLayout.named.StringViewModel();
+    public demoapp.dom.ActionLayout.position.ActionLayoutPositionVm position(){
+        return new demoapp.dom.ActionLayout.position.ActionLayoutPositionVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.PropertyLayout.cssClass.StringViewModel cssClass(){
-        return new demoapp.dom.PropertyLayout.cssClass.StringViewModel();
+    public demoapp.dom.ActionLayout.promptStyle.ActionLayoutPromptStyleVm promptStyle(){
+        return new demoapp.dom.ActionLayout.promptStyle.ActionLayoutPromptStyleVm();
     }
 
 

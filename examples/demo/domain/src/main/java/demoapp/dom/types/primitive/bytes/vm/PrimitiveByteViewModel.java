@@ -38,7 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
 
 //tag::class[]
-@XmlRootElement(name = "demo.PrimitiveByteViewModel")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(

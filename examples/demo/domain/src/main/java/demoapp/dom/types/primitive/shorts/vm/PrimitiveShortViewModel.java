@@ -38,7 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.shorts.holder.PrimitiveShortHolder;
 
 //tag::class[]
-@XmlRootElement(name = "demo.PrimitiveShortViewModel")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(

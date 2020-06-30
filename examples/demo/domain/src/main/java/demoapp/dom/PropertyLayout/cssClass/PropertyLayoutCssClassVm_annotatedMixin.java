@@ -29,13 +29,13 @@ import lombok.RequiredArgsConstructor;
 @Property()
 @PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
-public class StringViewModel_mixinPropertyWithCssClass {
+public class PropertyLayoutCssClassVm_annotatedMixin {
 
-    private final StringViewModel stringViewModel;
+    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
 
     @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
-        return stringViewModel.getPropertyUsingAnnotation();
+        return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
     }
 
 }

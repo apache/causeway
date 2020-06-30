@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.position;
+package demoapp.dom.ActionLayout.promptStyle;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
@@ -43,13 +44,22 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.ActionLayoutPositionVm"
+        objectType = "demo.ActionLayoutPromptStyleVm"
 )
-public class ActionLayoutPositionVm implements HasAsciiDocDescription {
+public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
 
-    public String title() {
-        return "Demonstrates: ActionLayout#position";
+//end::class[]
+    public ActionLayoutPromptStyleVm() {
+        this.title = "ActionLayout#promptStyle";
     }
+
+//tag::class[]
+    @Title(prepend = "Demonstrates: ")
+    @Property(editing = Editing.DISABLED)
+    @MemberOrder(name = "general", sequence = "1")
+    @XmlElement(required = true)
+    @Getter @Setter
+    private String title;
 
     @Property(optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "annotated", sequence = "1")
@@ -58,10 +68,24 @@ public class ActionLayoutPositionVm implements HasAsciiDocDescription {
     private String readOnlyProperty1;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "layout", sequence = "1")
+    @PropertyLayout(describedAs = "has associated action with promptStyle=INLINE_AS_IF_EDIT")
+    @MemberOrder(name = "annotated", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String readOnlyProperty2;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @MemberOrder(name = "layout", sequence = "1")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String readOnlyProperty3;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(describedAs = "has associated action with promptStyle=INLINE_AS_IF_EDIT")
+    @MemberOrder(name = "layout", sequence = "2")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String readOnlyProperty4;
 
 }
 //end::class[]

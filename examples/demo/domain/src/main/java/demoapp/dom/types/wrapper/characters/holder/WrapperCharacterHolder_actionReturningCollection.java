@@ -29,9 +29,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 
-@Action(
-        semantics = SemanticsOf.SAFE
-)
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class WrapperCharacterHolder_actionReturningCollection {
 
@@ -45,5 +44,5 @@ public class WrapperCharacterHolder_actionReturningCollection {
         );
         return characters;
     }
-
 }
+//end::class[]

@@ -38,7 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder;
 
 //tag::class[]
-@XmlRootElement(name = "demo.PrimitiveDoubleViewModel")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(

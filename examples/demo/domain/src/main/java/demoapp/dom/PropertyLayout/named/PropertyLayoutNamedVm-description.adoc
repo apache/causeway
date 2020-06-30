@@ -1,0 +1,12 @@
+TODO
+
+[source,java]
+----
+include::PropertyLayoutNamedVm.java[tags=class]
+----
+
+[source,java]
+----
+include::PropertyLayoutNamedMetaAnnotation.java[tags=class]
+----
+

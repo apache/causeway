@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(named = "Positioned below", describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=BELOW/></cpt:property>")
 @RequiredArgsConstructor
-public class ActionLayoutPromptVm_update2PositionBelow {
+public class ActionLayoutPositionVm_layoutBelow {
 
     private final ActionLayoutPositionVm stringViewModel;
 

@@ -17,24 +17,16 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="General" id="general"/>
-			<cpt:fieldSet name="Annotated" id="annotated"/>
-			<cpt:fieldSet name="Layout" id="layout">
-				<cpt:action id="layoutPanel" position="PANEL">
-					<cpt:named>Positioned on panel</cpt:named>
-				</cpt:action>
-				<cpt:action id="layoutPanelDropDown" position="PANEL_DROPDOWN">
-					<cpt:named>Positioned on panel in drop down</cpt:named>
-				</cpt:action>
-				<cpt:property id="readOnlyProperty2">
-					<cpt:action id="layoutBelow" position="BELOW">
-						<cpt:named>Positioned below</cpt:named>
-					</cpt:action>
-					<cpt:action id="layoutRight" position="RIGHT">
-						<cpt:named>Positioned right</cpt:named>
-					</cpt:action>
+			<cpt:fieldSet name="General" id="general">
+				<cpt:property id="title" />
+			</cpt:fieldSet>
+			<cpt:fieldSet name="Properties" id="properties">
+				<cpt:property id="namedUsingLayoutProperty">
+					<cpt:named>Named using layout.xml</cpt:named>
 				</cpt:property>
 			</cpt:fieldSet>
+			<cpt:fieldSet name="Contributed" id="contributed"/>
+			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">

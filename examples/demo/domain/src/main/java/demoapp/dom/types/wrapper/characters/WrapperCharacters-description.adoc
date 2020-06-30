@@ -9,7 +9,7 @@ Some properties on these domain objects are mandatory, some optional.
 
 == Common interface
 
-These objects both implement a common interface, `WrapperCharacterHolder`:
+These objects both implement a common interface, `StringHolder`:
 
 [source,java]
 ----
@@ -29,7 +29,7 @@ For example:
 +
 [source,java]
 ----
-include::holder/WrapperCharacterHolder_updateReadOnlyPropertyPromptStyleInline.java[tags=class]
+include::holder/WrapperCharacterHolder_updateReadOnlyOptionalProperty.java[tags=class]
 ----
 +
 There are a number of variants of this action, to demonstrate different prompt layouts.
@@ -41,17 +41,11 @@ There are a number of variants of this action, to demonstrate different prompt l
 include::holder/WrapperCharacterHolder_actionReturning.java[tags=class]
 ----
 
-== Mixin properties
 
-We also use the interface to contribute a number of mixin properties:
-
-* the `mixinPropertyWithCssClass` property:
+* the `actionReturningCollection` action is:
 +
 [source,java]
 ----
-include::holder/WrapperCharacterHolder_mixinPropertyWithCssClass.java[tags=class]
+include::holder/WrapperCharacterHolder_actionReturningCollection.java[tags=class]
 ----
-+
-TIP: the styling is provided from the `application.css` static resource.
-
 

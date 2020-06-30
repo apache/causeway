@@ -9,10 +9,12 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+//tag::class[]
 @PropertyLayout(named = "Named <i>from</i> custom type", namedEscaped = false)
 @Inherited
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PropertyLayoutNamedCustomType {
+public @interface PropertyLayoutNamedMetaAnnotation {
 
 }
+//end::class[]

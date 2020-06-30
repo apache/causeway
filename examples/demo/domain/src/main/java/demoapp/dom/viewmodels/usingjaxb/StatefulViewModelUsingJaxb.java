@@ -45,7 +45,7 @@ import lombok.val;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
-@XmlRootElement(name = "demo.StatefulViewModelUsingJaxb")   // <.>
+@XmlRootElement(name = "root")                              // <.>
 @XmlType                                                    // <.>
 @XmlAccessorType(XmlAccessType.FIELD)                       // <.>
 @DomainObject(
@@ -65,7 +65,7 @@ public class StatefulViewModelUsingJaxb implements HasAsciiDocDescription {
 
 //end::class[]
 //tag::child[]
-    @XmlRootElement(name = "demo.StatefulViewModelUsingJaxb.Child")
+    @XmlRootElement(name = "root")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
     @Data

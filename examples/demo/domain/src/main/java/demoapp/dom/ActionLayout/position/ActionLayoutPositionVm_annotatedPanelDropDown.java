@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(position = ActionLayout.Position.PANEL_DROPDOWN, named = "Positioned on panel in dropdown", describedAs = "position = PANEL_DROPDOWN")
 @RequiredArgsConstructor
-public class ActionLayoutPromptVm_update1PositionPanelDropDown {
+public class ActionLayoutPositionVm_annotatedPanelDropDown {
 
     private final ActionLayoutPositionVm stringViewModel;
 

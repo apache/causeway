@@ -1,0 +1,32 @@
+TODO
+
+[source,java]
+----
+include::ActionLayoutPromptStyleVm.java[tags=class]
+----
+
+* `promptStyle` of _inline_:
++
+[source,java]
+----
+include::ActionLayoutPromptStyleVm_annotatedInline.java[tags=class]
+----
+
+* `promptStyle` of _sidebar_:
++
+[source,java]
+----
+include::ActionLayoutPromptStyleVm_annotatedSidebar.java[tags=class]
+----
+
+* `promptStyle` of _modal_:
++
+[source,java]
+----
+include::ActionLayoutPromptStyleVm_annotatedModal.java[tags=class]
+----
+
+[source,java]
+----
+include::ActionLayoutPromptStyleVm_annotatedInlineAsIfEdit.java[tags=class]
+----

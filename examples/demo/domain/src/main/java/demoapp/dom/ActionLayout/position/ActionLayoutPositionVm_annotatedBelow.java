@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(position = ActionLayout.Position.BELOW, named = "Positioned below", describedAs = "position = BELOW")
 @RequiredArgsConstructor
-public class ActionLayoutPromptVm_update1PositionBelow {
+public class ActionLayoutPositionVm_annotatedBelow {
 
     private final ActionLayoutPositionVm stringViewModel;
 

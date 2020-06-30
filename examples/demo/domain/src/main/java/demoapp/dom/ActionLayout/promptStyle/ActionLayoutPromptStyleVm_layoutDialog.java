@@ -20,7 +20,6 @@ package demoapp.dom.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -34,11 +33,11 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = DIALOG/></cpt:property>")
 @RequiredArgsConstructor
-public class StringViewModel_update3PromptStyleDialog {
+public class ActionLayoutPromptStyleVm_layoutDialog {
 
-    private final StringViewModel stringViewModel;
+    private final ActionLayoutPromptStyleVm stringViewModel;
 
-    public StringViewModel act(String newValue) {
+    public ActionLayoutPromptStyleVm act(String newValue) {
         stringViewModel.setReadOnlyProperty3(newValue);
         return stringViewModel;
     }

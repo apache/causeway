@@ -46,12 +46,12 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayout.cssClass.ActionLayoutPromptStyleVm"
+        objectType = "demo.PropertyLayoutCssClassVm"
 )
-public class StringViewModel implements HasAsciiDocDescription {
+public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 
 //end::class[]
-    public StringViewModel() {
+    public PropertyLayoutCssClassVm() {
         this.title = "PropertyLayout#cssClass";
     }
 

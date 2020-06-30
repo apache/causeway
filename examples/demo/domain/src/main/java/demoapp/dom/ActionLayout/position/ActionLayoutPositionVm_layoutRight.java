@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(named = "Positioned right", describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=RIGHT/></cpt:property>")
 @RequiredArgsConstructor
-public class ActionLayoutPromptVm_update2PositionRight {
+public class ActionLayoutPositionVm_layoutRight {
 
     private final ActionLayoutPositionVm stringViewModel;
 
