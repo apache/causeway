@@ -90,10 +90,10 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
 
 // TODO: using an editable property fails ...
     public List<ChildJdoEntity> choicesFavoriteChild() {
-        return choices0ChangeFavoriteChild(); // reuse same logic
+        return choices0ChangeFavoriteChild(); // reuse logic from above
     }
     public String disableFavoriteChild() {
-        return getChildren().isEmpty() ? "no children" : null;
+        return disableChangeFavoriteChild(); // reuse logic from above
     }
 
 //tag::class[]

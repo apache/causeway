@@ -396,11 +396,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     @Override
     public Stream<FormPendingParamUiModel> streamPendingParamUiModels() {
 
-        val targetAdapter = this.getOwner();
-        val realTargetAdapter = this.getMetaModel().realTargetAdapter(targetAdapter);
+        val owner = this.getOwner();
+        val target = this.getMetaModel().realTargetAdapter(owner);
         val pendingArgs = getArgumentsAsParamModel();
 
-        val head = InteractionHead.of(targetAdapter, realTargetAdapter);
+        val head = InteractionHead.of(owner, target);
         
         return argCache()
         .streamParamUiModels()

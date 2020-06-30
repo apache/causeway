@@ -130,13 +130,15 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return parentEntityModel;
     }
 
-    private transient ManagedObject owner;
+    //XXX[ISIS-2383] don't cache always load from parent model
+    //private transient ManagedObject owner;
     @Override
     public ManagedObject getOwner() {
-        if(owner==null) {
-            owner = getParentUiModel().load(); 
-        }
-        return owner;  
+//        if(owner==null) {
+//            owner = getParentUiModel().load(); 
+//        }
+//        return owner;
+        return getParentUiModel().load();
     }
     
     /**
