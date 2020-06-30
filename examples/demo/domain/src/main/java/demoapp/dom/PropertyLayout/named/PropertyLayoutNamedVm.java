@@ -45,10 +45,10 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutNamedVm"
+        objectType = "demo.PropertyLayoutNamedVm",
+        editing = Editing.ENABLED
 )
-public class PropertyLayoutNamedVm
-        implements HasAsciiDocDescription {
+public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 
 //end::class[]
     public PropertyLayoutNamedVm() {
@@ -56,7 +56,7 @@ public class PropertyLayoutNamedVm
     }
 
 //tag::class[]
-    @Title(prepend = "Demonstrates: ")
+    @Title
     @Property(editing = Editing.DISABLED)
     @XmlElement(required = true)
     @Getter @Setter
@@ -64,17 +64,31 @@ public class PropertyLayoutNamedVm
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(named = "Named using annotation", describedAs = "@PropertyLayout(named= \"Named using annotation\")", hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "properties", sequence = "1")
+    @MemberOrder(name = "named", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingAnnotation;
+    private String namedUsingAnnotation;
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(describedAs = "<cpt:property id=\"...\"><cpt:named>...</cpt:named></cpt:property>", hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "properties", sequence = "2")
+    @MemberOrder(name = "named", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingLayout;
+    private String namedUsingLayout;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(named = "Named <b>uses</b> <i>markup</i>", namedEscaped = false, describedAs = "@PropertyLayout(named= \"Named <b>uses</b> <i>markup</i>\" namedEscaped=false)", hidden = Where.ALL_TABLES)
+    @MemberOrder(name = "markup", sequence = "1")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String nameUsesMarkup;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(named = "Named <b>but</b> <i>escaped</i>", namedEscaped = false, describedAs = "@PropertyLayout(named= \"Named <b>but</b> <i>unescaped</i>\" namedEscaped=true)", hidden = Where.ALL_TABLES)
+    @MemberOrder(name = "markup", sequence = "2")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String nameUsesEscapedMarkup;
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayoutNamedMetaAnnotation
@@ -82,7 +96,7 @@ public class PropertyLayoutNamedVm
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotation;
+    private String namedUsingMetaAnnotation;
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayoutNamedMetaAnnotation
@@ -90,7 +104,7 @@ public class PropertyLayoutNamedVm
     @MemberOrder(name = "meta-annotated", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotationOverridden;
+    private String namedUsingMetaAnnotationButOverridden;
 
 }
 //end::class[]

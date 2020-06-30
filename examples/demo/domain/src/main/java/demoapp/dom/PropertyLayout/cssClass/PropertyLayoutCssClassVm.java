@@ -46,7 +46,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutCssClassVm"
+        objectType = "demo.PropertyLayoutCssClassVm",
+        editing = Editing.ENABLED
 )
 public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 
@@ -56,7 +57,7 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
     }
 
 //tag::class[]
-    @Title(prepend = "Demonstrates: ")
+    @Title
     @Property(editing = Editing.DISABLED)
     @XmlElement(required = true)
     @Getter @Setter

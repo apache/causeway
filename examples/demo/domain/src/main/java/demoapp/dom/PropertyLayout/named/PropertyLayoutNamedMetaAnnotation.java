@@ -10,7 +10,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
 //tag::class[]
-@PropertyLayout(named = "Named <i>from</i> custom type", namedEscaped = false)
+@PropertyLayout(named = "Named from meta-annotation")
 @Inherited
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)

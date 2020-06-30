@@ -20,12 +20,13 @@
 			<cpt:fieldSet name="General" id="general">
 				<cpt:property id="title" />
 			</cpt:fieldSet>
-			<cpt:fieldSet name="Properties" id="properties">
-				<cpt:property id="namedUsingLayoutProperty">
+			<cpt:fieldSet name="Named" id="named">
+				<cpt:property id="propertyUsingAnnotation"/>
+				<cpt:property id="propertyUsingLayout">
 					<cpt:named>Named using layout.xml</cpt:named>
 				</cpt:property>
 			</cpt:fieldSet>
-			<cpt:fieldSet name="Contributed" id="contributed"/>
+			<cpt:fieldSet name="Markup" id="markup"/>
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
