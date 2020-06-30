@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.fallback;
 
+import org.apache.isis.core.commons.collections.CanVector;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
@@ -31,10 +32,10 @@ public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
     }
 
     @Override
-    public Object[][] getChoices(
+    public CanVector<ManagedObject> getChoices(
             final ManagedObject inObject,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ManagedObject[0][0];
+        return CanVector.empty();
     }
 
     @Override

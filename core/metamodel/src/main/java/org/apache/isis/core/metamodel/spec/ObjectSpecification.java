@@ -465,8 +465,13 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // -- TYPE COMPATIBILITY UTILITIES
     
     default public void assertPojoCompatible(@Nullable Object pojo) {
+        
+        // can do this check only when the pojo is not null, otherwise is always considered valid
+        if(pojo==null) {
+            return;
+        }
+        
         if(!isPojoCompatible(pojo)) {
-            Objects.requireNonNull(pojo);
             val expectedType = getCorrespondingClass();
             throw _Exceptions.illegalArgument(
                     "Pojo not compatible with ObjectSpecification, " +
@@ -477,12 +482,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
         }
     }
     
-    default public boolean isPojoCompatible(@Nullable Object pojo) {
-        
-        // can do this check only when the pojo is not null, otherwise is always considered valid
-        if(pojo==null) {
-            return true;
-        }
+    default public boolean isPojoCompatible(Object pojo) {
         
         val expectedType = getCorrespondingClass();
         val actualType = pojo.getClass();

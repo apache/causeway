@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.choices;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -44,7 +45,7 @@ public interface PropertyChoicesFacet extends Facet {
     /**
      * Gets the available choices for this property.
      */
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 }

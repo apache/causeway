@@ -110,9 +110,8 @@ public interface ManagedObject {
      * @return
      */
     public static ManagedObject of(@NonNull ObjectSpecification specification, @Nullable Object pojo) {
-        
+        ManagedObjects.assertPojoNotManaged(pojo);
         specification.assertPojoCompatible(pojo);
-        
         return new SimpleManagedObject(specification, pojo);
     }
     
@@ -128,6 +127,7 @@ public interface ManagedObject {
                     "pojo.toString() = %s",
                     specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
+        ManagedObjects.assertPojoNotManaged(pojo);
         return SimpleManagedObject.identified(specification, pojo, rootOid);
     }
 
@@ -140,7 +140,7 @@ public interface ManagedObject {
     public static ManagedObject of(
             Function<Class<?>, ObjectSpecification> specLoader, 
             Object pojo) {
-
+        ManagedObjects.assertPojoNotManaged(pojo);
         return new LazyManagedObject(specLoader, pojo);
     }
     

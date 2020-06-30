@@ -254,6 +254,48 @@ public final class ManagedObjects {
     private static String abbreviated(final String str, final int maxLength, String suffix) {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + suffix;
     }
+    
+    // -- ADABT UTILITIES
+    
+    public static Can<ManagedObject> adaptMultipleOfType(
+            @NonNull final ObjectSpecification elementSpec,
+            @Nullable final Object collectionOrArray) {
+        
+        return _NullSafe.streamAutodetect(collectionOrArray)
+        .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
+        .collect(Can.toCan());
+    }
+
+    /**
+     * used eg. to adapt the result of supporting methods, that return choice pojos
+     */
+    public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
+            @NonNull final ObjectSpecification elementSpec,
+            @Nullable final Object collectionOrArray, 
+            @NonNull  final InteractionInitiatedBy interactionInitiatedBy) {
+        
+        return _NullSafe.streamAutodetect(collectionOrArray)
+        .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
+//        .map(ManagedObjects.EntityUtil::reattach)
+        .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
+        .collect(Can.toCan());
+    }
+    
+    public static void assertPojoNotManaged(@Nullable Object pojo) {
+        // can do this check only when the pojo is not null, otherwise is always considered valid
+        if(pojo==null) {
+            return;
+        }
+        
+        if(pojo instanceof ManagedObject) {
+            throw _Exceptions.illegalArgument(
+                    "Cannot adapt a pojo of type ManagedObject, " +
+                    "pojo.getClass() = %s, " +
+                    "pojo.toString() = %s",
+                    pojo.getClass(), pojo.toString());
+        }
+    }
+
 
     // -- ENTITY UTILITIES
     
@@ -337,6 +379,8 @@ public final class ManagedObjects {
             if(!entityState.isDetached()) {
                 return managedObject;
             }
+            
+            //TODO identification fails, on detached object, if rootOid was not previously memoized 
             
             val objectIdentifier = identify(managedObject)
                     .map(RootOid::getIdentifier);
@@ -720,6 +764,8 @@ public final class ManagedObjects {
         }
         
     }
+
+
     
 
 }

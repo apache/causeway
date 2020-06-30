@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.param.choices.enums;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
@@ -36,7 +35,8 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
     }
 
     @Override
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
+            final ObjectSpecification requiredSpec,
             final ManagedObject adapter,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -46,7 +46,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
         final ObjectSpecification noSpec = getSpecification(paramPeer.getType());
         final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null) {
-            return _Constants.emptyObjects;
+            return Can.empty();
         }
         return choicesFacet.getChoices(adapter, interactionInitiatedBy);
     }

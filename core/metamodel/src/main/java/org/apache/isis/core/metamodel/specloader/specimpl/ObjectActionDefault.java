@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -33,8 +32,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.internal._Constants;
+import org.apache.isis.core.commons.collections.CanVector;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -531,95 +529,82 @@ implements ObjectAction {
     // -- choices
 
     @Override
-    public Can<Can<ManagedObject>> getChoices(
+    public CanVector<ManagedObject> getChoices(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final int parameterCount = getParameterCount();
-        Object[][] parameterChoicesPojos;
+        CanVector<ManagedObject> paramChoicesVector; 
 
         final ActionChoicesFacet facet = getFacet(ActionChoicesFacet.class);
         val parameters = getParameters();
 
         if (!facet.isFallback()) {
             // using the old choicesXxx() approach
-            parameterChoicesPojos = facet.getChoices(target,
+            paramChoicesVector = facet.getChoices(target,
                     interactionInitiatedBy);
 
             // if no options, or not the right number of pojos, then default
-            if (parameterChoicesPojos == null) {
-                parameterChoicesPojos = new Object[parameterCount][];
-            } else if (parameterChoicesPojos.length != parameterCount) {
+            if (paramChoicesVector == null) {
+                paramChoicesVector = new CanVector<>(parameterCount);
+            } else if (paramChoicesVector.size() != parameterCount) {
                 throw new DomainModelException(
                         String.format("Choices array of incompatible size; expected %d elements, but was %d for %s",
-                                parameterCount, parameterChoicesPojos.length, facet));
+                                parameterCount, paramChoicesVector.size(), facet));
             }
         } else {
             // use the new choicesNXxx approach for each param in turn
             // (the reflector will have made sure both aren't installed).
 
-            parameterChoicesPojos = new Object[parameterCount][];
+            val emptyPendingArgs = Can.<ManagedObject>empty();
+            paramChoicesVector = new CanVector<>(parameterCount);
             for (int i = 0; i < parameterCount; i++) {
-                final ActionParameterChoicesFacet paramFacet = parameters.getElseFail(i).getFacet(ActionParameterChoicesFacet.class);
+                val param = parameters.getElseFail(i);
+                val paramSpec = param.getSpecification();
+                val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
+                
                 if (paramFacet != null && !paramFacet.isFallback()) {
-                    parameterChoicesPojos[i] = paramFacet.getChoices(target, null,
-                            interactionInitiatedBy);
+                    val visibleChoices = paramFacet.getChoices(paramSpec, target, emptyPendingArgs, interactionInitiatedBy);
+                    ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
+                            getSpecificationLoader(), visibleChoices, paramSpec);
+                    paramChoicesVector.set(i, visibleChoices);
                 } else {
-                    parameterChoicesPojos[i] = _Constants.emptyObjects;
+                    paramChoicesVector.set(i, Can.empty());
                 }
             }
         }
+        return paramChoicesVector;
 
-        final List<Can<ManagedObject>> parameterChoicesAdapters = new ArrayList<>(parameterCount);
-        for (int i = 0; i < parameterCount; i++) {
-            
-            ManagedObject[] choices;
-            
-            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
-
-            if (parameterChoicesPojos[i] != null && parameterChoicesPojos[i].length > 0) {
-                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
-                        getSpecificationLoader(), parameterChoicesPojos[i], paramSpec);
-                choices = new ManagedObject[parameterChoicesPojos[i].length];
-                for (int j = 0; j < parameterChoicesPojos[i].length; j++) {
-                    choices[j] = ManagedObject.of(paramSpec, parameterChoicesPojos[i][j]);
-                }
-            } else if (paramSpec.isNotCollection()) {
-                choices = new ManagedObject[0];
-            } else {
-                throw new UnknownTypeException(paramSpec);
-            }
-
-            if (choices.length == 0) {
-                choices = null;
-            }
-            
-            parameterChoicesAdapters.add(Can.ofArray(choices));
-            
-        }
-
-        return Can.ofCollection(parameterChoicesAdapters);
+//        final List<Can<ManagedObject>> parameterChoicesAdapters = new ArrayList<>(parameterCount);
+//        for (int i = 0; i < parameterCount; i++) {
+//            
+//            ManagedObject[] choices;
+//            
+//            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
+//
+//            if (paramChoicesVector[i] != null && paramChoicesVector[i].length > 0) {
+//                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
+//                        getSpecificationLoader(), paramChoicesVector[i], paramSpec);
+//                choices = new ManagedObject[paramChoicesVector[i].length];
+//                for (int j = 0; j < paramChoicesVector[i].length; j++) {
+//                    choices[j] = ManagedObject.of(paramSpec, paramChoicesVector[i][j]);
+//                }
+//            } else if (paramSpec.isNotCollection()) {
+//                choices = new ManagedObject[0];
+//            } else {
+//                throw new UnknownTypeException(paramSpec);
+//            }
+//
+//            if (choices.length == 0) {
+//                choices = null;
+//            }
+//            
+//            parameterChoicesAdapters.add(Can.ofArray(choices));
+//            
+//        }
+//
+//        return Can.ofCollection(parameterChoicesAdapters);
     }
-
-
-    //    /**
-    //     * Internal API
-    //     */
-    //    @Override
-    //    public void setupBulkActionInvocationContext(final ObjectAdapter targetAdapter) {
-    //
-    //        final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
-    //
-    //        final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
-    //        if (bulkFacet != null) {
-    //            final org.apache.isis.applib.services.actinvoc.ActionInvocationContext actionInvocationContext = getActionInvocationContext();
-    //            if (actionInvocationContext != null && actionInvocationContext.getInvokedOn() == null) {
-    //
-    //                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
-    //                actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
-    //            }
-    //        }
-    //    }
 
     @Override
     public boolean isPrototype() {

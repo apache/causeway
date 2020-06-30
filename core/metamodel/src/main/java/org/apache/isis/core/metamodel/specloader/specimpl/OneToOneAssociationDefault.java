@@ -254,17 +254,12 @@ implements OneToOneAssociation {
 
         val propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
         if (propertyChoicesFacet == null) {
-            return null;
+            return Can.empty();
         }
 
-        final Object[] pojoOptions = propertyChoicesFacet.getChoices(
+        return propertyChoicesFacet.getChoices(
                 ownerAdapter,
                 interactionInitiatedBy);
-
-        val adapters = _NullSafe.stream(pojoOptions)
-                .map(getObjectManager()::adapt)
-                .collect(Can.toCan());
-        return adapters;
     }
 
 

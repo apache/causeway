@@ -43,7 +43,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
                 new EnumValueSemanticsProvider<>(holder, _Casts.uncheckedCast(cls));
         
         addFacets(_Casts.uncheckedCast(enumValueSemanticsProvider));
-        super.addFacet(new ChoicesFacetEnum(holder, cls.getEnumConstants()));
+        super.addFacet(new ChoicesFacetEnum(holder, cls));
     }
 
 }

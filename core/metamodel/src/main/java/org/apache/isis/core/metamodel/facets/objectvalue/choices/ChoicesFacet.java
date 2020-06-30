@@ -19,31 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.choices;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ChoicesFacet extends Facet {
 
     /**
      * Gets a set of choices for this object.
      */
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy);
-
-
-
-    public static class Util {
-
-        private Util() {
-        }
-
-        public static boolean hasChoices(final ObjectSpecification specification) {
-            return specification.getFacet(ChoicesFacet.class) != null;
-        }
-
-    }
 
 }

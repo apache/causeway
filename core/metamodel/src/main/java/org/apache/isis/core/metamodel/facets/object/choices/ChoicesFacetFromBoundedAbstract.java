@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices;
 
-import java.util.function.Predicate;
-
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -31,6 +30,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -101,18 +101,21 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
             ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val context = getMetaModelContext();
-        val repository = context.getRepositoryService();
-
-        final Predicate<ManagedObject> visibilityFilter = 
-                objectAdapter -> ManagedObjects.VisibilityUtil.isVisible(objectAdapter, interactionInitiatedBy);
-
-        val query = new QueryFindAllChoices(getObjectSpecification().getFullIdentifier(), visibilityFilter, 0L, Long.MAX_VALUE);
-        return repository.allMatches(query).toArray();
+        val query = new QueryFindAllChoices(
+                getObjectSpecification().getFullIdentifier(), 
+                ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy), 
+                0L, 
+                Long.MAX_VALUE);
+        
+        val resultTypeSpec = getObjectManager().loadSpecification(query.getResultType());
+        val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
+        val allMatching = getObjectManager().queryObjects(queryRequest);
+        
+        return allMatching;
     }
 
 }

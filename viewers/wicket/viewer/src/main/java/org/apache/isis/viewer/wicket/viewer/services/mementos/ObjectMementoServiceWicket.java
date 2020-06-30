@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -67,15 +68,18 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForRootOid(@NonNull RootOid rootOid) {
+        _Probe.errOut("mementoForRootOid %s", rootOid);
         val mementoAdapter = ObjectMementoLegacy.createPersistent(rootOid, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
     @Override
     public ObjectMemento mementoForObject(@Nullable ManagedObject adapter) {
+        assertSingleton(adapter);
+        _Probe.errOut("mementoForObject %s", adapter);
         val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
         if(mementoAdapter==null) {
-            // sonar-ignore-on (fails to detect this as null guard) 
+            // sonar-ignore-on (fails to detect this as null guard)
             return ManagedObjects.isSpecified(adapter)
                     ? new ObjectMementoForEmpty(adapter.getSpecification().getSpecId())
                     : null;
@@ -86,6 +90,8 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     
     @Override
     public ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter) {
+        _Probe.errOut("mementoForParameter %s", paramAdapter);
+        assertSingleton(paramAdapter);
         val mementoAdapter = ObjectMementoLegacy.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
             return new ObjectMementoForEmpty(paramAdapter.getSpecification().getSpecId());
@@ -96,12 +102,16 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForPojo(Object pojo) {
+        _Probe.errOut("mementoForPojo %s", ""+pojo);
+        assertSingleton(pojo);
+        
         val managedObject = objectManager.adapt(pojo);
         return mementoForObject(managedObject);
     }
     
     @Override
     public ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId) {
+        _Probe.errOut("mementoForPojos");
         val listOfMementos = _NullSafe.stream(iterablePojos)
                 .map(pojo->mementoForPojo(pojo))
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
@@ -142,6 +152,25 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         }
 
         throw _Exceptions.unrecoverableFormatted("unsupported ObjectMemento type %s", memento.getClass());
+    }
+    
+    private void assertSingleton(ManagedObject adapter) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
+            return;
+        }
+        val pojo = ManagedObjects.UnwrapUtil.single(adapter);
+        assertSingleton(pojo);
+        val spec = adapter.getSpecification();
+        if(!spec.isNotCollection()) {
+            throw _Exceptions.illegalArgument("unexpected spec type %s for %s (elementSpec=%s)", 
+                    spec, spec.getFullIdentifier(), spec.getElementSpecification());
+        }
+    }
+    
+    private void assertSingleton(Object pojo) {
+        if(_NullSafe.streamAutodetect(pojo).limit(2).count()>1L) {
+            throw _Exceptions.illegalArgument("cardinality 0 or 1 expect");
+        }
     }
 
     @RequiredArgsConstructor(staticName = "of")

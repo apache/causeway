@@ -340,7 +340,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         val scalarModel = getModel();
         
         if (scalarModel.hasChoices()) {
-            val choices = scalarModel.getChoices();
+            val choices = scalarModel.getChoices(); //FIXME must not return detached entities
             val choiceMementos = choices.map(commonContext::mementoForParameter);
             return new ObjectAdapterMementoProviderForReferenceChoices(scalarModel, choiceMementos);
         }

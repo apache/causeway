@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.collections.CanVector;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -64,9 +66,10 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     }
 
     @Override
-    public Object[][] getChoices(
+    public CanVector<ManagedObject> getChoices(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         final Object objectOrCollection = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if (!(objectOrCollection instanceof Object[])) {
             throw new DomainModelException(String.format(
@@ -75,30 +78,26 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
                             objectOrCollection));
         }
         final Object[] options = (Object[]) objectOrCollection;
-        final Object[][] results = new Object[options.length][];
-
+        
+        val choicesVector = new CanVector<ManagedObject>(options.length);
         val parameterTypes = method.getParameterTypes();
         
-        for (int i = 0; i < results.length; i++) {
-            results[i] = handleResults(options[i], parameterTypes[i], interactionInitiatedBy);
+        for (int i = 0; i < choicesVector.size(); i++) {
+            choicesVector.set(i, handleResults(options[i], parameterTypes[i], interactionInitiatedBy));
         }
-        return results;
+        return choicesVector;
     }
 
-    private Object[] handleResults(
+    private Can<ManagedObject> handleResults(
             final Object collectionOrArray,
             final Class<?> parameterType,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        if (collectionOrArray == null) {
-            return null;
-        }
-
-        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
-        val visiblePojos = ManagedObjects.VisibilityUtil
-                .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
-        
-        return visiblePojos;
+        val elementSpec = getObjectManager().loadSpecification(parameterType);
+        val visibleChoices = ManagedObjects
+                .adaptMultipleOfTypeThenAttachThenFilterByVisibility(
+                        elementSpec, collectionOrArray, interactionInitiatedBy);
+        return visibleChoices;
     }
 
     @Override

@@ -23,6 +23,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Obtain choices for each of the parameters of the action.
@@ -34,7 +35,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  */
 public interface ActionParameterChoicesFacet extends Facet {
 
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
+            ObjectSpecification requiredSpec,
             ManagedObject target,
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);

@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.collections.CanVector;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -140,7 +141,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    public Can<Can<ManagedObject>> getChoices(
+    public CanVector<ManagedObject> getChoices(
             final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ManagedObject mixinAdapter = mixinAdapterFor(mixedInAdapter);
