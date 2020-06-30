@@ -21,6 +21,7 @@ package org.apache.isis.core.commons.internal.primitives;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
@@ -116,6 +117,9 @@ public class _Ints {
             return String.format("%s%d,%d%S", 
                     lowerBound.isInclusive() ? '[' : '(', lowerBound.getValue(),
                     upperBound.getValue(), upperBound.isInclusive() ? ']' : ')');
+        }
+        public IntStream stream() {
+            return IntStream.rangeClosed(nearestToLower(), nearestToUpper());
         }
     }
     
