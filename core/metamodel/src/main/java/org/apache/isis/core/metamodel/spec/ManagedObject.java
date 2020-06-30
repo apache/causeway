@@ -61,6 +61,8 @@ public interface ManagedObject {
      */
     Optional<RootOid> getRootOid();
     
+    boolean isRootOidMemoized();
+    
     // -- TITLE
 
     public default String titleString() {
@@ -176,14 +178,19 @@ public interface ManagedObject {
         @NonNull private final ObjectSpecification specification;
         @Nullable private final Object pojo;
 
+        @Override
         public Optional<RootOid> getRootOid() {
             return rootOidLazy.get();
         }
         
         // -- LAZY ID HANDLING
         private final _Lazy<Optional<RootOid>> rootOidLazy = 
-                _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));  
+                _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
 
+        @Override
+        public boolean isRootOidMemoized() {
+            return rootOidLazy.isMemoized();
+        }  
         
     }
 
@@ -196,8 +203,19 @@ public interface ManagedObject {
 
         @Getter @NonNull private final Object pojo;
         
-        @Getter(lazy=true, onMethod = @__(@Override)) 
-        private final Optional<RootOid> rootOid = ManagedObjectInternalUtil.identify(this);
+        @Override
+        public Optional<RootOid> getRootOid() {
+            return rootOidLazy.get();
+        }
+        
+        // -- LAZY ID HANDLING
+        private final _Lazy<Optional<RootOid>> rootOidLazy = 
+                _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
+        
+        @Override
+        public boolean isRootOidMemoized() {
+            return rootOidLazy.isMemoized();
+        }  
 
         private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);
 
@@ -228,5 +246,7 @@ public interface ManagedObject {
         }
 
     }
+
+    
 
 }

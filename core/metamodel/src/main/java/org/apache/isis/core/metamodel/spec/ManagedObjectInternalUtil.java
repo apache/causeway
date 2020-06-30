@@ -54,6 +54,11 @@ final class ManagedObjectInternalUtil {
         public Optional<RootOid> getRootOid() {
             return Optional.empty();
         }
+
+        @Override
+        public boolean isRootOidMemoized() {
+            return false;
+        }
         
     };
 

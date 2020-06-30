@@ -258,7 +258,7 @@ public final class ManagedObjects {
     // -- ADABT UTILITIES
     
     public static Can<ManagedObject> adaptMultipleOfType(
-            @NonNull final ObjectSpecification elementSpec,
+            @NonNull  final ObjectSpecification elementSpec,
             @Nullable final Object collectionOrArray) {
         
         return _NullSafe.streamAutodetect(collectionOrArray)
@@ -270,13 +270,13 @@ public final class ManagedObjects {
      * used eg. to adapt the result of supporting methods, that return choice pojos
      */
     public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
-            @NonNull final ObjectSpecification elementSpec,
+            @NonNull  final ObjectSpecification elementSpec,
             @Nullable final Object collectionOrArray, 
             @NonNull  final InteractionInitiatedBy interactionInitiatedBy) {
         
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
-//        .map(ManagedObjects.EntityUtil::reattach)
+        .map(ManagedObjects.EntityUtil::reattach)
         .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }
@@ -380,7 +380,12 @@ public final class ManagedObjects {
                 return managedObject;
             }
             
-            //TODO identification fails, on detached object, if rootOid was not previously memoized 
+            // identification fails, on detached object, if rootOid was not previously memoized
+            if(!managedObject.isRootOidMemoized()) {
+                throw _Exceptions.illegalState("entity %s is required to have a memoized ID, "
+                        + "otherwise cannot re-attach", 
+                        managedObject.getSpecification().getSpecId());
+            }
             
             val objectIdentifier = identify(managedObject)
                     .map(RootOid::getIdentifier);
