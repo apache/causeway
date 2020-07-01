@@ -36,9 +36,11 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
@@ -88,7 +90,29 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
 
 //end::class[]
 
-// TODO: using an editable property fails ...
+    //XXX[ISIS-2384] potentially fails with NPE
+    @Action(associateWith = "children")
+    public StatefulViewModelJaxbRefsEntity suffixSelected(List<ChildJdoEntity> children) {
+        for(ChildJdoEntity child : children) {
+            child.setName(child.getName() + ", Jr");
+        }
+        return this;
+    }
+    
+    //XXX shortcut for debugging (wicket only)
+    @Action(associateWith = "children", associateWithSequence = "2", semantics = SemanticsOf.NON_IDEMPOTENT)
+    public StatefulViewModelJaxbRefsEntity addAll() {
+        val all = CommonContextUtils
+                .getCommonContext()
+                .getServiceRegistry()
+                .lookupServiceElseFail(ChildJdoEntities.class)
+                .all();
+        getChildren().clear();
+        getChildren().addAll(all);
+        return this;
+    }
+    
+    //XXX[ISIS-2383] in support of an editable property ...
     public List<ChildJdoEntity> choicesFavoriteChild() {
         return choices0ChangeFavoriteChild(); // reuse logic from above
     }

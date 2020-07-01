@@ -106,10 +106,12 @@ implements Serializable {
             protected void doOnClick(final AjaxRequestTarget target) {
 
                 if(toggledMementosProviderIfAny != null) {
+                    
+                    val commonContext = super.getCommonContext();
 
                     val selectedMementos = toggledMementosProviderIfAny.getToggles();
                     val selectedPojosFromAssocCollection = selectedMementos
-                            .map(super.getCommonContext()::reconstructObject)
+                            .map(commonContext::reconstructObject)
                             .map(ManagedObject::getPojo);
                     
                     val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection

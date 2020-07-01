@@ -37,12 +37,12 @@ import org.apache.isis.core.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.Getter;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
@@ -55,7 +55,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny;
 
-    @Getter protected final transient IsisAppCommonContext commonContext;
+    protected transient IsisAppCommonContext commonContext;
 
     ActionLink(IsisAppCommonContext commonContext, String id, ActionModel model) {
         super(id, model);
@@ -84,6 +84,10 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
                 if(ajaxDeferredBehaviourIfAny != null) {
                     this.add(ajaxDeferredBehaviourIfAny);
                 }
+    }
+    
+    public IsisAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
     @Override
