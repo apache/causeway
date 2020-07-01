@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 .navbar {
     min-height: 24px;
     height: 24px;
@@ -36,7 +54,7 @@ div.tabulator-cell {
     height: 35px;
 }
 
-div.tabulator-header {
+div.tabulator-header, label.control-label {
     font-weight: lighter !important;
     font-size: small !important;
 }
@@ -65,11 +83,6 @@ div.tabulator-header {
     padding: 4px 12px !important;
 }
 
-label.control-label {
-    font-weight: lighter !important;
-    font-size: small !important;
-}
-
 pre.highlight {
     margin: 7px 0;
     padding: 14px;
@@ -82,7 +95,7 @@ pre.highlight {
 
 .panel-heading {
     padding: 3px 15px;
-    display: flex;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
     min-height: 3em;
@@ -110,11 +123,14 @@ textarea {
 .button-bar {
     display: flex;
     align-self: baseline !important;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 12px;
 }
 
 @font-face {
     font-family: Chicago;
-    src: url('/fonts/ChicagoFLF.ttf');
+    src: url('../fonts/ChicagoFLF.ttf');
 }
 
 div {
@@ -131,15 +147,9 @@ div {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain, cover;
+    /*background-image: url(/img/kroviz-logo.svg);*/
     background-image: url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
 }
-
-/*background-image: url("https://www.apache.org/img/ASF20thAnniversary.jpg");*/
-/*background-image: url(https://www.apache.org/logos/res/isis/isis.png);*/
-/*background-image: url(/img/kroviz-logo.svg);*/
-/*background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/b9/SVG_animation_using_SMIL.svg)
-https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg
-*/
 
 .kv-window {
     /* background-color: rgba(255,255,255, 0) !important;*/
@@ -162,7 +172,26 @@ https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg
 .icon-bar {
     margin-top: 40px;
     width: 40px;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 88px);
     scroll-behavior: auto;
     background: GHOSTWHITE;
+}
+
+.status-bar {
+    height: 34px;
+    width: 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+html {
+    overflow: hidden;
+}
+
+.leaflet-container {
+    height: calc(100vh - 88px) !important;
+}
+
+.nav .nav-tabs {
+    width: 100% !important;
 }

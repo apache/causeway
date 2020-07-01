@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.event.EventStore
@@ -27,7 +45,7 @@ object RoIconBar : SimplePanel() {
         panel.addCssClass("icon-bar")
         panel.title = "Drop objects, factories, or actions here"
         this.add(createDeleteIcon())
-        panel.setDropTargetData(Constants.format) { id ->
+        panel.setDropTargetData(Constants.stdMimeType) { id ->
             when {
                 Utils.isUrl(id!!) ->
                     this.add(createObjectIcon(id)!!)
@@ -40,7 +58,7 @@ object RoIconBar : SimplePanel() {
         hide()
     }
 
-    private fun add(icon: SimplePanel) {
+    fun add(icon: SimplePanel) {
         icons.add(icon)
         panel.add(icon)
     }
@@ -70,7 +88,7 @@ object RoIconBar : SimplePanel() {
             margin = CssSize(0, UNIT.px)
             title = "Drop icon here in order to remove it"
         }
-        del.setDropTargetData(Constants.format) {
+        del.setDropTargetData(Constants.stdMimeType) {
             icons.forEach { ii ->
                 if (ii.id == it) {
                     icons.remove(ii)
@@ -124,7 +142,7 @@ object RoIconBar : SimplePanel() {
                          cssClass: String,
                          btnId: String)
             : SimplePanel {
-        icon.setDragDropData(Constants.format, id)
+        icon.setDragDropData(Constants.stdMimeType, id)
         icon.id = id
         icon.title = title
         icon.addCssClass(cssClass)

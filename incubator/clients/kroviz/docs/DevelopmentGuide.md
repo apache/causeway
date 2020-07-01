@@ -293,3 +293,15 @@ See: elp.kapowsoftware.com/9.4/index.jsp?topic=/doc/rm/JSONTerminology.html
  
  ### Solution 3:
  Incorporate kroviz.js eg. in the WAR containing your Apache Isis backend. 
+ 
+ # Extensions
+ 
+ ## OSM/Leaflet 
+ * 2.5D, buildings see https://osmbuildings.org/documentation/leaflet/
+ * Magnifying Glass
+ * Wikipedia markers
+ * Routing
+ 
+ ## Chart.js
+ 
+ *  SanKey diagarms, see CodePen example

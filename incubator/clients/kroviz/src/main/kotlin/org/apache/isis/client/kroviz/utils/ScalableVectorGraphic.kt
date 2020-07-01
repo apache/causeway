@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.utils
 
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.w3c.dom.Document
 import org.w3c.dom.parsing.DOMParser
 import org.w3c.dom.svg.SVGSVGElement
@@ -29,7 +30,7 @@ enum class Direction(val id: String) {
 
 class ScalableVectorGraphic(val data: String) {
 
-    var document: Document = DOMParser().parseFromString(data, "image/svg+xml")
+    var document: Document = DOMParser().parseFromString(data, Constants.svgMimeType)
     private var root: SVGSVGElement
     lateinit var viewBox: ViewBox
     private var scale: Double = 1.0

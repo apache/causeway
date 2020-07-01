@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.ui
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 import org.apache.isis.client.kroviz.utils.Direction
-import org.apache.isis.client.kroviz.utils.DomHelper
+import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UmlUtils
 
@@ -29,7 +29,7 @@ class ImageDialog(
         var label: String,
         private var pumlCode: String) : Command() {
 
-    private val uuid: String = DomHelper.uuid()
+    private val uuid: String = DomUtil.uuid()
     private var dialog: RoDialog
     private val formItems = mutableListOf<FormItem>()
 
@@ -50,14 +50,14 @@ class ImageDialog(
     }
 
     fun scale(direction: Direction) {
-        val oldElement = DomHelper.getById(uuid)!!
+        val oldElement = DomUtil.getById(uuid)!!
         val oldStr = oldElement.innerHTML
         val newImage = ScalableVectorGraphic(oldStr)
         when (direction) {
             Direction.UP -> newImage.scaleUp()
             Direction.DOWN -> newImage.scaleDown()
         }
-        DomHelper.replaceWith(uuid, newImage)
+        DomUtil.replaceWith(uuid, newImage)
     }
 
 }

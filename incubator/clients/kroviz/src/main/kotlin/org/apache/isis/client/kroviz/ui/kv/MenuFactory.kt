@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
@@ -54,7 +72,7 @@ object MenuFactory {
                 style = style,
                 classes = classes,
                 forNavbar = false)
-        //dd.setDragDropData(Constants.format, menuTitle)
+        //dd.setDragDropData(Constants.stdMimeType, menuTitle)
         // action.setDragDropData gets always overridden by dd.setDragDropData
         menu.section.forEachIndexed { index, section ->
             section.serviceAction.forEach { sa ->
@@ -62,7 +80,7 @@ object MenuFactory {
                 action.onClick {
                     ActionDispatcher().invoke(sa.link!!)
                 }
-                action.setDragDropData(Constants.format, action.id!!)
+                action.setDragDropData(Constants.stdMimeType, action.id!!)
                 dd.add(action)
             }
             if (index < menu.section.size - 1) {
@@ -121,7 +139,7 @@ object MenuFactory {
                 icon = IconManager.find(label),
                 classes = IconManager.findStyleFor(label))
         val id = "$menuTitle${Constants.actionSeparator}$actionTitle"
-        actionLink.setDragDropData(Constants.format, id)
+        actionLink.setDragDropData(Constants.stdMimeType, id)
         actionLink.id = id
         return actionLink
     }

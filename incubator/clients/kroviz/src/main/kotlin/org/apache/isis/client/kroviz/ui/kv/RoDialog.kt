@@ -36,7 +36,6 @@ import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
-import pl.treksoft.kvision.utils.px
 
 class RoDialog(
         caption: String,
@@ -95,12 +94,9 @@ class RoDialog(
 
             add(formPanel!!, grow = 2)
 
-            val buttonBar = HPanel(spacing = 10) {
-                id = "button-bar"
-                marginTop = 10.px
-                marginLeft = 10.px
-                marginBottom = 12.px
-            }
+            val buttonBar = HPanel(
+                    spacing = 10,
+                    classes = setOf("button-bar"))
             buttonBar.add(okButton)
             buttonBar.add(cancelButton)
             if (items.isNotEmpty() && hasScalableContent()) {

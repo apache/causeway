@@ -39,6 +39,7 @@ object IconManager {
             "Isis" to "ankh",
             "JEE/CDI" to "jedi",
             "List" to "list",
+            "Location" to "map-marker",
             "Log" to "history",
             "Manager" to "manager",
             "Map" to "map",

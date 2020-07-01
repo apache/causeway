@@ -1,5 +1,6 @@
 package org.apache.isis.client.kroviz
 
+import org.apache.isis.client.kroviz.ui.kv.RoApp
 import pl.treksoft.kvision.Application
 import pl.treksoft.kvision.pace.Pace
 import pl.treksoft.kvision.panel.root
@@ -19,7 +20,7 @@ class App : Application() {
         root("kroviz") {
             vPanel(spacing = 0) {
                 padding = 0.px
-                add(org.apache.isis.client.kroviz.ui.kv.RoApp)
+                add(RoApp)
             }
         }
     }

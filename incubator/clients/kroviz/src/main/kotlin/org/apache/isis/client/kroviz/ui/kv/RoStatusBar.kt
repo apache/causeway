@@ -4,9 +4,9 @@ import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.ClassDiagram
-import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.ui.ImageDialog
 import org.apache.isis.client.kroviz.ui.NotificationDialog
+import org.apache.isis.client.kroviz.utils.IconManager
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
@@ -16,11 +16,9 @@ import pl.treksoft.kvision.navbar.NavbarType
 import pl.treksoft.kvision.panel.SimplePanel
 
 object RoStatusBar {
-    val navbar = Navbar(type = NavbarType.FIXEDBOTTOM) {
-        height = CssSize(8, UNIT.mm)
-        minHeight = CssSize(8, UNIT.mm)
-        width = CssSize(100, UNIT.perc)
-    }
+    val navbar = Navbar(
+            type = NavbarType.FIXEDBOTTOM,
+            classes = setOf("status-bar"))
     private val nav = Nav(rightAlign = true)
     private val userBtn: Button = buildButton("", "Me", ButtonStyle.OUTLINEWARNING)
     private val umlDiagram = buildButton("", "Diagram", ButtonStyle.OUTLINEWARNING)
