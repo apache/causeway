@@ -111,16 +111,25 @@ public interface ManagedObject {
      * @param pojo - might also be a collection of pojos
      * @return
      */
-    public static ManagedObject of(@NonNull ObjectSpecification specification, @Nullable Object pojo) {
+    public static ManagedObject of(
+            @NonNull ObjectSpecification specification, 
+            @Nullable Object pojo) {
+        
         ManagedObjects.assertPojoNotManaged(pojo);
         specification.assertPojoCompatible(pojo);
-        return new SimpleManagedObject(specification, pojo);
+        val adapter = new SimpleManagedObject(specification, pojo);
+        //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
+        return adapter;
     }
     
     /**
      * Optimized for cases, when the pojo's specification and rootOid are already available.
      */
-    public static ManagedObject identified(ObjectSpecification specification, Object pojo, RootOid rootOid) {
+    public static ManagedObject identified(
+            @NonNull ObjectSpecification specification, 
+            @NonNull Object pojo, 
+            @NonNull RootOid rootOid) {
+        
         if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
                     "Pojo not compatible with ObjectSpecification, " +
@@ -143,7 +152,9 @@ public interface ManagedObject {
             Function<Class<?>, ObjectSpecification> specLoader, 
             Object pojo) {
         ManagedObjects.assertPojoNotManaged(pojo);
-        return new LazyManagedObject(specLoader, pojo);
+        val adapter = new LazyManagedObject(specLoader, pojo);
+        //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
+        return adapter;
     }
     
     // -- EMPTY

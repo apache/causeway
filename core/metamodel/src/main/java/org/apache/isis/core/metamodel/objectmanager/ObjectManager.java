@@ -93,13 +93,6 @@ public interface ObjectManager {
         getObjectRefresher().refreshObject(managedObject);
     }
     
-    public default ManagedObject adapt(@Nullable Object pojo) {
-        if(pojo==null) {
-            return ManagedObject.unspecified(); 
-        }
-        return ManagedObject.of(this::loadSpecification, pojo);
-    }
-
     @Nullable
     public default ObjectSpecification loadSpecification(@Nullable Object pojo) {
         if(pojo==null) {
@@ -112,7 +105,13 @@ public interface ObjectManager {
     default ObjectSpecification loadSpecification(@Nullable final Class<?> domainType) {
         return getMetaModelContext().getSpecificationLoader().loadSpecification(domainType);
     }
-
+    
+    public default ManagedObject adapt(@Nullable Object pojo) {
+        if(pojo==null) {
+            return ManagedObject.unspecified(); 
+        }
+        return ManagedObject.of(this::loadSpecification, pojo);
+    }
     
     
 }

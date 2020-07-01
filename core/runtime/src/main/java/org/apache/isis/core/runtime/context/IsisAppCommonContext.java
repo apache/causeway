@@ -32,6 +32,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
@@ -156,15 +157,14 @@ public class IsisAppCommonContext implements MetaModelContext.Delegating {
             return getCommonContext().getMementoService();
         }
         
-        default Function<Object, ManagedObject> getPojoToAdapter() {
-            return pojo->ManagedObject.of(
-                    getCommonContext().getSpecificationLoader()::loadSpecification, pojo);
-        }
-        
         default ServiceInjector getServiceInjector() {
             return getCommonContext().getServiceInjector();
         }
         
+        default ObjectManager getObjectManager() {
+            return getCommonContext().getObjectManager();
+        }
+       
     }
     
     

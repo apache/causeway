@@ -222,7 +222,7 @@ implements LinksProvider, UiHintContainer {
                 }
 
                 final List<ManagedObject> adapterList =
-                        _Lists.map(objectList, x-> (ManagedObject)colModel.getPojoToAdapter().apply(x));
+                        _Lists.map(objectList, x-> (ManagedObject)colModel.getObjectManager().adapt(x));
 
                 return adapterList;
             }

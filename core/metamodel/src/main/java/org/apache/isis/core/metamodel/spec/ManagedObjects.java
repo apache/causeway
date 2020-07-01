@@ -42,6 +42,7 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -58,6 +59,7 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -280,7 +282,26 @@ public final class ManagedObjects {
         .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }
+
+    /**
+     * TODO just for debugging, remove!
+     * print stacktrace to console, if {@code pojo} is an attached entity
+     * @deprecated
+     */
+    @SneakyThrows
+    public static void warnIfAttachedEntity(ManagedObject adapter, String logMessage) {
+        if(isNullOrUnspecifiedOrEmpty(adapter)) {
+            return;
+        }
+        if(EntityUtil.isAttached(adapter)) {
+            _Probe.errOut("%s [%s]", logMessage, adapter.getSpecification().getFullIdentifier());
+            _Exceptions.dumpStackTrace();    
+        }
+    }
     
+    /**
+     * eg. in order to prevent wrapping an object that is already wrapped
+     */
     public static void assertPojoNotManaged(@Nullable Object pojo) {
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {

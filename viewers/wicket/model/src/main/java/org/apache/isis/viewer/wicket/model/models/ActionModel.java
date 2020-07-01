@@ -208,7 +208,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)
-                .map(super.getPojoToAdapter())
+                .map(super.getObjectManager()::adapt)
                 .filter(_NullSafe::isPresent)
                 .findFirst()
                 .orElse(resultAdapter);
