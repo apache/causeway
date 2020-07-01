@@ -54,8 +54,8 @@ public class PrimitiveByteHolder_updateReadOnlyPropertyWithChoices {
                 .collect(Collectors.toList());
     }
     public boolean hideAct() {
-        return true;
-    } // TODO: choices doesn't seem to work for this datatype
+        return true; // TODO: choices doesn't seem to work for this datatype
+    }
 
     private static Byte byteOf(int x) {
         return (byte)x;

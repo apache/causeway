@@ -2,7 +2,7 @@ JDO supports `byte` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-include::PrimitiveByteJdoEntity.java[tags="class"]
+include::PrimitiveByteJdo.java[tags="class"]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
-<.> no additional annotations required.
+<.> no additional JDO annotations required.

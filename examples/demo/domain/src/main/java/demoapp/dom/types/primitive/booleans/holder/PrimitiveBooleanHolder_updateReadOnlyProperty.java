@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
+
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
@@ -44,5 +45,6 @@ public class PrimitiveBooleanHolder_updateReadOnlyProperty {
     public boolean default0Act() {
         return primitiveBooleanHolder.isReadOnlyProperty();
     }
+
 }
 //end::class[]

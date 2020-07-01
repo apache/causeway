@@ -34,5 +34,6 @@ public class PrimitiveBooleanHolder_actionReturning {
     public boolean act() {
         return primitiveBooleanHolder.isReadOnlyProperty();
     }
+
 }
 //end::class[]

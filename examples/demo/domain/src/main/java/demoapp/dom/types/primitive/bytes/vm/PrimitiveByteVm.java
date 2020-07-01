@@ -46,11 +46,11 @@ import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
         objectType = "demo.PrimitiveByteViewModel"
 )
 @lombok.NoArgsConstructor                                           // <.>
-public class PrimitiveByteViewModel
+public class PrimitiveByteVm
         implements HasAsciiDocDescription, PrimitiveByteHolder {
 
 //end::class[]
-    public PrimitiveByteViewModel(byte initialValue) {
+    public PrimitiveByteVm(byte initialValue) {
         this.readOnlyProperty = initialValue;
         this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;

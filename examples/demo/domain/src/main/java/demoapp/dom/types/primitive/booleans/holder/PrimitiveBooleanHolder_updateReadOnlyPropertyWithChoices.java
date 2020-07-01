@@ -52,7 +52,7 @@ public class PrimitiveBooleanHolder_updateReadOnlyPropertyWithChoices {
         return Stream.of(true,false).collect(Collectors.toList());
     }
     public boolean hideAct() {
-        return true;
-    } // TODO: choices doesn't seem to work for this datatype
+        return true; // TODO: choices doesn't seem to work for this datatype
+    }
 
 }

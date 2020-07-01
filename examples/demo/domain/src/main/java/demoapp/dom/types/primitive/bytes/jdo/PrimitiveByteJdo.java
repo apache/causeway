@@ -25,44 +25,39 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
+import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.PrimitiveByteJdoEntity"
+        objectType = "demo.PrimitiveByteJdo"
 )
-public class PrimitiveByteJdoEntity                                 // <.>
-        implements HasAsciiDocDescription, PrimitiveByteHolder {
+public class PrimitiveByteJdo                                       // <.>
+        implements HasAsciiDocDescription, PrimitiveByteHolder2 {
 
 //end::class[]
-    public PrimitiveByteJdoEntity(byte initialValue) {
+    public PrimitiveByteJdo(byte initialValue) {
         this.readOnlyProperty = initialValue;
-        this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
     @Title(prepend = "byte (primitive) JDO entity: ")
+    @MemberOrder(name = "read-only-properties", sequence = "1")
     @Getter @Setter
     private byte readOnlyProperty;                                  // <.>
 
-    @Property
-    @PropertyLayout(hidden = Where.ALL_TABLES)
-    @Getter @Setter
-    private byte readOnlyProperty2;
-
     @Property(editing = Editing.ENABLED)
+    @MemberOrder(name = "editable-properties", sequence = "1")
     @Getter @Setter
     private byte readWriteProperty;
 

@@ -40,8 +40,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities;
-import demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntity;
-import demoapp.dom.types.primitive.bytes.vm.PrimitiveByteViewModel;
+import demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdo;
+import demoapp.dom.types.primitive.bytes.vm.PrimitiveByteVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -56,15 +56,15 @@ public class PrimitiveBytes implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public PrimitiveByteViewModel openViewModel(byte initialValue) {
-        return new PrimitiveByteViewModel(initialValue);
+    public PrimitiveByteVm openViewModel(byte initialValue) {
+        return new PrimitiveByteVm(initialValue);
     }
     public byte default0OpenViewModel() {
         return (byte)123;
     }
 
     @Collection
-    public List<PrimitiveByteJdoEntity> getEntities() {
+    public List<PrimitiveByteJdo> getEntities() {
         return entities.all();
     }
 

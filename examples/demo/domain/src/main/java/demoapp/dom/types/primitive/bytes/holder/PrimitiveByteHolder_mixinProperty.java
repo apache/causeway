@@ -28,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
-public class PrimitiveByteHolder_mixinPropertyWithCssClass {
+public class PrimitiveByteHolder_mixinProperty {
 
     private final PrimitiveByteHolder primitiveByteHolder;
 
@@ -38,6 +38,5 @@ public class PrimitiveByteHolder_mixinPropertyWithCssClass {
     public byte prop() {
         return primitiveByteHolder.getReadOnlyProperty();
     }
-
 }
 //end::class[]

@@ -18,12 +18,8 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Read Only Properties" id="read-only-properties">
-				<cpt:property id="readOnlyProperty" />
-			</cpt:fieldSet>
-			<cpt:fieldSet name="Editable Properties" id="editable-properties">
-				<cpt:property id="readWriteProperty" />
-			</cpt:fieldSet>
+			<cpt:fieldSet name="Read Only Properties" id="read-only-properties"/>
+			<cpt:fieldSet name="Editable Properties" id="editable-properties"/>
 			<cpt:fieldSet name="Label Positions" id="label-positions"/>
 			<cpt:fieldSet name="Contributed by Mixins" id="contributed"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>

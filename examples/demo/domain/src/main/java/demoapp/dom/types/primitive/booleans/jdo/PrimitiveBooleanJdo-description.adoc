@@ -1,5 +1,4 @@
-JDO package demoapp.dom.types.primitive.booleans
-`boolean` out-of-the-box, so no special annotations are required.
+JDO supports `boolean` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----

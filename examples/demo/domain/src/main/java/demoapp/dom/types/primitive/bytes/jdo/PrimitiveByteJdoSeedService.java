@@ -13,7 +13,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @Service
-public class PrimitiveByteJdoEntitySeedService {
+public class PrimitiveByteJdoSeedService {
 
     @EventListener(AppLifecycleEvent.class)
     public void onAppLifecycleEvent(AppLifecycleEvent event) {
@@ -31,7 +31,7 @@ public class PrimitiveByteJdoEntitySeedService {
         @Override
         protected void execute(ExecutionContext executionContext) {
             Stream.of(1,2,3)
-                    .map((Integer x) -> new PrimitiveByteJdoEntity(x.byteValue()))
+                    .map((Integer x) -> new PrimitiveByteJdo(x.byteValue()))
                     .forEach(repositoryService::persist);
         }
 
