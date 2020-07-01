@@ -17,9 +17,6 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="General" id="general">
-				<cpt:property id="title" />
-			</cpt:fieldSet>
 			<cpt:fieldSet name="Named" id="named">
 				<cpt:property id="propertyUsingAnnotation"/>
 				<cpt:property id="propertyUsingLayout">
@@ -34,7 +31,7 @@
 			<cpt:fieldSet name="Description" id="description" >
 				<cpt:action id="clearHints" position="PANEL" />
 				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
-				<cpt:action id="rebuildMetamodel"  position="PANEL"/>
+				<cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
 				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="downloadJdoMetadata"  position="PANEL_DROPDOWN"/>

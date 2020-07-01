@@ -6,6 +6,13 @@
 }
 
 /*
+ * Demonstrates use of @PropertyLayout(cssClass='red')
+ */
+.property.blue label {
+    color: dodgerblue;
+}
+
+/*
  * admonitionblock styles (ie, NOTE: TIP: CAUTION: IMPORTANT: WARNING:)
  * (taken from asciidoctor.css)
  */

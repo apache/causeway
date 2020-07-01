@@ -51,17 +51,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 )
 public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 
-//end::class[]
-    public PropertyLayoutCssClassVm() {
-        this.title = "PropertyLayout#cssClass";
+    public String title() {
+        return "PropertyLayout#cssClass";
     }
-
-//tag::class[]
-    @Title
-    @Property(editing = Editing.DISABLED)
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String title;
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(cssClass = "red", describedAs = "@PropertyLayout(cssClass=\"red\")", hidden = Where.ALL_TABLES)
@@ -71,7 +63,7 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
     private String propertyUsingAnnotation;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "<cpt:property id=\"...\" cssClass=\"red\")/>", hidden = Where.ALL_TABLES)
+    @PropertyLayout(describedAs = "<cpt:property id=\"...\" cssClass=\"red\"/>", hidden = Where.ALL_TABLES)
     @MemberOrder(name = "properties", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter

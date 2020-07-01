@@ -50,17 +50,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 )
 public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 
-//end::class[]
-    public PropertyLayoutNamedVm() {
-        this.title = "PropertyLayout#named";
+    public String title() {
+        return "PropertyLayout#named";
     }
-
-//tag::class[]
-    @Title
-    @Property(editing = Editing.DISABLED)
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String title;
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(named = "Named using annotation", describedAs = "@PropertyLayout(named= \"Named using annotation\")", hidden = Where.ALL_TABLES)

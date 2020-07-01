@@ -48,13 +48,11 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 )
 public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
 
-//end::class[]
-    public ActionLayoutPromptStyleVm() {
-        this.title = "ActionLayout#promptStyle";
+    public String title() {
+        return "ActionLayout#promptStyle";
     }
 
-//tag::class[]
-    @Title(prepend = "Demonstrates: ")
+    @Title
     @Property(editing = Editing.DISABLED)
     @MemberOrder(name = "general", sequence = "1")
     @XmlElement(required = true)

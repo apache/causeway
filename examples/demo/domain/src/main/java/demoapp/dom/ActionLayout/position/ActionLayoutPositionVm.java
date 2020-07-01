@@ -48,7 +48,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class ActionLayoutPositionVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "Demonstrates: ActionLayout#position";
+        return "ActionLayout#position";
     }
 
     @Property(optionality = Optionality.OPTIONAL)
