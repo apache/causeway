@@ -18,13 +18,8 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Action Prompt Styles" id="action-prompt-styles">
+			<cpt:fieldSet name="Read Only Properties" id="read-only-properties">
 				<cpt:property id="readOnlyProperty" />
-				<cpt:property id="readOnlyProperty2" >
-					<cpt:describedAs>
-						Associated action uses promptStyle=INLINE_AS_IF_EDIT
-					</cpt:describedAs>
-				</cpt:property>
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Editable Properties" id="editable-properties">
 				<cpt:property id="readWriteProperty" />

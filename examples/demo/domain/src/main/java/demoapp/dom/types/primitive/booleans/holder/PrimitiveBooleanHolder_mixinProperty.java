@@ -28,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
-public class PrimitiveBooleanHolder_mixinPropertyWithCssClass {
+public class PrimitiveBooleanHolder_mixinProperty {
 
     private final PrimitiveBooleanHolder primitiveBooleanHolder;
 

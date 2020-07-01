@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -42,7 +43,7 @@ import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder;
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
+        nature= Nature.VIEW_MODEL,
         objectType = "demo.PrimitiveBooleanViewModel"
 )
 @lombok.NoArgsConstructor                                           // <.>
@@ -52,21 +53,17 @@ public class PrimitiveBooleanViewModel
 //end::class[]
     public PrimitiveBooleanViewModel(boolean initialValue) {
         this.readOnlyProperty = initialValue;
-        this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
+
 //tag::class[]
-
     @Title(prepend = "boolean (primitive) view model: ")
+    @MemberOrder(name = "read-only-properties", sequence = "1")
     @Getter @Setter
-    private boolean readOnlyProperty;                               // <.>
-
-    @Property
-    @PropertyLayout(hidden = Where.ALL_TABLES)
-    @Getter @Setter
-    private boolean readOnlyProperty2;
+    private boolean readOnlyProperty;                                   // <.>
 
     @Property(editing = Editing.ENABLED)
+    @MemberOrder(name = "editable-properties", sequence = "1")
     @Getter @Setter
     private boolean readWriteProperty;
 

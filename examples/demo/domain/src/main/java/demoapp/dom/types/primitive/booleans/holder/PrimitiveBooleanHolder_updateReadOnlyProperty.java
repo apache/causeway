@@ -25,15 +25,15 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-
+//tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "3"
+        associateWithSequence = "1"
 )
-@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR, named = "sidebar", describedAs = "promptStyle = DIALOG_SIDEBAR")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
-public class PrimitiveBooleanHolder_updateReadOnlyPropertyPromptStyleSidebar {
+public class PrimitiveBooleanHolder_updateReadOnlyProperty {
 
     private final PrimitiveBooleanHolder primitiveBooleanHolder;
 
@@ -44,6 +44,5 @@ public class PrimitiveBooleanHolder_updateReadOnlyPropertyPromptStyleSidebar {
     public boolean default0Act() {
         return primitiveBooleanHolder.isReadOnlyProperty();
     }
-
-
 }
+//end::class[]
