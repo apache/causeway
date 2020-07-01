@@ -65,17 +65,31 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     
     @Override
     public Object lookup(BookmarkHolder bookmarkHolder) {
-        
-        Bookmark bookmark = bookmarkHolder.bookmark();
-        return bookmark != null? lookup(bookmark): null;
+        val bookmark = bookmarkHolder.bookmark();
+        return bookmark != null
+                ? lookup(bookmark)
+                : null;
     }
 
+    // why would we ever store Service Beans as Bookmarks?
+    // - ANSWER: because it might be used by the CommandService to replay a command or exec in the background.
     @Override
     public Object lookup(Bookmark bookmark) {
         if(bookmark == null) {
             return null;
         }
-        return lookupInternal(bookmark, true);
+        try {
+            val spec = specificationLoader.loadSpecification(ObjectSpecId.of(bookmark.getObjectType()));
+            val identifier = bookmark.getIdentifier();
+            val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
+            
+            val adapter = objectManager.loadObject(objectLoadRequest);
+            
+            return adapter.getPojo();
+            
+        } catch(ObjectNotFoundException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -132,28 +146,6 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     }
 
     // -- HELPER
-    
-    // why would we ever store Service Beans as Bookmarks?
-    // - ANSWER: because it might be used by the CommandService to replay a command or exec in the background.
-    private Object lookupInternal(Bookmark bookmark, boolean denyRefresh) {
-        
-        if(bookmark == null) {
-            return null;
-        }
-        try {
-            val spec = specificationLoader.loadSpecification(ObjectSpecId.of(bookmark.getObjectType()));
-            val identifier = bookmark.getIdentifier();
-            val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
-            
-            val adapter = objectManager.loadObject(objectLoadRequest);
-            
-            return adapter.getPojo();
-            
-        } catch(ObjectNotFoundException ex) {
-            return null;
-        }
-    }
-
 
     private static final Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
             String.class, String[].class,
