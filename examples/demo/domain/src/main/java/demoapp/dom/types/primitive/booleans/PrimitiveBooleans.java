@@ -40,8 +40,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities;
-import demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntity;
-import demoapp.dom.types.primitive.booleans.vm.PrimitiveBooleanViewModel;
+import demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdo;
+import demoapp.dom.types.primitive.booleans.vm.PrimitiveBooleanVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -56,15 +56,15 @@ public class PrimitiveBooleans implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public PrimitiveBooleanViewModel openViewModel(boolean initialValue) {
-        return new PrimitiveBooleanViewModel(initialValue);
+    public PrimitiveBooleanVm openViewModel(boolean initialValue) {
+        return new PrimitiveBooleanVm(initialValue);
     }
     public boolean default0OpenViewModel() {
         return true;
     }
 
     @Collection
-    public List<PrimitiveBooleanJdoEntity> getEntities() {
+    public List<PrimitiveBooleanJdo> getEntities() {
         return entities.all();
     }
 

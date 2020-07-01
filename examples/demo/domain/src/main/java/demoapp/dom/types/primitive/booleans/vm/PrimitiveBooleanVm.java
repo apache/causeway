@@ -37,6 +37,7 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder;
+import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -47,11 +48,11 @@ import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder;
         objectType = "demo.PrimitiveBooleanViewModel"
 )
 @lombok.NoArgsConstructor                                           // <.>
-public class PrimitiveBooleanViewModel
-        implements HasAsciiDocDescription, PrimitiveBooleanHolder {
+public class PrimitiveBooleanVm
+        implements HasAsciiDocDescription, PrimitiveBooleanHolder2 {
 
 //end::class[]
-    public PrimitiveBooleanViewModel(boolean initialValue) {
+    public PrimitiveBooleanVm(boolean initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

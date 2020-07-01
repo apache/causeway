@@ -16,6 +16,13 @@ These objects both implement a common interface, `PrimitiveBooleanHolder`:
 include::holder/PrimitiveBooleanHolder.java[tags=class]
 ----
 
+There is also an extension of this interface, `PrimitiveBooleanHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder2.java[tags=class]
+----
+
 The default methods have annotations that automatically inherited.
 Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
 
@@ -25,14 +32,12 @@ Using `@MemberOrder` positions the properties into the appropriate `<field-set>`
 A number of mixin actions contribute through this interface, demonstrate the use of `boolean` as a parameter and as a return type.
 For example:
 
-* the `updateReadOnlyPropertyPromptStyleInline` action is:
+* the `updateReadOnlyProperty` action is:
 +
 [source,java]
 ----
-include::holder/PrimitiveBooleanHolder_updateReadOnlyPropertyPromptStyleInline.java[tags=class]
+include::holder/PrimitiveBooleanHolder_updateReadOnlyProperty.java[tags=class]
 ----
-+
-There are a number of variants of this action, to demonstrate different prompt layouts.
 
 * the `actionReturning` action is:
 +
@@ -43,15 +48,12 @@ include::holder/PrimitiveBooleanHolder_actionReturning.java[tags=class]
 
 == Mixin properties
 
-We also use the interface to contribute a number of mixin properties:
+We also use the interface to contribute a mixin property:
 
-* the `mixinPropertyWithCssClass` property:
+* the `mixinProperty` property:
 +
 [source,java]
 ----
-include::holder/PrimitiveBooleanHolder_mixinPropertyWithCssClass.java[tags=class]
+include::holder/PrimitiveBooleanHolder_mixinProperty.java[tags=class]
 ----
-+
-TIP: the styling is provided from the `application.css` static resource.
-
 
