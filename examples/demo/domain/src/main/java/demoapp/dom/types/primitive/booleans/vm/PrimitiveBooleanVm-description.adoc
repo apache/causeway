@@ -5,4 +5,4 @@ JAXB supports `boolean` out-of-the-box, so no special annotations are required.
 include::PrimitiveBooleanVm.java[tags="class"]
 ----
 <.> a no-arg constructor is required by JAXB
-<.> no additional annotations required.
+<.> no additional JAXB annotations required.

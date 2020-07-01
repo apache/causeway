@@ -42,9 +42,9 @@ import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder2;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.PrimitiveBooleanJdoEntity"
+        objectType = "demo.PrimitiveBooleanJdo"
 )
-public class PrimitiveBooleanJdo                                  // <.>
+public class PrimitiveBooleanJdo                                        // <.>
         implements HasAsciiDocDescription, PrimitiveBooleanHolder2 {
 
 //end::class[]

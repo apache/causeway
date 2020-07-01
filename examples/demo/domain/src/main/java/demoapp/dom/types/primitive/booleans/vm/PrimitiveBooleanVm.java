@@ -45,9 +45,9 @@ import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder2;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature= Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveBooleanViewModel"
+        objectType = "demo.PrimitiveBooleanVm"
 )
-@lombok.NoArgsConstructor                                           // <.>
+@lombok.NoArgsConstructor                                               // <.>
 public class PrimitiveBooleanVm
         implements HasAsciiDocDescription, PrimitiveBooleanHolder2 {
 

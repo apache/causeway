@@ -59,6 +59,7 @@ public class PrimitiveBooleans implements HasAsciiDocDescription {
     public PrimitiveBooleanVm openViewModel(boolean initialValue) {
         return new PrimitiveBooleanVm(initialValue);
     }
+    // TODO: there is a bug in the UI, requiring the user to explicitly set/unset the value (even though looks like is set)
     public boolean default0OpenViewModel() {
         return true;
     }

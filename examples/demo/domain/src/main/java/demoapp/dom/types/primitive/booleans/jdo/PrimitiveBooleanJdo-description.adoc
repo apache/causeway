@@ -6,4 +6,4 @@ JDO package demoapp.dom.types.primitive.booleans
 include::PrimitiveBooleanJdo.java[tags="class"]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
-<.> no additional annotations required.
+<.> no additional JDO annotations required.

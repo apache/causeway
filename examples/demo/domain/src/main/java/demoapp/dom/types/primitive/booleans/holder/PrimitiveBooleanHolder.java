@@ -45,17 +45,17 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public interface PrimitiveBooleanHolder {
 
 //end::class[]
-    @MemberOrder(name = "read-only-properties", sequence = "1") // TODO: doesn't seem to get picked up
     @Property
     @PropertyLayout
+    @MemberOrder(name = "read-only-properties", sequence = "1") // TODO: doesn't seem to get picked up
 //tag::class[]
     boolean isReadOnlyProperty();
     void setReadOnlyProperty(boolean c);
 
 //end::class[]
-    @MemberOrder(name = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
     @Property
     @PropertyLayout
+    @MemberOrder(name = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
 //tag::class[]
     boolean isReadWriteProperty();
     void setReadWriteProperty(boolean c);
