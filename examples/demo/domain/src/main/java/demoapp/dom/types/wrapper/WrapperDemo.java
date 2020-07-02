@@ -112,7 +112,23 @@ public class WrapperDemo implements HasAsciiDocDescription {
     public boolean default1BooleanParams() {
         return true;
     }
-            
+
+    //FIXME[ISIS-2387] contrary to the above, second parameter works; however, first parameter is 
+    // initialized to null but not rendered as 3-state
+    // either we fix rendering or we initialize with FALSE when null 
+    @Action
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+    public WrapperDemo booleanBoxedParams(
+            Boolean boxed0,
+            Boolean boxed1) {
+        return this;
+    }
+    @Model
+    public Boolean default1BooleanBoxedParams() {
+        return true;
+    }
+
+    
     
     // -- SHORT
 
