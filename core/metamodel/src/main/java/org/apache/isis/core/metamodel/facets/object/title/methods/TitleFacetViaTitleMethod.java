@@ -65,6 +65,11 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
 
     @Override
     public String title(final ManagedObject owningAdapter) {
+        
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
+            return null;
+        }
+        
         try {
             final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
             if(returnValue instanceof String) {
