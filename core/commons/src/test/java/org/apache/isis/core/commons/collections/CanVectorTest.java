@@ -18,40 +18,35 @@
  */
 package org.apache.isis.core.commons.collections;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.core.commons.SerializationTester;
 
-class CanTest {
+import lombok.val;
+
+class CanVectorTest {
 
     @Test
-    void tester_selftest() throws ClassNotFoundException, IOException {
-        SerializationTester.selftest();
+    void emptyCanVectors_shouldBeEqual() {
+        assertEquals(CanVector.empty(), new CanVector<String>(0));
     }
     
     @Test
-    void emptyCans_shouldBeEqual() {
-        assertEquals(Can.empty(), Can.<String>of());
+    void emptyCanVector_shouldBeSerializable() {
+        SerializationTester.assertEqualsOnRoundtrip(CanVector.empty());
+        SerializationTester.assertEqualsOnRoundtrip(new CanVector<String>(0));
     }
     
     @Test
-    void emptyCan_shouldBeSerializable() {
-        SerializationTester.assertEqualsOnRoundtrip(Can.empty());
-        SerializationTester.assertEqualsOnRoundtrip(Can.<String>of());
-    }
-    
-    @Test
-    void singletonCan_shouldBeSerializable() {
+    void populatedCanVector_shouldBeSerializable() {
+        val vector = new CanVector<String>(3);
+        vector.set(0, Can.<String>of("hi"));
+        vector.set(1, Can.<String>of("hi", "there"));
         SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi"));
     }
     
-    @Test
-    void multiCan_shouldBeSerializable() {
-        SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi", "there"));
-    }
+
 
 }

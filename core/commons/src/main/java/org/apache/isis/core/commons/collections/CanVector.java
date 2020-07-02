@@ -85,4 +85,20 @@ public final class CanVector<T> implements Iterable<Can<T>>, Serializable {
         return new CanVector<>(0);
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true; // optimization not strictly necessary
+        }
+        return (obj instanceof CanVector)
+                ? cans.equals(((CanVector<?>)obj).cans)
+                : false;
+    }
+    
+    @Override
+    public int hashCode() {
+        return cans.hashCode();
+    }
+    
+    
 }
