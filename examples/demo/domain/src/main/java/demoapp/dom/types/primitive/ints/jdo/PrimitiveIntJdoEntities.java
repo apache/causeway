@@ -12,12 +12,12 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @Service
 public class PrimitiveIntJdoEntities {
 
-    public Optional<PrimitiveIntJdoEntity> find(final int readOnlyProperty) {
-        return repositoryService.firstMatch(PrimitiveIntJdoEntity.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    public Optional<PrimitiveIntJdo> find(final int readOnlyProperty) {
+        return repositoryService.firstMatch(PrimitiveIntJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
     }
 
-    public List<PrimitiveIntJdoEntity> all() {
-        return repositoryService.allInstances(PrimitiveIntJdoEntity.class);
+    public List<PrimitiveIntJdo> all() {
+        return repositoryService.allInstances(PrimitiveIntJdo.class);
     }
 
     @Inject

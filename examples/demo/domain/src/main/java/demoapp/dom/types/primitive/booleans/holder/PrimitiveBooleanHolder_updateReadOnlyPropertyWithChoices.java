@@ -35,21 +35,22 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty",
         associateWithSequence = "4"
 )
-@ActionLayout(promptStyle = PromptStyle.AS_CONFIGURED, named = "with choices")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "update with choices")
 @RequiredArgsConstructor
 public class PrimitiveBooleanHolder_updateReadOnlyPropertyWithChoices {
 
-    private final PrimitiveBooleanHolder primitiveBooleanHolder;
+    private final PrimitiveBooleanHolder holder;
 
     public PrimitiveBooleanHolder act(boolean newValue) {
-        primitiveBooleanHolder.setReadOnlyProperty(newValue);
-        return primitiveBooleanHolder;
+        holder.setReadOnlyProperty(newValue);
+        return holder;
     }
     public boolean default0Act() {
-        return primitiveBooleanHolder.isReadOnlyProperty();
+        return holder.isReadOnlyProperty();
     }
     public List<Boolean> choices0Act() {
-        return Stream.of(true,false).collect(Collectors.toList());
+        return Stream.of(true, false)
+                .collect(Collectors.toList());
     }
     public boolean hideAct() {
         return true; // TODO: choices doesn't seem to work for this datatype

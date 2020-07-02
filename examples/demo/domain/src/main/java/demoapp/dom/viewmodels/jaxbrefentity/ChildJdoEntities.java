@@ -12,12 +12,12 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @Service
 public class ChildJdoEntities {
 
-    public Optional<ChildJdoEntity> find(final String name) {
-        return repositoryService.firstMatch(ChildJdoEntity.class, x -> x.getName().equals(name));
+    public Optional<ChildJdo> find(final String name) {
+        return repositoryService.firstMatch(ChildJdo.class, x -> x.getName().equals(name));
     }
 
-    public List<ChildJdoEntity> all() {
-        return repositoryService.allInstances(ChildJdoEntity.class);
+    public List<ChildJdo> all() {
+        return repositoryService.allInstances(ChildJdo.class);
     }
 
     @Inject

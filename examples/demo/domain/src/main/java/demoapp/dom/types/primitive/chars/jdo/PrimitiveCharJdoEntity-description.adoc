@@ -1,8 +1,0 @@
-JDO supports `char` out-of-the-box, so no special annotations are required.
-
-[source,java]
-----
-include::PrimitiveCharJdoEntity.java[tags="class"]
-----
-<.> a no-arg constructor is introduced by JDO enhancer
-<.> no additional annotations required.

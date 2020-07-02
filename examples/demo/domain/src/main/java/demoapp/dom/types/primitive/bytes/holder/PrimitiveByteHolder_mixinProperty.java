@@ -32,11 +32,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveByteHolder_mixinProperty {
 
-    private final PrimitiveByteHolder primitiveByteHolder;
+    private final PrimitiveByteHolder holder;
 
     @MemberOrder(name = "contributed", sequence = "1")
     public byte prop() {
-        return primitiveByteHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
+
 }
 //end::class[]

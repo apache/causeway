@@ -16,8 +16,15 @@ These objects both implement a common interface, `PrimitiveLongHolder`:
 include::holder/PrimitiveLongHolder.java[tags=class]
 ----
 
-The default methods have annotations that automatically inherited.
-Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+There is also an extension of this interface, `PrimitiveLongHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/PrimitiveLongHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
 
 
 == Mixin actions
@@ -25,14 +32,12 @@ Using `@MemberOrder` positions the properties into the appropriate `<field-set>`
 A number of mixin actions contribute through this interface, demonstrate the use of `long` as a parameter and as a return type.
 For example:
 
-* the `updateReadOnlyPropertyPromptStyleInline` action is:
+* the `updateReadOnlyProperty` action is:
 +
 [source,java]
 ----
-include::holder/PrimitiveLongHolder_updateReadOnlyPropertyPromptStyleInline.java[tags=class]
+include::holder/PrimitiveLongHolder_updateReadOnlyProperty.java[tags=class]
 ----
-+
-There are a number of variants of this action, to demonstrate different prompt layouts.
 
 * the `actionReturning` action is:
 +
@@ -43,15 +48,12 @@ include::holder/PrimitiveLongHolder_actionReturning.java[tags=class]
 
 == Mixin properties
 
-We also use the interface to contribute a number of mixin properties:
+We also use the interface to contribute a mixin property:
 
 * the `mixinPropertyWithCssClass` property:
 +
 [source,java]
 ----
-include::holder/PrimitiveLongHolder_mixinPropertyWithCssClass.java[tags=class]
+include::holder/PrimitiveLongHolder_mixinProperty.java[tags=class]
 ----
-+
-TIP: the styling is provided from the `application.css` static resource.
-
 

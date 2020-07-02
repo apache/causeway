@@ -40,13 +40,17 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities;
-import demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntity;
-import demoapp.dom.types.primitive.chars.vm.PrimitiveCharViewModel;
+import demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdo;
+import demoapp.dom.types.primitive.chars.vm.PrimitiveCharVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.PrimitiveChars", editing=Editing.ENABLED)
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.PrimitiveChars",
+        editing=Editing.ENABLED
+)
 @Log4j2
 public class PrimitiveChars implements HasAsciiDocDescription {
 
@@ -56,15 +60,15 @@ public class PrimitiveChars implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public PrimitiveCharViewModel openViewModel(char initialValue) {
-        return new PrimitiveCharViewModel(initialValue);
+    public PrimitiveCharVm openViewModel(char initialValue) {
+        return new PrimitiveCharVm(initialValue);
     }
     public char default0OpenViewModel() {
         return 'a';
     }
 
     @Collection
-    public List<PrimitiveCharJdoEntity> getEntities() {
+    public List<PrimitiveCharJdo> getEntities() {
         return entities.all();
     }
 

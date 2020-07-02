@@ -44,49 +44,11 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 //tag::class[]
 public interface PrimitiveLongHolder {
 
-//end::class[]
-    @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
-    @Property
-    @PropertyLayout
-//tag::class[]
     long getReadOnlyProperty();
     void setReadOnlyProperty(long c);
 
-//end::class[]
-    @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
-    @Property
-    @PropertyLayout(describedAs = "associated action uses promptStyle=INLINE_AS_IF_EDIT", hidden = Where.ALL_TABLES) // TODO: doesn't seem to get picked up
-//tag::class[]
-    long getReadOnlyProperty2();
-    void setReadOnlyProperty2(long c);
-
-//end::class[]
-    @MemberOrder(name = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
-    @Property
-    @PropertyLayout
-//tag::class[]
     long getReadWriteProperty();
     void setReadWriteProperty(long c);
-
-    @MemberOrder(name = "label-positions", sequence = "1")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
-    default long getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "2")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
-    default long getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "3")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
-    default long getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "4")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
-    default long getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
 
 }
 //end::class[]

@@ -32,11 +32,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveBooleanHolder_mixinProperty {
 
-    private final PrimitiveBooleanHolder primitiveBooleanHolder;
+    private final PrimitiveBooleanHolder holder;
 
     @MemberOrder(name = "contributed", sequence = "1")
     public boolean prop() {
-        return primitiveBooleanHolder.isReadOnlyProperty();
+        return holder.isReadOnlyProperty();
     }
+
 }
 //end::class[]

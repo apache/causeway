@@ -50,6 +50,5 @@ public interface PrimitiveByteHolder {
     byte getReadWriteProperty();
     void setReadWriteProperty(byte c);
 
-
 }
 //end::class[]

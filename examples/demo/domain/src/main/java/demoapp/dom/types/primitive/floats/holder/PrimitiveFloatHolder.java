@@ -44,49 +44,11 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 //tag::class[]
 public interface PrimitiveFloatHolder {
 
-//end::class[]
-    @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
-    @Property
-    @PropertyLayout
-//tag::class[]
     float getReadOnlyProperty();
     void setReadOnlyProperty(float c);
 
-//end::class[]
-    @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
-    @Property
-    @PropertyLayout(describedAs = "associated action uses promptStyle=INLINE_AS_IF_EDIT", hidden = Where.ALL_TABLES) // TODO: doesn't seem to get picked up
-//tag::class[]
-    float getReadOnlyProperty2();
-    void setReadOnlyProperty2(float c);
-
-//end::class[]
-    @MemberOrder(name = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
-    @Property
-    @PropertyLayout
-//tag::class[]
     float getReadWriteProperty();
     void setReadWriteProperty(float c);
-
-    @MemberOrder(name = "label-positions", sequence = "1")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
-    default float getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "2")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
-    default float getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "3")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
-    default float getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
-
-    @MemberOrder(name = "label-positions", sequence = "4")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
-    default float getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
 
 }
 //end::class[]

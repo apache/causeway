@@ -29,10 +29,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveCharHolder_actionReturning {
 
-    private final demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder primitiveCharHolder;
+    private final PrimitiveCharHolder holder;
 
     public char act() {
-        return primitiveCharHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
 
 }

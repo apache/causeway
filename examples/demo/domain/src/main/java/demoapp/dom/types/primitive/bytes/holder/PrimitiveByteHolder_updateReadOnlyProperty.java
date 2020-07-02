@@ -36,14 +36,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveByteHolder_updateReadOnlyProperty {
 
-    private final PrimitiveByteHolder primitiveByteHolder;
+    private final PrimitiveByteHolder holder;
 
     public PrimitiveByteHolder act(byte newValue) {
-        primitiveByteHolder.setReadOnlyProperty(newValue);
-        return primitiveByteHolder;
+        holder.setReadOnlyProperty(newValue);
+        return holder;
     }
     public byte default0Act() {
-        return primitiveByteHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
 
 }

@@ -27,25 +27,49 @@ import org.apache.isis.applib.annotation.Where;
 //tag::class[]
 public interface PrimitiveByteHolder2 extends PrimitiveByteHolder{
 
-    @MemberOrder(name = "label-positions", sequence = "1")
     @Property
-    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
-    default byte getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
+    @PropertyLayout(                                                        // <.>
+            labelPosition = LabelPosition.LEFT,
+            describedAs = "labelPosition=LEFT",
+            hidden = Where.ALL_TABLES
+    )
+    @MemberOrder(name = "label-positions", sequence = "1")                  // <.>
+    default byte getReadOnlyPropertyDerivedLabelPositionLeft() {
+        return getReadOnlyProperty();
+    }
 
+    @Property
+    @PropertyLayout(
+            labelPosition = LabelPosition.TOP,
+            describedAs = "labelPosition=TOP",
+            hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "label-positions", sequence = "2")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
-    default byte getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
+    default byte getReadOnlyPropertyDerivedLabelPositionTop() {
+        return getReadOnlyProperty();
+    }
 
+    @Property
+    @PropertyLayout(
+            labelPosition = LabelPosition.RIGHT,    // TODO: not honoured
+            describedAs = "labelPosition=RIGHT",
+            hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "label-positions", sequence = "3")
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
-    default byte getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
+    default byte getReadOnlyPropertyDerivedLabelPositionRight() {
+        return getReadOnlyProperty();
+    }
 
-    @MemberOrder(name = "label-positions", sequence = "4")
     @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
-    default byte getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
+    @PropertyLayout(
+            labelPosition = LabelPosition.NONE,
+            describedAs = "labelPosition=NONE",
+            hidden = Where.ALL_TABLES
+    )
+    @MemberOrder(name = "label-positions", sequence = "4")
+    default byte getReadOnlyPropertyDerivedLabelPositionNone() {
+        return getReadOnlyProperty();
+    }
 
 }
 //end::class[]

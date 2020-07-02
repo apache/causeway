@@ -46,7 +46,11 @@ import demoapp.dom.types.primitive.booleans.vm.PrimitiveBooleanVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.PrimitiveBooleans", editing=Editing.ENABLED)
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.PrimitiveBooleans",
+        editing=Editing.ENABLED
+)
 @Log4j2
 public class PrimitiveBooleans implements HasAsciiDocDescription {
 

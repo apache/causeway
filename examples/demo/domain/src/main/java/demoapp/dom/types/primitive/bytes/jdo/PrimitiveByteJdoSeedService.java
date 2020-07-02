@@ -30,7 +30,7 @@ public class PrimitiveByteJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1,2,3)
+            Stream.of(1, 2, 3)
                     .map((Integer x) -> new PrimitiveByteJdo(x.byteValue()))
                     .forEach(repositoryService::persist);
         }

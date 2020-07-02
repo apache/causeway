@@ -29,10 +29,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveByteHolder_actionReturning {
 
-    private final PrimitiveByteHolder primitiveByteHolder;
+    private final PrimitiveByteHolder holder;
 
     public byte act() {
-        return primitiveByteHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
 
 }

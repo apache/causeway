@@ -35,24 +35,25 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty",
         associateWithSequence = "4"
 )
-@ActionLayout(promptStyle = PromptStyle.AS_CONFIGURED, named = "with choices")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "update with choices")
 @RequiredArgsConstructor
 public class PrimitiveCharHolder_updateReadOnlyPropertyWithChoices {
 
-    private final demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder primitiveCharHolder;
+    private final PrimitiveCharHolder holder;
 
-    public demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder act(char newValue) {
-        primitiveCharHolder.setReadOnlyProperty(newValue);
-        return primitiveCharHolder;
+    public PrimitiveCharHolder act(char newValue) {
+        holder.setReadOnlyProperty(newValue);
+        return holder;
     }
     public char default0Act() {
-        return primitiveCharHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
     public List<Character> choices0Act() {
-        return Stream.of('a', 'b', 'c').collect(Collectors.toList());
+        return Stream.of('a', 'b', 'c')
+                .collect(Collectors.toList());
     }
     public boolean hideAct() {
-        return true;
-    } // TODO: choices doesn't seem to work for this datatype
+        return true; // TODO: choices doesn't seem to work for this datatype
+    }
 
 }

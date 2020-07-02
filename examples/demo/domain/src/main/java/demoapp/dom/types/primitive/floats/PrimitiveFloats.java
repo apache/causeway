@@ -40,13 +40,17 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities;
-import demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntity;
-import demoapp.dom.types.primitive.floats.vm.PrimitiveFloatViewModel;
+import demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdo;
+import demoapp.dom.types.primitive.floats.vm.PrimitiveFloatVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.PrimitiveFloats", editing=Editing.ENABLED)
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.PrimitiveFloats",
+        editing=Editing.ENABLED
+)
 @Log4j2
 public class PrimitiveFloats implements HasAsciiDocDescription {
 
@@ -56,15 +60,15 @@ public class PrimitiveFloats implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public PrimitiveFloatViewModel openViewModel(float initialValue) {
-        return new PrimitiveFloatViewModel(initialValue);
+    public PrimitiveFloatVm openViewModel(float initialValue) {
+        return new PrimitiveFloatVm(initialValue);
     }
     public float default0OpenViewModel() {
         return 1.23f;
     }
 
     @Collection
-    public List<PrimitiveFloatJdoEntity> getEntities() {
+    public List<PrimitiveFloatJdo> getEntities() {
         return entities.all();
     }
 

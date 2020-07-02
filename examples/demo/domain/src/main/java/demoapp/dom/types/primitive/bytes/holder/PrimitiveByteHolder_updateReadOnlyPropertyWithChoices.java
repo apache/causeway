@@ -35,30 +35,26 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty",
         associateWithSequence = "4"
 )
-@ActionLayout(promptStyle = PromptStyle.AS_CONFIGURED, named = "with choices")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "update with choices")
 @RequiredArgsConstructor
 public class PrimitiveByteHolder_updateReadOnlyPropertyWithChoices {
 
-    private final PrimitiveByteHolder primitiveByteHolder;
+    private final PrimitiveByteHolder holder;
 
     public PrimitiveByteHolder act(byte newValue) {
-        primitiveByteHolder.setReadOnlyProperty(newValue);
-        return primitiveByteHolder;
+        holder.setReadOnlyProperty(newValue);
+        return holder;
     }
     public byte default0Act() {
-        return primitiveByteHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
     public List<Byte> choices0Act() {
         return Stream.of(1, 2, 3)
-                .map(x -> byteOf(x))
+                .map(x -> (byte) (int) x)
                 .collect(Collectors.toList());
     }
     public boolean hideAct() {
         return true; // TODO: choices doesn't seem to work for this datatype
-    }
-
-    private static Byte byteOf(int x) {
-        return (byte)x;
     }
 
 }

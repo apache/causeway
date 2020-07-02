@@ -42,7 +42,8 @@ public interface PrimitiveBooleanHolder2 extends PrimitiveBooleanHolder {
     @PropertyLayout(
             labelPosition = LabelPosition.TOP,
             describedAs = "labelPosition=TOP",
-            hidden = Where.ALL_TABLES)
+            hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "label-positions", sequence = "2")
     default boolean isReadOnlyPropertyDerivedLabelPositionTop() {
         return isReadOnlyProperty();

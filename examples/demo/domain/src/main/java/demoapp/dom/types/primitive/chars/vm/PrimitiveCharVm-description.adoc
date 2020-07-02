@@ -1,0 +1,8 @@
+JAXB supports `char` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+include::PrimitiveCharVm.java[tags="class"]
+----
+<.> a no-arg constructor is required by JAXB
+<.> no additional JAXB annotations required.

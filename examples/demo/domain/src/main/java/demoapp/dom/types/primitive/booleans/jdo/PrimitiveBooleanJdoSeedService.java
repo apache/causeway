@@ -30,7 +30,7 @@ public class PrimitiveBooleanJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(true,false)
+            Stream.of(true, false)
                     .map(PrimitiveBooleanJdo::new)
                     .forEach(repositoryService::persist);
         }

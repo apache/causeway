@@ -18,17 +18,8 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Action Prompt Styles" id="action-prompt-styles">
-				<cpt:property id="readOnlyProperty" />
-				<cpt:property id="readOnlyProperty2" >
-					<cpt:describedAs>
-						Associated action uses promptStyle=INLINE_AS_IF_EDIT
-					</cpt:describedAs>
-				</cpt:property>
-			</cpt:fieldSet>
-			<cpt:fieldSet name="Editable Properties" id="editable-properties">
-				<cpt:property id="readWriteProperty" />
-			</cpt:fieldSet>
+			<cpt:fieldSet name="Read Only Properties" id="read-only-properties"/>
+			<cpt:fieldSet name="Editable Properties" id="editable-properties"/>
 			<cpt:fieldSet name="Label Positions" id="label-positions"/>
 			<cpt:fieldSet name="Contributed by Mixins" id="contributed"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>

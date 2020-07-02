@@ -1,8 +1,0 @@
-JAXB supports `long` out-of-the-box, so no special annotations are required.
-
-[source,java]
-----
-include::PrimitiveLongViewModel.java[tags="class"]
-----
-<.> a no-arg constructor is required by JAXB
-<.> no additional annotations required.

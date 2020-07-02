@@ -23,18 +23,16 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder;
-
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class PrimitiveDoubleHolder_actionReturning {
 
-    private final PrimitiveDoubleHolder primitiveDoubleHolder;
+    private final PrimitiveDoubleHolder holder;
 
     public double act() {
-        return primitiveDoubleHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
 
 }

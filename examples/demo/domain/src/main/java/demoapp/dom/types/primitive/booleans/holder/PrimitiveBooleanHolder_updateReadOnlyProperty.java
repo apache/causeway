@@ -36,14 +36,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveBooleanHolder_updateReadOnlyProperty {
 
-    private final PrimitiveBooleanHolder primitiveBooleanHolder;
+    private final PrimitiveBooleanHolder holder;
 
     public PrimitiveBooleanHolder act(boolean newValue) {
-        primitiveBooleanHolder.setReadOnlyProperty(newValue);
-        return primitiveBooleanHolder;
+        holder.setReadOnlyProperty(newValue);
+        return holder;
     }
     public boolean default0Act() {
-        return primitiveBooleanHolder.isReadOnlyProperty();
+        return holder.isReadOnlyProperty();
     }
 
 }

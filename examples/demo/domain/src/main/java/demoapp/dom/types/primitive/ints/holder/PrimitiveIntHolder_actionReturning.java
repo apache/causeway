@@ -29,10 +29,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveIntHolder_actionReturning {
 
-    private final PrimitiveIntHolder primitiveIntHolder;
+    private final PrimitiveIntHolder holder;
 
     public int act() {
-        return primitiveIntHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
 
 }
