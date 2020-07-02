@@ -166,6 +166,10 @@ public final class ClassUtil {
         if (_Strings.isNullOrEmpty(fullName)) {
             return null;
         }
+        val primitiveClass = primitives.get(fullName);
+        if(primitiveClass!=null) {
+            return primitiveClass; 
+        }
         try {
             return _Context.loadClass(fullName);
         } catch (final ClassNotFoundException e) {

@@ -125,7 +125,7 @@ public interface SpecificationLoader {
         val type = lookupType(objectSpecId);
         return introspectionState!=null 
                 ? loadSpecification(type, introspectionState)
-                        : loadSpecification(type);
+                : loadSpecification(type);
     }
 
     default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {

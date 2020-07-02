@@ -81,7 +81,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
         val classNameFromCache = classNameBySpecId.get(objectSpecID);
         val className = classNameFromCache != null
                 ? classNameFromCache 
-                        : objectSpecID.asString();
+                : objectSpecID.asString();
         return ClassUtil.forNameElseNull(className);
     }
     
