@@ -34,11 +34,11 @@ import lombok.val;
 @RequiredArgsConstructor
 public class WrapperCharacterHolder_actionReturningCollection {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final WrapperCharacterHolder holder;
 
     public Collection<Character> act() {
         final Collection<Character> characters = new ArrayList<>();
-        val initial = wrapperCharacterHolder.getReadOnlyProperty();
+        val initial = holder.getReadOnlyProperty();
         Stream.of(0, 1, 2, 3).forEach(x ->
                 characters.add((char) (initial + x))
         );

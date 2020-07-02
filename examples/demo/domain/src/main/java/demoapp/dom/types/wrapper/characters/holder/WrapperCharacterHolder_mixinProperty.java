@@ -18,20 +18,26 @@
  */
 package demoapp.dom.types.wrapper.characters.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
+
 
 //tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
+@Property()
+@PropertyLayout(hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_actionReturning {
+public class WrapperCharacterHolder_mixinProperty {
 
     private final WrapperCharacterHolder holder;
 
-    public Character act() {
+    @MemberOrder(name = "contributed", sequence = "1")
+    public Character prop() {
         return holder.getReadOnlyProperty();
     }
 

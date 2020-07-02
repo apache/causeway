@@ -30,12 +30,13 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 
+//tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "4"
+        associateWithSequence = "2"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "update with choices")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices")
 @RequiredArgsConstructor
 public class PrimitiveByteHolder_updateReadOnlyPropertyWithChoices {
 
@@ -58,3 +59,4 @@ public class PrimitiveByteHolder_updateReadOnlyPropertyWithChoices {
     }
 
 }
+//end::class[]

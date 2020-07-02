@@ -22,6 +22,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -33,21 +34,21 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyOptionalProperty",
         associateWithSequence = "1"
 )
-@ActionLayout(named = "Update")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
 public class WrapperCharacterHolder_updateReadOnlyOptionalProperty {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final WrapperCharacterHolder holder;
 
     public WrapperCharacterHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             Character newValue
     ) {
-        wrapperCharacterHolder.setReadOnlyOptionalProperty(newValue);
-        return wrapperCharacterHolder;
+        holder.setReadOnlyOptionalProperty(newValue);
+        return holder;
     }
     public Character default0Act() {
-        return wrapperCharacterHolder.getReadOnlyOptionalProperty();
+        return holder.getReadOnlyOptionalProperty();
     }
 
 }

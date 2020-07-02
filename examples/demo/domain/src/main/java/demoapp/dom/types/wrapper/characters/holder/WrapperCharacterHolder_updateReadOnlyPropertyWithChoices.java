@@ -30,29 +30,29 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 
+//tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "4"
+        associateWithSequence = "2"
 )
-@ActionLayout(promptStyle = PromptStyle.AS_CONFIGURED, named = "with choices")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices")
 @RequiredArgsConstructor
 public class WrapperCharacterHolder_updateReadOnlyPropertyWithChoices {
 
-    private final WrapperCharacterHolder wrapperCharacterHolder;
+    private final WrapperCharacterHolder holder;
 
     public WrapperCharacterHolder act(Character newValue) {
-        wrapperCharacterHolder.setReadOnlyProperty(newValue);
-        return wrapperCharacterHolder;
+        holder.setReadOnlyProperty(newValue);
+        return holder;
     }
     public Character default0Act() {
-        return wrapperCharacterHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
     public List<Character> choices0Act() {
-        return Stream.of('a', 'b', 'c').collect(Collectors.toList());
+        return Stream.of('a', 'b', 'c')
+                .collect(Collectors.toList());
     }
-    public boolean hideAct() {
-        return true;
-    } // TODO: choices doesn't seem to work for this datatype
 
 }
+//end::class[]

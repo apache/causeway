@@ -19,19 +19,30 @@
 package demoapp.dom.types.wrapper.characters.holder;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "1"
+)
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_actionReturning {
+public class WrapperCharacterHolder_updateReadOnlyProperty {
 
     private final WrapperCharacterHolder holder;
 
-    public Character act() {
+    public WrapperCharacterHolder act(Character newValue) {
+        holder.setReadOnlyProperty(newValue);
+        return holder;
+    }
+    public char default0Act() {
         return holder.getReadOnlyProperty();
     }
 
