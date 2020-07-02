@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -137,14 +139,7 @@ implements ParameterUiModel {
 
     @Override
     public ManagedObject load() {
-        val objectAdapter = loadFromSuper();
-
-        if(objectAdapter == null) {
-            if(getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
-                return ManagedObject.of(getMetaModel().getSpecification(), null);
-            }
-        }
-        return objectAdapter;
+        return toNonNull(loadFromSuper());
     }
 
     @Override
@@ -159,13 +154,25 @@ implements ParameterUiModel {
 
     @Override
     public ManagedObject getValue() {
-        return getObject();
+        return toNonNull(getObject());
     }
 
     @Override
     public void setValue(ManagedObject paramValue) {
         super.setObject(paramValue);
     }
+    
+    // -- HELPER
+    
+    private ManagedObject toNonNull(@Nullable ManagedObject adapter) {
+        if(adapter == null) {
+            if(getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
+                return ManagedObject.empty(getMetaModel().getSpecification());
+            }
+        }
+        return adapter;
+    }
+    
 
     
 }

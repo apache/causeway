@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -71,6 +72,8 @@ public interface FormUiModel extends HasTitle {
                 .map(FormPendingParamUiModel::getParamModel)
                 .map(ParameterUiModel::getValue)
                 .collect(Can.toCan());
+        
+        _Assert.assertEquals(getMetaModel().getParameterCount(), proposedArguments.size());
         
         return getMetaModel().isProposedArgumentSetValid(
                 getOwner(), 

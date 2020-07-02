@@ -25,6 +25,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
+import lombok.NonNull;
+
 public interface ParameterUiModel extends ScalarUiModel {
 
     /** param meta model */
@@ -32,6 +34,7 @@ public interface ParameterUiModel extends ScalarUiModel {
     ObjectActionParameter getMetaModel();
     
     /** param value */
+    @NonNull
     ManagedObject getValue();
     
     /** param value */
