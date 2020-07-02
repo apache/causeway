@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.types.wrapper.bytes.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -34,15 +34,15 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty {
+public class WrapperByteHolder_updateReadOnlyProperty {
 
-    private final WrapperCharacterHolder holder;
+    private final WrapperByteHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
+    public WrapperByteHolder act(Byte newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Character default0Act() {
+    public Byte default0Act() {
         return holder.getReadOnlyProperty();
     }
 

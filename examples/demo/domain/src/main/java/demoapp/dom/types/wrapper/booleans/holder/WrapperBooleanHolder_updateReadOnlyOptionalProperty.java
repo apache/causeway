@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.types.wrapper.booleans.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -29,21 +31,24 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
+        associateWith = "readOnlyOptionalProperty",
         associateWithSequence = "1"
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty {
+public class WrapperBooleanHolder_updateReadOnlyOptionalProperty {
 
-    private final WrapperCharacterHolder holder;
+    private final WrapperBooleanHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
-        holder.setReadOnlyProperty(newValue);
+    public WrapperBooleanHolder act(
+            @Parameter(optionality = Optionality.OPTIONAL)              // <.>
+            Boolean newValue
+    ) {
+        holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public Character default0Act() {
-        return holder.getReadOnlyProperty();
+    public Boolean default0Act() {
+        return holder.getReadOnlyOptionalProperty();
     }
 
 }

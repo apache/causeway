@@ -16,7 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.types.wrapper.bytes.holder;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -30,20 +34,25 @@ import lombok.RequiredArgsConstructor;
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
+        associateWithSequence = "2"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty {
+public class WrapperByteHolder_updateReadOnlyPropertyWithChoices {
 
-    private final WrapperCharacterHolder holder;
+    private final WrapperByteHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
+    public WrapperByteHolder act(Byte newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Character default0Act() {
+    public Byte default0Act() {
         return holder.getReadOnlyProperty();
+    }
+    public List<Byte> choices0Act() {
+        return Stream.of(1, 2, 3)
+                .map(Integer::byteValue)
+                .collect(Collectors.toList());
     }
 
 }

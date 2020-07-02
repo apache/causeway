@@ -16,35 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.types.wrapper.booleans.holder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
-)
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty {
+public class WrapperBooleanHolder_actionReturningCollection {
 
-    private final WrapperCharacterHolder holder;
+    private final WrapperBooleanHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
-        holder.setReadOnlyProperty(newValue);
-        return holder;
+    public Collection<Boolean> act() {
+        final Collection<Boolean> booleans = new ArrayList<>();
+        val initial = holder.getReadOnlyProperty();
+        Stream.of(true, false, true, false)
+                .forEach(booleans::add);
+        return booleans;
     }
-    public Character default0Act() {
-        return holder.getReadOnlyProperty();
-    }
-
 }
 //end::class[]

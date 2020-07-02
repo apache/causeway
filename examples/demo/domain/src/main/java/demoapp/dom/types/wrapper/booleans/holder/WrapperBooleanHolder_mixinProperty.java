@@ -16,33 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.holder;
+package demoapp.dom.types.wrapper.booleans.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
+
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
-)
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
+@Property()
+@PropertyLayout(hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty {
+public class WrapperBooleanHolder_mixinProperty {
 
-    private final WrapperCharacterHolder holder;
+    private final WrapperBooleanHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
-        holder.setReadOnlyProperty(newValue);
-        return holder;
-    }
-    public Character default0Act() {
+    @MemberOrder(name = "contributed", sequence = "1")
+    public Boolean prop() {
         return holder.getReadOnlyProperty();
     }
 

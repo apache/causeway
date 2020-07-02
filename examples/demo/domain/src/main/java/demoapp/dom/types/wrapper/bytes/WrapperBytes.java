@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters;
+package demoapp.dom.types.wrapper.bytes;
 
 import java.util.List;
 
@@ -39,38 +39,38 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.wrapper.characters.jdo.WrapperCharacterJdoEntities;
-import demoapp.dom.types.wrapper.characters.jdo.WrapperCharacterJdo;
-import demoapp.dom.types.wrapper.characters.vm.WrapperCharacterVm;
+import demoapp.dom.types.wrapper.bytes.jdo.WrapperByteJdoEntities;
+import demoapp.dom.types.wrapper.bytes.jdo.WrapperByteJdo;
+import demoapp.dom.types.wrapper.bytes.vm.WrapperByteVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperCharacters", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperBytes", editing=Editing.ENABLED)
 @Log4j2
-public class WrapperCharacters implements HasAsciiDocDescription {
+public class WrapperBytes implements HasAsciiDocDescription {
 
     public String title() {
-        return "Character (wrapper) data type";
+        return "Byte (wrapper) data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public WrapperCharacterVm openViewModel(Character initialValue) {
-        return new WrapperCharacterVm(initialValue);
+    public WrapperByteVm openViewModel(Byte initialValue) {
+        return new WrapperByteVm(initialValue);
     }
     public char default0OpenViewModel() {
         return 'a';
     }
 
     @Collection
-    public List<WrapperCharacterJdo> getEntities() {
+    public List<WrapperByteJdo> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    WrapperCharacterJdoEntities entities;
+    WrapperByteJdoEntities entities;
 
 
 }
