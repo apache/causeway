@@ -26,13 +26,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -95,6 +99,20 @@ public class WrapperDemo implements HasAsciiDocDescription {
     public List<Boolean> calculateBooleans() {
         return _Lists.of(Boolean.FALSE, Boolean.TRUE, null);
     }
+    
+    //FIXME[ISIS-2387] even though primitive1 gets initialized with true, the model thinks its null
+    @Action
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+    public WrapperDemo booleanParams(
+            boolean primitive0,
+            boolean primitive1) {
+        return this;
+    }
+    @Model
+    public boolean default1BooleanParams() {
+        return true;
+    }
+            
     
     // -- SHORT
 
