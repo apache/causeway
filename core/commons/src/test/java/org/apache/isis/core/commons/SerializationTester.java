@@ -25,7 +25,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
@@ -64,10 +65,22 @@ public class SerializationTester {
         try {
             afterRoundtrip = roundtrip(object);
         } catch (ClassNotFoundException | IOException e) {
-            Assertions.fail(e);
+            fail(e);
             return;
         }
-        Assertions.assertEquals(object, afterRoundtrip);
+        assertEquals(object, afterRoundtrip);
+    }
+
+    public static void selftest() {
+        String afterRoundtrip;
+        try {
+            afterRoundtrip = roundtrip("Hello World!");
+        } catch (ClassNotFoundException | IOException e) {
+            fail(e);
+            return;
+        }
+        assertEquals("Hello World!", afterRoundtrip);
+        assertEqualsOnRoundtrip("Hello World!");
     }
 
 }

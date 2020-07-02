@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.commons.collections;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,8 +39,9 @@ class CanTest {
     }
 
     @Test
-    void tester_selftest() {
-        SerializationTester.assertEqualsOnRoundtrip("Hello World!");
+    void tester_selftest() throws ClassNotFoundException, IOException {
+        
+        SerializationTester.selftest();
     }
     
     @Test
