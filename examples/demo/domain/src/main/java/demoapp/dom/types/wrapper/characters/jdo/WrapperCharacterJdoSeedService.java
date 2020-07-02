@@ -13,7 +13,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @Service
-public class WrapperCharacterJdoEntitySeedService {
+public class WrapperCharacterJdoSeedService {
 
     @EventListener(AppLifecycleEvent.class)
     public void onAppLifecycleEvent(AppLifecycleEvent event) {
@@ -31,7 +31,7 @@ public class WrapperCharacterJdoEntitySeedService {
         @Override
         protected void execute(ExecutionContext executionContext) {
             Stream.of('a', 'b', 'c')
-                    .map(WrapperCharacterJdoEntity::new)
+                    .map(WrapperCharacterJdo::new)
                     .forEach(repositoryService::persist);
         }
 

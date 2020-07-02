@@ -16,16 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.wrapper.characters.jdo;
+package demoapp.dom.types.wrapper.characters.vm;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -39,45 +41,43 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.wrapper.characters.holder.WrapperCharacterHolder;
 
 //tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-        objectType = "demo.WrapperCharacterJdoEntity"
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.WrapperCharacterVm"
 )
-public class WrapperCharacterJdoEntity                                          // <.>
+@lombok.NoArgsConstructor                                                       // <.>
+public class WrapperCharacterVm
         implements HasAsciiDocDescription, WrapperCharacterHolder {
 
 //end::class[]
-    public WrapperCharacterJdoEntity(Character initialValue) {
+    public WrapperCharacterVm(Character initialValue) {
         this.readOnlyProperty = initialValue;
-        this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "Character (wrapper) JDO entity: ")
-    @Column(allowsNull = "false")                                               // <.>
+    @Title(prepend = "Character (wrapper) view model: ")
+    @MemberOrder(name = "read-only-properties", sequence = "1")
+    @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private Character readOnlyProperty;
 
-    @Property
-    @PropertyLayout(hidden = Where.ALL_TABLES)
-    @Column(allowsNull = "false")
-    @Getter @Setter
-    private Character readOnlyProperty2;
-
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @Column(allowsNull = "false")
+    @MemberOrder(name = "editable-properties", sequence = "1")
+    @XmlElement(required = true)
     @Getter @Setter
     private Character readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @Column(allowsNull = "true")                                                // <.>
+    @MemberOrder(name = "optional-properties", sequence = "1")
     @Getter @Setter
     private Character readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @Column(allowsNull = "true")
+    @MemberOrder(name = "optional-properties", sequence = "2")
     @Getter @Setter
     private Character readWriteOptionalProperty;
 

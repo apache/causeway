@@ -50,7 +50,7 @@ include::holder/PrimitiveLongHolder_actionReturning.java[tags=class]
 
 We also use the interface to contribute a mixin property:
 
-* the `mixinPropertyWithCssClass` property:
+* the `mixinProperty` property:
 +
 [source,java]
 ----

@@ -40,8 +40,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.wrapper.characters.jdo.WrapperCharacterJdoEntities;
-import demoapp.dom.types.wrapper.characters.jdo.WrapperCharacterJdoEntity;
-import demoapp.dom.types.wrapper.characters.vm.WrapperCharacterViewModel;
+import demoapp.dom.types.wrapper.characters.jdo.WrapperCharacterJdo;
+import demoapp.dom.types.wrapper.characters.vm.WrapperCharacterVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -56,15 +56,15 @@ public class WrapperCharacters implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public WrapperCharacterViewModel openViewModel(char initialValue) {
-        return new WrapperCharacterViewModel(initialValue);
+    public WrapperCharacterVm openViewModel(char initialValue) {
+        return new WrapperCharacterVm(initialValue);
     }
     public char default0OpenViewModel() {
         return 'a';
     }
 
     @Collection
-    public List<WrapperCharacterJdoEntity> getEntities() {
+    public List<WrapperCharacterJdo> getEntities() {
         return entities.all();
     }
 
