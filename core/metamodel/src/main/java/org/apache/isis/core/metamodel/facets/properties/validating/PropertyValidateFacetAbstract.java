@@ -46,8 +46,7 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
         ManagedObject proposed = propertyModifyContext.getProposed();
         if(proposed == null) {
             // skip validation if null value and optional property.
-            MandatoryFacet mandatoryFacet = getFacetHolder().getFacet(MandatoryFacet.class);
-            if(mandatoryFacet == null || mandatoryFacet.isFallback() || mandatoryFacet.isInvertedSemantics()) {
+            if(MandatoryFacet.isMandatory(getFacetHolder())) {
                 return null;
             }
         }

@@ -36,6 +36,7 @@ import lombok.NonNull;
 public interface ActionParameterDefaultsFacet extends Facet {
 
     /** default parameter value, depending on other pending parameters
+     * @param paramSpec 
      * @implNote this is pretty low level, meant to be called only by 
      * instances of {@link ObjectActionParameter}, other callers should 
      * rather use {@link ObjectActionParameter#getDefault(PendingParameterModel)} 

@@ -243,6 +243,32 @@ public final class ManagedObjects {
         
     }
     
+    // -- DEFAULTS UTILITIES
+    
+    public static ManagedObject emptyToDefault(boolean mandatory, @NonNull ManagedObject input) {
+        if(!isSpecified(input)) {
+            return input;
+        }
+        if(input.getPojo()!=null) {
+            return input;
+        }
+        
+        // there are 2 cases to handle here
+        // 1) if primitive, then don't return null
+        // 2) if boxed boolean, that is MANDATORY, then don't return null
+        
+        val spec = input.getSpecification();
+        val expectedType = spec.getCorrespondingClass();
+        if(expectedType.isPrimitive()) {
+            return ManagedObject.of(spec, ClassExtensions.toDefault(expectedType));
+        }
+        if(Boolean.class.equals(expectedType) && mandatory) {
+            return ManagedObject.of(spec, Boolean.FALSE);
+        }
+        
+        return input;
+    }
+    
     // -- TITLE UTILITIES
     
     public static String abbreviatedTitleOf(ManagedObject adapter, int maxLength, String suffix) {

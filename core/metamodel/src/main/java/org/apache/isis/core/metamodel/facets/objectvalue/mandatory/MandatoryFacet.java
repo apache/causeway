@@ -24,6 +24,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.NonNull;
+import lombok.val;
+
 /**
  * Whether a property or a parameter is mandatory (not optional).
  *
@@ -54,4 +57,12 @@ public interface MandatoryFacet extends Facet, ValidatingInteractionAdvisor {
      * attached is <i>not</i> mandatory.
      */
     public boolean isInvertedSemantics();
+
+    static boolean isMandatory(@NonNull FacetHolder facetHolder) {
+        val mandatoryFacet = facetHolder.getFacet(MandatoryFacet.class);
+        if(mandatoryFacet == null || mandatoryFacet.isFallback() || mandatoryFacet.isInvertedSemantics()) {
+            return false;
+        }
+        return true;
+    }
 }

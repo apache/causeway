@@ -241,9 +241,13 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null && !defaultsFacet.isFallback()) {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
-            return ManagedObject.of(paramSpec, paramValuePojo);    
+            return ManagedObjects.emptyToDefault(
+                    !isOptional(),
+                    ManagedObject.of(paramSpec, paramValuePojo));    
         }   
-        return pendingArgs.getParamValue(getNumber());
+        return ManagedObjects.emptyToDefault(
+                !isOptional(),
+                pendingArgs.getParamValue(getNumber()));
     }
 
     // helpers

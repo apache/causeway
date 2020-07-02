@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -118,19 +118,17 @@ implements ParameterUiModel {
     }
 
     @Override
-    public String validate(final ManagedObject proposedAdapter) {
+    public String validate(final ManagedObject proposedValue) {
         final ObjectActionParameter parameter = getMetaModel();
         
         val action = parameter.getAction();
-        
-        
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
             
             val head = action.interactionHead(parentAdapter);    
             
             final String invalidReasonIfAny = parameter
-                    .isValid(head, proposedAdapter, InteractionInitiatedBy.USER);
+                    .isValid(head, proposedValue, InteractionInitiatedBy.USER);
             return invalidReasonIfAny;
         } catch (final Exception ex) {
             return ex.getLocalizedMessage();
@@ -166,11 +164,9 @@ implements ParameterUiModel {
     
     private ManagedObject toNonNull(@Nullable ManagedObject adapter) {
         if(adapter == null) {
-            if(getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
-                return ManagedObject.empty(getMetaModel().getSpecification());
-            }
+            adapter = ManagedObject.empty(getMetaModel().getSpecification());
         }
-        return adapter;
+        return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
     }
     
 

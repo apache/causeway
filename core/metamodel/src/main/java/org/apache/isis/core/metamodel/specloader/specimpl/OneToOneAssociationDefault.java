@@ -227,9 +227,8 @@ implements OneToOneAssociation {
 
     @Override
     public void toDefault(final ManagedObject ownerAdapter) {
-        // don't default optional fields
-        final MandatoryFacet mandatoryFacet = getFacet(MandatoryFacet.class);
-        if (mandatoryFacet != null && mandatoryFacet.isInvertedSemantics()) {
+        // default only mandatory fields
+        if (!MandatoryFacet.isMandatory(this)) {
             return;
         }
 

@@ -88,8 +88,7 @@ implements ObjectAssociation {
 
     @Override
     public boolean isMandatory() {
-        final MandatoryFacet mandatoryFacet = getFacet(MandatoryFacet.class);
-        return mandatoryFacet != null && !mandatoryFacet.isInvertedSemantics();
+        return MandatoryFacet.isMandatory(this);
     }
 
     @Override

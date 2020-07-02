@@ -33,12 +33,14 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import lombok.NonNull;
+import lombok.val;
 
 public class ActionParameterDefaultsFacetViaMethod 
 extends ActionParameterDefaultsFacetAbstract 
 implements ImperativeFacet {
 
     private final Method method;
+    @SuppressWarnings("unused")
     private final int paramNum;
     private final Optional<Constructor<?>> ppmFactory;
 
@@ -80,17 +82,17 @@ implements ImperativeFacet {
             
         // call with args: defaultNAct(X x, Y y, ...) 
         
-        if(ppmFactory.isPresent()) {
+        val defaultValue = ppmFactory.isPresent()
             // PPM programming model
-            return ManagedObjects.InvokeUtil
+            ? ManagedObjects.InvokeUtil
                     .invokeWithPPM(ppmFactory.get(), method, 
-                            pendingArgs.getActionTarget(), pendingArgs.getParamValues());    
-        }
-        
-        // else support legacy programming model, call any-arg defaultNAct(...)
-        return ManagedObjects.InvokeUtil
-                .invokeAutofit(method, 
-                    pendingArgs.getActionTarget(), pendingArgs.getParamValues());
+                            pendingArgs.getActionTarget(), pendingArgs.getParamValues())
+            // else support legacy programming model, call any-arg defaultNAct(...)
+            : ManagedObjects.InvokeUtil
+                    .invokeAutofit(method, 
+                        pendingArgs.getActionTarget(), pendingArgs.getParamValues());     
+
+        return defaultValue;
     }
 
     @Override
@@ -102,5 +104,6 @@ implements ImperativeFacet {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }
+   
 
 }
