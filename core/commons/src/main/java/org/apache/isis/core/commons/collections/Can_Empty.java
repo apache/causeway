@@ -123,7 +123,12 @@ final class Can_Empty<T> implements Can<T> {
     
     @Override
     public boolean equals(Object obj) {
-        return INSTANCE == obj;
+        if(INSTANCE == obj) {
+            return true; // optimization not strictly necessary
+        }
+        return (obj instanceof Can)
+                ? ((Can<?>)obj).isEmpty()
+                : false;
     }
     
     @Override
