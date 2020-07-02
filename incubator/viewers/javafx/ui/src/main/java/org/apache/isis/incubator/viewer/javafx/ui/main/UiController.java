@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
@@ -40,6 +41,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -48,6 +51,7 @@ import javafx.scene.paint.Color;
 @Log4j2
 public class UiController {
     
+    private final JavaFxViewerConfig viewerConfig;
     private final MetaModelContext metaModelContext;
     private final HeaderUiModelProvider headerUiModelProvider;
     private final IsisInteractionFactory isisInteractionFactory;
@@ -57,6 +61,7 @@ public class UiController {
     @FXML private MenuBar menuBarLeft;
     @FXML private MenuBar menuBarRight;
     @FXML private ScrollPane contentView;
+    @FXML private HBox topPane;
     @FXML private VBox contentPane;
     @FXML private TextArea sampleTextArea;
     
@@ -70,12 +75,25 @@ public class UiController {
         contentPane.setFillWidth(true);
         _fx.borderDashed(contentPane, Color.CRIMSON); //debug
         isisInteractionFactory.runAnonymous(this::buildMenu);
+        renderHompage();
     }
     
     private void buildMenu() {
         val header = headerUiModelProvider.getHeader();
         
         val commonContext = IsisAppCommonContext.of(metaModelContext);
+        
+        // adding a top level menu 'Home' decorated with a branding-icon ...
+        
+        val brandingIcon = new ImageView(viewerConfig.getBrandingIcon());
+        brandingIcon.setPreserveRatio(true);
+        
+        val menu = _fx.newMenu(menuBarLeft, "Home");
+        menu.setGraphic(brandingIcon);
+        brandingIcon.fitHeightProperty().set(16);
+        _fx.setMenuOnAction(menu, e->renderHompage());
+        
+        // let the MenuBuilderFx populate the menu-bars ... 
         
         val leftMenuBuilder = MenuBuilderFx.of(uiContext, menuBarLeft, this::onActionLinkClicked);
         val rightMenuBuilder = MenuBuilderFx.of(uiContext, menuBarRight, this::onActionLinkClicked);
@@ -92,6 +110,14 @@ public class UiController {
     private void replaceContent(Node node) {
         contentPane.getChildren().clear();
         contentPane.getChildren().add(node);
+    }
+    
+    private void renderHompage() {
+        log.info("about to render homepage");
+        isisInteractionFactory.runAnonymous(()->{
+            val homepageViewmodel = metaModelContext.getHomePageAdapter();
+            uiActionHandler.handleActionResult(homepageViewmodel, this::replaceContent);
+        });
     }
     
 }

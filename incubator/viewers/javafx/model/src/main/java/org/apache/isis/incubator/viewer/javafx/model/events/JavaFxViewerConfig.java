@@ -31,6 +31,7 @@ public class JavaFxViewerConfig {
 
     private String applicationTitle;
     private Image applicationIcon;
+    private Image brandingIcon;
     
     @Builder.Default
     private Resource uiLayout = new ClassPathResource("/ui.fxml");

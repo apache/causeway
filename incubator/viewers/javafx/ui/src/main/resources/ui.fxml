@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
@@ -14,7 +13,7 @@
 
 <VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.apache.isis.incubator.viewer.javafx.ui.main.UiController">
   <children>
-    <HBox VBox.vgrow="NEVER">
+    <HBox fx:id="topPane" VBox.vgrow="NEVER">
       <children>
     		<MenuBar fx:id="menuBarLeft" />
             <Region fx:id="topLevelMenuSpacer" styleClass="menu-bar" HBox.hgrow="SOMETIMES" />
@@ -25,86 +24,17 @@
          <content>
             <VBox fx:id="contentPane" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #f8f9fa;">
                <children>
-                  <FlowPane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: LIGHTYELLOW;">
-                           <children>
-                              <Label alignment="CENTER" style="&#10;" text="COL1" textAlignment="CENTER" wrapText="false">
-                                 <font>
-                                    <Font size="18.0" fx:id="x11" />
-                                 </font>
-                                 <textFill>
-                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x21" />
-                                 </textFill>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #FFF5EE;">
-                           <children>
-                              <Label alignment="CENTER" style="&#10;" text="COL2" textAlignment="CENTER" wrapText="false">
-                                 <font>
-                                    <Font size="18.0" fx:id="x111" />
-                                 </font>
-                                 <textFill>
-                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x211" />
-                                 </textFill>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #F0F8FF;">
-                           <children>
-                              <Label alignment="CENTER" style="&#10;" text="COL3" textAlignment="CENTER" wrapText="false">
-                                 <font>
-                                    <Font size="18.0" fx:id="x1111" />
-                                 </font>
-                                 <textFill>
-                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x2111" />
-                                 </textFill>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #F0FFF0;">
-                           <children>
-                              <Label alignment="CENTER" style="&#10;" text="COL4" textAlignment="CENTER" wrapText="false">
-                                 <font>
-                                    <Font size="18.0" fx:id="x1111" />
-                                 </font>
-                                 <textFill>
-                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x2111" />
-                                 </textFill>
-                              </Label>
-                           </children>
-                        </VBox>
-                     </children>
-                  </FlowPane>
-                  <FlowPane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: LIGHTYELLOW;">
-                           <children>
-                              <Label alignment="CENTER" style="&#10;" text="COL1" textAlignment="CENTER" wrapText="false">
-                                 <font>
-                                    <Font size="18.0" fx:id="x111" />
-                                 </font>
-                                 <textFill>
-                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x211" />
-                                 </textFill>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #FFF5EE;">
-                           <children>
-                              <Label alignment="CENTER" style="&#10;" text="COL2" textAlignment="CENTER" wrapText="false">
-                                 <font>
-                                    <Font size="18.0" fx:id="x1111" />
-                                 </font>
-                                 <textFill>
-                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x2111" />
-                                 </textFill>
-                              </Label>
-                           </children>
-                        </VBox>
-                     </children>
-                  </FlowPane>
+                  <Label alignment="CENTER" style="&#10;" text="Initializing ..." textAlignment="CENTER" wrapText="false">
+                     <font>
+                        <Font size="18.0" fx:id="x11" />
+                     </font>
+                     <textFill>
+                        <Color blue="0.624" green="0.624" red="0.624" fx:id="x21" />
+                     </textFill>
+                     <VBox.margin>
+                        <Insets left="16.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
                </children>
             </VBox>
          </content>

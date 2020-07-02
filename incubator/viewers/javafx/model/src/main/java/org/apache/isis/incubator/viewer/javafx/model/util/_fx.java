@@ -32,6 +32,9 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -151,6 +154,18 @@ public final class _fx {
         container.getChildren().add(component);
         return component;
     }
+    
+    public static Menu newMenu(MenuBar container, String label) {
+        val component = new Menu(label);
+        container.getMenus().add(component);
+        return component;
+    }
+    
+    public static MenuItem newMenuItem(Menu container, String label) {
+        val component = new MenuItem(label);
+        container.getItems().add(component);
+        return component;
+    }
 
     public static TitledPane newTitledPane(Accordion container, String label) {
         
@@ -239,6 +254,20 @@ public final class _fx {
                 new CornerRadii(3), 
                 new BorderWidths(1))));
         return region;
+    }
+    
+    // -- HACKS
+    
+    /**
+     * {@code menu.setOnAction(action)} does nothing if the menu has no menu items
+     */
+    public static void setMenuOnAction(Menu menu, EventHandler<ActionEvent> action) {
+        
+        _fx.newMenuItem(menu, "dummy");
+        menu.addEventHandler(Menu.ON_SHOWN, event -> menu.hide());
+        menu.addEventHandler(Menu.ON_SHOWING, event -> menu.fire());
+        
+        menu.setOnAction(action);
     }
     
 

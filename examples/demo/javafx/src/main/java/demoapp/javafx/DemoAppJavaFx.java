@@ -52,6 +52,7 @@ public class DemoAppJavaFx {
         return JavaFxViewerConfig.builder()
                 .applicationTitle("Apache Isis Demo")
                 .applicationIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "icon.png"))
+                .brandingIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "gift_32.png"))
                 .build();
     }
 

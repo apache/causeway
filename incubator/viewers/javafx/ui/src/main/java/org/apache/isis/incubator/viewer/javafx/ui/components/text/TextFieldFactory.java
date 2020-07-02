@@ -41,7 +41,8 @@ public class TextFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(Request request) {
-        return request.hasFeatureFacet(StringValueFacet.class);
+        return false;
+//        return request.hasFeatureFacet(StringValueFacet.class);
     }
 
     @Override

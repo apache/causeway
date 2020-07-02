@@ -66,11 +66,14 @@ public class UiActionHandler {
             val actionResultOrVeto = managedAction.invoke(Can.empty());
             
             actionResultOrVeto.left()
-            .ifPresent(actionResult->
-                    onNewPageContent.accept(uiComponentForActionResult(actionResult, onNewPageContent)));
+            .ifPresent(actionResult->handleActionResult(actionResult, onNewPageContent));
 
         });
 
+    }
+    
+    public void handleActionResult(ManagedObject actionResult, Consumer<Node> onNewPageContent) {
+        onNewPageContent.accept(uiComponentForActionResult(actionResult, onNewPageContent));
     }
     
     private Node uiComponentForActionResult(ManagedObject actionResult, Consumer<Node> onNewPageContent) {
