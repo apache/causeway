@@ -113,7 +113,9 @@
 	<modules>
 		<module>mappings/microprofile</module>
 		<module>viewers/vaadin</module>
+<!--
 		<module>viewers/javafx</module>
+-->
 	</modules>
 
 </project>
