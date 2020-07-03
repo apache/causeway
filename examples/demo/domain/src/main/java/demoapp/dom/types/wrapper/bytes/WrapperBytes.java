@@ -59,8 +59,8 @@ public class WrapperBytes implements HasAsciiDocDescription {
     public WrapperByteVm openViewModel(Byte initialValue) {
         return new WrapperByteVm(initialValue);
     }
-    public char default0OpenViewModel() {
-        return 'a';
+    public Byte default0OpenViewModel() {
+        return (byte)123;
     }
 
     @Collection

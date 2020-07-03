@@ -36,7 +36,7 @@ For example:
 +
 [source,java]
 ----
-include::holder/WrapperDoubleHolder_updateReadOnlyOptionalProperty.java[tags=class]
+include::holder/WrapperDoubleHolder_updateReadOnlyProperty.java[tags=class]
 ----
 
 * the `updateReadOnlyOptionalProperty` action is:
