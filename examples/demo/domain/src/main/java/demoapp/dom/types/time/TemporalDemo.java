@@ -63,15 +63,6 @@ public class TemporalDemo implements HasAsciiDocDescription {
 
     // -- DATE ONLY (LOCAL TIME)
 
-    @Property
-    @PropertyLayout(describedAs="java.sql.Date")
-    @XmlElement @XmlJavaTypeAdapter(SqlDateAdapter.class)
-    @Getter //@Setter 
-    private java.sql.Date javaSqlDate;
-    public void setJavaSqlDate(java.sql.Date javaSqlDate) {
-        this.javaSqlDate = javaSqlDate;
-        _Probe.sysOut("setJavaSqlDate %s", javaSqlDate);
-    }
 
     @Property
     @PropertyLayout(describedAs="java.time.LocalDate")

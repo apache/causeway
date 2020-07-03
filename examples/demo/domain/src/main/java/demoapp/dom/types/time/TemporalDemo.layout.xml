@@ -17,7 +17,6 @@
     <bs3:row>
         <bs3:col span="6">
             <cpt:fieldSet name="Date only (Local Time)" id="date">
-                <cpt:property id="javaSqlDate"/>
                 <cpt:property id="javaLocalDate"/>
             </cpt:fieldSet>
             

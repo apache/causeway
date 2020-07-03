@@ -49,6 +49,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.blob.BlobDemo;
 import demoapp.dom.types.clob.ClobDemo;
 import demoapp.dom.types.markup.MarkupDemo;
+import demoapp.dom.types.temporal.javasqldate.TemporalJavaSqlDates;
 import demoapp.dom.types.wrapper.WrapperDemo;
 import demoapp.dom.types.primitive.booleans.PrimitiveBooleans;
 import demoapp.dom.types.primitive.bytes.PrimitiveBytes;
@@ -94,17 +95,7 @@ public class DataTypesMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public WrapperDemo wrappers(){
-        val demo = factoryService.viewModel(WrapperDemo.class);
-
-        demo.setJavaLangByte(Byte.MAX_VALUE);
-        demo.setJavaLangShort(Short.MAX_VALUE);
-        demo.setJavaLangInteger(Integer.MAX_VALUE);
-        demo.setJavaLangLong(Long.MAX_VALUE);
-
-        demo.setJavaLangFloat(Float.MAX_VALUE);
-        demo.setJavaLangDouble(Double.MAX_VALUE);
-
-        return demo;
+        return new WrapperDemo();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -274,6 +265,11 @@ public class DataTypesMenu {
     }
 
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public TemporalJavaSqlDates temporalJavaSqlDates(){
+        return new TemporalJavaSqlDates();
+    }
 
 
 }
