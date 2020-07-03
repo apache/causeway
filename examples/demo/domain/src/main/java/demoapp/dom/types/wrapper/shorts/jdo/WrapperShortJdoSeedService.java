@@ -30,7 +30,7 @@ public class WrapperShortJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1, 2, 3)
+            Stream.of(123, -123, 3000, 400)
                     .map(Integer::shortValue)
                     .map(WrapperShortJdo::new)
                     .forEach(repositoryService::persist);

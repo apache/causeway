@@ -30,8 +30,7 @@ public class WrapperLongJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1, 2, 3)
-                    .map(Integer::longValue)
+            Stream.of(121_212_121_212L,2L, -300_000_000_000L, 4L)
                     .map(WrapperLongJdo::new)
                     .forEach(repositoryService::persist);
         }

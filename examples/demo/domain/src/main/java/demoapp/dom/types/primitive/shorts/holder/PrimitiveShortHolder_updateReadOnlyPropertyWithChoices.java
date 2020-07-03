@@ -51,7 +51,7 @@ public class PrimitiveShortHolder_updateReadOnlyPropertyWithChoices {
     }
     public List<Short> choices0Act() {
         return Stream.of(123, -123, 3000, 400)
-                .map(x -> (short) (int) x)
+                .map(Integer::shortValue)
                 .collect(Collectors.toList());
     }
     public boolean hideAct() {

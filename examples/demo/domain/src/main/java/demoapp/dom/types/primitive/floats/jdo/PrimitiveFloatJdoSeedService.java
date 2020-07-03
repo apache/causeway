@@ -30,7 +30,7 @@ public class PrimitiveFloatJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of('a', 'b', 'c')
+            Stream.of(1.1f, 2.2f, 3.3f, 4.0f, -9.9f, -8.8f)
                     .map(PrimitiveFloatJdo::new)
                     .forEach(repositoryService::persist);
         }

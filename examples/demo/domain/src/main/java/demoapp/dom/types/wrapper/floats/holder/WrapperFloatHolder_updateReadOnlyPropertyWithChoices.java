@@ -50,8 +50,7 @@ public class WrapperFloatHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<Float> choices0Act() {
-        return Stream.of(1, 2, 3)
-                .map(Integer::floatValue)
+        return Stream.of(1.1f, 2.2f, 3.3f, 4.0f, -9.9f, -8.8f)
                 .collect(Collectors.toList());
     }
 

@@ -50,8 +50,7 @@ public class WrapperDoubleHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<Double> choices0Act() {
-        return Stream.of(1, 2, 3)
-                .map(Integer::doubleValue)
+        return Stream.of(123.4567, 762.1234, 9.00, -12.1314)
                 .collect(Collectors.toList());
     }
 

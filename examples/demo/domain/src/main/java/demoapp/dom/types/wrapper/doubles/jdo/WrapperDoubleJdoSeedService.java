@@ -30,8 +30,7 @@ public class WrapperDoubleJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1, 2, 3)
-                    .map(Integer::doubleValue)
+            Stream.of(123.4567, 762.1234, 9.00, -12.1314)
                     .map(WrapperDoubleJdo::new)
                     .forEach(repositoryService::persist);
         }

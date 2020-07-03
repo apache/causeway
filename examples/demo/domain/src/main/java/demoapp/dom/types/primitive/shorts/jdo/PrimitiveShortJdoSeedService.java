@@ -30,14 +30,10 @@ public class PrimitiveShortJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1,2,3,4)
-                    .map(x -> asShort(x))
+            Stream.of(123, -123, 3000, 400)
+                    .map(x -> (short)(int)x)
                     .map(PrimitiveShortJdo::new)
                     .forEach(repositoryService::persist);
-        }
-
-        private static short asShort(int x) {
-            return (short) x;
         }
 
         @Inject

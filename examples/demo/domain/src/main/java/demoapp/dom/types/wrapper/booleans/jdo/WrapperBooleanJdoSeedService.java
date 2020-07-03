@@ -30,7 +30,7 @@ public class WrapperBooleanJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of('a', 'b', 'c')
+            Stream.of(true, false)
                     .map(WrapperBooleanJdo::new)
                     .forEach(repositoryService::persist);
         }

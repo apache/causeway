@@ -50,8 +50,7 @@ public class WrapperLongHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<Long> choices0Act() {
-        return Stream.of(1, 2, 3)
-                .map(Integer::longValue)
+        return Stream.of(121_212_121_212L,2L, -300_000_000_000L, 4L)
                 .collect(Collectors.toList());
     }
 

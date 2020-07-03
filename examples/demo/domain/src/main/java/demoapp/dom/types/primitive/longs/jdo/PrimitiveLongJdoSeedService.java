@@ -30,7 +30,7 @@ public class PrimitiveLongJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of('a', 'b', 'c')
+            Stream.of(121_212_121_212L,2L, -300_000_000_000L, 4L)
                     .map(PrimitiveLongJdo::new)
                     .forEach(repositoryService::persist);
         }
