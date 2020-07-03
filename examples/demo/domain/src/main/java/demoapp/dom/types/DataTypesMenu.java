@@ -239,7 +239,7 @@ public class DataTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperIntegers wrapperInts(){
+    public WrapperIntegers wrapperIntegers(){
         return new WrapperIntegers();
     }
 
