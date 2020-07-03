@@ -59,8 +59,8 @@ public class WrapperLongs implements HasAsciiDocDescription {
     public WrapperLongVm openViewModel(Long initialValue) {
         return new WrapperLongVm(initialValue);
     }
-    public char default0OpenViewModel() {
-        return 'a';
+    public Long default0OpenViewModel() {
+        return 123_456_789_012L;
     }
 
     @Collection

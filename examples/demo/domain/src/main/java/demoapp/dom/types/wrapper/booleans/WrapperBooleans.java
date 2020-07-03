@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -59,8 +60,8 @@ public class WrapperBooleans implements HasAsciiDocDescription {
     public WrapperBooleanVm openViewModel(Boolean initialValue) {
         return new WrapperBooleanVm(initialValue);
     }
-    public char default0OpenViewModel() {
-        return 'a';
+    public Boolean default0OpenViewModel() {
+        return true;
     }
 
     @Collection
@@ -71,6 +72,43 @@ public class WrapperBooleans implements HasAsciiDocDescription {
     @Inject
     @XmlTransient
     WrapperBooleanJdoEntities entities;
+
+
+    //FIXME[ISIS-2387]
+    @Action
+    @ActionLayout(
+            promptStyle = PromptStyle.DIALOG_MODAL
+            , describedAs = "FIXME[ISIS-2387] even though primitive1 gets initialized with true, the model thinks its null"
+    )
+    public WrapperBooleans booleanParams(
+            boolean primitive0,
+            boolean primitive1) {
+        return this;
+    }
+    @Model
+    public boolean default1BooleanParams() {
+        return true;
+    }
+
+    //FIXME[ISIS-2387]
+    @Action
+    @ActionLayout(
+            promptStyle = PromptStyle.DIALOG_MODAL
+            , describedAs =
+            "FIXME[ISIS-2387] contrary to the above, second parameter works; " +
+                    "however, first parameter is however, first parameter is initialized to null but not " +
+                    "rendered as 3-state.  Either we fix rendering or we" +
+                    " initialize with FALSE when null"
+    )
+    public WrapperBooleans booleanBoxedParams(
+            Boolean boxed0,
+            Boolean boxed1) {
+        return this;
+    }
+    @Model
+    public Boolean default1BooleanBoxedParams() {
+        return true;
+    }
 
 
 }

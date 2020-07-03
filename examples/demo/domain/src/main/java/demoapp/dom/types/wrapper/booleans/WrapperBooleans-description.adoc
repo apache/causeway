@@ -9,7 +9,7 @@ Some properties on these domain objects are mandatory, some optional.
 
 == Common interface
 
-These objects both implement a common interface, `StringHolder`:
+These objects both implement a common interface, `WrapperBooleanHolder`:
 
 [source,java]
 ----
@@ -36,7 +36,7 @@ For example:
 +
 [source,java]
 ----
-include::holder/WrapperBooleanHolder_updateReadOnlyOptionalProperty.java[tags=class]
+include::holder/WrapperBooleanHolder_updateReadOnlyProperty.java[tags=class]
 ----
 
 * the `updateReadOnlyOptionalProperty` action is:

@@ -59,8 +59,8 @@ public class WrapperFloats implements HasAsciiDocDescription {
     public WrapperFloatVm openViewModel(Float initialValue) {
         return new WrapperFloatVm(initialValue);
     }
-    public char default0OpenViewModel() {
-        return 'a';
+    public Float default0OpenViewModel() {
+        return 1234.1234f;
     }
 
     @Collection
