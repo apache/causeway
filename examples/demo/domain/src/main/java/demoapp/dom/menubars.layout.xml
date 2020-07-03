@@ -26,7 +26,14 @@
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveBooleans"/>
             </mb3:section>
             <mb3:section>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperBytes"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperShorts"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperIntegers"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperLongs"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperFloats"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperDoubles"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperCharacters"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperBooleans"/>
             </mb3:section>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="text"/>

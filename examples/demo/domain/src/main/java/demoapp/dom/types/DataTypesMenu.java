@@ -61,7 +61,14 @@ import demoapp.dom.types.primitive.shorts.PrimitiveShorts;
 import demoapp.dom.types.text.TextDemo;
 import demoapp.dom.types.time.TemporalDemo;
 import demoapp.dom.types.uuid.UuidDemo;
+import demoapp.dom.types.wrapper.booleans.WrapperBooleans;
+import demoapp.dom.types.wrapper.bytes.WrapperBytes;
 import demoapp.dom.types.wrapper.characters.WrapperCharacters;
+import demoapp.dom.types.wrapper.doubles.WrapperDoubles;
+import demoapp.dom.types.wrapper.floats.WrapperFloats;
+import demoapp.dom.types.wrapper.integers.WrapperIntegers;
+import demoapp.dom.types.wrapper.longs.WrapperLongs;
+import demoapp.dom.types.wrapper.shorts.WrapperShorts;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DataTypesMenu")
 @DomainObjectLayout(named="DataTypes")
@@ -220,9 +227,53 @@ public class DataTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
+    public WrapperBytes wrapperBytes(){
+        return new WrapperBytes();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public WrapperShorts wrapperShorts(){
+        return new WrapperShorts();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public WrapperIntegers wrapperInts(){
+        return new WrapperIntegers();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public WrapperLongs wrapperLongs(){
+        return new WrapperLongs();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public WrapperFloats wrapperFloats(){
+        return new WrapperFloats();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public WrapperDoubles wrapperDoubles(){
+        return new WrapperDoubles();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
     public WrapperCharacters wrapperCharacters(){
         return new WrapperCharacters();
     }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public WrapperBooleans wrapperBooleans(){
+        return new WrapperBooleans();
+    }
+
+
 
 
 }
