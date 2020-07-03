@@ -16,76 +16,68 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.temporal.javasqldate.vm;
+package demoapp.dom.types.temporal.javasqltimestamp.jdo;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.util.JaxbAdapters;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.temporal.javasqldate.holder.TemporalJavaSqlDateHolder;
+import demoapp.dom.types.temporal.javasqltimestamp.holder.TemporalJavaSqlTimestampHolder;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.TemporalJavaSqlDateVm"
+        objectType = "demo.TemporalJavaSqlTimestampJdo"
 )
-@lombok.NoArgsConstructor                                                       // <.>
-public class TemporalJavaSqlDateVm
-        implements HasAsciiDocDescription, TemporalJavaSqlDateHolder {
+public class TemporalJavaSqlTimestampJdo                                          // <.>
+        implements HasAsciiDocDescription, TemporalJavaSqlTimestampHolder {
 
 //end::class[]
-    public TemporalJavaSqlDateVm(java.sql.Date initialValue) {
+    public TemporalJavaSqlTimestampJdo(java.sql.Timestamp initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "java.sql.Date (wrapper) view model: ")
+    @Title(prepend = "java.sql.Timestamp (wrapper) JDO entity: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlDateAdapter.class)                      // <.>
+    @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private java.sql.Date readOnlyProperty;
+    private java.sql.Timestamp readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlDateAdapter.class)
+    @Column(allowsNull = "false")
     @Getter @Setter
-    private java.sql.Date readWriteProperty;
+    private java.sql.Timestamp readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlDateAdapter.class)
+    @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private java.sql.Date readOnlyOptionalProperty;
+    private java.sql.Timestamp readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlDateAdapter.class)
+    @Column(allowsNull = "true")
     @Getter @Setter
-    private java.sql.Date readWriteOptionalProperty;
+    private java.sql.Timestamp readWriteOptionalProperty;
 
 }
 //end::class[]

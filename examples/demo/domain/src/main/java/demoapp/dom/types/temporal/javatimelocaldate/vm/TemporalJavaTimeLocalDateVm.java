@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.temporal.javasqldate.vm;
+package demoapp.dom.types.temporal.javatimelocaldate.vm;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -40,7 +40,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.temporal.javasqldate.holder.TemporalJavaSqlDateHolder;
+import demoapp.dom.types.temporal.javatimelocaldate.holder.TemporalJavaTimeLocalDateHolder;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,44 +48,44 @@ import demoapp.dom.types.temporal.javasqldate.holder.TemporalJavaSqlDateHolder;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.TemporalJavaSqlDateVm"
+        objectType = "demo.TemporalJavaTimeLocalDateVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
-public class TemporalJavaSqlDateVm
-        implements HasAsciiDocDescription, TemporalJavaSqlDateHolder {
+public class TemporalJavaTimeLocalDateVm
+        implements HasAsciiDocDescription, TemporalJavaTimeLocalDateHolder {
 
 //end::class[]
-    public TemporalJavaSqlDateVm(java.sql.Date initialValue) {
+    public TemporalJavaTimeLocalDateVm(java.time.LocalDate initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "java.sql.Date (wrapper) view model: ")
+    @Title(prepend = "java.time.LocalDate (wrapper) view model: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlDateAdapter.class)                      // <.>
+    @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)                    // <.>
     @Getter @Setter
-    private java.sql.Date readOnlyProperty;
+    private java.time.LocalDate readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlDateAdapter.class)
+    @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
     @Getter @Setter
-    private java.sql.Date readWriteProperty;
+    private java.time.LocalDate readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlDateAdapter.class)
+    @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
     @Getter @Setter
-    private java.sql.Date readOnlyOptionalProperty;
+    private java.time.LocalDate readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlDateAdapter.class)
+    @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
     @Getter @Setter
-    private java.sql.Date readWriteOptionalProperty;
+    private java.time.LocalDate readWriteOptionalProperty;
 
 }
 //end::class[]

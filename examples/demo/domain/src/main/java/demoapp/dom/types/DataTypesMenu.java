@@ -19,10 +19,6 @@
 package demoapp.dom.types;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -43,33 +39,14 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.resources._Resources;
 
 import lombok.val;
-
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.blob.BlobDemo;
 import demoapp.dom.types.clob.ClobDemo;
 import demoapp.dom.types.markup.MarkupDemo;
-import demoapp.dom.types.temporal.javasqldate.TemporalJavaSqlDates;
-import demoapp.dom.types.wrapper.WrapperDemo;
-import demoapp.dom.types.primitive.booleans.PrimitiveBooleans;
-import demoapp.dom.types.primitive.bytes.PrimitiveBytes;
-import demoapp.dom.types.primitive.chars.PrimitiveChars;
-import demoapp.dom.types.primitive.doubles.PrimitiveDoubles;
-import demoapp.dom.types.primitive.floats.PrimitiveFloats;
-import demoapp.dom.types.primitive.ints.PrimitiveInts;
-import demoapp.dom.types.primitive.longs.PrimitiveLongs;
-import demoapp.dom.types.primitive.shorts.PrimitiveShorts;
 import demoapp.dom.types.text.TextDemo;
-import demoapp.dom.types.time.TemporalDemo;
 import demoapp.dom.types.uuid.UuidDemo;
-import demoapp.dom.types.wrapper.booleans.WrapperBooleans;
-import demoapp.dom.types.wrapper.bytes.WrapperBytes;
-import demoapp.dom.types.wrapper.characters.WrapperCharacters;
-import demoapp.dom.types.wrapper.doubles.WrapperDoubles;
-import demoapp.dom.types.wrapper.floats.WrapperFloats;
-import demoapp.dom.types.wrapper.integers.WrapperIntegers;
-import demoapp.dom.types.wrapper.longs.WrapperLongs;
-import demoapp.dom.types.wrapper.shorts.WrapperShorts;
+import demoapp.dom.types.wrapper.WrapperDemo;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DataTypesMenu")
 @DomainObjectLayout(named="DataTypes")
@@ -98,21 +75,6 @@ public class DataTypesMenu {
         return new WrapperDemo();
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
-    public TemporalDemo temporals(){
-        val demo = factoryService.viewModel(TemporalDemo.class);
-
-        demo.setJavaUtilDate(new Date());
-        demo.setJavaSqlDate( new java.sql.Date(System.currentTimeMillis()));
-        demo.setJavaSqlTimestamp(new java.sql.Timestamp(System.currentTimeMillis()));
-
-        demo.setJavaLocalDate(LocalDate.now());
-        demo.setJavaLocalDateTime(LocalDateTime.now());
-        demo.setJavaOffsetDateTime(OffsetDateTime.now());
-
-        return demo;
-    }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-at")
@@ -165,110 +127,6 @@ public class DataTypesMenu {
         }
 
         return demo;
-    }
-
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveBytes primitiveBytes(){
-        return new PrimitiveBytes();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveShorts primitiveShorts(){
-        return new PrimitiveShorts();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveInts primitiveInts(){
-        return new PrimitiveInts();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveLongs primitiveLongs(){
-        return new PrimitiveLongs();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveFloats primitiveFloats(){
-        return new PrimitiveFloats();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveDoubles primitiveDoubles(){
-        return new PrimitiveDoubles();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveChars primitiveChars(){
-        return new PrimitiveChars();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveBooleans primitiveBooleans(){
-        return new PrimitiveBooleans();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperBytes wrapperBytes(){
-        return new WrapperBytes();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperShorts wrapperShorts(){
-        return new WrapperShorts();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperIntegers wrapperIntegers(){
-        return new WrapperIntegers();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperLongs wrapperLongs(){
-        return new WrapperLongs();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperFloats wrapperFloats(){
-        return new WrapperFloats();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperDoubles wrapperDoubles(){
-        return new WrapperDoubles();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperCharacters wrapperCharacters(){
-        return new WrapperCharacters();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperBooleans wrapperBooleans(){
-        return new WrapperBooleans();
-    }
-
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public TemporalJavaSqlDates temporalJavaSqlDates(){
-        return new TemporalJavaSqlDates();
     }
 
 
