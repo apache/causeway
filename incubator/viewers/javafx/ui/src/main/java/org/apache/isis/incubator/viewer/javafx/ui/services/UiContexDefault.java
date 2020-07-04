@@ -40,7 +40,7 @@ public class UiContexDefault implements UiContext {
     //private final UiActionHandler uiActionHandler;
     private final IsisInteractionFactory isisInteractionFactory;
     
+    
     private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
-
     
 }

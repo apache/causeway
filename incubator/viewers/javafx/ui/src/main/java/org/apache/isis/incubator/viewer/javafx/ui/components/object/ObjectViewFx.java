@@ -82,8 +82,6 @@ public class ObjectViewFx extends VBox {
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
         
-        //this.setFillWidth(true);
-        
         val gridVisistor = new UiGridLayout.Visitor<Pane, TabPane>(this) {
 
             @Override
@@ -178,10 +176,7 @@ public class ObjectViewFx extends VBox {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .getManagedAction()
                 .ifPresent(managedAction -> {
-                    val uiButton = _fx.newButton(
-                            container, 
-                            managedAction.getName(), 
-                            event->actionEventHandler.accept(managedAction));
+                    _fx.add(container, uiComponentFactory.buttonFor(managedAction, actionEventHandler));
                 });
             }
 

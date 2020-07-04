@@ -18,6 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.text;
 
+import javax.inject.Inject;
+
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -29,20 +31,19 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 
-import lombok.val;
-
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.MIDPOINT)
-//@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TextFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(Request request) {
-        return false;
-//        return request.hasFeatureFacet(StringValueFacet.class);
+        return request.hasFeatureFacet(StringValueFacet.class);
     }
 
     @Override

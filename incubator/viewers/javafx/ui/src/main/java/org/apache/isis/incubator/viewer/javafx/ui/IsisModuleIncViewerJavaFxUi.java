@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
+import org.apache.isis.incubator.viewer.javafx.ui.components.PrototypingDecorator;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory;
@@ -31,6 +32,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
 import org.apache.isis.incubator.viewer.javafx.ui.services.DecoratorServiceDefault;
 import org.apache.isis.incubator.viewer.javafx.ui.services.IconServiceDefault;
+import org.apache.isis.incubator.viewer.javafx.ui.services.PrototypingInfoService;
 import org.apache.isis.incubator.viewer.javafx.ui.services.UiContexDefault;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
@@ -56,6 +58,8 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         // @Service's
         UiComponentFactoryFx.class,
         UiActionHandler.class,
+        PrototypingInfoService.class,
+        PrototypingDecorator.class,
         
         UiContexDefault.class,
         IconServiceDefault.class,

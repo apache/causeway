@@ -75,7 +75,7 @@ public final class ManagedAction extends ManagedMember {
     public ObjectAction getMember() {
         return getAction();
     }
-
+    
     @Override
     public MemberType getMemberType() {
         return MemberType.ACTION;

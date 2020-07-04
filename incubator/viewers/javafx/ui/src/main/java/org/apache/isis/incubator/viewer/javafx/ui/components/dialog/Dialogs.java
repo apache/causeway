@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
-
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -45,12 +45,24 @@ public class Dialogs {
         alert.showAndWait();
     }
     
+    public static void message(String title, String headerText, String contentText, Node contentNode){
+        val alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+
+        alert.getDialogPane().setExpandableContent(contentNode);
+        alert.getDialogPane().setExpanded(true);
+        
+        alert.showAndWait();
+    }
+    
     public static void warning(String title, String headerText, String contentText){
         val alert = new Alert(AlertType.WARNING);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
-
+        
         alert.showAndWait();
     }
     

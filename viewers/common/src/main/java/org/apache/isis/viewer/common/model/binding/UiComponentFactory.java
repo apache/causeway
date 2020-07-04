@@ -42,8 +42,6 @@ public interface UiComponentFactory<T> {
     
     T componentFor(UiComponentFactory.Request request);
     
-    // -- REQUEST (VALUE) TYPE
-    
     @Value(staticConstructor = "of")
     public static class Request {
         @NonNull private final Where where;
