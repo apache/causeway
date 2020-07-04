@@ -1225,7 +1225,7 @@ public class IsisConfiguration {
                 /**
                  * Whether to perform introspection in parallel.
                  */
-                private boolean parallelize = true;
+                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is broken 
 
                 /**
                  * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
