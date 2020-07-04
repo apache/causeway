@@ -18,6 +18,12 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.Collections;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +32,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
+import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.base._Timing;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -58,18 +64,37 @@ import lombok.extern.log4j.Log4j2;
 })
 @Incubating("not a real test, just for performance tuning")
 @Log4j2
-class UnstableSpecloaderPerformanceTest {
+class SpecloaderPerformanceTest {
     
     @Inject private IsisConfiguration config;
     @Inject private SpecificationLoader specificationLoader;
     
+    private final _Lazy<Set<String>> referenceMetamodelSummary = _Lazy.threadSafe(()->
+        MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications())); 
+    
     @BeforeEach
     void setup() {
+        config.getCore().getMetaModel().getIntrospector().setParallelize(false);
+        referenceMetamodelSummary.get(); // memoize
         config.getCore().getMetaModel().getIntrospector().setParallelize(true);
     }
     
     static long ITERATIONS = 100; /* should typically run in ~10s */
     static long EXPECTED_MILLIS_PER_ITERATION = 100;
+    
+    @Test
+    void concurrentSpecloading_shouldYieldSameMetamodelAsSequential() {
+        _Annotations.clearCache();
+        specificationLoader.disposeMetaModel();
+        specificationLoader.createMetaModel();
+        val mmSummary = MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications());
+        
+        val missingFeatures = _Sets.minus(referenceMetamodelSummary.get(), mmSummary);
+        if(!missingFeatures.isEmpty()) {
+            System.err.println(String.format("%d missing features", missingFeatures.size()));
+        }
+        assertEquals(Collections.<String>emptySet(), missingFeatures);
+    }
     
     @Test @Tag("LongRunning")
     void repeatedConcurrentSpecloading_shouldNotDeadlock() {
