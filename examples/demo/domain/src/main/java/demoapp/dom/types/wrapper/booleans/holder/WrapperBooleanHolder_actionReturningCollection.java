@@ -20,13 +20,16 @@ package demoapp.dom.types.wrapper.booleans.holder;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.booleans.WrapperBooleansStream;
 
 
 //tag::class[]
@@ -38,10 +41,12 @@ public class WrapperBooleanHolder_actionReturningCollection {
 
     public Collection<Boolean> act() {
         final Collection<Boolean> booleans = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(true, false, true, false)
+        samples.stream()
                 .forEach(booleans::add);
         return booleans;
     }
+
+    @Inject
+    Samples<Boolean> samples;
 }
 //end::class[]

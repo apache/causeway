@@ -18,15 +18,19 @@
  */
 package demoapp.dom.types.temporal.javautildate.holder;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.Date;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javautildate.TemporalJavaUtilDatesStream;
 
 
 //tag::class[]
@@ -37,12 +41,11 @@ public class TemporalJavaUtilDateHolder_actionReturningCollection {
     private final TemporalJavaUtilDateHolder holder;
 
     public Collection<java.util.Date> act() {
-        final Collection<java.util.Date> javaSqlDates = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> new java.util.Date(120,x,x))  // 1900 is the epoch
-                .forEach(javaSqlDates::add);
-        return javaSqlDates;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<Date> samples;
 }
 //end::class[]

@@ -18,15 +18,18 @@
  */
 package demoapp.dom.types.wrapper.characters.holder;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.characters.WrapperCharactersStream;
 
 
 //tag::class[]
@@ -37,12 +40,11 @@ public class WrapperCharacterHolder_actionReturningCollection {
     private final WrapperCharacterHolder holder;
 
     public Collection<Character> act() {
-        final Collection<Character> characters = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(0, 1, 2, 3).forEach(x ->
-                characters.add((char) (initial + x))
-        );
-        return characters;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<Character> samples;
 }
 //end::class[]

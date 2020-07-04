@@ -18,15 +18,18 @@
  */
 package demoapp.dom.types.wrapper.integers.holder;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.integers.WrapperIntegersStream;
 
 
 //tag::class[]
@@ -37,11 +40,11 @@ public class WrapperIntegerHolder_actionReturningCollection {
     private final WrapperIntegerHolder holder;
 
     public Collection<Integer> act() {
-        final Collection<Integer> integers = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .forEach(integers::add);
-        return integers;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<Integer> samples;
 }
 //end::class[]

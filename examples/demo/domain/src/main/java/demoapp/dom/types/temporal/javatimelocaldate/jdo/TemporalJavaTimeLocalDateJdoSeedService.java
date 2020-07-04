@@ -1,6 +1,6 @@
 package demoapp.dom.types.temporal.javatimelocaldate.jdo;
 
-import java.util.stream.Stream;
+import java.time.LocalDate;
 
 import javax.inject.Inject;
 
@@ -11,6 +11,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javatimelocaldate.TemporalJavaTimeLocalDatesStream;
 
 @Service
 public class TemporalJavaTimeLocalDateJdoSeedService {
@@ -30,8 +33,7 @@ public class TemporalJavaTimeLocalDateJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1,2,3)
-                    .map(x -> java.time.LocalDate.of(2020, x, x)) // 1900 is the epoch
+            samples.stream()
                     .map(TemporalJavaTimeLocalDateJdo::new)
                     .forEach(repositoryService::persist);
         }
@@ -39,5 +41,7 @@ public class TemporalJavaTimeLocalDateJdoSeedService {
         @Inject
         RepositoryService repositoryService;
 
+        @Inject
+        Samples<LocalDate> samples;
     }
 }

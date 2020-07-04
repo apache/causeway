@@ -20,13 +20,17 @@ package demoapp.dom.types.wrapper.bytes.holder;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.bytes.WrapperBytesStream;
 
 
 //tag::class[]
@@ -39,10 +43,12 @@ public class WrapperByteHolder_actionReturningCollection {
     public Collection<Byte> act() {
         final Collection<Byte> bytes = new ArrayList<>();
         val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> x.byteValue())
+        samples.stream()
                 .forEach(bytes::add);
         return bytes;
     }
+
+    @Inject
+    Samples<Byte> samples;
 }
 //end::class[]

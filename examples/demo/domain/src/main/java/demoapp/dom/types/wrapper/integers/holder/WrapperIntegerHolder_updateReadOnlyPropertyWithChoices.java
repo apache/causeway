@@ -20,7 +20,8 @@ package demoapp.dom.types.wrapper.integers.holder;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,6 +29,9 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.integers.WrapperIntegersStream;
 
 
 //tag::class[]
@@ -50,9 +54,11 @@ public class WrapperIntegerHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<Integer> choices0Act() {
-        return Stream.of(1, 2, 3)
+        return samples.stream()
                 .collect(Collectors.toList());
     }
 
+    @Inject
+    Samples<Integer> samples;
 }
 //end::class[]

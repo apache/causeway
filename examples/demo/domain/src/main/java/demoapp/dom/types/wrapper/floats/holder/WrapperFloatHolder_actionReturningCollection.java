@@ -18,15 +18,18 @@
  */
 package demoapp.dom.types.wrapper.floats.holder;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.floats.WrapperFloatsStream;
 
 
 //tag::class[]
@@ -37,12 +40,11 @@ public class WrapperFloatHolder_actionReturningCollection {
     private final WrapperFloatHolder holder;
 
     public Collection<Float> act() {
-        final Collection<Float> floats = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> x.floatValue())
-                .forEach(floats::add);
-        return floats;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<Float> samples;
 }
 //end::class[]

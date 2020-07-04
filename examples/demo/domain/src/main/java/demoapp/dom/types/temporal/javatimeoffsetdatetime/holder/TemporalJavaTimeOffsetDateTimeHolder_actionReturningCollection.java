@@ -18,17 +18,19 @@
  */
 package demoapp.dom.types.temporal.javatimeoffsetdatetime.holder;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.time.OffsetDateTime;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javatimeoffsetdatetime.TemporalJavaTimeOffsetDateTimesStream;
 
 
 //tag::class[]
@@ -39,12 +41,11 @@ public class TemporalJavaTimeOffsetDateTimeHolder_actionReturningCollection {
     private final TemporalJavaTimeOffsetDateTimeHolder holder;
 
     public Collection<java.time.OffsetDateTime> act() {
-        final Collection<java.time.OffsetDateTime> javaSqlDates = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.UTC))
-                .forEach(javaSqlDates::add);
-        return javaSqlDates;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<OffsetDateTime> samples;
 }
 //end::class[]

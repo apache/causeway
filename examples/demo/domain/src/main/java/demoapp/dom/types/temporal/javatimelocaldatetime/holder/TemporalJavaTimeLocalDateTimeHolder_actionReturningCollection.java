@@ -18,15 +18,19 @@
  */
 package demoapp.dom.types.temporal.javatimelocaldatetime.holder;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javatimelocaldatetime.TemporalJavaTimeLocalDateTimesStream;
 
 
 //tag::class[]
@@ -37,12 +41,11 @@ public class TemporalJavaTimeLocalDateTimeHolder_actionReturningCollection {
     private final TemporalJavaTimeLocalDateTimeHolder holder;
 
     public Collection<java.time.LocalDateTime> act() {
-        final Collection<java.time.LocalDateTime> javaSqlDates = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> java.time.LocalDateTime.of(2020,x,x,x,x))
-                .forEach(javaSqlDates::add);
-        return javaSqlDates;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<LocalDateTime> samples;
 }
 //end::class[]

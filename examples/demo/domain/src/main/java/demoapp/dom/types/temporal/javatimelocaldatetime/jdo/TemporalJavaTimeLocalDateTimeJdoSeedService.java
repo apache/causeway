@@ -1,6 +1,6 @@
 package demoapp.dom.types.temporal.javatimelocaldatetime.jdo;
 
-import java.util.stream.Stream;
+import java.time.LocalDateTime;
 
 import javax.inject.Inject;
 
@@ -11,6 +11,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javatimelocaldatetime.TemporalJavaTimeLocalDateTimesStream;
 
 @Service
 public class TemporalJavaTimeLocalDateTimeJdoSeedService {
@@ -30,8 +33,7 @@ public class TemporalJavaTimeLocalDateTimeJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1,2,3)
-                    .map(x -> java.time.LocalDateTime.of(120, x, x, x, x))
+            samples.stream()
                     .map(TemporalJavaTimeLocalDateTimeJdo::new)
                     .forEach(repositoryService::persist);
         }
@@ -39,5 +41,7 @@ public class TemporalJavaTimeLocalDateTimeJdoSeedService {
         @Inject
         RepositoryService repositoryService;
 
+        @Inject
+        Samples<LocalDateTime> samples;
     }
 }

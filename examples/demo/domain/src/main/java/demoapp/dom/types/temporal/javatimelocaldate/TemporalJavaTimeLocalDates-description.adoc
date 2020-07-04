@@ -1,9 +1,9 @@
-The framework has built-in support for a number of temporal types, including `java.sql.Date`.
+The framework has built-in support for a number of temporal types, including `java.time.LocalDate`.
 
 From here you can:
 
-* navigate to an entity that uses the `java.sql.Date` datatype
-* open a view model that uses the `java.sql.Date` datatype
+* navigate to an entity that uses the `java.time.LocalDate` datatype
+* open a view model that uses the `java.time.LocalDate` datatype
 
 Some properties on these domain objects are mandatory, some optional.
 
@@ -29,7 +29,7 @@ include::holder/TemporalJavaTimeLocalDateHolder2.java[tags=class]
 
 == Mixin actions
 
-A number of mixin actions contribute through this interface, demonstrate the use of `java.sql.Date` as a parameter and as a return type.
+A number of mixin actions contribute through this interface, demonstrate the use of `java.time.LocalDate` as a parameter and as a return type.
 For example:
 
 * the `updateReadOnlyProperty` action is:

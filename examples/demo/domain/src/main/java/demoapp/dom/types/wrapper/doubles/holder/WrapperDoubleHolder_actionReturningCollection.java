@@ -20,13 +20,17 @@ package demoapp.dom.types.wrapper.doubles.holder;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.doubles.WrapperDoublesStream;
 
 
 //tag::class[]
@@ -39,10 +43,12 @@ public class WrapperDoubleHolder_actionReturningCollection {
     public Collection<Double> act() {
         final Collection<Double> doubles = new ArrayList<>();
         val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> x.doubleValue())
+        samples.stream()
                 .forEach(doubles::add);
         return doubles;
     }
+
+    @Inject
+    Samples<Double> samples;
 }
 //end::class[]

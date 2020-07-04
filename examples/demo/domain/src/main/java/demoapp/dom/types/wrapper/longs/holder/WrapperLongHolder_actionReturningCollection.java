@@ -18,15 +18,18 @@
  */
 package demoapp.dom.types.wrapper.longs.holder;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.longs.WrapperLongsStream;
 
 
 //tag::class[]
@@ -37,12 +40,11 @@ public class WrapperLongHolder_actionReturningCollection {
     private final WrapperLongHolder holder;
 
     public Collection<Long> act() {
-        final Collection<Long> longs = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> x.longValue())
-                .forEach(longs::add);
-        return longs;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<Long> samples;
 }
 //end::class[]

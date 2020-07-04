@@ -18,16 +18,19 @@
  */
 package demoapp.dom.types.temporal.javasqltimestamp.holder;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javasqltimestamp.TemporalJavaSqlTimestampsStream;
 
 
 //tag::class[]
@@ -38,12 +41,11 @@ public class TemporalJavaSqlTimestampHolder_actionReturningCollection {
     private final TemporalJavaSqlTimestampHolder holder;
 
     public Collection<java.sql.Timestamp> act() {
-        final Collection<java.sql.Timestamp> javaSqlDates = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> new java.sql.Timestamp(new java.util.Date(120, x, x, x, x).getTime())) // 1900 is epoch
-                .forEach(javaSqlDates::add);
-        return javaSqlDates;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<Timestamp> samples;
 }
 //end::class[]

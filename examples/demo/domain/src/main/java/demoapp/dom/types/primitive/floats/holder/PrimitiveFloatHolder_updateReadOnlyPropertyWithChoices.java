@@ -20,7 +20,8 @@ package demoapp.dom.types.primitive.floats.holder;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,6 +29,9 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.floats.WrapperFloatsStream;
 
 
 //tag::class[]
@@ -50,12 +54,14 @@ public class PrimitiveFloatHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<Float> choices0Act() {
-        return Stream.of(1.1f, 2.2f, 3.3f, 4.0f, -9.9f, -8.8f)
+        return samples.stream()
                 .collect(Collectors.toList());
     }
     public boolean hideAct() {
         return true; // TODO: choices doesn't seem to work for this datatype
     }
 
+    @Inject
+    Samples<Float> samples;
 }
 //end::class[]

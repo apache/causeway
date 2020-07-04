@@ -1,6 +1,6 @@
 package demoapp.dom.types.temporal.javasqltimestamp.jdo;
 
-import java.util.stream.Stream;
+import java.sql.Timestamp;
 
 import javax.inject.Inject;
 
@@ -11,6 +11,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javasqltimestamp.TemporalJavaSqlTimestampsStream;
 
 @Service
 public class TemporalJavaSqlTimestampJdoSeedService {
@@ -30,8 +33,7 @@ public class TemporalJavaSqlTimestampJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1,2,3)
-                    .map(x -> new java.sql.Timestamp(new java.util.Date(120, x, x, x, x).getTime())) // 1900 is the epoch
+            samples.stream()
                     .map(TemporalJavaSqlTimestampJdo::new)
                     .forEach(repositoryService::persist);
         }
@@ -39,5 +41,7 @@ public class TemporalJavaSqlTimestampJdoSeedService {
         @Inject
         RepositoryService repositoryService;
 
+        @Inject
+        Samples<Timestamp> samples;
     }
 }

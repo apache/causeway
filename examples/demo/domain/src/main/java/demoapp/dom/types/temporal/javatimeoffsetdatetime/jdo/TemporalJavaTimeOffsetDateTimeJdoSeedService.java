@@ -1,7 +1,6 @@
 package demoapp.dom.types.temporal.javatimeoffsetdatetime.jdo;
 
-import java.time.ZoneOffset;
-import java.util.stream.Stream;
+import java.time.OffsetDateTime;
 
 import javax.inject.Inject;
 
@@ -12,6 +11,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javatimeoffsetdatetime.TemporalJavaTimeOffsetDateTimesStream;
 
 @Service
 public class TemporalJavaTimeOffsetDateTimeJdoSeedService {
@@ -31,8 +33,7 @@ public class TemporalJavaTimeOffsetDateTimeJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of(1,2,3)
-                    .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.UTC))
+            samples.stream()
                     .map(TemporalJavaTimeOffsetDateTimeJdo::new)
                     .forEach(repositoryService::persist);
         }
@@ -40,5 +41,7 @@ public class TemporalJavaTimeOffsetDateTimeJdoSeedService {
         @Inject
         RepositoryService repositoryService;
 
+        @Inject
+        Samples<OffsetDateTime> samples;
     }
 }

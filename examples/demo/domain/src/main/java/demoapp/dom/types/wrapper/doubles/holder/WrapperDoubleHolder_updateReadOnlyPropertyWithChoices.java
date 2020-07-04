@@ -20,7 +20,8 @@ package demoapp.dom.types.wrapper.doubles.holder;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,6 +29,9 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.wrapper.doubles.WrapperDoublesStream;
 
 
 //tag::class[]
@@ -50,9 +54,11 @@ public class WrapperDoubleHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<Double> choices0Act() {
-        return Stream.of(123.4567, 762.1234, 9.00, -12.1314)
+        return samples.stream()
                 .collect(Collectors.toList());
     }
 
+    @Inject
+    Samples<Double> samples;
 }
 //end::class[]

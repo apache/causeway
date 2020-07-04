@@ -18,9 +18,11 @@
  */
 package demoapp.dom.types.temporal.javatimelocaldate.holder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,6 +30,9 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.temporal.javatimelocaldate.TemporalJavaTimeLocalDatesStream;
 
 
 //tag::class[]
@@ -50,10 +55,11 @@ public class TemporalJavaTimeLocalDateHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<java.time.LocalDate> choices0Act() {
-        return Stream.of(1,2,3)
-                .map(x -> java.time.LocalDate.of(2020, x, x)) // 1900 is the epoch
+        return samples.stream()
                 .collect(Collectors.toList());
     }
 
+    @Inject
+    Samples<LocalDate> samples;
 }
 //end::class[]

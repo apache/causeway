@@ -19,15 +19,17 @@
 package demoapp.dom.types.temporal.javatimelocaldate.holder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import demoapp.dom.types.Samples;
 
 
 //tag::class[]
@@ -38,12 +40,11 @@ public class TemporalJavaTimeLocalDateHolder_actionReturningCollection {
     private final TemporalJavaTimeLocalDateHolder holder;
 
     public Collection<java.time.LocalDate> act() {
-        final Collection<java.time.LocalDate> javaSqlDates = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        Stream.of(1, 2, 3)
-                .map(x -> LocalDate.of(2020, x, x))
-                .forEach(javaSqlDates::add);
-        return javaSqlDates;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
+
+    @Inject
+    Samples<LocalDate> samples;
 }
 //end::class[]
