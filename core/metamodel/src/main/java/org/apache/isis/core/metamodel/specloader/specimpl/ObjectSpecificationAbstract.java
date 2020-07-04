@@ -754,9 +754,8 @@ implements ObjectSpecification {
         if(_NullSafe.isEmpty(mixinTypes)) {
             return;
         }
-        val mixedInAssociations = _Lists.<ObjectAssociation>newArrayList();
         for (val mixinType : mixinTypes) {
-            forEachMixedInAssociation(mixinType, mixedInAssociations::add);
+            forEachMixedInAssociation(mixinType, onNewMixedInAssociation);
         }
     }
 
