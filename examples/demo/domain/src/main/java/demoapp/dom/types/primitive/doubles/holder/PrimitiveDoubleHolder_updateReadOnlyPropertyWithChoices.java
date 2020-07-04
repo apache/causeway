@@ -20,7 +20,8 @@ package demoapp.dom.types.primitive.doubles.holder;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,6 +29,8 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 
 //tag::class[]
@@ -50,12 +53,14 @@ public class PrimitiveDoubleHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<Double> choices0Act() {
-        return Stream.of(1.1, 2.2, 3.3, 4.0, -9.9, -8.8)
+        return samples.stream()
                 .collect(Collectors.toList());
     }
     public boolean hideAct() {
         return true; // TODO: choices doesn't seem to work for this datatype
     }
 
+    @Inject
+    Samples<Double> samples;
 }
 //end::class[]

@@ -20,7 +20,8 @@ package demoapp.dom.types.primitive.shorts.holder;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,6 +29,8 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 
 //tag::class[]
@@ -50,13 +53,15 @@ public class PrimitiveShortHolder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
     public List<Short> choices0Act() {
-        return Stream.of(123, -123, 3000, 400)
-                .map(Integer::shortValue)
+        return samples.stream()
                 .collect(Collectors.toList());
     }
     public boolean hideAct() {
         return true; // TODO: choices doesn't seem to work for this datatype
     }
+
+    @Inject
+    Samples<Short> samples;
 
 }
 //end::class[]
