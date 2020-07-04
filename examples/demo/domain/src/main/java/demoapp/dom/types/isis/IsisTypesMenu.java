@@ -36,8 +36,8 @@ import demoapp.dom.types.isis.passwords.IsisPasswords;
 import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
 import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaMathTypesMenu")
-@DomainObjectLayout(named="JavaMathTypes")
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.IsisTypesMenu")
+@DomainObjectLayout(named="Isis Types")
 @Log4j2
 public class IsisTypesMenu {
 

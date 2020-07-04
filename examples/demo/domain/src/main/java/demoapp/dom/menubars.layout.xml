@@ -39,6 +39,10 @@
                 <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="strings"/>
                 <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="voids"/>
             </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>More Types</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="javaUtilDates"/>
                 <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="javaUtilUuids"/>
@@ -71,7 +75,7 @@
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Data Types (old)</mb3:named>
+            <mb3:named>Data Types (to remove)</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="text"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrappers"/>
