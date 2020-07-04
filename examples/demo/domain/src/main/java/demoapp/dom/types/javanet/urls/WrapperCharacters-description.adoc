@@ -9,18 +9,18 @@ Some properties on these domain objects are mandatory, some optional.
 
 == Common interface
 
-These objects both implement a common interface, `WrapperCharacterHolder`:
+These objects both implement a common interface, `JavaNetUrlHolder`:
 
 [source,java]
 ----
-include::holder/WrapperCharacterHolder.java[tags=class]
+include::holder/JavaNetUrlHolder.java[tags=class]
 ----
 
-There is also an extension of this interface, `WrapperCharacterHolder2`, with default methods demonstrating the use of label positions:
+There is also an extension of this interface, `JavaNetUrlHolder2`, with default methods demonstrating the use of label positions:
 
 [source,java]
 ----
-include::holder/WrapperCharacterHolder2.java[tags=class]
+include::holder/JavaNetUrlHolder2.java[tags=class]
 ----
 
 <.> The default methods have annotations that are automatically inherited.
@@ -36,21 +36,21 @@ For example:
 +
 [source,java]
 ----
-include::holder/WrapperCharacterHolder_updateReadOnlyProperty.java[tags=class]
+include::holder/JavaNetUrlHolder_updateReadOnlyProperty.java[tags=class]
 ----
 
 * the `updateReadOnlyOptionalProperty` action is:
 +
 [source,java]
 ----
-include::holder/WrapperCharacterHolder_updateReadOnlyOptionalProperty.java[tags=class]
+include::holder/JavaNetUrlHolder_updateReadOnlyOptionalProperty.java[tags=class]
 ----
 
 * the `actionReturning` action is:
 +
 [source,java]
 ----
-include::holder/WrapperCharacterHolder_actionReturning.java[tags=class]
+include::holder/JavaNetUrlHolder_actionReturning.java[tags=class]
 ----
 
 
@@ -58,7 +58,7 @@ include::holder/WrapperCharacterHolder_actionReturning.java[tags=class]
 +
 [source,java]
 ----
-include::holder/WrapperCharacterHolder_actionReturningCollection.java[tags=class]
+include::holder/JavaNetUrlHolder_actionReturningCollection.java[tags=class]
 ----
 
 == Mixin properties
@@ -69,7 +69,7 @@ We also use the interface to contribute a mixin property:
 +
 [source,java]
 ----
-include::holder/WrapperCharacterHolder_mixinProperty.java[tags=class]
+include::holder/JavaNetUrlHolder_mixinProperty.java[tags=class]
 ----
 
 

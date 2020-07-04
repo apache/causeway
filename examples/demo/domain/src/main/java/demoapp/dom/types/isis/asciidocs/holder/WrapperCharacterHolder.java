@@ -19,7 +19,7 @@
 package demoapp.dom.types.isis.asciidoc.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface IsisAsciiDocHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

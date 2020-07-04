@@ -37,19 +37,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.markups.holder.WrapperCharacterHolder;
+import demoapp.dom.types.isis.markups.holder.IsisMarkupHolder;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.WrapperCharacterJdo"
+        objectType = "demo.IsisMarkupJdo"
 )
-public class WrapperCharacterJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperCharacterHolder {
+public class IsisMarkupJdo                                          // <.>
+        implements HasAsciiDocDescription, IsisMarkupHolder {
 
 //end::class[]
-    public WrapperCharacterJdo(Character initialValue) {
+    public IsisMarkupJdo(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

@@ -19,7 +19,7 @@
 package demoapp.dom.types.javalang.strings.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface JavaLangStringHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.strings.holder.WrapperCharacterHolder;
+import demoapp.dom.types.javalang.strings.holder.JavaLangStringHolder;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -46,14 +46,14 @@ import demoapp.dom.types.javalang.strings.holder.WrapperCharacterHolder;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.WrapperCharacterVm"
+        objectType = "demo.JavaLangStringVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
-public class WrapperCharacterVm
-        implements HasAsciiDocDescription, WrapperCharacterHolder {
+public class JavaLangStringVm
+        implements HasAsciiDocDescription, JavaLangStringHolder {
 
 //end::class[]
-    public WrapperCharacterVm(Character initialValue) {
+    public JavaLangStringVm(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

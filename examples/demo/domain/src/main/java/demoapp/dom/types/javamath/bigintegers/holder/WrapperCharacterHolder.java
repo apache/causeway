@@ -19,7 +19,7 @@
 package demoapp.dom.types.javamath.bigintegers.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface JavaMathBigIntegerHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

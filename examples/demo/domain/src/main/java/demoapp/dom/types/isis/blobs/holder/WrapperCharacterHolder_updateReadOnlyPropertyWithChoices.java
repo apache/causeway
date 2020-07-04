@@ -38,11 +38,11 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyPropertyWithChoices {
+public class IsisBlobHolder_updateReadOnlyPropertyWithChoices {
 
-    private final WrapperCharacterHolder holder;
+    private final IsisBlobHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
+    public IsisBlobHolder act(Character newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }

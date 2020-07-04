@@ -37,19 +37,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javamath.bigintegers.holder.WrapperCharacterHolder;
+import demoapp.dom.types.javamath.bigintegers.holder.JavaMathBigIntegerHolder;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.WrapperCharacterJdo"
+        objectType = "demo.JavaMathBigIntegerJdo"
 )
-public class WrapperCharacterJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperCharacterHolder {
+public class JavaMathBigIntegerJdo                                          // <.>
+        implements HasAsciiDocDescription, JavaMathBigIntegerHolder {
 
 //end::class[]
-    public WrapperCharacterJdo(Character initialValue) {
+    public JavaMathBigIntegerJdo(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

@@ -34,11 +34,11 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty {
+public class JavaUtilUuidHolder_updateReadOnlyProperty {
 
-    private final WrapperCharacterHolder holder;
+    private final JavaUtilUuidHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
+    public JavaUtilUuidHolder act(Character newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }

@@ -37,19 +37,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javanet.urls.holder.WrapperCharacterHolder;
+import demoapp.dom.types.javanet.urls.holder.JavaNetUrlHolder;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.WrapperCharacterJdo"
+        objectType = "demo.JavaNetUrlJdo"
 )
-public class WrapperCharacterJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperCharacterHolder {
+public class JavaNetUrlJdo                                          // <.>
+        implements HasAsciiDocDescription, JavaNetUrlHolder {
 
 //end::class[]
-    public WrapperCharacterJdo(Character initialValue) {
+    public JavaNetUrlJdo(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

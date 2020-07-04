@@ -19,7 +19,7 @@
 package demoapp.dom.types.isis.markups.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface IsisMarkupHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

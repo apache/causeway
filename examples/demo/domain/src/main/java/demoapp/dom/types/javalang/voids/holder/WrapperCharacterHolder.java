@@ -19,7 +19,7 @@
 package demoapp.dom.types.javalang.voids.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface JavaLangVoidHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

@@ -36,11 +36,11 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyOptionalProperty {
+public class JavaMathBigDecimalHolder_updateReadOnlyOptionalProperty {
 
-    private final WrapperCharacterHolder holder;
+    private final JavaMathBigDecimalHolder holder;
 
-    public WrapperCharacterHolder act(
+    public JavaMathBigDecimalHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             Character newValue
     ) {

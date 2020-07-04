@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.blobs.holder.WrapperCharacterHolder;
+import demoapp.dom.types.isis.blobs.holder.IsisBlobHolder;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -46,14 +46,14 @@ import demoapp.dom.types.isis.blobs.holder.WrapperCharacterHolder;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.WrapperCharacterVm"
+        objectType = "demo.IsisBlobVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
-public class WrapperCharacterVm
-        implements HasAsciiDocDescription, WrapperCharacterHolder {
+public class IsisBlobVm
+        implements HasAsciiDocDescription, IsisBlobHolder {
 
 //end::class[]
-    public WrapperCharacterVm(Character initialValue) {
+    public IsisBlobVm(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

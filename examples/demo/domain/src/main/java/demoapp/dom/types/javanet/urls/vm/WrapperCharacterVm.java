@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javanet.urls.holder.WrapperCharacterHolder;
+import demoapp.dom.types.javanet.urls.holder.JavaNetUrlHolder;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -46,14 +46,14 @@ import demoapp.dom.types.javanet.urls.holder.WrapperCharacterHolder;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.WrapperCharacterVm"
+        objectType = "demo.JavaNetUrlVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
-public class WrapperCharacterVm
-        implements HasAsciiDocDescription, WrapperCharacterHolder {
+public class JavaNetUrlVm
+        implements HasAsciiDocDescription, JavaNetUrlHolder {
 
 //end::class[]
-    public WrapperCharacterVm(Character initialValue) {
+    public JavaNetUrlVm(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

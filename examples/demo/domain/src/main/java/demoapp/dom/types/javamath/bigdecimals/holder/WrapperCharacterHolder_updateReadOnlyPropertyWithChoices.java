@@ -38,11 +38,11 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyPropertyWithChoices {
+public class JavaMathBigDecimalHolder_updateReadOnlyPropertyWithChoices {
 
-    private final WrapperCharacterHolder holder;
+    private final JavaMathBigDecimalHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
+    public JavaMathBigDecimalHolder act(Character newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }

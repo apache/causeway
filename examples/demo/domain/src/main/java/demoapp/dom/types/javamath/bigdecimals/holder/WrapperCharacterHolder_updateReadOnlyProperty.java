@@ -34,11 +34,11 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyProperty {
+public class JavaMathBigDecimalHolder_updateReadOnlyProperty {
 
-    private final WrapperCharacterHolder holder;
+    private final JavaMathBigDecimalHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
+    public JavaMathBigDecimalHolder act(Character newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }

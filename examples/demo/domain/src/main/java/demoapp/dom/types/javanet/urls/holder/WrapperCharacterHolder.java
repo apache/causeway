@@ -19,7 +19,7 @@
 package demoapp.dom.types.javanet.urls.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface JavaNetUrlHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

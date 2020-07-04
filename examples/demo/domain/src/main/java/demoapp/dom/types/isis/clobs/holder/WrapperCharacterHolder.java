@@ -19,7 +19,7 @@
 package demoapp.dom.types.isis.clobs.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface IsisClobHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

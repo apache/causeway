@@ -19,7 +19,7 @@
 package demoapp.dom.types.javautil.uuids.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface JavaUtilUuidHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

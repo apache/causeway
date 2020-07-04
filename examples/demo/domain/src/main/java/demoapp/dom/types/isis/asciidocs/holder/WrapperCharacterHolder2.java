@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
 //tag::class[]
-public interface WrapperCharacterHolder2 extends WrapperCharacterHolder {
+public interface IsisAsciiDocHolder2 extends IsisAsciiDocHolder {
 
     @Property
     @PropertyLayout(                                                        // <.>

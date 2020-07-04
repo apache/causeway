@@ -2,7 +2,7 @@ JDO supports `Character` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-include::WrapperCharacterJdo.java[tags=class]
+include::IsisLocalResourcePathJdo.java[tags=class]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
 <.> required property as defined to JDO/DataNucleus.

@@ -13,25 +13,25 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @Service
-public class WrapperCharacterJdoSeedService {
+public class JavaMathBigIntegerJdoSeedService {
 
     @EventListener(AppLifecycleEvent.class)
     public void onAppLifecycleEvent(AppLifecycleEvent event) {
 
         if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new WrapperCharacterJdoEntityFixture());
+            fixtureScripts.run(new JavaMathBigIntegerJdoEntityFixture());
         }
     }
 
     @Inject
     FixtureScripts fixtureScripts;
 
-    static class WrapperCharacterJdoEntityFixture extends FixtureScript {
+    static class JavaMathBigIntegerJdoEntityFixture extends FixtureScript {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
             Stream.of('a', 'b', 'c')
-                    .map(WrapperCharacterJdo::new)
+                    .map(JavaMathBigIntegerJdo::new)
                     .forEach(repositoryService::persist);
         }
 

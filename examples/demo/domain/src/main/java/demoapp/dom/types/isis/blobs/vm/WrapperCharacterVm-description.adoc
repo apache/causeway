@@ -2,7 +2,7 @@ JAXB supports `Character` out-of-the-box, so no special annotations are required
 
 [source,java]
 ----
-include::WrapperCharacterVm.java[tags=class]
+include::IsisBlobVm.java[tags=class]
 ----
 <.> a no-arg constructor is required by JAXB
 <.> required property as defined to JAXB

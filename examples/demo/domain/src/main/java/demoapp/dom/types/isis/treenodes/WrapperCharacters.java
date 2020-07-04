@@ -39,16 +39,16 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.treenodes.jdo.WrapperCharacterJdoEntities;
-import demoapp.dom.types.isis.treenodes.jdo.WrapperCharacterJdo;
-import demoapp.dom.types.isis.treenodes.vm.WrapperCharacterVm;
+import demoapp.dom.types.isis.treenodes.jdo.IsisTreeNodeJdoEntities;
+import demoapp.dom.types.isis.treenodes.jdo.IsisTreeNodeJdo;
+import demoapp.dom.types.isis.treenodes.vm.IsisTreeNodeVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperCharacters", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisTreeNodes", editing=Editing.ENABLED)
 @Log4j2
-public class WrapperCharacters implements HasAsciiDocDescription {
+public class IsisTreeNodes implements HasAsciiDocDescription {
 
     public String title() {
         return "Character (wrapper) data type";
@@ -56,21 +56,21 @@ public class WrapperCharacters implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public WrapperCharacterVm openViewModel(Character initialValue) {
-        return new WrapperCharacterVm(initialValue);
+    public IsisTreeNodeVm openViewModel(Character initialValue) {
+        return new IsisTreeNodeVm(initialValue);
     }
     public Character default0OpenViewModel() {
         return 'a';
     }
 
     @Collection
-    public List<WrapperCharacterJdo> getEntities() {
+    public List<IsisTreeNodeJdo> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    WrapperCharacterJdoEntities entities;
+    IsisTreeNodeJdoEntities entities;
 
 
 }

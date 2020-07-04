@@ -32,9 +32,9 @@ import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 @Property()
 @PropertyLayout(hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_mixinProperty {
+public class IsisLocalResourcePathHolder_mixinProperty {
 
-    private final WrapperCharacterHolder holder;
+    private final IsisLocalResourcePathHolder holder;
 
     @MemberOrder(name = "contributed", sequence = "1")
     public Character prop() {

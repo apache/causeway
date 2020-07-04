@@ -19,7 +19,7 @@
 package demoapp.dom.types.isis.passwords.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface IsisPasswordHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

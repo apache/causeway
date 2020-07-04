@@ -19,7 +19,7 @@
 package demoapp.dom.types.javamath.bigdecimals.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface JavaMathBigDecimalHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);

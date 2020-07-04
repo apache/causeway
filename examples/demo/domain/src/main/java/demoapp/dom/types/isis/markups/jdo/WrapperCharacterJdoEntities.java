@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 @Service
-public class WrapperCharacterJdoEntities {
+public class IsisMarkupJdoEntities {
 
-    public Optional<WrapperCharacterJdo> find(final Character readOnlyProperty) {
-        return repositoryService.firstMatch(WrapperCharacterJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    public Optional<IsisMarkupJdo> find(final Character readOnlyProperty) {
+        return repositoryService.firstMatch(IsisMarkupJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
     }
 
-    public List<WrapperCharacterJdo> all() {
-        return repositoryService.allInstances(WrapperCharacterJdo.class);
+    public List<IsisMarkupJdo> all() {
+        return repositoryService.allInstances(IsisMarkupJdo.class);
     }
 
     @Inject

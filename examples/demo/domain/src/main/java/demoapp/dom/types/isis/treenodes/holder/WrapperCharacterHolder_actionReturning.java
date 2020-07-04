@@ -27,9 +27,9 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_actionReturning {
+public class IsisTreeNodeHolder_actionReturning {
 
-    private final WrapperCharacterHolder holder;
+    private final IsisTreeNodeHolder holder;
 
     public Character act() {
         return holder.getReadOnlyProperty();

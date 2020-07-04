@@ -36,11 +36,11 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_updateReadOnlyOptionalProperty {
+public class IsisClobHolder_updateReadOnlyOptionalProperty {
 
-    private final WrapperCharacterHolder holder;
+    private final IsisClobHolder holder;
 
-    public WrapperCharacterHolder act(
+    public IsisClobHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             Character newValue
     ) {

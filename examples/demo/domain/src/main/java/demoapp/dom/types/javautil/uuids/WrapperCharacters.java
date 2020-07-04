@@ -39,16 +39,16 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javautil.uuids.jdo.WrapperCharacterJdoEntities;
-import demoapp.dom.types.javautil.uuids.jdo.WrapperCharacterJdo;
-import demoapp.dom.types.javautil.uuids.vm.WrapperCharacterVm;
+import demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities;
+import demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdo;
+import demoapp.dom.types.javautil.uuids.vm.JavaUtilUuidVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperCharacters", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaUtilUuids", editing=Editing.ENABLED)
 @Log4j2
-public class WrapperCharacters implements HasAsciiDocDescription {
+public class JavaUtilUuids implements HasAsciiDocDescription {
 
     public String title() {
         return "Character (wrapper) data type";
@@ -56,21 +56,21 @@ public class WrapperCharacters implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public WrapperCharacterVm openViewModel(Character initialValue) {
-        return new WrapperCharacterVm(initialValue);
+    public JavaUtilUuidVm openViewModel(Character initialValue) {
+        return new JavaUtilUuidVm(initialValue);
     }
     public Character default0OpenViewModel() {
         return 'a';
     }
 
     @Collection
-    public List<WrapperCharacterJdo> getEntities() {
+    public List<JavaUtilUuidJdo> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    WrapperCharacterJdoEntities entities;
+    JavaUtilUuidJdoEntities entities;
 
 
 }

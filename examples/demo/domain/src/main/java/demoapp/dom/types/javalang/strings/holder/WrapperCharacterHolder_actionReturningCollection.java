@@ -32,9 +32,9 @@ import lombok.val;
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
-public class WrapperCharacterHolder_actionReturningCollection {
+public class JavaLangStringHolder_actionReturningCollection {
 
-    private final WrapperCharacterHolder holder;
+    private final JavaLangStringHolder holder;
 
     public Collection<Character> act() {
         final Collection<Character> characters = new ArrayList<>();

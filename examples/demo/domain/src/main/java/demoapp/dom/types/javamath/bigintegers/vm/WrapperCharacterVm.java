@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javamath.bigintegers.holder.WrapperCharacterHolder;
+import demoapp.dom.types.javamath.bigintegers.holder.JavaMathBigIntegerHolder;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -46,14 +46,14 @@ import demoapp.dom.types.javamath.bigintegers.holder.WrapperCharacterHolder;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.WrapperCharacterVm"
+        objectType = "demo.JavaMathBigIntegerVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
-public class WrapperCharacterVm
-        implements HasAsciiDocDescription, WrapperCharacterHolder {
+public class JavaMathBigIntegerVm
+        implements HasAsciiDocDescription, JavaMathBigIntegerHolder {
 
 //end::class[]
-    public WrapperCharacterVm(Character initialValue) {
+    public JavaMathBigIntegerVm(Character initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

@@ -39,16 +39,16 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.strings.jdo.WrapperCharacterJdoEntities;
-import demoapp.dom.types.javalang.strings.jdo.WrapperCharacterJdo;
-import demoapp.dom.types.javalang.strings.vm.WrapperCharacterVm;
+import demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities;
+import demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdo;
+import demoapp.dom.types.javalang.strings.vm.JavaLangStringVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperCharacters", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaLangStrings", editing=Editing.ENABLED)
 @Log4j2
-public class WrapperCharacters implements HasAsciiDocDescription {
+public class JavaLangStrings implements HasAsciiDocDescription {
 
     public String title() {
         return "Character (wrapper) data type";
@@ -56,21 +56,21 @@ public class WrapperCharacters implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public WrapperCharacterVm openViewModel(Character initialValue) {
-        return new WrapperCharacterVm(initialValue);
+    public JavaLangStringVm openViewModel(Character initialValue) {
+        return new JavaLangStringVm(initialValue);
     }
     public Character default0OpenViewModel() {
         return 'a';
     }
 
     @Collection
-    public List<WrapperCharacterJdo> getEntities() {
+    public List<JavaLangStringJdo> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    WrapperCharacterJdoEntities entities;
+    JavaLangStringJdoEntities entities;
 
 
 }

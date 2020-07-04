@@ -13,25 +13,25 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @Service
-public class WrapperCharacterJdoSeedService {
+public class IsisAsciiDocJdoSeedService {
 
     @EventListener(AppLifecycleEvent.class)
     public void onAppLifecycleEvent(AppLifecycleEvent event) {
 
         if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new WrapperCharacterJdoEntityFixture());
+            fixtureScripts.run(new IsisAsciiDocJdoEntityFixture());
         }
     }
 
     @Inject
     FixtureScripts fixtureScripts;
 
-    static class WrapperCharacterJdoEntityFixture extends FixtureScript {
+    static class IsisAsciiDocJdoEntityFixture extends FixtureScript {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
             Stream.of('a', 'b', 'c')
-                    .map(WrapperCharacterJdo::new)
+                    .map(IsisAsciiDocJdo::new)
                     .forEach(repositoryService::persist);
         }
 

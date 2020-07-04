@@ -19,7 +19,7 @@
 package demoapp.dom.types.isis.localresourcepaths.holder;
 
 //tag::class[]
-public interface WrapperCharacterHolder {
+public interface IsisLocalResourcePathHolder {
 
     Character getReadOnlyProperty();
     void setReadOnlyProperty(Character c);
