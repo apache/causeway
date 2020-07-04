@@ -39,7 +39,7 @@ import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom._infra.asciidocdesc.HasMarkdownDescription;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.Samples;
 import demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities;
 import demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdo;
@@ -50,7 +50,7 @@ import demoapp.dom.types.isisext.markdowns.vm.IsisMarkdownVm;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisMarkdowns", editing=Editing.ENABLED)
 @Log4j2
-public class IsisMarkdowns implements HasMarkdownDescription {
+public class IsisMarkdowns implements HasAsciiDocDescription {
 
     public String title() {
         return "Markdown data type";
