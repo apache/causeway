@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.wrapper.floats.WrapperFloatsStream;
 
 
 //tag::class[]

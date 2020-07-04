@@ -74,6 +74,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-sse-ui</artifactId>
 		</dependency>
 		<dependency>
@@ -133,7 +137,11 @@
 			<version>3.16.1</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.valuetypes</groupId>
+            <artifactId>isis-valuetypes-markdown-applib</artifactId>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>

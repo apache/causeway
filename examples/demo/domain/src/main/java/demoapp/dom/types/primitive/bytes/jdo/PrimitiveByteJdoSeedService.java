@@ -11,7 +11,6 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.wrapper.bytes.WrapperBytesStream;
 
 @Service
 public class PrimitiveByteJdoSeedService {

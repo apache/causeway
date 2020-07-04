@@ -11,7 +11,6 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.wrapper.shorts.WrapperShortsStream;
 
 @Service
 public class PrimitiveShortJdoSeedService {
@@ -31,7 +30,7 @@ public class PrimitiveShortJdoSeedService {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            stream.stream()
+            samples.stream()
                     .map(PrimitiveShortJdo::new)
                     .forEach(repositoryService::persist);
         }

@@ -41,7 +41,7 @@
 	<package name="demoapp.dom.types.primitive.shorts.jdo">
 		<class name="PrimitiveShortJdo" />
 	</package>
-	<package name="demoapp.dom.types.wrapper.characters.jdo">
+	<package name="demoapp.dom.types.javalang.characters.jdo">
 		<class name="WrapperCharacterJdo" />
 	</package>
 
