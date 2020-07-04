@@ -102,7 +102,7 @@
 		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
 		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
-		<datanucleus-rdbms.version>5.2.1</datanucleus-rdbms.version>
+		<datanucleus-rdbms.version>5.2.3</datanucleus-rdbms.version>
 
 		<docx4j.version>3.2.1</docx4j.version>
 
