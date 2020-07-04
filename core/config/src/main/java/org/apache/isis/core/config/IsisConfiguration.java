@@ -1223,7 +1223,10 @@ public class IsisConfiguration {
             @Data
             public static class Introspector {
                 /**
-                 * Whether to perform introspection in parallel.
+                 * Whether to perform introspection in parallel. Meant to speed up bootstrapping.  
+                 * <p>
+                 *     For now this is <i>experimental</i>. Leave this disabled (the default).
+                 * </p>
                  */
                 private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is broken 
 
