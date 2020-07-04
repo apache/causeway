@@ -41,6 +41,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.resources._Resources;
 
+import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -55,72 +56,19 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     @Inject private GridReaderUsingJaxb gridReader;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
 
+    @Value
     static class DomainClassAndLayout {
         private final Class<?> domainClass;
         private final String layoutIfAny;
-
-        DomainClassAndLayout(final Class<?> domainClass, final String layoutIfAny) {
-            this.domainClass = domainClass;
-            this.layoutIfAny = layoutIfAny;
-        }
-
-        @Override public boolean equals(final Object o) {
-            if (this == o)
-                return true;
-            if (o == null || getClass() != o.getClass())
-                return false;
-
-            final DomainClassAndLayout that = (DomainClassAndLayout) o;
-
-            if (!Objects.equals(domainClass, that.domainClass))
-                return false;
-            return Objects.equals(layoutIfAny, that.layoutIfAny);
-        }
-
-        @Override public int hashCode() {
-            int result = domainClass != null ? domainClass.hashCode() : 0;
-            result = 31 * result + (layoutIfAny != null ? layoutIfAny.hashCode() : 0);
-            return result;
-        }
-
-        @Override public String toString() {
-            return "domainClass=" + domainClass +
-                    ", layout='" + layoutIfAny + '\'';
-        }
     }
 
     // for better logging messages (used only in prototyping mode)
     private final Map<DomainClassAndLayout, String> badXmlByDomainClassAndLayout = _Maps.newHashMap();
 
+    @Value
     static class DomainClassAndLayoutAndXml {
         private final DomainClassAndLayout domainClassAndLayout;
         private final String xml;
-
-        @Override public boolean equals(final Object o) {
-            if (this == o)
-                return true;
-            if (o == null || getClass() != o.getClass())
-                return false;
-
-            final DomainClassAndLayoutAndXml that = (DomainClassAndLayoutAndXml) o;
-
-            if (domainClassAndLayout != null ?
-                    !domainClassAndLayout.equals(that.domainClassAndLayout) :
-                        that.domainClassAndLayout != null)
-                return false;
-            return xml != null ? xml.equals(that.xml) : that.xml == null;
-        }
-
-        @Override public int hashCode() {
-            int result = domainClassAndLayout != null ? domainClassAndLayout.hashCode() : 0;
-            result = 31 * result + (xml != null ? xml.hashCode() : 0);
-            return result;
-        }
-
-        DomainClassAndLayoutAndXml(final DomainClassAndLayout domainClassAndLayout, final String xml) {
-            this.domainClassAndLayout = domainClassAndLayout;
-            this.xml = xml;
-        }
     }
 
     // cache (used only in prototyping mode)
