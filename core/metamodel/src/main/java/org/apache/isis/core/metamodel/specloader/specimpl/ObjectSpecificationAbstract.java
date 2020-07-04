@@ -683,7 +683,9 @@ implements ObjectSpecification {
     public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        guardAgainstTooEarly_assoz(contributed);
+        if(contributed.isIncluded()) {
+            createMixedInAssociations(); // only if not already
+        }
         
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
@@ -734,7 +736,9 @@ implements ObjectSpecification {
     public Stream<ObjectAction> streamObjectActions(final ActionType type, final Contributed contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        guardAgainstTooEarly_contrib(contributed);
+        if(contributed.isIncluded()) {
+            createMixedInActions(); // only if not already
+        }
 
         return stream(objectActionsByType.get(type))
                 .filter(ContributeeMember.Predicates.regularElse(contributed));
@@ -742,22 +746,18 @@ implements ObjectSpecification {
 
     // -- mixin associations (properties and collections)
 
-    private List<ObjectAssociation> createMixedInAssociations() {
+    private void createMixedInAssociations(final Consumer<ObjectAssociation> onNewMixedInAssociation) {
         if (isManagedBean() || isValue()) {
-            return Collections.emptyList();
+            return;
         }
-
         val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
-            return Collections.emptyList();
+            return;
         }
-
         val mixedInAssociations = _Lists.<ObjectAssociation>newArrayList();
-
         for (val mixinType : mixinTypes) {
             forEachMixedInAssociation(mixinType, mixedInAssociations::add);
         }
-        return mixedInAssociations;
     }
 
     private void forEachMixedInAssociation(
@@ -800,21 +800,17 @@ implements ObjectSpecification {
      * If this specification {@link #isManagedBean() is actually for} a service,
      * then returns an empty list.
      */
-    private List<ObjectAction> createMixedInActions() {
+    private void createMixedInActions(final Consumer<ObjectAction> onNewMixedInAction) {
         if (isManagedBean() || isValue() || isMixin()) {
-            return Collections.emptyList();
+            return;
         }
-
         val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
-            return Collections.emptyList();
+            return;
         }
-
-        val mixedInActions = _Lists.<ObjectAction>newArrayList();
         for (val mixinType : mixinTypes) {
-            forEachMixedInAction(mixinType, mixedInActions::add);
+            forEachMixedInAction(mixinType, onNewMixedInAction);
         }
-        return mixedInActions;
     }
 
 
@@ -838,10 +834,10 @@ implements ObjectSpecification {
         }
         val mixinMethodName = mixinFacet.value();
 
-        final Stream<ObjectAction> mixinActions = mixinSpec
+        final Stream<ObjectAction> mixinsActions = mixinSpec
                 .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
 
-        mixinActions
+        mixinsActions
         .filter(Predicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
         .map(Factories.mixedInAction(this, mixinType, mixinMethodName))
@@ -921,16 +917,16 @@ implements ObjectSpecification {
     private boolean contributeeAndMixedInAssociationsAdded;
     private boolean contributeeAndMixedInActionsAdded;
 
-    private void guardAgainstTooEarly_contrib(Contributed contributed) {
+    private void createMixedInActions() {
         // update our list of actions if requesting for contributed actions
         // and they have not yet been added
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
-        if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
-            synchronized (unmodifiableActions) {
+        synchronized (unmodifiableActions) {
+            if(!contributeeAndMixedInActionsAdded) {
                 val actions = _Lists.newArrayList(this.objectActions);
                 if (isEntityOrViewModel()) {
-                    actions.addAll(createMixedInActions());
+                    createMixedInActions(actions::add);
                 }
                 sortCacheAndUpdateActions(actions);
                 contributeeAndMixedInActionsAdded = true;
@@ -938,14 +934,14 @@ implements ObjectSpecification {
         }
     }
 
-    private void guardAgainstTooEarly_assoz(Contributed contributed) {
+    private void createMixedInAssociations() {
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
-        if(contributed.isIncluded() && !contributeeAndMixedInAssociationsAdded) {
-            synchronized (unmodifiableAssociations) {
+        synchronized (unmodifiableAssociations) {
+            if(!contributeeAndMixedInAssociationsAdded) {
                 val associations = _Lists.newArrayList(this.associations);
                 if(isEntityOrViewModel()) {
-                    associations.addAll(createMixedInAssociations());
+                    createMixedInAssociations(associations::add);
                 }
                 sortAndUpdateAssociations(associations);
                 contributeeAndMixedInAssociationsAdded = true;
