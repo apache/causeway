@@ -104,8 +104,9 @@ implements HasDynamicallyVisibleContent {
     private WebMarkupContainer buildGui() {
         final WebMarkupContainer div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
-
         final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(getModel());
+        div.setMarkupId("collection-" + entityCollectionModel.getLayoutData().getId());
+
         CssClassAppender.appendCssClassTo(div, entityCollectionModel.getCollectionMemento().getId());
         CssClassAppender.appendCssClassTo(div, entityCollectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
 
