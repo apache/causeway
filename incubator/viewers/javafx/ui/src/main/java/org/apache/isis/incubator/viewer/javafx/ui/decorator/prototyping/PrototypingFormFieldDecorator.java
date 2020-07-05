@@ -16,65 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.components;
+package org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.dialog.Dialogs;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
-import org.apache.isis.incubator.viewer.javafx.ui.services.PrototypingInfoService;
+import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
+import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Service
+@Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class PrototypingDecorator {
+public class PrototypingFormFieldDecorator implements PrototypingDecorator<FormField> {
+
+    private final PrototypingInfoPopupProvider prototypingInfoService;
     
-    private final PrototypingInfoService prototypingInfoService;
-
-    public Node decorateButton(
-            @NonNull final ManagedMember managedAction, 
-            @NonNull final Button uiButton) {
-        
-        val span = new HBox();
-        val prototypingLabel = _fx.add(span, new Label("ⓘ"));
-        _fx.add(span, uiButton);
-        prototypingLabel.setTooltip(new Tooltip("Inspect Metamodel"));
-        prototypingLabel.setOnMouseClicked(e->showPrototypingPopup(managedAction));
-        return span;
-    }
-
-    public FormField decorateFormField(
-            @NonNull final FormField formField, 
-            @NonNull final ManagedMember managedMember) {
-        
-        return DecoratingFormField.of(formField, ()->showPrototypingPopup(managedMember));
+    @Override
+    public FormField decorate(final FormField formField, final PrototypingUiModel prototypingUiModel) {
+        return DecoratingFormField.of(formField, ()->
+            prototypingInfoService.showPrototypingPopup(prototypingUiModel));
     }
     
     // -- HELPER
-    
-    private void showPrototypingPopup(final ManagedMember managedMember) {
-        val infoNode = prototypingInfoService.getPrototypingInfoUiComponent(managedMember);
-        val headerText = String.format("%s: %s", 
-                managedMember.getMemberType().name(), 
-                managedMember.getName());
-        val contentText = String.format("%s", managedMember.getId());
-        Dialogs.message("Inspect Metamodel", headerText, contentText, infoNode);
-    }
 
     @RequiredArgsConstructor(staticName = "of")
     private static class DecoratingFormField implements FormField {

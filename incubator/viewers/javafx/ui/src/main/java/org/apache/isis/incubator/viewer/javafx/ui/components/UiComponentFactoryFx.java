@@ -31,7 +31,10 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingButtonDecorator;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingFormFieldDecorator;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -42,7 +45,8 @@ import lombok.val;
 public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
 
     private final boolean isPrototyping;
-    private final PrototypingDecorator prototypingDecorator;
+    private final PrototypingButtonDecorator prototypingButtonDecorator;
+    private final PrototypingFormFieldDecorator prototypingFormFieldDecorator;
     private final ChainOfResponsibility<Request, FormField> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
@@ -52,11 +56,13 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
     @Inject
     private UiComponentFactoryFx(
             IsisSystemEnvironment isisSystemEnvironment,
-            PrototypingDecorator prototypingDecorator,
+            PrototypingButtonDecorator prototypingButtonDecorator,
+            PrototypingFormFieldDecorator prototypingFormFieldDecorator,
             List<UiComponentHandlerFx> handlers) {
         
         this.isPrototyping = isisSystemEnvironment.isPrototyping();
-        this.prototypingDecorator = prototypingDecorator;
+        this.prototypingButtonDecorator = prototypingButtonDecorator;
+        this.prototypingFormFieldDecorator = prototypingFormFieldDecorator;
         this.chainOfHandlers = ChainOfResponsibility.of(handlers);
         this.registeredHandlers = handlers.stream()
                 .map(Handler::getClass)
@@ -72,7 +78,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
                         "Component Mapper failed to handle request %s", request));
         
         return isPrototyping
-                ? prototypingDecorator.decorateFormField(formField, request.getObjectFeature())
+                ? prototypingFormFieldDecorator.decorate(formField, PrototypingUiModel.of(request.getObjectFeature()))
                 : formField;
     }
     
@@ -83,7 +89,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
         uiButton.setOnAction(event->actionEventHandler.accept(managedAction));
         
         return isPrototyping
-                ? prototypingDecorator.decorateButton(managedAction, uiButton)
+                ? prototypingButtonDecorator.decorate(uiButton, PrototypingUiModel.of(managedAction))
                 : uiButton;
     }
     

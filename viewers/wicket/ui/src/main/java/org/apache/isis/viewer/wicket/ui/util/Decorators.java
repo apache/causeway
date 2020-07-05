@@ -34,6 +34,7 @@ import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
+import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -94,8 +95,9 @@ public class Decorators {
     
     public final static class Prototyping implements PrototypingDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent) {
+        public Component decorate(Component uiComponent, PrototypingUiModel prototypingUiModel) {
             uiComponent.add(new CssClassAppender("prototype"));
+            return uiComponent;
         }
     }
     
@@ -194,7 +196,7 @@ public class Decorators {
             }
             
             if (actionMeta.isPrototyping()) {
-                getPrototypingDecorator().decorate(actionLinkUiComponent);
+                getPrototypingDecorator().decorate(actionLinkUiComponent, PrototypingUiModel.of(actionMeta));
             }
 
         }
