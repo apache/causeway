@@ -75,6 +75,14 @@ class ScalableVectorGraphic(val data: String) {
         scaleUp(factor * -1)
     }
 
+    fun scaleHorizontally(factor: Double = 0.25) {
+        val s = scale + factor
+        val w = 100 * s
+        root.setAttribute("height", "100%")
+        root.setAttribute("width", "$w%")
+        root.setAttribute("preserveAspectRatio", "\"none\"")
+    }
+
     class ViewBox(val x: Int, val y: Int, var width: Int, var height: Int)
 
 }

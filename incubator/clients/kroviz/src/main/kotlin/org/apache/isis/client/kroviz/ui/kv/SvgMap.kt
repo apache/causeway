@@ -101,6 +101,7 @@ class SvgMap : SimplePanel() {
         }
 
         val svg = ScalableVectorGraphic(str)
+        svg.scaleHorizontally()
         val svgDoc = svg.document
         val svgElement = svgDoc.documentElement!!
 
