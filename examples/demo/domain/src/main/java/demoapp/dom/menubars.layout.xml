@@ -26,14 +26,14 @@
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="booleans"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="bytes"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="shorts"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="integers"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="longs"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="floats"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="doubles"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="characters"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="booleans"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperBytes"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperShorts"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperIntegers"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperLongs"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperFloats"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperDoubles"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperCharacters"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperBooleans"/>
             </mb3:section>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="strings"/>
