@@ -58,11 +58,11 @@ public class UiBuilder {
         fxmlLoader.setControllerFactory(springContext::getBean);
         val uiRoot = (Parent)fxmlLoader.load();
         val scene = new Scene(uiRoot);
+        scene.getStylesheets().add("/ui.css");
         val stage = event.getStage();
         stage.setScene(scene);
         setupTitle(stage);
         setupIcon(stage);
-        
         stage.show();
     }
 

@@ -53,7 +53,7 @@ public class PrototypingInfoPopupProvider {
     public void showPrototypingPopup(final PrototypingUiModel prototypingUiModel) {
         val infoNode = getPrototypingInfoUiComponent(prototypingUiModel);
         val headerText = prototypingUiModel.getFeatureFullLabel();
-        val contentText = (String)null;
+        val contentText = prototypingUiModel.getFeatureType().toString();
         Dialogs.message("Inspect Metamodel", headerText, contentText, infoNode);
     }
 

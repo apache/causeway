@@ -47,6 +47,9 @@ public class PrototypingButtonDecorator implements PrototypingDecorator<Node> {
         prototypingLabel.setTooltip(new Tooltip("Inspect Metamodel"));
         prototypingLabel.setOnMouseClicked(e->
             prototypingInfoService.showPrototypingPopup(prototypingUiModel));
+        
+        uiButton.getStyleClass().add("button-prototyping");
+        
         return span;
     }
 
