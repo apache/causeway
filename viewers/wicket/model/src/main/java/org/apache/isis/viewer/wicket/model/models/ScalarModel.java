@@ -359,7 +359,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     protected abstract ObjectSpecification getScalarTypeSpec();
 
-    protected abstract String getIdentifier();
+    public abstract String getIdentifier();
 
     public AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {

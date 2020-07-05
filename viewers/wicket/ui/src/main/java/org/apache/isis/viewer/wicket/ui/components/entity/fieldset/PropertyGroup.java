@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -50,6 +51,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
@@ -98,6 +100,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         setOutputMarkupId(true);
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_MEMBER_GROUP);
+        div.setMarkupId("fieldSet-" + fieldSet.getId());
 
         String groupName = fieldSet.getName();
 
@@ -203,6 +206,10 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+        if(component instanceof MarkupContainer) {
+            String identifier = scalarModel.getIdentifier();
+            CssClassAppender.appendCssClassTo((MarkupContainer)component, identifier);
+        }
 
         val adapter = entityModel.getManagedObject();
         final List<ObjectAction> associatedActions =
