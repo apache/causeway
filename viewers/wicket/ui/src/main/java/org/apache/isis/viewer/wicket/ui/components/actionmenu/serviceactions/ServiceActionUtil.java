@@ -24,21 +24,23 @@ import java.util.function.Consumer;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.common.model.menu.MenuItemDto;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
+import org.apache.isis.viewer.common.model.menu.MenuVisitor;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -47,12 +49,12 @@ import lombok.experimental.UtilityClass;
 public final class ServiceActionUtil {
 
     static void addLeafItem(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             CssMenuItem menuItem,
             ListItem<CssMenuItem> listItem,
             MarkupContainer parent) {
         
-        val actionUiModel = menuItem.getMenuActionUiModel();
+        val actionUiModel = menuItem.getLinkAndLabel();
         val menuItemActionLink = actionUiModel.getUiComponent();
 
         val menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
@@ -75,7 +77,7 @@ public final class ServiceActionUtil {
     }
 
     static void addFolderItem(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             CssMenuItem subMenuItem,
             ListItem<CssMenuItem> listItem,
             MarkupContainer parent) {
@@ -85,7 +87,7 @@ public final class ServiceActionUtil {
         Fragment folderItem = new Fragment("content", "folderItem", parent);
         listItem.add(folderItem);
 
-        folderItem.add(new Label("folderName", subMenuItem.getMenuActionUiModel().getLabel()));
+        folderItem.add(new Label("folderName", subMenuItem.getLinkAndLabel().getLabel()));
         final List<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
         ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
                 menuItems) {
@@ -105,14 +107,14 @@ public final class ServiceActionUtil {
         folderItem.add(subMenuItemsView);
     }
 
+    @RequiredArgsConstructor(staticName = "of")
+    private static class LinkAndLabelFactoryWkt {
 
-    private static class MenuActionFactoryWkt implements ActionUiModelFactory<AbstractLink> {
-
-        @Override
-        public LinkAndLabel newAction(
-                IsisWebAppCommonContext commonContext, 
-                String named, 
-                ManagedAction managedAction) {
+        private final IsisAppCommonContext commonContext;
+        
+        public LinkAndLabel newActionLink(
+                final String named, 
+                final ManagedAction managedAction) {
         
             val serviceModel = EntityModel.ofAdapter(commonContext, managedAction.getOwner());
             
@@ -121,7 +123,10 @@ public final class ServiceActionUtil {
                     serviceModel);
             
             return LinkAndLabel.of(
-                    model->actionLinkFactory.newActionLink(model.getObjectAction(), named).getUiComponent(),
+                    model->actionLinkFactory.newActionLink(
+                            model.getObjectAction(()->CommonContextUtils.getCommonContext().getSpecificationLoader()),
+                            named)
+                            .getUiComponent(),
                     named,
                     serviceModel,
                     managedAction.getAction());
@@ -129,17 +134,51 @@ public final class ServiceActionUtil {
         
     }
 
+    @RequiredArgsConstructor(staticName = "of")
+    private static class MenuBuilderWkt implements MenuVisitor {
+        
+        private final Consumer<CssMenuItem> onNewMenuItem;
+        private final LinkAndLabelFactoryWkt linkAndLabelFactory;
+        
+        private CssMenuItem currentTopLevelMenu = null;
+        private boolean needsSpacerBeforeSelf = false;
+        
+        @Override
+        public void addTopLevel(MenuItemDto menuDto) {
+            currentTopLevelMenu = CssMenuItem.newMenuItem(menuDto.getName());
+            onNewMenuItem.accept(currentTopLevelMenu);
+        }
 
+        @Override
+        public void addSectionSpacer() {
+            needsSpacerBeforeSelf = true;
+        }
+
+        @Override
+        public void addSubMenu(MenuItemDto menuDto) {
+            val managedAction = menuDto.getManagedAction();
+            
+            val menuItem = CssMenuItem.newMenuItem(menuDto.getName());
+            
+            currentTopLevelMenu.addSubMenuItem(menuItem);
+            
+            menuItem.setLinkAndLabel(linkAndLabelFactory.newActionLink(menuDto.getName(), managedAction));
+            if(needsSpacerBeforeSelf) {
+                needsSpacerBeforeSelf = false;
+                menuItem.setNeedsSpacerBeforeSelf(true);
+            }
+        }
+        
+    }
+    
     public static void buildMenu(
-            final IsisWebAppCommonContext commonContext,
+            final IsisAppCommonContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {
         
-        menuUiModel.buildMenuItems(
-                commonContext, 
-                new MenuActionFactoryWkt(),
-                CssMenuItem::newMenuItem,
-                onNewMenuItem);
+        menuUiModel.buildMenuItems(commonContext, MenuBuilderWkt.of(
+                onNewMenuItem,
+                LinkAndLabelFactoryWkt.of(commonContext)));
     }
 
 }

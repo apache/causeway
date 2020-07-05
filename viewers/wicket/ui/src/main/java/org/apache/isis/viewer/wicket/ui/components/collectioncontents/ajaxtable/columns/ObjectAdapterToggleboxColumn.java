@@ -30,7 +30,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
@@ -43,12 +43,12 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
     private static final long serialVersionUID = 1L;
 
 
-    public ObjectAdapterToggleboxColumn(IsisWebAppCommonContext commonContext) {
+    public ObjectAdapterToggleboxColumn(IsisAppCommonContext commonContext) {
         this(commonContext, null);
     }
 
     public ObjectAdapterToggleboxColumn(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             OnSelectionHandler onSelectionHandler) {
         
         super(commonContext, "");

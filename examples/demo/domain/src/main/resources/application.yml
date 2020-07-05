@@ -55,7 +55,7 @@ isis:
   viewer:
     wicket:
       application:
-        menubars-layout-xml: demoapp/webapp/menubars.layout.xml
+        menubars-layout-xml: demoapp/dom/menubars.layout.xml
         favicon-url: images/favicon.png
         brand-logo-header: images/gift_48.png
         brand-logo-signin: images/gift_256.png

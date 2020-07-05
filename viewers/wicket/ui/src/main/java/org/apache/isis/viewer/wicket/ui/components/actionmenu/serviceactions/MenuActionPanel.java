@@ -43,16 +43,14 @@ public abstract class MenuActionPanel extends PanelBase {
         return new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
 
             private static final long serialVersionUID = 1L;
-            private transient int populationCount = 0;
 
             @Override
             protected void populateItem(ListItem<CssMenuItem> listItem) {
                 val subMenuItem = listItem.getModelObject();
 
-                if(subMenuItem.isFirstInSection() 
-                        && populationCount>0) {
-                    addSeparatorBefore(subMenuItem, listItem);
-                }
+                if(subMenuItem.isNeedsSpacerBeforeSelf()) {
+                    listItem.add(new CssClassAppender("list-separator"));
+                } 
 
                 if (subMenuItem.hasSubMenuItems()) {
                     addFolderItem(subMenuItem, listItem);
@@ -60,7 +58,6 @@ public abstract class MenuActionPanel extends PanelBase {
                     addLeafItem(subMenuItem, listItem);
                 }
 
-                populationCount++;
             }
         };
     }
@@ -75,10 +72,6 @@ public abstract class MenuActionPanel extends PanelBase {
     }
 
     // -- HELPER
-
-    private void addSeparatorBefore(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
-        listItem.add(new CssClassAppender("list-separator"));
-    }
 
     private void addFolderItem(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;

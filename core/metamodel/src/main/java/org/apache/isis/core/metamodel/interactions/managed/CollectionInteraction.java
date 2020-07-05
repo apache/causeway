@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -42,6 +45,23 @@ public final class CollectionInteraction extends MemberInteraction<ManagedCollec
     
     CollectionInteraction(@NonNull _Either<ManagedCollection, InteractionVeto> chain) {
         super(chain);
+    }
+    
+    /**
+     * @return optionally the ManagedCollection based on whether there 
+     * was no interaction veto within the originating chain 
+     */
+    public Optional<ManagedCollection> getManagedCollection() {
+        return super.getManagedMember();
+    }
+    
+    /**
+     * @return this Interaction's ManagedCollection
+     * @throws X if there was any interaction veto within the originating chain
+     */
+    public <X extends Throwable> 
+    ManagedCollection getManagedCollectionElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return super.getManagedMemberElseThrow(onFailure);
     }
 
 //    public PropertyHandle modifyProperty(

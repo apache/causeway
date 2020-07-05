@@ -123,6 +123,14 @@ final class Can_Singleton<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> remove(T element) {
+        if(this.element.equals(element)) {
+            return Can.empty();    
+        }
+        return this;
+    }
+    
+    @Override
     public int indexOf(@NonNull T element) {
         return this.element.equals(element) ? 0 : -1;
     }

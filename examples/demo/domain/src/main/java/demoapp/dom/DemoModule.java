@@ -18,6 +18,57 @@
  */
 package demoapp.dom;
 
-public final class DemoModule {
-    private DemoModule(){}
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+
+import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
+import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+
+@Configuration
+@Import({
+    IsisModuleCoreRuntimeServices.class,
+    IsisModuleJdoDataNucleus5.class,
+    
+    IsisModuleTestingFixturesApplib.class,
+
+    IsisModuleExtModelAnnotation.class, // @Model support
+
+})
+@PropertySources({
+    @PropertySource(IsisPresets.H2InMemory),
+    @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.SilenceWicket),
+    @PropertySource(IsisPresets.DataNucleusAutoCreate),
+})
+@ComponentScan(
+        basePackageClasses= {
+                DemoModule.class
+        })
+public class DemoModule {
+    
+    @Bean
+    public SecurityModuleConfig securityModuleConfigBean() {
+        return SecurityModuleConfig.builder()
+                .adminUserName("sven")
+                .adminAdditionalPackagePermission("demoapp.dom")
+                .adminAdditionalPackagePermission("demoapp.utils")
+                .adminAdditionalPackagePermission("org.apache.isis")
+                .build();
+    }
+
+    @Bean
+    public PermissionsEvaluationService permissionsEvaluationService() {
+        return new PermissionsEvaluationServiceAllowBeatsVeto();
+    }
+    
 }

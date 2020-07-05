@@ -38,9 +38,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 import lombok.Value;
@@ -50,7 +50,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PageParameterUtil {
     
-    public static ActionModel actionModelFor(IsisWebAppCommonContext commonContext, PageParameters pageParameters) {
+    public static ActionModel actionModelFor(IsisAppCommonContext commonContext, PageParameters pageParameters) {
         val entityModel = newEntityModelFrom(commonContext, pageParameters);
         val actionMemento = newActionMementoFrom(commonContext, pageParameters);
         val actionModel = ActionModel.of(entityModel, actionMemento);
@@ -137,7 +137,7 @@ public class PageParameterUtil {
     }
 
     private static ActionMemento newActionMementoFrom(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
         final ObjectSpecId owningSpec = ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters));
@@ -183,7 +183,7 @@ public class PageParameterUtil {
     }
     
     private static EntityModel newEntityModelFrom(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
         val rootOid = oidFor(pageParameters);

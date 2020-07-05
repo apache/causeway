@@ -18,37 +18,23 @@
  */
 package demoapp.dom.viewmodels;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.viewmodels.jaxbrefentity.StatefulViewModelJaxbRefsEntity;
-import demoapp.dom.viewmodels.usingjaxb.StatefulViewModelUsingJaxb;
+import demoapp.dom.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
+import demoapp.dom.viewmodels.usingjaxb.StatefulVmUsingJaxb;
 
 @DomainService(
-        objectType = "demoapp.ViewModels"
+        objectType = "demo.ViewModels"
 )
 public class ViewModels {
 
     @Action(semantics = SemanticsOf.SAFE)
-    public StatefulViewModelUsingJaxb openStateful(final String message) {
-        val viewModel = new StatefulViewModelUsingJaxb();
+    public StatefulVmUsingJaxb openStateful(final String message) {
+        val viewModel = new StatefulVmUsingJaxb();
         viewModel.setMessage(message);
         return viewModel;
     }
@@ -57,8 +43,8 @@ public class ViewModels {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public StatefulViewModelJaxbRefsEntity openStatefulRefsEntity(final String message) {
-        val viewModel = new StatefulViewModelJaxbRefsEntity();
+    public StatefulVmJaxbRefsEntity openStatefulRefsEntity(final String message) {
+        val viewModel = new StatefulVmJaxbRefsEntity();
         viewModel.setMessage(message);
         return viewModel;
     }

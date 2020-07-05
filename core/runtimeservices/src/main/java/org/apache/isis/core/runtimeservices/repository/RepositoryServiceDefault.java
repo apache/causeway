@@ -50,6 +50,7 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
@@ -92,7 +93,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     public <T> T persist(final T domainObject) {
         
         val adapter = objectManager.adapt(unwrapped(domainObject));
-        if(adapter == null) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
         // only persist detached entities, otherwise skip

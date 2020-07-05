@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.model.common;
 
 import org.apache.wicket.Session;
 
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.val;
 
@@ -29,12 +29,12 @@ import lombok.val;
  */
 public class CommonContextUtils {
 
-    public static IsisWebAppCommonContext getCommonContext() {
+    public static IsisAppCommonContext getCommonContext() {
         val application = Session.get().getApplication();
-        return ((IsisWebAppCommonContext.Provider) application).getCommonContext();
+        return ((IsisAppCommonContext.Provider) application).getCommonContext();
     }
     
-    public static IsisWebAppCommonContext computeIfAbsent(IsisWebAppCommonContext commonContext) {
+    public static IsisAppCommonContext computeIfAbsent(IsisAppCommonContext commonContext) {
         return commonContext!=null
                 ? commonContext
                         : getCommonContext();

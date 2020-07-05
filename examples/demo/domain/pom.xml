@@ -40,11 +40,9 @@
 				<filtering>false</filtering>
 				<directory>src/main/java</directory>
 				<includes>
+					<!-- we include all .java too, so that we can reference it from the descriptions -->
 					<include>**</include>
 				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
 			</resource>
 		</resources>
 
@@ -73,6 +71,10 @@
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-ui</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
@@ -129,6 +131,17 @@
 			<scope>provided</scope>
 		</dependency>
 
-	</dependencies>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.16.1</version>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.valuetypes</groupId>
+            <artifactId>isis-valuetypes-markdown-applib</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

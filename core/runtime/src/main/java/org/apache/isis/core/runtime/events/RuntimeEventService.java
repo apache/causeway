@@ -33,6 +33,9 @@ import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtime.events.persistence.PostStoreEvent;
 import org.apache.isis.core.runtime.events.persistence.PreStoreEvent;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+
+import lombok.val;
 
 /**
  * 
@@ -47,7 +50,8 @@ import org.apache.isis.core.runtime.iactn.IsisInteraction;
 @Qualifier("Default")
 public class RuntimeEventService {
     
-    @Inject private EventBusService eventBusService;  
+    @Inject private EventBusService eventBusService;
+    @Inject private IsisInteractionTracker interactionTracker;
 
    // -- APP
 
@@ -62,21 +66,24 @@ public class RuntimeEventService {
     // -- INTERACTION
 
     public void fireInteractionHasStarted(IsisInteraction interaction) {
+        val conversationId = interactionTracker.getConversationId().orElse(null);
         eventBusService.post(
                 IsisInteractionLifecycleEvent
-                .of(interaction, IsisInteractionLifecycleEvent.EventType.HAS_STARTED));
+                .of(conversationId, interaction, IsisInteractionLifecycleEvent.EventType.HAS_STARTED));
     }
 
     public void fireInteractionIsEnding(IsisInteraction interaction) {
+        val conversationId = interactionTracker.getConversationId().orElse(null);
         eventBusService.post(
                 IsisInteractionLifecycleEvent
-                .of(interaction, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
+                .of(conversationId, interaction, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
     }
 
 	public void fireInteractionFlushRequest(IsisInteraction interaction) {
+	    val conversationId = interactionTracker.getConversationId().orElse(null);
 	    eventBusService.post(
 	            IsisInteractionLifecycleEvent
-	            .of(interaction, IsisInteractionLifecycleEvent.EventType.FLUSH_REQUEST));
+	            .of(conversationId, interaction, IsisInteractionLifecycleEvent.EventType.FLUSH_REQUEST));
 	}
 	
     // -- PERSISTENT OBJECT EVENTS

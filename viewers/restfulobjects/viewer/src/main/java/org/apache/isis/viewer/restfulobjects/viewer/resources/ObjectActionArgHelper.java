@@ -25,7 +25,6 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -64,13 +63,13 @@ public class ObjectActionArgHelper {
             final JsonRepresentation argRepr = argList.get(i);
             final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
             try {
-                final ManagedObject argAdapter = new JsonParserHelper(resourceContext, paramSpec).objectAdapterFor(argRepr);
+                final ManagedObject argAdapter = new JsonParserHelper(resourceContext, paramSpec)
+                        .objectAdapterFor(argRepr);
                 argAdapters.add(argAdapter);
 
                 // validate individual arg
                 final ObjectActionParameter parameter = parameters.getElseFail(i);
-                final Object argPojo = argAdapter!=null?argAdapter.getPojo():null;
-                final String reasonNotValid = parameter.isValid(head, argPojo, InteractionInitiatedBy.USER);
+                final String reasonNotValid = parameter.isValid(head, argAdapter, InteractionInitiatedBy.USER);
                 if (reasonNotValid != null) {
                     argRepr.mapPut("invalidReason", reasonNotValid);
                     valid = false;

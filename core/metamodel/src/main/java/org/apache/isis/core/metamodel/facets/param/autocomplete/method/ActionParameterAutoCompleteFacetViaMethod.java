@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -80,7 +79,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object[] autoComplete(
+    public Can<ManagedObject> autoComplete(
             final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs,
             final String searchArg,
@@ -93,14 +92,13 @@ implements ImperativeFacet {
                         method, owningAdapter, pendingArgs, Collections.singletonList(searchArg));
         
         if (collectionOrArray == null) {
-            return _Constants.emptyObjects;
+            return Can.empty();
         }
-        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
-
-        val visiblePojos = ManagedObjects.VisibilityUtil
-                .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
+        val elementSpec = getObjectManager().loadSpecification(choicesType);
+        val visibleChoices = ManagedObjects
+                .adaptMultipleOfTypeThenAttachThenFilterByVisibility(elementSpec, collectionOrArray, interactionInitiatedBy);
         
-        return visiblePojos;
+        return visibleChoices;
     }
 
     @Override

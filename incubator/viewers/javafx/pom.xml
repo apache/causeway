@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.incubator</groupId>
+		<artifactId>isis-incubator</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<groupId>org.apache.isis.incubator.viewer</groupId>
+	<artifactId>isis-viewer-javafx</artifactId>
+	<name>Apache Isis Inc - Viewer JavaFX</name>
+	<description>
+		Initial sketches
+	</description>
+
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.incubator.viewer.javafx</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/javafx</git-plugin.propertiesDir>
+		<javafx.version>11.0.2</javafx.version>
+	</properties>
+
+	<packaging>pom</packaging>
+
+	<build>
+		<plugins>
+			<!-- Compile -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<showDeprecation>false</showDeprecation>
+					<showWarnings>false</showWarnings>
+					<release>11</release>
+					<compilerArgs>
+						<arg>${maven.compiler.arg}</arg>
+					</compilerArgs>
+				</configuration>
+				<!-- goal:compile binds to phase:compile -->
+				<!-- goal:testCompile binds to phase:test-compile -->
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>org.apache.isis.incubator.viewer</groupId>
+				<artifactId>isis-viewer-javafx-model</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.incubator.viewer</groupId>
+				<artifactId>isis-viewer-javafx-ui</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.incubator.viewer</groupId>
+				<artifactId>isis-viewer-javafx-viewer</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<!-- JAVA-FX -->
+
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-base</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-controls</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-swing</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-fxml</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-web</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>model</module>
+		<module>viewer</module>
+		<module>ui</module>
+	</modules>
+
+</project>

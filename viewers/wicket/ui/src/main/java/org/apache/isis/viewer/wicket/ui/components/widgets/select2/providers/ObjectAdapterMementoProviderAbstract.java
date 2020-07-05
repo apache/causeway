@@ -33,10 +33,11 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
@@ -52,7 +53,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     private static final String NULL_DISPLAY_TEXT = "";
 
     @Getter private final ScalarModel scalarModel;
-    @Getter private final transient IsisWebAppCommonContext commonContext;
+    @Getter private final transient IsisAppCommonContext commonContext;
     @Getter private final transient WicketViewerSettings wicketViewerSettings;
 
     public ObjectAdapterMementoProviderAbstract(ScalarModel scalarModel) {
@@ -67,12 +68,14 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         if (choice == null) {
             return NULL_DISPLAY_TEXT;
         }
-
-        val objectAdapter = commonContext.reconstructObject(choice); 
+        val objectAdapter = commonContext.reconstructObject(choice);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
+            return "Internal error: broken memento " + choice;
+        }
         final IConverter<Object> converter = findConverter(objectAdapter);
         return converter != null
                 ? converter.convertToString(objectAdapter.getPojo(), getLocale())
-                        : objectAdapter.titleString(null);
+                : objectAdapter.titleString(null);
     }
 
     protected Locale getLocale() {

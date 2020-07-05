@@ -20,8 +20,6 @@ package org.apache.isis.applib.services.bookmark;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;

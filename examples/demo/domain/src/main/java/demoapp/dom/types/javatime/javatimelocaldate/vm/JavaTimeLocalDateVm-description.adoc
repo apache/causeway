@@ -1,0 +1,14 @@
+JAXB supports `Character` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+include::TemporalJavaTimeLocalDateVm.java[tags=class]
+----
+<.> a no-arg constructor is required by JAXB
+<.> required property as defined to JAXB
+<.> The `org.apache.isis.applib.util.JaxbAdapters.SqlDateAdapter` instructs JAXB how to marshal the `java.time.LocalDate` instance to and from XML
+<.> directly editable property as defined to Apache Isis
+<.> optional property as defined to Apache Isis.
++
+Properties are optional by default in JAXB, so no additional annotation required.
+

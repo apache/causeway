@@ -28,7 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -62,7 +62,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
     private final String describedAs;
 
     public ObjectAdapterPropertyColumn(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             EntityCollectionModel.Variant collectionVariant,
             IModel<String> columnNameModel,
             String sortProperty,

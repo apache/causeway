@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -44,7 +44,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsPr
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -54,7 +54,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
- * of) {@link ScalarPanelAbstract2}.
+ * of) {@link ScalarPanelAbstract}.
  */
 public class CollectionPanel 
 extends PanelAbstract<EntityCollectionModel> 

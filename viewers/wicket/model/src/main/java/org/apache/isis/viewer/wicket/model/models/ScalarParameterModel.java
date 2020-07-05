@@ -18,12 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -62,7 +64,7 @@ implements ParameterUiModel {
     @Override
     public ObjectActionParameter getMetaModel() {
         if(actionParameter==null) {
-            actionParameter = paramMemento.getActionParameter(getSpecificationLoader()); 
+            actionParameter = paramMemento.getActionParameter(this::getSpecificationLoader); 
         }
         return actionParameter;  
     }
@@ -116,19 +118,17 @@ implements ParameterUiModel {
     }
 
     @Override
-    public String validate(final ManagedObject proposedAdapter) {
+    public String validate(final ManagedObject proposedValue) {
         final ObjectActionParameter parameter = getMetaModel();
         
         val action = parameter.getAction();
-        
-        
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
             
             val head = action.interactionHead(parentAdapter);    
             
-            final String invalidReasonIfAny = parameter.isValid(head, proposedAdapter.getPojo(),
-                    InteractionInitiatedBy.USER);
+            final String invalidReasonIfAny = parameter
+                    .isValid(head, proposedValue, InteractionInitiatedBy.USER);
             return invalidReasonIfAny;
         } catch (final Exception ex) {
             return ex.getLocalizedMessage();
@@ -137,14 +137,7 @@ implements ParameterUiModel {
 
     @Override
     public ManagedObject load() {
-        val objectAdapter = loadFromSuper();
-
-        if(objectAdapter == null) {
-            if(getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
-                return ManagedObject.of(getMetaModel().getSpecification(), null);
-            }
-        }
-        return objectAdapter;
+        return toNonNull(loadFromSuper());
     }
 
     @Override
@@ -159,13 +152,23 @@ implements ParameterUiModel {
 
     @Override
     public ManagedObject getValue() {
-        return getObject();
+        return toNonNull(getObject());
     }
 
     @Override
     public void setValue(ManagedObject paramValue) {
         super.setObject(paramValue);
     }
+    
+    // -- HELPER
+    
+    private ManagedObject toNonNull(@Nullable ManagedObject adapter) {
+        if(adapter == null) {
+            adapter = ManagedObject.empty(getMetaModel().getSpecification());
+        }
+        return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
+    }
+    
 
     
 }

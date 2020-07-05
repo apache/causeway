@@ -227,9 +227,8 @@ implements OneToOneAssociation {
 
     @Override
     public void toDefault(final ManagedObject ownerAdapter) {
-        // don't default optional fields
-        final MandatoryFacet mandatoryFacet = getFacet(MandatoryFacet.class);
-        if (mandatoryFacet != null && mandatoryFacet.isInvertedSemantics()) {
+        // default only mandatory fields
+        if (!MandatoryFacet.isMandatory(this)) {
             return;
         }
 
@@ -254,17 +253,12 @@ implements OneToOneAssociation {
 
         val propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
         if (propertyChoicesFacet == null) {
-            return null;
+            return Can.empty();
         }
 
-        final Object[] pojoOptions = propertyChoicesFacet.getChoices(
+        return propertyChoicesFacet.getChoices(
                 ownerAdapter,
                 interactionInitiatedBy);
-
-        val adapters = _NullSafe.stream(pojoOptions)
-                .map(getObjectManager()::adapt)
-                .collect(Can.toCan());
-        return adapters;
     }
 
 

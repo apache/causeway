@@ -13,7 +13,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import lombok.val;
 
 @Service
-@Named("demoapp.MarkupVariableResolverService")
+@Named("demo.MarkupVariableResolverService")
 public class MarkupVariableResolverService {
 
     private final Map<String, String> constants = _Maps.unmodifiable(

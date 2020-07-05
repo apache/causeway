@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -44,13 +45,15 @@ import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -67,7 +70,7 @@ import lombok.val;
  * </p>
  */
 public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> 
-extends ScalarPanelAbstract2 
+extends ScalarPanelAbstract 
 implements TextFieldValueModel.ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
@@ -219,7 +222,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         textField.add(new IValidator<T>() {
             private static final long serialVersionUID = 1L;
-            private transient IsisWebAppCommonContext commonContext;
+            private transient IsisAppCommonContext commonContext;
 
             @Override
             public void validate(final IValidatable<T> validatable) {
@@ -237,7 +240,7 @@ implements TextFieldValueModel.ScalarModelProvider {
                 return getCommonContext().getObjectManager();
             }
             
-            private IsisWebAppCommonContext getCommonContext() {
+            private IsisAppCommonContext getCommonContext() {
                 return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
             }
             
@@ -316,7 +319,29 @@ implements TextFieldValueModel.ScalarModelProvider {
         // must be "live", for ajax updates.
         return _Casts.uncheckedCast(model);
     }
+    
+    protected class ToStringConvertingModel<X> extends Model<String> {
+        private static final long serialVersionUID = 1L;
+        
+        @NonNull private final IConverter<X> converter;
 
+        private ToStringConvertingModel(@NonNull IConverter<X> converter) {
+            this.converter = converter;
+        }
+
+        @Override public String getObject() {
+            val adapter = scalarModel.getObject();
+            val value = ManagedObjects.UnwrapUtil.single(adapter);
+            final String str = value != null
+                    ? converter.convertToString(_Casts.uncheckedCast(value), getLocaleProvider().getLocale())
+                    : null;
+            return str;
+        }
+    }
+    
+    protected ToStringConvertingModel<T> toStringConvertingModelOf(IConverter<T> converter) {
+        return new ToStringConvertingModel<>(converter);
+    }
 
     // //////////////////////////////////////
 

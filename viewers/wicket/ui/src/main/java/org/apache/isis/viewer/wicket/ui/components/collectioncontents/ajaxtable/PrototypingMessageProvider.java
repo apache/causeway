@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import java.util.Locale;
 
 import org.apache.isis.core.commons.internal.base._Timing;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 import lombok.val;
@@ -37,7 +37,7 @@ import lombok.val;
  */
 class PrototypingMessageProvider {
 
-    private static IsisWebAppCommonContext commonContext = null;
+    private static IsisAppCommonContext commonContext = null;
 
     public static String getTookTimingMessageModel() {
         return isPrototyping()
@@ -47,7 +47,7 @@ class PrototypingMessageProvider {
 
     // -- HELPER
 
-    private static IsisWebAppCommonContext commonContext() {
+    private static IsisAppCommonContext commonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     

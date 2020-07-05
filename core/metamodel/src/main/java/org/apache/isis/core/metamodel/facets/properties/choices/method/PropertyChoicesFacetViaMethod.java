@@ -24,8 +24,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -63,22 +65,25 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     }
 
     @Override
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        
-        final Object options = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
-        if (options == null) {
-            return null;
-        }
+        val elementSpec = getObjectManager().loadSpecification(((FacetedMethod) getFacetHolder()).getType());
+        val optionPojos = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
 
-        val collectionAdapter = getObjectManager().adapt(options);
-
-        val visiblePojos = ManagedObjects.VisibilityUtil
-                .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
+//XXX[ISIS-2383] debugging        
+//        if(elementSpec.isEntity()) {
+//            _NullSafe.streamAutodetect(optionPojos)
+//            .map(pojo->ManagedObject.of(elementSpec, pojo))
+//            .filter(adapter->!ManagedObjects.EntityUtil.isAttached(adapter))
+//            .forEach(detached->_Probe.errOut("non attached entity from choices method %s detected", method));
+//        }
         
-        return visiblePojos;
+        val visibleChoices = ManagedObjects
+                .adaptMultipleOfTypeThenAttachThenFilterByVisibility(elementSpec, optionPojos, interactionInitiatedBy);
+        
+        return visibleChoices;
     }
 
     @Override

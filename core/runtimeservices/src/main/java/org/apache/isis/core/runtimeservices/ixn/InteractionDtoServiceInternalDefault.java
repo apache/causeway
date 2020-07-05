@@ -71,8 +71,9 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final Interaction interaction = interactionContextProvider.get().getInteraction();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
-        final Object targetPojo = targetAdapter.getPojo();
-        final Bookmark targetBookmark = bookmarkService.bookmarkForElseThrow(targetPojo);
+        //final Object targetPojo = targetAdapter.getPojo();
+        final Bookmark targetBookmark = targetAdapter.getRootOid().get().asBookmark();
+            // bookmarkService.bookmarkForElseThrow(targetPojo);
 
         final String actionIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
         final String actionId = actionIdentifier.substring(actionIdentifier.indexOf('#')+1);
@@ -116,8 +117,9 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
-        final Object targetPojo = targetAdapter.getPojo();
-        final Bookmark targetBookmark = bookmarkService.bookmarkForElseThrow(targetPojo);
+        //final Object targetPojo = targetAdapter.getPojo();
+        final Bookmark targetBookmark = targetAdapter.getRootOid().get().asBookmark(); 
+                //bookmarkService.bookmarkForElseThrow(targetPojo);
 
         final String propertyIdentifier = property.getIdentifier().toClassAndNameIdentityString();
         final String propertyId = propertyIdentifier.substring(propertyIdentifier.indexOf('#')+1);

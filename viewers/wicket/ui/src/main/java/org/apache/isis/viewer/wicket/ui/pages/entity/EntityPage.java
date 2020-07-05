@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
@@ -70,7 +70,7 @@ public class EntityPage extends PageAbstract {
      * Specifically handled by <code>IsisWicketApplication#newPageFactory()</code>
      */
     public static EntityPage bookmarked(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             PageParameters pageParameters) {
         
         val entityModel = createEntityModel(commonContext, pageParameters);
@@ -85,7 +85,7 @@ public class EntityPage extends PageAbstract {
      * @return An EntityModel for the requested OID
      */
     private static EntityModel createEntityModel(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             PageParameters parameters) {
         
         String oid = EntityModel.oidStr(parameters);
@@ -103,14 +103,14 @@ public class EntityPage extends PageAbstract {
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
     public EntityPage(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             ManagedObject adapter) {
         
         this(PageParametersUtils.newPageParameters(), newEntityModel(commonContext, adapter));
     }
 
     private static EntityModel newEntityModel(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             ManagedObject adapter) {
         
         val entityModel = EntityModel.ofAdapter(commonContext, adapter);

@@ -27,8 +27,8 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -43,7 +43,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectMement
 
     private static final long serialVersionUID = 1L;
     
-    private final transient IsisWebAppCommonContext commonContext;
+    private final transient IsisAppCommonContext commonContext;
 
     /**
      * Converts string representation of {@link Oid} to

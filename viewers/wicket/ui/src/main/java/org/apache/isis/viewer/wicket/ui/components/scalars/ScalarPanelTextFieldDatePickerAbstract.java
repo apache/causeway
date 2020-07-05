@@ -30,11 +30,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
-
-import lombok.val;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
@@ -84,7 +83,7 @@ extends ScalarPanelTextFieldAbstract<T>  {
 
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
-                return (IConverter<C>) converter;
+                return _Casts.uncheckedCast(converter);
             }
         };
         label.setEnabled(false);
@@ -100,23 +99,12 @@ extends ScalarPanelTextFieldAbstract<T>  {
 
                 return label;
     }
-
+    
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        return new Model<String>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override public String getObject() {
-                val adapter = scalarModel.getObject();
-                final T value = adapter != null ? (T) adapter.getPojo() : null;
-                final String str =
-                        value != null
-                        ? converter.convertToString(value, getLocaleProvider().getLocale())
-                                : null;
-                        return str;
-            }
-        };
+        return super.toStringConvertingModelOf(converter);
     }
+
 
     /**
      * Optional override for subclasses to explicitly indicate desired amount to adjust compact form of textField

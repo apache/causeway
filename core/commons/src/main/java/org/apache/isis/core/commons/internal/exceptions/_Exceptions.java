@@ -270,7 +270,7 @@ public final class _Exceptions {
     }
 
     public static void dumpStackTrace() {
-        dumpStackTrace(System.out, 0, 1000); 
+        dumpStackTrace(System.err, 0, 1000); 
     }
 
     // -- CAUSAL CHAIN

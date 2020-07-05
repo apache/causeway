@@ -23,11 +23,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault;
-import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
-import org.apache.isis.incubator.viewer.vaadin.viewer.IsisServletForVaadin;
 import org.apache.isis.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUi;
@@ -64,8 +63,9 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
     public static void main(String[] args) {
         
         IsisPresets.logging(IsisInteractionFactoryDefault.class, "debug");
-        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
-        IsisPresets.logging(IsisServletForVaadin.class, "debug");
+//        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
+//        IsisPresets.logging(IsisServletForVaadin.class, "debug");
+        IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
         
         ThereCanBeOnlyOne.remoteShutdownOthersIfAny();
         

@@ -24,9 +24,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 /**
@@ -42,7 +42,7 @@ implements HasCommonContext {
     private transient IsisConfiguration isisConfiguration;
     private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
-    private transient IsisWebAppCommonContext commonContext;
+    private transient IsisAppCommonContext commonContext;
     private transient IsisInteractionFactory isisInteractionFactory;
     
     protected WebPageBase(PageParameters parameters) {
@@ -54,7 +54,7 @@ implements HasCommonContext {
     }
     
     @Override
-    public IsisWebAppCommonContext getCommonContext() {
+    public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     

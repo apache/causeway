@@ -107,6 +107,11 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> remove(T element) {
+        return this; // on an empty can this is a no-op
+    }
+    
+    @Override
     public int indexOf(T element) {
         return -1;
     }
@@ -118,7 +123,12 @@ final class Can_Empty<T> implements Can<T> {
     
     @Override
     public boolean equals(Object obj) {
-        return INSTANCE == obj;
+        if(INSTANCE == obj) {
+            return true; // optimization not strictly necessary
+        }
+        return (obj instanceof Can)
+                ? ((Can<?>)obj).isEmpty()
+                : false;
     }
     
     @Override

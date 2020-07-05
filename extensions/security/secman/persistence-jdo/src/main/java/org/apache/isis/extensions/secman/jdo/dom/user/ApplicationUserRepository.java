@@ -23,10 +23,14 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.stereotype.Repository;
+
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -37,12 +41,12 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
+import org.apache.isis.extensions.secman.api.events.UserCreatedEvent;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
-import org.springframework.stereotype.Repository;
 
 import lombok.NonNull;
 import lombok.val;
@@ -57,7 +61,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     @Inject private SecurityModuleConfig configBean;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
 	@Inject protected IsisConfiguration isisConfiguration;
-    
+    @Inject private EventBusService eventBusService;  
+ 
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
     
     @Override
@@ -193,8 +198,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
 
     @Override
     public ApplicationUser newUser(
-            String username, 
-            AccountType accountType,
+            @NonNull String username, 
+            @Nullable AccountType accountType,
             Consumer<ApplicationUser> beforePersist) {
         
         val user = newApplicationUser();
@@ -202,14 +207,14 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         user.setAccountType(accountType);
         beforePersist.accept(user);
         if(user.getAccountType().equals(AccountType.LOCAL)) {
-        	// keep null that is set for status in accept() call above
+        	// keep null when is set for status in accept() call above
         } else {
-            val shiroConf = isisConfiguration.getSecurity().getShiro();
-			user.setStatus(shiroConf.isAutoEnableIfDelegatedAndAuthenticated() 
+			user.setStatus(configBean.isAutoEnableIfDelegatedAndAuthenticated() 
 			        ?  ApplicationUserStatus.ENABLED 
 	                :  ApplicationUserStatus.DISABLED);
         }
         repository.persistAndFlush(user);
+        eventBusService.post(UserCreatedEvent.of(user));
         return user;
     }
     

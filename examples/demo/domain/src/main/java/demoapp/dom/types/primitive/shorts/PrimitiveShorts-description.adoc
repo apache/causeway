@@ -1,0 +1,59 @@
+The framework has built-in support for all of the primitive data types, including `short`.
+
+From here you can:
+
+* navigate to an entity that uses the `short` datatype
+* open a view model that uses the `short` datatype
+
+Because `short` is a primitive value, the properties on these domain objects are mandatory.
+
+== Common interface
+
+These objects both implement a common interface, `PrimitiveShortHolder`:
+
+[source,java]
+----
+include::holder/PrimitiveShortHolder.java[tags=class]
+----
+
+There is also an extension of this interface, `PrimitiveShortHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/PrimitiveShortHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `short` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+include::holder/PrimitiveShortHolder_updateReadOnlyProperty.java[tags=class]
+----
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+include::holder/PrimitiveShortHolder_actionReturning.java[tags=class]
+----
+
+== Mixin properties
+
+We also use the interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/PrimitiveShortHolder_mixinProperty.java[tags=class]
+----
+

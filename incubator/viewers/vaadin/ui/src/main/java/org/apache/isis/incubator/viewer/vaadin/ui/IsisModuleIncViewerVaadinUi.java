@@ -34,6 +34,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.other.FallbackField
 import org.apache.isis.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.text.TextFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.pages.main.UiActionHandler;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 
@@ -47,6 +48,7 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         VaadinAuthenticationHandler.class,
         LogoutHandlerVaa.class,
         UiComponentFactoryVaa.class,
+        UiActionHandler.class,
         
         // Component Factories
         BlobFieldFactory.class,

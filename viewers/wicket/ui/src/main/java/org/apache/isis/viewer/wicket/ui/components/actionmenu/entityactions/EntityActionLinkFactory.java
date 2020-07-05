@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -59,7 +60,9 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
         // this is now done at the point of rendering
 
         return LinkAndLabel.of(
-                model->super.newLinkComponent(model.getObjectAction(), toggledMementosProviderIfAny),
+                model->super.newLinkComponent(
+                        model.getObjectAction(()->CommonContextUtils.getCommonContext().getSpecificationLoader()), 
+                        toggledMementosProviderIfAny),
                 named, 
                 this.targetEntityModel, 
                 objectAction);

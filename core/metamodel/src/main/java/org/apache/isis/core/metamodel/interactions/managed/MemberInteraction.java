@@ -87,9 +87,20 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
     }
 
-    @Deprecated // use more specialized methods 
-    public <X extends Throwable> 
-    T getOrElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+    /**
+     * @return optionally the ManagedMember based on whether there 
+     * was no interaction veto within the originating chain 
+     */
+    protected Optional<T> getManagedMember() {
+        return chain.left();
+    }
+    
+    /**
+     * @return this Interaction's ManagedMember
+     * @throws X if there was any interaction veto within the originating chain
+     */
+    protected <X extends Throwable> 
+    T getManagedMemberElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
         val value = chain.leftIfAny();
         if (value != null) {
             return value;
@@ -98,10 +109,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
     }
     
-    @Deprecated 
-    public Optional<T> get() {
-        return chain.left();
-    }
+
     
     
 }

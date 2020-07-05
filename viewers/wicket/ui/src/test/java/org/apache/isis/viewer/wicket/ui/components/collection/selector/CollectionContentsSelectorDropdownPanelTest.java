@@ -31,11 +31,11 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -53,7 +53,7 @@ public class CollectionContentsSelectorDropdownPanelTest {
     public void setUp() throws Exception {
         
         metaModelContext = MetaModelContext_forTesting.buildDefault(); 
-        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        val commonContext = IsisAppCommonContext.of(metaModelContext);
         
         ajaxTableComponentFactory = new CollectionContentsAsAjaxTablePanelFactory() {
             private static final long serialVersionUID = 1L; {

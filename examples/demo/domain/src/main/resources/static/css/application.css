@@ -1,7 +1,204 @@
+/*
+ * Demonstrates use of @PropertyLayout(cssClass='red')
+ */
+.property.red label {
+    color: red;
+}
 
-.welcome {
-	font-size: 16px;
+/*
+ * Demonstrates use of @PropertyLayout(cssClass='red')
+ */
+.property.blue label {
+    color: dodgerblue;
+}
+
+/*
+ * admonitionblock styles (ie, NOTE: TIP: CAUTION: IMPORTANT: WARNING:)
+ * (taken from asciidoctor.css)
+ */
+.admonitionblock td.content > .title {
+    line-height: 1.45;
+    color: #7a2518;
+    font-weight: 400;
+    margin-top: 0;
+    margin-bottom: .25em
+}
+
+.admonitionblock td.content > .title {
+    text-rendering: optimizeLegibility;
+    text-align: left;
+    font-family: "Noto Serif", "DejaVu Serif", serif;
+    font-size: 1rem;
+    font-style: italic
+}
+
+.admonitionblock {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.admonitionblock > table {
+    border-collapse: separate;
+    border: 0;
+    background: none;
+    width: 100%
+}
+
+.admonitionblock > table td.icon {
+    text-align: center;
+    width: 80px
+}
+
+.admonitionblock > table td.icon img {
+    max-width: none
+}
+
+.admonitionblock > table td.icon .title {
+    font-weight: bold;
+    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    text-transform: uppercase
+}
+
+.admonitionblock > table td.content {
+    padding-left: 1.125em;
+    padding-right: 1.25em;
+    border-left: 1px solid #ddddd8;
+    color: rgba(0, 0, 0, .6)
+}
+
+.admonitionblock > table td.content > :last-child > :last-child {
+    margin-bottom: 0
+}
+
+.admonitionblock td.icon [class^="fa icon-"] {
+    font-size: 1.75em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, .5);
+    cursor: default
+}
+
+.admonitionblock td.icon .icon-note::before {
+    content: "\f05a";
+    color: #19407c
+}
+
+.admonitionblock td.icon .icon-tip::before {
+    content: "\f0eb";
+    text-shadow: 1px 1px 2px rgba(155, 155, 0, .8);
+    color: #111
+}
+
+.admonitionblock td.icon .icon-warning::before {
+    content: "\f071";
+    color: #bf6900
+}
+
+.admonitionblock td.icon .icon-caution::before {
+    content: "\f06d";
+    color: #bf3400
+}
+
+.admonitionblock td.icon .icon-important::before {
+    content: "\f06a";
+    color: #bf0000
+}
+
+/*
+ * colist (callout list) styles
+ * (taken then adapted from asciidoctor.css)
+ */
+.colist > table {
+    border: 0;
+    background: none
+}
+
+.colist > table > tbody > tr {
+    background: none
+}
+
+.literalblock + .colist, .listingblock + .colist {
+    margin-top: 1.0em
+}
+
+.colist td:not([class]):first-child {
+    padding: .4em .75em 0;
+    line-height: 1;
+    vertical-align: top
+}
+
+.colist td:not([class]):first-child img {
+    max-width: none
+}
+
+.colist td:not([class]):last-child {
+    padding: .25em 0
+}
+
+/*
+ * conum (callout number) styles
+ * (taken from asciidoctor.css)
+ */
+.conum[data-value] {
+    display: inline-block;
+    color: #fff !important;
+    background-color: rgba(0, 0, 0, .8);
+    -webkit-border-radius: 100px;
+    border-radius: 100px;
+    text-align: center;
+    font-size: .75em;
+    width: 1.67em;
+    height: 1.67em;
+    line-height: 1.67em;
+    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    font-style: normal;
+    font-weight: bold
+}
+
+.conum[data-value] * {
+    color: #fff !important
+}
+
+.conum[data-value] + b {
+    display: none
+}
+
+.conum[data-value]::after {
+    content: attr(data-value)
+}
+
+pre .conum[data-value] {
+    position: relative;
+    top: -.125em
+}
+
+b.conum * {
+    color: inherit !important
+}
+
+.conum:not([data-value]):empty {
+    display: none
 }
 
 
+/*
+ * Miscellaneous other styles
+ */
+.welcome {
+    font-size: 16px;
+}
+
+div.paragraph a {
+    text-decoration: underline dotted;
+}
+
+div.paragraph a:hover{
+    text-decoration: underline solid;
+}
+
+div.paragraph a.a-has-code {
+    text-decoration-color: #c7254e;
+}
+
+div.paragraph a.a-has-code:hover {
+    text-decoration-color: #c7254e;
+}
 

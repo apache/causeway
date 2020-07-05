@@ -58,7 +58,6 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvi
 import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 
 import lombok.val;
 
@@ -67,7 +66,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 /**
  *
  */
-class PdfJsViewerPanel extends ScalarPanelAbstract<ScalarPropertyModel> implements IRequestListener {
+class PdfJsViewerPanel extends ScalarPanelAbstractLegacy<ScalarPropertyModel> implements IRequestListener {
 
     private static final long serialVersionUID = 1L;
 

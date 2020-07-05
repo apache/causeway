@@ -23,8 +23,8 @@ import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -36,11 +36,11 @@ public class UsernameAvailableValidator extends ValidatorBase<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public static UsernameAvailableValidator instance(IsisWebAppCommonContext commonContext) { 
+    public static UsernameAvailableValidator instance(IsisAppCommonContext commonContext) { 
         return new UsernameAvailableValidator(commonContext);
     }
     
-    private UsernameAvailableValidator(IsisWebAppCommonContext commonContext) {
+    private UsernameAvailableValidator(IsisAppCommonContext commonContext) {
         super(commonContext);
     }
     

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.apache.isis.incubator.viewer.javafx.ui.main.UiController">
+  <children>
+    <HBox fx:id="topPane" VBox.vgrow="NEVER">
+      <children>
+    		<MenuBar fx:id="menuBarLeft" />
+            <Region fx:id="topLevelMenuSpacer" styleClass="menu-bar" HBox.hgrow="SOMETIMES" />
+    		<MenuBar fx:id="menuBarRight" />
+   	  </children>
+    </HBox>
+  <ScrollPane fx:id="contentView" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+         <content>
+            <VBox fx:id="contentPane" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #f8f9fa;">
+               <children>
+                  <Label alignment="CENTER" style="&#10;" text="Initializing ..." textAlignment="CENTER" wrapText="false">
+                     <font>
+                        <Font size="18.0" fx:id="x11" />
+                     </font>
+                     <textFill>
+                        <Color blue="0.624" green="0.624" red="0.624" fx:id="x21" />
+                     </textFill>
+                     <VBox.margin>
+                        <Insets left="16.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+         </content>
+  </ScrollPane>
+    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+      <children>
+        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
+          <font>
+            <Font size="11.0" fx:id="x3" />
+          </font>
+          <textFill>
+            <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
+          </textFill>
+        </Label>
+        <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+        <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
+      </children>
+      <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+      </padding>
+    </HBox>
+  </children>
+</VBox>

@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  */
 public interface ActionParameterAutoCompleteFacet extends Facet {
 
-    public Object[] autoComplete(
+    public Can<ManagedObject> autoComplete(
             ManagedObject inObject,
             Can<ManagedObject> pendingArgs,
             String searchArg,

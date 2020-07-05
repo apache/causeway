@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -58,7 +58,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionFormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -92,13 +92,13 @@ implements Serializable {
     public abstract LinkAndLabel newActionLink(ObjectAction action, String named);
     
     protected ActionLink newLinkComponent(
-            final ObjectAction action,
+            final ObjectAction objectAction,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        val actionModel = ActionModel.of(this.targetEntityModel, action);
+        val actionModel = ActionModel.of(this.targetEntityModel, objectAction);
         val commonContext = actionModel.getCommonContext();
 
-        final ActionLink link = new ActionLink(commonContext, linkId, actionModel, action) {
+        final ActionLink link = new ActionLink(commonContext, linkId, actionModel) {
             
             private static final long serialVersionUID = 1L;
 
@@ -106,10 +106,12 @@ implements Serializable {
             protected void doOnClick(final AjaxRequestTarget target) {
 
                 if(toggledMementosProviderIfAny != null) {
+                    
+                    val commonContext = super.getCommonContext();
 
                     val selectedMementos = toggledMementosProviderIfAny.getToggles();
                     val selectedPojosFromAssocCollection = selectedMementos
-                            .map(super.getCommonContext()::reconstructObject)
+                            .map(commonContext::reconstructObject)
                             .map(ManagedObject::getPojo);
                     
                     val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection
@@ -170,8 +172,9 @@ implements Serializable {
             //
             if(actionModel.hasParameters()) {
 
-                final ActionParametersPanel actionParametersPanel =
-                        (ActionParametersPanel) getComponentFactoryRegistry().createComponent(
+                val actionParametersPanel = (ActionParametersPanel)
+                        getComponentFactoryRegistry()
+                        .createComponent(
                                 ComponentType.ACTION_PROMPT, prompt.getContentId(), actionModel);
 
                 actionParametersPanel.setShowHeader(false);
@@ -280,7 +283,7 @@ implements Serializable {
 
             actionModel.setInlinePromptContext(inlinePromptContext);
             getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
-                    ScalarPanelAbstract2.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
+                    ScalarPanelAbstract.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
 
             inlinePromptContext.getScalarIfRegular().setVisible(false);
             inlinePromptContext.getScalarIfRegularInlinePromptForm().setVisible(true);
@@ -294,7 +297,7 @@ implements Serializable {
     private InlinePromptContext determineInlinePromptContext() {
         return scalarModelForAssociationIfAny != null
                 ? scalarModelForAssociationIfAny.getInlinePromptContext()
-                        : null;
+                : null;
     }
 
 
@@ -320,7 +323,7 @@ implements Serializable {
         return getCommonContext().getSpecificationLoader();
     }
 
-    protected IsisWebAppCommonContext getCommonContext() {
+    protected IsisAppCommonContext getCommonContext() {
         return targetEntityModel.getCommonContext();
     }
 

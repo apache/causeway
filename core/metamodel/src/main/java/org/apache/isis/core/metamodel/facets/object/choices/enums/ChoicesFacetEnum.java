@@ -21,22 +21,30 @@ package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.val;
+
 public class ChoicesFacetEnum extends ChoicesFacetAbstract {
 
-    private final Object[] choices;
+    private final Can<ManagedObject> choices;
 
-    public ChoicesFacetEnum(final FacetHolder holder, final Object[] choices) {
+    public ChoicesFacetEnum(final FacetHolder holder, final Class<?> enumClass) {
         super(holder);
-        this.choices = choices;
+        
+        final Object[] choices = enumClass.getEnumConstants();
+        
+        val elementSpec = getSpecification(enumClass);
+        this.choices = Can.ofArray(choices)
+                .map(choice->ManagedObject.of(elementSpec, choice));
     }
 
     @Override
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return choices;

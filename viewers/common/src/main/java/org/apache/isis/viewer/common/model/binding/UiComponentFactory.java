@@ -42,8 +42,6 @@ public interface UiComponentFactory<T> {
     
     T componentFor(UiComponentFactory.Request request);
     
-    // -- REQUEST (VALUE) TYPE
-    
     @Value(staticConstructor = "of")
     public static class Request {
         @NonNull private final Where where;
@@ -79,6 +77,12 @@ public interface UiComponentFactory<T> {
         public boolean isFeatureTypeAssignableFrom(@Nullable Class<?> type) {
             return type!=null
                     ? getFeatureType().isAssignableFrom(type)
+                    : false;
+        }
+        
+        public boolean isFeatureTypeInstanceOf(@Nullable Class<?> type) {
+            return type!=null
+                    ? type.isAssignableFrom(getFeatureType())
                     : false;
         }
         

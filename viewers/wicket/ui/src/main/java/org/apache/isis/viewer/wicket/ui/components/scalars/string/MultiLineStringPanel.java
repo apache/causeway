@@ -77,6 +77,8 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
         final Fragment fragment = new Fragment(id, "textareaInlinePrompt", this);
         final TextArea<String> inlinePromptTextArea = new TextArea<String>("scalarValue", inlinePromptModel) {
 
+            private static final long serialVersionUID = 1L;
+
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
                 tag.put("tabindex","-1");

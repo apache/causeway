@@ -1,0 +1,59 @@
+The framework has built-in support for all of the primitive data types, including `boolean`.
+
+From here you can:
+
+* navigate to an entity that uses the `boolean` datatype
+* open a view model that uses the `boolean` datatype
+
+Because `boolean` is a primitive value, the properties on these domain objects are mandatory.
+
+== Common interface
+
+The two domain objects both implement a common interface, `PrimitiveBooleanHolder`:
+
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder.java[tags=class]
+----
+
+There is also an extension of this interface, `PrimitiveBooleanHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `boolean` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder_updateReadOnlyProperty.java[tags=class]
+----
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder_actionReturning.java[tags=class]
+----
+
+== Mixin properties
+
+We also use the interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder_mixinProperty.java[tags=class]
+----
+

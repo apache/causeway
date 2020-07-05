@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.core.commons.internal.base._Either;
@@ -56,6 +57,23 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
                 : _Either.left(property); 
         });
         return this;
+    }
+    
+    /**
+     * @return optionally the ManagedProperty based on whether there 
+     * was no interaction veto within the originating chain 
+     */
+    public Optional<ManagedProperty> getManagedProperty() {
+        return super.getManagedMember();
+    }
+    
+    /**
+     * @return this Interaction's ManagedProperty
+     * @throws X if there was any interaction veto within the originating chain
+     */
+    public <X extends Throwable> 
+    ManagedProperty getManagedPropertyElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return super.getManagedMemberElseThrow(onFailure);
     }
 
     

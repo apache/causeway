@@ -42,6 +42,7 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -58,6 +59,7 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -241,6 +243,32 @@ public final class ManagedObjects {
         
     }
     
+    // -- DEFAULTS UTILITIES
+    
+    public static ManagedObject emptyToDefault(boolean mandatory, @NonNull ManagedObject input) {
+        if(!isSpecified(input)) {
+            return input;
+        }
+        if(input.getPojo()!=null) {
+            return input;
+        }
+        
+        // there are 2 cases to handle here
+        // 1) if primitive, then don't return null
+        // 2) if boxed boolean, that is MANDATORY, then don't return null
+        
+        val spec = input.getSpecification();
+        val expectedType = spec.getCorrespondingClass();
+        if(expectedType.isPrimitive()) {
+            return ManagedObject.of(spec, ClassExtensions.toDefault(expectedType));
+        }
+        if(Boolean.class.equals(expectedType) && mandatory) {
+            return ManagedObject.of(spec, Boolean.FALSE);
+        }
+        
+        return input;
+    }
+    
     // -- TITLE UTILITIES
     
     public static String abbreviatedTitleOf(ManagedObject adapter, int maxLength, String suffix) {
@@ -254,6 +282,67 @@ public final class ManagedObjects {
     private static String abbreviated(final String str, final int maxLength, String suffix) {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + suffix;
     }
+    
+    // -- ADABT UTILITIES
+    
+    public static Can<ManagedObject> adaptMultipleOfType(
+            @NonNull  final ObjectSpecification elementSpec,
+            @Nullable final Object collectionOrArray) {
+        
+        return _NullSafe.streamAutodetect(collectionOrArray)
+        .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
+        .collect(Can.toCan());
+    }
+
+    /**
+     * used eg. to adapt the result of supporting methods, that return choice pojos
+     */
+    public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
+            @NonNull  final ObjectSpecification elementSpec,
+            @Nullable final Object collectionOrArray, 
+            @NonNull  final InteractionInitiatedBy interactionInitiatedBy) {
+        
+        return _NullSafe.streamAutodetect(collectionOrArray)
+        .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
+        .map(ManagedObjects.EntityUtil::reattach)
+        .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
+        .collect(Can.toCan());
+    }
+
+    /**
+     * TODO just for debugging, remove!
+     * print stacktrace to console, if {@code pojo} is an attached entity
+     * @deprecated
+     */
+    @SneakyThrows
+    public static void warnIfAttachedEntity(ManagedObject adapter, String logMessage) {
+        if(isNullOrUnspecifiedOrEmpty(adapter)) {
+            return;
+        }
+        if(EntityUtil.isAttached(adapter)) {
+            _Probe.errOut("%s [%s]", logMessage, adapter.getSpecification().getFullIdentifier());
+            _Exceptions.dumpStackTrace();    
+        }
+    }
+    
+    /**
+     * eg. in order to prevent wrapping an object that is already wrapped
+     */
+    public static void assertPojoNotManaged(@Nullable Object pojo) {
+        // can do this check only when the pojo is not null, otherwise is always considered valid
+        if(pojo==null) {
+            return;
+        }
+        
+        if(pojo instanceof ManagedObject) {
+            throw _Exceptions.illegalArgument(
+                    "Cannot adapt a pojo of type ManagedObject, " +
+                    "pojo.getClass() = %s, " +
+                    "pojo.toString() = %s",
+                    pojo.getClass(), pojo.toString());
+        }
+    }
+
 
     // -- ENTITY UTILITIES
     
@@ -336,6 +425,13 @@ public final class ManagedObjects {
             }
             if(!entityState.isDetached()) {
                 return managedObject;
+            }
+            
+            // identification fails, on detached object, if rootOid was not previously memoized
+            if(!managedObject.isRootOidMemoized()) {
+                throw _Exceptions.illegalState("entity %s is required to have a memoized ID, "
+                        + "otherwise cannot re-attach", 
+                        managedObject.getSpecification().getSpecId());
             }
             
             val objectIdentifier = identify(managedObject)
@@ -720,6 +816,8 @@ public final class ManagedObjects {
         }
         
     }
+
+
     
 
 }

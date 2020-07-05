@@ -35,8 +35,8 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -119,7 +119,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
                     private static final long serialVersionUID = 1L;
                     
-                    private transient IsisWebAppCommonContext commonContext;
+                    private transient IsisAppCommonContext commonContext;
 
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
@@ -141,7 +141,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                                 .getAuthenticationSessionElseFail();
                     }
                     
-                    private IsisWebAppCommonContext getCommonContext() {
+                    private IsisAppCommonContext getCommonContext() {
                         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
                     }
                     

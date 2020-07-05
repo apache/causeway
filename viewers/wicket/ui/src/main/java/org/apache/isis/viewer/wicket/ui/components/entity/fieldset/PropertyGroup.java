@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -46,10 +47,11 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
@@ -66,7 +68,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
     private static final String ID_PROPERTY = "property";
 
     private final FieldSet fieldSet;
-    private final List<ScalarPanelAbstract2> childScalarPanelAbstract2s;
+    private final List<ScalarPanelAbstract> childScalarPanelAbstract2s;
     private final List<Component> childComponents;
 
     public PropertyGroup(final String id, final EntityModel model, final FieldSet fieldSet) {
@@ -77,8 +79,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         childComponents = buildGui();
         childScalarPanelAbstract2s = 
                 _NullSafe.stream(childComponents)
-                .filter(ScalarPanelAbstract2.class::isInstance)
-                .map(ScalarPanelAbstract2.class::cast)
+                .filter(ScalarPanelAbstract.class::isInstance)
+                .map(ScalarPanelAbstract.class::cast)
                 .collect(Collectors.toList());
                 
     }
@@ -98,6 +100,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         setOutputMarkupId(true);
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_MEMBER_GROUP);
+        div.setMarkupId("fieldSet-" + fieldSet.getId());
 
         String groupName = fieldSet.getName();
 
@@ -203,6 +206,10 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+        if(component instanceof MarkupContainer) {
+            String identifier = scalarModel.getIdentifier();
+            CssClassAppender.appendCssClassTo((MarkupContainer)component, identifier);
+        }
 
         val adapter = entityModel.getManagedObject();
         final List<ObjectAction> associatedActions =
@@ -216,7 +223,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
     @Override
     public void onConfigure() {
-        for (final ScalarPanelAbstract2 childComponent : childScalarPanelAbstract2s) {
+        for (final ScalarPanelAbstract childComponent : childScalarPanelAbstract2s) {
             childComponent.configure();
         }
         super.onConfigure();
@@ -236,7 +243,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         }
         // HACK:END
 
-        for (final ScalarPanelAbstract2 childComponent : childScalarPanelAbstract2s) {
+        for (final ScalarPanelAbstract childComponent : childScalarPanelAbstract2s) {
             if(childComponent.isVisibilityAllowed()) {
                 return true;
             }

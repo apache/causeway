@@ -1,0 +1,8 @@
+JDO supports `double` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+include::PrimitiveDoubleJdo.java[tags="class"]
+----
+<.> a no-arg constructor is introduced by JDO enhancer
+<.> no additional JDO annotations required.

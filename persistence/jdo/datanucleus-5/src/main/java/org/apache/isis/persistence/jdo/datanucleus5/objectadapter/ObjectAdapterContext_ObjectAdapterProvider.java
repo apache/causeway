@@ -20,8 +20,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.RuntimeContext;
 
 import lombok.val;
@@ -36,7 +34,6 @@ import lombok.val;
 class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvider {
 
     private final ObjectAdapterContext objectAdapterContext;
-    private final SpecificationLoader specificationLoader; 
     private final ObjectManager objectManager; 
 
     ObjectAdapterContext_ObjectAdapterProvider(
@@ -44,7 +41,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             RuntimeContext runtimeContext) {
 
         this.objectAdapterContext = objectAdapterContext;
-        this.specificationLoader = runtimeContext.getSpecificationLoader();
         this.objectManager = runtimeContext.getMetaModelContext().getObjectManager(); 
     }
 
@@ -55,7 +51,8 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             return null;
         }
 
-        val rootOid = objectManager.identifyObject(ManagedObject.of(specificationLoader::loadSpecification, pojo));
+        val adapter = objectManager.adapt(pojo);
+        val rootOid = objectManager.identifyObject(adapter);
         val newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
         return objectAdapterContext.injectServices(newAdapter);
     }

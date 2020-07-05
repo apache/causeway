@@ -21,14 +21,10 @@ package org.apache.isis.viewer.common.model.menu;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
-import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -37,6 +33,7 @@ import lombok.val;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of")
+//@Log4j2
 public class MenuUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,26 +45,18 @@ public class MenuUiModel implements Serializable {
         return menuBarSelect.name().toLowerCase(Locale.ENGLISH);
     }
     
-    public <T, M extends MenuItemUiModel<T, M>> 
-    void buildMenuItems(
-            final IsisWebAppCommonContext commonContext,
-            final ActionUiModelFactory<T> menuActionFactory,
-            final Function<String, M> menuItemFactory,
-            final Consumer<M> onNewMenuItem) {
+    public void buildMenuItems(
+            final IsisAppCommonContext commonContext,
+            final MenuVisitor menuBuilder) {
         
         val menuBars = commonContext.getMenuBarsService().menuBars();
-
-        // TODO: remove hard-coded dependency on BS3
-        final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(getMenuBarSelect());
+        val menuBar = (BS3MenuBar) menuBars.menuBarFor(getMenuBarSelect());
         
         MenuUiModel_buildMenuItems.buildMenuItems(
                 commonContext, 
                 menuBar,
-                menuActionFactory,
-                menuItemFactory,
-                onNewMenuItem);
+                menuBuilder);
         
     }
-    
 
 }

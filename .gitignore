@@ -13,9 +13,12 @@
 # Node
 package-lock.json
 package.json
+pnpmfile.js
+pnpm-lock.yaml
 webpack.config.js
 webpack.generated.js
-/node/
+node/
+node_modules/
 
 *.exe
 *~
@@ -67,8 +70,5 @@ rebel.xml
 /.antora-cache-dir/
 
 _commit.sh
-
-# The following files are generated/updated by vaadin-maven-plugin
-node_modules/
 
 /incubator/clients/kroviz/package.json

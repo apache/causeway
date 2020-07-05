@@ -14,11 +14,35 @@
 	</package>
 
 	<package name="demoapp.dom.viewmodels.jaxbrefentity">
-		<class name="ChildJdoEntity" />
+		<class name="ChildJdo" />
 	</package>
 
+	<package name="demoapp.dom.types.primitive.booleans.jdo">
+		<class name="PrimitiveBooleanJdo" />
+	</package>
+	<package name="demoapp.dom.types.primitive.bytes.jdo">
+		<class name="PrimitiveByteJdo" />
+	</package>
 	<package name="demoapp.dom.types.primitive.chars.jdo">
-		<class name="PrimitiveCharJdoEntity" />
+		<class name="PrimitiveCharJdo" />
+	</package>
+	<package name="demoapp.dom.types.primitive.doubles.jdo">
+		<class name="PrimitiveDoubleJdo" />
+	</package>
+	<package name="demoapp.dom.types.primitive.floats.jdo">
+		<class name="PrimitiveFloatJdo" />
+	</package>
+	<package name="demoapp.dom.types.primitive.ints.jdo">
+		<class name="PrimitiveIntJdo" />
+	</package>
+	<package name="demoapp.dom.types.primitive.longs.jdo">
+		<class name="PrimitiveLongJdo" />
+	</package>
+	<package name="demoapp.dom.types.primitive.shorts.jdo">
+		<class name="PrimitiveShortJdo" />
+	</package>
+	<package name="demoapp.dom.types.javalang.characters.jdo">
+		<class name="WrapperCharacterJdo" />
 	</package>
 
 </jdo>

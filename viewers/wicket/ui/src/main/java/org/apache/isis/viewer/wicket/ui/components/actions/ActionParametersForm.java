@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -95,7 +95,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
     }
 
-    private Optional<ScalarPanelAbstract2> newParamPanel(
+    private Optional<ScalarPanelAbstract> newParamPanel(
             final WebMarkupContainer container, 
             final ScalarParameterModel paramModel) {
         
@@ -111,8 +111,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         }
         
         val paramPanel =
-                component instanceof ScalarPanelAbstract2
-                ? (ScalarPanelAbstract2) component
+                component instanceof ScalarPanelAbstract
+                ? (ScalarPanelAbstract) component
                 : null;
                 
         if (paramPanel != null) {
@@ -149,7 +149,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanelUpdated) {
+    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanelUpdated) {
 
         val actionModel = getActionModel();
         val paramModel = (ParameterUiModel)scalarPanelUpdated.getModel();

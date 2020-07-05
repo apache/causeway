@@ -46,9 +46,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -222,7 +222,7 @@ implements LinksProvider, UiHintContainer {
                 }
 
                 final List<ManagedObject> adapterList =
-                        _Lists.map(objectList, x-> (ManagedObject)colModel.getPojoToAdapter().apply(x));
+                        _Lists.map(objectList, x-> (ManagedObject)colModel.getObjectManager().adapt(x));
 
                 return adapterList;
             }
@@ -341,7 +341,7 @@ implements LinksProvider, UiHintContainer {
     private ActionModel actionModelHint;
 
     private EntityCollectionModel(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             Variant type, 
             EntityModel entityModel, 
             Class<?> typeOf, 

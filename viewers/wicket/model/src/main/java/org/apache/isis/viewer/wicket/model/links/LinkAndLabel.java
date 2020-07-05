@@ -25,8 +25,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
-
 import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -34,14 +32,13 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 import lombok.NonNull;
 import lombok.val;
 
-public final class LinkAndLabel extends ActionUiModel<AbstractLink> implements Serializable  {
+public final class LinkAndLabel extends LinkAndLabelAbstract {
 
     private static final long serialVersionUID = 1L;
     

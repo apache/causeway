@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 
 import lombok.NonNull;
 import lombok.val;
@@ -52,12 +52,12 @@ extends ModelAbstract<ManagedObject> {
     private ObjectMemento memento;
     
     protected ManagedObjectModel(
-            @NonNull IsisWebAppCommonContext commonContext) {
+            @NonNull IsisAppCommonContext commonContext) {
         this(commonContext, null);
     }
     
     protected ManagedObjectModel(
-            @NonNull IsisWebAppCommonContext commonContext, 
+            @NonNull IsisAppCommonContext commonContext, 
             @Nullable ObjectMemento initialMemento) {
 
         super(commonContext);

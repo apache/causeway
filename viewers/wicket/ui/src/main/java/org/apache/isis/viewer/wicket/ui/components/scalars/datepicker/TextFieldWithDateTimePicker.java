@@ -31,8 +31,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import de.agilecoders.wicket.core.util.Attributes;
 
@@ -54,7 +54,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     private final DateTimeConfig config;
 
     public TextFieldWithDateTimePicker(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             String id, 
             IModel<T> model, 
             Class<T> type, 

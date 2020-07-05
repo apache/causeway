@@ -1,0 +1,59 @@
+The framework has built-in support for all of the primitive data types, including `float`.
+
+From here you can:
+
+* navigate to an entity that uses the `float` datatype
+* open a view model that uses the `float` datatype
+
+Because `float` is a primitive value, the properties on these domain objects are mandatory.
+
+== Common interface
+
+These objects both implement a common interface, `PrimitiveFloatHolder`:
+
+[source,java]
+----
+include::holder/PrimitiveFloatHolder.java[tags=class]
+----
+
+There is also an extension of this interface, `PrimitiveFloatHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/PrimitiveFloatHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `float` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+include::holder/PrimitiveFloatHolder_updateReadOnlyProperty.java[tags=class]
+----
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+include::holder/PrimitiveFloatHolder_actionReturning.java[tags=class]
+----
+
+== Mixin properties
+
+We also use the interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/PrimitiveFloatHolder_mixinProperty.java[tags=class]
+----
+

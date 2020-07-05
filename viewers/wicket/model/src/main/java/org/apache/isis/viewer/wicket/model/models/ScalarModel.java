@@ -130,13 +130,15 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return parentEntityModel;
     }
 
-    private transient ManagedObject owner;
+    //XXX[ISIS-2383] don't cache always load from parent model
+    //private transient ManagedObject owner;
     @Override
     public ManagedObject getOwner() {
-        if(owner==null) {
-            owner = getParentUiModel().load(); 
-        }
-        return owner;  
+//        if(owner==null) {
+//            owner = getParentUiModel().load(); 
+//        }
+//        return owner;
+        return getParentUiModel().load();
     }
     
     /**
@@ -294,12 +296,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         private final List<ObjectAction> remainingAssociated;
 
         AssociatedActions(final Can<ObjectAction> allAssociated) {
-            final List<ObjectAction> temp = allAssociated.toList();
-            this.firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
-            if(this.firstAssociatedWithInlineAsIfEdit != null) {
-                temp.remove(firstAssociatedWithInlineAsIfEdit);
-            }
-            remainingAssociated = Collections.unmodifiableList(temp);
+            firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
+            remainingAssociated = (firstAssociatedWithInlineAsIfEdit != null)
+                    ? allAssociated.remove(firstAssociatedWithInlineAsIfEdit).toList()
+                    : allAssociated.toList();
         }
 
         public List<ObjectAction> getRemainingAssociated() {
@@ -359,7 +359,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     protected abstract ObjectSpecification getScalarTypeSpec();
 
-    protected abstract String getIdentifier();
+    public abstract String getIdentifier();
 
     public AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {

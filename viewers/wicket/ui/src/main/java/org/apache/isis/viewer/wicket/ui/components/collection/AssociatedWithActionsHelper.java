@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 import lombok.val;
@@ -72,7 +72,7 @@ public class AssociatedWithActionsHelper implements Serializable {
         return parentAdapter.getSpecification();
     }
 
-    private ImmutableEnumSet<ActionType> inferActionTypes(IsisWebAppCommonContext commonContext) {
+    private ImmutableEnumSet<ActionType> inferActionTypes(IsisAppCommonContext commonContext) {
         if (commonContext.getSystemEnvironment().isPrototyping()) {
             return ActionType.USER_AND_PROTOTYPE;
         }

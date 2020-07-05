@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.core.commons.collections.Can;
@@ -154,6 +155,23 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         } else {
             throw onFailure.apply(chain.rightIfAny());
         }
+    }
+    
+    /**
+     * @return optionally the ManagedAction based on whether there 
+     * was no interaction veto within the originating chain 
+     */
+    public Optional<ManagedAction> getManagedAction() {
+        return super.getManagedMember();
+    }
+    
+    /**
+     * @return this Interaction's ManagedAction
+     * @throws X if there was any interaction veto within the originating chain
+     */
+    public <X extends Throwable> 
+    ManagedAction getManagedActionElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return super.getManagedMemberElseThrow(onFailure);
     }
     
     // -- HELPER

@@ -32,15 +32,17 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.core.commons.internal.debug._Probe;
+import org.apache.isis.core.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.Getter;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
@@ -53,13 +55,9 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny;
 
-    @Getter protected final transient IsisWebAppCommonContext commonContext;
+    protected transient IsisAppCommonContext commonContext;
 
-//    public ActionLink(String id, ActionModel model) {
-//        this(id, model, null);
-//    }
-    
-    ActionLink(IsisWebAppCommonContext commonContext, String id, ActionModel model, ObjectAction action) {
+    ActionLink(IsisAppCommonContext commonContext, String id, ActionModel model) {
         super(id, model);
 
         this.commonContext = commonContext;
@@ -75,7 +73,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
                 }
 
                 // trivial optimization; also store the objectAction if it is available (saves looking it up)
-                objectAction = action;
+                objectAction = model.getMetaModel();
 
                 // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.
                 // Otherwise can use default handling
@@ -87,9 +85,16 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
                     this.add(ajaxDeferredBehaviourIfAny);
                 }
     }
+    
+    public IsisAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    }
 
     @Override
     public void onClick(AjaxRequestTarget target) {
+        
+        _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                + "originating from User clicking an Action Link.");
 
         if (ajaxDeferredBehaviourIfAny != null) {
             ajaxDeferredBehaviourIfAny.initiate(target);
@@ -111,7 +116,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     public ObjectAction getObjectAction() {
         return objectAction != null
                 ? objectAction
-                        : (objectAction = getActionModel().getMetaModel());
+                : (objectAction = getActionModel().getMetaModel());
     }
 
 

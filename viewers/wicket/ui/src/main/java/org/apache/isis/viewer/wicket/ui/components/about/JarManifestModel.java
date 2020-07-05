@@ -35,8 +35,8 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.commons.CloseableExtensions;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
@@ -51,7 +51,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
      * @param commonContext 
      * @param metaInfManifestIs provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
      */
-    public JarManifestModel(IsisWebAppCommonContext commonContext, InputStream metaInfManifestIs) {
+    public JarManifestModel(IsisAppCommonContext commonContext, InputStream metaInfManifestIs) {
 
         super(commonContext);
         

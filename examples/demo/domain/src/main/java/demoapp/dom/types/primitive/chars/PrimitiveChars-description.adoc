@@ -2,55 +2,58 @@ The framework has built-in support for all of the primitive data types, includin
 
 From here you can:
 
-* open a view model that uses the `char` datatype
 * navigate to an entity that uses the `char` datatype
+* open a view model that uses the `char` datatype
 
 Because `char` is a primitive value, the properties on these domain objects are mandatory.
 
-These objects also have actions that demonstrate the use of `char` as a parameter and as a return type.
-These are mixins to a common interface implemented by both view model and entity:
+== Common interface
+
+These objects both implement a common interface, `PrimitiveCharHolder`:
+
+[source,java]
+----
+include::holder/PrimitiveCharHolder.java[tags=class]
+----
+
+There is also an extension of this interface, `PrimitiveCharHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/PrimitiveCharHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `char` as a parameter and as a return type.
+For example:
 
 * the `updateReadOnlyProperty` action is:
 +
 [source,java]
 ----
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
-)
-@RequiredArgsConstructor
-public class PrimitiveCharHolder_updateReadOnlyProperty {
-
-    private final PrimitiveCharHolder primitiveCharHolder;
-
-    public PrimitiveCharHolder act(char newValue) {
-        primitiveCharHolder.setReadOnlyProperty(newValue);
-        return primitiveCharHolder;
-    }
-    public char default0Act() {
-        return primitiveCharHolder.getReadOnlyProperty();
-    }
-}
+include::holder/PrimitiveCharHolder_updateReadOnlyProperty.java[tags=class]
 ----
 
-* and the `actionReturning` action is:
+* the `actionReturning` action is:
 +
 [source,java]
 ----
-@Action(
-        semantics = SemanticsOf.SAFE,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "3"
-)
-@RequiredArgsConstructor
-public class PrimitiveCharHolder_actionReturning {
+include::holder/PrimitiveCharHolder_actionReturning.java[tags=class]
+----
 
-    private final PrimitiveCharHolder primitiveCharHolder;
+== Mixin properties
 
-    public char act() {
-        return primitiveCharHolder.getReadOnlyProperty();
-    }
-}
+We also use the interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/PrimitiveCharHolder_mixinProperty.java[tags=class]
 ----
 

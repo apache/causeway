@@ -24,18 +24,16 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.SAFE,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "3"
-)
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class PrimitiveCharHolder_actionReturning {
 
-    private final PrimitiveCharHolder primitiveCharHolder;
+    private final PrimitiveCharHolder holder;
 
     public char act() {
-        return primitiveCharHolder.getReadOnlyProperty();
+        return holder.getReadOnlyProperty();
     }
 
 }
+//end::class[]

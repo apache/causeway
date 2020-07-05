@@ -24,9 +24,9 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -36,7 +36,7 @@ import lombok.val;
  * Uses Wicket's default page factory, except for {@link EntityPage}s which require special instantiation:
  * <p> 
  * Constructor
- * {@link EntityPage#EntityPage(IsisWebAppCommonContext, PageParameters)}
+ * {@link EntityPage#EntityPage(IsisAppCommonContext, PageParameters)}
  * needs the common-context as argument. 
  * 
  * @since 2.0

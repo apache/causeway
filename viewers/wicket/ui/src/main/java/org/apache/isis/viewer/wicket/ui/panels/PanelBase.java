@@ -31,10 +31,10 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.MessageBroker;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -65,7 +65,7 @@ implements HasCommonContext {
     private transient PageClassRegistry pageClassRegistry;
     private transient ImageResourceCache imageCache;
     private transient MetaModelContext metaModelContext;
-    private transient IsisWebAppCommonContext commonContext;
+    private transient IsisAppCommonContext commonContext;
     private transient IsisInteractionFactory isisInteractionFactory;
     private transient TranslationService translationService;
     private transient LocaleProvider localeProvider;
@@ -84,7 +84,7 @@ implements HasCommonContext {
     }
     
     @Override
-    public IsisWebAppCommonContext getCommonContext() {
+    public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     

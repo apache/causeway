@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +68,7 @@ final class PendingModel extends Model<ObjectMemento> {
     
     // -- HELPER
     
-    private IsisWebAppCommonContext getCommonContext() {
+    private IsisAppCommonContext getCommonContext() {
         return ownerModel.getCommonContext();
     }
     

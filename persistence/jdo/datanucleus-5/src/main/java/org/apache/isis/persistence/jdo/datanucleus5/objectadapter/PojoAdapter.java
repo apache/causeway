@@ -140,5 +140,10 @@ public final class PojoAdapter implements ObjectAdapter {
         return Optional.empty();
     }
 
+    @Override
+    public boolean isRootOidMemoized() {
+        return true; // oid is immutable
+    }
+
 
 }

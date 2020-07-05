@@ -330,16 +330,16 @@ under the License.
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>apache.snapshots</id>
-			<name>Apache Snapshot Repository</name>
-			<url>https://repository.apache.org/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-	</repositories>
+<!-- 	<repositories> -->
+<!-- 		<repository> -->
+<!-- 			<id>apache.snapshots</id> -->
+<!-- 			<name>Apache Snapshot Repository</name> -->
+<!-- 			<url>https://repository.apache.org/snapshots</url> -->
+<!-- 			<releases> -->
+<!-- 				<enabled>false</enabled> -->
+<!-- 			</releases> -->
+<!-- 		</repository> -->
+<!-- 	</repositories> -->
 
 	<build>
 		<pluginManagement>

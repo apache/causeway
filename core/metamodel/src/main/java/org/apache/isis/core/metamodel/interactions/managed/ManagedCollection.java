@@ -79,7 +79,7 @@ public final class ManagedCollection extends ManagedMember {
         return Optional.ofNullable(getCollection().get(getOwner(), InteractionInitiatedBy.USER))
                 .orElse(ManagedObject.empty(getElementSpecification()));
     }
-
+    
     // -- INTERACTION
     
     /**

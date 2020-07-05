@@ -67,7 +67,6 @@ final class ObjectCreator_builtinHandlers {
             }
             
             val pojo = instantiateAndInjectServices(spec);
-
             val adapter = ManagedObject.of(spec, pojo);
             return initializePropertiesAndDoCallback(adapter);
         }

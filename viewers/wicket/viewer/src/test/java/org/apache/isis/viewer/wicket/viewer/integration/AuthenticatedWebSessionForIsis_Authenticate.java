@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory.ThrowingRunnable;
@@ -49,7 +50,6 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
 
@@ -62,7 +62,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     protected Request mockRequest;
     private AuthenticationManager authMgr;
     @Mock protected Authenticator mockAuthenticator;
-    @Mock protected IsisWebAppCommonContext mockCommonContext;
+    @Mock protected IsisAppCommonContext mockCommonContext;
     @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
     @Mock protected IsisInteractionTracker mockIsisInteractionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;

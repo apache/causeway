@@ -61,7 +61,7 @@ public class ObjectAdapterAccessHelper {
                 .checkVisibility(where)
                 .checkUsability(where, AccessIntent.MUTATE)
                 .checkSemanticConstraint(semanticConstraint)
-                .getOrElseThrow(InteractionFailureHandler::onFailure);
+                .getManagedActionElseThrow(InteractionFailureHandler::onFailure);
     }
 
     public ManagedProperty getPropertyThatIsVisibleForIntent(
@@ -72,7 +72,7 @@ public class ObjectAdapterAccessHelper {
                 .start(managedObject, propertyId)
                 .checkVisibility(where)
                 .checkUsability(where, intent)
-                .getOrElseThrow(InteractionFailureHandler::onFailure);
+                .getManagedPropertyElseThrow(InteractionFailureHandler::onFailure);
         
     }
 
@@ -84,7 +84,7 @@ public class ObjectAdapterAccessHelper {
                 .start(managedObject, collectionId)
                 .checkVisibility(where)
                 .checkUsability(where, intent)
-                .getOrElseThrow(InteractionFailureHandler::onFailure);
+                .getManagedCollectionElseThrow(InteractionFailureHandler::onFailure);
 
     }
 

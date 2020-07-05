@@ -252,14 +252,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         introspect(knownSpecs, IntrospectionState.TYPE_INTROSPECTED);
 
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
-        introspect(domainServiceSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspect(valueTypeSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         log.info(" - introspecting {} domain services", domainServiceSpecs.size());
         introspect(domainServiceSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         log.info(" - introspecting {} mixins", typeRegistry.getMixinTypes().size());
         log.info(" - introspecting {} entities", typeRegistry.getEntityTypes().size());
-        
         log.info(" - introspecting {} view models", typeRegistry.getViewModelTypes().size());
         introspect(domainObjectSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 

@@ -57,10 +57,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
+import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
 import lombok.val;
 
@@ -85,7 +85,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public static ActionModel ofPageParameters(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             PageParameters pageParameters) {
         
         return PageParameterUtil.actionModelFor(commonContext, pageParameters);
@@ -112,7 +112,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     @Override
     public ObjectAction getMetaModel() {
         if(objectAction==null) {
-            objectAction = actionMemento.getAction(getSpecificationLoader()); 
+            objectAction = actionMemento.getAction(this::getSpecificationLoader); 
         }
         return objectAction;
     }
@@ -208,7 +208,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)
-                .map(super.getPojoToAdapter())
+                .map(super.getObjectManager()::adapt)
                 .filter(_NullSafe::isPresent)
                 .findFirst()
                 .orElse(resultAdapter);
@@ -396,11 +396,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     @Override
     public Stream<FormPendingParamUiModel> streamPendingParamUiModels() {
 
-        val targetAdapter = this.getOwner();
-        val realTargetAdapter = this.getMetaModel().realTargetAdapter(targetAdapter);
+        val owner = this.getOwner();
+        val target = this.getMetaModel().realTargetAdapter(owner);
         val pendingArgs = getArgumentsAsParamModel();
 
-        val head = InteractionHead.of(targetAdapter, realTargetAdapter);
+        val head = InteractionHead.of(owner, target);
         
         return argCache()
         .streamParamUiModels()

@@ -25,7 +25,6 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
 import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
-import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
 /**
  * Configuration Bean to support Isis Security using Shiro.
@@ -36,7 +35,6 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 @Import({
         // modules
         IsisModuleCoreRuntimeServices.class,
-        IsisModuleCoreWebapp.class,
 
         // @Service's
         AuthenticatorShiro.class,

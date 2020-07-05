@@ -1,0 +1,13 @@
+JAXB supports `LocalResourcePath` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+include::IsisLocalResourcePathVm.java[tags=class]
+----
+<.> a no-arg constructor is required by JAXB
+<.> required property as defined to JAXB
+<.> directly editable property as defined to Apache Isis
+<.> optional property as defined to Apache Isis.
++
+This is the default for JAXB so no additional annotation required.
+

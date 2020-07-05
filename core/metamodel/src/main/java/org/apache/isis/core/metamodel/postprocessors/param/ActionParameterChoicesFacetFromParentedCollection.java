@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
@@ -44,14 +45,15 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
     }
 
     @Override
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
+            final ObjectSpecification requiredSpec,
             final ManagedObject target,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ManagedObject parentAdapter = determineParentAdapter(target);
-        final ManagedObject objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
-        return CollectionFacet.toArrayOfPojos(objectAdapter);
+        val parentAdapter = determineParentAdapter(target);
+        val objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
+        return CollectionFacet.streamAdapters(objectAdapter).collect(Can.toCan());
     }
 
     /**

@@ -28,6 +28,14 @@ public enum AccountType {
     LOCAL,
     DELEGATED;
 
+    public boolean isLocal() {
+        return this==LOCAL;
+    }
+    
+    public boolean isDelegated() {
+        return this==DELEGATED;
+    }
+    
     @Override
     public String toString() {
         return StringExtensions.capitalize(name());

@@ -126,14 +126,7 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean autoLogoutIfAlreadyAuthenticated = false;
-            /**
-             * Delegated users, on first successful logon, are auto-created but disabled (by default).
-             * <p> 
-             * This option allows to override this behavior, such that authenticated 
-             * users are also auto-enabled. 
-             *
-             */
-            private boolean autoEnableIfDelegatedAndAuthenticated = false;
+            
         }
     }
 
@@ -1230,9 +1223,12 @@ public class IsisConfiguration {
             @Data
             public static class Introspector {
                 /**
-                 * Whether to perform introspection in parallel.
+                 * Whether to perform introspection in parallel. Meant to speed up bootstrapping.  
+                 * <p>
+                 *     For now this is <i>experimental</i>. Leave this disabled (the default).
+                 * </p>
                  */
-                private boolean parallelize = true;
+                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is broken 
 
                 /**
                  * Whether all known types should be fully introspected as part of the bootstrapping, or should only be

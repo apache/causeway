@@ -30,7 +30,7 @@ import lombok.val;
 
 
 @Service
-@Named("demoapp.DefaultTitleProvider")
+@Named("demo.DefaultTitleProvider")
 public class DefaultTitleProvider {
 
     @EventListener(TitleUiEvent.class)

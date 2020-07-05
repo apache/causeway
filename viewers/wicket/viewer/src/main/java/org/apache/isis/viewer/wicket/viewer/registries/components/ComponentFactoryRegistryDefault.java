@@ -41,6 +41,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Multimaps;
 import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -48,7 +49,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -87,7 +87,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
         
         componentFactoryRegistrar.addComponentFactories(componentFactories);
 
-        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        val commonContext = IsisAppCommonContext.of(metaModelContext);
         
         for (val componentFactory : componentFactories) {
             registerComponentFactory(commonContext, componentFactory);
@@ -97,7 +97,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     }
 
     private void registerComponentFactory(
-            final IsisWebAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext, 
             final ComponentFactory componentFactory) {
         
         // handle dependency injection for factories

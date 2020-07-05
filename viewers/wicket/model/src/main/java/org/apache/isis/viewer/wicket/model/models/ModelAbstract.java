@@ -21,9 +21,9 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 
 import lombok.NonNull;
 
@@ -37,19 +37,19 @@ implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull private transient IsisWebAppCommonContext commonContext;
+    @NonNull private transient IsisAppCommonContext commonContext;
 
-    public ModelAbstract(IsisWebAppCommonContext commonContext) {
+    public ModelAbstract(IsisAppCommonContext commonContext) {
         this.commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
-    public ModelAbstract(IsisWebAppCommonContext commonContext, T t) {
+    public ModelAbstract(IsisAppCommonContext commonContext, T t) {
         super(t);
         this.commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
     @Override
-    public IsisWebAppCommonContext getCommonContext() {
+    public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     

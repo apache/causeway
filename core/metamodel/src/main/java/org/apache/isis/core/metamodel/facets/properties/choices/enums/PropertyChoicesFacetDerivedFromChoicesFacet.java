@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.choices.enums;
 
-import org.apache.isis.core.commons.internal._Constants;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -36,7 +36,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
     }
 
     @Override
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -44,7 +44,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
         val methodSpec = getSpecification(facetedMethod.getType());
         val choicesFacet = methodSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null) {
-            return _Constants.emptyObjects;
+            return Can.empty();
         }
         return choicesFacet.getChoices(adapter, interactionInitiatedBy);
     }

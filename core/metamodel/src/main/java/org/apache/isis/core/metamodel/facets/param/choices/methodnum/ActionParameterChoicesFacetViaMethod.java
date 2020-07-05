@@ -27,13 +27,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -72,24 +72,24 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object[] getChoices(
+    public Can<ManagedObject> getChoices(
+            final ObjectSpecification requiredSpec,
             final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        final Object choices = ppmFactory.isPresent()
+        final Object collectionOrArray = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs) 
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
-        if (choices == null) {
-            return _Constants.emptyObjects;
+        if (collectionOrArray == null) {
+            return Can.empty();
         }
         
-        val objectAdapter = getObjectManager().adapt(choices);
+        val visibleChoices = ManagedObjects
+                .adaptMultipleOfTypeThenAttachThenFilterByVisibility(
+                        requiredSpec, collectionOrArray, interactionInitiatedBy);
 
-        val visiblePojos = ManagedObjects.VisibilityUtil
-                .visiblePojosAsArray(objectAdapter, interactionInitiatedBy);
-
-        return visiblePojos;
+        return visibleChoices;
     }
 
     @Override

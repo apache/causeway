@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -44,7 +44,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
     
     @SuppressWarnings("unused")
 	private final NotificationPanel feedback;
-    private transient IsisWebAppCommonContext commonContext;
+    private transient IsisAppCommonContext commonContext;
     
 
     FullCalendarWithEventHandling(
@@ -68,7 +68,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         final SpecificationLoader specificationLoader = commonContext.getSpecificationLoader();
         final MetaModelContext metaModelContext = commonContext.getMetaModelContext();
         final ObjectManager objectManager = commonContext.getObjectManager();
-        final IsisWebAppCommonContext webAppCommonContext = IsisWebAppCommonContext.of(metaModelContext);
+        final IsisAppCommonContext webAppCommonContext = IsisAppCommonContext.of(metaModelContext);
 
         val spec = specificationLoader.loadSpecification(oid.getObjectSpecId());
         val objectId = oid.getIdentifier();
@@ -84,7 +84,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         // otherwise ignore
     }
 
-    public IsisWebAppCommonContext getCommonContext() {
+    public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 

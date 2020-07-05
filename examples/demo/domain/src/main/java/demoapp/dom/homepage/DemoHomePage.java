@@ -44,24 +44,27 @@ import lombok.Setter;
 import demoapp.dom._infra.AsciiDocReaderService;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+//tag::class[]
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , objectType = "demoapp.Homepage"
+        , objectType = "demo.Homepage"
 )
-@HomePage
-public class DemoHomePage implements HasAsciiDocDescription {
+@HomePage                                                       // <.>
+public class DemoHomePage
+        implements HasAsciiDocDescription {                     // <.>
 
-    public String title() {
+    public String title() {                                     // <.>
         return "Hello, " + userService.getUser().getName();
     }
 
-    public AsciiDoc getWelcome() {
+    public AsciiDoc getWelcome() {                              // <.>
         return asciiDocReaderService.readFor(this, "welcome");
     }
 
     @Inject
-    UserService userService;
+    UserService userService;                                    // <.>
 
     @Inject
     AsciiDocReaderService asciiDocReaderService;
 }
+//end::class[]

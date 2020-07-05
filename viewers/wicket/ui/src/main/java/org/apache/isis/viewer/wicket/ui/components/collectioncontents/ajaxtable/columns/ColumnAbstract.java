@@ -25,13 +25,13 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -46,20 +46,20 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
 
     private static final long serialVersionUID = 1L;
     
-    private transient IsisWebAppCommonContext commonContext;
+    private transient IsisAppCommonContext commonContext;
     private transient ComponentFactoryRegistry componentRegistry;
     
     
-    public ColumnAbstract(IsisWebAppCommonContext commonContext, String columnName) {
+    public ColumnAbstract(IsisAppCommonContext commonContext, String columnName) {
         this(commonContext, Model.of(columnName), null);
     }
 
-    public ColumnAbstract(IsisWebAppCommonContext commonContext, IModel<String> columnNameModel, String sortColumn) {
+    public ColumnAbstract(IsisAppCommonContext commonContext, IModel<String> columnNameModel, String sortColumn) {
         super(columnNameModel, sortColumn);
         this.commonContext = commonContext;
     }
 
-    public IsisWebAppCommonContext getCommonContext() {
+    public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     

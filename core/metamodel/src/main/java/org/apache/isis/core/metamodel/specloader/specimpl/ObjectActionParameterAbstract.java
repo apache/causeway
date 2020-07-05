@@ -20,11 +20,9 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
@@ -52,6 +50,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -187,18 +186,16 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val adapters = _Lists.<ManagedObject>newArrayList();
         val autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
-
-        if (autoCompleteFacet != null) {
-            final Object[] choices = autoCompleteFacet
-                    .autoComplete(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), searchArg, interactionInitiatedBy);
-            checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
-            for (final Object choice : choices) {
-                adapters.add(getObjectManager().adapt(choice));
-            }
+        if (autoCompleteFacet == null) {
+            return Can.empty();
         }
-        return Can.ofCollection(adapters);
+        
+        val visibleChoices = autoCompleteFacet
+                .autoComplete(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), searchArg, interactionInitiatedBy);
+        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getSpecification());
+        
+        return visibleChoices;
     }
 
     @Override
@@ -208,12 +205,11 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     }
 
 
-
     // -- Choices
 
     @Override
     public boolean hasChoices() {
-        final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+        val choicesFacet = getFacet(ActionParameterChoicesFacet.class);
         return choicesFacet != null;
     }
 
@@ -221,26 +217,17 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     public Can<ManagedObject> getChoices(
             final PendingParameterModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
-        return findChoices(pendingArgs, interactionInitiatedBy);
-    }
 
-    private Can<ManagedObject> findChoices(
-            final PendingParameterModel pendingArgs,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        
-        final List<ManagedObject> adapters = _Lists.newArrayList();
-        final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
-
-        if (facet != null) {
-            final Object[] choices = facet.getChoices(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), interactionInitiatedBy);
-            checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
-            for (final Object choice : choices) {
-                ManagedObject adapter = choice != null? getObjectManager().adapt(choice) : null;
-                adapters.add(adapter);
-            }
+        val paramSpec = getSpecification();        
+        val choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+        if (choicesFacet == null) {
+            return Can.empty();
         }
-        return Can.ofCollection(adapters);
+
+        val visibleChoices = choicesFacet.getChoices(paramSpec, pendingArgs.getActionTarget(), pendingArgs.getParamValues(), interactionInitiatedBy);
+        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getSpecification());
+        
+        return visibleChoices;
     }
 
     // -- Defaults
@@ -254,25 +241,32 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null && !defaultsFacet.isFallback()) {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
-            return ManagedObject.of(paramSpec, paramValuePojo);    
+            return ManagedObjects.emptyToDefault(
+                    !isOptional(),
+                    ManagedObject.of(paramSpec, paramValuePojo));    
         }   
-        return pendingArgs.getParamValue(getNumber());
+        return ManagedObjects.emptyToDefault(
+                !isOptional(),
+                pendingArgs.getParamValue(getNumber()));
     }
 
     // helpers
     static void checkChoicesOrAutoCompleteType(
             final SpecificationLoader specificationLookup,
-            final Object[] objects,
+            final Can<ManagedObject> choices,
             final ObjectSpecification paramSpec) {
-        for (final Object object : objects) {
+        
+        for (final ManagedObject choice : choices) {
+            
+            val choicePojo = choice.getPojo();
 
-            if(object == null) {
+            if(choicePojo == null) {
                 continue;
             }
 
             // check type, but wrap first
             // (eg we treat int.class and java.lang.Integer.class as compatible with each other)
-            final Class<?> choiceClass = object.getClass();
+            final Class<?> choiceClass = choicePojo.getClass();
             final Class<?> paramClass = paramSpec.getCorrespondingClass();
 
             final Class<?> choiceWrappedClass = ClassExtensions.asWrappedIfNecessary(choiceClass);
@@ -365,23 +359,14 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public String isValid(
             final InteractionHead head,
-            final Object proposedValue,
+            final ManagedObject proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        ManagedObject proposedValueAdapter = null;
-        ObjectSpecification proposedValueSpec;
-        if(proposedValue != null) {
-            proposedValueAdapter = getObjectManager().adapt(proposedValue);
-            if(proposedValueAdapter == null) {
-                return null;
-            }
-            proposedValueSpec = proposedValueAdapter.getSpecification();
-            if(!proposedValueSpec.isOfType(proposedValueSpec)) {
-                return null;
-            }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(proposedValue)) {
+            return null;
         }
 
-        val argumentAdapters = arguments(proposedValueAdapter);
+        val argumentAdapters = arguments(proposedValue);
         val validityContext = createProposedArgumentInteractionContext(
                 head, argumentAdapters, getNumber(), interactionInitiatedBy);
 

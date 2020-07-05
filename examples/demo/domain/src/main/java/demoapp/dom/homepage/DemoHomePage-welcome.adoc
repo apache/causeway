@@ -22,7 +22,10 @@ If running in prototype mode then there are a number of actions contributed by t
 
 Click into the application and try things out.
 
-NOTE: The demo app uses an in-memory database, so any changes made will be lost when the app is stopped.
+[CAUTION]
+====
+The demo app uses an in-memory database, so any changes made will be lost when the app is stopped.
+====
 
 == Getting Help and Assistance
 
