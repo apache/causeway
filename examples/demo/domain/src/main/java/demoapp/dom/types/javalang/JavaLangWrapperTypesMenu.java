@@ -43,43 +43,43 @@ public class JavaLangWrapperTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperBytes bytes(){
+    public WrapperBytes wrapperBytes(){
         return new WrapperBytes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperShorts shorts(){
+    public WrapperShorts wrapperShorts(){
         return new WrapperShorts();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperIntegers integers(){
+    public WrapperIntegers wrapperIntegers(){
         return new WrapperIntegers();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperLongs longs(){
+    public WrapperLongs wrapperLongs(){
         return new WrapperLongs();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperFloats floats(){
+    public WrapperFloats wrapperFloats(){
         return new WrapperFloats();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperDoubles doubles(){
+    public WrapperDoubles wrapperDoubles(){
         return new WrapperDoubles();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperCharacters characters(){
+    public WrapperCharacters wrapperCharacters(){
         return new WrapperCharacters();
     }
 
