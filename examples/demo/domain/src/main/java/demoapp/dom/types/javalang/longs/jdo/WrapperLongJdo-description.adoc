@@ -1,4 +1,4 @@
-JDO supports `Long` out-of-the-box, so no special annotations are required.
+JDO supports `Long` link:http://www.datanucleus.org:15080/products/accessplatform_5_2/jdo/mapping.html#_primitive_and_java_lang_types[out-of-the-box], so no special annotations are required.
 
 [source,java]
 ----

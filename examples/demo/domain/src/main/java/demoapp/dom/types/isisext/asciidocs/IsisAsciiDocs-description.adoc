@@ -1,4 +1,6 @@
-The framework has built-in support for all of the Wrapper data types, including `AsciiDoc`.
+The framework has built-in support for rendering HTML written including link:https://asciidoctor.org/[Asciidoctor], using the `AsciiDoc` data type.
+
+NOTE: This is an Apache Isis specific data type.
 
 From here you can:
 

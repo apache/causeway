@@ -13,14 +13,14 @@ These objects both implement a common interface, `JavaTimeLocalDateHolder`:
 
 [source,java]
 ----
-include::holder/TemporalJavaTimeLocalDateHolder.java[tags=class]
+include::holder/JavaTimeLocalDateHolder.java[tags=class]
 ----
 
 There is also an extension of this interface, `JavaTimeLocalDateHolder2`, with default methods demonstrating the use of label positions:
 
 [source,java]
 ----
-include::holder/TemporalJavaTimeLocalDateHolder2.java[tags=class]
+include::holder/JavaTimeLocalDateHolder2.java[tags=class]
 ----
 
 <.> The default methods have annotations that are automatically inherited.
@@ -36,21 +36,21 @@ For example:
 +
 [source,java]
 ----
-include::holder/TemporalJavaTimeLocalDateHolder_updateReadOnlyProperty.java[tags=class]
+include::holder/JavaTimeLocalDateHolder_updateReadOnlyProperty.java[tags=class]
 ----
 
 * the `updateReadOnlyOptionalProperty` action is:
 +
 [source,java]
 ----
-include::holder/TemporalJavaTimeLocalDateHolder_updateReadOnlyOptionalProperty.java[tags=class]
+include::holder/JavaTimeLocalDateHolder_updateReadOnlyOptionalProperty.java[tags=class]
 ----
 
 * the `actionReturning` action is:
 +
 [source,java]
 ----
-include::holder/TemporalJavaTimeLocalDateHolder_actionReturning.java[tags=class]
+include::holder/JavaTimeLocalDateHolder_actionReturning.java[tags=class]
 ----
 
 
@@ -58,7 +58,7 @@ include::holder/TemporalJavaTimeLocalDateHolder_actionReturning.java[tags=class]
 +
 [source,java]
 ----
-include::holder/TemporalJavaTimeLocalDateHolder_actionReturningCollection.java[tags=class]
+include::holder/JavaTimeLocalDateHolder_actionReturningCollection.java[tags=class]
 ----
 
 == Mixin properties
@@ -69,7 +69,7 @@ We also use the interface to contribute a mixin property:
 +
 [source,java]
 ----
-include::holder/TemporalJavaTimeLocalDateHolder_mixinProperty.java[tags=class]
+include::holder/JavaTimeLocalDateHolder_mixinProperty.java[tags=class]
 ----
 
 
