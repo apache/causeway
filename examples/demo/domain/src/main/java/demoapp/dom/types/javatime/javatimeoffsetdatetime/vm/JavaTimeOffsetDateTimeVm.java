@@ -46,7 +46,7 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.holder.JavaTimeOffsetDa
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.TemporalJavaTimeOffsetDateTimeVm"
+        objectType = "demo.JavaTimeOffsetDateTimeVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeOffsetDateTimeVm

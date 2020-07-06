@@ -41,7 +41,7 @@ import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.TemporalJavaUtilDateJdo"
+        objectType = "demo.JavaUtilDateJdo"
 )
 public class JavaUtilDateJdo                                          // <.>
         implements HasAsciiDocDescription, JavaUtilDateHolder {

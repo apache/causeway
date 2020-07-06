@@ -41,7 +41,7 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.holder.JavaTimeOffsetDa
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.TemporalJavaTimeOffsetDateTimeJdo"
+        objectType = "demo.JavaTimeOffsetDateTimeJdo"
 )
 public class JavaTimeOffsetDateTimeJdo                                          // <.>
         implements HasAsciiDocDescription, JavaTimeOffsetDateTimeHolder {

@@ -1,8 +1,8 @@
-JDO supports `java.time.LocalDateTime` out-of-the-box, so no special annotations are required.
+JDO supports `java.time.LocalDateTime` link:http://www.datanucleus.org:15080/products/accessplatform_5_2/jdo/mapping.html#_temporal_types_java_util_java_sql_java_time_jodatime[out-of-the-box], so no special annotations are required.
 
 [source,java]
 ----
-include::TemporalJavaTimeLocalDateTimeJdo.java[tags=class]
+include::JavaTimeLocalDateTimeJdo.java[tags=class]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
 <.> required property as defined to JDO/DataNucleus.

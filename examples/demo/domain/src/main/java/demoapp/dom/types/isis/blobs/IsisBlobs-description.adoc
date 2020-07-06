@@ -1,4 +1,6 @@
-The framework has built-in support for all of the Wrapper data types, including `Blob`.
+The framework has built-in support for binary large objects, using the `Blob` data type.
+
+NOTE: This is an Apache Isis specific data type.
 
 From here you can:
 

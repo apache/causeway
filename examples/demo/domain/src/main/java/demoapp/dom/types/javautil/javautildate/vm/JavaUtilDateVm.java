@@ -46,7 +46,7 @@ import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.TemporalJavaUtilDateVm"
+        objectType = "demo.JavaUtilDateVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaUtilDateVm

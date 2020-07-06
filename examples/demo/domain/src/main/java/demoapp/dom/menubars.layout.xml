@@ -36,16 +36,19 @@
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperBooleans"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="strings"/>
-                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="voids"/>
+                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="javaLangStrings"/>
+                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="javaLangVoids"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
             <mb3:named>More Types</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="javaUtilDates"/>
-                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="javaUtilUuids"/>
+                <mb3:serviceAction objectType="demo.JavaMathTypesMenu" id="javaMathBigDecimals"/>
+                <mb3:serviceAction objectType="demo.JavaMathTypesMenu" id="javaMathBigIntegers"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:serviceAction objectType="demo.JavaNetTypesMenu" id="javaNetUrls"/>
             </mb3:section>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="javaSqlDates"/>
@@ -57,9 +60,13 @@
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="javaTimeOffsetDateTimes"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaTimeLocalDates"/>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaTimeLocalDateTimes"/>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaTimeDateTimes"/>
+                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="javaUtilDates"/>
+                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="javaUtilUuids"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaLocalDates"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaLocalDateTimes"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaDateTimes"/>
             </mb3:section>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="isisBlobs"/>
