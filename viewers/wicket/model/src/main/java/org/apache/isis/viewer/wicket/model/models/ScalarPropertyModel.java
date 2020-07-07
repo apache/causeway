@@ -161,16 +161,13 @@ implements PropertyUiModel {
      * Apply changes to the underlying adapter (possibly returning a new adapter).
      *
      * @return adapter, which may be different from the original
-     *  (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
+     *  (specifically, if operating on a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
      */
     public ManagedObject applyValue() {
         
         val proposedNewValue = getObject();
         getManagedProperty().modifyProperty(proposedNewValue);
-        val owner = getManagedProperty().getOwner();
-//        val result = ManagedObjects.copyIfClonable(owner); //XXX I don't understand, why do we need this?
-//        return result;
-        return owner;
+        return getManagedProperty().getOwner();
 
     }
     

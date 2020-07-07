@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -57,13 +58,27 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
     }
 
     @Override
-    public void setProperty(
+    public ManagedObject setProperty(
             final OneToOneAssociation owningAssociation,
             final ManagedObject targetAdapter,
             final ManagedObject valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         ManagedObjects.InvokeUtil.invoke(method, targetAdapter, valueAdapter);
+        return cloneIfViewModelCloneable(targetAdapter);
+    }
+
+    private ManagedObject cloneIfViewModelCloneable(final ManagedObject adapter) {
+
+        if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
+            return adapter;
+        }
+
+        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        final Object clone = viewModelFacet.clone(adapter.getPojo());
+
+        final ManagedObject clonedAdapter = getObjectManager().adapt(clone);
+        return clonedAdapter;
     }
 
 

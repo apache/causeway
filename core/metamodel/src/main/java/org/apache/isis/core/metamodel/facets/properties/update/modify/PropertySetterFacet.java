@@ -42,8 +42,12 @@ public interface PropertySetterFacet extends Facet {
 
     /**
      * Sets the value of this property.
+     *
+     * <p>
+     *     If this is a view model, then the target will be cloned and effectively replaced.
+     * </p>
      */
-    void setProperty(
+    ManagedObject setProperty(
             final OneToOneAssociation owningAssociation,
             final ManagedObject inObject,
             final ManagedObject value,

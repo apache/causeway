@@ -109,10 +109,12 @@ public final class ManagedProperty extends ManagedMember {
         if(interactionVeto.isPresent()) {
             return interactionVeto;
         }
-        
-        property.set(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
+
+        ManagedObject managedObject = property.set(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
+        setOwner(managedObject);
         return Optional.empty();
     }
+
 
     /**
      * If visibility is vetoed, returns an empty but specified ManagedObject.

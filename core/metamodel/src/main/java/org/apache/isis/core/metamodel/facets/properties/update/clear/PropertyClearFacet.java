@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  */
 public interface PropertyClearFacet extends Facet {
 
-    void clearProperty(
+    ManagedObject clearProperty(
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);

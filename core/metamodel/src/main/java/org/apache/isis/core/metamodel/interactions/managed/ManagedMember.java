@@ -92,7 +92,21 @@ public abstract class ManagedMember {
     public ManagedObject getOwner() {
         return owner = EntityUtil.reattach(owner);
     }
-    
+
+    /**
+     * Allows a managed property of a view model to replace its owner with a clone.
+     *
+     * <p>
+     *     This is because view models are intrinsically immutable.
+     * </p>
+     *
+     * @param managedObject
+     */
+    protected void setOwner(@NonNull ManagedObject managedObject) {
+        this.owner = managedObject;
+    }
+
+
     public abstract ObjectMember getMember();
     
     public abstract MemberType getMemberType();
