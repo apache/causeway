@@ -1,4 +1,4 @@
-JAXB supports `java.net.URL` out-of-the-box, so no special annotations are required.
+JAXB would seem to support `java.net.URL` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----

@@ -1,4 +1,4 @@
-JAXB supports `char` out-of-the-box, so no special annotations are required.
+JAXB supports `char` link:https://docs.oracle.com/cd/E12840_01/wls/docs103/webserv/data_types.html#wp223908[out-of-the-box], so no special annotations are required.
 
 [source,java]
 ----

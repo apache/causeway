@@ -28,7 +28,9 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -60,10 +62,13 @@ public class PrimitiveBooleanVm
     @Getter @Setter
     private boolean readOnlyProperty;                                   // <.>
 
+//end::class[]
     @Property(editing = Editing.ENABLED)
+    @PropertyLayout(hidden = Where.EVERYWHERE) // TODO: editable properties broken for view models - new value doesn't stick
     @MemberOrder(name = "editable-properties", sequence = "1")
     @Getter @Setter
     private boolean readWriteProperty;
+//tag::class[]
 
 }
 //end::class[]

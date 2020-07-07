@@ -1,0 +1,11 @@
+== Sample #4
+
+NOTE: these
+
+CAUTION: are
+
+IMPORTANT: examples
+
+WARNING: of
+
+TIP: admonitions

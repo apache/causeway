@@ -56,13 +56,13 @@ public class IsisAsciiDocJdo                                          // <.>
 //tag::class[]
     @Title(prepend = "AsciiDoc JDO entity: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                               // <.>
+    @Column(allowsNull = "false", jdbcType = "CLOB")                            // <.>
     @Getter @Setter
     private AsciiDoc readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false")
+    @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
     private AsciiDoc readWriteProperty;
 

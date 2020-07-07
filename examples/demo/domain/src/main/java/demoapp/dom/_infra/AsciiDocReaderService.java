@@ -1,11 +1,5 @@
 package demoapp.dom._infra;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -35,7 +29,7 @@ public class AsciiDocReaderService {
     }
 
     public AsciiDoc readFor(Class<?> aClass, final String member) {
-        val adocResourceName = String.format("%s-%s.adoc", aClass.getSimpleName(), member);
+        val adocResourceName = String.format("%s-%s.%s", aClass.getSimpleName(), member, "adoc");
         val asciiDoc = resourceReaderService.readResource(aClass, adocResourceName);
         return AsciiDoc.valueOfHtml(asciiDocConverterService.adocToHtml(aClass, asciiDoc));
     }
