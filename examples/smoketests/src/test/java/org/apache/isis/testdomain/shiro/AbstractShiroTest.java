@@ -35,7 +35,6 @@ import org.apache.isis.security.shiro.webmodule.WebModuleShiro.EnvironmentLoader
 
 import lombok.SneakyThrows;
 import lombok.val;
-import lombok.var;
 
 /**
  * 
@@ -100,7 +99,7 @@ class AbstractShiroTest {
         val factory = new IniSecurityManagerFactory(ini);
         val securityManager = factory.getInstance();
 
-        var listener = new EnvironmentLoaderListenerForIsis(serviceInjector);
+        val listener = new EnvironmentLoaderListenerForIsis(serviceInjector);
         listener.injectServicesIntoRealms(securityManager);
         
 //debug        
