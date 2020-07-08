@@ -172,9 +172,12 @@ public class ObjectViewFx extends VBox {
             protected void onAction(Pane container, ActionLayoutData actionData) {
                 
                 val owner = objectInteractor.getManagedObject();
-                ActionInteraction.start(owner, actionData.getId())
-                .checkVisibility(Where.OBJECT_FORMS)
-                .getManagedAction()
+                val interaction = ActionInteraction.start(owner, actionData.getId())
+                .checkVisibility(Where.OBJECT_FORMS);
+                
+                //interaction.checkUsability(Where.OBJECT_FORMS); //TODO use any interaction veto
+                
+                interaction.getManagedAction()
                 .ifPresent(managedAction -> {
                     _fx.add(container, uiComponentFactory.buttonFor(managedAction, actionEventHandler));
                 });

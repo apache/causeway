@@ -16,27 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.components.form;
+package org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling;
 
-import org.apache.isis.applib.annotation.LabelPosition;
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import javafx.scene.Node;
+@Component
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class DisablingDecoratorForFormField implements DisablingDecorator<FormField> {
 
-@RequiredArgsConstructor
-public class SimpleFormField implements FormField {
+    @Override
+    public void decorate(FormField formField, DisablingUiModel disableUiModel) {
+        
+        disableUiModel.getReason().ifPresent(reason->{
+        
+            //formField.setDisabledReason(); //TODO lookup vaadin api as rolemodel
+            //formField.getStyleClass().add("button-disabled");
+            //uiButton.setTooltip(new Tooltip(reason));
+            //uiButton.disableProperty().set(true);
+            
+        });
+        
+    }
 
-    @Getter(onMethod_ = {@Override})
-    protected final LabelPosition labelPosition;
     
-    @Getter(onMethod_ = {@Override})
-    protected final Node uiLabel;
-    
-    @Getter(onMethod_ = {@Override})
-    protected final Node uiField;
-    
-
 }

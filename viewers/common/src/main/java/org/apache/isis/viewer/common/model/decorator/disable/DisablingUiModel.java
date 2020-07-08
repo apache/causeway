@@ -23,16 +23,20 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class DisableUiModel implements Serializable {
+public class DisablingUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -43,10 +47,32 @@ public class DisableUiModel implements Serializable {
      * @param disabled - overwritten to be {@code true}, whenever {@code reason} is not empty
      * @param reason
      */
-    public static DisableUiModel of(boolean disabled, @Nullable String reason) {
+    public static DisablingUiModel of(boolean disabled, @Nullable String reason) {
         return _Strings.isEmpty(reason) 
                 ? of(disabled, Optional.empty())
                 : of(true, Optional.of(reason));
     }
+
+    public static DisablingUiModel of(@NonNull ManagedMember managedMember, @NonNull Where where) {
+        val vetoIfAny = managedMember.checkVisibility(where);
+        if(vetoIfAny.isPresent()) {
+            return of(true, vetoIfAny.get().getReason());
+        }
+        return of(false, Optional.empty());
+    }
+    
+//    public static DisablingUiModel of(ManagedAction managedAction) {
+//        
+//        val vetoIfAny = managedMember.checkVisibility(where);
+//        if(vetoIfAny.isPresent()) {
+//            return of(true, vetoIfAny.get().getReason());
+//        }
+//        return of(false, Optional.empty());
+//        
+//        managedAction.getAction().isUsable(target, interactionInitiatedBy, where)
+//        
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
 
 }

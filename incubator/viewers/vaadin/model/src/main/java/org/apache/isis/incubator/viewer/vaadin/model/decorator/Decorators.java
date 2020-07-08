@@ -65,7 +65,7 @@ public class Decorators {
 
     }
 
-    public final static class Icon implements FontAwesomeDecorator<Component> {
+    public final static class Icon implements FontAwesomeDecorator<Component, Component> {
 
         @Override
         public Component decorate(

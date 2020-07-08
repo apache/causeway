@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
@@ -38,7 +38,7 @@ import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class PrototypingFormFieldDecorator implements PrototypingDecorator<FormField> {
+public class PrototypingDecoratorForFormField implements PrototypingDecorator<FormField, FormField> {
 
     private final PrototypingInfoPopupProvider prototypingInfoService;
     

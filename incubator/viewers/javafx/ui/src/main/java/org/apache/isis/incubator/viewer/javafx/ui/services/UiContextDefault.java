@@ -16,34 +16,54 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.model.context;
+package org.apache.isis.incubator.viewer.javafx.ui.services;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuItem;
 
-public interface UiContext {
+@Service
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class UiContextDefault implements UiContext {
 
-    IsisInteractionFactory getIsisInteractionFactory();
-    ActionUiModelFactoryFx getActionUiModelFactory();
+    //private final UiActionHandler uiActionHandler;
+    @Getter(onMethod_ = {@Override})
+    private final IsisInteractionFactory isisInteractionFactory;
+    @Getter(onMethod_ = {@Override})
+    private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
     
     // -- DECORATORS
-    
-    FontAwesomeDecorator<Labeled, Labeled> getIconDecoratorForLabeled();
-    FontAwesomeDecorator<MenuItem, MenuItem> getIconDecoratorForMenuItem();
+
+    @Getter(onMethod_ = {@Override})
+    private final FontAwesomeDecorator<Labeled, Labeled> iconDecoratorForLabeled;
+    @Getter(onMethod_ = {@Override})
+    private final FontAwesomeDecorator<MenuItem, MenuItem> iconDecoratorForMenuItem;
    
-    DisablingDecorator<Button> getDisablingDecoratorForButton();
-    DisablingDecorator<FormField> getDisablingDecoratorForFormField();
+    @Getter(onMethod_ = {@Override})
+    private final DisablingDecorator<Button> disablingDecoratorForButton;
+    @Getter(onMethod_ = {@Override})
+    private final DisablingDecorator<FormField> disablingDecoratorForFormField;
     
-    PrototypingDecorator<Button, Node> getPrototypingDecoratorForButton();
-    PrototypingDecorator<FormField, FormField> getPrototypingDecoratorForFormField();
+    @Getter(onMethod_ = {@Override})
+    private final PrototypingDecorator<Button, Node> prototypingDecoratorForButton;
+    @Getter(onMethod_ = {@Override})
+    private final PrototypingDecorator<FormField, FormField> prototypingDecoratorForFormField;
+    
     
 }

@@ -26,15 +26,18 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryF
 import org.apache.isis.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.components.text.TextFieldFactory;
-import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingButtonDecorator;
-import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingFormFieldDecorator;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForLabeled;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForMenuItem;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefault;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton;
+import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField;
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandler;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
-import org.apache.isis.incubator.viewer.javafx.ui.services.DecoratorServiceDefault;
-import org.apache.isis.incubator.viewer.javafx.ui.services.IconServiceDefault;
-import org.apache.isis.incubator.viewer.javafx.ui.services.UiContexDefault;
+import org.apache.isis.incubator.viewer.javafx.ui.services.UiContextDefault;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 /**
@@ -43,7 +46,7 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleViewerCommon.class,
         IsisModuleIncViewerJavaFxModel.class,
         
@@ -51,23 +54,28 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         UiBuilder.class,
         UiController.class,
         
-        // component factories 
+        // Component Factories 
         TextFieldFactory.class,
         MarkupFieldFactory.class,
         FallbackFieldFactory.class,
         
-        // decorators
-        PrototypingButtonDecorator.class,
-        PrototypingFormFieldDecorator.class,
+        // Decorators
+        PrototypingDecoratorForButton.class,
+        PrototypingDecoratorForFormField.class,
         PrototypingInfoPopupProvider.class,
+        
+        DisablingDecoratorForButton.class,
+        DisablingDecoratorForFormField.class,
+        
+        IconDecoratorForLabeled.class,
+        IconDecoratorForMenuItem.class,
+        IconServiceDefault.class,
         
         // @Service's
         UiComponentFactoryFx.class,
         UiActionHandler.class,
         
-        UiContexDefault.class,
-        IconServiceDefault.class,
-        DecoratorServiceDefault.class,
+        UiContextDefault.class,
 
         // @Mixin's
 })

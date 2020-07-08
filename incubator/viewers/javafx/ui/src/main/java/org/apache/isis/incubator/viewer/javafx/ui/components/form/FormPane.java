@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 
 import lombok.NonNull;
 import lombok.val;

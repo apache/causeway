@@ -16,31 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.services;
+package org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
-import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
-import org.apache.isis.incubator.viewer.javafx.model.decorator.DecoratorService;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Service
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+
+@Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Getter
-public class UiContexDefault implements UiContext {
-    
-    //private final IconService iconService;
-    private final DecoratorService decoratorService;
-    //private final UiActionHandler uiActionHandler;
-    private final IsisInteractionFactory isisInteractionFactory;
-    
-    
-    private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
-    
+public class DisablingDecoratorForButton implements DisablingDecorator<Button> {
+
+    @Override
+    public void decorate(Button uiButton, DisablingUiModel disableUiModel) {
+
+        disableUiModel.getReason().ifPresent(reason->{
+
+            uiButton.setTooltip(new Tooltip(reason));
+            uiButton.disableProperty().set(true);
+            uiButton.setOnAction(null);
+
+            //uiComponent.getStyleClass().add("button-disabled");
+
+
+        });
+
+    }
+
+
 }

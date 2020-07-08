@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.components.form;
+package org.apache.isis.incubator.viewer.javafx.model.form;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 

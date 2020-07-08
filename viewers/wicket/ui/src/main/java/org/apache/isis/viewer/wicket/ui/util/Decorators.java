@@ -29,8 +29,8 @@ import org.apache.isis.viewer.common.model.action.decorator.ActionUiDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.danger.DangerDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
@@ -78,9 +78,9 @@ public class Decorators {
         }
     }
     
-    public final static class Disable implements DisableDecorator<Component> {
+    public final static class Disable implements DisablingDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent, DisableUiModel disableUiModel) {
+        public void decorate(Component uiComponent, DisablingUiModel disableUiModel) {
             if (disableUiModel.isDisabled()) {
                 
                 disableUiModel.getReason()
@@ -93,7 +93,7 @@ public class Decorators {
         }
     }
     
-    public final static class Prototyping implements PrototypingDecorator<Component> {
+    public final static class Prototyping implements PrototypingDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, PrototypingUiModel prototypingUiModel) {
             uiComponent.add(new CssClassAppender("prototype"));
@@ -133,7 +133,7 @@ public class Decorators {
         }
     }
     
-    public final static class IconDecorator implements FontAwesomeDecorator<Component> {
+    public final static class IconDecorator implements FontAwesomeDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
             if(fontAwesome.isPresent()) {
@@ -143,7 +143,7 @@ public class Decorators {
         }
     }
 
-    public final static class MissingIconDecorator implements FontAwesomeDecorator<Component> {
+    public final static class MissingIconDecorator implements FontAwesomeDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
             if(!fontAwesome.isPresent()) {

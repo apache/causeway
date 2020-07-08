@@ -16,42 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping;
+package org.apache.isis.incubator.viewer.javafx.ui.decorator.icon;
+
+import java.util.Optional;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.layout.HBox;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import javafx.scene.control.Labeled;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class PrototypingButtonDecorator implements PrototypingDecorator<Node> {
+public class IconDecoratorForLabeled implements FontAwesomeDecorator<Labeled, Labeled> {
 
-    private final PrototypingInfoPopupProvider prototypingInfoService;
-    
+    private final IconService iconService;
+
     @Override
-    public Node decorate(Node uiButton, PrototypingUiModel prototypingUiModel) {
-        val span = new HBox();
-        val prototypingLabel = _fx.add(span, new Label("ⓘ"));
-        _fx.add(span, uiButton);
-        prototypingLabel.setTooltip(new Tooltip("Inspect Metamodel"));
-        prototypingLabel.setOnMouseClicked(e->
-            prototypingInfoService.showPrototypingPopup(prototypingUiModel));
-        
-        uiButton.getStyleClass().add("button-prototyping");
-        
-        return span;
+    public Labeled decorate(Labeled uiComponent, Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
+        fontAwesomeUiModel.ifPresent(fa->{
+            val icon = iconService.fontAwesome(fa);
+            icon
+            .map(this::iconForImage)
+            .ifPresent(uiComponent::setGraphic);
+        });
+        return uiComponent;
     }
 
-    
+    private ImageView iconForImage(Image image) {
+        return _fx.iconForImage(image, 16, 16);
+    }
+
 }

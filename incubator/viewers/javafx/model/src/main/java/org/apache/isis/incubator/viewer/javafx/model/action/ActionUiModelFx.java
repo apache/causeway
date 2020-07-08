@@ -48,7 +48,8 @@ public class ActionUiModelFx implements ActionUiModel<MenuItem, Node> {
         val actionMeta = getActionUiMetaModel();
         val menuItem = new MenuItem(actionMeta.getLabel());
         
-        return uiContext.getDecoratorService().decorateMenuItem(menuItem, actionMeta.getFontAwesomeUiModel());
+        return uiContext.getIconDecoratorForMenuItem()
+                .decorate(menuItem, actionMeta.getFontAwesomeUiModel());
     }
 
     @Override
@@ -56,7 +57,8 @@ public class ActionUiModelFx implements ActionUiModel<MenuItem, Node> {
         val actionMeta = getActionUiMetaModel();
         val uiLabel = new Label(actionMeta.getLabel());
         
-        return uiContext.getDecoratorService().decorateLabeled(uiLabel, actionMeta.getFontAwesomeUiModel());
+        return uiContext.getIconDecoratorForLabeled()
+                .decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
     }
 
 

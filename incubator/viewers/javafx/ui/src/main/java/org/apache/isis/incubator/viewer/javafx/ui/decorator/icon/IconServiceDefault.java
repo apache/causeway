@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.services;
+package org.apache.isis.incubator.viewer.javafx.ui.decorator.icon;
 
 import java.util.Map;
 import java.util.Optional;

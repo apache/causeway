@@ -18,7 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 
 public interface UiComponentHandlerFx 

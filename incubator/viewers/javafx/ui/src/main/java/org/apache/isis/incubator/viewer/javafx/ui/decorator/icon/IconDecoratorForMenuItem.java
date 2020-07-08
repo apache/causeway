@@ -16,38 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.services;
+package org.apache.isis.incubator.viewer.javafx.ui.decorator.icon;
 
 import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import org.apache.isis.incubator.viewer.javafx.model.decorator.DecoratorService;
 import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import javafx.scene.Node;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-@Service
+@Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Getter
-public class DecoratorServiceDefault implements DecoratorService {
+public class IconDecoratorForMenuItem implements FontAwesomeDecorator<MenuItem, MenuItem> {
 
     private final IconService iconService;
-
+    
     @Override
-    public MenuItem decorateMenuItem(MenuItem menuItem, Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
+    public MenuItem decorate(MenuItem menuItem, Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
         // TODO honor icon position
 
         fontAwesomeUiModel.ifPresent(fa->{
@@ -58,24 +54,9 @@ public class DecoratorServiceDefault implements DecoratorService {
         });
         return menuItem;
     }
-
-    @Override
-    public Node decorateLabeled(Labeled labeled, Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
-        // TODO honor icon position
-
-        fontAwesomeUiModel.ifPresent(fa->{
-            val icon = iconService.fontAwesome(fa);
-            icon
-            .map(this::iconForImage)
-            .ifPresent(labeled::setGraphic);
-        });
-        return labeled;
-    }
-
+    
     private ImageView iconForImage(Image image) {
         return _fx.iconForImage(image, 16, 16);
     }
-
-
 
 }

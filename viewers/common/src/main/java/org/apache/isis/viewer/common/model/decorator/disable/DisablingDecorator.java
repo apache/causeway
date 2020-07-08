@@ -16,19 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.model.decorator;
+package org.apache.isis.viewer.common.model.decorator.disable;
 
-import java.util.Optional;
+public interface DisablingDecorator<T> {
 
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
-
-import javafx.scene.Node;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.MenuItem;
-
-public interface DecoratorService {
-
-    MenuItem decorateMenuItem(MenuItem menuItem, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
-    Node decorateLabeled(Labeled labeled, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
-
+    void decorate(T uiComponent, DisablingUiModel disableUiModel);
+    
 }

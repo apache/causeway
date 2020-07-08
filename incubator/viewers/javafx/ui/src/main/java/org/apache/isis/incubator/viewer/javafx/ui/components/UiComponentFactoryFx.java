@@ -26,27 +26,28 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
-import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingButtonDecorator;
-import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingFormFieldDecorator;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
+
+import lombok.Getter;
+import lombok.val;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import lombok.Getter;
-import lombok.val;
 
 @Service
 public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
 
     private final boolean isPrototyping;
-    private final PrototypingButtonDecorator prototypingButtonDecorator;
-    private final PrototypingFormFieldDecorator prototypingFormFieldDecorator;
+    private final UiContext uiContext;
     private final ChainOfResponsibility<Request, FormField> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
@@ -56,13 +57,11 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
     @Inject
     private UiComponentFactoryFx(
             IsisSystemEnvironment isisSystemEnvironment,
-            PrototypingButtonDecorator prototypingButtonDecorator,
-            PrototypingFormFieldDecorator prototypingFormFieldDecorator,
+            UiContext uiContext,
             List<UiComponentHandlerFx> handlers) {
         
         this.isPrototyping = isisSystemEnvironment.isPrototyping();
-        this.prototypingButtonDecorator = prototypingButtonDecorator;
-        this.prototypingFormFieldDecorator = prototypingFormFieldDecorator;
+        this.uiContext = uiContext;
         this.chainOfHandlers = ChainOfResponsibility.of(handlers);
         this.registeredHandlers = handlers.stream()
                 .map(Handler::getClass)
@@ -77,19 +76,30 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Component Mapper failed to handle request %s", request));
         
+        val managedMember = request.getObjectFeature(); 
+        
+        uiContext.getDisablingDecoratorForFormField()
+            .decorate(formField, DisablingUiModel.of(managedMember, Where.OBJECT_FORMS));
+        
         return isPrototyping
-                ? prototypingFormFieldDecorator.decorate(formField, PrototypingUiModel.of(request.getObjectFeature()))
+                ? uiContext.getPrototypingDecoratorForFormField()
+                        .decorate(formField, PrototypingUiModel.of(managedMember))
                 : formField;
     }
     
     public Node buttonFor(
             final ManagedAction managedAction, 
             final Consumer<ManagedAction> actionEventHandler) {
+        
         val uiButton = new Button(managedAction.getName());
         uiButton.setOnAction(event->actionEventHandler.accept(managedAction));
+
+        uiContext.getDisablingDecoratorForButton()
+            .decorate(uiButton, DisablingUiModel.of(managedAction, Where.OBJECT_FORMS));
         
         return isPrototyping
-                ? prototypingButtonDecorator.decorate(uiButton, PrototypingUiModel.of(managedAction))
+                ? uiContext.getPrototypingDecoratorForButton()
+                        .decorate(uiButton, PrototypingUiModel.of(managedAction))
                 : uiButton;
     }
     
