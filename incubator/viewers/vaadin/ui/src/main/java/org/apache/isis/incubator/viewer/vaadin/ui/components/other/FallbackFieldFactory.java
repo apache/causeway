@@ -53,11 +53,11 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
     @Override
     public Component handle(ComponentRequest request) {
         
-        val spec = request.getObjectFeature().getSpecification();
+        val spec = request.getManagedFeature().getSpecification();
         
         val debugUiModel = DebugUiModel.of("type not handled")
         .withProperty("ObjectFeature.specification.fullIdentifier",  spec.getFullIdentifier())
-        .withProperty("ObjectFeature.identifier",  request.getObjectFeature().getIdentifier().toString());
+        .withProperty("ObjectFeature.identifier",  request.getManagedFeature().getIdentifier().toString());
         
         val handlerInfo = uiComponentFactory.get().getRegisteredHandlers()
         .stream()
@@ -75,7 +75,7 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
         });
         
         
-        val uiField = new DebugField(request.getObjectFeature().getName());
+        val uiField = new DebugField(request.getManagedFeature().getDisplayLabel());
         uiField.setValue(debugUiModel);
         return uiField;
     }

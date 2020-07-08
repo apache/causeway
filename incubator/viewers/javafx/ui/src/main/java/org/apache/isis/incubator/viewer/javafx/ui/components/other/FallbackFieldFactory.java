@@ -27,8 +27,9 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerF
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
-import javafx.scene.control.Label;
 import lombok.val;
+
+import javafx.scene.control.Label;
 
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.LAST)
@@ -42,9 +43,9 @@ public class FallbackFieldFactory implements UiComponentHandlerFx {
     @Override
     public FormField handle(ComponentRequest request) {
         
-        val spec = request.getObjectFeature().getSpecification();
+        val spec = request.getFeatureSpec();
         val uiField = new Label(spec.getCorrespondingClass().getSimpleName() + " type not handled");
-        val uiLabel = new Label(request.getFeatureLabel());
+        val uiLabel = new Label(request.getDisplayLabel());
         
         return new SimpleFormField(LabelPosition.TOP, uiLabel, uiField);
     }

@@ -41,7 +41,7 @@ public class BlobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public Component handle(ComponentRequest request) {
-        val uiField = new BlobField(request.getFeatureLabel());
+        val uiField = new BlobField(request.getDisplayLabel());
         uiField.setValue(request.getFeatureValue(Blob.class).orElse(null));
         return uiField;
     }

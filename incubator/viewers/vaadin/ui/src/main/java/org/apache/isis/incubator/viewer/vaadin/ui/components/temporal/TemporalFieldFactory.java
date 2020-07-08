@@ -60,7 +60,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         switch(temporalCharacteristic) {
         case DATE_ONLY:{
 
-            val uiField = new DateField(request.getFeatureLabel());
+            val uiField = new DateField(request.getDisplayLabel());
             
             final Binder<ComponentRequest> binder;
             if(request.isFeatureTypeEqualTo(LocalDate.class)) {

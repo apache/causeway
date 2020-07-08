@@ -30,7 +30,8 @@ import org.apache.isis.core.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -45,6 +46,7 @@ public interface UiComponentFactory<B, C> {
     
     B buttonFor(UiComponentFactory.ButtonRequest request);
     C componentFor(UiComponentFactory.ComponentRequest request);
+    C parameterFor(UiComponentFactory.ComponentRequest request);
     
     @Value(staticConstructor = "of")
     public static class ButtonRequest {
@@ -55,31 +57,26 @@ public interface UiComponentFactory<B, C> {
     
     @Value(staticConstructor = "of")
     public static class ComponentRequest {
-        @NonNull private final ManagedMember objectFeature;
+        @NonNull private final ManagedFeature managedFeature;
         @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
         @NonNull private final Where where;
         
+        public static ComponentRequest of(ManagedParameter managedParameter) {
+            return of(managedParameter, Optional.empty(), Where.ANYWHERE);
+        }
+        
         // -- SHORTCUTS
         
-        /**
-         * @return The feature's name. (With the UI to be used as form field title.) 
-         */
-        public String getFeatureLabel() {
-            return getObjectFeature().getName(); //TODO need to check what we actually use with wicket   
+        public String getDisplayLabel() {
+            return managedFeature.getDisplayLabel();   
         }
         
-        /**
-         * @return The specification of the feature's underlying type. 
-         */
         public ObjectSpecification getFeatureSpec() {
-            return getObjectFeature().getSpecification();    
+            return managedFeature.getSpecification();    
         }
         
-        /**
-         * @return The feature's underlying type. 
-         */
         public Class<?> getFeatureType() {
-            return getFeatureSpec().getCorrespondingClass();    
+            return managedFeature.getCorrespondingClass();    
         }
         
         public boolean isFeatureTypeEqualTo(@Nullable Class<?> type) {
@@ -124,12 +121,12 @@ public interface UiComponentFactory<B, C> {
             return getFeatureFacet(facetType)
                     .orElseThrow(()->_Exceptions
                             .noSuchElement("Feature %s has no such facet %s",
-                                    getObjectFeature().getIdentifier(),
+                                    managedFeature.getIdentifier(),
                                     facetType.getName()));    
         }
         
         public <T> Optional<T> getFeatureValue(@Nullable Class<T> type) {
-            val managedProperty = (ManagedProperty)getObjectFeature();
+            val managedProperty = (ManagedProperty)managedFeature;
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type 
             return Optional.ofNullable(managedProperty.getPropertyValue(where))
@@ -139,13 +136,13 @@ public interface UiComponentFactory<B, C> {
         }
 
         public boolean isReadOnly() {
-            return getObjectFeature().checkUsability(where).isPresent();
+            return ((ManagedProperty)managedFeature).checkUsability(where).isPresent();
         }
 
         public Optional<InteractionVeto> setFeatureValue(Object proposedNewValuePojo) {
             //TODO we are loosing any fields that are cached within ManagedObject
             val proposedNewValue = ManagedObject.of(getFeatureSpec(), proposedNewValuePojo);
-            return ((ManagedProperty)getObjectFeature()).modifyProperty(proposedNewValue);
+            return ((ManagedProperty)managedFeature).modifyProperty(proposedNewValue);
         }
         
     }

@@ -47,7 +47,7 @@ public class UuidFieldFactory implements UiComponentHandlerVaa {
     @Override
     public Component handle(ComponentRequest request) {
 
-        val uiField = new TextField(request.getFeatureLabel());
+        val uiField = new TextField(request.getDisplayLabel());
         
         val binder = BinderUtil.requestBinderWithConverter(uiField, UUID.class, new StringToUuidConverter());
         binder.setBean(request);

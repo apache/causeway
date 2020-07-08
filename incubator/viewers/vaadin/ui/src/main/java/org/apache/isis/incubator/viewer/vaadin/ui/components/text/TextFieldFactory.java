@@ -43,7 +43,7 @@ public class TextFieldFactory implements UiComponentHandlerVaa {
     @Override
     public Component handle(ComponentRequest request) {
 
-        val uiField = new TextField(request.getFeatureLabel());
+        val uiField = new TextField(request.getDisplayLabel());
         
         val binder = BinderUtil.requestBinder(uiField, String.class, 
                 builder->builder.withNullRepresentation(""));

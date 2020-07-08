@@ -51,14 +51,6 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
                 .map(Handler::getClass)
                 .collect(Collectors.toList());
     }
-    
-    @Override
-    public Component componentFor(ComponentRequest request) {
-        return chainOfHandlers
-                .handle(request)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Component Mapper failed to handle request %s", request));
-    }
 
     @Override
     public Component buttonFor(ButtonRequest request) {
@@ -81,6 +73,22 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
         
         return uiButton;
         
+    }
+    
+    @Override
+    public Component componentFor(ComponentRequest request) {
+        return chainOfHandlers
+                .handle(request)
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "Component Mapper failed to handle request %s", request));
+    }
+
+    @Override
+    public Component parameterFor(ComponentRequest request) {
+        return chainOfHandlers
+                .handle(request)
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "Component Mapper failed to handle request %s", request));
     }
     
     

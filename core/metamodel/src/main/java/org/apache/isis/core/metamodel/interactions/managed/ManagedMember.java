@@ -41,7 +41,7 @@ import lombok.Setter;
 import lombok.val;
 
 @RequiredArgsConstructor
-public abstract class ManagedMember {
+public abstract class ManagedMember implements ManagedFeature {
 
     // only used to create failure messages
     @RequiredArgsConstructor
@@ -97,6 +97,7 @@ public abstract class ManagedMember {
     
     public abstract MemberType getMemberType();
     
+    @Override
     public ObjectSpecification getSpecification() {
         return getMember().getSpecification();
     }
@@ -109,8 +110,14 @@ public abstract class ManagedMember {
         return getMember().getName();
     }
     
+    @Override
     public Identifier getIdentifier() {
         return getMember().getIdentifier();
+    }
+    
+    @Override
+    public String getDisplayLabel() {
+        return getMember().getName();
     }
     
     @Getter @Setter @NonNull 

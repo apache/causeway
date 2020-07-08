@@ -75,7 +75,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
         
         val uiComponent = new WebViewFitContent(hostServices::showDocument, markupHtml);
         
-        val uiLabel = new Label(request.getFeatureLabel());
+        val uiLabel = new Label(request.getDisplayLabel());
         
         val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
                 .map(LabelAtFacet::label)

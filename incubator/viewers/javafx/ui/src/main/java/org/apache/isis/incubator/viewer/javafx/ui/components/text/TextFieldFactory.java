@@ -31,10 +31,11 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerF
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.MIDPOINT)
@@ -49,16 +50,16 @@ public class TextFieldFactory implements UiComponentHandlerFx {
     @Override
     public FormField handle(ComponentRequest request) {
 
-        val uiLabel = new Label(request.getFeatureLabel());
+        val uiLabel = new Label(request.getDisplayLabel());
 
         //TODO 1) move all the logic that is in the request to the underlying ManagedProperty
         // 2) pass the ManagedProperty over with the request object
         // 3) design for an API to bind a ManagedProperty to a FormField, also make sure this works
         // with Vaadin's FormLayout/Field API
-        val textValue = request.getFeatureValue(String.class)
-                .orElse("");
+//        val textValue = request.getFeatureValue(String.class)
+//                .orElse("");
 
-        val uiComponent = new TextArea(textValue);
+        val uiComponent = new TextArea();
 
         val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
                 .map(LabelAtFacet::label)

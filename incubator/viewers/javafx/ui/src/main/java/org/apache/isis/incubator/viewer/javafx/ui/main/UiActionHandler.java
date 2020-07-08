@@ -26,18 +26,24 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.dialog.Dialogs;
 import org.apache.isis.incubator.viewer.javafx.ui.components.object.ObjectViewFx;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.layout.GridPane;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -54,7 +60,49 @@ public class UiActionHandler {
         if(managedAction.getAction().getParameterCount()>0) {
             // TODO get an ActionPrompt, then on invocation show the result in the content view
             
-            Dialogs.message("Warn", "ActionPrompt not supported yet!", null);
+            //Dialogs.message("Warn", "ActionPrompt not supported yet!", null);
+            
+            val pendingParameterModel = managedAction.getInteractionHead().defaults();
+            
+            Dialog<PendingParameterModel> dialog = new Dialog<>();
+            dialog.setTitle("<Title>");
+            dialog.setHeaderText("<HeaderText>");
+           
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+            val grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+            dialog.getDialogPane().setContent(grid);
+            
+            val actionMeta = managedAction.getAction();
+            
+            actionMeta.getParameters()
+            .forEach(paramMeta->{
+                
+                val paramNr = paramMeta.getNumber(); // zero based
+                
+                val initialValue = pendingParameterModel.getParamValue(paramNr);
+                val managedParameter = ManagedParameter.of(managedAction, paramMeta, initialValue);
+                
+                val uiField = uiComponentFactory.parameterFor(ComponentRequest.of(
+                        managedParameter));
+                
+                grid.add(uiField.getUiLabel(), 0, paramNr);
+                grid.add(uiField.getUiField(), 1, paramNr);
+                
+            });
+            
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == ButtonType.OK) {
+                    return pendingParameterModel;
+                }
+                return null;
+            });
+            
+            dialog.showAndWait().ifPresent(params->{
+                System.out.println("param negotiation result");
+            });
             
             return;
         }

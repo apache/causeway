@@ -39,7 +39,7 @@ public class MarkupFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public Component handle(ComponentRequest request) {
-        val uiField = new MarkupField(request.getFeatureLabel());
+        val uiField = new MarkupField(request.getDisplayLabel());
         uiField.setValue(request.getFeatureValue(org.apache.isis.applib.value.Markup.class).orElse(null));
         return uiField;
     }

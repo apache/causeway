@@ -20,9 +20,11 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
@@ -31,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of")
-public class ManagedParameter {
+public class ManagedParameter implements ManagedFeature {
     @NonNull private final ManagedAction owningAction;
     @NonNull private final ObjectActionParameter parameter;
     
@@ -52,6 +54,21 @@ public class ManagedParameter {
     
     public Optional<InteractionVeto> validate() {
         return validate(getValue());
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return parameter.getIdentifier();
+    }
+
+    @Override
+    public String getDisplayLabel() {
+        return parameter.getName();
+    }
+
+    @Override
+    public ObjectSpecification getSpecification() {
+        return parameter.getSpecification();
     }
     
 }

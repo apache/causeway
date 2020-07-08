@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
@@ -72,7 +73,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, FormField>
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Component Mapper failed to handle request %s", request));
         
-        val managedMember = request.getObjectFeature(); 
+        val managedMember = (ManagedMember) request.getManagedFeature(); 
         
         request.getDisablingUiModelIfAny().ifPresent(disablingUiModel->{
             uiContext.getDisablingDecoratorForFormField()
@@ -104,6 +105,15 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, FormField>
                 ? uiContext.getPrototypingDecoratorForButton()
                         .decorate(uiButton, PrototypingUiModel.of(managedAction))
                 : uiButton;
+    }
+
+    @Override
+    public FormField parameterFor(ComponentRequest request) {
+        val formField = chainOfHandlers
+                .handle(request)
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "Component Mapper failed to handle request %s", request));
+        return formField;
     }
     
     
