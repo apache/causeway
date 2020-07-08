@@ -175,6 +175,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 // TODO Auto-generated method stub
             }
 
+            @SuppressWarnings("unused")
             @Override
             protected void onAction(HasComponents container, ActionLayoutData actionData) {
                 
@@ -196,6 +197,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 
             }
 
+            @SuppressWarnings("unused")
             @Override
             protected void onProperty(HasComponents container, PropertyLayoutData propertyData) {
                 
@@ -207,13 +209,12 @@ public class ObjectViewVaa extends VerticalLayout {
                 .ifPresent(managedProperty -> {
                     
                     interaction.checkUsability(Where.OBJECT_FORMS);
-                    val disabling = DisablingUiModel.of(interaction);
                     
                     val uiProperty = _vaa.add(container, 
                             uiComponentFactory.componentFor(
                                     UiComponentFactory.ComponentRequest.of(
                                             managedProperty,
-                                            disabling,
+                                            DisablingUiModel.of(interaction),
                                             Where.OBJECT_FORMS)));
                     
                     // handle associated actions

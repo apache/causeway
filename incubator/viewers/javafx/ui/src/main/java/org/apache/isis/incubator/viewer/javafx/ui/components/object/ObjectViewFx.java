@@ -169,6 +169,7 @@ public class ObjectViewFx extends VBox {
                 // TODO Auto-generated method stub
             }
 
+            @SuppressWarnings("unused")
             @Override
             protected void onAction(Pane container, ActionLayoutData actionData) {
                 
@@ -179,13 +180,12 @@ public class ObjectViewFx extends VBox {
                 .ifPresent(managedAction -> {
                     
                     interaction.checkUsability(Where.OBJECT_FORMS);
-                    val disabling = DisablingUiModel.of(interaction);
                     
                     val uiButton = _fx.add(container, 
                             uiComponentFactory.buttonFor(
                                     UiComponentFactory.ButtonRequest.of(
                                         managedAction, 
-                                        disabling, 
+                                        DisablingUiModel.of(interaction), 
                                         actionEventHandler)));
                 });
             }
@@ -203,12 +203,11 @@ public class ObjectViewFx extends VBox {
                 .ifPresent(managedProperty -> {
                     
                     interaction.checkUsability(Where.OBJECT_FORMS);
-                    val disabling = DisablingUiModel.of(interaction);
                     
                     val uiPropertyField = uiComponentFactory.componentFor(
                             UiComponentFactory.ComponentRequest.of(
                                     managedProperty,
-                                    disabling,
+                                    DisablingUiModel.of(interaction),
                                     Where.OBJECT_FORMS));
                     
                     formPane.addField(uiPropertyField);
