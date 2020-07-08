@@ -16,19 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.markdown.ui;
+package org.apache.isis.valuetypes.markdown.persistence.jdo.dn5;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
-import org.apache.isis.valuetypes.markdown.ui.components.MarkdownPanelFactoriesForWicket;
+import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 
 @Configuration
 @Import({
-    IsisModuleValMarkdownApplib.class,
-    MarkdownPanelFactoriesForWicket.Parented.class,
-    MarkdownPanelFactoriesForWicket.Standalone.class,
+    IsisModuleValAsciidocApplib.class
 })
-public class IsisModuleValMarkdownUi {
+public class IsisModuleValMarkdownPersistenceJdoDn5 {
 }

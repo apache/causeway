@@ -22,6 +22,7 @@
 
 	<artifactId>isis-valuetypes-markdown-ui</artifactId>
 	<name>Apache Isis Val - Markdown (ui)</name>
+	<packaging>pom</packaging>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.markdown.ui</jar-plugin.automaticModuleName>
@@ -38,11 +39,6 @@
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-metamodel</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
 		</dependency>
 
 		<!-- provides a markdown parser -->
@@ -65,4 +61,7 @@
 
 	</dependencies>
 
+	<modules>
+		<module>wicket</module>
+	</modules>
 </project>

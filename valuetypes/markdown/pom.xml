@@ -35,6 +35,7 @@
 	<modules>
 		<module>applib</module>
 		<module>ui</module>
+		<module>persistence</module>
 	</modules>
 
 	<profiles>

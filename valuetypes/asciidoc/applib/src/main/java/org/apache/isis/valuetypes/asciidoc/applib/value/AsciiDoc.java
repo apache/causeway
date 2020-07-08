@@ -18,16 +18,19 @@
  */
 package org.apache.isis.valuetypes.asciidoc.applib.value;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.value.Markup;
+import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
 /**
  * Immutable value type holding pre-rendered HTML.
  *
  */
-@Value(semanticsProviderName = 
+@Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
-public class AsciiDoc extends Markup {
+@XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
+public class AsciiDoc {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,9 +42,47 @@ public class AsciiDoc extends Markup {
         return new AsciiDoc(html);
     }
 
-    private AsciiDoc(String html) {
-        super(html);
+    private final String html;
+
+    public AsciiDoc() {
+        this(null);
     }
 
+    public AsciiDoc(String html) {
+        this.html = html!=null ? html : "";
+    }
+
+    public String title() {
+        return "AsciiDoc[length="+html.length()+"]";
+    }
+
+    public String asString() {
+        return html;
+    }
+
+    public boolean isEqualTo(final AsciiDoc other) {
+        return other != null && this.html.equals(other.html);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return isEqualTo((AsciiDoc) obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return html.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "AsciiDoc[length="+html.length()+", html="+html+"]";
+    }
 
 }

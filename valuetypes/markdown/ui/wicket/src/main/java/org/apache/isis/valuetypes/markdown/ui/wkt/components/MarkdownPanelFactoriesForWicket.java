@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.valuetypes.markdown.ui.components;
+package org.apache.isis.valuetypes.markdown.ui.wkt.components;
 
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
@@ -45,7 +45,7 @@ public class MarkdownPanelFactoriesForWicket {
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
-                val markupComponent = new MarkdownComponent(id, model);
+                val markupComponent = new org.apache.isis.valuetypes.markdown.ui.wkt.components.MarkdownComponent(id, model);
                 markupComponent.setEnabled(false);
                 return markupComponent;    
             };
