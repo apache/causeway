@@ -31,7 +31,7 @@ import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -40,12 +40,12 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class BinderUtil {
 
-    public static <P, M> Binder<Request> requestBinder(
+    public static <P, M> Binder<ComponentRequest> requestBinder(
             final HasValue<?, P> uiField,
             final Class<M> modelValueType,
-            final Function<BindingBuilder<Request, P>, BindingBuilder<Request, M>> chain) {
+            final Function<BindingBuilder<ComponentRequest, P>, BindingBuilder<ComponentRequest, M>> chain) {
         
-        val binder = new Binder<Request>();
+        val binder = new Binder<ComponentRequest>();
         val propagator = new Propagator<M>(modelValueType);
         
         chain.apply(binder.forField(uiField))
@@ -65,11 +65,11 @@ public final class BinderUtil {
      * @param nullRepresentation 
      * @return
      */
-    public static <P> Binder<Request> requestBinder(
+    public static <P> Binder<ComponentRequest> requestBinder(
             final HasValue<?, P> uiField,
             final Class<P> fieldValueType) {
         
-        val binder = new Binder<Request>();
+        val binder = new Binder<ComponentRequest>();
         val propagator = new Propagator<P>(fieldValueType);
         
         binder.forField(uiField)
@@ -90,7 +90,7 @@ public final class BinderUtil {
      * @param converter
      * @return
      */
-    public static <P, M> Binder<Request> requestBinderWithConverter(
+    public static <P, M> Binder<ComponentRequest> requestBinderWithConverter(
             final HasValue<?, P> uiField,
             final Class<M> modelValueType,
             final Converter<P, M> converter) {
@@ -105,7 +105,7 @@ public final class BinderUtil {
         private static final long serialVersionUID = 1L;
 
         private final Class<P> pojoType;
-        private Request request;
+        private ComponentRequest request;
         
         @Override
         public Result<P> convertToModel(P newValue, ValueContext context) {
@@ -124,12 +124,12 @@ public final class BinderUtil {
             return value; // identity function
         }
         
-        public P init(Request request) {
+        public P init(ComponentRequest request) {
             this.request = request;
             return request.getFeatureValue(pojoType).orElse(null);
         }
         
-        public P propagate(Request request, P newValue) {
+        public P propagate(ComponentRequest request, P newValue) {
             return newValue; // identity function
         }
         
@@ -143,7 +143,7 @@ public final class BinderUtil {
         JAVA_TIME_LOCAL_DATE{
 
             @Override
-            public Binder<Request> bind(HasValue<?, LocalDate> uiField) {
+            public Binder<ComponentRequest> bind(HasValue<?, LocalDate> uiField) {
                 return BinderUtil.requestBinder(uiField, LocalDate.class);
             }
             
@@ -151,14 +151,14 @@ public final class BinderUtil {
         JAVA_SQL_DATE{
 
             @Override
-            public Binder<Request> bind(HasValue<?, LocalDate> uiField) {
+            public Binder<ComponentRequest> bind(HasValue<?, LocalDate> uiField) {
                 return BinderUtil.requestBinderWithConverter(uiField, java.sql.Date.class, 
                         new LocalDateToDateConverter().chain(new DateToSqlDateConverter()));
             }
             
         };
         
-        public abstract Binder<Request> bind(final HasValue<?, LocalDate> uiField);
+        public abstract Binder<ComponentRequest> bind(final HasValue<?, LocalDate> uiField);
         
     }
     

@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.debug.DebugField;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 import org.apache.isis.viewer.common.model.debug.DebugUiModel;
 
 import lombok.val;
@@ -46,12 +46,12 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
     @Inject private Provider<UiComponentFactoryVaa> uiComponentFactory;
 
     @Override
-    public boolean isHandling(Request request) {
+    public boolean isHandling(ComponentRequest request) {
         return true; // the last handler in the chain
     }
 
     @Override
-    public Component handle(Request request) {
+    public Component handle(ComponentRequest request) {
         
         val spec = request.getObjectFeature().getSpecification();
         

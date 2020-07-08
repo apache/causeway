@@ -183,9 +183,10 @@ public class ObjectViewFx extends VBox {
                     
                     val uiButton = _fx.add(container, 
                             uiComponentFactory.buttonFor(
-                                    managedAction, 
-                                    disabling, 
-                                    actionEventHandler));
+                                    UiComponentFactory.ButtonRequest.of(
+                                        managedAction, 
+                                        disabling, 
+                                        actionEventHandler)));
                 });
             }
 
@@ -205,7 +206,7 @@ public class ObjectViewFx extends VBox {
                     val disabling = DisablingUiModel.of(interaction);
                     
                     val uiPropertyField = uiComponentFactory.componentFor(
-                            UiComponentFactory.Request.of(
+                            UiComponentFactory.ComponentRequest.of(
                                     managedProperty,
                                     disabling,
                                     Where.OBJECT_FORMS));

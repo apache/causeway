@@ -19,8 +19,6 @@
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -30,11 +28,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
 import lombok.Getter;
@@ -44,11 +40,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 
 @Service
-public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
+public class UiComponentFactoryFx implements UiComponentFactory<Node, FormField> {
 
     private final boolean isPrototyping;
     private final UiContext uiContext;
-    private final ChainOfResponsibility<Request, FormField> chainOfHandlers;
+    private final ChainOfResponsibility<ComponentRequest, FormField> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
     @Getter 
@@ -69,7 +65,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
     }
     
     @Override
-    public FormField componentFor(Request request) {
+    public FormField componentFor(ComponentRequest request) {
         
         val formField = chainOfHandlers
                 .handle(request)
@@ -89,11 +85,12 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
                 : formField;
     }
     
-    //@Override
-    public Node buttonFor(
-            final ManagedAction managedAction, 
-            final Optional<DisablingUiModel> disablingUiModelIfAny,
-            final Consumer<ManagedAction> actionEventHandler) {
+    @Override
+    public Node buttonFor(ButtonRequest request) {
+
+        val managedAction = request.getManagedAction();
+        val disablingUiModelIfAny = request.getDisablingUiModelIfAny();
+        val actionEventHandler = request.getActionEventHandler();
         
         val uiButton = new Button(managedAction.getName());
         uiButton.setOnAction(event->actionEventHandler.accept(managedAction));

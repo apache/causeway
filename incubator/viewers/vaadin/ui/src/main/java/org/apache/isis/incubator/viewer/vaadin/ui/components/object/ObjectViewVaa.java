@@ -185,25 +185,15 @@ public class ObjectViewVaa extends VerticalLayout {
                 .ifPresent(managedAction -> {
                     
                     interaction.checkUsability(Where.OBJECT_FORMS);
-                    val disabling = DisablingUiModel.of(interaction);
                     
                     val uiButton = _vaa.add(container, 
                             uiComponentFactory.buttonFor(
-                                    managedAction, 
-                                    disabling, 
-                                    actionEventHandler));
-                    
+                                    UiComponentFactory.ButtonRequest.of(
+                                            managedAction, 
+                                            DisablingUiModel.of(interaction), 
+                                            actionEventHandler)));
                 });
                 
-                ActionInteraction.start(owner, actionData.getId())
-                .checkVisibility(Where.OBJECT_FORMS)
-                .getManagedAction()
-                .ifPresent(managedAction -> {
-                    val uiButton = _vaa.newButton(
-                            container, 
-                            managedAction.getName(), 
-                            event->actionEventHandler.accept(managedAction));
-                });
             }
 
             @Override
@@ -221,7 +211,7 @@ public class ObjectViewVaa extends VerticalLayout {
                     
                     val uiProperty = _vaa.add(container, 
                             uiComponentFactory.componentFor(
-                                    UiComponentFactory.Request.of(
+                                    UiComponentFactory.ComponentRequest.of(
                                             managedProperty,
                                             disabling,
                                             Where.OBJECT_FORMS)));

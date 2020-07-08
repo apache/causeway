@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import javafx.scene.control.Label;
 import lombok.val;
@@ -35,12 +35,12 @@ import lombok.val;
 public class FallbackFieldFactory implements UiComponentHandlerFx {
     
     @Override
-    public boolean isHandling(Request request) {
+    public boolean isHandling(ComponentRequest request) {
         return true; // the last handler in the chain
     }
 
     @Override
-    public FormField handle(Request request) {
+    public FormField handle(ComponentRequest request) {
         
         val spec = request.getObjectFeature().getSpecification();
         val uiField = new Label(spec.getCorrespondingClass().getSimpleName() + " type not handled");

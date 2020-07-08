@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.common.model.binding;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -28,6 +29,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -39,13 +41,20 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
-public interface UiComponentFactory<C> {
+public interface UiComponentFactory<B, C> {
     
-    C componentFor(UiComponentFactory.Request request);
-    //B buttonFor(ActionInteraction actionInteraction);
+    B buttonFor(UiComponentFactory.ButtonRequest request);
+    C componentFor(UiComponentFactory.ComponentRequest request);
     
     @Value(staticConstructor = "of")
-    public static class Request {
+    public static class ButtonRequest {
+        @NonNull private final ManagedAction managedAction;
+        @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
+        @NonNull private final Consumer<ManagedAction> actionEventHandler;
+    }
+    
+    @Value(staticConstructor = "of")
+    public static class ComponentRequest {
         @NonNull private final ManagedMember objectFeature;
         @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
         @NonNull private final Where where;
@@ -148,7 +157,7 @@ public interface UiComponentFactory<C> {
      * @param <T> - the Handler's Response type
      */
     static interface Handler<T> 
-    extends ChainOfResponsibility.Handler<UiComponentFactory.Request, T> {
+    extends ChainOfResponsibility.Handler<UiComponentFactory.ComponentRequest, T> {
     }
     
 }

@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -42,12 +42,12 @@ import lombok.val;
 public class TextFieldFactory implements UiComponentHandlerFx {
 
     @Override
-    public boolean isHandling(Request request) {
+    public boolean isHandling(ComponentRequest request) {
         return request.hasFeatureFacet(StringValueFacet.class);
     }
 
     @Override
-    public FormField handle(Request request) {
+    public FormField handle(ComponentRequest request) {
 
         val uiLabel = new Label(request.getFeatureLabel());
 

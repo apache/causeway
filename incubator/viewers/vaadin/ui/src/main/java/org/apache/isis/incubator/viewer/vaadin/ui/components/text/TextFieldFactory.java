@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BinderUtil;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 
@@ -36,12 +36,12 @@ import lombok.val;
 public class TextFieldFactory implements UiComponentHandlerVaa {
 
     @Override
-    public boolean isHandling(Request request) {
+    public boolean isHandling(ComponentRequest request) {
         return request.hasFeatureFacet(StringValueFacet.class);
     }
 
     @Override
-    public Component handle(Request request) {
+    public Component handle(ComponentRequest request) {
 
         val uiField = new TextField(request.getFeatureLabel());
         
