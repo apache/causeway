@@ -19,6 +19,7 @@
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,6 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -78,8 +78,10 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
         
         val managedMember = request.getObjectFeature(); 
         
-        uiContext.getDisablingDecoratorForFormField()
-            .decorate(formField, DisablingUiModel.of(managedMember, Where.OBJECT_FORMS));
+        request.getDisablingUiModelIfAny().ifPresent(disablingUiModel->{
+            uiContext.getDisablingDecoratorForFormField()
+            .decorate(formField, disablingUiModel);
+        });
         
         return isPrototyping
                 ? uiContext.getPrototypingDecoratorForFormField()
@@ -87,15 +89,19 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
                 : formField;
     }
     
+    //@Override
     public Node buttonFor(
             final ManagedAction managedAction, 
+            final Optional<DisablingUiModel> disablingUiModelIfAny,
             final Consumer<ManagedAction> actionEventHandler) {
         
         val uiButton = new Button(managedAction.getName());
         uiButton.setOnAction(event->actionEventHandler.accept(managedAction));
 
-        uiContext.getDisablingDecoratorForButton()
-            .decorate(uiButton, DisablingUiModel.of(managedAction, Where.OBJECT_FORMS));
+        disablingUiModelIfAny.ifPresent(disablingUiModel->{
+            uiContext.getDisablingDecoratorForButton()
+            .decorate(uiButton, disablingUiModel);
+        });
         
         return isPrototyping
                 ? uiContext.getPrototypingDecoratorForButton()

@@ -44,14 +44,21 @@ public class _vaa {
         container.add(component);
         return component;
     }
-    
-    public static Button newButton(HasComponents container, String label, ComponentEventListener<ClickEvent<Button>> eventHandler) {
+
+    public static Button newButton(String label) {
         val component = new Button(label);
-        container.add(component);
         component.getStyle().set("margin-left", "0.5em");
         component.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        return component;
+    }
+    
+    public static Button newButton(HasComponents container, String label, ComponentEventListener<ClickEvent<Button>> eventHandler) {
+        val component = newButton(label);
+        container.add(component);
         component.addClickListener(eventHandler);
         return component;
     }
+    
+
     
 }

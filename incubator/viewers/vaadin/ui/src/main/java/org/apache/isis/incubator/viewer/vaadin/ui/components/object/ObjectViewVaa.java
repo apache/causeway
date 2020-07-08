@@ -52,6 +52,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryV
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
@@ -178,6 +179,22 @@ public class ObjectViewVaa extends VerticalLayout {
             protected void onAction(HasComponents container, ActionLayoutData actionData) {
                 
                 val owner = objectInteractor.getManagedObject();
+                val interaction = ActionInteraction.start(owner, actionData.getId());
+                interaction.checkVisibility(Where.OBJECT_FORMS)
+                .getManagedAction()
+                .ifPresent(managedAction -> {
+                    
+                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    val disabling = DisablingUiModel.of(interaction);
+                    
+                    val uiButton = _vaa.add(container, 
+                            uiComponentFactory.buttonFor(
+                                    managedAction, 
+                                    disabling, 
+                                    actionEventHandler));
+                    
+                });
+                
                 ActionInteraction.start(owner, actionData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
                 .getManagedAction()
@@ -194,15 +211,20 @@ public class ObjectViewVaa extends VerticalLayout {
                 
                 val owner = objectInteractor.getManagedObject();
                 
-                PropertyInteraction.start(owner, propertyData.getId())
-                .checkVisibility(Where.OBJECT_FORMS)
+                val interaction = PropertyInteraction.start(owner, propertyData.getId());
+                interaction.checkVisibility(Where.OBJECT_FORMS)
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
+                    
+                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    val disabling = DisablingUiModel.of(interaction);
+                    
                     val uiProperty = _vaa.add(container, 
                             uiComponentFactory.componentFor(
                                     UiComponentFactory.Request.of(
-                                            Where.OBJECT_FORMS,
-                                            managedProperty)));
+                                            managedProperty,
+                                            disabling,
+                                            Where.OBJECT_FORMS)));
                     
                     // handle associated actions
                     val actionBar = newActionPanel(container);

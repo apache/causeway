@@ -26,6 +26,7 @@ import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -37,18 +38,14 @@ public class DisablingDecoratorForButton implements DisablingDecorator<Button> {
     @Override
     public void decorate(Button uiButton, DisablingUiModel disableUiModel) {
 
-        disableUiModel.getReason().ifPresent(reason->{
+        val reason = disableUiModel.getReason();
 
-            uiButton.setTooltip(new Tooltip(reason));
-            uiButton.disableProperty().set(true);
-            uiButton.setOnAction(null);
+        uiButton.setTooltip(new Tooltip(reason));
+        uiButton.disableProperty().set(true);
+        uiButton.setOnAction(null);
 
-            //uiComponent.getStyleClass().add("button-disabled");
-
-
-        });
+        //uiComponent.getStyleClass().add("button-disabled");
 
     }
-
 
 }

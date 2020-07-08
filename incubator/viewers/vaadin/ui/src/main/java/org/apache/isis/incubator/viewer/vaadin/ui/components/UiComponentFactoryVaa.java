@@ -19,6 +19,8 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -29,9 +31,13 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.Getter;
+import lombok.val;
 
 @Service
 public class UiComponentFactoryVaa implements UiComponentFactory<Component> {
@@ -56,6 +62,29 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component> {
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Component Mapper failed to handle request %s", request));
+    }
+
+    //@Override
+    public Component buttonFor(
+            ManagedAction managedAction, 
+            Optional<DisablingUiModel> disablingUiModelIfAny,
+            Consumer<ManagedAction> actionEventHandler) {
+
+        val uiButton = _vaa.newButton(managedAction.getName());
+        
+        disablingUiModelIfAny.ifPresent(disablingUiModel->{
+//            uiContext.getDisablingDecoratorForButton()
+//                .decorate(uiButton, disablingUiModel);
+            
+            uiButton.setEnabled(false);
+        });
+        
+        if(!disablingUiModelIfAny.isPresent()) {
+            uiButton.addClickListener(event->actionEventHandler.accept(managedAction));
+        }
+        
+        return uiButton;
+        
     }
     
     

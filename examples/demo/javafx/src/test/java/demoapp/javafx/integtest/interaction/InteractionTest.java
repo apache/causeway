@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
 
@@ -34,11 +35,21 @@ import demoapp.javafx.integtest.DemoFxTestAbstract;
 class InteractionTest extends DemoFxTestAbstract {
 
     @Test 
+    void actionInteraction_whenEnabled_shouldHaveNoVeto() {
+        
+        val managedAction = startActionInteractionOn(TooltipDemo.class, "noArgAction")
+                .getManagedAction().get(); // should not throw  
+        
+        assertTrue(managedAction.checkVisibility(Where.OBJECT_FORMS).isEmpty()); // is visible
+        assertTrue(managedAction.checkUsability(Where.OBJECT_FORMS).isEmpty()); // can invoke 
+    }
+    
+    @Test 
     void actionInteraction_whenDisabled_shouldHaveVeto() {
         
         val managedAction = startActionInteractionOn(TooltipDemo.class, "disabledAction")
                 .getManagedAction().get(); // should not throw  
-        assertNotNull(managedAction);
+        
         
         assertTrue(managedAction.checkVisibility(Where.OBJECT_FORMS).isEmpty()); // is visible
         
@@ -47,6 +58,28 @@ class InteractionTest extends DemoFxTestAbstract {
         assertNotNull(veto);
         
         assertEquals("Disabled for demonstration.", veto.getReason());
+    }
+    
+    @Test 
+    void actionInteraction_whenEnabled_shouldProvideProperDecoratorModels() {
+        
+        val actionInteraction = startActionInteractionOn(TooltipDemo.class, "noArgAction")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+        
+        val disablingUiModel = DisablingUiModel.of(actionInteraction);
+        assertTrue(disablingUiModel.isEmpty());
+    }
+    
+    @Test 
+    void actionInteraction_whenDisabled_shouldProvideProperDecoratorModels() {
+        
+        val actionInteraction = startActionInteractionOn(TooltipDemo.class, "disabledAction")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+        
+        val disablingUiModel = DisablingUiModel.of(actionInteraction).get();
+        assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
     }
     
     

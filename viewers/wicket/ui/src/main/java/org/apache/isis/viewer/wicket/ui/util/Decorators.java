@@ -81,15 +81,13 @@ public class Decorators {
     public final static class Disable implements DisablingDecorator<Component> {
         @Override
         public void decorate(Component uiComponent, DisablingUiModel disableUiModel) {
-            if (disableUiModel.isDisabled()) {
-                
-                disableUiModel.getReason()
-                    .map(TooltipUiModel::ofBody)
-                    .ifPresent(tooltipUiModel->getTooltip().decorate(uiComponent, tooltipUiModel));
-                
-                uiComponent.add(new CssClassAppender("disabled"));
-                uiComponent.setEnabled(false);
-            }
+            
+            val tooltipUiModel = TooltipUiModel.ofBody(disableUiModel.getReason());
+            getTooltip().decorate(uiComponent, tooltipUiModel);
+            
+            uiComponent.add(new CssClassAppender("disabled"));
+            uiComponent.setEnabled(false);
+            
         }
     }
     
@@ -173,13 +171,12 @@ public class Decorators {
             val actionLinkUiComponent = actionUiModel.getUiComponent(); // UI component #2
             val actionMeta = actionUiModel.getActionUiMetaModel();
             
-            val disableUiModel = actionMeta.getDisableUiModel();
-            getDisableDecorator().decorate(uiComponent, disableUiModel);
+            actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
+                getDisableDecorator().decorate(uiComponent, disableUiModel);
+                getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason()));
+            });
             
-            if (disableUiModel.isDisabled()) {
-                getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason().orElse(null)));
-                
-            } else {
+            if (!actionMeta.getDisableUiModel().isPresent()) {
 
                 if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
                     getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));

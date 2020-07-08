@@ -44,6 +44,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormPane;
 import org.apache.isis.incubator.viewer.javafx.ui.components.panel.TitledPanel;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
@@ -172,14 +173,19 @@ public class ObjectViewFx extends VBox {
             protected void onAction(Pane container, ActionLayoutData actionData) {
                 
                 val owner = objectInteractor.getManagedObject();
-                val interaction = ActionInteraction.start(owner, actionData.getId())
-                .checkVisibility(Where.OBJECT_FORMS);
-                
-                //interaction.checkUsability(Where.OBJECT_FORMS); //TODO use any interaction veto
-                
-                interaction.getManagedAction()
+                val interaction = ActionInteraction.start(owner, actionData.getId());
+                interaction.checkVisibility(Where.OBJECT_FORMS)
+                .getManagedAction()
                 .ifPresent(managedAction -> {
-                    _fx.add(container, uiComponentFactory.buttonFor(managedAction, actionEventHandler));
+                    
+                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    val disabling = DisablingUiModel.of(interaction);
+                    
+                    val uiButton = _fx.add(container, 
+                            uiComponentFactory.buttonFor(
+                                    managedAction, 
+                                    disabling, 
+                                    actionEventHandler));
                 });
             }
 
@@ -190,15 +196,19 @@ public class ObjectViewFx extends VBox {
                 
                 val formPane = (FormPane) container;
                 
-                PropertyInteraction.start(owner, propertyData.getId())
-                .checkVisibility(Where.OBJECT_FORMS)
+                val interaction = PropertyInteraction.start(owner, propertyData.getId());
+                interaction.checkVisibility(Where.OBJECT_FORMS)
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
                     
+                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    val disabling = DisablingUiModel.of(interaction);
+                    
                     val uiPropertyField = uiComponentFactory.componentFor(
                             UiComponentFactory.Request.of(
-                                    Where.OBJECT_FORMS,
-                                    managedProperty));
+                                    managedProperty,
+                                    disabling,
+                                    Where.OBJECT_FORMS));
                     
                     formPane.addField(uiPropertyField);
                     

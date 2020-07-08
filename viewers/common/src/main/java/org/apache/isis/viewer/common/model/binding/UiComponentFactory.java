@@ -33,19 +33,22 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
-public interface UiComponentFactory<T> {
+public interface UiComponentFactory<C> {
     
-    T componentFor(UiComponentFactory.Request request);
+    C componentFor(UiComponentFactory.Request request);
+    //B buttonFor(ActionInteraction actionInteraction);
     
     @Value(staticConstructor = "of")
     public static class Request {
-        @NonNull private final Where where;
         @NonNull private final ManagedMember objectFeature;
+        @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
+        @NonNull private final Where where;
         
         // -- SHORTCUTS
         

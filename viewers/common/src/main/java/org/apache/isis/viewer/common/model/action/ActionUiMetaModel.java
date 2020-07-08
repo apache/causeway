@@ -62,7 +62,7 @@ public final class ActionUiMetaModel implements Serializable {
     @Getter private final SemanticsOf semantics;
     @Getter private final PromptStyle promptStyle;
     @Getter private final Parameters parameters;
-    @Getter private final DisablingUiModel disableUiModel;
+    @Getter private final Optional<DisablingUiModel> disableUiModel;
     /**
      * An action with no parameters AND an are-you-sure semantics
      * does require an immediate confirmation dialog.
@@ -129,7 +129,7 @@ public final class ActionUiMetaModel implements Serializable {
     
     // -- USABILITY
     
-    private static DisablingUiModel disabledUiModelFor(
+    private static Optional<DisablingUiModel> disabledUiModelFor(
             @NonNull final ManagedObject actionHolder, 
             @NonNull final ObjectAction objectAction) {
             

@@ -27,6 +27,7 @@ import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -35,14 +36,14 @@ public class DisablingDecoratorForFormField implements DisablingDecorator<FormFi
     @Override
     public void decorate(FormField formField, DisablingUiModel disableUiModel) {
         
-        disableUiModel.getReason().ifPresent(reason->{
+        val reason = disableUiModel.getReason();
         
             //formField.setDisabledReason(); //TODO lookup vaadin api as rolemodel
             //formField.getStyleClass().add("button-disabled");
             //uiButton.setTooltip(new Tooltip(reason));
             //uiButton.disableProperty().set(true);
             
-        });
+        
         
     }
 

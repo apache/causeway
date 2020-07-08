@@ -23,15 +23,13 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
+import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
@@ -39,39 +37,24 @@ public class DisablingUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    final boolean disabled;
-    @NonNull final Optional<String> reason;
-
+    @NonNull final String reason;
+    
     /**
      * @param disabled - overwritten to be {@code true}, whenever {@code reason} is not empty
      * @param reason
+     * @deprecated use interaction instead
      */
-    public static DisablingUiModel of(boolean disabled, @Nullable String reason) {
-        return _Strings.isEmpty(reason) 
-                ? of(disabled, Optional.empty())
-                : of(true, Optional.of(reason));
+    public static Optional<DisablingUiModel> of(boolean disabled, @Nullable String reason) {
+        reason = _Strings.nullToEmpty(reason);
+        disabled|=_Strings.isNotEmpty(reason);
+        return disabled
+                ? Optional.of(of(reason))
+                : Optional.empty();
     }
 
-    public static DisablingUiModel of(@NonNull ManagedMember managedMember, @NonNull Where where) {
-        val vetoIfAny = managedMember.checkVisibility(where);
-        if(vetoIfAny.isPresent()) {
-            return of(true, vetoIfAny.get().getReason());
-        }
-        return of(false, Optional.empty());
+    public static Optional<DisablingUiModel> of(@NonNull MemberInteraction<?, ?> memberInteraction) {
+        return memberInteraction.getInteractionVeto()
+                .map(veto->of(veto.getReason()));
     }
-    
-//    public static DisablingUiModel of(ManagedAction managedAction) {
-//        
-//        val vetoIfAny = managedMember.checkVisibility(where);
-//        if(vetoIfAny.isPresent()) {
-//            return of(true, vetoIfAny.get().getReason());
-//        }
-//        return of(false, Optional.empty());
-//        
-//        managedAction.getAction().isUsable(target, interactionInitiatedBy, where)
-//        
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
 
 }
