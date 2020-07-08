@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.model.icon;
 
 import java.util.Optional;
 
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 
 import javafx.scene.image.Image;
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui.services;
+package org.apache.isis.incubator.viewer.javafx.ui.main;
 
 import javax.inject.Inject;
 
@@ -27,7 +27,7 @@ import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactory
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 
 import lombok.Getter;
@@ -51,9 +51,9 @@ public class UiContextDefault implements UiContext {
     // -- DECORATORS
 
     @Getter(onMethod_ = {@Override})
-    private final FontAwesomeDecorator<Labeled, Labeled> iconDecoratorForLabeled;
+    private final IconDecorator<Labeled, Labeled> iconDecoratorForLabeled;
     @Getter(onMethod_ = {@Override})
-    private final FontAwesomeDecorator<MenuItem, MenuItem> iconDecoratorForMenuItem;
+    private final IconDecorator<MenuItem, MenuItem> iconDecoratorForMenuItem;
    
     @Getter(onMethod_ = {@Override})
     private final DisablingDecorator<Button> disablingDecoratorForButton;

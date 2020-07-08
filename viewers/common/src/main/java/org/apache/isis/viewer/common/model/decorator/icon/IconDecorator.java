@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.decorator.fa;
+package org.apache.isis.viewer.common.model.decorator.icon;
 
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ import java.util.Optional;
  * @param <T> UI component type to decorate
  * @param <R> resulting UI component type
  */
-public interface FontAwesomeDecorator<T, R> {
+public interface IconDecorator<T, R> {
     
     /**
      * corresponds to the webjars path as provided by the maven artifact 

@@ -30,8 +30,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModel;
@@ -65,7 +65,7 @@ public class Decorators {
 
     }
 
-    public final static class Icon implements FontAwesomeDecorator<Component, Component> {
+    public final static class Icon implements IconDecorator<Component, Component> {
 
         @Override
         public Component decorate(

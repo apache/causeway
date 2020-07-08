@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 
 import lombok.AccessLevel;

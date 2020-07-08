@@ -31,8 +31,8 @@ import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.danger.DangerDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
@@ -62,7 +62,7 @@ public class Decorators {
     @Getter(lazy = true) private final static Danger danger = new Danger();
     
     
-    @Getter(lazy = true) private final static IconDecorator icon = new IconDecorator();
+    @Getter(lazy = true) private final static IconDecoratorWkt icon = new IconDecoratorWkt();
     @Getter(lazy = true) private final static MissingIconDecorator missingIcon = new MissingIconDecorator();
     
     // -- ADVANCED DECORATORS
@@ -133,7 +133,7 @@ public class Decorators {
         }
     }
     
-    public final static class IconDecorator implements FontAwesomeDecorator<Component, Component> {
+    public final static class IconDecoratorWkt implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
             if(fontAwesome.isPresent()) {
@@ -143,7 +143,7 @@ public class Decorators {
         }
     }
 
-    public final static class MissingIconDecorator implements FontAwesomeDecorator<Component, Component> {
+    public final static class MissingIconDecorator implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
             if(!fontAwesome.isPresent()) {

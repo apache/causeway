@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.decorator.fa;
+package org.apache.isis.viewer.common.model.decorator.icon;
 
 import java.io.Serializable;
 import java.util.Optional;

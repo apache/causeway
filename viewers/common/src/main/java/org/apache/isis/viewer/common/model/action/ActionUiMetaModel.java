@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
 import lombok.AccessLevel;

@@ -20,7 +20,7 @@ package org.apache.isis.viewer.common.model.action.decorator;
 
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 
@@ -43,7 +43,7 @@ public class ActionUiDecorator<T> {
     private final DisablingDecorator<T> disableDecorator;
     private final ConfirmDecorator<T> confirmDecorator;
     private final PrototypingDecorator<T, T> prototypingDecorator;
-    private final FontAwesomeDecorator<T, T> iconDecorator;
+    private final IconDecorator<T, T> iconDecorator;
 
 
 

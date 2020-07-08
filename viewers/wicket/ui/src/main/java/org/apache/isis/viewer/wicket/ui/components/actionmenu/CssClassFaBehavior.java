@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

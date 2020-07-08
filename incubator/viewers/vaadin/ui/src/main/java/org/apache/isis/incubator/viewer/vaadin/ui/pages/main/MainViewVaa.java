@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.val;
@@ -77,7 +77,7 @@ implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
 
-        val faStyleSheet = LocalResourceUtil.ResourceDescriptor.webjars(FontAwesomeDecorator.FONTAWESOME_RESOURCE);
+        val faStyleSheet = LocalResourceUtil.ResourceDescriptor.webjars(IconDecorator.FONTAWESOME_RESOURCE);
         LocalResourceUtil.addStyleSheet(faStyleSheet);
         
         setPrimarySection(Section.NAVBAR);

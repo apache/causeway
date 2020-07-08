@@ -26,8 +26,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -38,7 +38,7 @@ import javafx.scene.image.ImageView;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class IconDecoratorForLabeled implements FontAwesomeDecorator<Labeled, Labeled> {
+public class IconDecoratorForLabeled implements IconDecorator<Labeled, Labeled> {
 
     private final IconService iconService;
 

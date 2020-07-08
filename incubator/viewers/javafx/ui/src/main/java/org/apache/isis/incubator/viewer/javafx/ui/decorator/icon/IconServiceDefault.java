@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

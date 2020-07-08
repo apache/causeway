@@ -22,7 +22,7 @@ import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 
 import javafx.scene.Node;
@@ -37,8 +37,8 @@ public interface UiContext {
     
     // -- DECORATORS
     
-    FontAwesomeDecorator<Labeled, Labeled> getIconDecoratorForLabeled();
-    FontAwesomeDecorator<MenuItem, MenuItem> getIconDecoratorForMenuItem();
+    IconDecorator<Labeled, Labeled> getIconDecoratorForLabeled();
+    IconDecorator<MenuItem, MenuItem> getIconDecoratorForMenuItem();
    
     DisablingDecorator<Button> getDisablingDecoratorForButton();
     DisablingDecorator<FormField> getDisablingDecoratorForFormField();

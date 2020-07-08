@@ -36,8 +36,8 @@ import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.Prototyp
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandler;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
+import org.apache.isis.incubator.viewer.javafx.ui.main.UiContextDefault;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
-import org.apache.isis.incubator.viewer.javafx.ui.services.UiContextDefault;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 /**
