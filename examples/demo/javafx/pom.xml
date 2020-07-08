@@ -123,7 +123,7 @@
 			<type>pom</type>
 		</dependency>
 
-		<!-- INCUBATOR: VAADIN VIEWER -->
+		<!-- INCUBATOR: JAVAFX VIEWER -->
 
 		<dependency>
 			<groupId>org.apache.isis.incubator.viewer</groupId>
@@ -133,6 +133,15 @@
 		</dependency>
 
 		<!-- EXTENSIONS -->
+
+		<!-- INTEGRATION TESTING -->
+		
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-integtests</artifactId>
+			<scope>test</scope>
+			<type>pom</type>
+		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
 
