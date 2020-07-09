@@ -20,13 +20,41 @@ package org.apache.isis.incubator.viewer.javafx.model.form;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 
-import javafx.scene.Node;
-
-public interface FormField {
+/**
+ * 
+ * Heavily inspired by com.vaadin.flow.component.customfield.CustomField
+ *
+ * @param <T>
+ */
+public interface FormField<T> {
 
     LabelPosition getLabelPosition();
+    
+    /**
+     * This method should return the value of the field, based on value of the internal fields.
+     *
+     * @return new value of the field.
+     */
+    T generateModelValue();
+    
+    /**
+     * This method should be implemented to set the value of the fields contained
+     * in this custom field according to the value of the parameter.
+     * It can also be use to show the value to the user in some way, 
+     * like placing it in an element contained on the field.
+     *
+     * @param newPresentationValue The new presentation value.
+     */
+    void setPresentationValue(T value);
+    
+    /**
+     * Gets the label for the field.
+     */
+    String getLabel();
 
-    Node getUiLabel();
-    Node getUiField();
+    /**
+     * Sets the label for the field.
+     */
+    void setLabel(String label);
 
 }

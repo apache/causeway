@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
@@ -31,10 +32,10 @@ import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class DisablingDecoratorForFormField implements DisablingDecorator<FormField> {
+public class DisablingDecoratorForFormField implements DisablingDecorator<FormFieldFx<?>> {
 
     @Override
-    public void decorate(FormField formField, DisablingUiModel disableUiModel) {
+    public void decorate(FormFieldFx<?> formField, DisablingUiModel disableUiModel) {
         
         val reason = disableUiModel.getReason();
         
