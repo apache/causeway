@@ -20,17 +20,17 @@ package org.apache.isis.valuetypes.asciidoc.applib.value;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
 /**
  * Immutable value type holding pre-rendered HTML.
  *
  */
-@Value(semanticsProviderName =
-        "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
+//@Value(semanticsProviderName =
+//        "org.apache.isis.valuetypes.asciidoc.metamodel.facets.AsciiDocValueFacetUsingSemanticsProviderFactory")
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
-public class AsciiDoc {
+public class AsciiDoc implements HasHtml {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,7 +56,7 @@ public class AsciiDoc {
         return "AsciiDoc[length="+html.length()+"]";
     }
 
-    public String asString() {
+    public String asHtml() {
         return html;
     }
 

@@ -21,7 +21,8 @@
 	</parent>
 
 	<artifactId>isis-valuetypes-sse-ui</artifactId>
-	<name>Apache Isis Val - Server Sent Events (ui)</name>
+	<name>Apache Isis Val - SSE (ui)</name>
+	<packaging>pom</packaging>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.sse.ui</jar-plugin.automaticModuleName>
@@ -29,10 +30,10 @@
 	</properties>
 
 	<dependencies>
-
+	
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-sse-metamodel</artifactId>
+			<artifactId>isis-valuetypes-sse-applib</artifactId>
 		</dependency>
 
 		<dependency>
@@ -40,18 +41,10 @@
 			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-webapp</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
 
 	</dependencies>
 
+	<modules>
+		<module>wicket</module>
+	</modules>
 </project>

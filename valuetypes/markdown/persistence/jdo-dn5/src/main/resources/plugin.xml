@@ -39,7 +39,7 @@
     -->
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.ext.asciidoc-string"
+                name="isis.ext.markdown-string"
                 member-type="org.apache.isis.valuetypes.markdown.applib.value.Markdown"
                 datastore-type="java.lang.String"
                 converter-class="org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.converters.IsisMarkdownConverter"/>

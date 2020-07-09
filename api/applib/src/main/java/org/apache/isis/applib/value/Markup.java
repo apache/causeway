@@ -19,9 +19,6 @@
 
 package org.apache.isis.applib.value;
 
-import java.io.Serializable;
-
-import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Value;
@@ -36,7 +33,7 @@ import org.apache.isis.applib.util.JaxbAdapters;
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
 @XmlJavaTypeAdapter(JaxbAdapters.MarkupAdapter.class)   // for JAXB view model support
-public class Markup {   // TODO: should be final
+public class Markup implements HasHtml {   // TODO: should be final
 
     private final String html;
 
@@ -48,7 +45,7 @@ public class Markup {   // TODO: should be final
         this.html = html!=null ? html : "";
     }
 
-    public String asString() {
+    public String asHtml() {
         return html;
     }
 

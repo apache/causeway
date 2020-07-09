@@ -54,7 +54,7 @@ public class MarkupField extends CustomField<Markup> {
             return;
         }
 
-        div.add(new Html("<div>" + markup.asString() + "</div>"));
+        div.add(new Html("<div>" + markup.asHtml() + "</div>"));
     }
 
 }

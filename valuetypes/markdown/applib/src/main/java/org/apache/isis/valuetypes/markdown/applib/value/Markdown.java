@@ -21,17 +21,15 @@ package org.apache.isis.valuetypes.markdown.applib.value;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.value.Markup;
+import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
 /**
  * Immutable value type holding pre-rendered HTML.
  *
  */
-@Value(semanticsProviderName = 
-        "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
-public class Markdown {
+public class Markdown implements HasHtml {
 
     private static final long serialVersionUID = 1L;
 
@@ -57,7 +55,7 @@ public class Markdown {
         return "Markdown[length="+html.length()+"]";
     }
 
-    public String asString() {
+    public String asHtml() {
         return html;
     }
 

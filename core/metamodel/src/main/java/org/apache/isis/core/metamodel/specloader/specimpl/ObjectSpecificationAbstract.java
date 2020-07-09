@@ -101,6 +101,7 @@ public abstract class ObjectSpecificationAbstract
 extends FacetHolderImpl 
 implements ObjectSpecification {
 
+
     private static class Subclasses {
         private final Set<ObjectSpecification> classes = _Sets.newConcurrentHashSet();
 
@@ -875,15 +876,20 @@ implements ObjectSpecification {
         return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
 
-    protected BeanSort managedObjectSort; 
+    private BeanSort managedObjectSort;
 
     @Override
     public BeanSort getBeanSort() {
         if(managedObjectSort==null) {
-            managedObjectSort = sortOf(this);
+            setManagedObjectSort(sortOf(this));
         }
         return managedObjectSort;
     }
+
+    protected void setManagedObjectSort(BeanSort managedObjectSort) {
+        this.managedObjectSort = managedObjectSort;
+    }
+
 
     // -- convenience isXxx (looked up from facets)
     @Override

@@ -20,7 +20,6 @@ package org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.converters;
 
 import org.datanucleus.store.types.converters.TypeConverter;
 
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 public class IsisMarkdownConverter implements TypeConverter<Markdown, String>{
@@ -30,7 +29,7 @@ public class IsisMarkdownConverter implements TypeConverter<Markdown, String>{
     @Override
     public String toDatastoreType(final Markdown memberValue) {
         return memberValue != null
-                ? memberValue.asString()
+                ? memberValue.asHtml()
                         : null;
     }
 

@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.value.Markup;
+import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
@@ -67,10 +67,10 @@ public class MarkupComponent extends WebComponent {
 
             final Object value = adapter.getPojo();
 
-            if(!(value instanceof Markup))
+            if(!(value instanceof HasHtml))
                 return fallback;
 
-            return ((Markup)value).asString();
+            return ((HasHtml)value).asHtml();
         }
 
         return modelObject.toString();

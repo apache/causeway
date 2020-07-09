@@ -100,7 +100,7 @@ public final class JaxbAdapters {
             if(v==null) {
                 return null;
             }
-            final String html = v.asString();
+            final String html = v.asHtml();
             return encoder.encodeToString(_Strings.toBytes(html, StandardCharsets.UTF_8));
         }
     }
