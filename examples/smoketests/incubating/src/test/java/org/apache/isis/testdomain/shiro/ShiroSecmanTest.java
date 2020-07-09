@@ -63,7 +63,7 @@ import lombok.val;
 })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("does not work with surefire")
-class UnstableShiroSecmanTest extends AbstractShiroTest {
+class ShiroSecmanTest extends AbstractShiroTest {
 
     @Inject SecurityModuleConfig securityConfig;
     @Inject ServiceInjector serviceInjector;

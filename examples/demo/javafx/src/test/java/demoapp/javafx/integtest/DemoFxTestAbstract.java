@@ -23,16 +23,10 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
-import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
-import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
-
-import lombok.val;
 
 import demoapp.dom.DemoModule;
 
@@ -49,29 +43,10 @@ import demoapp.dom.DemoModule;
 public abstract class DemoFxTestAbstract extends IsisIntegrationTestAbstract {
     
     @Inject protected UiContext uiContext;
-    @Inject protected MetaModelContext metaModelContext;
     
     @BeforeAll
     static void beforeAll() {
        //JavafxViewer.launch(DemoAppJavaFx.class, _Constants.emptyStringArray);    
-    }
-    
-    protected ActionInteraction startActionInteractionOn(Class<?> type, String actionId) {
-        val viewModel = factoryService.viewModel(type);
-        val managedObject = metaModelContext.getObjectManager().adapt(viewModel);
-        return ActionInteraction.start(managedObject, actionId);
-    }
-    
-    protected PropertyInteraction startPropertyInteractionOn(Class<?> type, String propertyId) {
-        val viewModel = factoryService.viewModel(type);
-        val managedObject = metaModelContext.getObjectManager().adapt(viewModel);
-        return PropertyInteraction.start(managedObject, propertyId);
-    }
-    
-    protected CollectionInteraction startCollectionInteractionOn(Class<?> type, String collectionId) {
-        val viewModel = factoryService.viewModel(type);
-        val managedObject = metaModelContext.getObjectManager().adapt(viewModel);
-        return CollectionInteraction.start(managedObject, collectionId);
     }
     
 }

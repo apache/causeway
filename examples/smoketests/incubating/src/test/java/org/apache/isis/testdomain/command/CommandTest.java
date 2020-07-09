@@ -24,7 +24,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,8 +56,7 @@ import lombok.val;
     IsisPresets.SilenceWicket
     ,IsisPresets.UseLog4j2Test
 })
-@DirtiesContext // because of the temporary installed AuditerServiceProbe
-//@Incubating("UNDER CONSTRUCTION")
+//@DirtiesContext // because of the temporary installed AuditerServiceProbe
 class CommandTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
