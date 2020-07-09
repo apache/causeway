@@ -18,7 +18,6 @@
  */
 package org.apache.isis.testdomain.interact;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -30,12 +29,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract.CommandSupport;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
@@ -45,7 +46,7 @@ import lombok.val;
         classes = { 
                 Configuration_headless.class,
                 Configuration_usingInteractionDomain.class,
-
+                CommandSupport.class
         }, 
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
@@ -136,7 +137,7 @@ class InteractionTest extends InteractionTestAbstract {
         assertEquals(2, actionMeta.getParameterCount());
     }
     
-    @Test @Disabled("bug")
+    @Test
     void actionInteraction_whenEnabled_shouldAllowInvocation() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled")
@@ -144,7 +145,7 @@ class InteractionTest extends InteractionTestAbstract {
         .checkUsability(Where.OBJECT_FORMS);
         
         val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
-        assertEquals(99, (int)result.getActionReturnedObject().getPojo());
+        assertEquals(99, (int)result.getActionReturnedObject().getPojo());    
     }
 
     @Test
@@ -157,6 +158,22 @@ class InteractionTest extends InteractionTestAbstract {
         assertThrows(IllegalAccessException.class, ()->{
             actionInteraction.getResultElseThrow(veto->_Exceptions.illegalAccess("%s", veto.toString()));    
         });
+    }
+    
+    @Test
+    void actionInteraction_withParams_shouldProduceCorrectResult() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+        .checkVisibility(Where.OBJECT_FORMS)
+        .checkUsability(Where.OBJECT_FORMS);
+        
+        val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
+        
+        actionInteraction.useParameters(__->params, 
+                (managedParameter, veto)-> fail(veto.toString()));
+        
+        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
+        assertEquals(46, (int)result.getActionReturnedObject().getPojo());
     }
     
 

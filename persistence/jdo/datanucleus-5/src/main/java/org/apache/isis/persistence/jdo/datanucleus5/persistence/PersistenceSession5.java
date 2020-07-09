@@ -169,7 +169,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             .addInstanceLifecycleListener((InstanceLifecycleListener)metricsService, (Class[]) null);
         }
 
-        final Command command = createCommand();
+        final Command command = commandService.create();
         final Interaction interaction = new Interaction();
 
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
@@ -186,13 +186,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
 
         this.state = State.OPEN;
-    }
-
-    private Command createCommand() {
-        final Command command = commandService.create();
-
-        serviceInjector.injectServicesInto(command);
-        return command;
     }
 
     // -- close

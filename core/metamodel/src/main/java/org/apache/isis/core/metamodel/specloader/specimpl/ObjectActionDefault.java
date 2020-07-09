@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.collections.CanVector;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -622,6 +623,9 @@ implements ObjectAction {
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
+        _Assert.assertNotNull(command, "No command available with current thread, "
+                + "are we missing an interaction context?");
+        
         if (command.getExecutor() != Command.Executor.USER) {
             return;
         }

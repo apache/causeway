@@ -19,6 +19,7 @@
 package org.apache.isis.testing.integtestsupport.applib;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.event.EventListener;
@@ -41,6 +42,8 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAf
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Convenient base class to extend for integration tests. 
@@ -63,18 +66,19 @@ public abstract class IsisIntegrationTestAbstract {
      */
     @Service
     @Order(OrderPrecedence.MIDPOINT)
+    @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class CommandSupport {
 
-        private final CommandContext commandContext;
-
-        @Inject
-        public CommandSupport(final CommandContext commandContext) {
-            this.commandContext = commandContext;
-        }
+        private final Provider<CommandContext> commandContextProvider;
 
         @EventListener
         public void on(final TransactionAfterBeginEvent event) {
-            final Command command = commandContext.getCommand();
+            setupCommand();
+        }
+        
+        private void setupCommand() {
+            val commandContext = commandContextProvider.get();
+            val command = commandContext.getCommand();
             if(command == null) {
                 return;
             }
@@ -82,9 +86,9 @@ public abstract class IsisIntegrationTestAbstract {
             if(executor != Command.Executor.OTHER) {
                 return;
             }
-
             command.internal().setExecutor(Command.Executor.USER);
         }
+        
     }
 
     /**

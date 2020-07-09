@@ -20,8 +20,7 @@ package org.apache.isis.applib.services.command;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,9 +31,10 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command.Executor;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Command}.
@@ -50,9 +50,12 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
-@Log4j2
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+//@Log4j2
 public class CommandContext {
 
+    private final ServiceInjector serviceInjector;
+    
     @Getter
     private Command command;
 
@@ -62,6 +65,9 @@ public class CommandContext {
      */
     public void setCommand(final Command command) {
         this.command = command;
+        if(command!=null) {
+            serviceInjector.injectServicesInto(command);
+        }
     }
 
     public Optional<Executor> getCurrentExecutor() {

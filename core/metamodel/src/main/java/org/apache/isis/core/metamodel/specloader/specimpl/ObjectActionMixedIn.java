@@ -160,7 +160,8 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
         final ManagedObject owner = head.getOwner();
         final ManagedObject target = mixinAdapterFor(mixinType, owner);
-        _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification());
+        _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(), 
+                "head has the wrong target (should be a mixin adapter, but is the owner adapter)");
         
         setupCommand(head.getTarget(), arguments);
         return mixinAction.executeInternal(

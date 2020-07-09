@@ -6,6 +6,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
@@ -13,6 +14,7 @@ import lombok.val;
 public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
     
     @Inject protected ObjectManager objectManager;
+    @Inject protected IsisInteractionFactory interactionFactory;
 
     protected ActionInteraction startActionInteractionOn(Class<?> type, String actionId) {
         val viewModel = factoryService.viewModel(type);
