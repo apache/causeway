@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -172,6 +174,39 @@ class InteractionTest extends InteractionTestAbstract {
         
         val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
         assertEquals(46, (int)result.getActionReturnedObject().getPojo());
+    }
+
+    @Test
+    void actionInteraction_withTooManyParams_shouldIgnoreOverflow() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+        .checkVisibility(Where.OBJECT_FORMS)
+        .checkUsability(Where.OBJECT_FORMS);
+        
+        val params = Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
+        
+        actionInteraction.useParameters(__->params, 
+                (managedParameter, veto)-> fail(veto.toString()));
+        
+        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
+        assertEquals(46, (int)result.getActionReturnedObject().getPojo());
+    }
+    
+    @Test
+    void actionInteraction_withTooLittleParams_shouldFail() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+        .checkVisibility(Where.OBJECT_FORMS)
+        .checkUsability(Where.OBJECT_FORMS);
+        
+        val params = Can.of(objectManager.adapt(12));
+        
+        assertThrows(NoSuchElementException.class, ()->{
+            
+            actionInteraction.useParameters(__->params, 
+                    (managedParameter, veto)-> fail(veto.toString()));
+        });
+
     }
     
 

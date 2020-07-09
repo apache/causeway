@@ -133,7 +133,7 @@ public class Configuration_headless {
         public void setupCommandCreateIfMissing() {
             
             val commandContext = commandContextProvider.get();
-            val command = Optional.ofNullable(commandContext.getCommand())
+            val command = Optional.<Command>ofNullable(commandContext.getCommand())
                     .orElseGet(()->{
                         val newCommand = commandService.create();
                         commandContext.setCommand(newCommand);
@@ -147,7 +147,7 @@ public class Configuration_headless {
             
             val interactionContext = interactionContextProvider.get();
             @SuppressWarnings("unused")
-            val interaction = Optional.ofNullable(interactionContext.getInteraction())
+            val interaction = Optional.<Interaction>ofNullable(interactionContext.getInteraction())
                     .orElseGet(()->{
                         val newInteraction = new Interaction();
                         interactionContext.setInteraction(newInteraction);
