@@ -160,127 +160,127 @@ public final class CommonDtoUtils {
     public static <T extends ValueDto> T setValueOn(
             final T valueDto,
             final ValueType valueType,
-            final Object val,
+            final Object pojo,
             final BookmarkService bookmarkService) {
-        if(val instanceof Collection) {
-            final Collection<?> collection = (Collection<?>) val;
+        if(pojo instanceof Collection) {
+            final Collection<?> collection = (Collection<?>) pojo;
             final CollectionDto collectionDto = asCollectionDto(collection, valueType, bookmarkService);
             valueDto.setCollection(collectionDto);
             return valueDto;
         }
         switch (valueType) {
         case STRING: {
-            final String argValue = (String) val;
+            final String argValue = (String) pojo;
             valueDto.setString(argValue);
             return valueDto;
         }
         case BYTE: {
-            final Byte argValue = (Byte) val;
+            final Byte argValue = (Byte) pojo;
             valueDto.setByte(argValue);
             return valueDto;
         }
         case SHORT: {
-            final Short argValue = (Short) val;
+            final Short argValue = (Short) pojo;
             valueDto.setShort(argValue);
             return valueDto;
         }
         case INT: {
-            final Integer argValue = (Integer) val;
+            final Integer argValue = (Integer) pojo;
             valueDto.setInt(argValue);
             return valueDto;
         }
         case LONG: {
-            final Long argValue = (Long) val;
+            final Long argValue = (Long) pojo;
             valueDto.setLong(argValue);
             return valueDto;
         }
         case CHAR: {
-            final Character argValue = (Character) val;
+            final Character argValue = (Character) pojo;
             valueDto.setChar("" + argValue);
             return valueDto;
         }
         case BOOLEAN: {
-            final Boolean argValue = (Boolean) val;
+            final Boolean argValue = (Boolean) pojo;
             valueDto.setBoolean(argValue);
             return valueDto;
         }
         case FLOAT: {
-            final Float argValue = (Float) val;
+            final Float argValue = (Float) pojo;
             valueDto.setFloat(argValue);
             return valueDto;
         }
         case DOUBLE: {
-            final Double argValue = (Double) val;
+            final Double argValue = (Double) pojo;
             valueDto.setDouble(argValue);
             return valueDto;
         }
         case BIG_INTEGER: {
-            final BigInteger argValue = (BigInteger) val;
+            final BigInteger argValue = (BigInteger) pojo;
             valueDto.setBigInteger(argValue);
             return valueDto;
         }
         case BIG_DECIMAL: {
-            final BigDecimal argValue = (BigDecimal) val;
+            final BigDecimal argValue = (BigDecimal) pojo;
             valueDto.setBigDecimal(argValue);
             return valueDto;
         }
         case LOCAL_DATE: {
-            final LocalDate argValue = (LocalDate) val;
+            final LocalDate argValue = (LocalDate) pojo;
             valueDto.setLocalDate(XmlCalendarFactory.create(argValue));
             return valueDto;
         }
         case LOCAL_TIME: {
-            final LocalTime argValue = (LocalTime) val;
+            final LocalTime argValue = (LocalTime) pojo;
             valueDto.setLocalTime(XmlCalendarFactory.create(argValue));
             return valueDto;
         }
         case LOCAL_DATE_TIME: {
-            final LocalDateTime argValue = (LocalDateTime) val;
+            final LocalDateTime argValue = (LocalDateTime) pojo;
             valueDto.setLocalDateTime(XmlCalendarFactory.create(argValue));
             return valueDto;
         }
         case OFFSET_DATE_TIME: {
-            final OffsetDateTime argValue = (OffsetDateTime) val;
+            final OffsetDateTime argValue = (OffsetDateTime) pojo;
             valueDto.setOffsetDateTime(XmlCalendarFactory.create(argValue));
             return valueDto;
         }
         case OFFSET_TIME: {
-            final OffsetTime argValue = (OffsetTime) val;
+            final OffsetTime argValue = (OffsetTime) pojo;
             valueDto.setOffsetTime(XmlCalendarFactory.create(argValue));
             return valueDto;
         }
         case ZONED_DATE_TIME: {
-            final ZonedDateTime argValue = (ZonedDateTime) val;
+            final ZonedDateTime argValue = (ZonedDateTime) pojo;
             valueDto.setZonedDateTime(XmlCalendarFactory.create(argValue));
             return valueDto;
         }
         case JODA_DATE_TIME: {
-            final org.joda.time.DateTime argValue = (org.joda.time.DateTime) val;
+            final org.joda.time.DateTime argValue = (org.joda.time.DateTime) pojo;
             valueDto.setOffsetDateTime(JodaDateTimeXMLGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
         case JODA_LOCAL_DATE_TIME: {
-            final org.joda.time.LocalDateTime argValue = (org.joda.time.LocalDateTime) val;
+            final org.joda.time.LocalDateTime argValue = (org.joda.time.LocalDateTime) pojo;
             valueDto.setLocalDateTime(JodaLocalDateTimeXMLGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
         case JODA_LOCAL_DATE: {
-            final org.joda.time.LocalDate argValue = (org.joda.time.LocalDate) val;
+            final org.joda.time.LocalDate argValue = (org.joda.time.LocalDate) pojo;
             valueDto.setLocalDate(JodaLocalDateXMLGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
         case JODA_LOCAL_TIME: {
-            final org.joda.time.LocalTime argValue = (org.joda.time.LocalTime) val;
+            final org.joda.time.LocalTime argValue = (org.joda.time.LocalTime) pojo;
             valueDto.setLocalTime(JodaLocalTimeXMLGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
         case JAVA_SQL_TIMESTAMP: {
-            final java.sql.Timestamp argValue = (java.sql.Timestamp) val;
+            final java.sql.Timestamp argValue = (java.sql.Timestamp) pojo;
             valueDto.setTimestamp(JavaSqlTimestampXmlGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
         case ENUM: {
-            final Enum<?> argValue = (Enum<?>) val;
+            final Enum<?> argValue = (Enum<?>) pojo;
             if(argValue == null) {
                 return null;
             }
@@ -291,11 +291,11 @@ public final class CommonDtoUtils {
             return valueDto;
         }
         case REFERENCE: {
-            final Bookmark bookmark = val instanceof Bookmark
-                    ? (Bookmark) val
-                            : bookmarkService!=null 
-                                ? bookmarkService.bookmarkFor(val) 
-                                        : null;
+            final Bookmark bookmark = pojo instanceof Bookmark
+                    ? (Bookmark) pojo
+                    : bookmarkService!=null 
+                            ? bookmarkService.bookmarkFor(pojo) 
+                            : null;
 
             if (bookmark != null) {
                 OidDto argValue = bookmark.toOidDto();
@@ -305,7 +305,7 @@ public final class CommonDtoUtils {
         }
         case BLOB: {
 
-            final Blob blob = (Blob) val;
+            final Blob blob = (Blob) pojo;
             if(blob != null) {
                 final BlobDto blobDto = new BlobDto();
                 blobDto.setName(blob.getName());
@@ -316,7 +316,7 @@ public final class CommonDtoUtils {
             return valueDto;
         }
         case CLOB: {
-            final Clob clob = (Clob) val;
+            final Clob clob = (Clob) pojo;
             if(clob != null) {
                 final ClobDto clobDto = new ClobDto();
                 clobDto.setName(clob.getName());

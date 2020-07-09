@@ -89,6 +89,17 @@ public interface RepositoryService {
 
     // end::refguide[]
     /**
+     * Removes all instances of the domain object.
+     *
+     * <p>
+     *     Intended primarily for testing purposes.
+     * </p>
+     */
+    // tag::refguide[]
+    <T> void removeAll(Class<T> cls);                       // <.>
+
+    // end::refguide[]
+    /**
      * As {@link #allInstances(Class, long, long)}, but but returning all instances rather than just those
      *      * within the specified range..
      */
