@@ -26,7 +26,10 @@ public class PrimitiveShortJdoSeedService extends SeedServiceAbstract {
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
                     .map(PrimitiveShortJdo::new)
-                    .forEach(repositoryService::persist);
+                                        .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject

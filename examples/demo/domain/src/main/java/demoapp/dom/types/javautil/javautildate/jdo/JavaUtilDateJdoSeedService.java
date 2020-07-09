@@ -28,7 +28,10 @@ public class JavaUtilDateJdoSeedService extends SeedServiceAbstract {
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
                     .map(JavaUtilDateJdo::new)
-                    .forEach(repositoryService::persist);
+                                        .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject

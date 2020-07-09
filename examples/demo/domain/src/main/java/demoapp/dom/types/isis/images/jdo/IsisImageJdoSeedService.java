@@ -29,7 +29,10 @@ public class IsisImageJdoSeedService extends SeedServiceAbstract {
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
                     .map(IsisImageJdo::new)
-                    .forEach(repositoryService::persist);
+                    .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject

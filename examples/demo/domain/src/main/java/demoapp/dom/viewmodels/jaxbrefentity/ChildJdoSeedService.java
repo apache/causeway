@@ -32,7 +32,10 @@ public class ChildJdoSeedService {
         protected void execute(ExecutionContext executionContext) {
             Stream.of("Fred", "Mary", "Joe")
                     .map(ChildJdo::new)
-                    .forEach(repositoryService::persist);
+                                        .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject
