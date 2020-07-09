@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.internal.base._Casts;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -43,9 +42,11 @@ final class Can_Multiple<T> implements Can<T> {
 
     private final List<T> elements;
 
-    @Getter(lazy=true, onMethod=@__({@Override})) 
-    private final Optional<T> first = Optional.of(elements.get(0));
-
+    @Override
+    public Optional<T> getFirst() {
+        return Optional.of(elements.get(0));
+    }
+    
     @Override
     public Cardinality getCardinality() {
         return Cardinality.MULTIPLE;
