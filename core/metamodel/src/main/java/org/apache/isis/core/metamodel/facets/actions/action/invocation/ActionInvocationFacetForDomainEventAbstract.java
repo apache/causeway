@@ -329,7 +329,7 @@ implements ImperativeFacet {
         } else {
             if(entityState.isPersistable()) {
                 log.warn("was unable to get a bookmark for the command result, "
-                        + "that an entity {}", resultAdapter);
+                        + "which is an entity: {}", resultAdapter);
             }
         }
         

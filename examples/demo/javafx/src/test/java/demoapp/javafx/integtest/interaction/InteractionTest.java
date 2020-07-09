@@ -29,6 +29,7 @@ import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
 
+import demoapp.dom.actions.depargs.DependentArgsActionDemo;
 import demoapp.dom.tooltip.TooltipDemo;
 import demoapp.javafx.integtest.DemoFxTestAbstract;
 
@@ -83,13 +84,41 @@ class InteractionTest extends DemoFxTestAbstract {
     }
     
     @Test 
-    void test0() {
+    void actionInteraction_shouldProvideActionMetadata() {
         
-        val actionInteraction = startActionInteractionOn(TooltipDemo.class, "withArguments")
+        val actionInteraction = startActionInteractionOn(TooltipDemo.class, "biArgAction")
                 .checkVisibility(Where.OBJECT_FORMS)
                 .checkUsability(Where.OBJECT_FORMS);
         
-        actionInteraction.getManagedAction().get(); // should not throw
+        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        val actionMeta = managedAction.getAction();
+        assertEquals(2, actionMeta.getParameterCount());
+        
+    }
+    
+    @Test 
+    void mixinActionInteraction_shouldProvideActionMetadata() {
+        
+        val actionInteraction = startActionInteractionOn(DependentArgsActionDemo.class, "useChoices")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+        
+        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        val actionMeta = managedAction.getAction();
+        assertEquals(2, actionMeta.getParameterCount());
+        
+    }
+    
+    @Test 
+    void actionInteraction_shouldProvideChoices() {
+        
+        val actionInteraction = startActionInteractionOn(DependentArgsActionDemo.class, "useChoices")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+        
+        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        val actionMeta = managedAction.getAction();
+        assertEquals(2, actionMeta.getParameterCount());
         
     }
     

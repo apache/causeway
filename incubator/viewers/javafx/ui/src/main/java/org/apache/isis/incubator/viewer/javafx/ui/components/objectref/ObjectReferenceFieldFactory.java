@@ -45,7 +45,8 @@ public class ObjectReferenceFieldFactory implements UiComponentHandlerFx {
     @Override
     public boolean isHandling(ComponentRequest request) {
         //return request.hasFeatureFacet(StringValueFacet.class);
-        return request.getFeatureSpec().isEntityOrViewModel();
+        return request.getFeatureSpec().isEntityOrViewModel()
+                || request.getFeatureType().isEnum();
     }
 
     @Override

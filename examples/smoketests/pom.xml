@@ -24,6 +24,7 @@
 	<artifactId>smoketests</artifactId>
 
 	<name>Apache Isis App - Smoketests</name>
+	<packaging>pom</packaging>
 
 	<properties>
 		<!--  mvn clean install -Dskip.smokeTests=true -->
@@ -350,6 +351,11 @@
 			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
 	</dependencies>
+	
+	<modules>
+		<module>stable</module>
+<!-- 		<module>incubating</module> -->
+	</modules>
 
 
 </project>
