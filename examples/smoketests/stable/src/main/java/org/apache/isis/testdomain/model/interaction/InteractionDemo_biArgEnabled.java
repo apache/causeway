@@ -32,7 +32,11 @@ public class InteractionDemo_biArgEnabled {
     
     @Model
     public int act(int a, int b) {
-        return a+b;
+        return a + b;
     }
     
+    @Model
+    public int[] choices1Act() {
+        return new int[] {1, 2, 3, 4};
+    }
 }

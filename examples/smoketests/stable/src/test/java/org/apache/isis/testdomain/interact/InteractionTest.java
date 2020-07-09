@@ -28,16 +28,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
+import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
@@ -209,22 +213,58 @@ class InteractionTest extends InteractionTestAbstract {
 
     }
     
+//  @Test //TODO populate defaults in test domain, so we can test these 
+//  void actionInteraction_shouldProvideParameterDefaults() {
+//
+//      val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+//              .checkVisibility(Where.OBJECT_FORMS)
+//              .checkUsability(Where.OBJECT_FORMS);
+//
+//      val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+//      val actionMeta = managedAction.getAction();
+//      
+//      managedAction.getInteractionHead().defaults();
+//      
+//
+//  }
+    
+    @Test 
+    void actionInteraction_shouldProvideChoices() {
 
-//    @Test //TODO simplify the API
-//    void actionInteraction_shouldProvideChoices() {
-//
-//        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-//                .checkVisibility(Where.OBJECT_FORMS)
-//                .checkUsability(Where.OBJECT_FORMS);
-//
-//        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-//        val actionMeta = managedAction.getAction();
-//        assertEquals(2, actionMeta.getParameterCount());
-//
-//    }
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+
+        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        val actionMeta = managedAction.getAction();
+        
+        val pendingArgs = managedAction.getInteractionHead().defaults();
+        
+        val paramMetaList = actionMeta.getParameters();
+        
+        val param0Meta = paramMetaList.getElseFail(0);
+        val param1Meta = paramMetaList.getElseFail(1);
+        
+        //TODO simplify the API
+        
+        val choices0 = param0Meta.getChoices(pendingArgs, InteractionInitiatedBy.USER); 
+        val choices1 = param1Meta.getChoices(pendingArgs, InteractionInitiatedBy.USER);
+        
+        assertTrue(choices0.isEmpty());
+        
+        val expectedChoices = new InteractionDemo_biArgEnabled(null).choices1Act();
+        val actualChoices = choices1.map(ManagedObject::getPojo);
+        
+        assertComponentWiseEquals(expectedChoices, actualChoices);
+        
+    }
+    
+        
     
   //TODO test whether actions do emit their domain events
   //TODO test whether actions can be vetoed via domain event interception
+  //TODO test command reification
+  //TODO test whether interactions spawn their own transactions, commands, interactions(applib)
 
 
 }

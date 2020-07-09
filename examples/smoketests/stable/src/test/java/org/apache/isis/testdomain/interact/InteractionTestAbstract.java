@@ -2,6 +2,10 @@ package org.apache.isis.testdomain.interact;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
@@ -34,5 +38,16 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
         return CollectionInteraction.start(managedObject, collectionId);
     }
 
+    
+    protected void assertComponentWiseEquals(Object a, Object b) {
+        
+        val array1 = _NullSafe.streamAutodetect(a)
+            .collect(_Arrays.toArray(Object.class));
+        val array2 = _NullSafe.streamAutodetect(b)
+                .collect(_Arrays.toArray(Object.class));
+        
+        assertArrayEquals(array1, array2);
+        
+    }
     
 }
