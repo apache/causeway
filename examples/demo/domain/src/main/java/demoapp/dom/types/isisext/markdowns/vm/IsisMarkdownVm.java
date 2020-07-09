@@ -60,7 +60,10 @@ public class IsisMarkdownVm
     }
 
 //tag::class[]
-    @Title(prepend = "Markdown view model: ")
+    public String title() {
+        return "Markdown view model";
+    }
+    
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter

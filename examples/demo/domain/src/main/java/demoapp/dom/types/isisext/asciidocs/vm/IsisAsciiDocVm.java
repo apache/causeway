@@ -60,7 +60,10 @@ public class IsisAsciiDocVm
     }
 
 //tag::class[]
-    @Title(prepend = "AsciiDoc view model: ")
+    public String title() {
+        return "AsciiDoc view model";
+    }
+
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
