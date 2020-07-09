@@ -86,6 +86,13 @@ public final class _Exceptions {
         _With.requires(format, "format");
         return new IllegalStateException(String.format(format, args));
     }
+    
+    public static IllegalAccessException illegalAccess(
+            final String format,
+            final @Nullable Object ... args) {
+        _With.requires(format, "format");
+        return new IllegalAccessException(String.format(format, args));
+    }
 
     public static final NoSuchElementException noSuchElement() {
         return new NoSuchElementException();

@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action
 @RequiredArgsConstructor
-public class InteractionDemo_noArgEnabled {
+public class InteractionDemo_noArgDisabled {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
@@ -34,5 +34,11 @@ public class InteractionDemo_noArgEnabled {
     public Integer act() {
         return 99;
     }
+    
+    @Model
+    public String disableAct() {
+        return "Disabled for demonstration.";
+    }
+    
     
 }

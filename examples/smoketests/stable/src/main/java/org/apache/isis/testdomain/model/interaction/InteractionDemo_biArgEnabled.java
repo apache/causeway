@@ -25,14 +25,14 @@ import lombok.RequiredArgsConstructor;
 
 @Action
 @RequiredArgsConstructor
-public class InteractionDemo_noArgEnabled {
+public class InteractionDemo_biArgEnabled {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
     
     @Model
-    public Integer act() {
-        return 99;
+    public int act(int a, int b) {
+        return a+b;
     }
     
 }
