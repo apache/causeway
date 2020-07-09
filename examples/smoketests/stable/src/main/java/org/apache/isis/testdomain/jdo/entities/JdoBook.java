@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
         objectType = "testdomain.jdo.Book",
         publishing=Publishing.ENABLED, 
         auditing = Auditing.ENABLED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
 @Log4j2
 public class JdoBook extends JdoProduct {
