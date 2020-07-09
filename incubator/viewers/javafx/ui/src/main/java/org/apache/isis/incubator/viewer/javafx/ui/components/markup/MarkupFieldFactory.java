@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
@@ -47,7 +47,6 @@ import javafx.concurrent.Worker.State;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -66,7 +65,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     }
 
     @Override
-    public FormField handle(ComponentRequest request) {
+    public FormFieldFx<?> handle(ComponentRequest request) {
         
         val markupHtml = request.getFeatureValue(Markup.class)
                 .map(Markup::asHtml)
@@ -75,13 +74,13 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
         
         val uiComponent = new WebViewFitContent(hostServices::showDocument, markupHtml);
         
-        val uiLabel = new Label(request.getDisplayLabel());
-        
         val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
                 .map(LabelAtFacet::label)
                 .orElse(LabelPosition.NOT_SPECIFIED);
         
-        return new SimpleFormField(labelPosition, uiLabel, uiComponent);
+        val formField = new SimpleFormField<Markup>(labelPosition, uiComponent);
+        formField.setLabel(request.getDisplayLabel());
+        return formField;
     }
 
     // -- HELPER

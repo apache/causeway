@@ -22,63 +22,30 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
-import org.apache.isis.incubator.viewer.javafx.model.util._fx;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class PrototypingDecoratorForFormField implements PrototypingDecorator<FormField, FormField> {
+public class PrototypingDecoratorForFormField implements PrototypingDecorator<FormFieldFx<?>, FormFieldFx<?>> {
 
     private final PrototypingInfoPopupProvider prototypingInfoService;
     
     @Override
-    public FormField decorate(final FormField formField, final PrototypingUiModel prototypingUiModel) {
-        return DecoratingFormField.of(formField, ()->
-            prototypingInfoService.showPrototypingPopup(prototypingUiModel));
-    }
-    
-    // -- HELPER
-
-    @RequiredArgsConstructor(staticName = "of")
-    private static class DecoratingFormField implements FormField {
-
-        private final FormField delegate;
-        private final Runnable onPrototypingPopup;
-        private Pane fieldNode;
+    public FormFieldFx<?> decorate(final FormFieldFx<?> formField, final PrototypingUiModel prototypingUiModel) {
+        val infoLabel = new Label("ⓘ");
         
-        @Override
-        public LabelPosition getLabelPosition() {
-            return delegate.getLabelPosition();
-        }
-
-        @Override
-        public Node getUiLabel() {
-            return delegate.getUiLabel();
-        }
-
-        @Override
-        public Node getUiField() {
-            if(fieldNode==null) {
-                fieldNode = new VBox();
-                val prototypingLabel = _fx.add(fieldNode, new Label("ⓘ"));
-                _fx.add(fieldNode, delegate.getUiField());
-                prototypingLabel.setTooltip(new Tooltip("Inspect Metamodel"));
-                prototypingLabel.setOnMouseClicked(e->onPrototypingPopup.run());
-            }
-            return fieldNode;
-        }
-
+        formField.getUiFieldContainer().getChildren().add(0, infoLabel);
+        infoLabel.setTooltip(new Tooltip("Inspect Metamodel"));
+        infoLabel.setOnMouseClicked(e->prototypingInfoService.showPrototypingPopup(prototypingUiModel));
+        return formField;
     }
     
 }

@@ -26,7 +26,9 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
@@ -34,8 +36,7 @@ import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentR
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.MIDPOINT)
@@ -48,9 +49,7 @@ public class TextFieldFactory implements UiComponentHandlerFx {
     }
 
     @Override
-    public FormField handle(ComponentRequest request) {
-
-        val uiLabel = new Label(request.getDisplayLabel());
+    public FormFieldFx<?> handle(ComponentRequest request) {
 
         //TODO 1) move all the logic that is in the request to the underlying ManagedProperty
         // 2) pass the ManagedProperty over with the request object
@@ -59,13 +58,31 @@ public class TextFieldFactory implements UiComponentHandlerFx {
 //        val textValue = request.getFeatureValue(String.class)
 //                .orElse("");
 
-        val uiComponent = new TextArea();
+        val uiComponent = new TextField();
+        
+        if(request.getManagedFeature() instanceof ManagedParameter) {
+            
+            val managedParameter = (ManagedParameter)request.getManagedFeature();
+            
+//            uiComponent.textProperty().
+//            
+//            managedParameter.validate(proposedValue)
+            
+            //TODO bind to parameter model
+            
+        } else if(request.getManagedFeature() instanceof ManagedProperty) {
+            
+            val managedProperty = (ManagedProperty)request.getManagedFeature();
+            //TODO bind to property model
+        }
 
         val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
                 .map(LabelAtFacet::label)
                 .orElse(LabelPosition.NOT_SPECIFIED);
 
-        return new SimpleFormField(labelPosition, uiLabel, uiComponent);
+        val formField = new SimpleFormField<String>(labelPosition, uiComponent);
+        formField.setLabel(request.getDisplayLabel());
+        return formField;
     }
 
 

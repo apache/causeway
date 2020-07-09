@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
@@ -41,11 +42,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 
 @Service
-public class UiComponentFactoryFx implements UiComponentFactory<Node, FormField> {
+public class UiComponentFactoryFx implements UiComponentFactory<Node, FormFieldFx<?>> {
 
     private final boolean isPrototyping;
     private final UiContext uiContext;
-    private final ChainOfResponsibility<ComponentRequest, FormField> chainOfHandlers;
+    private final ChainOfResponsibility<ComponentRequest, FormFieldFx<?>> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
     @Getter 
@@ -66,7 +67,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, FormField>
     }
     
     @Override
-    public FormField componentFor(ComponentRequest request) {
+    public FormFieldFx<?> componentFor(ComponentRequest request) {
         
         val formField = chainOfHandlers
                 .handle(request)
@@ -108,7 +109,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, FormField>
     }
 
     @Override
-    public FormField parameterFor(ComponentRequest request) {
+    public FormFieldFx<?> parameterFor(ComponentRequest request) {
         val formField = chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(

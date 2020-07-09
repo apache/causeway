@@ -82,5 +82,16 @@ class InteractionTest extends DemoFxTestAbstract {
         assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
     }
     
+    @Test 
+    void test0() {
+        
+        val actionInteraction = startActionInteractionOn(TooltipDemo.class, "withArguments")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+        
+        actionInteraction.getManagedAction().get(); // should not throw
+        
+    }
+    
     
 }

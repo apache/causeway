@@ -19,24 +19,40 @@
 package org.apache.isis.incubator.viewer.javafx.ui.components.form;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 
-@RequiredArgsConstructor
-public class SimpleFormField implements FormField {
+public class SimpleFormField<T> extends FormFieldFx<T> {
 
-    @Getter(onMethod_ = {@Override})
-    protected final LabelPosition labelPosition;
-    
-    @Getter(onMethod_ = {@Override})
-    protected final Node uiLabel;
-    
-    @Getter(onMethod_ = {@Override})
-    protected final Node uiField;
+    private static final long serialVersionUID = 1L;
+
+    public SimpleFormField(
+            LabelPosition labelPosition, 
+            Node uiField) {
+        super(labelPosition, new Label(), uiField, new Label());
+        
+        ((Label)getUiLabel()).textProperty().bind(super.label);
+        ((Label)getUiErrorMessage()).textProperty().bind(super.errorMessage);
+    }
+
+    private final ObjectProperty<T> valueProperty = new SimpleObjectProperty<T>();
+
+    @Override
+    public T generateModelValue() {
+        // return the current internal (model) value
+        return valueProperty.get();
+    }
+
+    @Override
+    public void setPresentationValue(T newPresentationValue) {
+        // update the internal (model) value and UI
+        valueProperty.set(newPresentationValue);
+        //TODO updateVisuals();
+    }
     
 
 }
