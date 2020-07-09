@@ -1,0 +1,25 @@
+== Wrap-up
+
+NOTE: AsciiDoc is quite cool, you should try it!
+
+[TIP]
+.Info
+=====
+Go to this URL to learn more about it:
+
+* http://asciidoc.org
+
+Or you could return to the xref:first[] or <<purpose,Purpose>>.
+=====
+
+CAUTION: caution!
+
+WARNING: warning!
+
+
+[IMPORTANT]
+One more thing. Happy documenting!
+
+[[google]]When all else fails, head over to <http://google.com>.
+
+

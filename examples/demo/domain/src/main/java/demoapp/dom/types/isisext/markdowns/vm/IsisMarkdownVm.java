@@ -66,27 +66,24 @@ public class IsisMarkdownVm
     @Getter @Setter
     private Markdown readOnlyProperty;
 
-//end::class[]
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(hidden = Where.EVERYWHERE) // TODO: editable properties broken for view models - new value doesn't stick
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Markdown readWriteProperty;
 
-//tag::class[]
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Getter @Setter
     private Markdown readOnlyOptionalProperty;
 
-//end::class[]
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.EVERYWHERE) // TODO: editable properties broken for view models - new value doesn't stick
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Getter @Setter
     private Markdown readWriteOptionalProperty;
 
-//tag::class[]
 }
 //end::class[]

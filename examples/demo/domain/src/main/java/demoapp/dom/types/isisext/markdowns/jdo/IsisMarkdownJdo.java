@@ -29,7 +29,9 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 import lombok.Getter;
@@ -61,18 +63,21 @@ public class IsisMarkdownJdo                                          // <.>
     private Markdown readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "editable-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
     private Markdown readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private Markdown readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter

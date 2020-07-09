@@ -1,0 +1,19 @@
+== We're back!
+
+
+.Asciidoctor usage example, should contain 3 lines
+[source, ruby]
+----
+doc = Asciidoctor::Document.new("*This* is it!", :header_footer => false)
+
+puts doc.render
+----
+
+// FIXME: use ifdef to show output according to backend
+Here's what it outputs (using the built-in templates):
+
+....
+<div class="paragraph">
+  <p><strong>This</strong> is it!</p>
+</div>
+....

@@ -1,11 +1,11 @@
-## Typographic replacements
+## Emphasis
 
-Enable typographer option to see result.
+**This is bold text**
 
-(c) (C) (r) (R) (tm) (TM) (p) (P) +-
+__This is bold text__
 
-test.. test... test..... test?..... test!....
+*This is italic text*
 
-!!!!!! ???? ,,  -- ---
+_This is italic text_
 
-"Smartypants, double quotes" and 'single quotes'
+~~Strikethrough~~

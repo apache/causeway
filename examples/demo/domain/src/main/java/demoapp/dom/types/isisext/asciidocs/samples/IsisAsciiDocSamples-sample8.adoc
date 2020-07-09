@@ -1,0 +1,18 @@
+Getting Literal [[literally]]
+-----------------------------
+
+ Want to get literal? Just prefix a line with a space (just one will do).
+
+....
+I'll join that party, too.
+....
+
+We forgot to mention in <<numbered>> that you can change the numbering style.
+
+.. first item (yeah!)
+.. second item, looking `so mono`
+.. third item, +mono+ it is!
+
+// This attribute line will get reattached to the next block
+// despite being followed by a trailing blank line
+[id='wrapup']

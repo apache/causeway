@@ -34,7 +34,7 @@ public class IsisAsciiDocSamples implements Samples<AsciiDoc> {
 
     @Override
     public Stream<AsciiDoc> stream() {
-        return Stream.of(1,2,3,4)
+        return Stream.of(1,2,3,4,5,6,7,8,9,10)
                 .map(x -> asciiDocReaderService.readFor(getClass(), "sample" + x));
     }
 

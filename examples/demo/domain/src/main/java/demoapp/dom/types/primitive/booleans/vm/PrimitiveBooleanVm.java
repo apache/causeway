@@ -62,13 +62,10 @@ public class PrimitiveBooleanVm
     @Getter @Setter
     private boolean readOnlyProperty;                                   // <.>
 
-//end::class[]
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(hidden = Where.EVERYWHERE) // TODO: editable properties broken for view models - new value doesn't stick
     @MemberOrder(name = "editable-properties", sequence = "1")
     @Getter @Setter
     private boolean readWriteProperty;
-//tag::class[]
 
 }
 //end::class[]

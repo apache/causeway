@@ -1,21 +1,19 @@
-== Sample #3
+=== Lists Upon Lists
 
-.This is a table
-[cols="1a,1a,1a", options="header"]
-|===
+.Adjacent lists
+* this list
+* should join
 
-| Header Cell 1
-| Header Cell 2
-|
+* to have
+* four items
 
+[[numbered]]
+.Numbered lists
+. These items
+. will be auto-numbered
+.. and can be nested
+. A numbered list can nest
+* unordered
+* list
+* items
 
-| Row 1 Cell 1
-| Row 1 Cell 2
-|
-
-| Row 2 Cell 1
-| Row 2 Cell 2
-|
-
-
-|===
