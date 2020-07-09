@@ -62,6 +62,7 @@ class RoDialog(
                 close()
             }
 
+    @Deprecated("remove once leaflet/svg is fully operational")
     private val scaleUpButton = Button(
             "",
             "fas fa-plus",
@@ -70,6 +71,7 @@ class RoDialog(
                 (command as ImageDialog).scale(Direction.UP)
             }
 
+    @Deprecated("remove once leaflet/svg is fully operational")
     private val scaleDownButton = Button(
             "",
             "fas fa-minus",
@@ -128,6 +130,7 @@ class RoDialog(
         dispose()
     }
 
+    @Deprecated("remove once leaflet/svg is fully operational")
     private fun hasScalableContent(): Boolean {
         val scalable = items.firstOrNull { it.type == ValueType.IMAGE.type }
         return scalable != null

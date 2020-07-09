@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.ui.kv
+package org.apache.isis.client.kroviz.ui.samples
 
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import pl.treksoft.kvision.maps.*
@@ -94,7 +94,6 @@ class SvgMap : SimplePanel() {
 """
 
     init {
-        // 0 0 is in the Atlantic Ocean, south of 'towel states' -> blue background
         val map = maps(0, 0, 11, baseLayerProvider = BaseLayerProvider.EMPTY, crs = CRS.Simple) {
             width = 100.pc
             height = 100.pc

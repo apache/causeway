@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.utils.DateHelper
+import org.apache.isis.client.kroviz.utils.UUID
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.Overflow
 import pl.treksoft.kvision.core.StringPair
@@ -66,6 +67,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.IMAGE.type -> add(createImage(fi))
                     ValueType.SLIDER.type -> add(createSlider(fi))
                     ValueType.IFRAME.type -> add(createIFrame(fi))
+                    ValueType.SVG.type -> add(createSvg(fi))
                 }
             }
         }
@@ -151,12 +153,21 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     private fun createImage(fi: FormItem): VPanel {
         val item = VPanel {
             // add InnerPanel to be replaced by callback with svg
-            vPanel { id = fi.callBackId }
+            vPanel {
+                id = (fi.callBack as UUID).value
+            }
         }
         item.height = auto
         item.width = 100.perc
-//        item.border = Border(width = 1.px, color = Color.name(Col.LIGHTGRAY), style = BorderStyle.DOTTED )
         return item
+    }
+
+    private fun createSvg(fi: FormItem): MapPanel {
+        val panel = MapPanel()
+        panel.height = 100.perc
+        panel.width = 100.perc
+        fi.callBack = panel
+        return panel
     }
 
     private fun createSlider(fi: FormItem): Range {

@@ -28,7 +28,7 @@ class FormItem(
         val description: String? = "not set",
         val member: Member? = null,
         var dspl: Displayable? = null,
-        val callBackId: String? = null) {
+        var callBack: Any? = null) {
 
     private var originalContent: Any? = content
     var readOnly = false

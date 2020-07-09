@@ -89,7 +89,17 @@ class RoXmlHttpRequest {
         EventStore.start(reSpec, method, body, aggregator)
     }
 
-    fun processAnonymous(link: Link, aggregator: BaseAggregator?) {
+    fun invokeAnonymous(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {
+        val reSpec = ResourceSpecification(link.href)
+        console.log("[RXHR.invokeAnonymous]")
+        console.log(EventStore.isCached(reSpec, link.method))
+        when {
+            EventStore.isCached(reSpec, link.method) -> processCached(reSpec)
+            else -> processAnonymous(link, aggregator, subType)
+        }
+    }
+
+    private fun processAnonymous(link: Link, aggregator: BaseAggregator?, subType: String) {
         val method = link.method
         val url = link.href
 
@@ -98,7 +108,7 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", Constants.stdMimeType)
         xhr.setRequestHeader("Accept", Constants.svgMimeType)
 
-        val reSpec = ResourceSpecification(url, Constants.subTypeXml)
+        val reSpec = ResourceSpecification(url, subType)
         xhr.onload = { _ -> resultHandler(reSpec, xhr.responseText) }
         xhr.onerror = { _ -> errorHandler(reSpec, xhr.responseText) }
         xhr.ontimeout = { _ -> errorHandler(reSpec, xhr.responseText) }

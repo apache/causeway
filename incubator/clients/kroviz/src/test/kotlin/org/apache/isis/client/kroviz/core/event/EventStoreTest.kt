@@ -195,4 +195,22 @@ class EventStoreTest : IntegrationTest() {
         assertNotNull(le2)  //2
         assertEquals(ol1, le2.url)  //3
     }
+
+    @Test
+    fun testAnonymousEntry() {
+        // given
+        EventStore.reset()
+        val method = Method.POST.operation
+        val url = Constants.plantUmlUrl
+        val rs = ResourceSpecification(url)
+        // when
+        EventStore.start(rs, method, body = "first invocation")
+        EventStore.start(rs, method, body = "second invocation")
+        EventStore.end(rs, "first response")
+        // then
+        val currentSize: Int = EventStore.log.size
+        assertEquals(2, currentSize)  //1
+        val le = EventStore.find(rs)!!
+        assertEquals("first response", le.response)
+    }
 }

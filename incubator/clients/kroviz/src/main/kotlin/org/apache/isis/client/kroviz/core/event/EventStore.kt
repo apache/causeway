@@ -120,15 +120,18 @@ object EventStore {
         return null
     }
 
-    internal fun findExact(reSpec: ResourceSpecification): LogEntry? {
+    //public for test
+    fun findExact(reSpec: ResourceSpecification): LogEntry? {
         return log.firstOrNull { it.matches(reSpec) }
     }
 
-    internal fun findView(title: String): LogEntry? {
+    //public for test
+    fun findView(title: String): LogEntry? {
         return log.firstOrNull { it.title == title && it.isView() }
     }
 
-    internal fun findEquivalent(reSpec: ResourceSpecification): LogEntry? {
+    //public for test
+    fun findEquivalent(reSpec: ResourceSpecification): LogEntry? {
         return log.firstOrNull { reSpec.matches(it) }
     }
 

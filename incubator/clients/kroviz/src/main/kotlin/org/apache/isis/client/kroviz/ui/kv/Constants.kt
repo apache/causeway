@@ -26,4 +26,6 @@ object Constants {
     const val actionSeparator = "\n"
     const val subTypeJson = "json"
     const val subTypeXml = "xml"
+    const val plantUmlUrl = "https://kroki.io/" //see: https://github.com/yuzutech/kroki
+
 }

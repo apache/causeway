@@ -20,37 +20,37 @@ package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
-import org.apache.isis.client.kroviz.utils.Direction
-import org.apache.isis.client.kroviz.utils.DomUtil
-import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
-import org.apache.isis.client.kroviz.utils.UmlUtils
+import org.apache.isis.client.kroviz.utils.*
 
 class ImageDialog(
         var label: String,
         private var pumlCode: String) : Command() {
 
-    private val uuid: String = DomUtil.uuid()
+    private var callBack: Any = UUID()
     private var dialog: RoDialog
     private val formItems = mutableListOf<FormItem>()
 
     fun open() {
         dialog.open()
-        UmlUtils.generateDiagram(pumlCode, uuid)
+        UmlUtils.generateDiagram(pumlCode, callBack)
     }
 
     init {
-        val img = FormItem("svg", ValueType.IMAGE.type, callBackId = uuid)
-        formItems.add(img)
+        val fi = FormItem("svg", ValueType.IMAGE.type, callBack = callBack)
+        formItems.add(fi)
 
         dialog = RoDialog(
                 widthPerc = 80,
                 caption = "Diagram",
                 items = formItems,
                 command = this)
+        //callBack = fi.callBack!!
     }
 
+    @Deprecated("use leaflet/svg")
     fun scale(direction: Direction) {
-        val oldElement = DomUtil.getById(uuid)!!
+        val uuid = callBack as UUID
+        val oldElement = DomUtil.getById(uuid.value)!!
         val oldStr = oldElement.innerHTML
         val newImage = ScalableVectorGraphic(oldStr)
         when (direction) {
