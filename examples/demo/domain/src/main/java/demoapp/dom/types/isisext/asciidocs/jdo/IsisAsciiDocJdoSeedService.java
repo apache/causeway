@@ -20,7 +20,7 @@ import demoapp.dom.types.Samples;
 public class IsisAsciiDocJdoSeedService extends SeedServiceAbstract {
 
     public IsisAsciiDocJdoSeedService() {
-        super(() -> new IsisAsciiDocJdoEntityFixture());
+        super(IsisAsciiDocJdoEntityFixture::new);
     }
 
     static class IsisAsciiDocJdoEntityFixture extends FixtureScript {
