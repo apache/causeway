@@ -21,9 +21,13 @@ package org.apache.isis.extensions.secman.model.facets;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,6 +38,17 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import lombok.val;
 
 public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
+
+    @Component
+    public static class Register implements MetaModelRefiner {
+
+        @Override
+        public void refineProgrammingModel(ProgrammingModel programmingModel) {
+            programmingModel.addFactory(
+                    ProgrammingModel.FacetProcessingOrder.Z2_AFTER_FINALLY,
+                    TenantedAuthorizationFacetFactory.class);
+        }
+    }
 
     public TenantedAuthorizationFacetFactory() {
         super(FeatureType.EVERYTHING);

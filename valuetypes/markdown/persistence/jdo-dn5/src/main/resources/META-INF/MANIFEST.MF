@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Isis Value Types Markdown Persistence JDO DataNucleus 5.2 Implementation
+Bundle-SymbolicName: org.apache.isis.valuetypes.markdown.persistence.jdo.dn5
+Bundle-Version: 2.0.0
+Bundle-Vendor: Apache Isis

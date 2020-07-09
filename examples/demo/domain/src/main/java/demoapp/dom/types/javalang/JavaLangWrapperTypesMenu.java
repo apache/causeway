@@ -85,7 +85,7 @@ public class JavaLangWrapperTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperBooleans booleans(){
+    public WrapperBooleans wrapperBooleans(){
         return new WrapperBooleans();
     }
 

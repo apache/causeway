@@ -1,0 +1,7 @@
+== Sample #2
+
+. this
+. is
+. an
+. ordered
+. list

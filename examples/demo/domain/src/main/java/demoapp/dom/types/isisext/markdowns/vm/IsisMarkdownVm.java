@@ -30,7 +30,9 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 import lombok.Getter;
@@ -64,21 +66,27 @@ public class IsisMarkdownVm
     @Getter @Setter
     private Markdown readOnlyProperty;
 
+//end::class[]
     @Property(editing = Editing.ENABLED)                                        // <.>
+    @PropertyLayout(hidden = Where.EVERYWHERE) // TODO: editable properties broken for view models - new value doesn't stick
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Markdown readWriteProperty;
 
+//tag::class[]
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Getter @Setter
     private Markdown readOnlyOptionalProperty;
 
+//end::class[]
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @PropertyLayout(hidden = Where.EVERYWHERE) // TODO: editable properties broken for view models - new value doesn't stick
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Getter @Setter
     private Markdown readWriteOptionalProperty;
 
+//tag::class[]
 }
 //end::class[]

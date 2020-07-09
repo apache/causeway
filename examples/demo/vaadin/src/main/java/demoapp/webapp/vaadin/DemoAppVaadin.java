@@ -29,7 +29,7 @@ import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefaul
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.isis.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUi;
+import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.dom._infra.utils.ThereCanBeOnlyOne;

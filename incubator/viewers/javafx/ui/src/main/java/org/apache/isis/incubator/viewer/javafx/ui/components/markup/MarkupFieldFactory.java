@@ -69,7 +69,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     public FormField handle(ComponentRequest request) {
         
         val markupHtml = request.getFeatureValue(Markup.class)
-                .map(Markup::asString)
+                .map(Markup::asHtml)
                 .orElse("");
 
         

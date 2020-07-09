@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -128,41 +129,39 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                 final InteractionInitiatedBy interactionInitiatedBy);
     }
 
-    public void clearProperty(
+    public ManagedObject clearProperty(
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        setOrClearProperty(Style.CLEAR,
+        return setOrClearProperty(Style.CLEAR,
                 owningProperty, targetAdapter, /*newValueAdapter*/ null, interactionInitiatedBy);
 
     }
 
-    public void setProperty(
+    public ManagedObject setProperty(
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        setOrClearProperty(Style.SET,
+        return setOrClearProperty(Style.SET,
                 owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
 
     }
 
-    private void setOrClearProperty(
+    private ManagedObject setOrClearProperty(
             final Style style,
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        getTransactionService().executeWithinTransaction(()->{
-            doSetOrClearProperty(style, owningProperty, InteractionHead.simple(targetAdapter), newValueAdapter, interactionInitiatedBy);
-        });
+        return getTransactionService().executeWithinTransaction(() ->
+                doSetOrClearProperty(style, owningProperty, InteractionHead.simple(targetAdapter), newValueAdapter, interactionInitiatedBy));
+        }
 
-    }
-
-    private void doSetOrClearProperty(
+    private ManagedObject doSetOrClearProperty(
             final Style style,
             final OneToOneAssociation owningProperty,
             final InteractionHead head,
@@ -172,13 +171,13 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         // similar code in ActionInvocationFacetFDEA
 
         if(!style.hasCorrespondingFacet(this)) {
-            return;
+            return head.getTarget();
         }
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
         if( command==null ) {
-            return;
+            return head.getTarget();
         }
 
         final InteractionContext interactionContext = getInteractionContext();
@@ -198,6 +197,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                         "Unable to persist command for property '%s'; CommandService does not support persistent commands ",
                         propertyId));
             }
+
+            return head.getTarget();
 
         } else {
 
@@ -264,7 +265,10 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                                     oldValue, actualNewValue);
                         }
 
-                        return null;
+                        ManagedObject targetAdapterPossiblyCloned =
+                                cloneIfViewModelCloneable(targetAdapter);
+
+                        return targetAdapterPossiblyCloned.getPojo();
 
                         //
                         // REVIEW: the corresponding action has a whole bunch of error handling here.
@@ -278,7 +282,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             };
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
-            interaction.execute(executor, execution, getClockService(), getMetricsService());
+            Object targetPojo = interaction.execute(executor, execution, getClockService(), getMetricsService());
 
             // handle any exceptions
             final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
@@ -299,7 +303,21 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                 getPublishingServiceInternal().publishProperty(priorExecution);
             }
 
+            return getObjectManager().adapt(targetPojo);
         }
+    }
+
+    private ManagedObject cloneIfViewModelCloneable(final ManagedObject adapter) {
+
+        if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
+            return adapter;
+        }
+
+        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        final Object clone = viewModelFacet.clone(adapter.getPojo());
+
+        final ManagedObject clonedAdapter = getObjectManager().adapt(clone);
+        return clonedAdapter;
     }
 
     public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {

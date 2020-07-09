@@ -429,7 +429,7 @@ implements ImperativeFacet {
         private final ActionInvocation execution;
 
         @Override
-        public Object execute(final Interaction.ActionInvocation currentExecution) {
+        public Object execute(final ActionInvocation currentExecution) {
 
             try {
 

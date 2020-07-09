@@ -6,14 +6,6 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mb3:primary>
         <mb3:menu>
-            <mb3:named>View Models</mb3:named>
-            <mb3:section>
-                <mb3:serviceAction objectType="demo.ViewModels" id="openStateful" cssClassFa="mountain"/>
-                <mb3:serviceAction objectType="demo.ViewModels" id="openStatefulRefsEntity"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
             <mb3:named>Data Types</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="bytes"/>
@@ -98,6 +90,14 @@
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="markup">
                     <cpt:named>Markup Type (HTML)</cpt:named>
                 </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>View Models</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="demo.ViewModels" id="openStateful" cssClassFa="mountain"/>
+                <mb3:serviceAction objectType="demo.ViewModels" id="openStatefulRefsEntity"/>
             </mb3:section>
         </mb3:menu>
 

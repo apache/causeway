@@ -34,6 +34,8 @@
 
 	<modules>
 		<module>applib</module>
+		<module>metamodel</module>
+		<module>persistence</module>
 		<module>ui</module>
 	</modules>
 

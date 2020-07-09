@@ -62,7 +62,7 @@ implements MarkupValueFacet {
 
     @Override
     public String titleString(final Object object) {
-        return object != null? ((Markup)object).asString(): "[null]";
+        return object != null? ((Markup)object).asHtml(): "[null]";
     }
 
     @Override
@@ -80,7 +80,7 @@ implements MarkupValueFacet {
             return "";
         }
         final Markup markup = (Markup) object.getPojo();
-        return markup.asString();
+        return markup.asHtml();
     }
 
     @Override
@@ -96,7 +96,7 @@ implements MarkupValueFacet {
     @Override
     protected String doEncode(final Object object) {
         Markup markup = (Markup)object;
-        return markup.asString();
+        return markup.asHtml();
     }
 
     @Override

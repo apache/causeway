@@ -56,13 +56,13 @@ public class IsisMarkdownJdo                                          // <.>
 //tag::class[]
     @Title(prepend = "Markdown JDO entity: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                               // <.>
+    @Column(allowsNull = "false", jdbcType = "CLOB")                            // <.>
     @Getter @Setter
     private Markdown readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false")
+    @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
     private Markdown readWriteProperty;
 
