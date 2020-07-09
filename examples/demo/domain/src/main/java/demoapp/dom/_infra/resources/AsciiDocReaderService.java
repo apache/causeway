@@ -1,4 +1,4 @@
-package demoapp.dom._infra;
+package demoapp.dom._infra.resources;
 
 import javax.inject.Inject;
 import javax.inject.Named;

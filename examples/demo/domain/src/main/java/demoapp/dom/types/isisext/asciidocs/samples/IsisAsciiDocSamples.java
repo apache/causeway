@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import demoapp.dom._infra.AsciiDocReaderService;
+import demoapp.dom._infra.resources.AsciiDocReaderService;
 import demoapp.dom.types.Samples;
 
 @Service

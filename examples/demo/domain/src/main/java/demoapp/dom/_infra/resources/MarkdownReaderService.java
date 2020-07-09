@@ -1,11 +1,10 @@
-package demoapp.dom._infra;
+package demoapp.dom._infra.resources;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.valuetypes.markdown.applib.value.Converter;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 

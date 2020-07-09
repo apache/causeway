@@ -30,7 +30,7 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom._infra.MarkupVariableResolverService;
+import demoapp.dom._infra.resources.MarkupVariableResolverService;
 
 @Property
 @RequiredArgsConstructor @SuppressWarnings("CdiManagedBeanInconsistencyInspection")

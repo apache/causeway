@@ -1,17 +1,15 @@
-package demoapp.dom._infra;
+package demoapp.dom._infra.resources;
 
-import java.io.StringReader;
 import java.util.HashMap;
-import java.util.Map;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import lombok.val;
 import static org.assertj.core.api.Assertions.*;
+
+import demoapp.dom._infra.resources.MarkupVariableResolverService;
+import demoapp.dom._infra.resources.ResourceReaderService;
 
 class ResourceReaderService_Test {
 

@@ -11,29 +11,29 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+import demoapp.dom._infra.fixtures.DemoFixtureScript;
+import demoapp.dom._infra.seed.SeedService;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class IsisAsciiDocJdoSeedService {
+public class IsisAsciiDocJdoSeedService extends SeedServiceAbstract {
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
-
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new IsisAsciiDocJdoEntityFixture());
-        }
+    public IsisAsciiDocJdoSeedService() {
+        super(() -> new IsisAsciiDocJdoEntityFixture());
     }
-
-    @Inject
-    FixtureScripts fixtureScripts;
 
     static class IsisAsciiDocJdoEntityFixture extends FixtureScript {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
+            repositoryService.removeAll(IsisAsciiDocJdo.class);
             samples.stream()
                     .map(IsisAsciiDocJdo::new)
-                    .forEach(repositoryService::persist);
+                    .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject

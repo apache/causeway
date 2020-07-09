@@ -4,7 +4,7 @@ On the left hand side of each web page you'll find the feature, and on the right
 
 == Page Layout
 
-This is probably as good place as any to explain the page layout of an Apache Isis webapp:
+This is as good place as any to explain the page layout of an Apache Isis webapp:
 
 * At the top is the menu bar.
 +

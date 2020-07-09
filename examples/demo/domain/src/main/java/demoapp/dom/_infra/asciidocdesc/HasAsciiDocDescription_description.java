@@ -29,7 +29,7 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom._infra.AsciiDocReaderService;
+import demoapp.dom._infra.resources.AsciiDocReaderService;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Property

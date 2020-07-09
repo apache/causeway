@@ -40,8 +40,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.DemoModule;
-import demoapp.dom._infra.AsciiDocReaderService;
-import demoapp.dom._infra.LibraryPreloadingService;
+import demoapp.dom._infra.fixtures.DemoFixtureScript;
 
 /**
  * Makes the integral parts of the 'demo' web application.
@@ -69,8 +68,8 @@ import demoapp.dom._infra.LibraryPreloadingService;
     IsisModuleTestingH2ConsoleUi.class,
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
 
-    LibraryPreloadingService.class, // just a performance enhancement
-    AsciiDocReaderService.class,
+    // fixtures
+    DemoFixtureScript.class,
 
 })
 @Log4j2

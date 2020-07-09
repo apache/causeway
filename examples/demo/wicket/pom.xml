@@ -66,7 +66,6 @@
 			<groupId>org.apache.isis.examples.apps</groupId>
 			<artifactId>demo-domain</artifactId>
 			<version>${project.version}</version>
-			<type>jar</type>
 		</dependency>
 
 		<!-- WEB APPLICATION DEPENDENCY BUNDLE -->
@@ -77,16 +76,7 @@
 			<type>pom</type>
 		</dependency>
 
-		<!-- JDK11+ SUPPORT -->
-
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jdk11</artifactId>
-			<type>pom</type>
-		</dependency>
-
-
-	</dependencies>
+    </dependencies>
 
 	<profiles>
 

@@ -1,4 +1,4 @@
-package demoapp.dom._infra;
+package demoapp.dom._infra.resources;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -69,11 +69,33 @@
 
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-sse-ui</artifactId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-ui-wkt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-persistence-jdo-dn5</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-sse-ui-wkt</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
