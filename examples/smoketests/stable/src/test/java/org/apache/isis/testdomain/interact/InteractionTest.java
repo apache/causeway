@@ -36,7 +36,6 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract.CommandSupport;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
@@ -45,8 +44,7 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,
-                Configuration_usingInteractionDomain.class,
-                CommandSupport.class
+                Configuration_usingInteractionDomain.class
         }, 
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
