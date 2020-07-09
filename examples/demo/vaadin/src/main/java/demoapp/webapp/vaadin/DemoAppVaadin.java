@@ -29,7 +29,7 @@ import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefaul
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.isis.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUiWkt;
+import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.dom._infra.utils.ThereCanBeOnlyOne;
@@ -48,7 +48,7 @@ import demoapp.webapp.DemoAppManifest;
     
     // WICKET INTEGRATION ... to allow side by side comparison
     IsisModuleViewerWicketViewer.class, // wicket viewer
-    IsisModuleValSseUi.class, // server sent events
+    IsisModuleValSseUiWkt.class, // server sent events
     IsisModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
   
 })

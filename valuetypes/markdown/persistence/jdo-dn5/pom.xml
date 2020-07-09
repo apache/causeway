@@ -16,7 +16,7 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes-asciidoc-persistence</artifactId>
+		<artifactId>isis-valuetypes-markdown-persistence</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 

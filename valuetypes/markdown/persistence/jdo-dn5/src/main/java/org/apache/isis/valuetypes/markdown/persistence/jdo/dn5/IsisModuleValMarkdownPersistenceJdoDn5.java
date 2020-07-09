@@ -21,11 +21,11 @@ package org.apache.isis.valuetypes.markdown.persistence.jdo.dn5;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
+import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
 
 @Configuration
 @Import({
-    IsisModuleValAsciidocApplib.class
+    IsisModuleValMarkdownApplib.class
 })
 public class IsisModuleValMarkdownPersistenceJdoDn5 {
 }
