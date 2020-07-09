@@ -36,6 +36,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.Result;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -148,7 +149,7 @@ class InteractionTest extends InteractionTestAbstract {
         .checkVisibility(Where.OBJECT_FORMS)
         .checkUsability(Where.OBJECT_FORMS);
         
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
+        Result result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
         assertEquals(99, (int)result.getActionReturnedObject().getPojo());    
     }
 
@@ -176,7 +177,7 @@ class InteractionTest extends InteractionTestAbstract {
         actionInteraction.useParameters(__->params, 
                 (managedParameter, veto)-> fail(veto.toString()));
         
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
+        Result result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
         assertEquals(46, (int)result.getActionReturnedObject().getPojo());
     }
 
@@ -192,7 +193,7 @@ class InteractionTest extends InteractionTestAbstract {
         actionInteraction.useParameters(__->params, 
                 (managedParameter, veto)-> fail(veto.toString()));
         
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
+        Result result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
         assertEquals(46, (int)result.getActionReturnedObject().getPojo());
     }
     
