@@ -220,6 +220,12 @@ public class RepositoryServiceDefault implements RepositoryService {
         return _Casts.uncheckedCast(managedDetachedObject.getPojo());
     }
 
+    @Override
+    public <T> void removeAll(Class<T> cls) {
+        allInstances(cls).forEach(this::remove);
+
+    }
+
     // -- HELPER
     
     private static <T> Optional<T> firstInstanceElseEmpty(final List<T> instances) {
