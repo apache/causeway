@@ -29,6 +29,7 @@ import org.w3c.dom.html.HTMLAnchorElement;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
@@ -61,14 +62,14 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     
     @Override
     public boolean isHandling(ComponentRequest request) {
-        return request.isFeatureTypeInstanceOf(Markup.class);
+        return request.isFeatureTypeInstanceOf(HasHtml.class);
     }
 
     @Override
     public FormFieldFx<?> handle(ComponentRequest request) {
         
-        val markupHtml = request.getFeatureValue(Markup.class)
-                .map(Markup::asHtml)
+        val markupHtml = request.getFeatureValue(HasHtml.class)
+                .map(HasHtml::asHtml)
                 .orElse("");
 
         
