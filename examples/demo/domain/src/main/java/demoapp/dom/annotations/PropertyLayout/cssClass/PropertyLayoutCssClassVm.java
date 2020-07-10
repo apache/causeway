@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.position;
+package demoapp.dom.annotations.PropertyLayout.cssClass;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -30,7 +30,8 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,25 +44,44 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.ActionLayoutPositionVm"
+        objectType = "demo.PropertyLayoutCssClassVm",
+        editing = Editing.ENABLED
 )
-public class ActionLayoutPositionVm implements HasAsciiDocDescription {
+public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "ActionLayout#position";
+        return "PropertyLayout#cssClass";
     }
 
     @Property(optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "annotated", sequence = "1")
+    @PropertyLayout(cssClass = "red", describedAs = "@PropertyLayout(cssClass=\"red\")", hidden = Where.ALL_TABLES)
+    @MemberOrder(name = "properties", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String readOnlyProperty1;
+    private String propertyUsingAnnotation;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "layout", sequence = "1")
+    @PropertyLayout(describedAs = "<cpt:property id=\"...\" cssClass=\"red\"/>", hidden = Where.ALL_TABLES)
+    @MemberOrder(name = "properties", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
-    private String readOnlyProperty2;
+    private String propertyUsingLayout;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayoutCssClassMetaAnnotation
+    @PropertyLayout(describedAs = "@PropertyLayoutCssClassMetaAnnotation", hidden = Where.ALL_TABLES)
+    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyUsingMetaAnnotation;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayoutCssClassMetaAnnotation
+    @PropertyLayout(cssClass = "blue", describedAs = "meta-annotation overridden using @PropertyLayout(...)", hidden = Where.ALL_TABLES)
+    @MemberOrder(name = "meta-annotated", sequence = "2")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyUsingMetaAnnotationOverridden;
 
 }
 //end::class[]

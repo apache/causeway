@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.promptStyle;
+package demoapp.dom.annotations.ActionLayout.position;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,13 +25,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,20 +41,13 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.ActionLayoutPromptStyleVm"
+        objectType = "demo.ActionLayoutPositionVm"
 )
-public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
+public class ActionLayoutPositionVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "ActionLayout#promptStyle";
+        return "ActionLayout#position";
     }
-
-    @Title
-    @Property(editing = Editing.DISABLED)
-    @MemberOrder(name = "general", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String title;
 
     @Property(optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "annotated", sequence = "1")
@@ -66,24 +56,10 @@ public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
     private String readOnlyProperty1;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "has associated action with promptStyle=INLINE_AS_IF_EDIT")
-    @MemberOrder(name = "annotated", sequence = "2")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String readOnlyProperty2;
-
-    @Property(optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "layout", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String readOnlyProperty3;
-
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "has associated action with promptStyle=INLINE_AS_IF_EDIT")
-    @MemberOrder(name = "layout", sequence = "2")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String readOnlyProperty4;
+    private String readOnlyProperty2;
 
 }
 //end::class[]

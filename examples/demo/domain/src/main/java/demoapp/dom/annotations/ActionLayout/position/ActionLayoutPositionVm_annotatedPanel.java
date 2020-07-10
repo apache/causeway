@@ -16,30 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout;
+package demoapp.dom.annotations.ActionLayout.position;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.RequiredArgsConstructor;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionLayoutMenu")
-@DomainObjectLayout(named="ActionLayout")
-@Log4j2
-public class ActionLayoutMenu {
 
-    @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.ActionLayout.position.ActionLayoutPositionVm position(){
-        return new demoapp.dom.ActionLayout.position.ActionLayoutPositionVm();
+//tag::class[]
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty1",
+        associateWithSequence = "2"
+)
+@ActionLayout(position = ActionLayout.Position.PANEL, named = "Positioned on panel", describedAs = "position = PANEL")
+@RequiredArgsConstructor
+public class ActionLayoutPositionVm_annotatedPanel {
+
+    private final ActionLayoutPositionVm stringViewModel;
+
+    public ActionLayoutPositionVm act(String newValue) {
+        stringViewModel.setReadOnlyProperty1(newValue);
+        return stringViewModel;
     }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.ActionLayout.promptStyle.ActionLayoutPromptStyleVm promptStyle(){
-        return new demoapp.dom.ActionLayout.promptStyle.ActionLayoutPromptStyleVm();
+    public String default0Act() {
+        return stringViewModel.getReadOnlyProperty1();
     }
-
 
 }
+//end::class[]

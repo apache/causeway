@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.position;
+package demoapp.dom.annotations.ActionLayout.position;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,21 +28,21 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty1",
-        associateWithSequence = "4"
+        associateWith = "readOnlyProperty2",
+        associateWithSequence = "2"
 )
-@ActionLayout(position = ActionLayout.Position.RIGHT, named = "Positioned right", describedAs = "position = RIGHT")
+@ActionLayout(named = "Positioned on panel", describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=PANEL/></cpt:property>")
 @RequiredArgsConstructor
-public class ActionLayoutPositionVm_annotatedRight {
+public class ActionLayoutPositionVm_layoutPanel {
 
     private final ActionLayoutPositionVm stringViewModel;
 
     public ActionLayoutPositionVm act(String newValue) {
-        stringViewModel.setReadOnlyProperty1(newValue);
+        stringViewModel.setReadOnlyProperty2(newValue);
         return stringViewModel;
     }
     public String default0Act() {
-        return stringViewModel.getReadOnlyProperty1();
+        return stringViewModel.getReadOnlyProperty2();
     }
 
 }

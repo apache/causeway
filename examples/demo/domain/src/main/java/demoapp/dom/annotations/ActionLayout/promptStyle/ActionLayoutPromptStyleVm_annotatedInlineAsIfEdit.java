@@ -16,26 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.PropertyLayout.cssClass;
+package demoapp.dom.annotations.ActionLayout.promptStyle;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
+
 //tag::class[]
-//@Property()
-//@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)  // TODO: this fails as attempts to invoke as an action, and heuristics replace null with the view model object.
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty2",
+        associateWithSequence = "1"
+)
+@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT, named = "Inline as if edit", describedAs = "promptStyle = INLINE_AS_IF_EDIT")
 @RequiredArgsConstructor
-public class PropertyLayoutCssClassVm_annotatedMixin {
+public class ActionLayoutPromptStyleVm_annotatedInlineAsIfEdit {
 
-    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
+    private final ActionLayoutPromptStyleVm stringViewModel;
 
-    @MemberOrder(name = "contributed", sequence = "1")
-    public String prop() {
-        return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
+    public ActionLayoutPromptStyleVm act(String newValue) {
+        stringViewModel.setReadOnlyProperty2(newValue);
+        return stringViewModel;
+    }
+    public String default0Act() {
+        return stringViewModel.getReadOnlyProperty2();
     }
 
 }

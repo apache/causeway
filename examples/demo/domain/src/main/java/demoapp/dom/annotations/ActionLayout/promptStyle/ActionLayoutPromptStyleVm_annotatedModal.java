@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.position;
+package demoapp.dom.annotations.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -28,21 +29,21 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty2",
-        associateWithSequence = "1"
+        associateWith = "readOnlyProperty1",
+        associateWithSequence = "2"
 )
-@ActionLayout(named = "Positioned below", describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=BELOW/></cpt:property>")
+@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL, named = "Modal", describedAs = "promptStyle = MODAL")
 @RequiredArgsConstructor
-public class ActionLayoutPositionVm_layoutBelow {
+public class ActionLayoutPromptStyleVm_annotatedModal {
 
-    private final ActionLayoutPositionVm stringViewModel;
+    private final ActionLayoutPromptStyleVm stringViewModel;
 
-    public ActionLayoutPositionVm act(String newValue) {
-        stringViewModel.setReadOnlyProperty2(newValue);
+    public ActionLayoutPromptStyleVm act(String newValue) {
+        stringViewModel.setReadOnlyProperty1(newValue);
         return stringViewModel;
     }
     public String default0Act() {
-        return stringViewModel.getReadOnlyProperty2();
+        return stringViewModel.getReadOnlyProperty1();
     }
 
 }

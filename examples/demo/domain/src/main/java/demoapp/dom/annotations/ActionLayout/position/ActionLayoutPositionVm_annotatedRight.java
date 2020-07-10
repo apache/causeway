@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.position;
+package demoapp.dom.annotations.ActionLayout.position;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -29,11 +29,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty1",
-        associateWithSequence = "3"
+        associateWithSequence = "4"
 )
-@ActionLayout(position = ActionLayout.Position.PANEL_DROPDOWN, named = "Positioned on panel in dropdown", describedAs = "position = PANEL_DROPDOWN")
+@ActionLayout(position = ActionLayout.Position.RIGHT, named = "Positioned right", describedAs = "position = RIGHT")
 @RequiredArgsConstructor
-public class ActionLayoutPositionVm_annotatedPanelDropDown {
+public class ActionLayoutPositionVm_annotatedRight {
 
     private final ActionLayoutPositionVm stringViewModel;
 

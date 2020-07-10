@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.promptStyle;
+package demoapp.dom.annotations.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -29,21 +28,21 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty1",
-        associateWithSequence = "2"
+        associateWith = "readOnlyProperty3",
+        associateWithSequence = "1"
 )
-@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL, named = "Modal", describedAs = "promptStyle = MODAL")
+@ActionLayout(describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = INLINE/></cpt:property>")
 @RequiredArgsConstructor
-public class ActionLayoutPromptStyleVm_annotatedModal {
+public class ActionLayoutPromptStyleVm_layoutInline {
 
     private final ActionLayoutPromptStyleVm stringViewModel;
 
     public ActionLayoutPromptStyleVm act(String newValue) {
-        stringViewModel.setReadOnlyProperty1(newValue);
+        stringViewModel.setReadOnlyProperty3(newValue);
         return stringViewModel;
     }
     public String default0Act() {
-        return stringViewModel.getReadOnlyProperty1();
+        return stringViewModel.getReadOnlyProperty3();
     }
 
 }

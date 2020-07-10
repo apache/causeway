@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.PropertyLayout;
+package demoapp.dom.annotations.PropertyLayout;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -32,13 +32,13 @@ import lombok.extern.log4j.Log4j2;
 public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.PropertyLayout.named.PropertyLayoutNamedVm named(){
-        return new demoapp.dom.PropertyLayout.named.PropertyLayoutNamedVm();
+    public demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm named(){
+        return new demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.PropertyLayout.cssClass.PropertyLayoutCssClassVm cssClass(){
-        return new demoapp.dom.PropertyLayout.cssClass.PropertyLayoutCssClassVm();
+    public demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm cssClass(){
+        return new demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm();
     }
 
 

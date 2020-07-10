@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.position;
+package demoapp.dom.annotations.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -29,15 +30,15 @@ import lombok.RequiredArgsConstructor;
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty1",
-        associateWithSequence = "2"
+        associateWithSequence = "1"
 )
-@ActionLayout(position = ActionLayout.Position.PANEL, named = "Positioned on panel", describedAs = "position = PANEL")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Inline", describedAs = "promptStyle = INLINE")
 @RequiredArgsConstructor
-public class ActionLayoutPositionVm_annotatedPanel {
+public class ActionLayoutPromptStyleVm_annotatedInline {
 
-    private final ActionLayoutPositionVm stringViewModel;
+    private final ActionLayoutPromptStyleVm stringViewModel;
 
-    public ActionLayoutPositionVm act(String newValue) {
+    public ActionLayoutPromptStyleVm act(String newValue) {
         stringViewModel.setReadOnlyProperty1(newValue);
         return stringViewModel;
     }

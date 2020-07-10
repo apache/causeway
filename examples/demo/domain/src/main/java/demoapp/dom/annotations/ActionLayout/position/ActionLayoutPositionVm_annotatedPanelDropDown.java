@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ActionLayout.promptStyle;
+package demoapp.dom.annotations.ActionLayout.position;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,21 +28,21 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty3",
-        associateWithSequence = "1"
+        associateWith = "readOnlyProperty1",
+        associateWithSequence = "3"
 )
-@ActionLayout(describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = INLINE/></cpt:property>")
+@ActionLayout(position = ActionLayout.Position.PANEL_DROPDOWN, named = "Positioned on panel in dropdown", describedAs = "position = PANEL_DROPDOWN")
 @RequiredArgsConstructor
-public class ActionLayoutPromptStyleVm_layoutInline {
+public class ActionLayoutPositionVm_annotatedPanelDropDown {
 
-    private final ActionLayoutPromptStyleVm stringViewModel;
+    private final ActionLayoutPositionVm stringViewModel;
 
-    public ActionLayoutPromptStyleVm act(String newValue) {
-        stringViewModel.setReadOnlyProperty3(newValue);
+    public ActionLayoutPositionVm act(String newValue) {
+        stringViewModel.setReadOnlyProperty1(newValue);
         return stringViewModel;
     }
     public String default0Act() {
-        return stringViewModel.getReadOnlyProperty3();
+        return stringViewModel.getReadOnlyProperty1();
     }
 
 }
