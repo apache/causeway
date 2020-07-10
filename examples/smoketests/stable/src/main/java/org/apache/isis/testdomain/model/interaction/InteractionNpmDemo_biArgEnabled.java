@@ -22,26 +22,40 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.experimental.Accessors;
 
 @Action
 @RequiredArgsConstructor
-public class InteractionDemo_biArgEnabled {
+public class InteractionNpmDemo_biArgEnabled {
 
     @SuppressWarnings("unused")
-    private final InteractionDemo holder;
+    private final InteractionNpmDemo holder;
     
-    @Model
-    public int act(int a, int b) {
-        return a + b;
+    @Value @Accessors(fluent = true)            
+    public static class Parameters {                                   
+ 
+        //@Parameter @ParameterLayout //TODO[ISIS-2362] support these here
+        int a;
+        //@Parameter @ParameterLayout //TODO[ISIS-2362] support these here
+        int b;
     }
     
+    
+    @Model
+    public int act(Parameters params) {
+        return params.a() + params.b();
+    }
+    
+    // parameter supporting methods, to be referenced by param name ...
+    
     @Model 
-    public int default0Act() {
+    public int defaultA(Parameters params) {
         return 5;
     }
     
     @Model
-    public int[] choices1Act() {
+    public int[] choicesB(Parameters params) {
         return new int[] {1, 2, 3, 4};
     }
 }

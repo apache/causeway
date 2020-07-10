@@ -19,30 +19,29 @@
 package org.apache.isis.testdomain.interact;
 
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
-import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.testdomain.model.interaction.InteractionNpmDemo;
+import org.apache.isis.testdomain.model.interaction.InteractionNpmDemo_biArgEnabled;
 
 import lombok.val;
 
@@ -64,114 +63,19 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class InteractionTest extends InteractionTestAbstract {
+class NewParameterModelTest extends InteractionTestAbstract {
 
-    @Test 
-    void actionInteraction_whenEnabled_shouldHaveNoVeto() {
-
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled")
-                .getManagedAction().get(); // should not throw  
-
-        assertFalse(managedAction.checkVisibility(Where.OBJECT_FORMS).isPresent()); // is visible
-        assertFalse(managedAction.checkUsability(Where.OBJECT_FORMS).isPresent()); // can invoke 
-    }
-    
-    @Test 
-    void actionInteraction_whenDisabled_shouldHaveVeto() {
-
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
-                .getManagedAction().get(); // should not throw  
-
-
-        assertFalse(managedAction.checkVisibility(Where.OBJECT_FORMS).isPresent()); // is visible
-
-        // cannot invoke
-        val veto = managedAction.checkUsability(Where.OBJECT_FORMS).get(); // should not throw
-        assertNotNull(veto);
-
-        assertEquals("Disabled for demonstration.", veto.getReason());
-    }
-
-    @Test 
-    void actionInteraction_whenEnabled_shouldProvideProperDecoratorModels() {
-
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
-
-        val disablingUiModel = DisablingUiModel.of(actionInteraction);
-        assertFalse(disablingUiModel.isPresent());
-    }
-
-    @Test 
-    void actionInteraction_whenDisabled_shouldProvideProperDecoratorModels() {
-
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
-
-        val disablingUiModel = DisablingUiModel.of(actionInteraction).get();
-        assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
-    }
-
-    @Test 
-    void actionInteraction_whenEnabled_shouldProvideActionMetadata() {
-
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
-
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val actionMeta = managedAction.getAction();
-        assertEquals(2, actionMeta.getParameterCount());
-
-    }
-
-    @Test //TODO API not yet provides a convenient means to get the action-meta when not usable    
-    void mixinActionInteraction_whenDisabled_shouldProvideActionMetadata() {
-
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled")
-                .checkVisibility(Where.OBJECT_FORMS);
-        
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        
-        actionInteraction.checkUsability(Where.OBJECT_FORMS);
-        
-        val actionMeta = managedAction.getAction();
-        assertEquals(2, actionMeta.getParameterCount());
-    }
-    
-    @Test
-    void actionInteraction_whenEnabled_shouldAllowInvocation() throws Throwable {
-
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
-        
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
-        assertEquals(99, (int)result.getActionReturnedObject().getPojo());    
-    }
-
-    @Test
-    void actionInteraction_whenDisabled_shouldVetoInvocation() {
-
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
-
-        assertThrows(IllegalAccessException.class, ()->{
-            actionInteraction.getResultElseThrow(veto->_Exceptions.illegalAccess("%s", veto.toString()));    
-        });
-    }
     
     @Test
     void actionInteraction_withParams_shouldProduceCorrectResult() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
         .checkVisibility(Where.OBJECT_FORMS)
         .checkUsability(Where.OBJECT_FORMS);
         
-        val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
+        val params = 
+                //FIXME must instead support Can.of(objectManager.adapt(12), objectManager.adapt(34));
+                Can.of(objectManager.adapt(new InteractionNpmDemo_biArgEnabled.Parameters(12, 34)));
         
         actionInteraction.useParameters(__->params, 
                 (managedParameter, veto)-> fail(veto.toString()));
@@ -183,11 +87,13 @@ class InteractionTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withTooManyParams_shouldIgnoreOverflow() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
         .checkVisibility(Where.OBJECT_FORMS)
         .checkUsability(Where.OBJECT_FORMS);
         
-        val params = Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
+        val params = 
+                //FIXME[ISIS-2362] must instead support Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
+                Can.of(objectManager.adapt(new InteractionNpmDemo_biArgEnabled.Parameters(12, 34)), objectManager.adapt(99));
         
         actionInteraction.useParameters(__->params, 
                 (managedParameter, veto)-> fail(veto.toString()));
@@ -199,11 +105,11 @@ class InteractionTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withTooLittleParams_shouldFail() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
         .checkVisibility(Where.OBJECT_FORMS)
         .checkUsability(Where.OBJECT_FORMS);
         
-        val params = Can.of(objectManager.adapt(12));
+        val params = Can.<ManagedObject>of();
         
         assertThrows(NoSuchElementException.class, ()->{
             
@@ -213,10 +119,10 @@ class InteractionTest extends InteractionTestAbstract {
 
     }
     
-    @Test 
+    @Test @Disabled("[ISIS-2362]")
     void actionInteraction_shouldProvideParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
                 .checkVisibility(Where.OBJECT_FORMS)
                 .checkUsability(Where.OBJECT_FORMS);
 
@@ -226,17 +132,17 @@ class InteractionTest extends InteractionTestAbstract {
         val expectedDefaults = Can.of(
                 new InteractionDemo_biArgEnabled(null).default0Act(),
                 0);
-        val actualDefaults = pendingArgs.getParamValues().map(ManagedObject::getPojo);
+        val actualDefaults = pendingArgs.getParamValues().stream()
+                .map(ManagedObject::getPojo)
+                .collect(Collectors.toList());
         
         assertComponentWiseEquals(expectedDefaults, actualDefaults);
-
-        //TODO also test PPM variant
     }
     
-    @Test 
+    @Test @Disabled("[ISIS-2362]")
     void actionInteraction_shouldProvideChoices() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
                 .checkVisibility(Where.OBJECT_FORMS)
                 .checkUsability(Where.OBJECT_FORMS);
 
@@ -266,15 +172,7 @@ class InteractionTest extends InteractionTestAbstract {
         
         assertComponentWiseEquals(expectedChoices, actualChoices);
         
-        //TODO also test PPM variant
     }
-    
-        
-    
-  //TODO test whether actions do emit their domain events
-  //TODO test whether actions can be vetoed via domain event interception
-  //TODO test command reification
-  //TODO test whether interactions spawn their own transactions, commands, interactions(applib)
 
 
 }

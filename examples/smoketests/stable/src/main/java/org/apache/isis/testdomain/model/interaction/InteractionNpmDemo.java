@@ -33,11 +33,11 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.Getter;
 import lombok.Setter;
 
-@XmlRootElement(name = "InteractionDemo")
+@XmlRootElement(name = "InteractionNpmDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType="smoketests.InteractionDemo", editing=Editing.ENABLED)
-public class InteractionDemo {
+@DomainObject(nature=Nature.VIEW_MODEL, objectType="smoketests.InteractionNpmDemo", editing=Editing.ENABLED)
+public class InteractionNpmDemo {
 
     @Property
     @PropertyLayout(multiLine=3)
