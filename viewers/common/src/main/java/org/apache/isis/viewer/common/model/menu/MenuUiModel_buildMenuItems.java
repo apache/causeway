@@ -114,6 +114,14 @@ final class MenuUiModel_buildMenuItems {
                 
                 menuVisitor.addTopLevel(topLevelDto);
                 pushedCurrentTopLevel = true;
+                
+                // add section label if first
+                if(isFirstInSection) {
+                    if(_Strings.isNotEmpty(menuSection.getNamed())) {
+                        menuVisitor.addSectionLabel(menuSection.getNamed());    
+                    }
+                }
+                
             } else {
                 if(isFirstInSection) {
                     if(_Strings.isNotEmpty(menuSection.getNamed())) {

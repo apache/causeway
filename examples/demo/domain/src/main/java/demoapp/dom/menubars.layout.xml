@@ -25,6 +25,7 @@ as a replacement for
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="booleans"/>
             </mb3:section>
             <mb3:section>
+            	<mb3:named>Wrappers</mb3:named>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperBytes"/>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperShorts"/>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperIntegers"/>

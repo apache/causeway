@@ -105,8 +105,7 @@ public abstract class MenuActionPanel extends PanelBase {
         val fragment = new Fragment("content", "sectionItem", parent);
         fragment.add(menuItemUiLabel);
         listItem.add(fragment);
-        
-        
+        listItem.add(new CssClassAppender("list-section-label"));
     }
     
 
