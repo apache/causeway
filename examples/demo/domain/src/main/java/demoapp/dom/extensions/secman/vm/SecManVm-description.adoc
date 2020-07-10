@@ -7,7 +7,7 @@ For example:
 
 [source,java]
 ----
-include::../spiimpl/ApplicationTenancyEvaluatorForDemo.java[tags=class]
+include::ApplicationTenancyEvaluatorForDemo.java[tags=class]
 ----
 <.> implements the SPI.
 There can be multiple implementations; all will be checked.

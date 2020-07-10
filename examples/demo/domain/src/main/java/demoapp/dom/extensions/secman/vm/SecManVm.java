@@ -18,40 +18,25 @@
  */
 package demoapp.dom.extensions.secman.vm;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.extensions.secman.entities.TenantedJdo;
 import demoapp.dom.extensions.secman.entities.TenantedJdoEntities;
-import demoapp.dom.extensions.secman.spiimpl.ApplicationTenancyEvaluatorForDemo;
-import demoapp.dom.viewmodels.jaxbrefentity.ChildJdo;
 
 //tag::class[]
 @XmlRootElement(name = "root")

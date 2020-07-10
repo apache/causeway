@@ -1,4 +1,4 @@
-package demoapp.dom.extensions.secman.spiimpl;
+package demoapp.dom.extensions.secman.vm;
 
 import java.util.regex.Pattern;
 
