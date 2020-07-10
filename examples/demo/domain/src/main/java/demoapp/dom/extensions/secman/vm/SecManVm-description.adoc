@@ -16,9 +16,26 @@ There can be multiple implementations; all will be checked.
 This demo application deals only with the `TenantedJdo` entity type.
 
 <.> whether the current user can view the domain object.
+
 <.> whether the current user can interact (invoke actions, modify the properties of) the domain object.
 
-This view model object you are viewing at right now provides a couple of properties to control the domain service, for example:
+This demo example doesn't in fact use the current `ApplicationUser` at all.
+A typical implementation though can exploit the fact that `ApplicationUser` implements `HasAtPath` and therefore can return an `atPath`: the "application tenancy path":
+
+[source,java]
+----
+public interface ApplicationUser extends HasAtPath {
+    String getAtPath();
+    //  ...
+}
+----
+
+The `atPath` is just a string and can take any format and be processed in any way that makes sense.
+One algorithm is to use it to define a hierarchy path, for example "/GBR/LON" represents a user based in London, Great Britain while "/ITA/MIL" is a user based in Milan, Italy.
+If the domain object also implements `HasAtPath`, then the `ApplicationTenancyEvaluator` can compare the two ``atPath``s to determine if the location/tenancy of the user is compatible with the location/tenancy of the domain object.
+
+This particular demo though simply uses a regular expression to control visibility and usability, with two properties (to the left-hand side of this page) used to control the domain service.
+For example:
 
 [source,java]
 ----
