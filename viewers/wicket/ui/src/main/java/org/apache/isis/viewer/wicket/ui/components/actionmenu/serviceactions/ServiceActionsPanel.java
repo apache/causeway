@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -69,7 +67,10 @@ public class ServiceActionsPanel extends MenuActionPanel {
                 
                 listItem.add(new Label("name", menuItem.getName()));
                 listItem.add(topMenu);
-                listItem.add(new CssClassAppender(cssForServices(menuItem)));
+                if(menuItem.getItemType().isActionOrSubMenuContainer()) {
+                    listItem.add(new CssClassAppender(cssForServices(menuItem)));    
+                }
+                
             }
         };
         add(menuItemsView);
@@ -96,28 +97,24 @@ public class ServiceActionsPanel extends MenuActionPanel {
     }
     
     private static String cssForServices(CssMenuItem menuItem) {
-        final List<CssMenuItem> childItems = menuItem.getSubMenuItems();
-        return _NullSafe.stream(childItems) 
-                .map((final CssMenuItem input) -> {
-                    final String actionIdentifier = input.getLinkAndLabel().getActionUiMetaModel().getActionIdentifier();
-                    if (actionIdentifier != null) {
-                        // busrules-busrulesobjects-findbyname
-                        final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
-                        final int i = actionId.lastIndexOf("-");
-                        // busrules-busrulesobjects
-                        return i == -1 ? actionId : actionId.substring(0, i);
-                    } else {
-                        return null;
-                    }
-                })
-                .filter((@Nullable final String input) -> {
-                    return input != null;
-                })
-                .map((final String input) -> {
-                    return "isis-" + input;
-                })
-                .distinct()
-                .collect(Collectors.joining(" "));
+        return _NullSafe.stream(menuItem.getSubMenuItems())
+        .filter(cssMenuItem->cssMenuItem.getItemType().isActionOrSubMenuContainer())
+        .map(cssMenuItem -> {
+            val actionIdentifier = cssMenuItem.getLinkAndLabel().getActionUiMetaModel().getActionIdentifier();
+            if (actionIdentifier != null) {
+                // busrules-busrulesobjects-findbyname
+                final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
+                final int i = actionId.lastIndexOf("-");
+                // busrules-busrulesobjects
+                return i == -1 ? actionId : actionId.substring(0, i);
+            } else {
+                return null;
+            }
+        })
+        .filter(_NullSafe::isPresent)
+        .map((final String input) -> "isis-" + input)
+        .distinct()
+        .collect(Collectors.joining(" "));
     }
 
 

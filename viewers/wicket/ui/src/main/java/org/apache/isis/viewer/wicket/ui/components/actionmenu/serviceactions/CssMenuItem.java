@@ -47,22 +47,23 @@ implements Serializable {
     private static final String ID_SUB_MENU_ITEMS = "subMenuItems";
 
     public static CssMenuItem newMenuItem(final String name) {
-        return new CssMenuItem(name);
+        return new CssMenuItem(name, MenuItemType.ACTION_OR_SUBMENU_CONTAINER);
     }
 
     @Getter private final String name;
     
     @Getter @Setter private LinkAndLabel linkAndLabel;
     
-    private CssMenuItem(final String name) {
+    private CssMenuItem(final String name, final MenuItemType itemType) {
         this.name = name;
+        this.itemType = itemType;
     }
     
-    protected CssMenuItem newSubMenuItem(final String name) {
-        val subMenuItem = newMenuItem(name);
-        subMenuItem.setParent(this);
-        return subMenuItem;
-    }
+//    protected CssMenuItem newSubMenuItem(final String name, final MenuItemType itemType) {
+//        val subMenuItem = newMenuItem(name);
+//        subMenuItem.setParent(this);
+//        return subMenuItem;
+//    }
     
     private final List<CssMenuItem> subMenuItems = _Lists.newArrayList();
     protected void addSubMenuItem(final CssMenuItem cssMenuItem) {
@@ -181,8 +182,28 @@ implements Serializable {
         return parent != null;
     }
 
+    // -- SUPPORT FOR SPECIAL MENU ITEMS
+    
+    public enum MenuItemType {
+        SPACER,
+        SECTION_LABEL,
+        ACTION_OR_SUBMENU_CONTAINER;
 
+        boolean isActionOrSubMenuContainer() {
+            return this == ACTION_OR_SUBMENU_CONTAINER;
+        }
+    }
+    
+    @Getter
+    private final MenuItemType itemType;
+    
+    public static CssMenuItem newSpacer() {
+        return new CssMenuItem("---", MenuItemType.SPACER);
+    }
 
+    public static CssMenuItem newSectionLabel(String named) {
+        return new CssMenuItem(named, MenuItemType.SECTION_LABEL);
+    }
 
 
 

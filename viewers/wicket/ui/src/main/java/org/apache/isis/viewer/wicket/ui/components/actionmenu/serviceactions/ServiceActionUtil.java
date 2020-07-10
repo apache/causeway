@@ -150,7 +150,8 @@ public final class ServiceActionUtil {
 
         @Override
         public void addSectionSpacer() {
-            // TODO handle
+            val menuSection = CssMenuItem.newSpacer();
+            currentTopLevelMenu.addSubMenuItem(menuSection);
         }
 
         @Override
@@ -158,7 +159,6 @@ public final class ServiceActionUtil {
             val managedAction = menuDto.getManagedAction();
             
             val menuItem = CssMenuItem.newMenuItem(menuDto.getName());
-            
             currentTopLevelMenu.addSubMenuItem(menuItem);
             
             menuItem.setLinkAndLabel(linkAndLabelFactory.newActionLink(menuDto.getName(), managedAction));
@@ -166,8 +166,8 @@ public final class ServiceActionUtil {
 
         @Override
         public void addSectionLabel(String named) {
-            // TODO Auto-generated method stub
-            
+            val menuSectionLabel = CssMenuItem.newSectionLabel(named);
+            currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
         
     }

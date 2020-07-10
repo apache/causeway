@@ -21,11 +21,14 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
@@ -47,6 +50,17 @@ public abstract class MenuActionPanel extends PanelBase {
             protected void populateItem(ListItem<CssMenuItem> listItem) {
                 val subMenuItem = listItem.getModelObject();
 
+                switch(subMenuItem.getItemType()) {
+                case SPACER:
+                    addSpacer(subMenuItem, listItem);
+                    return;
+                case SECTION_LABEL:
+                    addSectionLabel(subMenuItem, listItem);
+                    return;
+                default:
+                    // fall through
+                }
+                
                 if (subMenuItem.hasSubMenuItems()) {
                     addFolderItem(subMenuItem, listItem);
                 } else {
@@ -78,5 +92,22 @@ public abstract class MenuActionPanel extends PanelBase {
                 super.getCommonContext(), menuItem, listItem, parent);
     }
 
+    private void addSpacer(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
+        final MarkupContainer parent = this;
+        val fragment = new Fragment("content", "separatorItem", parent);
+        listItem.add(fragment);
+        listItem.add(new CssClassAppender("list-separator"));
+    }
+    
+    private void addSectionLabel(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
+        final MarkupContainer parent = this;
+        val menuItemUiLabel = new Label("sectionLabel", menuItem.getName());
+        val fragment = new Fragment("content", "sectionItem", parent);
+        fragment.add(menuItemUiLabel);
+        listItem.add(fragment);
+        
+        
+    }
+    
 
 }
