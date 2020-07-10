@@ -116,7 +116,8 @@
 }
 
 .literalblock + .colist, .listingblock + .colist {
-    margin-top: 1.0em
+    margin-top: 1.0em;
+    margin-bottom: 1.0em;
 }
 
 .colist td:not([class]):first-child {

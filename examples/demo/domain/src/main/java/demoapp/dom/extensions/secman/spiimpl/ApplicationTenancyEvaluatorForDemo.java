@@ -30,7 +30,7 @@ public class ApplicationTenancyEvaluatorForDemo
         val tenantedJdo = (TenantedJdo) domainObject;
         val name = tenantedJdo.getName();
 
-        return hidePattern.matcher(name).matches() ? "hidden" : null;
+        return hidePattern.matcher(name).matches() ? "any non-null value will hide" : null;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ApplicationTenancyEvaluatorForDemo
         val tenantedJdo = (TenantedJdo) domainObject;
         val name = tenantedJdo.getName();
 
-        return disablePattern.matcher(name).matches() ? "disabled" : null;
+        return disablePattern.matcher(name).matches() ? String.format("disabled, because name matches '%s'", disablePattern) : null;
     }
 
     @Getter
