@@ -22,7 +22,7 @@ import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.ClassDiagram
-import org.apache.isis.client.kroviz.ui.ImageDialog
+import org.apache.isis.client.kroviz.ui.DiagramDialog
 import org.apache.isis.client.kroviz.ui.NotificationDialog
 import org.apache.isis.client.kroviz.utils.IconManager
 import pl.treksoft.kvision.core.*
@@ -66,7 +66,7 @@ object RoStatusBar {
         umlDiagram.onClick {
             val title = dd.title
             val code = ClassDiagram.buildDiagramCode(dd)
-            ImageDialog(title, code).open()
+            DiagramDialog(title, code).open()
         }
     }
 

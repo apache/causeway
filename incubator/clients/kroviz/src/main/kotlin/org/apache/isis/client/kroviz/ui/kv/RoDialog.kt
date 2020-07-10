@@ -20,9 +20,9 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.Command
+import org.apache.isis.client.kroviz.ui.DiagramDialog
 import org.apache.isis.client.kroviz.ui.Displayable
 import org.apache.isis.client.kroviz.ui.FormItem
-import org.apache.isis.client.kroviz.ui.ImageDialog
 import org.apache.isis.client.kroviz.utils.Direction
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
@@ -68,7 +68,7 @@ class RoDialog(
             "fas fa-plus",
             ButtonStyle.OUTLINEINFO)
             .onClick {
-                (command as ImageDialog).scale(Direction.UP)
+                (command as DiagramDialog).scale(Direction.UP)
             }
 
     @Deprecated("remove once leaflet/svg is fully operational")
@@ -77,7 +77,7 @@ class RoDialog(
             "fas fa-minus",
             ButtonStyle.OUTLINEINFO)
             .onClick {
-                (command as ImageDialog).scale(Direction.DOWN)
+                (command as DiagramDialog).scale(Direction.DOWN)
             }
 
     var formPanel: FormPanel<String>? = null

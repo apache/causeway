@@ -22,7 +22,7 @@ import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 import org.apache.isis.client.kroviz.utils.*
 
-class ImageDialog(
+class DiagramDialog(
         var label: String,
         private var pumlCode: String) : Command() {
 

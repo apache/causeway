@@ -39,8 +39,11 @@ import pl.treksoft.kvision.form.time.DateTime
 import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.Div
 import pl.treksoft.kvision.html.Iframe
+import pl.treksoft.kvision.html.Image
+import pl.treksoft.kvision.html.image
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.panel.vPanel
+import pl.treksoft.kvision.require
 import pl.treksoft.kvision.utils.auto
 import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
@@ -152,10 +155,30 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createImage(fi: FormItem): VPanel {
         val item = VPanel {
-            // add InnerPanel to be replaced by callback with svg
-            vPanel {
-                id = (fi.callBack as UUID).value
+            //TODO this is a quick hack, needs to be straightned out
+            when {
+                fi.callBack is UUID -> {
+                    // add InnerPanel to be replaced by callback with svg
+                    vPanel {
+                        id = (fi.callBack as UUID).value
+                    }
+                }
+                fi.content is Image -> fi.content as Image
+                fi.content is String -> {
+                    // interpret as (file) URL and load locally
+                    val url = fi.content as String
+                    console.log("[FPF.createImage]")
+                    console.log(url)
+                    // passing url as string does not work:
+                    // require resolves string to url and `compiles` it into the binary
+                    // working with remote resources allows to me more dynamic
+                    image(
+                            require("img/kroviz-logo.svg"))
+                }
+                else -> {
+                }
             }
+
         }
         item.height = auto
         item.width = 100.perc
