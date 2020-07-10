@@ -18,23 +18,25 @@
  */
 package org.apache.isis.extensions.secman.model.facets;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
+import lombok.Getter;
 import lombok.val;
 
 public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
@@ -76,6 +78,12 @@ public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
         FacetUtil.addFacet(createFacet(cls, facetHolder));
     }
 
+    
+    public static class QueryResultsCacheProviderHolder {
+        @Inject @Getter private Provider<QueryResultsCache> queryResultsCacheProvider;
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private TenantedAuthorizationFacetDefault createFacet(
             final Class<?> cls, 
             final FacetHolder holder) {
@@ -85,26 +93,24 @@ public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
         val evaluators = serviceRegistry
                 .select(ApplicationTenancyEvaluator.class)
                 .stream()
+                .filter(applicationTenancyEvaluator->applicationTenancyEvaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
-        val evaluatorsForCls = Collections.unmodifiableList(
-                _NullSafe.stream(evaluators)
-                .filter(applicationTenancyEvaluator->applicationTenancyEvaluator.handles(cls))
-                .collect(Collectors.<ApplicationTenancyEvaluator>toList()));
-
-        if(evaluatorsForCls.isEmpty()) {
+        if(evaluators.isEmpty()) {
             return null;
         }
-
+        
         val applicationUserRepository =
                 serviceRegistry.lookupService(ApplicationUserRepository.class).orElse(null);
-        val queryResultsCache = 
-                serviceRegistry.lookupService(QueryResultsCache.class).orElse(null);
+        val queryResultsCacheProvider =
+                super.getServiceInjector()
+                .injectServicesInto(new QueryResultsCacheProviderHolder())
+                .getQueryResultsCacheProvider();
         val userService = 
                 serviceRegistry.lookupService(UserService.class).orElse(null);
 
         return new TenantedAuthorizationFacetDefault(
-                evaluatorsForCls, applicationUserRepository, queryResultsCache, userService, holder);
+                evaluators, applicationUserRepository, queryResultsCacheProvider, userService, holder);
     }
 
 
