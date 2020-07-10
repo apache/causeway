@@ -50,7 +50,7 @@ public class BS3MenuSection implements MenuSection, Serializable, ServiceActionL
     private String named;
 
     @Override
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     public String getNamed() {
         return named;
     }
