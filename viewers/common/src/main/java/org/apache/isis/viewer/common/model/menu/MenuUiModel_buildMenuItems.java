@@ -124,10 +124,12 @@ final class MenuUiModel_buildMenuItems {
                 
             } else {
                 if(isFirstInSection) {
-                    if(_Strings.isNotEmpty(menuSection.getNamed())) {
-                        menuVisitor.addSectionLabel(menuSection.getNamed());    
+                    if(_Strings.isEmpty(menuSection.getNamed())) {
+                        menuVisitor.addSectionSpacer();    
                     } else {
+                        //XXX could make it a config option whether non-top sections are preceded with a spacer or not
                         menuVisitor.addSectionSpacer();
+                        menuVisitor.addSectionLabel(menuSection.getNamed());
                     }
                 }
             }
