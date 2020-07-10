@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.list.ListView;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
@@ -48,10 +47,6 @@ public abstract class MenuActionPanel extends PanelBase {
             protected void populateItem(ListItem<CssMenuItem> listItem) {
                 val subMenuItem = listItem.getModelObject();
 
-                if(subMenuItem.isNeedsSpacerBeforeSelf()) {
-                    listItem.add(new CssClassAppender("list-separator"));
-                } 
-
                 if (subMenuItem.hasSubMenuItems()) {
                     addFolderItem(subMenuItem, listItem);
                 } else {
@@ -62,7 +57,6 @@ public abstract class MenuActionPanel extends PanelBase {
         };
     }
     
-    //TODO candidate to be supported by the model itself (recursive)
     protected List<CssMenuItem> flatten(final List<CssMenuItem> menuItems) {
         val subMenuItems = _Lists.<CssMenuItem>newArrayList();
         for (val menuItem : menuItems) {

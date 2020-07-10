@@ -53,7 +53,6 @@ implements Serializable {
     @Getter private final String name;
     
     @Getter @Setter private LinkAndLabel linkAndLabel;
-    @Getter @Setter private boolean needsSpacerBeforeSelf;
     
     private CssMenuItem(final String name) {
         this.name = name;
