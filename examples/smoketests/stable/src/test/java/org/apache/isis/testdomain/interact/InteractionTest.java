@@ -36,7 +36,6 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -226,11 +225,10 @@ class InteractionTest extends InteractionTestAbstract {
         val expectedDefaults = Can.of(
                 new InteractionDemo_biArgEnabled(null).default0Act(),
                 0);
-        val actualDefaults = pendingArgs.getParamValues().map(ManagedObject::getPojo);
+        val actualDefaults = pendingArgs.getParamValues();
         
-        assertComponentWiseEquals(expectedDefaults, actualDefaults);
+        assertComponentWiseUnwrappedEquals(expectedDefaults, actualDefaults);
 
-        //TODO also test PPM variant
     }
     
     @Test 
@@ -254,19 +252,16 @@ class InteractionTest extends InteractionTestAbstract {
         
         //TODO we need to allow ui-component binding
         
-        
-        
         val choices0 = param0Meta.getChoices(pendingArgs, InteractionInitiatedBy.USER); 
         val choices1 = param1Meta.getChoices(pendingArgs, InteractionInitiatedBy.USER);
         
         assertTrue(choices0.isEmpty());
         
         val expectedChoices = new InteractionDemo_biArgEnabled(null).choices1Act();
-        val actualChoices = choices1.map(ManagedObject::getPojo);
+        val actualChoices = choices1;
         
-        assertComponentWiseEquals(expectedChoices, actualChoices);
+        assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
         
-        //TODO also test PPM variant
     }
     
         
