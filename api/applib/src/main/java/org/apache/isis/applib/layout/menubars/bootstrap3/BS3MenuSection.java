@@ -36,6 +36,7 @@ import org.apache.isis.applib.layout.menubars.MenuSection;
 @XmlType(
         name = "section"
         , propOrder = {
+                "named",
                 "serviceActions"
         }
         )
