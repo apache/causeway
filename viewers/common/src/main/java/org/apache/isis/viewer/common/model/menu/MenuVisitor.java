@@ -24,4 +24,9 @@ public interface MenuVisitor {
     void addSectionSpacer();
     void addSubMenu(MenuItemDto menuDto);
     
+    /**
+     * @param named - not null and not empty
+     */
+    void addSectionLabel(String named);
+    
 }

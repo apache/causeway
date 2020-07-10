@@ -69,5 +69,11 @@ public class MenuBuilderFx implements MenuVisitor {
         currentTopLevelMenu.getItems()
         .add(new SeparatorMenuItem());
     }
+
+    @Override
+    public void addSectionLabel(String named) {
+        log.warn("section labels not supported yet: {}", named);
+        addSectionSpacer(); //TODO this is just a fallback
+    }
     
 }

@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -77,7 +78,7 @@ final class MenuUiModel_buildMenuItems {
                     
                     val isFirstInSection = itemsPerSectionCounter.intValue()==0;
                     
-                    menuVisitor.addSubMenu(managedAction, isFirstInSection, actionLayoutData);
+                    menuVisitor.addSubMenu(menuSection, managedAction, isFirstInSection, actionLayoutData);
                     itemsPerSectionCounter.increment();
                     
                 }
@@ -103,6 +104,7 @@ final class MenuUiModel_buildMenuItems {
         }
 
         public void addSubMenu(
+                @NonNull BS3MenuSection menuSection, 
                 @NonNull ManagedAction managedAction,
                 boolean isFirstInSection, 
                 ServiceActionLayoutData actionLayoutData) {
@@ -114,7 +116,11 @@ final class MenuUiModel_buildMenuItems {
                 pushedCurrentTopLevel = true;
             } else {
                 if(isFirstInSection) {
-                    menuVisitor.addSectionSpacer();
+                    if(_Strings.isNotEmpty(menuSection.getNamed())) {
+                        menuVisitor.addSectionLabel(menuSection.getNamed());    
+                    } else {
+                        menuVisitor.addSectionSpacer();
+                    }
                 }
             }
             val menuDto = MenuItemDto.subMenu(

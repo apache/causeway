@@ -168,6 +168,12 @@ public final class ServiceActionUtil {
                 menuItem.setNeedsSpacerBeforeSelf(true);
             }
         }
+
+        @Override
+        public void addSectionLabel(String named) {
+            // TODO Auto-generated method stub
+            
+        }
         
     }
     
