@@ -1,4 +1,4 @@
-package demoapp.dom.extensions.secman.entities.seed;
+package demoapp.dom.extensions.secman.apptenancy.entities.seed;
 
 import javax.inject.Inject;
 
@@ -9,7 +9,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom.extensions.secman.entities.TenantedJdo;
+import demoapp.dom.extensions.secman.apptenancy.entities.TenantedJdo;
 
 @Service
 public class TenantedJdoSeedService extends SeedServiceAbstract {

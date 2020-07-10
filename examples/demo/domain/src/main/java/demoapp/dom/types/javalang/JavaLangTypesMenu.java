@@ -40,13 +40,13 @@ public class JavaLangTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaLangStrings javaLangStrings(){
+    public JavaLangStrings strings(){
         return new JavaLangStrings();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaLangVoids javaLangVoids(){
+    public JavaLangVoids voids(){
         return new JavaLangVoids();
     }
 

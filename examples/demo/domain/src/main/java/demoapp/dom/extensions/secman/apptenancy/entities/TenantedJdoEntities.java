@@ -1,7 +1,6 @@
-package demoapp.dom.extensions.secman.entities;
+package demoapp.dom.extensions.secman.apptenancy.entities;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 

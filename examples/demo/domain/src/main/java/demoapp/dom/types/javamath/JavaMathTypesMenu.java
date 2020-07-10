@@ -39,13 +39,13 @@ public class JavaMathTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaMathBigDecimals javaMathBigDecimals(){
+    public JavaMathBigDecimals bigDecimals(){
         return new JavaMathBigDecimals();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaMathBigIntegers javaMathBigIntegers(){
+    public JavaMathBigIntegers bigIntegers(){
         return new JavaMathBigIntegers();
     }
 

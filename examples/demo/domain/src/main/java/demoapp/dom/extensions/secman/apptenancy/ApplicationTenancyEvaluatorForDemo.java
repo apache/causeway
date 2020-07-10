@@ -1,4 +1,4 @@
-package demoapp.dom.extensions.secman.vm;
+package demoapp.dom.extensions.secman.apptenancy;
 
 import java.util.regex.Pattern;
 
@@ -10,7 +10,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import lombok.Getter;
 import lombok.val;
 
-import demoapp.dom.extensions.secman.entities.TenantedJdo;
+import demoapp.dom.extensions.secman.apptenancy.entities.TenantedJdo;
 
 //tag::class[]
 @Service

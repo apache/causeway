@@ -37,13 +37,13 @@ public class JavaUtilTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaUtilUuids javaUtilUuids(){
+    public JavaUtilUuids uuids(){
         return new JavaUtilUuids();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaUtilDates javaUtilDates(){
+    public JavaUtilDates dates(){
         return new JavaUtilDates();
     }
 

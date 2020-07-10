@@ -19,7 +19,9 @@
 package demoapp.dom.viewmodels;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.val;
@@ -28,27 +30,28 @@ import demoapp.dom.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
 import demoapp.dom.viewmodels.usingjaxb.StatefulVmUsingJaxb;
 
 @DomainService(
-        objectType = "demo.ViewModels"
+        objectType = "demo.ViewModelMenu"
 )
-public class ViewModels {
+@DomainServiceLayout(named = "View Models")
+public class ViewModelMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    public StatefulVmUsingJaxb openStateful(final String message) {
+    public StatefulVmUsingJaxb stateful(final String message) {
         val viewModel = new StatefulVmUsingJaxb();
         viewModel.setMessage(message);
         return viewModel;
     }
-    public String default0OpenStateful() {
+    public String default0Stateful() {
         return "Some initial state";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public StatefulVmJaxbRefsEntity openStatefulRefsEntity(final String message) {
+    public StatefulVmJaxbRefsEntity statefulRefsEntity(final String message) {
         val viewModel = new StatefulVmJaxbRefsEntity();
         viewModel.setMessage(message);
         return viewModel;
     }
-    public String default0OpenStatefulRefsEntity() {
+    public String default0StatefulRefsEntity() {
         return "Some initial state";
     }
 

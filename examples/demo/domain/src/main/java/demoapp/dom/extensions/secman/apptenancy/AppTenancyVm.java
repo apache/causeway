@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.extensions.secman.vm;
+package demoapp.dom.extensions.secman.apptenancy;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.extensions.secman.entities.TenantedJdo;
-import demoapp.dom.extensions.secman.entities.TenantedJdoEntities;
+import demoapp.dom.extensions.secman.apptenancy.entities.TenantedJdo;
+import demoapp.dom.extensions.secman.apptenancy.entities.TenantedJdoEntities;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -46,7 +46,7 @@ import demoapp.dom.extensions.secman.entities.TenantedJdoEntities;
         nature=Nature.VIEW_MODEL
         , objectType = "demo.SecManVm"
 )
-public class SecManVm implements HasAsciiDocDescription {
+public class AppTenancyVm implements HasAsciiDocDescription {
 
     public String title() {
         return "Tenancy demo";
@@ -62,7 +62,7 @@ public class SecManVm implements HasAsciiDocDescription {
     }
     @Action(associateWith = "hideRegex")
     @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
-    public SecManVm updateHideRegex(
+    public AppTenancyVm updateHideRegex(
             @Parameter(optionality = Optionality.OPTIONAL)
             String regex) {
         applicationTenancyEvaluatorForDemo.setHideRegex(regex);
@@ -79,7 +79,7 @@ public class SecManVm implements HasAsciiDocDescription {
     }
     @Action(associateWith = "disableRegex")
     @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
-    public SecManVm updateDisableRegex(
+    public AppTenancyVm updateDisableRegex(
             @Parameter(optionality = Optionality.OPTIONAL)
             String regex) {
         applicationTenancyEvaluatorForDemo.setDisableRegex(regex);

@@ -39,19 +39,19 @@ public class JavaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaTimeLocalDates javaTimeLocalDates(){
+    public JavaTimeLocalDates localDates(){
         return new JavaTimeLocalDates();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaTimeLocalDateTimes javaTimeLocalDateTimes(){
+    public JavaTimeLocalDateTimes localDateTimes(){
         return new JavaTimeLocalDateTimes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaTimeOffsetDateTimes javaTimeOffsetDateTimes(){
+    public JavaTimeOffsetDateTimes offsetDateTimes(){
         return new JavaTimeOffsetDateTimes();
     }
 

@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.extensions.secman.vm.SecManVm;
+import demoapp.dom.extensions.secman.apptenancy.AppTenancyVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.IsisExtSecManMenu")
 @DomainObjectLayout(named="SecMan")
@@ -34,8 +34,8 @@ import demoapp.dom.extensions.secman.vm.SecManVm;
 public class IsisExtSecManMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    public SecManVm secMan(){
-        return new SecManVm();
+    public AppTenancyVm appTenancy(){
+        return new AppTenancyVm();
     }
 
 

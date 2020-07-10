@@ -36,7 +36,7 @@ public class JavaNetTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaNetUrls javaNetUrls(){
+    public JavaNetUrls urls(){
         return new JavaNetUrls();
     }
 
