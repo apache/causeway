@@ -23,7 +23,7 @@
 	
 	<artifactId>demo-domain</artifactId>
 
-	<name>Apache Isis Demo - Domain</name>
+	<name>Demo - Domain</name>
 
 	<packaging>jar</packaging>
 

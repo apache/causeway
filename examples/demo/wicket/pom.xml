@@ -23,7 +23,7 @@
 
 	<artifactId>demo-wicket</artifactId>
 
-	<name>Apache Isis Demo - Wicket</name>
+	<name>Demo - Wicket</name>
 
 	<packaging>${packaging.type}</packaging>
 
