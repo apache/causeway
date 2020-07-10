@@ -11,35 +11,22 @@
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis</groupId>
-	<artifactId>isis-all</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<parent>
+		<groupId>org.apache.isis.core</groupId>
+		<artifactId>isis-parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../core-parent/pom.xml</relativePath>
+	</parent>
 
+	<artifactId>antora</artifactId>
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis (Aggregator)</name>
-	<description>
-        Convenience aggregator POM that references all modules.
-        The parent POM of the core framework is core-parent/pom.xml
-    </description>
-
-	<scm>
-		<connection>scm:git:https://github.com/apache/isis.git</connection>
-		<developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
-		<url>https://github.com/apache/isis.git</url>
-		<tag>HEAD</tag>
-	</scm>
-
-	<modules>
-		<module>antora</module>
-		<module>core-parent</module>
-
-		<module>examples/demo</module>
-		<module>examples/smoketests</module>
-	</modules>
+	<name>Apache Isis Antora</name>
 
 </project>
+
+

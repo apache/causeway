@@ -1,5 +1,6 @@
-package demoapp.dom.viewmodels.jaxbrefentity;
+package demoapp.dom.viewmodels.jaxbrefentity.seed;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -12,27 +13,24 @@ import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+import demoapp.dom._infra.samples.NameSamples;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom.viewmodels.jaxbrefentity.ChildJdo;
+
 @Service
-public class ChildJdoSeedService {
+public class ChildJdoSeedService extends SeedServiceAbstract {
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
-
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new ChildJdoEntityFixture());
-        }
+    public ChildJdoSeedService() {
+        super(ChildJdoEntityFixture::new);
     }
-
-    @Inject
-    FixtureScripts fixtureScripts;
 
     static class ChildJdoEntityFixture extends FixtureScript {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of("Fred", "Mary", "Joe")
+            nameSamples.stream()
                     .map(ChildJdo::new)
-                                        .forEach(domainObject -> {
+                    .forEach(domainObject -> {
                         repositoryService.persist(domainObject);
                         executionContext.addResult(this, domainObject);
                     });
@@ -40,6 +38,9 @@ public class ChildJdoSeedService {
 
         @Inject
         RepositoryService repositoryService;
+
+        @Inject
+        NameSamples nameSamples;
 
     }
 }

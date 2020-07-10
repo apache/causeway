@@ -16,22 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javalang.strings.samples;
+package demoapp.dom._infra.samples;
 
 import java.util.stream.Stream;
 
-import org.springframework.context.annotation.Primary;
+import javax.inject.Named;
+
 import org.springframework.stereotype.Service;
 
 import demoapp.dom.types.Samples;
 
 @Service
-@Primary
-public class JavaLangStringSamples implements Samples<String> {
+public class NameSamples implements Samples<String> {
 
     @Override
     public Stream<String> stream() {
-        return Stream.of("Hello", "world");
+        return Stream.of(
+                "Joey", "Chandler", "Monica", "Ross", "Phoebe", "Rachel",
+                "Tom", "Jerry", "Margo", "Barbara",
+                "Mary", "Mungo", "Midge"
+        );
     }
 
 }

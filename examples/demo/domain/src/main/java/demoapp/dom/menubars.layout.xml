@@ -102,18 +102,21 @@
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>ActionLayout</mb3:named>
+            <mb3:named>Annotations</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
             </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>PropertyLayout</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="cssClass"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Extensions</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="demo.IsisExtSecManMenu" id="secMan"/>
             </mb3:section>
         </mb3:menu>
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.ActionLayout;
+package demoapp.dom.extensions.secman;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -26,19 +26,16 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionLayoutMenu")
-@DomainObjectLayout(named="@ActionLayout")
+import demoapp.dom.extensions.secman.vm.SecManVm;
+
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.IsisExtSecManMenu")
+@DomainObjectLayout(named="SecMan")
 @Log4j2
-public class ActionLayoutMenu {
+public class IsisExtSecManMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.annotations.ActionLayout.position.ActionLayoutPositionVm position(){
-        return new demoapp.dom.annotations.ActionLayout.position.ActionLayoutPositionVm();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.annotations.ActionLayout.promptStyle.ActionLayoutPromptStyleVm promptStyle(){
-        return new demoapp.dom.annotations.ActionLayout.promptStyle.ActionLayoutPromptStyleVm();
+    public SecManVm secMan(){
+        return new SecManVm();
     }
 
 

@@ -1,0 +1,34 @@
+Application Tenancy is the idea that certain information "belongs" to one party and should be either not visible or at least not modifiable by some other party.
+
+The SecMan extension provides a very flexible way of implementing this, through the `ApplicationTenancyEvaluator` SPI.
+This allows a domain service to decide whether to hide or to disable each object for the current user.
+
+For example:
+
+[source,java]
+----
+include::../spiimpl/ApplicationTenancyEvaluatorForDemo.java[tags=class]
+----
+<.> implements the SPI.
+There can be multiple implementations; all will be checked.
+
+<.> whether this implementation handles the type of the domain object being considered.
+This demo application deals only with the `TenantedJdo` entity type.
+
+<.> whether the current user can view the domain object.
+<.> whether the current user can interact (invoke actions, modify the properties of) the domain object.
+
+This view model object you are viewing at right now provides a couple of properties to control the domain service, for example:
+
+[source,java]
+----
+include::SecManVm.java[tags=hideRegex]
+----
+
+[IMPORTANT]
+====
+This SPI is a presentation-layer concern only.
+It does not prevent the domain objects from being retrieved from the data store.
+
+In particular, there is nothing to prevent "malicious" code from retrieving and interacting with objects from another tenancy.
+====
