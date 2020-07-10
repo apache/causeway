@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Unless released we are using
+	https://raw.githubusercontent.com/apache/isis/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd
+as a replacement for
+	http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd
+ -->
 <mb3:menuBars
-        xsi:schemaLocation="http://isis.apache.org/applib/layout/menubars/bootstrap3 http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd"
+        xsi:schemaLocation="http://isis.apache.org/applib/layout/menubars/bootstrap3 https://raw.githubusercontent.com/apache/isis/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd"
         xmlns:cpt="http://isis.apache.org/applib/layout/component"
         xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
