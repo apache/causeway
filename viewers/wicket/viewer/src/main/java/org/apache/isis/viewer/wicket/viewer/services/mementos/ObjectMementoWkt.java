@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import com.google.common.base.Objects;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.commons.internal.base._NullSafe;
@@ -32,6 +34,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -43,32 +46,33 @@ import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-final class ObjectMementoLegacy implements Serializable {
+final class ObjectMementoWkt implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Factory method
      */
-    public static ObjectMementoLegacy createOrNull(ManagedObject adapter) {
+    public static ObjectMementoWkt createOrNull(ManagedObject adapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             return null;
         }
-        return new ObjectMementoLegacy(adapter);
+        return new ObjectMementoWkt(adapter);
     }
 
     /**
      * Factory method
      */
-    static ObjectMementoLegacy createPersistent(
+    static ObjectMementoWkt createPersistent(
             RootOid rootOid, 
             SpecificationLoader specificationLoader) {
 
-        return new ObjectMementoLegacy(rootOid, specificationLoader);
+        return new ObjectMementoWkt(rootOid, specificationLoader);
     }
 
     private enum Cardinality {
@@ -79,23 +83,23 @@ final class ObjectMementoLegacy implements Serializable {
 
             @Override
             public ManagedObject asAdapter(
-                    ObjectMementoLegacy memento,
-                    SpecificationLoader specificationLoader) {
+                    ObjectMementoWkt memento,
+                    MetaModelContext mmc) {
 
-                return memento.recreateStrategy.recreateObject(memento, specificationLoader);
+                return memento.recreateStrategy.recreateObject(memento, mmc);
             }
 
             @Override
-            public int hashCode(ObjectMementoLegacy memento) {
+            public int hashCode(ObjectMementoWkt memento) {
                 return memento.recreateStrategy.hashCode(memento);
             }
 
             @Override
-            public boolean equals(ObjectMementoLegacy memento, Object other) {
-                if (!(other instanceof ObjectMementoLegacy)) {
+            public boolean equals(ObjectMementoWkt memento, Object other) {
+                if (!(other instanceof ObjectMementoWkt)) {
                     return false;
                 }
-                final ObjectMementoLegacy otherMemento = (ObjectMementoLegacy) other;
+                final ObjectMementoWkt otherMemento = (ObjectMementoWkt) other;
                 if(otherMemento.cardinality != SCALAR) {
                     return false;
                 }
@@ -103,7 +107,7 @@ final class ObjectMementoLegacy implements Serializable {
             }
 
             @Override
-            public String asString(final ObjectMementoLegacy memento) {
+            public String asString(final ObjectMementoWkt memento) {
                 return memento.recreateStrategy.toString(memento);
             }
         },
@@ -114,26 +118,26 @@ final class ObjectMementoLegacy implements Serializable {
 
             @Override
             public ManagedObject asAdapter(
-                    ObjectMementoLegacy memento,
-                    SpecificationLoader specificationLoader) {
+                    ObjectMementoWkt memento,
+                    MetaModelContext mmc) {
 
                 final List<Object> listOfPojos =
-                        _Lists.map(memento.list, Functions.toPojo(specificationLoader));
-
+                        _Lists.map(memento.list, Functions.toPojo(mmc));
+                val specificationLoader = mmc.getSpecificationLoader();
                 return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
             }
 
             @Override
-            public int hashCode(ObjectMementoLegacy memento) {
+            public int hashCode(ObjectMementoWkt memento) {
                 return memento.list.hashCode();
             }
 
             @Override
-            public boolean equals(ObjectMementoLegacy memento, Object other) {
-                if (!(other instanceof ObjectMementoLegacy)) {
+            public boolean equals(ObjectMementoWkt memento, Object other) {
+                if (!(other instanceof ObjectMementoWkt)) {
                     return false;
                 }
-                final ObjectMementoLegacy otherMemento = (ObjectMementoLegacy) other;
+                final ObjectMementoWkt otherMemento = (ObjectMementoWkt) other;
                 if(otherMemento.cardinality != VECTOR) {
                     return false;
                 }
@@ -141,7 +145,7 @@ final class ObjectMementoLegacy implements Serializable {
             }
 
             @Override
-            public String asString(ObjectMementoLegacy memento) {
+            public String asString(ObjectMementoWkt memento) {
                 return memento.list.toString();
             }
         };
@@ -154,28 +158,29 @@ final class ObjectMementoLegacy implements Serializable {
         }
 
         public abstract ManagedObject asAdapter(
-                ObjectMementoLegacy memento,
-                SpecificationLoader specificationLoader);
+                ObjectMementoWkt memento,
+                MetaModelContext mmc);
 
-        public abstract int hashCode(ObjectMementoLegacy memento);
+        public abstract int hashCode(ObjectMementoWkt memento);
 
-        public abstract boolean equals(ObjectMementoLegacy memento, Object other);
+        public abstract boolean equals(ObjectMementoWkt memento, Object other);
 
-        public abstract String asString(ObjectMementoLegacy memento);
+        public abstract String asString(ObjectMementoWkt memento);
     }
 
     private enum RecreateStrategy {
         /**
-         * The {@link ObjectAdapter} that this is the memento for directly has
+         * The {@link ObjectAdapter} that this is the memento for, directly has
          * an {@link EncodableFacet} (it is almost certainly a value), and so is
          * stored directly.
          */
         ENCODEABLE {
             @Override
             public ManagedObject recreateObject(
-                    ObjectMementoLegacy memento,
-                    SpecificationLoader specificationLoader) {
+                    ObjectMementoWkt memento,
+                    MetaModelContext mmc) {
 
+                val specificationLoader = mmc.getSpecificationLoader();
                 ObjectSpecId specId = memento.objectSpecId;
                 ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(specId);
                 EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
@@ -184,38 +189,38 @@ final class ObjectMementoLegacy implements Serializable {
 
             @Override
             public boolean equals(
-                    ObjectMementoLegacy memento, 
-                    ObjectMementoLegacy otherMemento) {
+                    ObjectMementoWkt memento, 
+                    ObjectMementoWkt otherMemento) {
 
                 return otherMemento.recreateStrategy == ENCODEABLE && 
                         memento.encodableValue.equals(otherMemento.encodableValue);
             }
 
             @Override
-            public int hashCode(ObjectMementoLegacy memento) {
+            public int hashCode(ObjectMementoWkt memento) {
                 return memento.encodableValue.hashCode();
             }
 
             @Override
-            public String toString(ObjectMementoLegacy memento) {
+            public String toString(ObjectMementoWkt memento) {
                 return memento.encodableValue;
             }
 
             @Override
             public void resetVersion(
-                    ObjectMementoLegacy memento,
-                    SpecificationLoader specificationLoader) {
+                    ObjectMementoWkt memento,
+                    MetaModelContext mmc) {
             }
         },
         /**
-         * The {@link ObjectAdapter} that this is for is already known by its
+         * The {@link ObjectAdapter} that this is for, is already known by its
          * (persistent) {@link Oid}.
          */
         LOOKUP {
             @Override
             public ManagedObject recreateObject(
-                    ObjectMementoLegacy memento,
-                    SpecificationLoader specificationLoader) {
+                    ObjectMementoWkt memento,
+                    MetaModelContext mmc) {
 
                 if(_NullSafe.isEmpty(memento.persistentOidStr)) {
                     throw _Exceptions.illegalArgument("need an id to lookup an object specId=%s", memento.objectSpecId);
@@ -225,6 +230,7 @@ final class ObjectMementoLegacy implements Serializable {
                 try {
 
                     log.debug("lookup by rootOid [{}]", rootOid);
+                    val specificationLoader = mmc.getSpecificationLoader();
                     return rootOid.loadObject(specificationLoader);
 
                 } finally {
@@ -240,47 +246,90 @@ final class ObjectMementoLegacy implements Serializable {
 
             @Override
             public void resetVersion(
-                    ObjectMementoLegacy memento,
-                    SpecificationLoader specificationLoader) {
+                    ObjectMementoWkt memento,
+                    MetaModelContext mmc) {
 
                 //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
-                ManagedObject adapter = recreateObject(memento, specificationLoader);
+                ManagedObject adapter = recreateObject(memento, mmc);
 
                 memento.persistentOidStr = ManagedObjects.stringifyElseFail(adapter);
             }
 
             @Override
-            public boolean equals(ObjectMementoLegacy oam, ObjectMementoLegacy other) {
-                return other.recreateStrategy == LOOKUP && oam.persistentOidStr.equals(other.persistentOidStr);
+            public boolean equals(ObjectMementoWkt oam, ObjectMementoWkt other) {
+                return other.recreateStrategy == LOOKUP 
+                        && oam.persistentOidStr.equals(other.persistentOidStr);
             }
 
             @Override
-            public int hashCode(ObjectMementoLegacy oam) {
+            public int hashCode(ObjectMementoWkt oam) {
                 return oam.persistentOidStr.hashCode();
             }
 
             @Override
-            public String toString(final ObjectMementoLegacy oam) {
+            public String toString(final ObjectMementoWkt oam) {
                 return oam.persistentOidStr;
             }
 
+        }, 
+        /**
+         * If all other strategies fail, as last resort we use plain java serialization, provided
+         * that the type in question is serializable 
+         */
+        SERIALIZABLE {
+            @Override
+            public ManagedObject recreateObject(
+                    ObjectMementoWkt memento,
+                    MetaModelContext mmc) {
+
+                val specificationLoader = mmc.getSpecificationLoader();
+                ObjectSpecId specId = memento.objectSpecId;
+                ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(specId);
+                return mmc.getObjectManager().getObjectSerializer()
+                        .deserialize(spec, memento.serializedObject);
+            }
+
+            @Override
+            public boolean equals(
+                    ObjectMementoWkt memento, 
+                    ObjectMementoWkt otherMemento) {
+                return otherMemento.recreateStrategy == SERIALIZABLE && 
+                        Objects.equal(memento.serializedObject, otherMemento.serializedObject);
+            }
+
+            @Override
+            public int hashCode(ObjectMementoWkt memento) {
+                return memento.serializedObject.hashCode();
+            }
+
+            @Override
+            public String toString(ObjectMementoWkt memento) {
+                throw _Exceptions.notImplemented();
+            }
+
+            @Override
+            public void resetVersion(
+                    ObjectMementoWkt memento,
+                    MetaModelContext mmc) {
+                // nope
+            }
         };
 
         public abstract ManagedObject recreateObject(
-                ObjectMementoLegacy memento,
-                SpecificationLoader specificationLoader);
+                ObjectMementoWkt memento,
+                MetaModelContext mmc);
 
         public abstract boolean equals(
-                ObjectMementoLegacy memento, 
-                ObjectMementoLegacy otherMemento);
+                ObjectMementoWkt memento, 
+                ObjectMementoWkt otherMemento);
 
-        public abstract int hashCode(ObjectMementoLegacy memento);
+        public abstract int hashCode(ObjectMementoWkt memento);
 
-        public abstract String toString(ObjectMementoLegacy memento);
+        public abstract String toString(ObjectMementoWkt memento);
 
         public abstract void resetVersion(
-                ObjectMementoLegacy memento,
-                SpecificationLoader specificationLoader);
+                ObjectMementoWkt memento,
+                MetaModelContext mmc);
     }
 
 
@@ -306,6 +355,14 @@ final class ObjectMementoLegacy implements Serializable {
      * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
      */
     private String encodableValue;
+    
+    /**
+     * The current value, if {@link RecreateStrategy#SERIALIZABLE}; will be <tt>null</tt> otherwise.
+     *
+     * <p>
+     * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
+     */
+    private byte[] serializedObject;
 
     /**
      * The current value, if {@link RecreateStrategy#LOOKUP}, will be <tt>null</tt> otherwise.
@@ -331,10 +388,10 @@ final class ObjectMementoLegacy implements Serializable {
     /**
      * populated only if {@link #getCardinality() sort} is {@link Cardinality#VECTOR vector}
      */
-    private ArrayList<ObjectMementoLegacy> list;
+    private ArrayList<ObjectMementoWkt> list;
 
-    private ObjectMementoLegacy(
-            ArrayList<ObjectMementoLegacy> list, 
+    private ObjectMementoWkt(
+            ArrayList<ObjectMementoWkt> list, 
             ObjectSpecId objectSpecId) {
 
         this.cardinality = Cardinality.VECTOR;
@@ -342,7 +399,7 @@ final class ObjectMementoLegacy implements Serializable {
         this.objectSpecId = objectSpecId;
     }
 
-    private ObjectMementoLegacy(RootOid rootOid, SpecificationLoader specificationLoader) {
+    private ObjectMementoWkt(RootOid rootOid, SpecificationLoader specificationLoader) {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
         val specId = rootOid.getObjectSpecId(); 
@@ -367,17 +424,14 @@ final class ObjectMementoLegacy implements Serializable {
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
-    private ObjectMementoLegacy(ManagedObject adapter) {
-
-        requires(adapter, "adapter");
-
+    private ObjectMementoWkt(@NonNull final ManagedObject adapter) {
         this.cardinality = Cardinality.SCALAR;
         val spec = adapter.getSpecification();
         objectSpecId = spec.getSpecId();
         init(adapter);
     }
 
-    private ObjectMementoLegacy(ObjectSpecId specId, String encodableValue) {
+    private ObjectMementoWkt(ObjectSpecId specId, String encodableValue) {
         this.cardinality = Cardinality.SCALAR;
         this.objectSpecId = specId;
         this.encodableValue = encodableValue;
@@ -389,6 +443,18 @@ final class ObjectMementoLegacy implements Serializable {
 
         val spec = adapter.getSpecification();
 
+        if(spec.isIdentifiable()) {
+            val rootOid = ManagedObjects.identifyElseFail(adapter);
+            persistentOidStr = rootOid.enString();
+            bookmark = rootOid.asBookmark();
+            if(adapter.getPojo() instanceof HintStore.HintIdProvider) {
+                HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getPojo();
+                this.hintId = provider.hintId();
+            }
+            recreateStrategy = RecreateStrategy.LOOKUP;
+            return;
+        }
+        
         val encodableFacet = spec.getFacet(EncodableFacet.class);
         val isEncodable = encodableFacet != null;
         if (isEncodable) {
@@ -396,15 +462,20 @@ final class ObjectMementoLegacy implements Serializable {
             recreateStrategy = RecreateStrategy.ENCODEABLE;
             return;
         }
-
-        val rootOid = ManagedObjects.identifyElseFail(adapter);
-        persistentOidStr = rootOid.enString();
-        bookmark = rootOid.asBookmark();
-        if(adapter.getPojo() instanceof HintStore.HintIdProvider) {
-            HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getPojo();
-            this.hintId = provider.hintId();
+        
+        if(spec.isSerializable()) {
+            val serializer = spec.getMetaModelContext().getObjectManager().getObjectSerializer();
+            serializedObject = serializer.serialize(adapter); 
+            recreateStrategy = RecreateStrategy.SERIALIZABLE;    
+            return;
         }
-        recreateStrategy = RecreateStrategy.LOOKUP;
+        
+        throw _Exceptions.illegalArgument("Don't know how to create an ObjectMemento for a type "
+                + "with ObjectSpecification %s. "
+                + "All other strategies failed. Type is neither "
+                + "identifiable (isManagedBean() || isViewModel() || isEntity()), nor "
+                + "has encodable semantics, nor is Serializable", spec);
+        
     }
 
     private Cardinality getCardinality() {
@@ -433,8 +504,9 @@ final class ObjectMementoLegacy implements Serializable {
      * best to call once and then hold onto the value thereafter. Alternatively,
      * can call {@link #setAdapter(ManagedObject)} to keep this memento in sync.
      */
-    ManagedObject reconstructObject(SpecificationLoader specificationLoader) {
+    ManagedObject reconstructObject(MetaModelContext mmc) {
 
+        val specificationLoader = mmc.getSpecificationLoader();
         val spec = specificationLoader.loadSpecification(objectSpecId);
         if(spec==null) {
             // eg. ill-formed request
@@ -446,7 +518,7 @@ final class ObjectMementoLegacy implements Serializable {
             return spec.getMetaModelContext().lookupServiceAdapterById(objectSpecId.asString());
         }
         
-        return cardinality.asAdapter(this, specificationLoader);
+        return cardinality.asAdapter(this, mmc);
     }
 
     ObjectSpecId getObjectSpecId() {
@@ -478,14 +550,15 @@ final class ObjectMementoLegacy implements Serializable {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     private static final class Functions {
 
-        private static Function<ObjectMementoLegacy, Object> toPojo(SpecificationLoader specificationLoader) {
+        private static Function<ObjectMementoWkt, Object> toPojo(
+                MetaModelContext mmc) {
 
             return memento->{
                 if(memento == null) {
                     return null;
                 }
                 val objectAdapter = memento
-                        .reconstructObject(specificationLoader);
+                        .reconstructObject(mmc);
                 if(objectAdapter == null) {
                     return null;
                 }

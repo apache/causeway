@@ -18,9 +18,10 @@
  */
 package org.apache.isis.valuetypes.markdown.applib.value;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
@@ -28,8 +29,9 @@ import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
  * Immutable value type holding pre-rendered HTML.
  *
  */
+@org.apache.isis.applib.annotation.Value
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
-public class Markdown implements HasHtml {
+public class Markdown implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
 

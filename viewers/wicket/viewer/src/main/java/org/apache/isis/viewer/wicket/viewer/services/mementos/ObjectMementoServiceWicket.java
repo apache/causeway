@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -63,12 +64,13 @@ import lombok.val;
 public class ObjectMementoServiceWicket implements ObjectMementoService {
 
     @Inject @Getter private SpecificationLoader specificationLoader;
+    @Inject private MetaModelContext mmc;
     @Inject private ObjectManager objectManager;
 
     @Override
     public ObjectMemento mementoForRootOid(@NonNull RootOid rootOid) {
 //        _Probe.errOut("mementoForRootOid %s", rootOid);
-        val mementoAdapter = ObjectMementoLegacy.createPersistent(rootOid, specificationLoader);
+        val mementoAdapter = ObjectMementoWkt.createPersistent(rootOid, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
@@ -76,7 +78,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     public ObjectMemento mementoForObject(@Nullable ManagedObject adapter) {
         assertSingleton(adapter);
 //        _Probe.errOut("mementoForObject %s", adapter);
-        val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
+        val mementoAdapter = ObjectMementoWkt.createOrNull(adapter);
         if(mementoAdapter==null) {
             // sonar-ignore-on (fails to detect this as null guard)
             return ManagedObjects.isSpecified(adapter)
@@ -91,7 +93,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     public ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter) {
 //        _Probe.errOut("mementoForParameter %s", paramAdapter);
         assertSingleton(paramAdapter);
-        val mementoAdapter = ObjectMementoLegacy.createOrNull(paramAdapter);
+        val mementoAdapter = ObjectMementoWkt.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
             return new ObjectMementoForEmpty(paramAdapter.getSpecification().getSpecId());
         }
@@ -147,7 +149,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 
         if(memento instanceof ObjectMementoAdapter) {
             val objectMementoAdapter = (ObjectMementoAdapter) memento;
-            return objectMementoAdapter.reconstructObject(specificationLoader);
+            return objectMementoAdapter.reconstructObject(mmc);
         }
 
         throw _Exceptions.unrecoverableFormatted("unsupported ObjectMemento type %s", memento.getClass());
@@ -178,7 +180,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 
         private static final long serialVersionUID = 1L;
 
-        private final ObjectMementoLegacy delegate;
+        private final ObjectMementoWkt delegate;
 
         @Override
         public String asString() {
@@ -200,8 +202,8 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
             return delegate.getObjectSpecId();
         }
 
-        ManagedObject reconstructObject(SpecificationLoader specificationLoader) {
-            return delegate.reconstructObject(specificationLoader);
+        ManagedObject reconstructObject(MetaModelContext mmc) {
+            return delegate.reconstructObject(mmc);
         }
 
         @Override

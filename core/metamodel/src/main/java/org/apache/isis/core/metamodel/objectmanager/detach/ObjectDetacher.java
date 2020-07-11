@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.detach;
 
-import java.util.Optional;
-
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.context.MetaModelContext;

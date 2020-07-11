@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
+import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -51,6 +52,7 @@ public interface ObjectManager {
     ObjectIdentifier getObjectIdentifier();
     ObjectRefresher getObjectRefresher();
     ObjectDetacher getObjectDetacher();
+    ObjectSerializer getObjectSerializer();
 
     // -- SHORTCUTS
 

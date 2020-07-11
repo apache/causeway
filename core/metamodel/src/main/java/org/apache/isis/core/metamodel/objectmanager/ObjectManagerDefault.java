@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
+import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 
 import lombok.Getter;
 import lombok.val;
@@ -59,6 +60,7 @@ public class ObjectManagerDefault implements ObjectManager {
     @Getter(onMethod = @__(@Override)) private ObjectIdentifier objectIdentifier;
     @Getter(onMethod = @__(@Override)) private ObjectRefresher objectRefresher;
     @Getter(onMethod = @__(@Override)) private ObjectDetacher objectDetacher;
+    @Getter(onMethod = @__(@Override)) private ObjectSerializer objectSerializer;
 
     @PostConstruct
     public void init() {
@@ -68,6 +70,7 @@ public class ObjectManagerDefault implements ObjectManager {
         objectIdentifier = ObjectIdentifier.createDefault();
         objectRefresher = ObjectRefresher.createDefault();
         objectDetacher = ObjectDetacher.createDefault(metaModelContext);
+        objectSerializer = ObjectSerializer.createDefault(metaModelContext);
     }
 
     

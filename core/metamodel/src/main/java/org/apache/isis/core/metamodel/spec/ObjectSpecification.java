@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import java.io.Externalizable;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
@@ -499,6 +501,20 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
         return _NullSafe.streamAutodetect(pojo)
                 .filter(element->!Objects.equals(element, pojo)) // to prevent infinite recursion depth
                 .allMatch(elementSpec::isPojoCompatible);
+    }
+
+    /**
+     * @return whether corresponding class implements {@link java.io.Serializable} or 
+     * {@link java.io.Externalizable}.
+     * @apiNote: per se does not tell what recreation strategy to use, the corresponding class 
+     * might be an entity or a view-model or a value with eg. encodable semantics, which have
+     * different object recreation mechanics
+     * @since 2.0.0 
+     */
+    default boolean isSerializable() {
+        return
+                Serializable.class.isAssignableFrom(getCorrespondingClass())
+                || Externalizable.class.isAssignableFrom(getCorrespondingClass());
     }
 
     

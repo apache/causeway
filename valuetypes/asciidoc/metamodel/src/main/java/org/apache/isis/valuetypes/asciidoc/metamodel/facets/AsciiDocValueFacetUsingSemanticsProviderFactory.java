@@ -19,7 +19,6 @@
 
 package org.apache.isis.valuetypes.asciidoc.metamodel.facets;
 
-import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;

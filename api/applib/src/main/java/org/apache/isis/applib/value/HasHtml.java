@@ -19,11 +19,6 @@
 
 package org.apache.isis.applib.value;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.util.JaxbAdapters;
-
 // tag::refguide[]
 // end::refguide[]
 public interface HasHtml {

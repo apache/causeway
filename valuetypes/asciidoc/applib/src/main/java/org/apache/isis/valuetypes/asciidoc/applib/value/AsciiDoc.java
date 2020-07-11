@@ -29,8 +29,6 @@ import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
  * Immutable value type holding pre-rendered HTML.
  *
  */
-//@Value(semanticsProviderName =
-//        "org.apache.isis.valuetypes.asciidoc.metamodel.facets.AsciiDocValueFacetUsingSemanticsProviderFactory")
 @org.apache.isis.applib.annotation.Value
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
 public class AsciiDoc implements HasHtml, Serializable {
