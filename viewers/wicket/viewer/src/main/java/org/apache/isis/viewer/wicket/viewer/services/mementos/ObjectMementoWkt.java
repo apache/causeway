@@ -123,8 +123,7 @@ final class ObjectMementoWkt implements Serializable {
 
                 final List<Object> listOfPojos =
                         _Lists.map(memento.list, Functions.toPojo(mmc));
-                val specificationLoader = mmc.getSpecificationLoader();
-                return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
+                return ManagedObject.of(mmc.getSpecificationLoader()::loadSpecification, listOfPojos);
             }
 
             @Override
@@ -180,9 +179,8 @@ final class ObjectMementoWkt implements Serializable {
                     ObjectMementoWkt memento,
                     MetaModelContext mmc) {
 
-                val specificationLoader = mmc.getSpecificationLoader();
                 ObjectSpecId specId = memento.objectSpecId;
-                ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(specId);
+                ObjectSpecification objectSpec = mmc.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
                 EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
                 return encodableFacet.fromEncodedString(memento.encodableValue);
             }
@@ -230,8 +228,7 @@ final class ObjectMementoWkt implements Serializable {
                 try {
 
                     log.debug("lookup by rootOid [{}]", rootOid);
-                    val specificationLoader = mmc.getSpecificationLoader();
-                    return rootOid.loadObject(specificationLoader);
+                    return rootOid.loadObject(mmc.getSpecificationLoader());
 
                 } finally {
                     // possibly out-dated insight ...
@@ -282,9 +279,8 @@ final class ObjectMementoWkt implements Serializable {
                     ObjectMementoWkt memento,
                     MetaModelContext mmc) {
 
-                val specificationLoader = mmc.getSpecificationLoader();
                 ObjectSpecId specId = memento.objectSpecId;
-                ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(specId);
+                ObjectSpecification spec = mmc.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
                 return mmc.getObjectManager().getObjectSerializer()
                         .deserialize(spec, memento.serializedObject);
             }
