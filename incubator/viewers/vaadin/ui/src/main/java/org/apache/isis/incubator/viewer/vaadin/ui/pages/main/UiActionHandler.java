@@ -64,9 +64,15 @@ public class UiActionHandler {
         
         val actionResultOrVeto = managedAction.invoke(Can.empty());
         
-        actionResultOrVeto.left()
-        .ifPresent(actionResult->
-                onNewPageContent.accept(uiComponentForActionResult(actionResult, onNewPageContent)));
+        isisInteractionFactory.runAnonymous(()->{
+            actionResultOrVeto.left()
+            .ifPresent(actionResult->
+                handleActionResult(actionResult, onNewPageContent));
+        });
+    }
+    
+    public void handleActionResult(ManagedObject actionResult, Consumer<Component> onNewPageContent) {
+        onNewPageContent.accept(uiComponentForActionResult(actionResult, onNewPageContent));        
     }
 
     private Component uiComponentForActionResult(ManagedObject actionResult, Consumer<Component> onNewPageContent) {

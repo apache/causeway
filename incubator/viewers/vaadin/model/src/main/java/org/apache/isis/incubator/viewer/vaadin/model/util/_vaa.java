@@ -21,6 +21,7 @@ package org.apache.isis.incubator.viewer.vaadin.model.util;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -59,6 +60,15 @@ public class _vaa {
         return component;
     }
     
-
+    // -- COMPONENT EVENTS
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static <T extends Component> T setOnClick(
+            T component, 
+            Runnable onClick) {
+        ComponentUtil.addListener(component, ClickEvent.class,
+                (ComponentEventListener) e->onClick.run());
+        return component;
+    }
     
 }

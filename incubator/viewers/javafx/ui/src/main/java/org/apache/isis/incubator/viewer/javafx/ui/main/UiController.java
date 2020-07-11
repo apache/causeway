@@ -75,7 +75,7 @@ public class UiController {
         contentPane.setFillWidth(true);
         _fx.borderDashed(contentPane, Color.CRIMSON); //debug
         isisInteractionFactory.runAnonymous(this::buildMenu);
-        renderHompage();
+        renderHomepage();
     }
     
     private void buildMenu() {
@@ -91,7 +91,7 @@ public class UiController {
         val menu = _fx.newMenu(menuBarLeft, "Home");
         menu.setGraphic(brandingIcon);
         brandingIcon.fitHeightProperty().set(16);
-        _fx.setMenuOnAction(menu, e->renderHompage());
+        _fx.setMenuOnAction(menu, e->renderHomepage());
         
         // let the MenuBuilderFx populate the menu-bars ... 
         
@@ -112,7 +112,7 @@ public class UiController {
         contentPane.getChildren().add(node);
     }
     
-    private void renderHompage() {
+    private void renderHomepage() {
         log.info("about to render homepage");
         isisInteractionFactory.runAnonymous(()->{
             val homepageViewmodel = metaModelContext.getHomePageAdapter();

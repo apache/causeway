@@ -30,6 +30,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 
@@ -41,9 +42,12 @@ final class MainView_createHeader {
     static Component createHeader(
             final IsisAppCommonContext commonContext, 
             final HeaderUiModel headerUiModel,
-            final Consumer<ManagedAction> menuActionEventHandler) {
+            final Consumer<ManagedAction> menuActionEventHandler,
+            final Runnable onHomepageLinkClick) {
 
         val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
+        _vaa.setOnClick(titleOrLogo, onHomepageLinkClick);
+        
         val leftMenuBar = new MenuBar();
         val horizontalSpacer = new Div();
         //        horizontalSpacer.setWidthFull();
@@ -77,6 +81,7 @@ final class MainView_createHeader {
 
     // -- HELPER
 
+
     private static Component createTitleOrLogo(
             final IsisAppCommonContext commonContext, 
             final BrandingUiModel brandingUiModel) {
@@ -93,7 +98,7 @@ final class MainView_createHeader {
             logo.setWidth("48px"); //TODO make this part of the UI model
             logo.setHeight("48px"); //TODO make this part of the UI model
             return logo;
-        }
+        } 
         return new Text(brandingName.orElse("App"));
 
     }

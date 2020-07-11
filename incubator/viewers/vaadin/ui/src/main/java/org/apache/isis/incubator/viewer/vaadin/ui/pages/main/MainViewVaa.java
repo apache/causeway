@@ -36,11 +36,13 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * top-level view
@@ -52,12 +54,14 @@ import lombok.val;
 //@Theme(value = Material.class, variant = Material.DARK)
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/menu.css")
+@Log4j2
 public class MainViewVaa extends AppLayout 
 implements BeforeEnterObserver {
 
     private static final long serialVersionUID = 1L;
     
     private final transient IsisAppCommonContext commonContext;
+    private final transient IsisInteractionFactory isisInteractionFactory;
     private final transient UiActionHandler uiActionHandler;
     private final transient HeaderUiModelProvider headerUiModelProvider;
     private Div pageContent = new Div();
@@ -68,11 +72,13 @@ implements BeforeEnterObserver {
     @Inject
     public MainViewVaa(
             final MetaModelContext metaModelContext,
+            final IsisInteractionFactory isisInteractionFactory,
             final UiActionHandler uiActionHandler,
             final HeaderUiModelProvider headerUiModelProvider) {
 
         this.commonContext = IsisAppCommonContext.of(metaModelContext);
         this.uiActionHandler = uiActionHandler;
+        this.isisInteractionFactory = isisInteractionFactory;
         this.headerUiModelProvider = headerUiModelProvider;
     }
     
@@ -87,11 +93,13 @@ implements BeforeEnterObserver {
         val menuBarContainer = MainView_createHeader.createHeader(
                 commonContext, 
                 headerUiModelProvider.getHeader(), 
-                this::onActionLinkClicked);
+                this::onActionLinkClicked,
+                this::renderHomepage);
         
         addToNavbar(menuBarContainer);
         setContent(pageContent = new Div());
         setDrawerOpened(false);
+        renderHomepage();
     }
 
     private void onActionLinkClicked(ManagedAction managedAction) {
@@ -103,7 +111,13 @@ implements BeforeEnterObserver {
         pageContent.add(component);
     }
 
-
+    private void renderHomepage() {
+        log.info("about to render homepage");
+        isisInteractionFactory.runAnonymous(()->{
+            val homepageViewmodel = commonContext.getHomePageAdapter();
+            uiActionHandler.handleActionResult(homepageViewmodel, this::replaceContent);
+        });
+    }
 
     
 }
