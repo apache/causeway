@@ -77,7 +77,13 @@ public final class JaxbAdapters {
 
     public static final class MarkupAdapter extends XmlAdapter<String, Markup> {
 
-        private final Base64.Encoder encoder = Base64.getEncoder(); // is thread-safe ?
+        /**
+         * Is threadsafe, see <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Base64.Encoder.html">JDK8 javadocs</a>
+         */
+        private final Base64.Encoder encoder = Base64.getEncoder();
+        /**
+         * Is threadsafe, see <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Base64.Decoder.html">JDK8 javadocs</a>
+         */
         private final Base64.Decoder decoder = Base64.getDecoder(); // is thread-safe ?
 
         @Override
@@ -94,10 +100,9 @@ public final class JaxbAdapters {
             if(v==null) {
                 return null;
             }
-            final String html = v.asString();
+            final String html = v.asHtml();
             return encoder.encodeToString(_Strings.toBytes(html, StandardCharsets.UTF_8));
         }
-
     }
 
     // -- BLOB

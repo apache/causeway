@@ -52,7 +52,7 @@ import demoapp.dom.types.javalang.strings.vm.JavaLangStringVm;
 public class JavaLangStrings implements HasAsciiDocDescription {
 
     public String title() {
-        return "Stringdata type";
+        return "String data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)

@@ -1,4 +1,4 @@
-JDO supports `org.joda.time.DateTime` out-of-the-box, so no special annotations are required.
+JDO supports `org.joda.time.DateTime` link:http://www.datanucleus.org:15080/products/accessplatform_5_2/jdo/mapping.html#_temporal_types_java_util_java_sql_java_time_jodatime[out-of-the-box], so no special annotations are required.
 
 [source,java]
 ----

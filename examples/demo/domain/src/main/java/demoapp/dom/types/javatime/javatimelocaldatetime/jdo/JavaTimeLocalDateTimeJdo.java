@@ -41,7 +41,7 @@ import demoapp.dom.types.javatime.javatimelocaldatetime.holder.JavaTimeLocalDate
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.TemporalJavaTimeLocalDateTimeJdo"
+        objectType = "demo.JavaTimeLocalDateTimeJdo"
 )
 public class JavaTimeLocalDateTimeJdo                                          // <.>
         implements HasAsciiDocDescription, JavaTimeLocalDateTimeHolder {

@@ -47,6 +47,9 @@ isis:
         explicit-object-type: true
         service-actions-only: true
         mixins-only: true
+      introspector:
+        parallelize: false
+        mode: full
     runtime-services:
       translation:
         po:
@@ -120,4 +123,3 @@ vaadin:
   urlMapping: "/vaadin/*"
   servlet:
       productionMode: true
-

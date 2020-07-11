@@ -29,10 +29,10 @@ import org.apache.isis.viewer.common.model.action.decorator.ActionUiDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.danger.DangerDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
@@ -62,7 +62,7 @@ public class Decorators {
     @Getter(lazy = true) private final static Danger danger = new Danger();
     
     
-    @Getter(lazy = true) private final static IconDecorator icon = new IconDecorator();
+    @Getter(lazy = true) private final static IconDecoratorWkt icon = new IconDecoratorWkt();
     @Getter(lazy = true) private final static MissingIconDecorator missingIcon = new MissingIconDecorator();
     
     // -- ADVANCED DECORATORS
@@ -78,22 +78,20 @@ public class Decorators {
         }
     }
     
-    public final static class Disable implements DisableDecorator<Component> {
+    public final static class Disable implements DisablingDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent, DisableUiModel disableUiModel) {
-            if (disableUiModel.isDisabled()) {
-                
-                disableUiModel.getReason()
-                    .map(TooltipUiModel::ofBody)
-                    .ifPresent(tooltipUiModel->getTooltip().decorate(uiComponent, tooltipUiModel));
-                
-                uiComponent.add(new CssClassAppender("disabled"));
-                uiComponent.setEnabled(false);
-            }
+        public void decorate(Component uiComponent, DisablingUiModel disableUiModel) {
+            
+            val tooltipUiModel = TooltipUiModel.ofBody(disableUiModel.getReason());
+            getTooltip().decorate(uiComponent, tooltipUiModel);
+            
+            uiComponent.add(new CssClassAppender("disabled"));
+            uiComponent.setEnabled(false);
+            
         }
     }
     
-    public final static class Prototyping implements PrototypingDecorator<Component> {
+    public final static class Prototyping implements PrototypingDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, PrototypingUiModel prototypingUiModel) {
             uiComponent.add(new CssClassAppender("prototype"));
@@ -133,7 +131,7 @@ public class Decorators {
         }
     }
     
-    public final static class IconDecorator implements FontAwesomeDecorator<Component> {
+    public final static class IconDecoratorWkt implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
             if(fontAwesome.isPresent()) {
@@ -143,7 +141,7 @@ public class Decorators {
         }
     }
 
-    public final static class MissingIconDecorator implements FontAwesomeDecorator<Component> {
+    public final static class MissingIconDecorator implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
             if(!fontAwesome.isPresent()) {
@@ -173,13 +171,12 @@ public class Decorators {
             val actionLinkUiComponent = actionUiModel.getUiComponent(); // UI component #2
             val actionMeta = actionUiModel.getActionUiMetaModel();
             
-            val disableUiModel = actionMeta.getDisableUiModel();
-            getDisableDecorator().decorate(uiComponent, disableUiModel);
+            actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
+                getDisableDecorator().decorate(uiComponent, disableUiModel);
+                getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason()));
+            });
             
-            if (disableUiModel.isDisabled()) {
-                getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason().orElse(null)));
-                
-            } else {
+            if (!actionMeta.getDisableUiModel().isPresent()) {
 
                 if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
                     getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));

@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueFacet;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 
@@ -35,13 +35,13 @@ import lombok.val;
 public class BlobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
-    public boolean isHandling(Request request) {
+    public boolean isHandling(ComponentRequest request) {
         return request.hasFeatureFacet(BlobValueFacet.class);
     }
 
     @Override
-    public Component handle(Request request) {
-        val uiField = new BlobField(request.getFeatureLabel());
+    public Component handle(ComponentRequest request) {
+        val uiField = new BlobField(request.getDisplayLabel());
         uiField.setValue(request.getFeatureValue(Blob.class).orElse(null));
         return uiField;
     }

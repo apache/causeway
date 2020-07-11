@@ -19,8 +19,8 @@
 package org.apache.isis.viewer.common.model.action.decorator;
 
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 
@@ -40,10 +40,10 @@ import lombok.RequiredArgsConstructor;
 public class ActionUiDecorator<T> {
     
     private final TooltipDecorator<T> tooltipDecorator;
-    private final DisableDecorator<T> disableDecorator;
+    private final DisablingDecorator<T> disableDecorator;
     private final ConfirmDecorator<T> confirmDecorator;
-    private final PrototypingDecorator<T> prototypingDecorator;
-    private final FontAwesomeDecorator<T> iconDecorator;
+    private final PrototypingDecorator<T, T> prototypingDecorator;
+    private final IconDecorator<T, T> iconDecorator;
 
 
 

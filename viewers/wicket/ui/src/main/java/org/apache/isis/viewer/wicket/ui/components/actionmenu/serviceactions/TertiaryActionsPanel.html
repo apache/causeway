@@ -24,6 +24,14 @@
             <li wicket:id="subMenuItems">
                 <wicket:container wicket:id="content"></wicket:container>
             </li>
+            
+            <wicket:fragment wicket:id="separatorItem">
+                <div class="list-separator"/>
+            </wicket:fragment>
+            
+        	<wicket:fragment wicket:id="sectionItem">
+                <span class="sectionLabel" wicket:id="sectionLabel"></span>
+            </wicket:fragment>
 
             <wicket:fragment wicket:id="leafItem">
                 <a class="menuLink" wicket:id="menuLink">

@@ -2,15 +2,14 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The Demo app provides an introduction to some of the features and components available in Apache Isis.
-It is bundled as a Docker image (link:https://hub.docker.com/r/apacheisis/demo-springboot/tags/[apacheisis/demo-springboot]) on Docker Hub.
+The Demo app provides an introduction to some of core features and components available in Apache Isis, allowing you to learn the very basics with a minimum of hassle.
+It's also a useful reference to help you develop your own Apache Isis applications.
 
-The app allows you to learn the very basics with a minimum of hassle.
-You can also use it to discover some of the more advanced features that the framework has to offer.
+It is packaged up as a Docker image (link:https://hub.docker.com/r/apacheisis/demo-springboot/tags/[apacheisis/demo-springboot]) on Docker Hub.
+
 
 image::https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-light.png[link="https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-light.png"]
 
-image::https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-dark.png[link="https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-dark.png"]
 
 == Prereqs
 
@@ -30,11 +29,8 @@ docker pull apacheisis/demo-springboot:latest
 +
 [source,bash]
 ----
-docker run \
-        --name demo \
-        --detach \
-        -p8080:8080 \
-        apacheisis/demo-springboot:latest
+docker pull apacheisis/demo-springboot:latest
+docker run -d -p8080:8080 apacheisis/demo-springboot:latest
 ----
 +
 The Demo app can then be accessed at http://localhost:8080/wicket/[].
@@ -51,42 +47,30 @@ docker stop demo && docker rm demo
 
 The way in which the app is run by Docker be customised in a couple of ways:
 
-* Specify a different context Path
-+
-----
-docker run \
-        --name demo \
-        --detach \
-        -p8080:8080 \
-        -eContextPath=/myPath \
-        apacheisis/demo-springboot:latest
-----
-+
-then access at http://localhost:8080/myPath/wicket/[].
 
 * Prototyping mode
 +
 ----
-docker run \
-        --name demo \
-        --detach
-        -p8080:8080 \
-        -ePROTOTYPING=true \
-        apacheisis/demo-springboot
+docker run -d -p8080:8080 -ePROTOTYPING=true apacheisis/demo-springboot:latest
 ----
 
 * Attached console
 +
 ----
-docker run \
-        --name demo \
-        -it \
-        -p8080:8080 \
-        apacheisis/demo-springboot:latest
+docker run -it -p8080:8080 apacheisis/demo-springboot:latest
 ----
 +
-To run the container with your console attached, replace the '--detach' argument with '-it'.
 Use CTRL-C to stop and detach
++
+TIP: on Windows, you might need to prefix with `winpty`.
+
+* Specify a different context Path
++
+----
+docker run -d -p8080:8080 -eContextPath=/myPath apacheisis/demo-springboot:latest
+----
++
+then access at http://localhost:8080/myPath/wicket/[].
 
 == Contributing
 

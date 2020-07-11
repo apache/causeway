@@ -23,7 +23,7 @@
 
 	<artifactId>demo-vaadin</artifactId>
 
-	<name>Apache Isis Demo - Vaadin</name>
+	<name>Demo - Vaadin</name>
 
 	<packaging>${packaging.type}</packaging>
 
@@ -38,9 +38,9 @@
 			web-application. Ideally these dependencies are just referenced in module 
 			viewer-vaadin-ui. See https://nodejs.org/en/download/ for latest node and 
 			npm (lts) versions -->
-		<node.version>v12.17.0</node.version>
-		<npm.version>6.14.4</npm.version>
-		<vaadin.version>14.2.0</vaadin.version>
+		<node.version>v12.18.2</node.version>
+		<npm.version>6.14.5</npm.version>
+		<vaadin.version>14.3.0</vaadin.version>
 
 	</properties>
 

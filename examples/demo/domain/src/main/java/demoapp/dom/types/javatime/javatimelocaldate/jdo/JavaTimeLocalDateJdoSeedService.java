@@ -12,21 +12,15 @@ import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class JavaTimeLocalDateJdoSeedService {
+public class JavaTimeLocalDateJdoSeedService extends SeedServiceAbstract {
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
-
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new TemporalJavaTimeLocalDateJdoEntityFixture());
-        }
+    public JavaTimeLocalDateJdoSeedService() {
+        super(TemporalJavaTimeLocalDateJdoEntityFixture::new);
     }
-
-    @Inject
-    FixtureScripts fixtureScripts;
 
     static class TemporalJavaTimeLocalDateJdoEntityFixture extends FixtureScript {
 
@@ -34,7 +28,10 @@ public class JavaTimeLocalDateJdoSeedService {
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
                     .map(JavaTimeLocalDateJdo::new)
-                    .forEach(repositoryService::persist);
+                    .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject

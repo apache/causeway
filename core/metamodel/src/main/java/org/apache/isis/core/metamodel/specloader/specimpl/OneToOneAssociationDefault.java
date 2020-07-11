@@ -168,9 +168,10 @@ implements OneToOneAssociation {
     /**
      * Sets up the {@link Command}, then delegates to the appropriate facet
      * ({@link PropertySetterFacet} or {@link PropertyClearFacet}).
+     * @return
      */
     @Override
-    public void set(
+    public ManagedObject set(
             final ManagedObject ownerAdapter,
             final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -178,33 +179,34 @@ implements OneToOneAssociation {
         setupCommand(ownerAdapter, newReferencedAdapter);
 
         if (newReferencedAdapter != null) {
-            setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
+            return setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
         } else {
-            clearValue(ownerAdapter, interactionInitiatedBy);
+            return clearValue(ownerAdapter, interactionInitiatedBy);
         }
     }
 
-    private void setValue(
+    private ManagedObject setValue(
             final ManagedObject ownerAdapter,
             final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val propertySetterFacet = getFacet(PropertySetterFacet.class);
         if (propertySetterFacet == null) {
-            return;
+            return ownerAdapter;
         }
         
         EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(ownerAdapter, newReferencedAdapter);
 
-        propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
+        ManagedObject targetPossiblyCloned = propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
+        return targetPossiblyCloned;
     }
 
-    private void clearValue(
+    private ManagedObject clearValue(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val propertyClearFacet = getFacet(PropertyClearFacet.class);
-        propertyClearFacet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
+        return propertyClearFacet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 
 

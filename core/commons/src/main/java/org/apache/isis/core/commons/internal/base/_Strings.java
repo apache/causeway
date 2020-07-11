@@ -142,6 +142,16 @@ public final class _Strings {
     public static boolean isNotEmpty(@Nullable final CharSequence x){
         return x!=null && x.length()!=0;
     }
+    
+    // -- OPTIONAL
+    
+    /**
+     * @param x - input string
+     * @return optionally the input string based on whether the input is not empty 
+     */
+    public static Optional<String> nonEmpty(@Nullable final CharSequence x) {
+        return isEmpty(x) ? Optional.empty() : Optional.of(x.toString());
+    }
 
     // -- BASIC UNARY OPERATORS
 

@@ -23,8 +23,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
+import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
+import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMarkdownPersistenceJdoDn5;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUi;
+import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
+import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.dom._infra.utils.ThereCanBeOnlyOne;
@@ -36,12 +40,20 @@ import demoapp.webapp.DemoAppManifest;
 @SpringBootApplication
 @Import({
     DemoAppManifest.class,
-    
-    // WICKET INTEGRATION
+
+    // Metamodel
+    IsisModuleValAsciidocMetaModel.class,
+
+    // UI
     IsisModuleViewerWicketViewer.class, // wicket viewer
-    IsisModuleValSseUi.class, // server sent events
-    IsisModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
-    
+    IsisModuleValSseUiWkt.class, // server sent events
+    IsisModuleValAsciidocUiWkt.class,
+    IsisModuleValMarkdownUiWkt.class,
+
+    // Persistence
+    IsisModuleValAsciidocPersistenceJdoDn5.class,   //
+    IsisModuleValMarkdownPersistenceJdoDn5.class,
+
 })
 //@Log4j2
 public class DemoAppWicket extends SpringBootServletInitializer {

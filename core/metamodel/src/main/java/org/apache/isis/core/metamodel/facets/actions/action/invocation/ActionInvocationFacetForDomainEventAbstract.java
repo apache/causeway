@@ -31,8 +31,6 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -40,9 +38,6 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.applib.services.metamodel.MetaModelService.Mode;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -74,7 +69,9 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public abstract class ActionInvocationFacetForDomainEventAbstract
 extends ActionInvocationFacetAbstract
 implements ImperativeFacet {
@@ -319,33 +316,25 @@ implements ImperativeFacet {
             return;
         }
 
-        final Class<?> domainType = resultAdapter.getSpecification().getCorrespondingClass();
-        final BeanSort sort = getMetaModelService().sortOf(domainType, Mode.STRICT);
-        switch (sort) {
-        case ENTITY:
-            final Object domainObject = resultAdapter.getPojo();
+        val entityState = ManagedObjects.EntityUtil.getEntityState(resultAdapter);
+        if(entityState.isDetached()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
-            if(!getRepositoryService().isPersistent(domainObject)) {
-                getTransactionService().flushTransaction();
-            }
-            if(getRepositoryService().isPersistent(domainObject)) {
-                BookmarkService bookmarkService = getBookmarkService();
-                Bookmark bookmark = bookmarkService.bookmarkForElseThrow(domainObject);
-                command.internal().setResult(bookmark);
-            }
-            break;
-        default:
-            // ignore all other sorts of objects
-            break;
+            getTransactionService().flushTransaction();
         }
-    }
-
-    private MetaModelService getMetaModelService() {
-        return serviceRegistry.lookupServiceElseFail(MetaModelService.class);
-    }
-
-    private BookmarkService getBookmarkService() {
-        return serviceRegistry.lookupServiceElseFail(BookmarkService.class);
+        if(entityState.isAttached()) {
+            resultAdapter.getRootOid().ifPresent(rootOid->{
+                val bookmark = rootOid.asBookmark();
+                command.internal().setResult(bookmark);
+            });
+        } else {
+            if(entityState.isPersistable()) {
+                log.warn("was unable to get a bookmark for the command result, "
+                        + "which is an entity: {}", resultAdapter);
+            }
+        }
+        
+        // ignore all other sorts of objects
+        
     }
 
     private ManagedObject filteredIfRequired(
@@ -429,7 +418,7 @@ implements ImperativeFacet {
         private final ActionInvocation execution;
 
         @Override
-        public Object execute(final Interaction.ActionInvocation currentExecution) {
+        public Object execute(final ActionInvocation currentExecution) {
 
             try {
 

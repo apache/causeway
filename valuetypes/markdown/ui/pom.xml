@@ -22,6 +22,7 @@
 
 	<artifactId>isis-valuetypes-markdown-ui</artifactId>
 	<name>Apache Isis Val - Markdown (ui)</name>
+	<packaging>pom</packaging>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.markdown.ui</jar-plugin.automaticModuleName>
@@ -40,11 +41,6 @@
 			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
-		</dependency>
-
 		<!-- provides a markdown parser -->
 		<dependency>
 			<groupId>com.vladsch.flexmark</groupId>
@@ -60,9 +56,13 @@
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.10.2</version>
+			<!-- mitigates version conflict with com.vaadin:flow-server -->
+			<version>1.12.1</version> 
 		</dependency>
 
 	</dependencies>
 
+	<modules>
+		<module>wicket</module>
+	</modules>
 </project>

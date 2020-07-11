@@ -19,7 +19,6 @@
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -29,25 +28,25 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
-import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingButtonDecorator;
-import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingFormFieldDecorator;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import lombok.Getter;
 import lombok.val;
 
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+
 @Service
-public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
+public class UiComponentFactoryFx implements UiComponentFactory<Node, FormFieldFx<?>> {
 
     private final boolean isPrototyping;
-    private final PrototypingButtonDecorator prototypingButtonDecorator;
-    private final PrototypingFormFieldDecorator prototypingFormFieldDecorator;
-    private final ChainOfResponsibility<Request, FormField> chainOfHandlers;
+    private final UiContext uiContext;
+    private final ChainOfResponsibility<ComponentRequest, FormFieldFx<?>> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
     @Getter 
@@ -56,13 +55,11 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
     @Inject
     private UiComponentFactoryFx(
             IsisSystemEnvironment isisSystemEnvironment,
-            PrototypingButtonDecorator prototypingButtonDecorator,
-            PrototypingFormFieldDecorator prototypingFormFieldDecorator,
+            UiContext uiContext,
             List<UiComponentHandlerFx> handlers) {
         
         this.isPrototyping = isisSystemEnvironment.isPrototyping();
-        this.prototypingButtonDecorator = prototypingButtonDecorator;
-        this.prototypingFormFieldDecorator = prototypingFormFieldDecorator;
+        this.uiContext = uiContext;
         this.chainOfHandlers = ChainOfResponsibility.of(handlers);
         this.registeredHandlers = handlers.stream()
                 .map(Handler::getClass)
@@ -70,27 +67,54 @@ public class UiComponentFactoryFx implements UiComponentFactory<FormField> {
     }
     
     @Override
-    public FormField componentFor(Request request) {
+    public FormFieldFx<?> componentFor(ComponentRequest request) {
         
         val formField = chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Component Mapper failed to handle request %s", request));
         
+        val managedMember = (ManagedMember) request.getManagedFeature(); 
+        
+        request.getDisablingUiModelIfAny().ifPresent(disablingUiModel->{
+            uiContext.getDisablingDecoratorForFormField()
+            .decorate(formField, disablingUiModel);
+        });
+        
         return isPrototyping
-                ? prototypingFormFieldDecorator.decorate(formField, PrototypingUiModel.of(request.getObjectFeature()))
+                ? uiContext.getPrototypingDecoratorForFormField()
+                        .decorate(formField, PrototypingUiModel.of(managedMember))
                 : formField;
     }
     
-    public Node buttonFor(
-            final ManagedAction managedAction, 
-            final Consumer<ManagedAction> actionEventHandler) {
+    @Override
+    public Node buttonFor(ButtonRequest request) {
+
+        val managedAction = request.getManagedAction();
+        val disablingUiModelIfAny = request.getDisablingUiModelIfAny();
+        val actionEventHandler = request.getActionEventHandler();
+        
         val uiButton = new Button(managedAction.getName());
         uiButton.setOnAction(event->actionEventHandler.accept(managedAction));
+
+        disablingUiModelIfAny.ifPresent(disablingUiModel->{
+            uiContext.getDisablingDecoratorForButton()
+            .decorate(uiButton, disablingUiModel);
+        });
         
         return isPrototyping
-                ? prototypingButtonDecorator.decorate(uiButton, PrototypingUiModel.of(managedAction))
+                ? uiContext.getPrototypingDecoratorForButton()
+                        .decorate(uiButton, PrototypingUiModel.of(managedAction))
                 : uiButton;
+    }
+
+    @Override
+    public FormFieldFx<?> parameterFor(ComponentRequest request) {
+        val formField = chainOfHandlers
+                .handle(request)
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "Component Mapper failed to handle request %s", request));
+        return formField;
     }
     
     

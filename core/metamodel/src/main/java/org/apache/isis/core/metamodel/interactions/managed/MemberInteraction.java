@@ -96,6 +96,14 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
     }
     
     /**
+     * @return optionally the InteractionVeto based on whether there 
+     * was any interaction veto within the originating chain 
+     */
+    public Optional<InteractionVeto> getInteractionVeto() {
+        return chain.right();
+    }
+    
+    /**
      * @return this Interaction's ManagedMember
      * @throws X if there was any interaction veto within the originating chain
      */

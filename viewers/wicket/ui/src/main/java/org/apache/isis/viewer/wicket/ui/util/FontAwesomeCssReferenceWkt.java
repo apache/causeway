@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.util;
 
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
@@ -44,7 +44,7 @@ public class FontAwesomeCssReferenceWkt extends WebjarsCssResourceReference {
      * Private constructor.
      */
     private FontAwesomeCssReferenceWkt() {
-        super(FontAwesomeDecorator.FONTAWESOME_RESOURCE);
+        super(IconDecorator.FONTAWESOME_RESOURCE);
     }
     
 }

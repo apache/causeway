@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid
+        xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:cpt="http://isis.apache.org/applib/layout/component"
+>
+	<bs3:row>
+		<bs3:col span="10" unreferencedActions="true">
+			<cpt:domainObject />
+			<cpt:action id="rebuildMetamodel"/>
+		</bs3:col>
+		<bs3:col span="2">
+			<cpt:fieldSet name="" id="sources" />
+		</bs3:col>
+	</bs3:row>
+	<bs3:row>
+        <bs3:col span="6">
+			<bs3:row>
+				<bs3:col span="12">
+					<cpt:collection id="tenantedEntities"/>
+				</bs3:col>
+			</bs3:row>
+			<bs3:row>
+				<bs3:col span="12">
+					<cpt:fieldSet name="General" id="general">
+						<cpt:property id="hideRegex"/>
+						<cpt:property id="disableRegex"/>
+					</cpt:fieldSet>
+				</bs3:col>
+			</bs3:row>
+			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+        </bs3:col>
+		<bs3:col span="6">
+			<cpt:fieldSet name="Description" id="description" >
+				<cpt:action id="clearHints" position="PANEL" />
+				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
+				<cpt:property id="description"/>
+			</cpt:fieldSet>
+		</bs3:col>
+	</bs3:row>
+	<bs3:row>
+		<bs3:col span="12" unreferencedCollections="true"/>
+	</bs3:row>
+</bs3:grid>

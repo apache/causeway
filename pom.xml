@@ -35,6 +35,7 @@
 	</scm>
 
 	<modules>
+		<module>antora</module>
 		<module>core-parent</module>
 
 		<module>examples/demo</module>

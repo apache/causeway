@@ -1,4 +1,4 @@
-The framework has built-in support for all of the Wrapper data types, including `java.net.URL`.
+The framework has built-in support for the `java.net.URL` data type.
 
 From here you can:
 

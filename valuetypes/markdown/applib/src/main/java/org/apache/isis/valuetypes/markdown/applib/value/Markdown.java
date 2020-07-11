@@ -18,16 +18,18 @@
  */
 package org.apache.isis.valuetypes.markdown.applib.value;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.value.Markup;
+import org.apache.isis.applib.value.HasHtml;
+import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
 /**
  * Immutable value type holding pre-rendered HTML.
  *
  */
-@Value(semanticsProviderName = 
-        "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
-public class Markdown extends Markup {
+@XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
+public class Markdown implements HasHtml {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,9 +41,47 @@ public class Markdown extends Markup {
         return new Markdown(html);
     }
 
-    private Markdown(String html) {
-        super(html);
+    private final String html;
+
+    public Markdown() {
+        this(null);
     }
 
+    public Markdown(String html) {
+        this.html = html!=null ? html : "";
+    }
+
+    public String title() {
+        return "Markdown[length="+html.length()+"]";
+    }
+
+    public String asHtml() {
+        return html;
+    }
+
+    public boolean isEqualTo(final Markdown other) {
+        return other != null && this.html.equals(other.html);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return isEqualTo((Markdown) obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return html.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Markdown[length="+html.length()+", html="+html+"]";
+    }
 
 }

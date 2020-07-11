@@ -34,7 +34,10 @@ public class JavaTimeOffsetDateTimeJdoSeedService {
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
                     .map(JavaTimeOffsetDateTimeJdo::new)
-                    .forEach(repositoryService::persist);
+                                        .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject

@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Unless released we are using
+	https://raw.githubusercontent.com/apache/isis/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd
+as a replacement for
+	http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd
+ -->
 <mb3:menuBars
-        xsi:schemaLocation="http://isis.apache.org/applib/layout/menubars/bootstrap3 http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd"
+        xsi:schemaLocation="http://isis.apache.org/applib/layout/menubars/bootstrap3 https://raw.githubusercontent.com/apache/isis/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd"
         xmlns:cpt="http://isis.apache.org/applib/layout/component"
         xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mb3:primary>
         <mb3:menu>
-            <mb3:named>View Models</mb3:named>
-            <mb3:section>
-                <mb3:serviceAction objectType="demo.ViewModels" id="openStateful" cssClassFa="mountain"/>
-                <mb3:serviceAction objectType="demo.ViewModels" id="openStatefulRefsEntity"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
             <mb3:named>Data Types</mb3:named>
             <mb3:section>
+            	<mb3:named>Primitives</mb3:named>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="bytes"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="shorts"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="ints"/>
@@ -26,16 +25,18 @@
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="booleans"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperBytes"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperShorts"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperIntegers"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperLongs"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperFloats"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperDoubles"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperCharacters"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="wrapperBooleans"/>
+            	<mb3:named>Wrappers</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="bytes"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="shorts"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="integers"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="longs"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="floats"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="doubles"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="characters"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="booleans"/>
             </mb3:section>
             <mb3:section>
+                <mb3:named>Common</mb3:named>
                 <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="strings"/>
                 <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="voids"/>
             </mb3:section>
@@ -44,39 +45,55 @@
         <mb3:menu>
             <mb3:named>More Types</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="javaUtilDates"/>
-                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="javaUtilUuids"/>
+                <mb3:named>java.math</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaMathTypesMenu" id="bigDecimals"/>
+                <mb3:serviceAction objectType="demo.JavaMathTypesMenu" id="bigIntegers"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="javaSqlDates"/>
-                <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="javaSqlTimestamps"/>
+                <mb3:named>java.net</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaNetTypesMenu" id="urls"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="javaTimeLocalDates"/>
-                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="javaTimeLocalDateTimes"/>
-                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="javaTimeOffsetDateTimes"/>
+                <mb3:named>java.sql</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="dates"/>
+                <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="timestamps"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaTimeLocalDates"/>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaTimeLocalDateTimes"/>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="jodaTimeDateTimes"/>
+                <mb3:named>java.time</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDates"/>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDateTimes"/>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="offsetDateTimes"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="isisBlobs"/>
-                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="isisClobs"/>
-                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="isisImages"/>
-                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="isisLocalResourcePaths"/>
-                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="isisPasswords"/>
+                <mb3:named>java.util</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="dates"/>
+                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="uuids"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="isisExtAsciiDocs"/>
-                <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="isisExtMarkdowns"/>
+                <mb3:named>JodaTime</mb3:named>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDates"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDateTimes"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="dateTimes"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Apache Isis Core</mb3:named>
+                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="blobs"/>
+                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="clobs"/>
+                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="images"/>
+                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="localResourcePaths"/>
+                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="passwords"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Apache Isis Extensions</mb3:named>
+                <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="asciiDocs"/>
+                <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="markdowns"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
             <mb3:named>Data Types (to remove)</mb3:named>
             <mb3:section>
+                <mb3:named>Miscellaneous</mb3:named>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="text"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrappers"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="uuid">
@@ -95,41 +112,31 @@
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>ActionLayout</mb3:named>
+            <mb3:named>View Models</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
+                <mb3:serviceAction objectType="demo.ViewModels" id="stateful" cssClassFa="mountain"/>
+                <mb3:serviceAction objectType="demo.ViewModels" id="statefulRefsEntity"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>PropertyLayout</mb3:named>
+            <mb3:named>Annotations</mb3:named>
             <mb3:section>
+                <mb3:named>@ActionLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@PropertyLayout</mb3:named>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="cssClass"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Tooltips</mb3:named>
-            <mb3:section>
-                <mb3:serviceAction objectType="demo.TooltipMenu" id="tooltipDemo"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Trees</mb3:named>
-            <mb3:section>
-                <mb3:serviceAction objectType="demo.TreeDemoMenu" id="fileSystemTree"/>
-            </mb3:section>
-        </mb3:menu>
-        
-        <mb3:menu>
             <mb3:named>Actions</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions">
-                    <cpt:named>Associated Actions</cpt:named>
-                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
                 <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
                     <cpt:named>Background (Async) Actions</cpt:named>
                 </mb3:serviceAction>
@@ -144,26 +151,39 @@
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
-        
+
         <mb3:menu>
-            <mb3:named>Events</mb3:named>
+            <mb3:named>Misc</mb3:named>
             <mb3:section>
+                <mb3:named>Tooltips</mb3:named>
+                <mb3:serviceAction objectType="demo.TooltipMenu" id="tooltipDemo"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Trees</mb3:named>
+                <mb3:serviceAction objectType="demo.TreeDemoMenu" id="fileSystemTree"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Events</mb3:named>
                 <mb3:serviceAction objectType="demo.EventsDemoMenu" id="eventsDemo" />
             </mb3:section>
-        </mb3:menu>
-        <mb3:menu>
-            <mb3:named>Error Handling</mb3:named>
             <mb3:section>
+                <mb3:named>Error Handling</mb3:named>
                 <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling" />
             </mb3:section>
         </mb3:menu>
-        
+
+        <mb3:menu>
+            <mb3:named>Extensions</mb3:named>
+            <mb3:section>
+                <mb3:named>SecMan</mb3:named>
+                <mb3:serviceAction objectType="demo.IsisExtSecManMenu" id="appTenancy"/>
+            </mb3:section>
+        </mb3:menu>
+
         <mb3:menu>
             <mb3:named>Experimental</mb3:named>
             <mb3:section>
-            	<mb3:serviceAction objectType="demo.TupleDemoMenu" id="tupleDemo">
-                    <cpt:named>Tuple Types</cpt:named>
-                </mb3:serviceAction>
+            	<mb3:serviceAction objectType="demo.TupleDemoMenu" id="tupleDemo"/>
                 <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo" />
             </mb3:section>
         </mb3:menu>

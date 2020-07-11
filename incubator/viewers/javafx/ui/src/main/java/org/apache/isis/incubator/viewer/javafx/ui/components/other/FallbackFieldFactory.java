@@ -22,31 +22,33 @@ import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
+
+import lombok.val;
 
 import javafx.scene.control.Label;
-import lombok.val;
 
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerFx {
     
     @Override
-    public boolean isHandling(Request request) {
+    public boolean isHandling(ComponentRequest request) {
         return true; // the last handler in the chain
     }
 
     @Override
-    public FormField handle(Request request) {
+    public FormFieldFx<?> handle(ComponentRequest request) {
         
-        val spec = request.getObjectFeature().getSpecification();
+        val spec = request.getFeatureSpec();
         val uiField = new Label(spec.getCorrespondingClass().getSimpleName() + " type not handled");
-        val uiLabel = new Label(request.getFeatureLabel());
         
-        return new SimpleFormField(LabelPosition.TOP, uiLabel, uiField);
+        val formField = new SimpleFormField<Void>(LabelPosition.TOP, uiField);
+        formField.setLabel(request.getDisplayLabel());
+        return formField;
     }
 
 }

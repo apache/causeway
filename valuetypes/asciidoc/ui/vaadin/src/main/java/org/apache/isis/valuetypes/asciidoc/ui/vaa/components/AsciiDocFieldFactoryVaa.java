@@ -25,7 +25,7 @@ import org.springframework.core.annotation.Order;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 
@@ -36,13 +36,13 @@ public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
     //private final static int TYPICAL_LENGTH = 48;
     
     @Override
-    public boolean isHandling(Request request) {
+    public boolean isHandling(ComponentRequest request) {
         return request.isFeatureTypeAssignableFrom(AsciiDoc.class);
     }
 
     @Override
-    public Component handle(Request request) {
-        val uiField = new AsciiDocFieldVaa(request.getFeatureLabel());
+    public Component handle(ComponentRequest request) {
+        val uiField = new AsciiDocFieldVaa(request.getDisplayLabel());
         uiField.setValue(request.getFeatureValue(AsciiDoc.class).orElse(null));
 
 //not compatible with flexibly growing grids        

@@ -27,41 +27,82 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NullSafeTest {
+class NullSafeTest {
 
     @Test
-    public void isEmptyString() throws Exception {
+    void streamAutodetect() throws Exception {
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new boolean[] {true, false})
+                .count());
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new byte[] {1, 2})
+                .count());
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new char[] {'1', '2'})
+                .count());
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new short[] {1, 2})
+                .count());
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new float[] {1.f, 2.f})
+                .count());
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new double[] {1., 2.})
+                .count());
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new int[] {1, 2})
+                .count());
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new long[] {1L, 2L})
+                .count());
+        
+        assertEquals(2, 
+                _NullSafe.streamAutodetect(new String[] {"hi", "there"})
+                .count());
+    }
+    
+    @Test
+    void isEmptyString() throws Exception {
         Assert.assertThat(_NullSafe.isEmpty((String)null), is(true));
         Assert.assertThat(_NullSafe.isEmpty(""), is(true));
         Assert.assertThat(_NullSafe.isEmpty(" 12 aBc"), is(false));
     }
 
     @Test
-    public void isEmptyCollection() throws Exception {
+    void isEmptyCollection() throws Exception {
         Assert.assertThat(_NullSafe.isEmpty((Collection<?>)null), is(true));
         Assert.assertThat(_NullSafe.isEmpty(Collections.emptyList()), is(true));
         Assert.assertThat(_NullSafe.isEmpty(Arrays.asList(new String[] {"foo", "bar"})), is(false));
     }
 
     @Test
-    public void absence() throws Exception {
+    void absence() throws Exception {
         Assert.assertThat(_NullSafe.isAbsent(null), is(true));
         Assert.assertThat(_NullSafe.isAbsent(""), is(false));
     }
 
     @Test
-    public void presence() throws Exception {
+    void presence() throws Exception {
         Assert.assertThat(_NullSafe.isPresent(null), is(false));
         Assert.assertThat(_NullSafe.isPresent(""), is(true));
     }
 
 
     @Test
-    public void emptyStreamWithArray() throws Exception {
+    void emptyStreamWithArray() throws Exception {
 
         Assert.assertNotNull(_NullSafe.stream((String[])null));
 
@@ -70,7 +111,7 @@ public class NullSafeTest {
     }
 
     @Test
-    public void streamWithArray() throws Exception {
+    void streamWithArray() throws Exception {
         Assert.assertThat(
                 _NullSafe.stream(new String[] {"foo", "bar"})
                 .collect(Collectors.joining("|")),
@@ -78,7 +119,7 @@ public class NullSafeTest {
     }
 
     @Test
-    public void emptyStreamWithCollection() throws Exception {
+    void emptyStreamWithCollection() throws Exception {
 
         Assert.assertNotNull(_NullSafe.stream((List<?>)null));
 
@@ -87,7 +128,7 @@ public class NullSafeTest {
     }
 
     @Test
-    public void streamWithCollection() throws Exception {
+    void streamWithCollection() throws Exception {
         Assert.assertThat(
                 _NullSafe.stream(Arrays.asList(new String[] {"foo", "bar"}))
                 .collect(Collectors.joining("|")),
@@ -95,7 +136,7 @@ public class NullSafeTest {
     }
 
     @Test
-    public void emptyStreamWithIterator() throws Exception {
+    void emptyStreamWithIterator() throws Exception {
 
         Assert.assertNotNull(_NullSafe.stream((Iterator<?>)null));
 
@@ -104,7 +145,7 @@ public class NullSafeTest {
     }
 
     @Test
-    public void streamWithIterator() throws Exception {
+    void streamWithIterator() throws Exception {
         Assert.assertThat(
                 _NullSafe.stream(Arrays.asList(new String[] {"foo", "bar"}).iterator())
                 .collect(Collectors.joining("|")),

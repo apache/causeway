@@ -40,6 +40,9 @@ xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s `detachedEntity
 
 <.> remove (delete) and flush;  same as `remove()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
 
+<.> removes all instances of the specified type.
+Intended primarily for testing purposes.
+
 <.> return all persisted instances of specified type.
 Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.
 

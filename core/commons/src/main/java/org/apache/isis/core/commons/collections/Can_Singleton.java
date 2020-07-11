@@ -32,7 +32,6 @@ import java.util.stream.Stream;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -44,8 +43,10 @@ final class Can_Singleton<T> implements Can<T> {
 
     private final T element;
 
-    @Getter(lazy=true, onMethod=@__({@Override})) 
-    private final Optional<T> singleton = Optional.of(element);
+    @Override
+    public Optional<T> getSingleton() {
+        return Optional.of(element);
+    }
 
     @Override
     public Cardinality getCardinality() {
@@ -171,6 +172,8 @@ final class Can_Singleton<T> implements Can<T> {
         array[0] = element;
         return array;
     }
+
+
     
     
 }

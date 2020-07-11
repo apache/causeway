@@ -29,7 +29,7 @@ public class IsisMarkupConverter implements TypeConverter<Markup, String>{
     @Override
     public String toDatastoreType(final Markup memberValue) {
         return memberValue != null
-                ? memberValue.asString()
+                ? memberValue.asHtml()
                         : null;
     }
 

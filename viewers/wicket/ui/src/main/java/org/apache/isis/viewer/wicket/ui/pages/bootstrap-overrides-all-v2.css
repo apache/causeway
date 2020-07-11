@@ -1087,6 +1087,12 @@ li.list-separator {
 	margin-top: .4em;
 }
 
+.sectionLabel { 
+	opacity: 0.5;
+	margin-left: 0.8em;
+	margin-top: 0.5em;
+}
+
 .list-inline > li {
     padding-left: 0px;
     padding-right: 0px;

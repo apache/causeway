@@ -52,6 +52,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryV
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
@@ -174,35 +175,47 @@ public class ObjectViewVaa extends VerticalLayout {
                 // TODO Auto-generated method stub
             }
 
+            @SuppressWarnings("unused")
             @Override
             protected void onAction(HasComponents container, ActionLayoutData actionData) {
                 
                 val owner = objectInteractor.getManagedObject();
-                ActionInteraction.start(owner, actionData.getId())
-                .checkVisibility(Where.OBJECT_FORMS)
+                val interaction = ActionInteraction.start(owner, actionData.getId());
+                interaction.checkVisibility(Where.OBJECT_FORMS)
                 .getManagedAction()
                 .ifPresent(managedAction -> {
-                    val uiButton = _vaa.newButton(
-                            container, 
-                            managedAction.getName(), 
-                            event->actionEventHandler.accept(managedAction));
+                    
+                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    
+                    val uiButton = _vaa.add(container, 
+                            uiComponentFactory.buttonFor(
+                                    UiComponentFactory.ButtonRequest.of(
+                                            managedAction, 
+                                            DisablingUiModel.of(interaction), 
+                                            actionEventHandler)));
                 });
+                
             }
 
+            @SuppressWarnings("unused")
             @Override
             protected void onProperty(HasComponents container, PropertyLayoutData propertyData) {
                 
                 val owner = objectInteractor.getManagedObject();
                 
-                PropertyInteraction.start(owner, propertyData.getId())
-                .checkVisibility(Where.OBJECT_FORMS)
+                val interaction = PropertyInteraction.start(owner, propertyData.getId());
+                interaction.checkVisibility(Where.OBJECT_FORMS)
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
+                    
+                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    
                     val uiProperty = _vaa.add(container, 
                             uiComponentFactory.componentFor(
-                                    UiComponentFactory.Request.of(
-                                            Where.OBJECT_FORMS,
-                                            managedProperty)));
+                                    UiComponentFactory.ComponentRequest.of(
+                                            managedProperty,
+                                            DisablingUiModel.of(interaction),
+                                            Where.OBJECT_FORMS)));
                     
                     // handle associated actions
                     val actionBar = newActionPanel(container);

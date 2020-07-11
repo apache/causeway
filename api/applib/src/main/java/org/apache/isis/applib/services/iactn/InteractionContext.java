@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.iactn;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,7 +30,6 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Interaction}.
@@ -48,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
-@Log4j2
+//@Log4j2
 public class InteractionContext {
 
     // end::refguide[]

@@ -23,7 +23,7 @@
 	
 	<artifactId>demo-domain</artifactId>
 
-	<name>Apache Isis Demo - Domain</name>
+	<name>Demo - Domain</name>
 
 	<packaging>jar</packaging>
 
@@ -58,28 +58,9 @@
 			<type>pom</type>
 		</dependency>
 
-		<!-- JDK11+ SUPPORT -->
-
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jdk11</artifactId>
-			<type>pom</type>
-		</dependency>
 
 		<!-- EXTENSIONS -->
 
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-sse-ui</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-modelannotation</artifactId>

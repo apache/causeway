@@ -1,0 +1,10 @@
+.section-spacer {
+	line-height: 0.1em;
+	min-height: 0.1em;
+	padding: 0;
+	margin: 0;
+}
+
+.section-label {
+	color: orange;
+}

@@ -45,8 +45,10 @@ public interface MutableCurrentHolder extends CurrentHolder {
      * @param owner
      * @param newValue
      * @param interactionInitiatedBy
+     *
+     * @return the targetAdapter.  This may have been cloned if dealing with a view model.
      */
-    void set(
+    ManagedObject set(
             final ManagedObject owner,
             final ManagedObject newValue,
             final InteractionInitiatedBy interactionInitiatedBy);
@@ -57,10 +59,10 @@ public interface MutableCurrentHolder extends CurrentHolder {
      * @param owner
      * @param newValue
      */
-    default void set(
+    default ManagedObject set(
             final ManagedObject owner,
             final ManagedObject newValue) {
-        set(owner, newValue, InteractionInitiatedBy.USER);
+        return set(owner, newValue, InteractionInitiatedBy.USER);
     }
 
 }

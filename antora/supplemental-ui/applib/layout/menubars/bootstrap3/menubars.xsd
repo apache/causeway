@@ -44,6 +44,7 @@
 
     <xs:complexType name="section">
         <xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="named" type="xs:string"/>
             <xs:element maxOccurs="unbounded" name="serviceAction" type="cpt:serviceAction"/>
         </xs:sequence>
     </xs:complexType>

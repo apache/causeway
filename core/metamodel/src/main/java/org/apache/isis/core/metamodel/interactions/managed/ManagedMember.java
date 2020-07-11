@@ -41,7 +41,7 @@ import lombok.Setter;
 import lombok.val;
 
 @RequiredArgsConstructor
-public abstract class ManagedMember {
+public abstract class ManagedMember implements ManagedFeature {
 
     // only used to create failure messages
     @RequiredArgsConstructor
@@ -92,11 +92,26 @@ public abstract class ManagedMember {
     public ManagedObject getOwner() {
         return owner = EntityUtil.reattach(owner);
     }
-    
+
+    /**
+     * Allows a managed property of a view model to replace its owner with a clone.
+     *
+     * <p>
+     *     This is because view models are intrinsically immutable.
+     * </p>
+     *
+     * @param managedObject
+     */
+    protected void setOwner(@NonNull ManagedObject managedObject) {
+        this.owner = managedObject;
+    }
+
+
     public abstract ObjectMember getMember();
     
     public abstract MemberType getMemberType();
     
+    @Override
     public ObjectSpecification getSpecification() {
         return getMember().getSpecification();
     }
@@ -109,8 +124,14 @@ public abstract class ManagedMember {
         return getMember().getName();
     }
     
+    @Override
     public Identifier getIdentifier() {
         return getMember().getIdentifier();
+    }
+    
+    @Override
+    public String getDisplayLabel() {
+        return getMember().getName();
     }
     
     @Getter @Setter @NonNull 

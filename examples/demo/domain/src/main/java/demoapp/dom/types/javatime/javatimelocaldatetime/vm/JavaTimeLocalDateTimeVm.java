@@ -46,7 +46,7 @@ import demoapp.dom.types.javatime.javatimelocaldatetime.holder.JavaTimeLocalDate
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.TemporalJavaTimeLocalDateTimeVm"
+        objectType = "demo.JavaTimeLocalDateTimeVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeLocalDateTimeVm

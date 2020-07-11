@@ -24,6 +24,7 @@
 	<artifactId>smoketests</artifactId>
 
 	<name>Apache Isis App - Smoketests</name>
+	<packaging>pom</packaging>
 
 	<properties>
 		<!--  mvn clean install -Dskip.smokeTests=true -->
@@ -267,6 +268,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>isis-viewer-common</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-fixtures-applib</artifactId>
 		</dependency>
@@ -350,6 +356,11 @@
 			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
 	</dependencies>
+	
+	<modules>
+		<module>stable</module>
+<!-- 		<module>incubating</module> -->
+	</modules>
 
 
 </project>

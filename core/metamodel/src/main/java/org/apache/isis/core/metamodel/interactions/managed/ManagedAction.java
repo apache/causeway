@@ -89,8 +89,10 @@ public final class ManagedAction extends ManagedMember {
         
         val action = getAction();
         
+        val head = action.interactionHead(getOwner());
+        
         val actionResult = action
-                .execute(InteractionHead.simple(getOwner()) , actionParameters, InteractionInitiatedBy.USER);
+                .execute(head , actionParameters, InteractionInitiatedBy.USER);
         
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)) {
             return _Either.left(ManagedObject.empty(action.getReturnType()));

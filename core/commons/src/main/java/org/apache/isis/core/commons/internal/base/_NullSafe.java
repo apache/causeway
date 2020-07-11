@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -173,14 +174,14 @@ public final class _NullSafe {
         if(pojo.getClass().isArray()) {
             if(Array.getLength(pojo)==0) return Stream.empty(); 
             if(pojo instanceof Object[]) return Stream.of((Object[]) pojo);
-            if(pojo instanceof boolean[]) return Stream.of((boolean[]) pojo);
-            if(pojo instanceof byte[]) return Stream.of((byte[]) pojo);
-            if(pojo instanceof char[]) return Stream.of((char[]) pojo);
-            if(pojo instanceof double[]) return Stream.of((double[]) pojo);
-            if(pojo instanceof float[]) return Stream.of((float[]) pojo);
-            if(pojo instanceof int[]) return Stream.of((int[]) pojo);
-            if(pojo instanceof long[]) return Stream.of((long[]) pojo);
-            if(pojo instanceof short[]) return Stream.of((short[]) pojo);
+            if(pojo instanceof boolean[]) return primitiveStream((boolean[]) pojo);
+            if(pojo instanceof byte[]) return primitiveStream((byte[]) pojo);
+            if(pojo instanceof char[]) return primitiveStream((char[]) pojo);
+            if(pojo instanceof double[]) return primitiveStream((double[]) pojo);
+            if(pojo instanceof float[]) return primitiveStream((float[]) pojo);
+            if(pojo instanceof int[]) return primitiveStream((int[]) pojo);
+            if(pojo instanceof long[]) return primitiveStream((long[]) pojo);
+            if(pojo instanceof short[]) return primitiveStream((short[]) pojo);
         }
         if(pojo instanceof Iterable) {
             return stream((Iterable<?>)pojo);
@@ -190,8 +191,41 @@ public final class _NullSafe {
         }
         return Stream.of(pojo);
     }
+    
+    private static Stream<Boolean> primitiveStream(final boolean[] array) {
+        return IntStream.range(0, array.length).mapToObj(s -> array[s]);
+    }
+    
+    private static Stream<Byte> primitiveStream(final byte[] array) {
+        return IntStream.range(0, array.length).mapToObj(s -> array[s]);
+    }
+    
+    private static Stream<Character> primitiveStream(final char[] array) {
+        return IntStream.range(0, array.length).mapToObj(s -> array[s]);
+    }
+    
+    private static Stream<Float> primitiveStream(final float[] array) {
+        return IntStream.range(0, array.length).mapToObj(s -> array[s]);
+    }
+    
+    private static Stream<Double> primitiveStream(final double[] array) {
+        return IntStream.range(0, array.length).mapToObj(s -> array[s]);
+    }
+    
+    private static Stream<Short> primitiveStream(final short[] array) {
+        return IntStream.range(0, array.length).mapToObj(s -> array[s]);
+    }
+    
+    private static Stream<Integer> primitiveStream(final int[] array) {
+        return IntStream.range(0, array.length).mapToObj(s -> array[s]);
+    }
+    
+    private static Stream<Long> primitiveStream(final long[] array) {
+        return IntStream.range(0, array.length).mapToObj(s -> array[s]);
+    }
 
     // -- ABSENCE/PRESENCE PREDICATES
+    
 
     /**
      * Equivalent to {@link java.util.Objects#nonNull(Object)}.

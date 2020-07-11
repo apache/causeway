@@ -24,7 +24,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUi;
+import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.webapp.DemoAppManifest;
@@ -38,7 +38,7 @@ import demoapp.webapp.DemoAppManifest;
     
     // WICKET INTEGRATION
     IsisModuleViewerWicketViewer.class, // wicket viewer
-    IsisModuleValSseUi.class, // server sent events
+    IsisModuleValSseUiWkt.class, // server sent events
     IsisModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
     
 })

@@ -29,12 +29,13 @@ import org.w3c.dom.html.HTMLAnchorElement;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormField;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -47,7 +48,6 @@ import javafx.concurrent.Worker.State;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -61,27 +61,27 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     private final HostServices hostServices;
     
     @Override
-    public boolean isHandling(Request request) {
-        return request.isFeatureTypeInstanceOf(Markup.class);
+    public boolean isHandling(ComponentRequest request) {
+        return request.isFeatureTypeInstanceOf(HasHtml.class);
     }
 
     @Override
-    public FormField handle(Request request) {
+    public FormFieldFx<?> handle(ComponentRequest request) {
         
-        val markupHtml = request.getFeatureValue(Markup.class)
-                .map(Markup::asString)
+        val markupHtml = request.getFeatureValue(HasHtml.class)
+                .map(HasHtml::asHtml)
                 .orElse("");
 
         
         val uiComponent = new WebViewFitContent(hostServices::showDocument, markupHtml);
         
-        val uiLabel = new Label(request.getFeatureLabel());
-        
         val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
                 .map(LabelAtFacet::label)
                 .orElse(LabelPosition.NOT_SPECIFIED);
         
-        return new SimpleFormField(labelPosition, uiLabel, uiComponent);
+        val formField = new SimpleFormField<Markup>(labelPosition, uiComponent);
+        formField.setLabel(request.getDisplayLabel());
+        return formField;
     }
 
     // -- HELPER

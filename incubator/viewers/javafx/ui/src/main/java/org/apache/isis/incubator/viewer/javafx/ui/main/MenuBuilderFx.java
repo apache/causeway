@@ -31,6 +31,7 @@ import lombok.extern.log4j.Log4j2;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 
 @RequiredArgsConstructor(staticName = "of")
@@ -45,7 +46,7 @@ public class MenuBuilderFx implements MenuVisitor {
 
     @Override
     public void addTopLevel(MenuItemDto menuDto) {
-        log.info("top level menu {}", menuDto.getName());
+        log.debug("top level menu {}", menuDto.getName());
         
         menuBar.getMenus()
         .add(currentTopLevelMenu = new Menu(menuDto.getName()));
@@ -55,7 +56,7 @@ public class MenuBuilderFx implements MenuVisitor {
     public void addSubMenu(MenuItemDto menuDto) {
         val managedAction = menuDto.getManagedAction();
         
-        log.info("sub menu {}", menuDto.getName());
+        log.debug("sub menu {}", menuDto.getName());
         
         val actionUiModel = uiContext.getActionUiModelFactory().newActionUiModel(uiContext, managedAction);
         val menuItem = actionUiModel.createMenuUiComponent();
@@ -65,9 +66,16 @@ public class MenuBuilderFx implements MenuVisitor {
     
     @Override
     public void addSectionSpacer() {
-        log.info("spacer");
-        currentTopLevelMenu.getItems()
-        .add(new SeparatorMenuItem());
+        log.debug("menu spacer");
+        currentTopLevelMenu.getItems().add(new SeparatorMenuItem());
+    }
+
+    @Override
+    public void addSectionLabel(String named) {
+        log.debug("section label  {}", named);
+        val menuItem = new MenuItem(named);
+        currentTopLevelMenu.getItems().add(menuItem);
+        menuItem.setDisable(true);
     }
     
 }

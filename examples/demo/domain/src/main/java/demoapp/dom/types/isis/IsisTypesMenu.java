@@ -43,31 +43,31 @@ public class IsisTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public IsisBlobs isisBlobs(){
+    public IsisBlobs blobs(){
         return new IsisBlobs();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public IsisClobs isisClobs(){
+    public IsisClobs clobs(){
         return new IsisClobs();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public IsisImages isisImages(){
+    public IsisImages images(){
         return new IsisImages();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public IsisLocalResourcePaths isisLocalResourcePaths(){
+    public IsisLocalResourcePaths resourcePaths(){
         return new IsisLocalResourcePaths();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public IsisPasswords isisPasswords(){
+    public IsisPasswords passwords(){
         return new IsisPasswords();
     }
 

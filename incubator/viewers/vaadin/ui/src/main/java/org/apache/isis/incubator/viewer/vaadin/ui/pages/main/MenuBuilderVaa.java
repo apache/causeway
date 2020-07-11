@@ -36,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of") 
+//@Log4j2
 class MenuBuilderVaa implements MenuVisitor {
 
     private final IsisAppCommonContext commonContext; 
@@ -68,10 +69,21 @@ class MenuBuilderVaa implements MenuVisitor {
 
     @Override
     public void addSectionSpacer() {
-        val spacer = new Hr();
-        //spacer.addClassName("spacer"); TODO vertical margin or padding is currently a bit too large 
-        currentTopLevelMenu.getSubMenu()
-        .addItem(spacer);
+        val sectionSpacer = new Hr();
+        val menuItem = currentTopLevelMenu.getSubMenu().addItem(sectionSpacer);
+        menuItem.setEnabled(false);
+        val menuItemElement = menuItem.getElement();
+        menuItemElement.setAttribute("class", "section-spacer");
+    }
+    
+    @Override
+    public void addSectionLabel(String named) {
+        val sectionLabel = new Label(named);
+        sectionLabel.addClassName("section-label");
+        val menuItem = currentTopLevelMenu.getSubMenu().addItem(sectionLabel);
+        menuItem.setEnabled(false);
+        val menuItemElement = menuItem.getElement();
+        menuItemElement.setAttribute("class", "section-label");
     }
 
 }

@@ -1,4 +1,6 @@
-The framework has built-in support for all of the Wrapper data types, including `Clob`.
+The framework has built-in support for character large objects, using the `Clob` data type .
+
+NOTE: This is an Apache Isis specific data type.
 
 From here you can:
 

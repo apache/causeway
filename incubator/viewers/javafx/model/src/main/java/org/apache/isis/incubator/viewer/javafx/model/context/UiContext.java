@@ -20,12 +20,30 @@ package org.apache.isis.incubator.viewer.javafx.model.context;
 
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
-import org.apache.isis.incubator.viewer.javafx.model.decorator.DecoratorService;
+import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
+import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
+import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
+
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.MenuItem;
 
 public interface UiContext {
 
-    DecoratorService getDecoratorService();
     IsisInteractionFactory getIsisInteractionFactory();
     ActionUiModelFactoryFx getActionUiModelFactory();
+    
+    // -- DECORATORS
+    
+    IconDecorator<Labeled, Labeled> getIconDecoratorForLabeled();
+    IconDecorator<MenuItem, MenuItem> getIconDecoratorForMenuItem();
+   
+    DisablingDecorator<Button> getDisablingDecoratorForButton();
+    DisablingDecorator<FormFieldFx<?>> getDisablingDecoratorForFormField();
+    
+    PrototypingDecorator<Button, Node> getPrototypingDecoratorForButton();
+    PrototypingDecorator<FormFieldFx<?>, FormFieldFx<?>> getPrototypingDecoratorForFormField();
     
 }

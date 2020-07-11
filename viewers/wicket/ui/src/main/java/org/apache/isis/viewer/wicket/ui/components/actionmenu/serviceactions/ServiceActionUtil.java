@@ -141,7 +141,6 @@ public final class ServiceActionUtil {
         private final LinkAndLabelFactoryWkt linkAndLabelFactory;
         
         private CssMenuItem currentTopLevelMenu = null;
-        private boolean needsSpacerBeforeSelf = false;
         
         @Override
         public void addTopLevel(MenuItemDto menuDto) {
@@ -151,7 +150,8 @@ public final class ServiceActionUtil {
 
         @Override
         public void addSectionSpacer() {
-            needsSpacerBeforeSelf = true;
+            val menuSection = CssMenuItem.newSpacer();
+            currentTopLevelMenu.addSubMenuItem(menuSection);
         }
 
         @Override
@@ -159,14 +159,15 @@ public final class ServiceActionUtil {
             val managedAction = menuDto.getManagedAction();
             
             val menuItem = CssMenuItem.newMenuItem(menuDto.getName());
-            
             currentTopLevelMenu.addSubMenuItem(menuItem);
             
             menuItem.setLinkAndLabel(linkAndLabelFactory.newActionLink(menuDto.getName(), managedAction));
-            if(needsSpacerBeforeSelf) {
-                needsSpacerBeforeSelf = false;
-                menuItem.setNeedsSpacerBeforeSelf(true);
-            }
+        }
+
+        @Override
+        public void addSectionLabel(String named) {
+            val menuSectionLabel = CssMenuItem.newSectionLabel(named);
+            currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
         
     }

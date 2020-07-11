@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isisext.asciidocs.jdo;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -29,7 +30,10 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
@@ -54,29 +58,37 @@ public class IsisAsciiDocJdo                                          // <.>
     }
 
 //tag::class[]
-    @Title(prepend = "AsciiDoc JDO entity: ")
+    public String title() {
+        return "AsciiDoc JDO entity: " + bookmarkService.bookmarkFor(this).getIdentifier();
+    }
+
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                               // <.>
+    @Column(allowsNull = "false", jdbcType = "CLOB")                            // <.>
     @Getter @Setter
     private AsciiDoc readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false")
+    @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
     private AsciiDoc readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private AsciiDoc readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private AsciiDoc readWriteOptionalProperty;
 
+    @Inject
+    private BookmarkService bookmarkService;
 }
 //end::class[]

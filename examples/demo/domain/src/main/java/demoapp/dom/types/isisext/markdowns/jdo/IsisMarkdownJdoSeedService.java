@@ -11,21 +11,15 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class IsisMarkdownJdoSeedService {
+public class IsisMarkdownJdoSeedService extends SeedServiceAbstract {
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
-
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new IsisMarkdownJdoEntityFixture());
-        }
+    public IsisMarkdownJdoSeedService() {
+        super(IsisMarkdownJdoEntityFixture::new);
     }
-
-    @Inject
-    FixtureScripts fixtureScripts;
 
     static class IsisMarkdownJdoEntityFixture extends FixtureScript {
 
@@ -33,7 +27,10 @@ public class IsisMarkdownJdoSeedService {
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
                     .map(IsisMarkdownJdo::new)
-                    .forEach(repositoryService::persist);
+                    .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject

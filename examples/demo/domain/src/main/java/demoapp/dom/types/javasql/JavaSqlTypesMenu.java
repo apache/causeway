@@ -38,13 +38,13 @@ public class JavaSqlTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaSqlDates javaSqlDates(){
+    public JavaSqlDates dates(){
         return new JavaSqlDates();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaSqlTimestamps javaSqlTimestamps(){
+    public JavaSqlTimestamps timestamps(){
         return new JavaSqlTimestamps();
     }
 

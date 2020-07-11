@@ -41,6 +41,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities;
 import demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdo;
+import demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples;
 import demoapp.dom.types.jodatime.jodadatetime.vm.JodaDateTimeVm;
 
 @XmlRootElement(name = "Demo")
@@ -74,6 +75,6 @@ public class JodaDateTimes implements HasAsciiDocDescription {
 
     @Inject
     @XmlTransient
-    JodaDateTimesSamples stream;
+    JodaDateTimeSamples stream;
 
 }

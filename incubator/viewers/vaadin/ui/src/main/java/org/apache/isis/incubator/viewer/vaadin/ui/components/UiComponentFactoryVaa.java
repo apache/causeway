@@ -29,14 +29,16 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 
 import lombok.Getter;
+import lombok.val;
 
 @Service
-public class UiComponentFactoryVaa implements UiComponentFactory<Component> {
+public class UiComponentFactoryVaa implements UiComponentFactory<Component, Component> {
 
-    private final ChainOfResponsibility<Request, Component> chainOfHandlers;
+    private final ChainOfResponsibility<ComponentRequest, Component> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
     @Getter 
@@ -49,9 +51,40 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component> {
                 .map(Handler::getClass)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Component buttonFor(ButtonRequest request) {
+        
+        val managedAction = request.getManagedAction();
+        val disablingUiModelIfAny = request.getDisablingUiModelIfAny();
+        val actionEventHandler = request.getActionEventHandler();
+        
+        val uiButton = _vaa.newButton(managedAction.getName());
+        
+        disablingUiModelIfAny.ifPresent(disablingUiModel->{
+//            uiContext.getDisablingDecoratorForButton()
+//                .decorate(uiButton, disablingUiModel);
+            uiButton.setEnabled(false);
+        });
+        
+        if(!disablingUiModelIfAny.isPresent()) {
+            uiButton.addClickListener(event->actionEventHandler.accept(managedAction));
+        }
+        
+        return uiButton;
+        
+    }
     
     @Override
-    public Component componentFor(Request request) {
+    public Component componentFor(ComponentRequest request) {
+        return chainOfHandlers
+                .handle(request)
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "Component Mapper failed to handle request %s", request));
+    }
+
+    @Override
+    public Component parameterFor(ComponentRequest request) {
         return chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(

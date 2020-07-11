@@ -1,0 +1,34 @@
+[[first,First Steps]]
+== First Steps with http://asciidoc.org[AsciiDoc]
+
+.Inline markup
+* single quotes around a phrase place 'emphasis'
+* astericks around a phrase make the text *bold*
+* double astericks around one or more **l**etters in a word make those letters bold
+* double underscore around a __sub__string in a word emphasize that substring
+* use carrots around characters to make them ^super^script
+* use tildes around characters to make them ~sub~script
+
+ifdef::basebackend-html[]
+* to pass through +++<u>HTML</u>+++ directly, surround the text with triple plus
+endif::basebackend-html[]
+ifdef::basebackend-docbook[]
+* to pass through +++<constant>XML</constant>+++ directly, surround the text with triple plus
+endif::basebackend-docbook[]
+
+
+// separate two adjacent lists using a line comment (only the leading // is required)
+
+- characters can be escaped using a {backslash}
+* for instance, you can escape a quote inside emphasized text like 'Here\'s Johnny!'
+- you can safely use reserved XML characters like <, > and &, which are escaped when rendering
+- force a space{sp}between inline elements using the \{sp} attribute
+- hold text together with an intrinsic non-breaking{nbsp}space attribute, \{nbsp}
+- handle words with unicode characters like in the name Gregory Romé
+- claim your copyright (C), registered trademark (R) or trademark (TM)
+
+You can write text http://example.com[with inline links], optionally{sp}using an explicit link:http://example.com[link prefix]. In either case, the link can have a http://example.com?foo=bar&lang=en[query string].
+
+If you want to break a line +
+just end it in a {plus} sign +
+and continue typing on the next line.

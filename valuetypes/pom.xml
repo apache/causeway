@@ -68,6 +68,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
 				<artifactId>isis-valuetypes-asciidoc-ui-vaa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -76,7 +81,17 @@
 				<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
 
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
 				<artifactId>isis-valuetypes-markdown-applib</artifactId>
@@ -84,7 +99,17 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-markdown-ui</artifactId>
+				<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-markdown-ui-wkt</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-markdown-persistence-jdo-dn5</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -100,7 +125,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-sse-ui</artifactId>
+				<artifactId>isis-valuetypes-sse-ui-wkt</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 

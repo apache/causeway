@@ -21,6 +21,8 @@ package org.apache.isis.extensions.secman.model.facets;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Provider;
+
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -40,19 +42,19 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
 
     private final List<ApplicationTenancyEvaluator> evaluators;
     private final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    private final QueryResultsCache queryResultsCache;
+    private final Provider<QueryResultsCache> queryResultsCacheProvider;
     private final UserService userService;
 
     public TenantedAuthorizationFacetDefault(
             final List<ApplicationTenancyEvaluator> evaluators,
             final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository,
-            final QueryResultsCache queryResultsCache,
+            final Provider<QueryResultsCache> queryResultsCacheProvider,
             final UserService userService,
             final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.evaluators = evaluators;
         this.applicationUserRepository = applicationUserRepository;
-        this.queryResultsCache = queryResultsCache;
+        this.queryResultsCacheProvider = queryResultsCacheProvider;
         this.userService = userService;
     }
 
@@ -111,7 +113,7 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
      * Per {@link #findApplicationUserNoCache(String)}, cached for the request using the {@link QueryResultsCache}.
      */
     protected ApplicationUser findApplicationUser(final String userName) {
-        return queryResultsCache.execute(new Callable<ApplicationUser>() {
+        return queryResultsCacheProvider.get().execute(new Callable<ApplicationUser>() {
             @Override
             public ApplicationUser call() throws Exception {
                 return findApplicationUserNoCache(userName);

@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
-import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
 import lombok.AccessLevel;
@@ -62,7 +62,7 @@ public final class ActionUiMetaModel implements Serializable {
     @Getter private final SemanticsOf semantics;
     @Getter private final PromptStyle promptStyle;
     @Getter private final Parameters parameters;
-    @Getter private final DisableUiModel disableUiModel;
+    @Getter private final Optional<DisablingUiModel> disableUiModel;
     /**
      * An action with no parameters AND an are-you-sure semantics
      * does require an immediate confirmation dialog.
@@ -129,7 +129,7 @@ public final class ActionUiMetaModel implements Serializable {
     
     // -- USABILITY
     
-    private static DisableUiModel disabledUiModelFor(
+    private static Optional<DisablingUiModel> disabledUiModelFor(
             @NonNull final ManagedObject actionHolder, 
             @NonNull final ObjectAction objectAction) {
             
@@ -141,7 +141,7 @@ public final class ActionUiMetaModel implements Serializable {
                 );
         
         val enabled = usability.getReason() == null;
-        return DisableUiModel.of(!enabled, usability.getReason()) ;
+        return DisablingUiModel.of(!enabled, usability.getReason()) ;
     }
     
     // -- DESCRIBED AS

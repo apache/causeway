@@ -188,11 +188,12 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         private void addSetterFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertySetterFacetAbstract(holder) {
                 @Override
-                public void setProperty(
+                public ManagedObject setProperty(
                         final OneToOneAssociation owningAssociation,
                         final ManagedObject inObject,
                         final ManagedObject value,
                         final InteractionInitiatedBy interactionInitiatedBy) {
+                    return inObject;
                 }
             });
         }
@@ -200,10 +201,11 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         private void addClearFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertyClearFacetAbstract(holder) {
                 @Override
-                public void clearProperty(
+                public ManagedObject clearProperty(
                         final OneToOneAssociation owningProperty, 
                         final ManagedObject targetAdapter,
                         final InteractionInitiatedBy interactionInitiatedBy) {
+                    return targetAdapter;
                 }
             });
         }

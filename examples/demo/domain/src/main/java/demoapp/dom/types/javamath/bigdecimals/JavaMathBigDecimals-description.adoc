@@ -1,4 +1,4 @@
-The framework has built-in support for all of the Wrapper data types, including `java.math.BigDecimal`.
+The framework has built-in support for the `java.math.BigDecimal` data type.
 
 From here you can:
 

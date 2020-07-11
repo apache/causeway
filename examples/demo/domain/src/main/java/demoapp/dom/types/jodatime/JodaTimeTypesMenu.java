@@ -39,19 +39,19 @@ public class JodaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JodaDateTimes jodaDateTimes(){
+    public JodaDateTimes dateTimes(){
         return new JodaDateTimes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JodaLocalDates jodaLocalDates(){
+    public JodaLocalDates localDates(){
         return new JodaLocalDates();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JodaLocalDateTimes jodaLocalDateTimes(){
+    public JodaLocalDateTimes localDateTimes(){
         return new JodaLocalDateTimes();
     }
 

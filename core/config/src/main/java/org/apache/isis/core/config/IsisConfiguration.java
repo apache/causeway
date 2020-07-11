@@ -81,7 +81,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Value;
-import lombok.var;
+import lombok.val;
 
 
 /**
@@ -3085,7 +3085,7 @@ public class IsisConfiguration {
 
         @Override
         public void initialize(final AssignableFrom assignableFrom) {
-            var className = assignableFrom.value();
+            val className = assignableFrom.value();
             try {
                 superType = _Context.loadClass(className);
             } catch (ClassNotFoundException e) {

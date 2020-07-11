@@ -10,21 +10,15 @@ import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class PrimitiveLongJdoSeedService {
+public class PrimitiveLongJdoSeedService extends SeedServiceAbstract {
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
-
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new PrimitiveLongJdoEntityFixture());
-        }
+    public PrimitiveLongJdoSeedService() {
+        super(PrimitiveLongJdoEntityFixture::new);
     }
-
-    @Inject
-    FixtureScripts fixtureScripts;
 
     static class PrimitiveLongJdoEntityFixture extends FixtureScript {
 
@@ -32,7 +26,11 @@ public class PrimitiveLongJdoSeedService {
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
                     .map(PrimitiveLongJdo::new)
-                    .forEach(repositoryService::persist);
+                    .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
+
         }
 
         @Inject

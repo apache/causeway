@@ -18,30 +18,15 @@
  */
 package demoapp.dom.homepage;
 
-import java.time.LocalDateTime;
-
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.applib.util.JaxbAdapters.MarkupAdapter;
-import org.apache.isis.applib.value.Markup;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import demoapp.dom._infra.AsciiDocReaderService;
+import demoapp.dom._infra.resources.AsciiDocReaderService;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]

@@ -24,7 +24,7 @@ import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 
@@ -33,13 +33,13 @@ import lombok.val;
 public class MarkupFieldFactory implements UiComponentHandlerVaa {
 
     @Override
-    public boolean isHandling(Request request) {
+    public boolean isHandling(ComponentRequest request) {
         return request.isFeatureTypeEqualTo(org.apache.isis.applib.value.Markup.class);
     }
 
     @Override
-    public Component handle(Request request) {
-        val uiField = new MarkupField(request.getFeatureLabel());
+    public Component handle(ComponentRequest request) {
+        val uiField = new MarkupField(request.getDisplayLabel());
         uiField.setValue(request.getFeatureValue(org.apache.isis.applib.value.Markup.class).orElse(null));
         return uiField;
     }

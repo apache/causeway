@@ -1,4 +1,4 @@
-The framework has built-in support for all of the Wrapper data types, including `java.util.UUID`.
+The framework has built-in support for the `java.util.UUID` data type.
 
 From here you can:
 

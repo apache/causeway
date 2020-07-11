@@ -377,6 +377,9 @@ public class WrapperFactoryDefault_wrappedObject_Test {
                 allowing(mockStringSpec).getBeanSort();
                 will(returnValue(BeanSort.VIEW_MODEL));
                 
+                allowing(mockEmployeeSpec).isViewModelCloneable(mockEmployeeAdapter);
+                will(returnValue(false));
+
                 allowing(mockStringSpec).streamFacets(HidingInteractionAdvisor.class);
                 will(returnValue(Stream.empty()));
                 

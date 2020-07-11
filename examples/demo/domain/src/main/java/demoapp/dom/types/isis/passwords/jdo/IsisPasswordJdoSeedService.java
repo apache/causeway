@@ -13,21 +13,15 @@ import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class IsisPasswordJdoSeedService {
+public class IsisPasswordJdoSeedService extends SeedServiceAbstract {
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
-
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new IsisPasswordJdoEntityFixture());
-        }
+    public IsisPasswordJdoSeedService() {
+        super(IsisPasswordJdoEntityFixture::new);
     }
-
-    @Inject
-    FixtureScripts fixtureScripts;
 
     static class IsisPasswordJdoEntityFixture extends FixtureScript {
 
@@ -35,7 +29,10 @@ public class IsisPasswordJdoSeedService {
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
                     .map(IsisPasswordJdo::new)
-                    .forEach(repositoryService::persist);
+                    .forEach(domainObject -> {
+                        repositoryService.persist(domainObject);
+                        executionContext.addResult(this, domainObject);
+                    });
         }
 
         @Inject

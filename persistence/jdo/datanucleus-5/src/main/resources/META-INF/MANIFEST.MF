@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Apache Isis JDO ObjectStore DataNucleus 5.2 Implementation
-Bundle-SymbolicName: org.apache.isis.objectstore.jdo.datanucleus
-Bundle-Version: 5.2.0
+Bundle-Name: Apache Isis JDO Persistence DataNucleus 5 Implementation
+Bundle-SymbolicName: org.apache.isis.persistence.jdo.datanucleus5
+Bundle-Version: 2.0.0
 Bundle-Vendor: Apache Isis
