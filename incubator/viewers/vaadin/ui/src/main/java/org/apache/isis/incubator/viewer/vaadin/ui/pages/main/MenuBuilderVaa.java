@@ -34,10 +34,9 @@ import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "of") 
-@Log4j2
+//@Log4j2
 class MenuBuilderVaa implements MenuVisitor {
 
     private final IsisAppCommonContext commonContext; 
@@ -70,16 +69,21 @@ class MenuBuilderVaa implements MenuVisitor {
 
     @Override
     public void addSectionSpacer() {
-        val spacer = new Hr();
-        //spacer.addClassName("spacer"); TODO vertical margin or padding is currently a bit too large 
-        currentTopLevelMenu.getSubMenu()
-        .addItem(spacer);
+        val sectionSpacer = new Hr();
+        val menuItem = currentTopLevelMenu.getSubMenu().addItem(sectionSpacer);
+        menuItem.setEnabled(false);
+        val menuItemElement = menuItem.getElement();
+        menuItemElement.setAttribute("class", "section-spacer");
     }
     
     @Override
     public void addSectionLabel(String named) {
-        log.warn("section labels not supported yet: {}", named);
-        addSectionSpacer(); //TODO this is just a fallback
+        val sectionLabel = new Label(named);
+        sectionLabel.addClassName("section-label");
+        val menuItem = currentTopLevelMenu.getSubMenu().addItem(sectionLabel);
+        menuItem.setEnabled(false);
+        val menuItemElement = menuItem.getElement();
+        menuItemElement.setAttribute("class", "section-label");
     }
 
 }

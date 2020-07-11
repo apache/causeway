@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -50,6 +51,7 @@ import lombok.val;
 @PWA(name = "Example Project", shortName = "Example Project")
 //@Theme(value = Material.class, variant = Material.DARK)
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
+@CssImport("./css/menu.css")
 public class MainViewVaa extends AppLayout 
 implements BeforeEnterObserver {
 
