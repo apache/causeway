@@ -70,7 +70,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.IMAGE.type -> add(createImage(fi))
                     ValueType.SLIDER.type -> add(createSlider(fi))
                     ValueType.IFRAME.type -> add(createIFrame(fi))
-                    ValueType.SVG.type -> add(createSvg(fi))
+                    ValueType.SVG_INLINE.type -> add(createSvgInline(fi))
+                    ValueType.SVG_MAPPED.type -> add(createSvgMap(fi))
                 }
             }
         }
@@ -154,22 +155,15 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createImage(fi: FormItem): VPanel {
-        val item = VPanel {
-            //TODO this is a quick hack, needs to be straightned out
+        val panel = VPanel {
+            val fc = fi.content
             when {
-                fi.callBack is UUID -> {
-                    // add InnerPanel to be replaced by callback with svg
-                    vPanel {
-                        id = (fi.callBack as UUID).value
-                    }
-                }
-                fi.content is Image -> fi.content as Image
-                fi.content is String -> {
+                fc is Image -> fc
+                fc is String -> {
                     // interpret as (file) URL and load locally
-                    val url = fi.content as String
                     console.log("[FPF.createImage]")
-                    console.log(url)
-                    // passing url as string does not work:
+                    console.log(fc)
+                    // TODO passing url as string does not work:
                     // require resolves string to url and `compiles` it into the binary
                     // working with remote resources allows to me more dynamic
                     image(
@@ -178,14 +172,31 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 else -> {
                 }
             }
-
         }
-        item.height = auto
-        item.width = 100.perc
-        return item
+        panel.height = auto
+        panel.width = 100.perc
+        return panel
     }
 
-    private fun createSvg(fi: FormItem): MapPanel {
+    private fun createSvgInline(fi: FormItem): VPanel {
+        val panel = VPanel {
+            when (val fcb = fi.callBack) {
+                is UUID -> {
+                    // add InnerPanel to be replaced by callback with svg
+                    vPanel {
+                        id = fcb.value
+                    }
+                }
+                else -> {
+                }
+            }
+        }
+        panel.height = auto
+        panel.width = 100.perc
+        return panel
+    }
+
+    private fun createSvgMap(fi: FormItem): MapPanel {
         val panel = MapPanel()
         panel.height = 100.perc
         panel.width = 100.perc

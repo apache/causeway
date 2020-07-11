@@ -36,7 +36,7 @@ class DiagramDialog(
     }
 
     init {
-        val fi = FormItem("svg", ValueType.IMAGE.type, callBack = callBack)
+        val fi = FormItem("svg", ValueType.SVG_INLINE.type, callBack = callBack)
         formItems.add(fi)
 
         dialog = RoDialog(
@@ -44,7 +44,6 @@ class DiagramDialog(
                 caption = "Diagram",
                 items = formItems,
                 command = this)
-        //callBack = fi.callBack!!
     }
 
     @Deprecated("use leaflet/svg")

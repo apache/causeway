@@ -21,8 +21,8 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.ExportDialog
-import org.apache.isis.client.kroviz.ui.samples.About
 import org.apache.isis.client.kroviz.ui.samples.GeoMap
+import org.apache.isis.client.kroviz.ui.samples.SvgInline
 import org.apache.isis.client.kroviz.ui.samples.SvgMap
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
@@ -112,6 +112,13 @@ object RoMenuBar : SimplePanel() {
                     icon = IconManager.find("Diagram")
             ).onClick {
                 UiManager.add(svgMapTitle, SvgMap())
+            }
+
+            val svgInlineTitle = "Sample SVG Inline (interactive)"
+            ddLink(svgInlineTitle,
+                    icon = IconManager.find("Diagram")
+            ).onClick {
+                SvgInline().open()
             }
 
             val aboutTitle = "About"

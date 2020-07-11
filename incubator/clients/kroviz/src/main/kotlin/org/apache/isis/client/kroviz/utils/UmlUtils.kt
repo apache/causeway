@@ -18,7 +18,7 @@
  */
 package org.apache.isis.client.kroviz.utils
 
-import org.apache.isis.client.kroviz.core.aggregator.DiagramDispatcher
+import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
@@ -34,7 +34,7 @@ object UmlUtils {
         args["output_format"] = Argument(key = "\"output_format\"", value = "\"svg\"")
 
         val link = Link(href = Constants.plantUmlUrl, method = Method.POST.operation, args = args)
-        val agr = DiagramDispatcher(callBack)
+        val agr = SvgDispatcher(callBack)
         RoXmlHttpRequest().invokeAnonymous(link, agr)
     }
 
