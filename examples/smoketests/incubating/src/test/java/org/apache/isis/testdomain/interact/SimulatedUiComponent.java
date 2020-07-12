@@ -21,9 +21,11 @@ package org.apache.isis.testdomain.interact;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel.BindableManagedObject;
 
 import lombok.val;
 
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
 @SuppressWarnings("restriction")
@@ -40,7 +42,12 @@ public class SimulatedUiComponent {
         paramMeta = paramMetaList.getElseFail(paramNr);
         
         valueProperty.setValue(pendingArgs.getParamValue(paramNr)); //sync models
-        valueProperty.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
+        valueProperty.bindBidirectional(adapt(pendingArgs.getBindableParamValue(paramNr)));
+    }
+
+    private Property<ManagedObject> adapt(BindableManagedObject bindableParamValue) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     public void simulateValueChange(Object newValue) {

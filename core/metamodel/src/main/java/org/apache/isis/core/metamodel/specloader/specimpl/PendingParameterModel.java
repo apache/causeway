@@ -24,6 +24,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.binding.Bindable;
+import org.apache.isis.core.commons.binding.ChangeListener;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
@@ -34,10 +36,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 /**
  * Model used to negotiate the paramValues of an action by means of an UI dialog.
@@ -74,9 +72,8 @@ public class PendingParameterModel {
         return paramValue;
     }
 
-    //FIXME don't depend on java-fx classes in core
     @RequiredArgsConstructor(staticName = "of")
-    public static class BindableManagedObject implements Property<ManagedObject> {
+    public static class BindableManagedObject implements Bindable<ManagedObject> {
 
         @Getter @NonNull private int paramNr;
         @Getter @NonNull private PendingParameterModel model;
@@ -107,7 +104,7 @@ public class PendingParameterModel {
         }
         
         private final List<ChangeListener<? super ManagedObject>> changeListeners = new ArrayList<>();
-        private final List<InvalidationListener> invalidationListeners = new ArrayList<>();
+//        private final List<InvalidationListener> invalidationListeners = new ArrayList<>();
 
         @Override
         public void addListener(ChangeListener<? super ManagedObject> listener) {
@@ -119,18 +116,18 @@ public class PendingParameterModel {
             changeListeners.remove(listener);
         }
 
-        @Override
-        public void addListener(InvalidationListener listener) {
-            invalidationListeners.add(listener);
-        }
+//        @Override
+//        public void addListener(InvalidationListener listener) {
+//            invalidationListeners.add(listener);
+//        }
+//
+//        @Override
+//        public void removeListener(InvalidationListener listener) {
+//            invalidationListeners.remove(listener);
+//        }
 
         @Override
-        public void removeListener(InvalidationListener listener) {
-            invalidationListeners.remove(listener);
-        }
-
-        @Override
-        public void bind(ObservableValue<? extends ManagedObject> observable) {
+        public void bind(Bindable<ManagedObject> observable) {
             // TODO Auto-generated method stub
             
         }
@@ -148,13 +145,13 @@ public class PendingParameterModel {
         }
 
         @Override
-        public void bindBidirectional(Property<ManagedObject> other) {
+        public void bindBidirectional(Bindable<ManagedObject> other) {
             // TODO Auto-generated method stub
             
         }
 
         @Override
-        public void unbindBidirectional(Property<ManagedObject> other) {
+        public void unbindBidirectional(Bindable<ManagedObject> other) {
             // TODO Auto-generated method stub
             
         }
