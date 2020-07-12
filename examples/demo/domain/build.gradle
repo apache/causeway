@@ -1,2 +1,22 @@
 group = 'org.apache.isis.examples.apps'
 description = 'Apache Isis App - Demo (Domain)'
+
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile project(':isis-parent:isis:isis-core-commons')
+    compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib')
+
+    //compile('commons-httpclient:commons-httpclient:3.1')  // did not work for me
+    compile('org.apache.httpcomponents:httpclient:4.5.12')
+
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-exceldownload:isis-extensions-exceldownload-ui')
+    compile project(':isis-parent:isis:isis-testing:isis-testing-h2console:isis-testing-h2console-ui')
+    compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-jaxrsresteasy4')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-encryption-jbcrypt')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-persistence-jdo')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-modelannotation')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse-applib')
+}
