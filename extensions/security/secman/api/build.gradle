@@ -1,0 +1,8 @@
+group = 'org.apache.isis.extensions'
+description = 'Apache Isis Ext - Sec Man API'
+
+task packageTests(type: Jar) {
+  from sourceSets.test.output
+  classifier = 'tests'
+}
+artifacts.archives packageTests

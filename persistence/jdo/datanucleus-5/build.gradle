@@ -1,0 +1,22 @@
+group = 'org.apache.isis.persistence'
+description = 'Apache Isis Persistence - JDO (datanucleus 5)'
+dependencies {
+    compile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib')
+    compile project(':isis-parent:isis:isis-core-runtime')
+    compile group: 'org.datanucleus', name: 'datanucleus-core', version: '5.2.2'
+    compile group: 'org.datanucleus', name: 'datanucleus-api-jdo', version: '5.2.2'
+    compile group: 'org.datanucleus', name: 'datanucleus-jdo-query', version: '5.0.9'
+    compile group: 'org.datanucleus', name: 'datanucleus-rdbms', version: '5.2.1'
+    compile group: 'org.datanucleus', name: 'datanucleus-jodatime', version: '5.2.0-release'
+    testCompile project(':isis-parent:isis:isis-core-runtime')
+    testCompile project(':isis-parent:isis:isis-core-config')
+    testCompile project(':isis-parent:isis:isis-core-runtimeservices')
+    testCompile project(':isis-parent:isis:isis-core-metamodel')
+    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

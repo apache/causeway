@@ -1,0 +1,14 @@
+group = 'org.apache.isis.extensions'
+description = 'Apache Isis Ext - Sec Man Encryption (Using jbcrypt)'
+apply plugin: 'war'
+dependencies {
+    compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+    providedCompile project(':isis-parent:isis:isis-core-runtime')
+    providedCompile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-api')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

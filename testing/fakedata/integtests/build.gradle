@@ -1,0 +1,13 @@
+group = 'org.apache.isis.testing'
+description = 'Apache Isis Tst - FakeData (integ tests)'
+dependencies {
+    testCompile project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-fixtures')
+    testCompile project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-applib')
+    testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

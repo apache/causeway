@@ -1,0 +1,17 @@
+description = 'Apache Isis Core - Code Gen (ByteBuddy)'
+apply plugin: 'war'
+dependencies {
+    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.10'
+    compile group: 'org.objenesis', name: 'objenesis', version: '2.6'
+    compile project(':isis-parent:isis:isis-core-commons')
+    testCompile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+        exclude(module: 'junit-dep')
+        exclude(module: 'byte-buddy')
+    }
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

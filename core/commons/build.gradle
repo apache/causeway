@@ -1,0 +1,38 @@
+description = 'Apache Isis Core - Commons'
+//apply plugin: 'war'
+
+dependencies {
+    compile 'javax:javaee-api:8.0'
+    compile 'com.google.code.findbugs:annotations:2.0.1'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.10.4'
+    compile 'org.springframework:spring-context:5.2.6.RELEASE'
+    compile 'org.springframework:spring-tx:5.2.6.RELEASE'
+    compile('org.springframework.boot:spring-boot-starter:2.2.7.RELEASE') {
+        exclude(module: 'validation-api')
+        exclude(module: 'spring-boot-starter-logging')
+    }
+    compile('org.springframework.boot:spring-boot-starter-log4j2:2.2.7.RELEASE') {
+        exclude(module: 'slf4j-api')
+    }
+    compile 'org.slf4j:slf4j-api:1.7.26'
+
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    compile 'org.hamcrest:hamcrest-library:2.1'
+
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    testCompile 'org.junit.vintage:junit-vintage-engine:5.5.2'
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests
+
+

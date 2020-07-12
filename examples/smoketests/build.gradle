@@ -1,0 +1,27 @@
+group = 'org.apache.isis.app'
+description = 'Apache Isis App - Smoketests'
+dependencies {
+    compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp')
+    compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-jdk11')
+    compile project(':isis-parent:isis:isis-security-shiro')
+    compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
+    compile project(':isis-parent:isis:isis-mappings:isis-mappings-restclient-api')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-modelannotation')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-model')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-encryption-jbcrypt')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-persistence-jdo')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap:isis-extensions-shiro-realm-ldap-impl')
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.2.7.RELEASE'
+    testCompile group: 'org.glassfish.jersey.ext', name: 'jersey-spring5', version: '2.29.1'
+    testCompile group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
+    testCompile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.moxy', version: '2.7.5'
+    testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
+    testCompile group: 'org.apache.directory.server', name: 'apacheds-test-framework', version: '2.0.0.AM25'
+
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+}

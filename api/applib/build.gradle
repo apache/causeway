@@ -1,0 +1,51 @@
+description = 'Apache Isis Core - AppLib'
+apply plugin: 'war'
+
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "io.freefair.gradle:lombok-plugin:5.1.0"
+    }
+}
+apply plugin: "io.freefair.lombok"
+
+dependencies {
+    compile project(':isis-parent:isis-schema')
+    compile project(':isis-parent:isis:isis-core-commons')
+
+    compile 'javax:javaee-api:8.0'
+    compile 'com.google.code.findbugs:annotations:2.0.1'
+    compile 'org.springframework:spring-context:5.2.6.RELEASE'
+    compile 'joda-time:joda-time:2.10.6'
+
+    compile('org.springframework.boot:spring-boot-starter-log4j2:2.2.7.RELEASE') {
+        exclude(module: 'slf4j-api')
+    }
+    compile 'org.slf4j:slf4j-api:1.7.26'
+
+/*    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'  */
+
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    testCompile 'org.junit.vintage:junit-vintage-engine:5.5.2'
+    testCompile 'org.jmock:jmock:2.11.0'
+    testCompile('org.jmock:jmock-junit4:2.11.0') {
+        exclude(module: 'junit-dep')
+        exclude(module: 'byte-buddy')
+    }
+    testCompile 'org.assertj:assertj-core:3.13.2'
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests
+
+

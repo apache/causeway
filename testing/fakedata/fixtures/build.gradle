@@ -1,0 +1,15 @@
+group = 'org.apache.isis.testing'
+description = 'Apache Isis Tst - FakeData (fixtures)'
+dependencies {
+    compile project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-applib')
+    compile project(':isis-parent:isis-applib')
+    compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
+    compile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-datanucleus5')
+    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

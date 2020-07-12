@@ -1,0 +1,39 @@
+description = 'Apache Isis Core - Schemas'
+apply plugin: 'war'
+
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "io.freefair.gradle:lombok-plugin:5.1.0"
+    }
+}
+apply plugin: "io.freefair.lombok"
+
+sourceSets {
+    main {
+        java {
+            srcDir 'target/generated-sources/xjc'
+        }
+    }
+}
+
+dependencies {
+    compile project(':isis-parent:isis:isis-core-commons')
+
+    compile 'org.springframework:spring-context:5.2.6.RELEASE'
+    compile 'joda-time:joda-time:2.10.6'
+
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

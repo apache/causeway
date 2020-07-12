@@ -1,0 +1,14 @@
+group = 'org.apache.isis.viewer'
+description = 'Apache Isis Viewer - Common Model'
+dependencies {
+    compile project(':isis-parent:isis:isis-core-webapp')
+    compile group: 'org.webjars', name: 'font-awesome', version: '5.13.0'
+    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':isis-parent:isis:isis-core-metamodel')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests
