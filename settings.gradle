@@ -129,7 +129,7 @@ include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse:isis-valuetypes-s
 include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse'
 include ':isis-parent:isis:isis-valuetypes'
 include ':isis-app-starter-parent:demo-parent:demo-domain'
-include ':isis-app-starter-parent:demo-parent:demo-wicket'
+//include ':isis-app-starter-parent:demo-parent:demo-wicket'
 include ':isis-app-starter-parent:demo-parent'
 include ':isis-app-starter-parent:smoketests'
 
@@ -263,6 +263,6 @@ project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse:isis-valuetypes-s
 project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse').projectDir = "$rootDir/valuetypes/sse" as File
 project(':isis-parent:isis:isis-valuetypes').projectDir = "$rootDir/valuetypes" as File
 project(':isis-app-starter-parent:demo-parent:demo-domain').projectDir = "$rootDir/examples/demo/domain" as File
-project(':isis-app-starter-parent:demo-parent:demo-wicket').projectDir = "$rootDir/examples/demo/wicket" as File
+//project(':isis-app-starter-parent:demo-parent:demo-wicket').projectDir = "$rootDir/examples/demo/wicket" as File
 project(':isis-app-starter-parent:demo-parent').projectDir = "$rootDir/examples/demo" as File
 project(':isis-app-starter-parent:smoketests').projectDir = "$rootDir/examples/smoketests" as File

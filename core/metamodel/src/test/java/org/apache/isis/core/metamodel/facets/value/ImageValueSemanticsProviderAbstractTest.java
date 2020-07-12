@@ -26,15 +26,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.config.unittestsupport.IsisConfigurationLegacy;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.junit.Assert.assertEquals;
+
+//import org.apache.isis.core.config.unittestsupport.IsisConfigurationLegacy;
 
 public class ImageValueSemanticsProviderAbstractTest {
 
@@ -47,8 +48,8 @@ public class ImageValueSemanticsProviderAbstractTest {
     @Mock
     private ServiceInjector mockServicesInjector;
 
-    @Mock
-    private IsisConfigurationLegacy mockConfiguration;
+//    @Mock
+//    private IsisConfigurationLegacy mockConfiguration;
 
     private TestImageSemanticsProvider adapter;
 
