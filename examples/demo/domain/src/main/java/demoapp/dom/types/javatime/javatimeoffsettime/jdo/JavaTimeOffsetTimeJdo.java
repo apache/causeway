@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isisext.markdowns.jdo;
+package demoapp.dom.types.javatime.javatimeoffsettime.jdo;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -30,65 +29,53 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isisext.markdowns.holder.IsisMarkdownHolder;
+import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisMarkdownJdo"
+        objectType = "demo.JavaTimeOffsetTimeJdo"
 )
-public class IsisMarkdownJdo                                          // <.>
-        implements HasAsciiDocDescription, IsisMarkdownHolder {
+public class JavaTimeOffsetTimeJdo                                          // <.>
+        implements HasAsciiDocDescription, JavaTimeOffsetTimeHolder {
 
 //end::class[]
-    public IsisMarkdownJdo(Markdown initialValue) {
+    public JavaTimeOffsetTimeJdo(java.time.OffsetTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    public String title() {
-    return "Markdown JDO entity: " + bookmarkService.bookmarkFor(this).getIdentifier();
-}
-
+    @Title(prepend = "java.time.OffsetTime JDO entity: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false", jdbcType = "CLOB")                            // <.>
+    @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private Markdown readOnlyProperty;
+    private java.time.OffsetTime readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false", jdbcType = "CLOB")
+    @Column(allowsNull = "false")
     @Getter @Setter
-    private Markdown readWriteProperty;
+    private java.time.OffsetTime readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private Markdown readOnlyOptionalProperty;
+    private java.time.OffsetTime readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private Markdown readWriteOptionalProperty;
+    private java.time.OffsetTime readWriteOptionalProperty;
 
-    @Inject
-    private BookmarkService bookmarkService;
 }
 //end::class[]

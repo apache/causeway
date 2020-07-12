@@ -16,11 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types;
-
-import java.nio.charset.StandardCharsets;
-
-import javax.inject.Inject;
+package demoapp.dom.types.javaawt;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,44 +24,22 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.value.Markup;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.resources._Resources;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.types.text.TextDemo;
-import demoapp.dom.types.wrapper.WrapperDemo;
+import demoapp.dom.types.javaawt.images.JavaAwtImages;
+import demoapp.dom.types.javanet.urls.JavaNetUrls;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.DataTypesMenu")
-@DomainObjectLayout(named="DataTypes")
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaAwtTypesMenu")
+@DomainObjectLayout(named="JavaAwtTypes")
 @Log4j2
-public class DataTypesMenu {
+public class JavaAwtTypesMenu {
 
-    @Inject private FactoryService factoryService;
-
-    @Action
-    @ActionLayout(cssClassFa="fa-font")
-    public TextDemo text(){
-        val demo = factoryService.viewModel(TextDemo.class);
-
-        demo.setString("a string (click me)");
-        demo.setStringMultiline("A multiline string\nspanning\n3 lines. (click me)");
-
-        demo.setStringReadonly("a readonly string (but allows text select)");
-        demo.setStringMultilineReadonly("A readonly string\nspanning\n3 lines. (but allows text select)");
-
-        return demo;
-    }
-    
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
-    public WrapperDemo wrappers(){
-        return new WrapperDemo();
+    @ActionLayout(cssClassFa="fa-link")
+    public JavaAwtImages images(){
+        return new JavaAwtImages();
     }
-
 
 
 }

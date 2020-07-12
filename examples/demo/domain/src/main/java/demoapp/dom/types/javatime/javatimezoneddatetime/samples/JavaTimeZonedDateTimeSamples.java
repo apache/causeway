@@ -16,9 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetdatetime.samples;
+package demoapp.dom.types.javatime.javatimezoneddatetime.samples;
 
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 import java.util.stream.Stream;
 
@@ -27,12 +27,12 @@ import org.springframework.stereotype.Service;
 import demoapp.dom.types.Samples;
 
 @Service
-public class JavaTimeOffsetDateTimeSamples implements Samples<OffsetDateTime> {
+public class JavaTimeZonedDateTimeSamples implements Samples<ZonedDateTime> {
 
     @Override
-    public Stream<OffsetDateTime> stream() {
+    public Stream<ZonedDateTime> stream() {
         return Stream.of(1, 2, 3)
-                .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.ofHours(x)));
+                .map(x -> java.time.ZonedDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.UTC));
     }
 
 }

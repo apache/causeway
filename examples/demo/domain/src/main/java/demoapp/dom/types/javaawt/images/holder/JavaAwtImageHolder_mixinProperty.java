@@ -16,23 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetdatetime.samples;
+package demoapp.dom.types.javaawt.images.holder;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.stream.Stream;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.value.Image;
 
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.types.Samples;
+import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 
-@Service
-public class JavaTimeOffsetDateTimeSamples implements Samples<OffsetDateTime> {
 
-    @Override
-    public Stream<OffsetDateTime> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.ofHours(x)));
+//tag::class[]
+@Property()
+@PropertyLayout(hidden = Where.ALL_TABLES)
+@RequiredArgsConstructor
+public class JavaAwtImageHolder_mixinProperty {
+
+    private final JavaAwtImageHolder holder;
+
+    @MemberOrder(name = "contributed", sequence = "1")
+    public Image prop() {
+        return holder.getReadOnlyProperty();
     }
 
 }
+//end::class[]

@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetdatetime.samples;
+package demoapp.dom.types.isis.markups.holder;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.stream.Stream;
+import org.apache.isis.applib.value.Markup;
 
-import org.springframework.stereotype.Service;
+//tag::class[]
+public interface IsisMarkupHolder {
 
-import demoapp.dom.types.Samples;
+    Markup getReadOnlyProperty();
+    void setReadOnlyProperty(Markup c);
 
-@Service
-public class JavaTimeOffsetDateTimeSamples implements Samples<OffsetDateTime> {
+    Markup getReadWriteProperty();
+    void setReadWriteProperty(Markup c);
 
-    @Override
-    public Stream<OffsetDateTime> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.ofHours(x)));
-    }
+    Markup getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(Markup c);
+
+    Markup getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(Markup c);
 
 }
+//end::class[]

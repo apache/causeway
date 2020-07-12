@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetdatetime.samples;
+package demoapp.dom.types.javatime.javatimezoneddatetime.holder;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.stream.Stream;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.types.Samples;
 
-@Service
-public class JavaTimeOffsetDateTimeSamples implements Samples<OffsetDateTime> {
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
+@RequiredArgsConstructor
+public class JavaTimeZonedDateTimeHolder_actionReturning {
 
-    @Override
-    public Stream<OffsetDateTime> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.ofHours(x)));
+    private final JavaTimeZonedDateTimeHolder holder;
+
+    public java.time.ZonedDateTime act() {
+        return holder.getReadOnlyProperty();
     }
 
 }
+//end::class[]

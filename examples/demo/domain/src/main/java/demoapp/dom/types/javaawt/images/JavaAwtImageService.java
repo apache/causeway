@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.images.samples;
+package demoapp.dom.types.javaawt.images;
 
 import java.awt.Image;
 import java.awt.image.ColorModel;
@@ -33,14 +33,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import lombok.SneakyThrows;
 
 @Service
-public class IsisImageService {
-
-    @SneakyThrows
-    public org.apache.isis.applib.value.Image bytesToImage(byte[] bytes) {
-        Image javaAwtImage = bytesToJavaAwtImage(bytes);
-        int[][] pixels = javaAwtImageToPixels(javaAwtImage);
-        return new org.apache.isis.applib.value.Image(pixels);
-    }
+public class JavaAwtImageService {
 
     @SneakyThrows
     public java.awt.Image bytesToJavaAwtImage(byte[] bytes) {
@@ -69,5 +62,6 @@ public class IsisImageService {
         }
         return new int[lines][width];
     }
+
 
 }

@@ -1,0 +1,77 @@
+The framework has built-in support for rendering HTML written using Markup, using the `Markup` data type.
+
+NOTE: This is an Apache Isis specific data type.
+
+From here you can:
+
+* navigate to an entity that uses the `Markup` datatype
+* open a view model that uses the `Markup` datatype
+
+Some properties on these domain objects are mandatory, some optional.
+
+== Common interface
+
+These objects both implement a common interface, `IsisMarkupHolder`:
+
+[source,java]
+----
+include::holder/IsisMarkupHolder.java[tags=class]
+----
+
+There is also an extension of this interface, `IsisMarkupHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/IsisMarkupHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `Markup` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+include::holder/IsisMarkupHolder_updateReadOnlyProperty.java[tags=class]
+----
+
+* the `updateReadOnlyOptionalProperty` action is:
++
+[source,java]
+----
+include::holder/IsisMarkupHolder_updateReadOnlyOptionalProperty.java[tags=class]
+----
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+include::holder/IsisMarkupHolder_actionReturning.java[tags=class]
+----
+
+
+* the `actionReturningCollection` action is:
++
+[source,java]
+----
+include::holder/IsisMarkupHolder_actionReturningCollection.java[tags=class]
+----
+
+== Mixin properties
+
+We also use the interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/IsisMarkupHolder_mixinProperty.java[tags=class]
+----
+
+

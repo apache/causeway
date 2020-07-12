@@ -32,6 +32,7 @@ import demoapp.dom.types.isis.blobs.IsisBlobs;
 import demoapp.dom.types.isis.clobs.IsisClobs;
 import demoapp.dom.types.isis.images.IsisImages;
 import demoapp.dom.types.isis.localresourcepaths.IsisLocalResourcePaths;
+import demoapp.dom.types.isis.markups.IsisMarkups;
 import demoapp.dom.types.isis.passwords.IsisPasswords;
 import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
 import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
@@ -63,6 +64,11 @@ public class IsisTypesMenu {
     @ActionLayout(cssClassFa="fa-external-link-alt")
     public IsisLocalResourcePaths localResourcePaths(){
         return new IsisLocalResourcePaths();
+    }
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-code")
+    public IsisMarkups markups(){
+        return new IsisMarkups();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

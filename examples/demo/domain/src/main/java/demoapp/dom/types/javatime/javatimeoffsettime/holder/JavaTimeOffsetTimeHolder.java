@@ -16,23 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetdatetime.samples;
+package demoapp.dom.types.javatime.javatimeoffsettime.holder;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.stream.Stream;
+//tag::class[]
+public interface JavaTimeOffsetTimeHolder {
 
-import org.springframework.stereotype.Service;
+    java.time.OffsetTime getReadOnlyProperty();
+    void setReadOnlyProperty(java.time.OffsetTime c);
 
-import demoapp.dom.types.Samples;
+    java.time.OffsetTime getReadWriteProperty();
+    void setReadWriteProperty(java.time.OffsetTime c);
 
-@Service
-public class JavaTimeOffsetDateTimeSamples implements Samples<OffsetDateTime> {
+    java.time.OffsetTime getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(java.time.OffsetTime c);
 
-    @Override
-    public Stream<OffsetDateTime> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.ofHours(x)));
-    }
+    java.time.OffsetTime getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(java.time.OffsetTime c);
 
 }
+//end::class[]

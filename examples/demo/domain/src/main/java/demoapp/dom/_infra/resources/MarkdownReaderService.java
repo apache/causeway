@@ -24,8 +24,8 @@ public class MarkdownReaderService {
     }
 
     public Markdown readFor(Class<?> aClass) {
-        val adocResourceName = String.format("%s.md", aClass.getSimpleName());
-        val markdown = resourceReaderService.readResource(aClass, adocResourceName);
+        val markdownResourceName = String.format("%s.md", aClass.getSimpleName());
+        val markdown = resourceReaderService.readResource(aClass, markdownResourceName);
         return Markdown.valueOfHtml(Converter.mdToHtml(markdown));
     }
 

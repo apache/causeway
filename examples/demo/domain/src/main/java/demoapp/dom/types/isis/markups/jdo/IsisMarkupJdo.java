@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isisext.markdowns.jdo;
+package demoapp.dom.types.isis.markups.jdo;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
@@ -34,59 +34,60 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
+import org.apache.isis.applib.value.Markup;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isisext.markdowns.holder.IsisMarkdownHolder;
+import demoapp.dom.types.isis.markups.holder.IsisMarkupHolder;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisMarkdownJdo"
+        objectType = "demo.IsisMarkupJdo"
 )
-public class IsisMarkdownJdo                                          // <.>
-        implements HasAsciiDocDescription, IsisMarkdownHolder {
+public class IsisMarkupJdo                                          // <.>
+        implements HasAsciiDocDescription, IsisMarkupHolder {
 
 //end::class[]
-    public IsisMarkdownJdo(Markdown initialValue) {
+    public IsisMarkupJdo(Markup initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
     public String title() {
-    return "Markdown JDO entity: " + bookmarkService.bookmarkFor(this).getIdentifier();
+    return "Markup JDO entity: " + bookmarkService.bookmarkFor(this).getIdentifier();
 }
 
+    @Title(prepend = "Markup JDO entity: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")                            // <.>
     @Getter @Setter
-    private Markdown readOnlyProperty;
+    private Markup readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "editable-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
-    private Markdown readWriteProperty;
+    private Markup readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private Markdown readOnlyOptionalProperty;
+    private Markup readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private Markdown readWriteOptionalProperty;
+    private Markup readWriteOptionalProperty;
 
     @Inject
     private BookmarkService bookmarkService;

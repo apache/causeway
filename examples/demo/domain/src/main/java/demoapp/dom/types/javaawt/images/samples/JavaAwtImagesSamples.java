@@ -16,23 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetdatetime.samples;
+package demoapp.dom.types.javaawt.images.samples;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.awt.Image;
 import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.resources._Resources;
+
+import lombok.SneakyThrows;
+import lombok.val;
+
 import demoapp.dom.types.Samples;
+import demoapp.dom.types.javaawt.images.JavaAwtImageService;
 
 @Service
-public class JavaTimeOffsetDateTimeSamples implements Samples<OffsetDateTime> {
+public class JavaAwtImagesSamples implements Samples<Image> {
 
     @Override
-    public Stream<OffsetDateTime> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.ofHours(x)));
+    public Stream<Image> stream() {
+        return Stream.of(
+                "apache-wicket.png", "byte-buddy.png", "datanucleus-logo.png",
+                "project-lombok.png", "resteasy_logo_600x.gif", "spring-boot-logo.png")
+                .map(this::loadImage);
     }
+
+
+    @SneakyThrows
+    private Image loadImage(String name) {
+        val bytes = _Bytes.of(_Resources.load(JavaAwtImagesSamples.class, name ));
+        return javaAwtImageService.bytesToJavaAwtImage(bytes);
+    }
+
+    @Inject
+    JavaAwtImageService javaAwtImageService;
 
 }

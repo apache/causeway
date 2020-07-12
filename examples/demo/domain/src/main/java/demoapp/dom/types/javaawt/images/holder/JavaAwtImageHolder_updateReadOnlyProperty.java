@@ -16,35 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.images.samples;
+package demoapp.dom.types.javaawt.images.holder;
 
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Image;
 
-import demoapp.dom.types.Samples;
-import demoapp.dom.types.javaawt.images.JavaAwtImageService;
-import demoapp.dom.types.javaawt.images.samples.JavaAwtImagesSamples;
+import lombok.RequiredArgsConstructor;
 
-@Service
-public class IsisImagesSamples implements Samples<Image> {
 
-    @Override
-    public Stream<Image> stream() {
-        return javaAwtImagesSamples.stream()
-                .map(javaAwtImageService::javaAwtImageToPixels)
-                .map(org.apache.isis.applib.value.Image::new);
+//tag::class[]
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "1"
+)
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
+@RequiredArgsConstructor
+public class JavaAwtImageHolder_updateReadOnlyProperty {
+
+    private final JavaAwtImageHolder holder;
+
+    public JavaAwtImageHolder act(Image newValue) {
+        holder.setReadOnlyProperty(newValue);
+        return holder;
+    }
+    public Image default0Act() {
+        return holder.getReadOnlyProperty();
     }
 
-
-    @Inject
-    JavaAwtImagesSamples javaAwtImagesSamples;
-
-    @Inject
-    JavaAwtImageService javaAwtImageService;
-
 }
+//end::class[]

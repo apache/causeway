@@ -16,23 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetdatetime.samples;
+package demoapp.dom.types.isis.markups.samples;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.value.Markup;
+
+import demoapp.dom._infra.resources.MarkupReaderService;
 import demoapp.dom.types.Samples;
 
 @Service
-public class JavaTimeOffsetDateTimeSamples implements Samples<OffsetDateTime> {
+public class IsisMarkupSamples implements Samples<Markup> {
 
     @Override
-    public Stream<OffsetDateTime> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> java.time.OffsetDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.ofHours(x)));
+    public Stream<Markup> stream() {
+        return Stream.of(1, 2, 3, 4)
+                .map(x -> markupReaderService.readFor(getClass(), "sample" + x));
     }
+
+    @Inject
+    MarkupReaderService markupReaderService;
 
 }

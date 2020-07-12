@@ -16,42 +16,66 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.markup;
+package demoapp.dom.types.isis.markups;
 
+import java.util.List;
+
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.util.JaxbAdapters;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Markup;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.Samples;
+import demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoEntities;
+import demoapp.dom.types.isis.markups.jdo.IsisMarkupJdo;
+import demoapp.dom.types.isis.markups.vm.IsisMarkupVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType="demo.Markup", editing=Editing.DISABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisMarkups", editing=Editing.ENABLED)
 @Log4j2
-public class MarkupDemo implements HasAsciiDocDescription {
+public class IsisMarkups implements HasAsciiDocDescription {
 
+    public String title() {
+        return "Markup data type";
+    }
 
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE)
-    @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.MarkupAdapter.class)
-    @Getter @Setter private Markup markup;
-    
-    
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+    public IsisMarkupVm openViewModel(final Markup initialValue) {
+        return new IsisMarkupVm(initialValue);
+    }
+    public Markup default0OpenViewModel() {
+        return samples.single();
+    }
+
+    @Collection
+    public List<IsisMarkupJdo> getEntities() {
+        return entities.all();
+    }
+
+    @Inject
+    @XmlTransient
+    IsisMarkupJdoEntities entities;
+
+    @Inject
+    @XmlTransient
+    Samples<Markup> samples;
+
 }

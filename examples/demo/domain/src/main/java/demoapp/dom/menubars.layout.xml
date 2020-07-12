@@ -12,7 +12,7 @@ as a replacement for
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mb3:primary>
         <mb3:menu>
-            <mb3:named>Data Types</mb3:named>
+            <mb3:named>Basic Types</mb3:named>
             <mb3:section>
             	<mb3:named>Primitives</mb3:named>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="bytes"/>
@@ -43,16 +43,7 @@ as a replacement for
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>More Types</mb3:named>
-            <mb3:section>
-                <mb3:named>java.math</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaMathTypesMenu" id="bigDecimals"/>
-                <mb3:serviceAction objectType="demo.JavaMathTypesMenu" id="bigIntegers"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>java.net</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaNetTypesMenu" id="urls"/>
-            </mb3:section>
+            <mb3:named>Temporal Types</mb3:named>
             <mb3:section>
                 <mb3:named>java.sql</mb3:named>
                 <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="dates"/>
@@ -63,11 +54,12 @@ as a replacement for
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDates"/>
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDateTimes"/>
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="offsetDateTimes"/>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="offsetTimes"/>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="zonedDateTimes"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>java.util</mb3:named>
                 <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="dates"/>
-                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="uuids"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>JodaTime</mb3:named>
@@ -75,12 +67,34 @@ as a replacement for
                 <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDateTimes"/>
                 <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="dateTimes"/>
             </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>More Types</mb3:named>
+            <mb3:section>
+                <mb3:named>java.awt</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaAwtTypesMenu" id="images"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>java.math</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaMathTypesMenu" id="bigDecimals"/>
+                <mb3:serviceAction objectType="demo.JavaMathTypesMenu" id="bigIntegers"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>java.net</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaNetTypesMenu" id="urls"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>java.util</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="uuids"/>
+            </mb3:section>
             <mb3:section>
                 <mb3:named>Apache Isis Core</mb3:named>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="blobs"/>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="clobs"/>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="images"/>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="localResourcePaths"/>
+                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="markups"/>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="passwords"/>
             </mb3:section>
             <mb3:section>
@@ -96,9 +110,6 @@ as a replacement for
                 <mb3:named>Miscellaneous</mb3:named>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="text"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrappers"/>
-                <mb3:serviceAction objectType="demo.DataTypesMenu" id="markup">
-                    <cpt:named>Markup Type (HTML)</cpt:named>
-                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
 
