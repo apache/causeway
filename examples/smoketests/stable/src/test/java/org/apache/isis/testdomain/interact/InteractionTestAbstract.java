@@ -34,10 +34,15 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 
 import lombok.val;
 
+@SuppressWarnings("restriction")
 public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
     
     @Inject protected ObjectManager objectManager;
     @Inject protected IsisInteractionFactory interactionFactory;
+    
+    static {
+        new javafx.embed.swing.JFXPanel(); // Initializes the JavaFx Platform
+    }
 
     protected ActionInteraction startActionInteractionOn(Class<?> type, String actionId) {
         val viewModel = factoryService.viewModel(type);

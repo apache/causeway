@@ -18,11 +18,39 @@
  */
 package org.apache.isis.testdomain.interact;
 
-public class SimulatedUiComponent<T> {
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
-    //TODO bind this to the Interaction API in order to simulate UI interaction 
-    // the would originate from the user
-    //
-    // might require some contract interface, that is provided by the Interaction API
+import lombok.val;
+
+import javafx.beans.property.SimpleObjectProperty;
+
+@SuppressWarnings("restriction")
+public class SimulatedUiComponent {
+    
+    private SimpleObjectProperty<ManagedObject> valueProperty = new SimpleObjectProperty<>();
+
+    private ObjectActionParameter paramMeta;
+    
+    public void bind(PendingParameterModel pendingArgs, int paramNr) {
+        
+        val actionMeta = pendingArgs.getHead().getMetaModel();
+        val paramMetaList = actionMeta.getParameters();
+        paramMeta = paramMetaList.getElseFail(paramNr);
+        
+        valueProperty.setValue(pendingArgs.getParamValue(paramNr)); //sync models
+        valueProperty.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
+    }
+
+    public void simulateValueChange(Object newValue) {
+        val paramSpec = paramMeta.getSpecification();
+        valueProperty.set(ManagedObject.of(paramSpec, newValue));
+    }
+
+    public ManagedObject getValue() {
+        return valueProperty.get();
+    }
+
     
 }

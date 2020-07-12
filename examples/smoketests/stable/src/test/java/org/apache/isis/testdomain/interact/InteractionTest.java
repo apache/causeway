@@ -250,8 +250,6 @@ class InteractionTest extends InteractionTestAbstract {
         val param0Meta = paramMetaList.getElseFail(0);
         val param1Meta = paramMetaList.getElseFail(1);
         
-        //TODO we need to allow ui-component binding
-        
         val choices0 = param0Meta.getChoices(pendingArgs, InteractionInitiatedBy.USER); 
         val choices1 = param1Meta.getChoices(pendingArgs, InteractionInitiatedBy.USER);
         
@@ -261,6 +259,49 @@ class InteractionTest extends InteractionTestAbstract {
         val actualChoices = choices1;
         
         assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
+        
+    }
+    
+    @Test 
+    void actionInteraction_shouldProvideParameterBinding() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+
+        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        val pendingArgs = managedAction.getInteractionHead().defaults();
+        final int choiceParamNr = 1;
+        
+        //TODO also test param 0 ... SimulatedUiComponent<T>
+        
+        SimulatedUiChoices uiParam1 = new SimulatedUiChoices();
+        uiParam1.bind(pendingArgs, choiceParamNr); // bind to param that has choices
+        uiParam1.simulateChoiceSelect(2); // select 3rd choice
+
+        val expectedChoices = new InteractionDemo_biArgEnabled(null).choices1Act();
+        val expectedChoice = expectedChoices[2]; // actual 3rd choice
+        
+        Object actualChoiceAsSeenByBackend = pendingArgs.getParamValue(choiceParamNr).getPojo();
+        Object actualChoiceAsSeenByUi = uiParam1.getValue().getPojo();
+
+        assertEquals(expectedChoice, actualChoiceAsSeenByBackend);
+        assertEquals(expectedChoice, actualChoiceAsSeenByUi);
+        
+        // ensure backend changes are reflected back to the UI
+        
+        val expectedChoiceAfterBackendUpdated = expectedChoices[0]; // actual first choice
+        val newParamValue = pendingArgs
+                .adaptParamValuePojo(choiceParamNr, expectedChoiceAfterBackendUpdated);
+        
+        val bindableParamValue = pendingArgs.getBindableParamValue(choiceParamNr);
+        bindableParamValue.setValue(newParamValue);
+        
+        actualChoiceAsSeenByBackend = pendingArgs.getParamValue(choiceParamNr).getPojo();
+        actualChoiceAsSeenByUi = uiParam1.getValue().getPojo();
+        
+        assertEquals(expectedChoiceAfterBackendUpdated, actualChoiceAsSeenByBackend);
+        assertEquals(expectedChoiceAfterBackendUpdated, actualChoiceAsSeenByUi);
         
     }
     

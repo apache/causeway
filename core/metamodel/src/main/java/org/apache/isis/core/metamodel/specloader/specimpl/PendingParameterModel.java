@@ -18,13 +18,26 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 /**
  * Model used to negotiate the paramValues of an action by means of an UI dialog.
@@ -36,8 +49,8 @@ import lombok.RequiredArgsConstructor;
 public class PendingParameterModel {
 
     @NonNull private final ActionInteractionHead head;
-    @NonNull private final Can<ManagedObject> paramValues;
-
+    @NonNull private Can<ManagedObject> paramValues;
+    
     // -- SHORTCUTS
     
     @NonNull public ManagedObject getActionTarget() {
@@ -48,5 +61,113 @@ public class PendingParameterModel {
         return paramValues.getElseFail(paramNum);
     }
 
+    public void setParamValue(int paramNr, @NonNull ManagedObject newParamValue) {
+        paramValues = paramValues.replace(paramNr, newParamValue);
+    }
+
+    public ManagedObject adaptParamValuePojo(int paramNr, @Nullable Object newParamValuePojo) {
+        val paramMeta = head.getMetaModel().getParameters().getElseFail(paramNr);
+        val paramSpec = paramMeta.getSpecification();
+        val paramValue = newParamValuePojo!=null
+                ? ManagedObject.of(paramSpec, newParamValuePojo)
+                : ManagedObject.empty(paramSpec);
+        return paramValue;
+    }
+
+    //FIXME don't depend on java-fx classes in core
+    @RequiredArgsConstructor(staticName = "of")
+    public static class BindableManagedObject implements Property<ManagedObject> {
+
+        @Getter @NonNull private int paramNr;
+        @Getter @NonNull private PendingParameterModel model;
+        
+        @Override
+        public Object getBean() {
+            return model;
+        }
+
+        @Override
+        public String getName() {
+            val paramMeta = model.getHead().getMetaModel().getParameters().getElseFail(paramNr);
+            return paramMeta.getName();
+        }
+        
+        @Override
+        public ManagedObject getValue() {
+            return model.getParamValue(paramNr);
+        }
+        
+        @Override
+        public void setValue(final ManagedObject newValue) {
+            val oldValue = getValue(); 
+            model.setParamValue(paramNr, newValue);
+            changeListeners.forEach(listener->{
+                listener.changed(this, oldValue, newValue);
+            }); 
+        }
+        
+        private final List<ChangeListener<? super ManagedObject>> changeListeners = new ArrayList<>();
+        private final List<InvalidationListener> invalidationListeners = new ArrayList<>();
+
+        @Override
+        public void addListener(ChangeListener<? super ManagedObject> listener) {
+            changeListeners.add(listener);
+        }
+
+        @Override
+        public void removeListener(ChangeListener<? super ManagedObject> listener) {
+            changeListeners.remove(listener);
+        }
+
+        @Override
+        public void addListener(InvalidationListener listener) {
+            invalidationListeners.add(listener);
+        }
+
+        @Override
+        public void removeListener(InvalidationListener listener) {
+            invalidationListeners.remove(listener);
+        }
+
+        @Override
+        public void bind(ObservableValue<? extends ManagedObject> observable) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void unbind() {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public boolean isBound() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public void bindBidirectional(Property<ManagedObject> other) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void unbindBidirectional(Property<ManagedObject> other) {
+            // TODO Auto-generated method stub
+            
+        }
+        
+    }
+    
+    private final Map<Integer, BindableManagedObject> 
+        bindableParamValueByParamNr = _Maps.newConcurrentHashMap();
+    
+    public BindableManagedObject getBindableParamValue(final int paramNr) {
+        return bindableParamValueByParamNr
+                .computeIfAbsent(paramNr, __->
+                    BindableManagedObject.of(paramNr, this));
+    }
     
 }
