@@ -16,13 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.clobs;
+package demoapp.dom.types.isis.clobs.samples;
 
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.resources._Resources;
+
+import lombok.SneakyThrows;
+import lombok.val;
 
 import demoapp.dom.types.Samples;
 
@@ -31,7 +40,22 @@ public class IsisClobsSamples implements Samples<Clob> {
 
     @Override
     public Stream<Clob> stream() {
-        return Stream.of();
+        return Stream.of(
+                "document.txt", "file-sample_100kB.rtf")
+                .map(this::loadClob);
     }
+
+    @SneakyThrows
+    private Clob loadClob(String name) {
+        val text = _Strings.read(_Resources.load(IsisClobsSamples.class, name), StandardCharsets.UTF_8);
+        return Clob.of(name, mimeTypeFor(name), text);
+    }
+
+    private static NamedWithMimeType.CommonMimeType mimeTypeFor(String name) {
+        if (name.endsWith(".txt")) return NamedWithMimeType.CommonMimeType.TXT;
+        if (name.endsWith(".rtf")) return NamedWithMimeType.CommonMimeType.RTF;
+        throw new IllegalArgumentException(name);
+    }
+
 
 }

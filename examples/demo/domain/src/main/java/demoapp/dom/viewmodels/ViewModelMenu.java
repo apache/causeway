@@ -19,6 +19,7 @@
 package demoapp.dom.viewmodels;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
@@ -36,6 +37,7 @@ import demoapp.dom.viewmodels.usingjaxb.StatefulVmUsingJaxb;
 public class ViewModelMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa = "gamepad")
     public StatefulVmUsingJaxb stateful(final String message) {
         val viewModel = new StatefulVmUsingJaxb();
         viewModel.setMessage(message);
@@ -46,6 +48,7 @@ public class ViewModelMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa = "gamepad")
     public StatefulVmJaxbRefsEntity statefulRefsEntity(final String message) {
         val viewModel = new StatefulVmJaxbRefsEntity();
         viewModel.setMessage(message);

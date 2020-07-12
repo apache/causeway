@@ -78,13 +78,13 @@ public class JavaLangWrapperTypesMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
+    @ActionLayout(cssClassFa="fa-font")
     public WrapperCharacters characters(){
         return new WrapperCharacters();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
+    @ActionLayout(cssClassFa="fa-check-square")
     public WrapperBooleans booleans(){
         return new WrapperBooleans();
     }

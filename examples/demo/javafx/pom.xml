@@ -23,7 +23,7 @@
 
 	<artifactId>demo-javafx</artifactId>
 
-	<name>Apache Isis App Demo - JavaFX</name>
+	<name>Demo - JavaFX</name>
 
 	<packaging>jar</packaging>
 

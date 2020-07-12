@@ -42,26 +42,26 @@ import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 public class IsisTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-file-alt")
     public IsisBlobs blobs(){
         return new IsisBlobs();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-file-alt")
     public IsisClobs clobs(){
         return new IsisClobs();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-image")
     public IsisImages images(){
         return new IsisImages();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
-    public IsisLocalResourcePaths resourcePaths(){
+    @ActionLayout(cssClassFa="fa-external-link-alt")
+    public IsisLocalResourcePaths localResourcePaths(){
         return new IsisLocalResourcePaths();
     }
 

@@ -38,13 +38,13 @@ import demoapp.dom.types.javautil.uuids.JavaUtilUuids;
 public class JavaMathTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-hashtag")
     public JavaMathBigDecimals bigDecimals(){
         return new JavaMathBigDecimals();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-hashtag")
     public JavaMathBigIntegers bigIntegers(){
         return new JavaMathBigIntegers();
     }

@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -33,6 +34,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.applib.value.Blob;
 
 import lombok.Getter;
@@ -60,25 +62,32 @@ public class IsisBlobVm
     }
 
 //tag::class[]
-    @Title(prepend = "Blob view model: ")
+    public String title() {
+        return "Blob view model: " +getReadOnlyProperty().getName();
+    }
+
     @MemberOrder(name = "read-only-properties", sequence = "1")
+    @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)                         // <.>
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private Blob readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
+    @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)
     @XmlElement(required = true)
     @Getter @Setter
     private Blob readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
+    @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)
     @Getter @Setter
     private Blob readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
+    @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)
     @Getter @Setter
     private Blob readWriteOptionalProperty;
 

@@ -96,15 +96,6 @@ as a replacement for
                 <mb3:named>Miscellaneous</mb3:named>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="text"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrappers"/>
-                <mb3:serviceAction objectType="demo.DataTypesMenu" id="uuid">
-                    <cpt:named>UUID Type</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.DataTypesMenu" id="blobs">
-                    <cpt:named>Blob Type</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.DataTypesMenu" id="clobs">
-                    <cpt:named>Clob Type</cpt:named>
-                </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="markup">
                     <cpt:named>Markup Type (HTML)</cpt:named>
                 </mb3:serviceAction>
@@ -114,8 +105,8 @@ as a replacement for
         <mb3:menu>
             <mb3:named>View Models</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.ViewModels" id="stateful" cssClassFa="mountain"/>
-                <mb3:serviceAction objectType="demo.ViewModels" id="statefulRefsEntity"/>
+                <mb3:serviceAction objectType="demo.ViewModelMenu" id="stateful"/>
+                <mb3:serviceAction objectType="demo.ViewModelMenu" id="statefulRefsEntity"/>
             </mb3:section>
         </mb3:menu>
 

@@ -35,7 +35,7 @@ import demoapp.dom.types.javanet.urls.JavaNetUrls;
 public class JavaNetTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-link")
     public JavaNetUrls urls(){
         return new JavaNetUrls();
     }

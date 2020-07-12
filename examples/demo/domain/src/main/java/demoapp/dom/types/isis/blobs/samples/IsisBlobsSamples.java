@@ -16,13 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.blobs;
+package demoapp.dom.types.isis.blobs.samples;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.resources._Resources;
+
+import lombok.SneakyThrows;
+import lombok.val;
 
 import demoapp.dom.types.Samples;
 
@@ -31,7 +38,24 @@ public class IsisBlobsSamples implements Samples<Blob> {
 
     @Override
     public Stream<Blob> stream() {
-        return Stream.of();
+        return Stream.of(
+                "file-sample_100kB.docx", "file-sample_150kB.pdf", "isis-logo-568x286.png")
+                .map(this::loadBlob);
     }
+
+
+    @SneakyThrows
+    private Blob loadBlob(String name) {
+        val bytes = _Bytes.of(_Resources.load(IsisBlobsSamples.class, name ));
+        return Blob.of(name, mimeTypeFor(name), bytes);
+    }
+
+    private static NamedWithMimeType.CommonMimeType mimeTypeFor(String name) {
+        if (name.endsWith(".png")) return NamedWithMimeType.CommonMimeType.PNG;
+        if (name.endsWith(".docx")) return NamedWithMimeType.CommonMimeType.DOCX;
+        if (name.endsWith(".pdf")) return NamedWithMimeType.CommonMimeType.PDF;
+        throw new IllegalArgumentException(name);
+    }
+
 
 }

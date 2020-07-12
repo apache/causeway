@@ -39,13 +39,13 @@ import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 public class IsisExtTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-pen-fancy")
     public IsisAsciiDocs asciiDocs(){
         return new IsisAsciiDocs();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-pen-fancy")
     public IsisMarkdowns markdowns(){
         return new IsisMarkdowns();
     }

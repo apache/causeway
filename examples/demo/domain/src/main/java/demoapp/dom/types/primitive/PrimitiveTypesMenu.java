@@ -79,13 +79,13 @@ public class PrimitiveTypesMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
+    @ActionLayout(cssClassFa="fa-font")
     public PrimitiveChars chars(){
         return new PrimitiveChars();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-hashtag")
+    @ActionLayout(cssClassFa="fa-check-square")
     public PrimitiveBooleans booleans(){
         return new PrimitiveBooleans();
     }

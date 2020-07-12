@@ -41,11 +41,8 @@ import org.apache.isis.core.commons.internal.resources._Resources;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.types.blob.BlobDemo;
-import demoapp.dom.types.clob.ClobDemo;
 import demoapp.dom.types.markup.MarkupDemo;
 import demoapp.dom.types.text.TextDemo;
-import demoapp.dom.types.uuid.UuidDemo;
 import demoapp.dom.types.wrapper.WrapperDemo;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DataTypesMenu")
@@ -76,43 +73,7 @@ public class DataTypesMenu {
     }
 
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-at")
-    public UuidDemo uuid(){
-        val demo = factoryService.viewModel(UuidDemo.class);
-        demo.setUuid(UUID.randomUUID());
-        return demo;
-    }
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-cloud")
-    public BlobDemo blobs(){
-        val demo = factoryService.viewModel(BlobDemo.class);
-
-        try {
-            val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "isis-logo-568x286.png"));
-            demo.setLogo(Blob.of("isis-logo-568x286", NamedWithMimeType.CommonMimeType.PNG, bytes));
-        } catch (Exception e) {
-            log.error("failed to create Blob from image resource", e);
-        }
-
-        return demo;
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-cloud")
-    public ClobDemo clobs(){
-        val demo = factoryService.viewModel(ClobDemo.class);
-
-        try {
-            val text = _Strings.read(_Resources.load(ClobDemo.class, "document.txt"), StandardCharsets.UTF_8);
-            demo.setDocument(Clob.of("document", NamedWithMimeType.CommonMimeType.TXT, text));
-        } catch (Exception e) {
-            log.error("failed to create Clob from text resource", e);
-        }
-
-        return demo;
-    }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-code")
@@ -128,6 +89,5 @@ public class DataTypesMenu {
 
         return demo;
     }
-
 
 }
