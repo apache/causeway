@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -78,6 +79,35 @@ final class ObjectSerializer_builtinHandlers {
         }
         
     }
+    
+    @Data
+    public static class SerializeOther implements ObjectSerializer.Handler {
+        
+        private MetaModelContext metaModelContext;
+
+        @Override
+        public boolean isHandling(ObjectSpecification spec) {
+            return true; // the last handler in the chain
+        }
+        
+        @Override
+        public byte[] serialize(ManagedObject object) {
+            throw _Exceptions.illegalArgument(
+                    "None of the registered ObjectSerializers knows how to serialize this object. "
+                    + "(when serializing pojo as held by ManagedObject %s)", 
+                        object);
+        }
+
+        @Override
+        public Object deserialize(ObjectSpecification spec, byte[] serializedObjectBytes) {
+            throw _Exceptions.illegalArgument(
+                    "None of the registered ObjectSerializers knows how to de-serialize "
+                    + "an object having ObjectSpecification %s", 
+                        spec);
+        }
+
+    }
+
 
 
 }

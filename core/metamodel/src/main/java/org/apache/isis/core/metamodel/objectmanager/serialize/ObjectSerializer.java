@@ -52,15 +52,14 @@ public interface ObjectSerializer {
         val response = serializeObject(request);
         return response.getSerializedObject().getSerializedObjectBytes();
     }
-    
-
-    // -- BOTH, REQUEST AND RESPONSE OBJECT
 
     @Value(staticConstructor = "of")
     static class SerializedObject {
         @NonNull private ObjectSpecification specification;
         @NonNull private byte[] serializedObjectBytes;
     }
+    
+    // -- BOTH, REQUEST AND RESPONSE OBJECT FOR THE HANDLER
     
     @Value(staticConstructor = "of")
     static class BiForm {
@@ -118,9 +117,8 @@ public interface ObjectSerializer {
     public static ObjectSerializer createDefault(MetaModelContext metaModelContext) {
 
         val chainOfHandlers = _Lists.<ObjectSerializer.Handler>of(
-                new ObjectSerializer_builtinHandlers.SerializeSerializable()
-                //                new ObjectDetacher_builtinHandlers.DetachEntity(metaModelContext),
-                //                new ObjectDetacher_builtinHandlers.DetachOther()
+                new ObjectSerializer_builtinHandlers.SerializeSerializable(),
+                new ObjectSerializer_builtinHandlers.SerializeOther()
                 );
 
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
