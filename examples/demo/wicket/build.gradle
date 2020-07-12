@@ -1,5 +1,20 @@
 group = 'org.apache.isis.examples.apps'
 description = 'Apache Isis App - Demo (Wicket)'
+
 dependencies {
-  compile project(':isis-app-starter-parent:demo-parent:demo-domain')
+    compile project(':isis-parent:isis-applib')
+    compile project(':isis-parent:isis:isis-core-commons')
+    compile project(':isis-app-starter-parent:demo-parent:demo-domain')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-ui')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
+    compile('org.springframework.boot:spring-boot-starter-log4j2:2.2.7.RELEASE') {
+        exclude(module: 'slf4j-api')
+    }
+    compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp')
+    compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-viewer')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui:isis-valuetypes-asciidoc-ui-wkt')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui')
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc')
 }
+
