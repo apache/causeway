@@ -28,6 +28,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -99,6 +100,11 @@ final class Can_Empty<T> implements Can<T> {
                     "cannot add to empty can with index other than 0; got " + index);
         }
         return Can.ofSingleton(element);
+    }
+    
+    @Override
+    public Can<T> replace(int index, T element) {
+        throw _Exceptions.unsupportedOperation("cannot replace an element in an empty Can");
     }
 
     @Override

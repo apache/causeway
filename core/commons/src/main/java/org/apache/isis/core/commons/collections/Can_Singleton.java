@@ -113,6 +113,15 @@ final class Can_Singleton<T> implements Can<T> {
         throw new IndexOutOfBoundsException(
                 "cannot add to singleton with index other than 0 or 1; got " + index);
     }
+    
+    @Override
+    public Can<T> replace(int index, T element) {
+        if(index==0) {
+            return Can.ofSingleton(element);    
+        }
+        throw new IndexOutOfBoundsException(
+                "cannot replace on singleton with index other than 0; got " + index);
+    }
 
     @Override
     public Can<T> remove(int index) {

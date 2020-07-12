@@ -422,6 +422,8 @@ public interface Can<T> extends Iterable<T>, Serializable {
      *         (<tt>index &lt; 0 || index &gt; size()</tt>)
      */
     Can<T> add(int index, T element);
+    
+    Can<T> replace(int index, T element);
 
     /**
      * Removes the element at the specified position in this list (optional
@@ -548,5 +550,7 @@ public interface Can<T> extends Iterable<T>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
+    
     
 }

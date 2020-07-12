@@ -140,6 +140,14 @@ public final class _Exceptions {
         return new UnsupportedOperationException("unrecoverable error: method call not allowed/supported");
     }
     
+    public static UnsupportedOperationException unsupportedOperation(String msg) {
+        return new UnsupportedOperationException(msg);
+    }
+    
+    public static UnsupportedOperationException unsupportedOperation(String format, Object ...args) {
+        return new UnsupportedOperationException(String.format(format, args));
+    }
+    
     // -- ASSERT
     
     public static AssertionError assertionError(String msg) {
