@@ -81,38 +81,6 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
     private String propertyUsingLayout;
 //end::layout-file[]
 
-//tag::markup[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-            named = "Named <b>uses</b> <i>markup</i>",          // <.>
-            namedEscaped = false                                // <.>
-            , describedAs = "@PropertyLayout(" +
-                "named= \"Named <b>uses</b> <i>markup</i>\"" +
-                ", namedEscaped=false)"
-            , hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "markup", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMarkup;
-//end::markup[]
-
-//tag::markup-escaped[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-            named = "Named <b>but</b> <i>escaped</i>",          // <.>
-            namedEscaped = true                                 // <.>
-            , describedAs = "@PropertyLayout(named= " +
-                "\"Named <b>but</b> <i>unescaped</i>\"" +
-                ", namedEscaped=true)"
-            , hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "markup", sequence = "2")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingEscapedMarkup;
-//end::markup-escaped[]
-
 //tag::meta-annotated[]
     @Property(optionality = Optionality.OPTIONAL)
     @NamedMetaAnnotation                            // <.>
@@ -141,6 +109,39 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
+
+    //tag::markup[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(
+            named = "Named <b>uses</b> <i>markup</i>",          // <.>
+            namedEscaped = false                                // <.>
+            , describedAs = "@PropertyLayout(" +
+            "named= \"Named <b>uses</b> <i>markup</i>\"" +
+            ", namedEscaped=false)"
+            , hidden = Where.ALL_TABLES
+    )
+    @MemberOrder(name = "markup", sequence = "1")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyUsingMarkup;
+//end::markup[]
+
+    //tag::markup-escaped[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(
+            named = "Named <b>but</b> <i>escaped</i>",          // <.>
+            namedEscaped = true                                 // <.>
+            , describedAs = "@PropertyLayout(named= " +
+            "\"Named <b>but</b> <i>unescaped</i>\"" +
+            ", namedEscaped=true)"
+            , hidden = Where.ALL_TABLES
+    )
+    @MemberOrder(name = "markup", sequence = "2")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyUsingEscapedMarkup;
+//end::markup-escaped[]
+
 
 }
 //end::class[]

@@ -13,7 +13,7 @@ This can optionally be escaped.
 
 == Annotation
 
-The name can be specified using explicitly using an annotation.
+The name can be specified explicitly using an annotation:
 
 * for properties, using `@PropertyLayout#named()`:
 +

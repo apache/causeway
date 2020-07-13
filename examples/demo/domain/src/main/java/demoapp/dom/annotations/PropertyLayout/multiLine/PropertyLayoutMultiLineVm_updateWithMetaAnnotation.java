@@ -1,4 +1,4 @@
-package demoapp.dom.annotations.PropertyLayout.named;
+package demoapp.dom.annotations.PropertyLayout.multiLine;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
@@ -12,21 +12,21 @@ import lombok.RequiredArgsConstructor;
     associateWith = "propertyUsingMetaAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutNamedVm_updateWithMetaAnnotation {
+public class PropertyLayoutMultiLineVm_updateWithMetaAnnotation {
 
-    private final PropertyLayoutNamedVm propertyLayoutNamedVm;
+    private final PropertyLayoutMultiLineVm propertyLayoutMultiLineVm;
 
 //tag::meta-annotation[]
-    public PropertyLayoutNamedVm act(
+    public PropertyLayoutMultiLineVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @NamedMetaAnnotation                            // <.>
+            @MultiLineMetaAnnotation                            // <.>
             final String newValue) {
-        propertyLayoutNamedVm.setPropertyUsingMetaAnnotation(newValue);
-        return propertyLayoutNamedVm;
+        propertyLayoutMultiLineVm.setPropertyUsingMetaAnnotation(newValue);
+        return propertyLayoutMultiLineVm;
     }
 //end::meta-annotation[]
     public String default0Act() {
-        return propertyLayoutNamedVm.getPropertyUsingMetaAnnotation();
+        return propertyLayoutMultiLineVm.getPropertyUsingMetaAnnotation();
     }
 
 }
