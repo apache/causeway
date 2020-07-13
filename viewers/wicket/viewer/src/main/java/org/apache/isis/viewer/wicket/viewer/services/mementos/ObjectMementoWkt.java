@@ -439,7 +439,7 @@ final class ObjectMementoWkt implements Serializable {
 
         val spec = adapter.getSpecification();
 
-        if(spec.isIdentifiable()) {
+        if(spec.isIdentifiable() || spec.isParented() ) {
             val rootOid = ManagedObjects.identifyElseFail(adapter);
             persistentOidStr = rootOid.enString();
             bookmark = rootOid.asBookmark();
@@ -469,8 +469,9 @@ final class ObjectMementoWkt implements Serializable {
         throw _Exceptions.illegalArgument("Don't know how to create an ObjectMemento for a type "
                 + "with ObjectSpecification %s. "
                 + "All other strategies failed. Type is neither "
-                + "identifiable (isManagedBean() || isViewModel() || isEntity()), nor "
-                + "has encodable semantics, nor is Serializable", spec);
+                + "identifiable (isManagedBean() || isViewModel() || isEntity()), "
+                + "nor is a parented collection, "
+                + "nor has encodable semantics, nor is Serializable", spec);
         
     }
 
