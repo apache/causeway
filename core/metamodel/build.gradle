@@ -3,7 +3,7 @@ dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-core-config')
     compile project(':isis-parent:isis:isis-core-security')
-    compile(group: 'io.swagger', name: 'swagger-core', version: '1.6.0') {
+    compile('io.swagger:swagger-core:1.6.0') {
         exclude(module: 'guava')
         exclude(module: 'validation-api')
         exclude(module: 'snakeyaml')
@@ -11,23 +11,25 @@ dependencies {
         exclude(module: 'commons-lang3')
     }
     compile project(':isis-parent:isis:isis-core-commons')
-    compile project(':isis-parent:isis:isis-core-internaltestsupport') // testCompile seems not to be sufficient
+
     testCompile project(':isis-parent:isis:isis-core-config')
     testCompile project(':isis-parent:isis-applib')
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
-    testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
-    testCompile group: 'org.jmock', name: 'jmock', version: '2.11.0'
-    testCompile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':isis-parent:isis:isis-core-runtimeservices')
+
+    testCompile('org.junit.jupiter:junit-jupiter-api:5.6.2')
+    testCompile('org.junit.jupiter:junit-jupiter-engine:5.6.2')
+    testCompile('org.junit.vintage:junit-vintage-engine:5.6.2')
+    testCompile('org.jmock:jmock:2.11.0')
+    testCompile('org.jmock:jmock-junit4:2.11.0') {
         exclude(module: 'junit-dep')
         exclude(module: 'byte-buddy')
     }
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.19.Final'
+    testCompile('org.hibernate.validator:hibernate-validator:6.0.19.Final')
 }
 
 task packageTests(type: Jar) {
     from sourceSets.test.output
-    classifier = 'tests'
+    archiveClassifier = 'tests'
 }
 artifacts.archives packageTests

@@ -1,5 +1,6 @@
 description = 'Apache Isis Core - AppLib'
 apply plugin: 'war'
+apply plugin: 'io.freefair.lombok'
 
 dependencies {
     compile project(':isis-parent:isis-schema')
@@ -15,15 +16,9 @@ dependencies {
     }
     compile 'org.slf4j:slf4j-api:1.7.26'
 
-/*    compileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-
-    testCompileOnly 'org.projectlombok:lombok:1.18.12'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'  */
-
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.2'
-    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
-    testCompile 'org.junit.vintage:junit-vintage-engine:5.5.2'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+    testCompile 'org.junit.vintage:junit-vintage-engine:5.6.2'
     testCompile 'org.jmock:jmock:2.11.0'
     testCompile('org.jmock:jmock-junit4:2.11.0') {
         exclude(module: 'junit-dep')

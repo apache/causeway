@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.applib.unittestsupport.ValueTypeContractTestAbstract;
+import org.apache.isis.core.internaltestsupport.value.ValueTypeContractTestAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class RootOidDefaultTest_valueSemantics_whenPersistent extends ValueTypeContractTestAbstract<RootOid> {
