@@ -105,15 +105,6 @@ as a replacement for
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Data Types (to remove)</mb3:named>
-            <mb3:section>
-                <mb3:named>Miscellaneous</mb3:named>
-                <mb3:serviceAction objectType="demo.DataTypesMenu" id="text"/>
-                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrappers"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
             <mb3:named>View Models</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.ViewModelMenu" id="stateful"/>
@@ -130,8 +121,9 @@ as a replacement for
             </mb3:section>
             <mb3:section>
                 <mb3:named>@PropertyLayout</mb3:named>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="multiLine"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
             </mb3:section>
         </mb3:menu>
 

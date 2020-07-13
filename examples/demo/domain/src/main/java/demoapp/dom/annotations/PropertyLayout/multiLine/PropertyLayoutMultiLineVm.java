@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.PropertyLayout.named;
+package demoapp.dom.annotations.PropertyLayout.multiLine;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -44,70 +44,44 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutNamedVm",
+        objectType = "demo.PropertyLayoutMultiLineVm",
         editing = Editing.ENABLED
 )
-public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
+public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "PropertyLayout#named";
+        return "PropertyLayout#multiLine";
     }
 
-//tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(named = "Named using annotation", describedAs = "@PropertyLayout(named= \"Named using annotation\")", hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "properties", sequence = "1")
+    @PropertyLayout(multiLine = 5, describedAs = "@PropertyLayout(multiLine = 5)", hidden = Where.ALL_TABLES)
+    @MemberOrder(name = "multiLine", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
-//end::annotation[]
 
-//tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "<cpt:property id=\"...\"><cpt:named>...</cpt:named></cpt:property>", hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "properties", sequence = "2")
+    @PropertyLayout(describedAs = "<cpt:property id=\"...\" multiLine=\"5\"/>", hidden = Where.ALL_TABLES)
+    @MemberOrder(name = "multiLine", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
-//end::layout-file[]
 
-//tag::markup[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(named = "Named <b>uses</b> <i>markup</i>", namedEscaped = false, describedAs = "@PropertyLayout(named= \"Named <b>uses</b> <i>markup</i>\" namedEscaped=false)", hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "markup", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMarkup;
-//end::markup[]
-
-//tag::markup-escaped[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(named = "Named <b>but</b> <i>escaped</i>", namedEscaped = true, describedAs = "@PropertyLayout(named= \"Named <b>but</b> <i>unescaped</i>\" namedEscaped=true)", hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "markup", sequence = "2")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingEscapedMarkup;
-//end::markup-escaped[]
-
-//tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayoutNamedMetaAnnotation
-    @PropertyLayout(describedAs = "@PropertyLayoutNamedMetaAnnotation", hidden = Where.ALL_TABLES)
+    @Property(optionality = Optionality.OPTIONAL, editing = Editing.DISABLED)
+    @PropertyLayoutMultiLineMetaAnnotation
+    @PropertyLayout(describedAs = "@PropertyLayoutMultiLineMetaAnnotation", hidden = Where.ALL_TABLES)
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
 
-//tag::meta-annotated-overridden[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayoutNamedMetaAnnotation
-    @PropertyLayout(named = "Name overrides meta-annotation", describedAs = "meta-annotation overridden using @PropertyLayout(...)", hidden = Where.ALL_TABLES)
+    @Property(optionality = Optionality.OPTIONAL, editing = Editing.DISABLED)
+    @PropertyLayoutMultiLineMetaAnnotation
+    @PropertyLayout(multiLine = 3, describedAs = "meta-annotation overridden using @PropertyLayout(...)", hidden = Where.ALL_TABLES)
     @MemberOrder(name = "meta-annotated", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
+    private String usingMetaAnnotationButOverridden;
 
 }
 //end::class[]

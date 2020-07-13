@@ -134,6 +134,10 @@
     padding: .25em 0
 }
 
+.colist > table > tbody > tr > td > div.paragraph > p {
+    margin-bottom: 0;
+}
+
 /*
  * conum (callout number) styles
  * (taken from asciidoctor.css)
@@ -203,3 +207,6 @@ div.paragraph a.a-has-code:hover {
     text-decoration-color: #c7254e;
 }
 
+div.sectionbody > div.ulist > ul {
+    margin-left: -23px;
+}

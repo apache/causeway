@@ -31,6 +31,8 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.javatime.javatimelocaldate.JavaTimeLocalDates;
 import demoapp.dom.types.javatime.javatimelocaldatetime.JavaTimeLocalDateTimes;
 import demoapp.dom.types.javatime.javatimeoffsetdatetime.JavaTimeOffsetDateTimes;
+import demoapp.dom.types.javatime.javatimeoffsettime.JavaTimeOffsetTimes;
+import demoapp.dom.types.javatime.javatimezoneddatetime.JavaTimeZonedDateTimes;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaTimeTypesMenu")
 @DomainObjectLayout(named="JavaTimeTypes")
@@ -53,6 +55,18 @@ public class JavaTimeTypesMenu {
     @ActionLayout(cssClassFa="fa-clock")
     public JavaTimeOffsetDateTimes offsetDateTimes(){
         return new JavaTimeOffsetDateTimes();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-clock")
+    public JavaTimeOffsetTimes offsetTimes(){
+        return new JavaTimeOffsetTimes();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-clock")
+    public JavaTimeZonedDateTimes zonedDateTimes(){
+        return new JavaTimeZonedDateTimes();
     }
 
 

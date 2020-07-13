@@ -24,7 +24,10 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
+
+import demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyLayoutMenu")
 @DomainObjectLayout(named="@PropertyLayout")
@@ -32,13 +35,21 @@ import lombok.extern.log4j.Log4j2;
 public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm named(){
-        return new demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm();
+    public demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm cssClass(){
+        return new demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm cssClass(){
-        return new demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm();
+    public demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineVm multiLine(){
+        val vm = new PropertyLayoutMultiLineVm();
+        vm.setPropertyUsingAnnotation("A multiline string\nspanning\n5 lines. (click me)");
+        vm.setPropertyUsingMetaAnnotation("A readonly string\nspanning\n5 lines. (but allows text select)");
+        return vm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm named(){
+        return new demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm();
     }
 
 

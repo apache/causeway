@@ -45,7 +45,7 @@ import demoapp.dom.types.javalang.strings.holder.JavaLangStringHolder;
 @DomainObject(
         objectType = "demo.JavaLangStringJdo"
 )
-public class JavaLangStringJdo                                          // <.>
+public class JavaLangStringJdo                                                  // <.>
         implements HasAsciiDocDescription, JavaLangStringHolder {
 
 //end::class[]

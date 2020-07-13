@@ -1,12 +1,80 @@
-TODO
+The `@PropertyLayout#named()` attribute (and its equivalent in the layout file) allows the name of the property to be overridden.
 
-[source,java]
+This can be useful if the desired name is a Java keyword (such as "default", or "package") that cannot be used as a variable name.
+
+Names can also include HTML markup.
+The associated `namedEscaped()` attribute can be used to indicate whether to escape any HTML markup.
+
+== Attribute or layout
+
+The name can be specified:
+
+* using `@PropertyLayout#named()`:
++
+[source,java,indent=0]
 ----
-include::PropertyLayoutNamedVm.java[tags=class]
+include::PropertyLayoutNamedVm.java[tags=annotation]
 ----
 
+* or using the layout file
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedVm.java[tags=annotation]
+----
++
+where the `layout.xml` is:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyUsingLayout">
+    <cpt:named>Named using layout.xml</cpt:named>
+</cpt:property>
+----
+// TODO: for some reason this doesn't include correctly in the app...
+
+//include::PropertyLayoutNamedVm.layout.xml[tags=layout-file]
+
+== Markup
+
+The name can include HTML markup.
+
+* Name with markup (not escaped):
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedVm.java[tags=markup]
+----
+
+* Named with markup (but escaped using `namedEscaped`):
+
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedVm.java[tags=markup-escaped]
+----
+
+
+== Meta-annotations
+
+The name can also be specified using a custom meta-annotation:
+
+* meta-annotation:
++
 [source,java]
 ----
 include::PropertyLayoutNamedMetaAnnotation.java[tags=class]
 ----
++
+applied to property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedVm.java[tags=meta-annotated]
+----
 
+* This meta-annotation can itself be overridden
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedVm.java[tags=meta-annotated-overridden]
+----

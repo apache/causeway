@@ -20,7 +20,8 @@
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Description" id="description" >
+			<bs3:sizeSpan offset="true" size="MD" span="6"/>
+			<cpt:fieldSet name="Description" id="description">
 				<cpt:action id="clearHints" position="PANEL" />
 				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="rebuildMetamodel"  position="PANEL"/>

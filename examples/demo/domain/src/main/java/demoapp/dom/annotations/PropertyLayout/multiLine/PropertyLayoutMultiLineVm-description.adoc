@@ -1,0 +1,12 @@
+TODO
+
+[source,java]
+----
+include::PropertyLayoutMultiLineVm.java[tags=class]
+----
+
+[source,java]
+----
+include::PropertyLayoutMultiLineMetaAnnotation.java[tags=class]
+----
+

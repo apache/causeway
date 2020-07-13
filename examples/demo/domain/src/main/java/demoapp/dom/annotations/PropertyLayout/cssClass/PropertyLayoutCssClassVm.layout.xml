@@ -18,7 +18,8 @@
 	<bs3:row>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Properties" id="properties">
-				<cpt:property id="cssClassUsingLayoutProperty" cssClass="red"/>
+				<cpt:property id="propertyUsingAnnotation"/>
+				<cpt:property id="propertyUsingLayout" cssClass="red"/>
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Contributed" id="contributed"/>
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>

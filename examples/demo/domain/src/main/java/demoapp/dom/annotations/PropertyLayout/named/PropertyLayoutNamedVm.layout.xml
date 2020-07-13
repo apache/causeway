@@ -17,11 +17,13 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Named" id="named">
+			<cpt:fieldSet name="Properties" id="properties">
 				<cpt:property id="propertyUsingAnnotation"/>
+<!-- tag::layout-file[] -->
 				<cpt:property id="propertyUsingLayout">
 					<cpt:named>Named using layout.xml</cpt:named>
 				</cpt:property>
+<!-- end::layout-file[] -->
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Markup" id="markup"/>
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
