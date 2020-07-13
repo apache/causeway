@@ -25,8 +25,8 @@
 				</cpt:property>
 <!-- end::layout-file[] -->
 			</cpt:fieldSet>
-			<cpt:fieldSet name="Markup" id="markup"/>
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
+			<cpt:fieldSet name="Markup" id="markup"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">

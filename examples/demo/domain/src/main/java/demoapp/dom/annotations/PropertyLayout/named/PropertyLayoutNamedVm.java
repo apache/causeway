@@ -55,7 +55,12 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 
 //tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(named = "Named using annotation", describedAs = "@PropertyLayout(named= \"Named using annotation\")", hidden = Where.ALL_TABLES)
+    @PropertyLayout(
+            named = "Named using annotation"            // <.>
+            , describedAs = "@PropertyLayout(" +
+                "named= \"Named using annotation\")"
+            , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "properties", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
@@ -64,7 +69,12 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "<cpt:property id=\"...\"><cpt:named>...</cpt:named></cpt:property>", hidden = Where.ALL_TABLES)
+    @PropertyLayout(                                        // <.>
+            describedAs = "<cpt:property id=\"...\">" +
+                            "<cpt:named>...</cpt:named>" +
+                          "</cpt:property>"
+            , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "properties", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
@@ -73,7 +83,14 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 
 //tag::markup[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(named = "Named <b>uses</b> <i>markup</i>", namedEscaped = false, describedAs = "@PropertyLayout(named= \"Named <b>uses</b> <i>markup</i>\" namedEscaped=false)", hidden = Where.ALL_TABLES)
+    @PropertyLayout(
+            named = "Named <b>uses</b> <i>markup</i>",          // <.>
+            namedEscaped = false                                // <.>
+            , describedAs = "@PropertyLayout(" +
+                "named= \"Named <b>uses</b> <i>markup</i>\"" +
+                ", namedEscaped=false)"
+            , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "markup", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
@@ -82,7 +99,14 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 
 //tag::markup-escaped[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(named = "Named <b>but</b> <i>escaped</i>", namedEscaped = true, describedAs = "@PropertyLayout(named= \"Named <b>but</b> <i>unescaped</i>\" namedEscaped=true)", hidden = Where.ALL_TABLES)
+    @PropertyLayout(
+            named = "Named <b>but</b> <i>escaped</i>",          // <.>
+            namedEscaped = true                                 // <.>
+            , describedAs = "@PropertyLayout(named= " +
+                "\"Named <b>but</b> <i>unescaped</i>\"" +
+                ", namedEscaped=true)"
+            , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "markup", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
@@ -91,8 +115,11 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 
 //tag::meta-annotated[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayoutNamedMetaAnnotation
-    @PropertyLayout(describedAs = "@PropertyLayoutNamedMetaAnnotation", hidden = Where.ALL_TABLES)
+    @NamedMetaAnnotation                            // <.>
+    @PropertyLayout(
+            describedAs = "@NamedMetaAnnotation"
+            , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
@@ -101,8 +128,14 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 
 //tag::meta-annotated-overridden[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayoutNamedMetaAnnotation
-    @PropertyLayout(named = "Name overrides meta-annotation", describedAs = "meta-annotation overridden using @PropertyLayout(...)", hidden = Where.ALL_TABLES)
+    @NamedMetaAnnotation                                // <.>
+    @PropertyLayout(
+            named = "@PropertyLayout name " +
+                    "overrides meta-annotation"         // <.>
+            , describedAs =
+                "meta-annotation overridden using @PropertyLayout(...)"
+            , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "meta-annotated", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter

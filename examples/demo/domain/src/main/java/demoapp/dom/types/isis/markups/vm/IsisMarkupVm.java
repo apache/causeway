@@ -70,7 +70,7 @@ public class IsisMarkupVm
     private Markup readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(hidden = Where.EVERYWHERE)
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter

@@ -19,7 +19,9 @@
 		<bs3:col span="6">
 			<cpt:fieldSet name="Properties" id="properties">
 				<cpt:property id="propertyUsingAnnotation"/>
+<!-- tag::layout-file[] -->
 				<cpt:property id="propertyUsingLayout" cssClass="red"/>
+<!-- end::layout-file[] -->
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Contributed" id="contributed"/>
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>

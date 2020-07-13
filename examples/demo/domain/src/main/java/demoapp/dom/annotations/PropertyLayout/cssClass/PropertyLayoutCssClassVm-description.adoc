@@ -1,11 +1,57 @@
-TODO
+The "cssClass" facet indicates that a property field should set the specified CSS class.
+The `application.css` file can then be used to apply styling to that CSS class.
 
-[source,java]
+The facet can be specified using either an attribute, a meta-attribute, or the layout file.
+
+== Attribute or layout
+
+The facet can be specified:
+
+* using `@PropertyLayout#multiLine()`:
++
+[source,java,indent=0]
 ----
-include::PropertyLayoutCssClassVm.java[tags=class]
+include::PropertyLayoutCssClassVm.java[tags=annotation]
 ----
 
+* or using the layout file
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm.java[tags=layout-file]
+----
++
+where the `Xxx.layout.xml` includes:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyUsingLayout" cssClass="red"/>
+----
+// TODO: for some reason this doesn't include correctly in the app...
+//include::PropertyLayoutCssClassVm.layout.xml[tags=layout-file]
+
+== Meta-annotations
+
+The facet can also be specified using a custom meta-annotation:
+
+* meta-annotation:
++
 [source,java]
 ----
 include::PropertyLayoutCssClassMetaAnnotation.java[tags=class]
 ----
++
+applied to property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm.java[tags=meta-annotated]
+----
+
+* This meta-annotation can itself be overridden
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm.java[tags=meta-annotated-overridden]
+----
+

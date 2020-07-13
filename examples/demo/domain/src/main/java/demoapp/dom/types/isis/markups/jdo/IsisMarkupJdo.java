@@ -62,7 +62,6 @@ public class IsisMarkupJdo                                          // <.>
     return "Markup JDO entity: " + bookmarkService.bookmarkFor(this).getIdentifier();
 }
 
-    @Title(prepend = "Markup JDO entity: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")                            // <.>
     @Getter @Setter

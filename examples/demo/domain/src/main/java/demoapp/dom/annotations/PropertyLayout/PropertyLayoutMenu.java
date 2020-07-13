@@ -30,7 +30,6 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyLayoutMenu")
-@DomainObjectLayout(named="@PropertyLayout")
 @Log4j2
 public class PropertyLayoutMenu {
 
@@ -43,7 +42,7 @@ public class PropertyLayoutMenu {
     public demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineVm multiLine(){
         val vm = new PropertyLayoutMultiLineVm();
         vm.setPropertyUsingAnnotation("A multiline string\nspanning\n5 lines. (click me)");
-        vm.setPropertyUsingMetaAnnotation("A readonly string\nspanning\n5 lines. (but allows text select)");
+        vm.setPropertyUsingAnnotationReadOnly("A readonly string\nspanning\n5 lines. (but allows text select)");
         return vm;
     }
 

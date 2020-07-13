@@ -19,7 +19,10 @@
 		<bs3:col span="6">
 			<cpt:fieldSet name="Properties" id="properties">
 				<cpt:property id="propertyUsingAnnotation"/>
+				<cpt:property id="propertyUsingAnnotationReadOnly"/>
+<!-- tag::layout-file[] -->
 				<cpt:property id="propertyUsingLayout" multiLine="5"/>
+<!-- end::layout-file[] -->
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>

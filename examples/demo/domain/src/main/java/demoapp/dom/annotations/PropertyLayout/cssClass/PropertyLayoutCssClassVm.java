@@ -53,20 +53,25 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
         return "PropertyLayout#cssClass";
     }
 
+//tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(cssClass = "red", describedAs = "@PropertyLayout(cssClass=\"red\")", hidden = Where.ALL_TABLES)
     @MemberOrder(name = "properties", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
+//end::annotation[]
 
+//tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(describedAs = "<cpt:property id=\"...\" cssClass=\"red\"/>", hidden = Where.ALL_TABLES)
     @MemberOrder(name = "properties", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
+//end::layout-file[]
 
+    //tag::meta-annotated[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayoutCssClassMetaAnnotation
     @PropertyLayout(describedAs = "@PropertyLayoutCssClassMetaAnnotation", hidden = Where.ALL_TABLES)
@@ -74,14 +79,17 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
+//end::meta-annotated[]
 
+//tag::meta-annotated-overridden[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayoutCssClassMetaAnnotation
     @PropertyLayout(cssClass = "blue", describedAs = "meta-annotation overridden using @PropertyLayout(...)", hidden = Where.ALL_TABLES)
     @MemberOrder(name = "meta-annotated", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotationOverridden;
+    private String propertyUsingMetaAnnotationButOverridden;
+//end::meta-annotated-overridden[]
 
 }
 //end::class[]

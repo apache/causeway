@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.extern.log4j.Log4j2;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionLayoutMenu")
-@DomainObjectLayout(named="@ActionLayout")
 @Log4j2
 public class ActionLayoutMenu {
 

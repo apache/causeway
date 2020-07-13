@@ -1,12 +1,57 @@
-TODO
+The "multiLine" facet indicates that a multiline text field should be used to render a property.
+It is currently supported only for ``String`` properties and parameters.
 
-[source,java]
+The facet can be specified using either an attribute, a meta-attribute, or the layout file.
+
+== Attribute or layout
+
+The facet can be specified:
+
+* using `@PropertyLayout#multiLine()`:
++
+[source,java,indent=0]
 ----
-include::PropertyLayoutMultiLineVm.java[tags=class]
+include::PropertyLayoutMultiLineVm.java[tags=annotation]
 ----
 
+* or using the layout file
++
+[source,java,indent=0]
+----
+include::PropertyLayoutMultiLineVm.java[tags=layout-file]
+----
++
+where the `Xxx.layout.xml` includes:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyUsingLayout" multiLine="5"/>
+----
+// TODO: for some reason this doesn't include correctly in the app...
+//include::PropertyLayoutMultiLineVm.layout.xml[tags=layout-file]
+
+== Meta-annotations
+
+The facet can also be specified using a custom meta-annotation:
+
+* meta-annotation:
++
 [source,java]
 ----
 include::PropertyLayoutMultiLineMetaAnnotation.java[tags=class]
+----
++
+applied to property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutMultiLineVm.java[tags=meta-annotated]
+----
+
+* This meta-annotation can itself be overridden
++
+[source,java,indent=0]
+----
+include::PropertyLayoutMultiLineVm.java[tags=meta-annotated-overridden]
 ----
 
