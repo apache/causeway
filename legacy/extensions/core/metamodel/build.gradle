@@ -2,14 +2,14 @@ group = 'org.apache.isis.legacy'
 description = 'Apache Isis Legacy - Metamodel'
 apply plugin: 'war'
 dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+    compile ('com.google.guava:guava:28.1-jre')
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-legacy:isis-legacy-applib')
     compile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-config')
     testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    compileOnly group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+    compileOnly ('org.datanucleus:javax.jdo:3.2.0-m13')
     providedCompile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib')
 }
 

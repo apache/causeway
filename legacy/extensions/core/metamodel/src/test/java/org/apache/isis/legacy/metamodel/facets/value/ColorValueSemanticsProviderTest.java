@@ -22,15 +22,14 @@ package org.apache.isis.legacy.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.apache.isis.legacy.applib.value.Color;
-import org.apache.isis.legacy.metamodel.facets.value.color.ColorValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
+import org.apache.isis.legacy.applib.value.Color;
+import org.apache.isis.legacy.metamodel.facets.value.color.ColorValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -41,10 +40,10 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     @Before
     public void setUpObjects() throws Exception {
         color = new Color(0x3366ff);
-        allowMockAdapterToReturn(color);
+        super.allowMockAdapterToReturn(color);
         holder = new FacetHolderImpl();
 
-        setValue(value = new ColorValueSemanticsProvider(holder));
+        super.setValue(value = new ColorValueSemanticsProvider(holder));
     }
 
     @Test

@@ -34,7 +34,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

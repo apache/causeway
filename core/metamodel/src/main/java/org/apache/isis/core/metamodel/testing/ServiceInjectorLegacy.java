@@ -1,22 +1,22 @@
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-package org.apache.isis.core.metamodel.services;
+package org.apache.isis.core.metamodel.testing;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -75,13 +75,13 @@ public class ServiceInjectorLegacy implements ServiceInjector {
     // -- HELPERS
 
     boolean autowireSetters;
-    boolean autowireInject;    
+    boolean autowireInject;
 
     private void injectServices(final Object targetPojo, Consumer<InjectionPoint> onNotResolvable) {
 
         val type = targetPojo.getClass();
-        
-//XXX check is too slow        
+
+//XXX check is too slow
 //        if(serviceRegistry.isResolvableBean(type)) {
 //            log.warn("Skipping call injectServices() on an already managed bean {}.", type);
 //            return; // already managed
@@ -125,7 +125,7 @@ public class ServiceInjectorLegacy implements ServiceInjector {
             injectToField_nonScalar(targetPojo, field, elementType, onNotResolvable);
             return;
         }
-        
+
         val beans = serviceRegistry.select(typeToBeInjected, field.getAnnotations());
 
         if(beans.isEmpty()) {
@@ -134,12 +134,12 @@ public class ServiceInjectorLegacy implements ServiceInjector {
             val bean = beans.getSingleton().get();
             invokeInjectorField(field, targetPojo, bean);
         } else {
-            
+
             val requiredAnnotations = _Arrays.combineWithExplicitType(
-                    Annotation.class, 
-                    _Constants.ANNOTATION_PRIMARY, 
+                    Annotation.class,
+                    _Constants.ANNOTATION_PRIMARY,
                     field.getAnnotations());
-            
+
             // look for primary
             val primaryBean = serviceRegistry.select(typeToBeInjected, requiredAnnotations);
             if(!primaryBean.isEmpty()) {
@@ -147,19 +147,19 @@ public class ServiceInjectorLegacy implements ServiceInjector {
                 invokeInjectorField(field, targetPojo, bean);
                 return;
             }
-            
+
             // fallback: pick first in list
             val bean = beans.getFirst().get();
-            invokeInjectorField(field, targetPojo, bean);    
+            invokeInjectorField(field, targetPojo, bean);
         }
 
     }
 
     @SuppressWarnings("unchecked")
     private void injectToField_nonScalar(
-            final Object targetPojo, 
-            final Field field, 
-            final Class<?> elementType, 
+            final Object targetPojo,
+            final Field field,
+            final Class<?> elementType,
             final Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<? extends Collection<Object>> collectionTypeToBeInjected =
@@ -169,7 +169,7 @@ public class ServiceInjectorLegacy implements ServiceInjector {
         if(!beans.isEmpty()) {
             final Collection<Object> collectionOfServices = beans.stream()
                     .filter(isOfType(elementType))
-                    // javac does require an explicit type argument here, 
+                    // javac does require an explicit type argument here,
                     // while eclipse compiler does not ...
                     .collect(_Collections.<Object>toUnmodifiableOfType(collectionTypeToBeInjected));
 
@@ -183,7 +183,7 @@ public class ServiceInjectorLegacy implements ServiceInjector {
     private void injectViaPrefixedMethods(
             final Object targetPojo,
             final Class<?> cls,
-            final String prefix, 
+            final String prefix,
             final Consumer<InjectionPoint> onNotResolvable) {
 
         _NullSafe.stream(methodsByClassCache.computeIfAbsent(cls, __->cls.getMethods()))
@@ -193,7 +193,7 @@ public class ServiceInjectorLegacy implements ServiceInjector {
 
     private void injectIntoSetter(
             final Object targetPojo,
-            final Method setter, 
+            final Method setter,
             final Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<?> typeToBeInjected = injectorMethodEvaluator.getTypeToBeInjected(setter);
@@ -204,7 +204,7 @@ public class ServiceInjectorLegacy implements ServiceInjector {
         val instance = serviceRegistry.select(typeToBeInjected, setter.getAnnotations());
         if(instance.isCardinalityOne()) {
             val bean = instance.getSingleton().get();
-            invokeInjectorMethod(setter, targetPojo, bean);    
+            invokeInjectorMethod(setter, targetPojo, bean);
         } else {
             onNotResolvable.accept(new InjectionPoint(new MethodParameter(setter, 0)));
         }
@@ -266,7 +266,7 @@ public class ServiceInjectorLegacy implements ServiceInjector {
     // -- TESTING
 
     /**
-     * JUnit Test support. 
+     * JUnit Test support.
      */
     public static ServiceInjectorLegacy getInstanceAndInit(
             IsisConfiguration configuration,

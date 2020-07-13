@@ -19,11 +19,6 @@
 
 package org.apache.isis.core.runtimeservices.wrapper;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +50,6 @@ import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBu
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -78,6 +72,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
@@ -88,6 +83,10 @@ import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WrapperFactoryDefault_wrappedObject_Test {
 
@@ -113,7 +112,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Mock private TransactionService mockTransactionService;
     @Mock private BookmarkService mockBookmarkService;
     @Mock protected ObjectManager mockObjectManager;
-    
+
     private ObjectMember employeeNameMember;
 
     @Mock private ObjectSpecificationDefault mockStringSpec;
@@ -130,7 +129,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     private Employee employeeWO;
 
     private WrapperFactoryDefault wrapperFactory;
-    
+
     protected MetaModelContext metaModelContext;
 
     @SuppressWarnings("unchecked")
@@ -138,7 +137,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     public void setUp() {
 
         // PRODUCTION
-        
+
         val proxyFactoryService = (ProxyFactoryService) new ProxyFactoryServiceByteBuddy();
 
         metaModelContext = MetaModelContext_forTesting.builder()
@@ -158,7 +157,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
                 .singleton(asyncControlService)
                 .singleton(mockBookmarkService)
                 .build();
-        
+
         metaModelContext.getServiceInjector().injectServicesInto(wrapperFactory);
 
         employeeRepository = new EmployeeRepositoryImpl();
@@ -169,19 +168,19 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
         context.checking(new Expectations() {
             {
-                
+
                 allowing(mockObjectManager).adapt(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockEmployeeSpec).isManagedBean();
                 will(returnValue(true));
-                
+
                 allowing(mockEmployeeSpec).getBeanSort();
                 will(returnValue(BeanSort.ENTITY));
-                
+
                 allowing(mockEmployeeSpec).isIdentifiable();
                 will(returnValue(true));
-                
+
                 allowing(mockEmployeeSpec).getCorrespondingClass();
                 will(returnValue(Employee.class));
 
@@ -190,10 +189,10 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
                 allowing(mockCommandDtoServiceInternal).asCommandDto(with(any(List.class)), with(any(OneToOneAssociation.class)), with(any(ManagedObject.class)));
                 will(returnValue(new CommandDto()));
-                
+
                 allowing(mockCommandContext).getCommand();
                 will(returnValue(mockCommand));
-                
+
                 allowing(mockCommandContext).getCurrentExecutor();
                 will(returnValue(Optional.of(Executor.USER)));
 
@@ -208,7 +207,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
                 allowing(mockEmployeeAdapter).titleString(null);
                 will(returnValue("titleOf[mockEmployeeAdapter]"));
-                
+
                 allowing(mockEmployeeAdapter).getSpecification();
                 will(returnValue(mockEmployeeSpec));
 
@@ -217,7 +216,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
                 allowing(mockEmployeeSpec).getMember(methodOf(Employee.class, "getEmployeeRepository"));
                 will(returnValue(null));
-                
+
                 allowing(mockEmployeeSpec).getFacet(EntityFacet.class);
                 will(returnValue(null));
 
@@ -319,16 +318,16 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
             allowing(mockStringSpec).isEntity();
             will(returnValue(false));
-            
+
             allowing(mockStringSpec).getIdentifier();
             will(returnValue(mockId));
-            
+
             allowing(mockStringSpec).getBeanSort();
             will(returnValue(BeanSort.VIEW_MODEL));
-            
+
             allowing(mockStringSpec).streamFacets(HidingInteractionAdvisor.class);
             will(returnValue(Stream.empty()));
-            
+
             allowing(mockObjectManager).adapt("Smith");
             will(returnValue(mockAdapterForStringSmith));
         }});
@@ -367,22 +366,22 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
                 allowing(mockStringSpec).isParented();
                 will(returnValue(false));
-                
+
                 allowing(mockStringSpec).isEntity();
                 will(returnValue(false));
-                
+
                 allowing(mockStringSpec).getIdentifier();
                 will(returnValue(mockId));
-                
+
                 allowing(mockStringSpec).getBeanSort();
                 will(returnValue(BeanSort.VIEW_MODEL));
-                
+
                 allowing(mockEmployeeSpec).isViewModelCloneable(mockEmployeeAdapter);
                 will(returnValue(false));
 
                 allowing(mockStringSpec).streamFacets(HidingInteractionAdvisor.class);
                 will(returnValue(Stream.empty()));
-                
+
             }
         });
 

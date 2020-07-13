@@ -1,22 +1,22 @@
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-package org.apache.isis.core.metamodel;
+package org.apache.isis.core.metamodel.testing;
 
 import java.util.List;
 import java.util.Map;
@@ -62,30 +62,30 @@ import lombok.val;
 
 @Builder @Getter
 public final class MetaModelContext_forTesting implements MetaModelContext {
-    
+
     public static MetaModelContext buildDefault() {
         return MetaModelContext_forTesting.builder()
         .build();
     }
-    
+
     private ServiceInjector serviceInjector;
-    private ServiceRegistry serviceRegistry; 
+    private ServiceRegistry serviceRegistry;
 
     @Builder.Default
-    private MetamodelEventService metamodelEventService = 
+    private MetamodelEventService metamodelEventService =
     MetamodelEventService.builder()
     .build();
-    
+
     @Builder.Default
     private IsisSystemEnvironment systemEnvironment = newIsisSystemEnvironment();
-    
+
     @Builder.Default
     private IsisConfiguration configuration = newIsisConfiguration();
-    
+
     private ObjectManager objectManager;
 
     private SpecificationLoader specificationLoader;
-    
+
     private ProgrammingModel programmingModel;
 
     private AuthenticationSessionTracker authenticationSessionTracker;
@@ -107,14 +107,14 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private TransactionService transactionService;
 
     private TransactionState transactionState;
-    
+
     private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
 
     private Map<String, ManagedObject> serviceAdaptersById;
 
     @Singular
     private List<Object> singletons;
-    
+
     @Override
     public Stream<ManagedObject> streamServiceAdapters() {
 
@@ -131,14 +131,14 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return serviceAdaptersById.get(serviceId);
     }
-    
+
     // -- LOOKUP
 
     @Override
     public <T> T getSingletonElseFail(Class<T> type) {
         return getSystemEnvironment().ioc().getSingletonElseFail(type);
     }
-    
+
     public Stream<Object> streamSingletons() {
 
         val fields = _Lists.of(
@@ -164,15 +164,15 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return Stream.concat(fields.stream(), getSingletons().stream())
                 .filter(_NullSafe::isPresent);
     }
-    
-    
-    
+
+
+
     private static IsisSystemEnvironment newIsisSystemEnvironment() {
         val env = new IsisSystemEnvironment();
         env.setUnitTesting(true);
         return env;
     }
-    
+
     private static IsisConfiguration newIsisConfiguration() {
         val properties = _Maps.<String, String>newHashMap();
         val config = new IsisConfiguration(new AbstractEnvironment() {
@@ -191,7 +191,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return serviceRegistry;
     }
-    
+
     @Override
     public ServiceInjector getServiceInjector() {
         if(serviceInjector==null) {
@@ -208,7 +208,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return factoryService;
     }
 
-    
+
     @Override
     public TranslationService getTranslationService() {
         if(translationService==null) {
@@ -216,12 +216,12 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return translationService;
     }
-    
+
     public IsisBeanTypeRegistryHolder getIsisBeanTypeRegistryHolder() {
         if(isisBeanTypeRegistryHolder==null) {
-            
+
             val typeRegistry = new IsisBeanTypeRegistry();
-            
+
             isisBeanTypeRegistryHolder = new IsisBeanTypeRegistryHolder() {
                 @Override
                 public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
@@ -231,11 +231,11 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return isisBeanTypeRegistryHolder;
     }
-    
+
     @Override
     public SpecificationLoader getSpecificationLoader() {
         if(specificationLoader==null) {
-            
+
             val configuration = requireNonNull(getConfiguration());
             val environment = requireNonNull(getSystemEnvironment());
             val serviceRegistry = requireNonNull(getServiceRegistry());
@@ -245,12 +245,12 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             val isisBeanTypeRegistryHolder = requireNonNull(getIsisBeanTypeRegistryHolder());
 
             specificationLoader = SpecificationLoaderDefault.getInstance(
-                    configuration, 
-                    environment, 
+                    configuration,
+                    environment,
                     serviceRegistry,
                     programmingModel,
                     isisBeanTypeRegistryHolder);
-            
+
         }
         return specificationLoader;
     }
@@ -272,25 +272,25 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     public void runWithConfigProperties(Consumer<Map<String, String>> setup, Runnable runnable) {
         val properties = _Maps.<String, String>newHashMap();
         setup.accept(properties);
-        
+
         val currentConfigBackup = this.configuration;
         try {
-            
+
             this.configuration = new IsisConfiguration(new AbstractEnvironment() {
                 @Override
                 public String getProperty(String key) {
                     return properties.get(key);
                 }
             });
-            
+
             runnable.run();
         } finally {
             this.configuration = currentConfigBackup;
         }
-        
-         
-                
+
+
+
     }
-    
+
 
 }

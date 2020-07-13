@@ -1,22 +1,22 @@
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-package org.apache.isis.core.metamodel;
+package org.apache.isis.core.metamodel.testing;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
@@ -47,7 +47,7 @@ import lombok.val;
 class ServiceRegistry_forTesting implements ServiceRegistry {
 
     @NonNull private final MetaModelContext metaModelContext;
-    
+
     @Getter @Setter private IocContainer iocContainer;
     private final Set<ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
 
@@ -59,7 +59,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
                     .select(type, _Spring.filterQualifiers(qualifiers));
         }
 
-// ignore        
+// ignore
 //        if(qualifiers!=null && qualifiers.length>0) {
 //            throw _Exceptions.notImplemented();
 //        }
@@ -73,7 +73,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
             return Can.ofSingleton(match.get());
         }
 
-        // lookup the _Context 
+        // lookup the _Context
         // XXX lombok bug, cannot use val here (https://github.com/rzwitserloot/lombok/issues/1588)
         T singleton = _Context.getIfAny(type);
         if(singleton!=null) {
@@ -109,7 +109,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
                 .map(s->toBeanAdapter(s))
                 .filter(_NullSafe::isPresent)
                 .forEach(registeredBeans::add);
-            }    
+            }
         }
         return registeredBeans;
     }

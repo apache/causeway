@@ -24,16 +24,15 @@ import java.util.Locale;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.apache.isis.legacy.applib.value.Money;
-import org.apache.isis.legacy.metamodel.facets.value.money.MoneyValueSemanticsProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
+import org.apache.isis.legacy.applib.value.Money;
+import org.apache.isis.legacy.metamodel.facets.value.money.MoneyValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -48,8 +47,8 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         Locale.setDefault(Locale.UK);
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
-        
-        setValue(adapter = new MoneyValueSemanticsProvider(holder));
+
+        super.setValue(adapter = new MoneyValueSemanticsProvider(holder));
     }
 
     private Money createMoney(final double amount, final String currency) {

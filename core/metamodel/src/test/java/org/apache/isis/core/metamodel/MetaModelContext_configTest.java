@@ -22,14 +22,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MetaModelContext_configTest {
 
     private MetaModelContext mmc;
-    
+
     @BeforeEach
     void setUp() {
         mmc = MetaModelContext_forTesting.buildDefault();
@@ -63,5 +64,5 @@ class MetaModelContext_configTest {
     private ConfigurableEnvironment environment() {
         return mmcForTesting().getConfiguration().getEnvironment();
     }
-    
+
 }

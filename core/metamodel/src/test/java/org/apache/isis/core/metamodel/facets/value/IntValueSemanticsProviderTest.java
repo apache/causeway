@@ -22,15 +22,15 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.integer.IntValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.integer.IntWrapperValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -45,7 +45,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
 
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
-        
+
         setValue(value = new IntWrapperValueSemanticsProvider(holder));
     }
 

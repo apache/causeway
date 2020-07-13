@@ -24,14 +24,14 @@ import java.math.BigInteger;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -47,7 +47,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
-        
+
         setValue(new BigIntegerValueSemanticsProvider(holder));
     }
 

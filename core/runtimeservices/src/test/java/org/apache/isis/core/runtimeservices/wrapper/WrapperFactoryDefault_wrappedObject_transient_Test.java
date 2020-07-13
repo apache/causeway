@@ -31,14 +31,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -54,7 +49,6 @@ import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBu
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -74,15 +68,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
-import static org.apache.isis.core.internaltestsupport.jmocking.PostponedAction.returnValuePostponed;
-
 import lombok.val;
+import static org.apache.isis.core.internaltestsupport.jmocking.PostponedAction.returnValuePostponed;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Contract test.
@@ -126,16 +122,16 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
     private WrapperFactoryDefault wrapperFactory;
     private Employee employeeWO;
     private List<Facet> facets;
-    
+
     protected MetaModelContext metaModelContext;
 
     @Before
     public void setUp() throws Exception {
 
         // PRODUCTION
-        
+
         val proxyFactoryService = (ProxyFactoryService) new ProxyFactoryServiceByteBuddy();
-        
+
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectManager(mockObjectManager)
@@ -151,7 +147,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
                 .singleton(asyncControlService)
                 .singleton(mockBookmarkService)
                 .build();
-        
+
         metaModelContext.getServiceInjector().injectServicesInto(wrapperFactory);
 
         employeeDO = new Employee();
@@ -183,7 +179,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
 
                 allowing(mockPasswordIdentifier).toClassAndNameIdentityString();
                 will(returnValue("mocked-class#member"));
-                
+
                 allowing(mockSpecificationLoader).loadSpecification(Employee.class);
                 will(returnValue(mockEmployeeSpec));
 
@@ -192,7 +188,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
 
                 allowing(mockEmployeeSpec).getMember(with(getPasswordMethod));
                 will(returnValue(mockPasswordMember));
-                
+
                 allowing(mockEmployeeSpec).getFacet(EntityFacet.class);
                 will(returnValue(null));
 
@@ -277,7 +273,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
 
         facets = Arrays.asList((Facet)new PropertySetterFacetViaSetterMethod(
                 setPasswordMethod, mockPasswordMember));
-        
+
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).streamFacets();
@@ -285,7 +281,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
 
                 oneOf(mockPasswordMember)
                 .set(mockEmployeeAdapter, mockPasswordAdapter, InteractionInitiatedBy.USER);
-                
+
                 oneOf(mockPasswordMember).get(mockEmployeeAdapter, InteractionInitiatedBy.USER);
                 will(returnValue(mockPasswordAdapter));
             }

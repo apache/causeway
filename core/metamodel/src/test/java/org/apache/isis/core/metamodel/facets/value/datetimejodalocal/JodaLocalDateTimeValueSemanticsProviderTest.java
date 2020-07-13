@@ -31,7 +31,7 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class JodaLocalDateTimeValueSemanticsProviderTest {

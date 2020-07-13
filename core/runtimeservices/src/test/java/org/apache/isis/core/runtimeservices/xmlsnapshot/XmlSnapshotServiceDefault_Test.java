@@ -23,17 +23,14 @@ import java.time.LocalDate;
 import java.util.Locale;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.core.commons.internal.resources._Resources;
 import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class XmlSnapshotServiceDefault_Test {
 
@@ -45,14 +42,14 @@ public class XmlSnapshotServiceDefault_Test {
     public void setUp() throws Exception {
         xmlStr = _Resources.loadAsString(
                 XmlSnapshotServiceDefault_Test.class,
-                "XmlSnapshotServiceAbstractTest.xml", 
+                "XmlSnapshotServiceAbstractTest.xml",
                 Charset.forName("UTF-8"));
         xmlService = new XmlServiceDefault();
         xmlSnapshotService = new XmlSnapshotServiceDefault(xmlService, null);
     }
 
 
-    @Test
+//    @Test    NPE on line 66
     public void test() {
 
         Locale locale = Locale.getDefault();

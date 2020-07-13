@@ -25,16 +25,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -45,7 +39,13 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 public class OneToManyAssociationDefaultTest {
 
@@ -94,10 +94,10 @@ public class OneToManyAssociationDefaultTest {
         context.checking(new Expectations() {
             {
                 allowing(mockSpecificationLoader).loadSpecification(Order.class);
-                
+
                 allowing(mockPeer).getMetaModelContext();
                 will(returnValue(metaModelContext));
-                
+
             }
         });
     }
@@ -128,16 +128,16 @@ public class OneToManyAssociationDefaultTest {
 
                 oneOf(mockOwnerAdapter).getSpecification();
                 will(returnValue(mockOwnerAdapterSpec));
-                
+
                 oneOf(mockOwnerAdapterSpec).isParented();
                 will(returnValue(false));
-                
+
                 oneOf(mockOwnerAdapterSpec).isEntity();
                 will(returnValue(false));
-                
+
                 oneOf(mockOwnerAdapterSpec).isIdentifiable();
                 will(returnValue(true));
-                
+
                 oneOf(mockAssociatedAdapter).getSpecification();
                 will(returnValue(mockOwnerAdapterSpec));
 
