@@ -98,7 +98,7 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
 
 //tag::meta-annotated[]
     @Property(optionality = Optionality.OPTIONAL)
-    @MultiLineMetaAnnotation                            // <.>
+    @MultiLineMetaAnnotation                        // <.>
     @PropertyLayout(
         describedAs = "@MultiLineMetaAnnotation"
         , hidden = Where.ALL_TABLES

@@ -1,27 +1,44 @@
-The "cssClass" facet indicates that a property field should set the specified CSS class.
-The `application.css` file can then be used to apply styling to that CSS class.
+The "cssClass" hint indicates that the `<div>` containing the property or parameter component within the UI should set the specified CSS class:
 
-The facet can be specified using either an attribute, a meta-attribute, or the layout file.
+* for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
-== Attribute or layout
+* for parameters, the hint can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
 
-The facet can be specified:
+The `application.css` file can then be used to apply styling to that CSS class
 
-* using `@PropertyLayout#multiLine()`:
+== Annotation
+
+The cssClass hint can be specified explicitly using an annotation:
+
+* for properties, using `@PropertyLayout#cssClass()`:
 +
 [source,java,indent=0]
 ----
 include::PropertyLayoutCssClassVm.java[tags=annotation]
 ----
+<.> explicitly specifies the CSS class to apply to the property `<div>`
 
-* or using the layout file
+* for parameters, using `@ParameterLayout#multiLine()`:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_updateWithParameterLayout.java[tags=annotation]
+----
+<.> explicitly specifies the CSS class to apply to the parameter `<div>`
+
+== Layout File
+
+For properties (not parameters), the CSS class hint can be specified using the `Xxx.layout.xml` file:
+
+* property definition:
 +
 [source,java,indent=0]
 ----
 include::PropertyLayoutCssClassVm.java[tags=layout-file]
 ----
-+
-where the `Xxx.layout.xml` includes:
+<.> `cssClass` attribute is _not_ present.
+
+* layout file snippet:
 +
 [source,xml,indent=0,tabsize=4]
 ----
@@ -30,28 +47,59 @@ where the `Xxx.layout.xml` includes:
 // TODO: for some reason this doesn't include correctly in the app...
 //include::PropertyLayoutCssClassVm.layout.xml[tags=layout-file]
 
+One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
+
+TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
+
 == Meta-annotations
 
-The facet can also be specified using a custom meta-annotation:
+The CSS class hint can also be specified using a custom meta-annotation:
 
-* meta-annotation:
+* the meta-annotation is defined as:
 +
 [source,java]
 ----
-include::PropertyLayoutCssClassMetaAnnotation.java[tags=class]
+include::CssClassMetaAnnotation.java[tags=class]
 ----
-+
-applied to property:
+<.> annotated for property ...
+<.> \... and also for parameter.
+<.> annotation can be applied to a property (either its getter or the field directly)
+<.> annotation can be applied to a parameter
+<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+
+* and can be applied to a property:
 +
 [source,java,indent=0]
 ----
 include::PropertyLayoutCssClassVm.java[tags=meta-annotated]
 ----
+<.> hint is inherited from the meta-annotation
 
-* This meta-annotation can itself be overridden
+* or can be applied to a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+----
+<.> hint is inherited from the meta-annotation
+
+The meta-annotation can itself be overridden:
+
+* in a property:
 +
 [source,java,indent=0]
 ----
 include::PropertyLayoutCssClassVm.java[tags=meta-annotated-overridden]
 ----
+<.> hint from meta-annotation ...
+<.> \... is overridden by the `@PropertyLayout` annotation
+
+* or a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> hint from meta-annotation ...
+<.> \... is overridden by the `@ParameterLayout` annotation
 

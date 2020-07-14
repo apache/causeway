@@ -55,7 +55,12 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 
 //tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(cssClass = "red", describedAs = "@PropertyLayout(cssClass=\"red\")", hidden = Where.ALL_TABLES)
+    @PropertyLayout(
+        cssClass = "red"
+        , describedAs =
+            "@PropertyLayout(cssClass = \"red\")"
+        , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "properties", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
@@ -64,17 +69,24 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "<cpt:property id=\"...\" cssClass=\"red\"/>", hidden = Where.ALL_TABLES)
+    @PropertyLayout(                                        // <.>
+        describedAs =
+            "<cpt:property id=\"...\" cssClass=\"red\"/>"
+        , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "properties", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
 //end::layout-file[]
 
-    //tag::meta-annotated[]
+//tag::meta-annotated[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayoutCssClassMetaAnnotation
-    @PropertyLayout(describedAs = "@PropertyLayoutCssClassMetaAnnotation", hidden = Where.ALL_TABLES)
+    @CssClassMetaAnnotation                         // <.>
+    @PropertyLayout(
+        describedAs = "@CssClassMetaAnnotation"
+        , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
@@ -83,8 +95,13 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 
 //tag::meta-annotated-overridden[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayoutCssClassMetaAnnotation
-    @PropertyLayout(cssClass = "blue", describedAs = "meta-annotation overridden using @PropertyLayout(...)", hidden = Where.ALL_TABLES)
+    @CssClassMetaAnnotation                             // <.>
+    @PropertyLayout(
+        cssClass = "blue"                               // <.>
+        , describedAs =
+            "@CssClassMetaAnnotation @PropertyLayout(...)"
+        , hidden = Where.ALL_TABLES
+    )
     @MemberOrder(name = "meta-annotated", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
