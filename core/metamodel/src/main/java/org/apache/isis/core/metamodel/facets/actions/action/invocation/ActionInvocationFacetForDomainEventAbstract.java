@@ -152,7 +152,7 @@ implements ImperativeFacet {
     private ManagedObject doInvoke(
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+            final ManagedObject mixedInAdapter, // owner
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         // similar code in PropertySetterOrClearFacetFDEA
@@ -183,7 +183,11 @@ implements ImperativeFacet {
 
         } else {
             // otherwise, go ahead and execute action in the 'foreground'
-            final ManagedObject mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
+//            final ManagedObject mixinElseRegularAdapter = mixedInAdapter != null 
+//                    ? mixedInAdapter 
+//                    : targetAdapter;
+            
+            final ManagedObject mixinElseRegularAdapter = targetAdapter;
 
             final Object mixinElseRegularPojo = UnwrapUtil.single(mixinElseRegularAdapter);
 

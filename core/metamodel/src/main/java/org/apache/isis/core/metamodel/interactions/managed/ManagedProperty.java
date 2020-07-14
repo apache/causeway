@@ -127,7 +127,7 @@ public final class ManagedProperty extends ManagedMember {
         return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, where).isAllowed() 
                 && property.isVisible(owner, InteractionInitiatedBy.USER, where).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
-            : ManagedObject.of(property.getSpecification(), null);
+            : ManagedObject.empty(property.getSpecification());
     }
     
     

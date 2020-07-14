@@ -19,12 +19,15 @@
 package demoapp.dom.annotations.PropertyLayout.cssClass;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-//@Property()
-//@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)  // TODO: this fails as attempts to invoke as an action, and heuristics replace null with the view model object.
+@Property()
+@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)  
 @RequiredArgsConstructor
 public class PropertyLayoutCssClassVm_annotatedMixin {
 
