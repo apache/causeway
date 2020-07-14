@@ -298,12 +298,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             _Lazy.threadSafe(this::collectFailuresFromMetaModel);
 
     private final AtomicBoolean validationInProgress = new AtomicBoolean(false);
-    
     private final BlockingQueue<ObjectSpecification> validationQueue = new LinkedBlockingQueue<>();
     
     private ValidationFailures collectFailuresFromMetaModel() {
-        //XXX while doing this don't trigger revalidateIfNecessary on self
-        //otherwise will deadlock
         validationInProgress.set(true);               
         val failures = new ValidationFailures();
         programmingModel.streamValidators()
@@ -423,8 +420,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         while(validationQueue.poll()!=null) {
             // keep re-validating until the queue is empty
-            validationResult.clear();
-            getValidationResult();            
+            validationQueue.clear(); // shortcut
+            validationResult.clear(); // invalidate
+            // potentially triggers a call to the method we are currently in, 
+            // which adds more entries to the validationQueue
+            getValidationResult(); 
         }
         
         // only after things have settled we offer feedback to the user (interface) 
