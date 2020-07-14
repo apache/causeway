@@ -21,10 +21,9 @@ public class PropertyLayoutMultiLineVm_updateWithParameterLayout {
     public PropertyLayoutMultiLineVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                    named = "Named using @ParameterLayout"          // <.>
-                    , describedAs =
-                        "@ParameterLayout(named = " +
-                             "\"Named using @ParameterLayout\")"
+                multiLine = 5                                 // <.>
+                , describedAs =
+                    "@ParameterLayout(multiLine = 5)"
             )
             final String newValue) {
         propertyLayoutMultiLineVm.setPropertyUsingAnnotation(newValue);

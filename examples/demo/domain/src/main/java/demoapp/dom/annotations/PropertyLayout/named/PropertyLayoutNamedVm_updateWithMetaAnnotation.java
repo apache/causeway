@@ -3,6 +3,7 @@ package demoapp.dom.annotations.PropertyLayout.named;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,9 @@ public class PropertyLayoutNamedVm_updateWithMetaAnnotation {
     public PropertyLayoutNamedVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @NamedMetaAnnotation                            // <.>
+            @ParameterLayout(
+                describedAs = "@NamedMetaAnnotation"
+            )
             final String newValue) {
         propertyLayoutNamedVm.setPropertyUsingMetaAnnotation(newValue);
         return propertyLayoutNamedVm;

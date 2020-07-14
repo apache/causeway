@@ -8,8 +8,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.annotations.PropertyLayout.named.NamedMetaAnnotation;
-
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
     associateWith = "propertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
@@ -22,9 +20,11 @@ public class PropertyLayoutMultiLineVm_updateWithMetaAnnotationOverridden {
 //tag::meta-annotation-overridden[]
     public PropertyLayoutMultiLineVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @NamedMetaAnnotation                            // <.>
+            @MultiLineMetaAnnotation                            // <.>
             @ParameterLayout(
-                    multiLine = 3                           // <.>
+                multiLine = 3                                   // <.>
+                , describedAs =
+                    "@MultiLineMetaAnnotation @ParameterLayout(...)"
             )
             final String newValue) {
         propertyLayoutMultiLineVm.setPropertyUsingMetaAnnotationButOverridden(newValue);

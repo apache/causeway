@@ -21,10 +21,9 @@ public class PropertyLayoutNamedVm_updateWithParameterLayout {
     public PropertyLayoutNamedVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                    named = "Named using @ParameterLayout"          // <.>
-                    , describedAs =
-                        "@ParameterLayout(named = " +
-                             "\"Named using @ParameterLayout\")"
+                named = "Named using @ParameterLayout"          // <.>
+                , describedAs =
+                    "@ParameterLayout(named = \"...\")"
             )
             final String newValue) {
         propertyLayoutNamedVm.setPropertyUsingAnnotation(newValue);

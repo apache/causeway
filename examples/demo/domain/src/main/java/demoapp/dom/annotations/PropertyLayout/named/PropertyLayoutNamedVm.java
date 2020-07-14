@@ -56,9 +56,9 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 //tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-            named = "Named using annotation"            // <.>
-            , describedAs = "@PropertyLayout(" +
-                "named= \"Named using annotation\")"
+            named = "Named using annotation"                // <.>
+            , describedAs =
+                "@PropertyLayout(named= \"...\")"
             , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "properties", sequence = "1")
@@ -70,9 +70,10 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(                                        // <.>
-            describedAs = "<cpt:property id=\"...\">" +
-                            "<cpt:named>...</cpt:named>" +
-                          "</cpt:property>"
+            describedAs =
+                "<cpt:property id=\"...\">" +
+                    "<cpt:named>...</cpt:named>" +
+                "</cpt:property>"
             , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "properties", sequence = "2")
@@ -101,7 +102,7 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
             named = "@PropertyLayout name " +
                     "overrides meta-annotation"         // <.>
             , describedAs =
-                "meta-annotation overridden using @PropertyLayout(...)"
+                "@NamedMetaAnnotation @PropertyLayout(...)"
             , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "meta-annotated", sequence = "2")
@@ -115,9 +116,9 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
     @PropertyLayout(
             named = "Named <b>uses</b> <i>markup</i>",          // <.>
             namedEscaped = false                                // <.>
-            , describedAs = "@PropertyLayout(" +
-            "named= \"Named <b>uses</b> <i>markup</i>\"" +
-            ", namedEscaped=false)"
+            , describedAs =
+                "@PropertyLayout(" +
+                "named= \"...\", namedEscaped=false)"
             , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "markup", sequence = "1")
@@ -131,9 +132,9 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
     @PropertyLayout(
             named = "Named <b>but</b> <i>escaped</i>",          // <.>
             namedEscaped = true                                 // <.>
-            , describedAs = "@PropertyLayout(named= " +
-            "\"Named <b>but</b> <i>unescaped</i>\"" +
-            ", namedEscaped=true)"
+            , describedAs =
+                "@PropertyLayout(" +
+                "named = \"...\", namedEscaped=true)"
             , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "markup", sequence = "2")

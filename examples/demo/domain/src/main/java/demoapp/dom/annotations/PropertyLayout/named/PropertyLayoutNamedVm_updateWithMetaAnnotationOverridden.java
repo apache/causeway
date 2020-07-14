@@ -20,10 +20,12 @@ public class PropertyLayoutNamedVm_updateWithMetaAnnotationOverridden {
 //tag::meta-annotation-overridden[]
     public PropertyLayoutNamedVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @NamedMetaAnnotation                            // <.>
+            @NamedMetaAnnotation                                // <.>
             @ParameterLayout(
-                    named = "@ParameterLayout name " +
-                            "overrides meta-annotation"     // <.>
+                named = "@ParameterLayout name " +
+                            "overrides meta-annotation"         // <.>
+                , describedAs =
+                    "@NamedMetaAnnotation @ParameterLayout(...)"
             )
             final String newValue) {
         propertyLayoutNamedVm.setPropertyUsingMetaAnnotationButOverridden(newValue);

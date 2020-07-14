@@ -3,6 +3,7 @@ package demoapp.dom.annotations.PropertyLayout.multiLine;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,9 @@ public class PropertyLayoutMultiLineVm_updateWithMetaAnnotation {
     public PropertyLayoutMultiLineVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @MultiLineMetaAnnotation                            // <.>
+            @ParameterLayout(
+                describedAs = "@MultiLineMetaAnnotation"
+            )
             final String newValue) {
         propertyLayoutMultiLineVm.setPropertyUsingMetaAnnotation(newValue);
         return propertyLayoutMultiLineVm;

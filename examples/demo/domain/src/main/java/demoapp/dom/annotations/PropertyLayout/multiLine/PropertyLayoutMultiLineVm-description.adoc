@@ -1,14 +1,14 @@
-The "multiLine" facet is a hint to indicates that a multiline text field (a textbox) should be used to render a property or parameter:
+The "multiLine" hint indicates that a textbox -- of the specified number of lines -- should be used to render a property or parameter:
 
-* for properties, the name can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
-* for parameters, the name can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
+* for parameters, the hint can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
 
 The facet is currently supported only for ``String``s.
 
 == Annotation
 
-The multiline facet can be specified explicitly using an annotation:
+The multiline hint can be specified explicitly using an annotation:
 
 * for properties, using `@PropertyLayout#multiLine()`:
 +
@@ -28,7 +28,7 @@ include::PropertyLayoutMultiLineVm_updateWithParameterLayout.java[tags=annotatio
 
 == Layout File
 
-For properties (not parameters), the multiline facet can be specified using the `Xxx.layout.xml` file:
+For properties (not parameters), the multiline hint can be specified using the `Xxx.layout.xml` file:
 
 * property definition:
 +
@@ -53,7 +53,7 @@ TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see t
 
 == Meta-annotations
 
-The multiline facet can also be specified using a custom meta-annotation:
+The multiline hint can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
@@ -73,7 +73,7 @@ include::MultiLineMetaAnnotation.java[tags=class]
 ----
 include::PropertyLayoutMultiLineVm.java[tags=meta-annotated]
 ----
-<.> property's multiLine facet is inherited from the meta-annotation
+<.> hint is inherited from the meta-annotation
 
 * or can be applied to a parameter:
 +
@@ -81,7 +81,7 @@ include::PropertyLayoutMultiLineVm.java[tags=meta-annotated]
 ----
 include::PropertyLayoutMultiLineVm_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
-<.> parameter's name is inherited from the meta-annotation
+<.> hint is inherited from the meta-annotation
 
 The meta-annotation can itself be overridden:
 
@@ -91,7 +91,7 @@ The meta-annotation can itself be overridden:
 ----
 include::PropertyLayoutMultiLineVm.java[tags=meta-annotated-overridden]
 ----
-<.> name from meta-annotation ...
+<.> hint from meta-annotation ...
 <.> \... is overridden by the `@PropertyLayout` annotation
 
 * or a parameter:
@@ -100,6 +100,6 @@ include::PropertyLayoutMultiLineVm.java[tags=meta-annotated-overridden]
 ----
 include::PropertyLayoutMultiLineVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
-<.> name from meta-annotation ...
+<.> hint from meta-annotation ...
 <.> \... is overridden by the `@ParameterLayout` annotation
 

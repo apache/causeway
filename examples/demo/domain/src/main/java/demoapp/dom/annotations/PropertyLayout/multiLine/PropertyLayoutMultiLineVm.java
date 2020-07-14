@@ -57,8 +57,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
             multiLine = 5                           // <.>
-            , describedAs = "@PropertyLayout(" +
-                                "multiLine = 5)"
+            , describedAs =
+                "@PropertyLayout(multiLine = 5)"
             , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "properties", sequence = "1")
@@ -74,8 +74,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
             multiLine = 5
-            , describedAs = "@PropertyLayout(" +
-                                "multiLine = 5)"
+            , describedAs =
+                "@PropertyLayout(multiLine = 5)"
             , hidden = Where.ALL_TABLES)
     @MemberOrder(name = "properties", sequence = "2")
     @XmlElement(required = false)
@@ -115,7 +115,7 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @PropertyLayout(
             multiLine = 3                               // <.>
             , describedAs =
-                "meta-annotation overridden using @PropertyLayout(...)"
+                "@MultiLineMetaAnnotation @PropertyLayout(...)"
             , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "meta-annotated", sequence = "2")

@@ -1,11 +1,12 @@
-Normally the name of a property _and_ also a parameter is inferred from its name in code.
-This inferred name can be however be overridden using various mechanisms with an explicit value.
-This is useful for example if the desired name is a Java keyword (such as "default", or "package") and therefore cannot be used as a variable name.
+The name of a property or parameter is used as the label of the field in the UI.
+Normally the name is inferred from the name of the corresponding field or parameter in code.
+This inferred name can be however be overridden using various mechanisms with an explicit value:
 
 * for properties, the name can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
 * for parameters, the name can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
 
+This is useful for example if the desired name is a Java keyword (such as "default", or "package").
 
 Names can also include HTML markup.
 This can optionally be escaped.
