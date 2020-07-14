@@ -120,13 +120,9 @@ implements ImperativeFacet {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val targetAdapter = head.getTarget();
-        val mixedInAdapter = head.getMixedIn().orElse(null);
-        
         final ManagedObject executionResult = 
                 getTransactionService().executeWithinTransaction(()->
-                    doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, 
-                            interactionInitiatedBy));
+                    doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy));
 
         //PersistableTypeGuard.instate(executionResult);
 
@@ -151,12 +147,11 @@ implements ImperativeFacet {
     
     private ManagedObject doInvoke(
             final ObjectAction owningAction,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter, // owner
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         // similar code in PropertySetterOrClearFacetFDEA
-
+        
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
@@ -183,29 +178,27 @@ implements ImperativeFacet {
 
         } else {
             // otherwise, go ahead and execute action in the 'foreground'
-//            final ManagedObject mixinElseRegularAdapter = mixedInAdapter != null 
-//                    ? mixedInAdapter 
-//                    : targetAdapter;
             
-            final ManagedObject mixinElseRegularAdapter = targetAdapter;
+            val targetAdapter = head.getTarget();
+            val mixedInAdapter = head.getMixedIn().orElse(null);
 
-            final Object mixinElseRegularPojo = UnwrapUtil.single(mixinElseRegularAdapter);
+            final Object targetPojo = UnwrapUtil.single(targetAdapter);
 
             final List<Object> argumentPojos = argumentAdapters.stream()
                     .map(UnwrapUtil::single)
                     .collect(_Lists.toUnmodifiable());
 
             final String targetMember = targetNameFor(owningAction, mixedInAdapter);
-            final String targetClass = CommandUtil.targetClassNameFor(mixinElseRegularAdapter);
+            final String targetClass = CommandUtil.targetClassNameFor(targetAdapter);
 
             final Interaction.ActionInvocation execution =
                     new Interaction.ActionInvocation(
-                            interaction, actionId, mixinElseRegularPojo, argumentPojos, targetMember,
+                            interaction, actionId, targetPojo, argumentPojos, targetMember,
                             targetClass);
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new DomainEventMemberExecutor(
                             argumentAdapters, targetAdapter, command, owningAction,
-                            mixinElseRegularAdapter, mixedInAdapter, execution);
+                            targetAdapter, mixedInAdapter, execution);
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
             interaction.execute(callable, execution, getClockService(), getMetricsService());

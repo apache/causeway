@@ -71,7 +71,7 @@ public class InteractionHead {
     
     /** 
      * as used by the domain event subsystem
-     * @return optionally the owner, based on whether the target is a mixin 
+     * @return optionally the owner, based on whether the target is a mixin
      */
     public Optional<ManagedObject> getMixedIn() {
         return Objects.equals(getOwner(), getTarget()) 
