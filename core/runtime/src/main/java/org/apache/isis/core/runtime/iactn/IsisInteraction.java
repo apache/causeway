@@ -44,7 +44,7 @@ import lombok.Setter;
 public class IsisInteraction extends RuntimeContextBase {
 
     @Getter private final AuthenticationSession authenticationSession;
-    @Getter private final long lifecycleStartedAtSystemMillis;
+    @Getter private final long lifecycleStartedAtSystemNanos;
 
     public IsisInteraction(
             @NonNull final MetaModelContext mmc,
@@ -52,7 +52,7 @@ public class IsisInteraction extends RuntimeContextBase {
 
         super(mmc);
         this.authenticationSession = authenticationSession; // binds this session to given authenticationSession
-        this.lifecycleStartedAtSystemMillis = System.currentTimeMillis(); // used to measure time periods, so not using ClockService here
+        this.lifecycleStartedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
     }
 
     // -- FLUSH

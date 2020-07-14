@@ -50,16 +50,16 @@ public final class _Timing {
     /**
      * 
      * @param startedAtNanos
-     * @return a new {@code startedAtSystemMillis} instance of {@link StopWatch}
+     * @return a new {@code startedAtSystemNanos} instance of {@link StopWatch}
      */
-    public static StopWatch atSystemMillis(long startedAtSystemMillis) {
-        return new StopWatch(startedAtSystemMillis);
+    public static StopWatch atSystemNanos(long startedAtSystemNanos) {
+        return new StopWatch(startedAtSystemNanos);
     }
     
-
     /**
      * Non thread safe start/stop watch utilizing the currently running
      * JVM's high-resolution time source.
+     * @implNote using {@link System#nanoTime()} as this is best suited to measure elapsed time
      */
     public static final class StopWatch {
 
@@ -76,13 +76,13 @@ public final class _Timing {
         }
 
         public StopWatch start() {
-            t0 = System.currentTimeMillis();
+            t0 = System.nanoTime();
             stopped = false;
             return this;
         }
 
         public StopWatch stop() {
-            t1 = System.currentTimeMillis();
+            t1 = System.nanoTime();
             stopped  = true;
             return this;
         }
@@ -91,8 +91,28 @@ public final class _Timing {
             return 0.001 * getMillis();
         }
 
+        /**
+         * @return elapsed nano seconds since started 
+         * (or when stopped, the time interval between started and stopped) 
+         */
+        public long getNanos() {
+            return stopped ? t1 - t0 : System.nanoTime() - t0 ;
+        }
+        
+        /**
+         * @return elapsed micro seconds since started
+         * (or when stopped, the time interval between started and stopped)
+         */
+        public long getMicros() {
+            return getNanos()/1000L;
+        }
+        
+        /**
+         * @return elapsed milli seconds since started
+         * (or when stopped, the time interval between started and stopped)
+         */
         public long getMillis() {
-            return stopped ? t1 - t0 : System.currentTimeMillis() - t0 ;
+            return getNanos()/1000_000L;
         }
         
         @Override
@@ -120,6 +140,8 @@ public final class _Timing {
         log.info(String.format(Locale.US, "Calling '%s' took %d ms", label, watch.getMillis()));
         return result;
     }
+
+
 
 
 }
