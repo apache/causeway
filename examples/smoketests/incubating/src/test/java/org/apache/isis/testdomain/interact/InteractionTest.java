@@ -39,8 +39,11 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
+import org.apache.isis.testdomain.model.interaction.DemoEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled;
+import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
+import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
@@ -230,6 +233,79 @@ class InteractionTest extends InteractionTestAbstract {
         assertComponentWiseUnwrappedEquals(expectedDefaults, actualDefaults);
 
     }
+    
+    @Test 
+    void actionInteraction_whenHavingChoices_shouldProvideProperParameterDefaults() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiInt")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+
+        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        val pendingArgs = managedAction.getInteractionHead().defaults();
+     
+        val mixin = new InteractionDemo_multiInt(null);
+        val expectedDefaults = Can.<Integer>of(
+                mixin.default0Act(),
+                mixin.default1Act(),
+                mixin.default2Act());
+        
+        assertComponentWiseUnwrappedEquals(expectedDefaults, pendingArgs.getParamValues());
+        
+        // when changing the first parameter, consecutive parameters should not be affected
+        // (unless they are depending on this choice ... subject to another test)
+        
+        int choiceParamNr = 0;
+        
+        SimulatedUiChoices uiParam1 = new SimulatedUiChoices();
+        uiParam1.bind(pendingArgs, choiceParamNr); // bind to param that has choices
+        uiParam1.simulateChoiceSelect(3); // select 4th choice
+        
+        val expectedDefaultsAfter = Can.<Integer>of(
+                mixin.choices0Act()[3],
+                mixin.default1Act(),
+                mixin.default2Act());
+        
+        assertComponentWiseUnwrappedEquals(expectedDefaultsAfter, pendingArgs.getParamValues());
+        
+    }
+    
+    @Test 
+    void actionInteraction_whenHavingEnumChoices_shouldProvideProperParameterDefaults() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiEnum")
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
+
+        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        val pendingArgs = managedAction.getInteractionHead().defaults();
+     
+        val mixin = new InteractionDemo_multiEnum(null);
+        val expectedDefaults = Can.<DemoEnum>of(
+                mixin.default0Act(),
+                mixin.default1Act(),
+                mixin.default2Act());
+        
+        assertComponentWiseUnwrappedEquals(expectedDefaults, pendingArgs.getParamValues());
+        
+        // when changing the first parameter, consecutive parameters should not be affected
+        // (unless they are depending on this choice ... subject to another test)
+        
+        int choiceParamNr = 0;
+        
+        SimulatedUiChoices uiParam1 = new SimulatedUiChoices();
+        uiParam1.bind(pendingArgs, choiceParamNr); // bind to param that has choices
+        uiParam1.simulateChoiceSelect(3); // select 4th choice
+        
+        val expectedDefaultsAfter = Can.<DemoEnum>of(
+                DemoEnum.values()[3],
+                mixin.default1Act(),
+                mixin.default2Act());
+        
+        assertComponentWiseUnwrappedEquals(expectedDefaultsAfter, pendingArgs.getParamValues());
+        
+    }
+    
     
     @Test 
     void actionInteraction_shouldProvideChoices() {

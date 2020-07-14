@@ -33,6 +33,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * NPM ... New Parameter Model (a Programming Model introduced in v2)
+ * 
+ */
 @XmlRootElement(name = "InteractionNpmDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
