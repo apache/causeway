@@ -1,5 +1,6 @@
 description = 'Apache Isis Core - Schemas'
 apply plugin: 'war'
+apply plugin: 'io.freefair.lombok'
 
 sourceSets {
     main {
@@ -14,6 +15,11 @@ dependencies {
 
     compile 'org.springframework:spring-context:5.2.6.RELEASE'
     compile 'joda-time:joda-time:2.10.6'
+
+    // These dependencies are required in order to build on jdk11
+    compile('javax.xml.bind:jaxb-api:2.3.1')  // not set in POM`s ??
+    compile('com.sun.xml.bind:jaxb-core:2.3.0.1')
+    compile('com.sun.xml.bind:jaxb-impl:2.3.2')
 }
 
 task packageTests(type: Jar) {

@@ -25,6 +25,13 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
 
     compile group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
+    testCompile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
+    testCompile project(':isis-parent:isis-applib')
+
+    // These dependencies are required in order to build on jdk11
+    compile('javax.xml.ws:jaxws-api:2.3.1')
 }
 
 task packageTests(type: Jar) {
