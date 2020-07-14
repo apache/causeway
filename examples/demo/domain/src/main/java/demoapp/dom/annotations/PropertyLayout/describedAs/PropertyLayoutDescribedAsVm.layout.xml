@@ -27,7 +27,6 @@
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
 			<cpt:fieldSet name="Contributed" id="contributed"/>
-			<cpt:fieldSet name="Markup" id="markup"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">
