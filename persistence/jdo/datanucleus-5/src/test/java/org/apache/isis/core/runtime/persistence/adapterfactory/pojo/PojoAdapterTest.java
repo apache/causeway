@@ -25,16 +25,17 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
+import org.apache.isis.core.metamodel.facets.RuntimeTestPojo;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.PojoAdapter;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.junit.Assert.assertEquals;
 
 public class PojoAdapterTest {
 
@@ -52,7 +53,7 @@ public class PojoAdapterTest {
         domainObject = new RuntimeTestPojo();
 
         adapter = PojoAdapter.of(
-                domainObject, 
+                domainObject,
                 Factory.root(ObjectSpecId.of("CUS"), "1"),
                 mockSpecificationLoader);
 

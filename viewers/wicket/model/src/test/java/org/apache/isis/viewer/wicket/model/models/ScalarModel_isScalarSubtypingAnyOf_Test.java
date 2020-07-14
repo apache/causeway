@@ -24,30 +24,29 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
+
+import lombok.val;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-
-import lombok.val;
-
 public class ScalarModel_isScalarSubtypingAnyOf_Test {
 
-    @Rule public JUnitRuleMockery2 context = 
+    @Rule public JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock ObjectSpecification mockObjectSpecification;
     @Mock EntityModel mockEntityModel;
     @Mock ObjectMementoService mockObjectAdapterMementoSupport;
-    @Mock ObjectManager mockObjectManager; 
-    
+    @Mock ObjectManager mockObjectManager;
+
     MetaModelContext metaModelContext;
 
     public static class A {}
@@ -56,24 +55,24 @@ public class ScalarModel_isScalarSubtypingAnyOf_Test {
 
     @Before
     public void setup() {
-        
+
         metaModelContext = MetaModelContext_forTesting.builder()
                 .objectManager(mockObjectManager)
                 .singleton(mockObjectAdapterMementoSupport)
                 .build();
-        
+
         val commonContext = IsisAppCommonContext.of(metaModelContext);
-        
+
         context.checking(new Expectations() {{
-            
+
             allowing(mockEntityModel).getCommonContext();
             will(returnValue(commonContext));
 
 
         }});
-        
+
     }
-    
+
     @Test
     public void when_super() {
         assertThat(newScalarModelFor(A.class).isScalarTypeSubtypeOf(B.class), is(equalTo(false)));

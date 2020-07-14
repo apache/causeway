@@ -16,8 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4;
+package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
-public abstract class RepresentationTypeTest_parser extends RepresentationTypeTest_parser_ContractTest {
+import org.apache.isis.viewer.restfulobjects.viewer.mappers.RestfulObjectsApplicationExceptionMapper_Test_Contract;
+
+public class RestfulObjectsApplicationExceptionMapper_Test extends
+        RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
 }

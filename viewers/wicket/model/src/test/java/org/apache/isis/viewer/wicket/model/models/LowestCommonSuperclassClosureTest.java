@@ -24,9 +24,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
-
 import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
+
+import static org.junit.Assert.assertThat;
 
 public class LowestCommonSuperclassClosureTest {
 
@@ -52,7 +52,7 @@ public class LowestCommonSuperclassClosureTest {
     }
 
     private static void assertLowestCommonOfListIs(List<Object> list, Class<?> expected) {
-        Util.LowestCommonSuperclassFinder finder = 
+        Util.LowestCommonSuperclassFinder finder =
                 new Util.LowestCommonSuperclassFinder();
         list.forEach(finder::collect);
         assertThat(finder.getLowestCommonSuperclass().get(), IsisMatchers.classEqualTo(expected));

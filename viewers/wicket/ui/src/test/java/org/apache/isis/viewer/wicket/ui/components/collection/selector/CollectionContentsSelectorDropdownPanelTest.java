@@ -26,18 +26,17 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 
 import lombok.val;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class CollectionContentsSelectorDropdownPanelTest {
 
@@ -51,24 +50,24 @@ public class CollectionContentsSelectorDropdownPanelTest {
 
     @Before
     public void setUp() throws Exception {
-        
-        metaModelContext = MetaModelContext_forTesting.buildDefault(); 
+
+        metaModelContext = MetaModelContext_forTesting.buildDefault();
         val commonContext = IsisAppCommonContext.of(metaModelContext);
-        
+
         ajaxTableComponentFactory = new CollectionContentsAsAjaxTablePanelFactory() {
             private static final long serialVersionUID = 1L; {
             setCommonContext(commonContext);
         }};
-        
+
     }
 
     @Test
     public void testOrderAjaxTableToEnd() {
 
-        List<ComponentFactory> componentFactories = 
+        List<ComponentFactory> componentFactories =
                 Arrays.<ComponentFactory>asList(
                         one,
-                        ajaxTableComponentFactory, 
+                        ajaxTableComponentFactory,
                         two);
         List<ComponentFactory> orderAjaxTableToEnd = CollectionSelectorHelper.orderAjaxTableToEnd(componentFactories);
         assertThat(orderAjaxTableToEnd.get(0), is(one));

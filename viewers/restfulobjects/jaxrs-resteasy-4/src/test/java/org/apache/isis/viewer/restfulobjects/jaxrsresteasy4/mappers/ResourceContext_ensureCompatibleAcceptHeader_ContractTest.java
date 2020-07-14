@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.viewer.context;
+package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.mappers;
 
+//TODO ISIS-2374 refactor copy
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,7 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 
 import lombok.val;

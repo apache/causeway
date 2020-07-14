@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader;
+package org.apache.isis.core.metamodel.facets;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
@@ -52,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
-abstract class SpecificationLoaderTestAbstract {
+public abstract class SpecificationLoaderTestAbstract {
 
     static class Producers {
 

@@ -43,8 +43,7 @@ import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 public abstract class ExceptionMapperAbstract<T extends Throwable> implements ExceptionMapper<T> {
 
-    @Context
-    protected HttpHeaders httpHeaders;
+    @Context public HttpHeaders httpHeaders;
 
     Response buildResponse(final T ex) {
         return buildResponse(ex, determineStatusCode(ex));

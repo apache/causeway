@@ -28,15 +28,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-
 import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
@@ -47,6 +44,9 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class ResourceContext_getArg_Test {
 
@@ -84,22 +84,22 @@ public class ResourceContext_getArg_Test {
 
 
         context.checking(new Expectations() {{
-                
+
                 allowing(webApplicationContext).getBean(MetaModelContext.class);
                 will(returnValue(metaModelContext));
-            
+
                 allowing(mockServletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
                 will(returnValue(webApplicationContext));
-            
+
                 allowing(mockHttpServletRequest).getServletContext();
                 will(returnValue(mockServletContext));
-                
+
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
-                
+
 //                allowing(mockIsisInteraction).getAuthenticationSession();
 //                will(returnValue(mockAuthenticationSession));
-         
+
         }});
     }
 

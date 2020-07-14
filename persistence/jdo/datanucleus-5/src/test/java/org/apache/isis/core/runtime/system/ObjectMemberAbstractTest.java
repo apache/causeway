@@ -19,15 +19,6 @@
 
 package org.apache.isis.core.runtime.system;
 
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Optional;
 
 import org.datanucleus.enhancement.Persistable;
@@ -41,7 +32,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -66,9 +56,19 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.PojoAdapter;
+
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ObjectMemberAbstractTest {
 
@@ -106,7 +106,7 @@ public class ObjectMemberAbstractTest {
                 mockSpecificationLoader);
 
         testMember = new ObjectMemberAbstractImpl(metaModelContext, "id");
-        
+
         context.checking(new Expectations() {{
             allowing(mockSpecificationLoader).lookupBySpecIdElseLoad(ObjectSpecId.of("CUS"));
             will(returnValue(mockSpecForCustomer));
@@ -118,7 +118,7 @@ public class ObjectMemberAbstractTest {
 
             allowing(mockSpecForCustomer).isViewModel();
             will(returnValue(false));
-            
+
             allowing(mockSpecForCustomer).getBeanSort();
             will(returnValue(BeanSort.ENTITY));
 
@@ -194,7 +194,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
             return firstName;
         }
     }
-    
+
     @Override
     public FacetHolder getFacetHolder() {
         return getFacetedMethod();
@@ -216,7 +216,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject target, 
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyUsabilityContext(
@@ -225,7 +225,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject target, 
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyVisibilityContext(

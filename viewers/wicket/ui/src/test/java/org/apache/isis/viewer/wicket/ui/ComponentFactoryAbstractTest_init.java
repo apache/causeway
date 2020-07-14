@@ -25,21 +25,21 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.testing.MetaModelContext_forTesting;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 public class ComponentFactoryAbstractTest_init {
 
     @Rule public ExpectedException thrown= ExpectedException.none();
-    
+
     private MetaModelContext metaModelContext;
     private IsisAppCommonContext commonContext;
-    
+
     @Before
     public void setUp() throws Exception {
-        
-        metaModelContext = MetaModelContext_forTesting.buildDefault(); 
+
+        metaModelContext = MetaModelContext_forTesting.buildDefault();
         commonContext = IsisAppCommonContext.of(metaModelContext);
     }
 

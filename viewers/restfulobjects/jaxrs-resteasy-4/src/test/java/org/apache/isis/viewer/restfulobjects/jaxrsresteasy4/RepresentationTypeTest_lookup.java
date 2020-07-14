@@ -18,10 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4;
 
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationTypeTest_lookup_ContractTest;
+import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.mappers.RepresentationTypeTest_lookup_ContractTest;
 
 public class RepresentationTypeTest_lookup extends RepresentationTypeTest_lookup_ContractTest {
-
-
 
 }

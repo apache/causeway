@@ -16,11 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.mappers;
+package org.apache.isis.viewer.restfulobjects.applib;
 
-import org.apache.isis.viewer.restfulobjects.viewer.mappers.RestfulObjectsApplicationExceptionMapper_Test_Contract;
+import org.junit.Test;
 
-public class RestfulObjectsApplicationExceptionMapper_Test extends
-        RestfulObjectsApplicationExceptionMapper_Test_Contract {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
+/**
+ * contract test.
+ */
+public abstract class RepresentationTypeTest_getMediaType_ContractTest {
+
+    @Test
+    public void whenHasProfile() {
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
+    }
+
+    @Test
+    public void whenHasNoProfile() {
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
+    }
+
 
 }
