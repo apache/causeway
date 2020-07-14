@@ -21,12 +21,10 @@ public class PropertyLayoutNamedVm_updateWithEscapedMarkup {
     public PropertyLayoutNamedVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                    named = "Named <b>but</b> <i>escaped</i>",      // <.>
-                    namedEscaped = true,                            // <.>
-                    describedAs =
-                        "@ParameterLayout(named = " +
-                            "\"Named <b>but</b> <i>escaped</i>\", " +
-                            "namedEscaped = true)"
+                named = "Named <b>but</b> <i>escaped</i>",          // <.>
+                namedEscaped = true,                                // <.>
+                describedAs =
+                    "@ParameterLayout(named = \"...\", namedEscaped = true)"
             )
             final String newValue) {
         propertyLayoutNamedVm.setPropertyUsingEscapedMarkup(newValue);

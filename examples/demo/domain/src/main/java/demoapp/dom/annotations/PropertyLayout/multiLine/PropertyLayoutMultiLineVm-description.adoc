@@ -1,10 +1,10 @@
-The "multiLine" hint indicates that a textbox -- of the specified number of lines -- should be used to render a property or parameter:
+The "multiLine" hint indicates that a textbox of the specified number of lines should be used to render a property or parameter:
 
 * for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
 * for parameters, the hint can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
 
-The facet is currently supported only for ``String``s.
+The hint is currently supported only for properties and parameters of type ``String``s.
 
 == Annotation
 

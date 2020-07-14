@@ -23,12 +23,11 @@ public class PropertyLayoutNamedVm_updateWithMarkup {
     public PropertyLayoutNamedVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                    named = "Named <b>uses</b> <i>markup</i>",  // <.>
-                    namedEscaped = false,                       // <.>
-                    describedAs =
-                        "@ParameterLayout(named = " +
-                            "\"Named <b>uses</b> <i>markup</i>\", " +
-                            "namedEscaped = false)"
+                named = "Named <b>uses</b> <i>markup</i>",      // <.>
+                namedEscaped = false,                           // <.>
+                describedAs =
+                    "@ParameterLayout(" +
+                        "named = \"...\", namedEscaped = false)"
             )
             final String newValue) {
         propertyLayoutNamedVm.setPropertyUsingMarkup(newValue);
