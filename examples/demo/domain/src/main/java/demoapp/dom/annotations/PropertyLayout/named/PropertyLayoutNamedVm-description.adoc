@@ -22,7 +22,7 @@ The name can be specified explicitly using an annotation:
 ----
 include::PropertyLayoutNamedVm.java[tags=annotation]
 ----
-<.> explicitly specifies name of the property
+<.> explicitly specifies the name of the property
 
 * for parameters, using `@ParameterLayout#named()`:
 +
@@ -30,7 +30,7 @@ include::PropertyLayoutNamedVm.java[tags=annotation]
 ----
 include::PropertyLayoutNamedVm_updateWithParameterLayout.java[tags=annotation]
 ----
-<.> explicitly specifies name of the parameter
+<.> explicitly specifies the name of the parameter
 
 == Layout File
 

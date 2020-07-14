@@ -1,4 +1,4 @@
-package demoapp.dom.annotations.PropertyLayout.cssClass;
+package demoapp.dom.annotations.PropertyLayout.describedAs;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
@@ -13,26 +13,25 @@ import lombok.RequiredArgsConstructor;
     associateWith = "propertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden {
+public class PropertyLayoutDescribedAsVm_updateWithMetaAnnotationOverridden {
 
-    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
+    private final PropertyLayoutDescribedAsVm propertyLayoutDescribedAsVm;
 
 //tag::meta-annotation-overridden[]
-    public PropertyLayoutCssClassVm act(
+    public PropertyLayoutDescribedAsVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @CssClassMetaAnnotation                             // <.>
+            @DescribedAsMetaAnnotation                                      // <.>
             @ParameterLayout(
-                cssClass = "blue"                               // <.>
-                , describedAs =
-                    "@CssClassMetaAnnotation @ParameterLayout(...)"
+                describedAs =                                               // <.>
+                    "@DescribedAsMetaAnnotation @ParameterLayout(...)"
             )
             final String newValue) {
-        propertyLayoutCssClassVm.setPropertyUsingMetaAnnotationButOverridden(newValue);
-        return propertyLayoutCssClassVm;
+        propertyLayoutDescribedAsVm.setPropertyUsingMetaAnnotationButOverridden(newValue);
+        return propertyLayoutDescribedAsVm;
     }
 //end::meta-annotation-overridden[]
     public String default0Act() {
-        return propertyLayoutCssClassVm.getPropertyUsingMetaAnnotationButOverridden();
+        return propertyLayoutDescribedAsVm.getPropertyUsingMetaAnnotationButOverridden();
     }
 
 }

@@ -1,4 +1,4 @@
-package demoapp.dom.annotations.PropertyLayout.cssClass;
+package demoapp.dom.annotations.PropertyLayout.describedAs;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
@@ -13,24 +13,24 @@ import lombok.RequiredArgsConstructor;
     associateWith = "propertyUsingMetaAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutCssClassVm_updateWithMetaAnnotation {
+public class PropertyLayoutDescribedAsVm_updateWithMetaAnnotation {
 
-    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
+    private final PropertyLayoutDescribedAsVm propertyLayoutDescribedAsVm;
 
 //tag::meta-annotation[]
-    public PropertyLayoutCssClassVm act(
+    public PropertyLayoutDescribedAsVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @CssClassMetaAnnotation                            // <.>
+            @DescribedAsMetaAnnotation                            // <.>
             @ParameterLayout(
-                describedAs = "@CssClassMetaAnnotation"
+                describedAs = "@DescribedAsMetaAnnotation"
             )
             final String newValue) {
-        propertyLayoutCssClassVm.setPropertyUsingMetaAnnotation(newValue);
-        return propertyLayoutCssClassVm;
+        propertyLayoutDescribedAsVm.setPropertyUsingMetaAnnotation(newValue);
+        return propertyLayoutDescribedAsVm;
     }
 //end::meta-annotation[]
     public String default0Act() {
-        return propertyLayoutCssClassVm.getPropertyUsingMetaAnnotation();
+        return propertyLayoutDescribedAsVm.getPropertyUsingMetaAnnotation();
     }
 
 }

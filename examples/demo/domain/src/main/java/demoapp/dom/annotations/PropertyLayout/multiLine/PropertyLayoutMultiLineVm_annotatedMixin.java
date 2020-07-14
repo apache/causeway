@@ -16,31 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.PropertyLayout.cssClass;
+package demoapp.dom.annotations.PropertyLayout.multiLine;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@Property()
+//@Property() // TODO: ISIS-2405: this fails as attempts to invoke as an action, and heuristics replace null with the view model object.
 @PropertyLayout(
-    cssClass = "red"
-    , describedAs =
-        "cssClass = \"red\" "
+    multiLine = 5
+    , describedAs = "@PropertyLayout(multiLine = 5)"
     , hidden = Where.ALL_TABLES
 )
 @RequiredArgsConstructor
-public class PropertyLayoutCssClassVm_annotatedMixin {
+public class PropertyLayoutMultiLineVm_annotatedMixin {
 
-    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
+    private final PropertyLayoutMultiLineVm propertyLayoutMultiLineVm;
 
     @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
-        return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
+        return propertyLayoutMultiLineVm.getPropertyUsingAnnotation();
     }
 
 }
