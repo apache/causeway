@@ -257,16 +257,16 @@ class InteractionTest extends InteractionTestAbstract {
         
         int choiceParamNr = 0;
         
-        SimulatedUiChoices uiParam1 = new SimulatedUiChoices();
-        uiParam1.bind(pendingArgs, choiceParamNr); // bind to param that has choices
-        uiParam1.simulateChoiceSelect(3); // select 4th choice
+        SimulatedUiChoices uiParam = new SimulatedUiChoices();
+        uiParam.bind(pendingArgs, choiceParamNr); // bind to param that has choices
+        uiParam.simulateChoiceSelect(3); // select 4th choice
         
-        val expectedDefaultsAfter = Can.<Integer>of(
+        val expectedParamsAfter = Can.<Integer>of(
                 mixin.choices0Act()[3],
                 mixin.default1Act(),
                 mixin.default2Act());
         
-        assertComponentWiseUnwrappedEquals(expectedDefaultsAfter, pendingArgs.getParamValues());
+        assertComponentWiseUnwrappedEquals(expectedParamsAfter, pendingArgs.getParamValues());
         
     }
     
@@ -293,17 +293,16 @@ class InteractionTest extends InteractionTestAbstract {
         
         int choiceParamNr = 0;
         
-        SimulatedUiChoices uiParam1 = new SimulatedUiChoices();
-        uiParam1.bind(pendingArgs, choiceParamNr); // bind to param that has choices
-        uiParam1.simulateChoiceSelect(3); // select 4th choice
+        SimulatedUiChoices uiParam = new SimulatedUiChoices();
+        uiParam.bind(pendingArgs, choiceParamNr); // bind to param that has choices
+        uiParam.simulateChoiceSelect(3); // select 4th choice
         
-        val expectedDefaultsAfter = Can.<DemoEnum>of(
+        val expectedParamsAfter = Can.<DemoEnum>of(
                 DemoEnum.values()[3],
                 mixin.default1Act(),
                 mixin.default2Act());
         
-        assertComponentWiseUnwrappedEquals(expectedDefaultsAfter, pendingArgs.getParamValues());
-        
+        assertComponentWiseUnwrappedEquals(expectedParamsAfter, pendingArgs.getParamValues());
     }
     
     

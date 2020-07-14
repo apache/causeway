@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.wicket.request.IRequestHandler;
@@ -437,44 +436,55 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
                 }
                 return;
             }
+
+            // We could automatically make sure the parameter value is one of the (reassessed) choices, 
+            // if not then blank it out.
+            // corner case: the parameter value might be non-scalar
+            //     we could remove from the parameter value (collection) all that no longer 
+            //     conform to the available (reassessed) choices,
+
+            //XXX HOWEVER ...
+            // there are pros and cons to that depending on the situation
+            // I'd rather not risk a bad user experience by blanking out values, 
+            // instead let the user control the situation, we have validation to signal what to do
             
-            boolean shouldBlankout = false;
-
-            if(!isEmpty) {
-                if(hasChoices) {
-                    // make sure the object is one of the choices, else blank it out.
-                    
-                    val choices = actionParameter
-                            .getChoices(pendingArgs, InteractionInitiatedBy.USER);
-
-                    shouldBlankout = 
-                            ! isPartOfChoicesConsideringDependentArgs(paramValue, choices);
-
-                } else if(hasAutoComplete) {
-
-                    //XXX poor man's implementation: don't blank-out, even though could fail validation later 
-                    shouldBlankout = false;
-                }
-            }
-
-            if(shouldBlankout) {
-                clearParameterValue(actionParameter);
-            }
+//            val paramIsScalar = actionParameter.getSpecification().isNotCollection();
+//            
+//            boolean shouldBlankout = false;
+//                        
+//            if(!isEmpty && paramIsScalar) {
+//                
+//                if(hasChoices) {
+//                    val choices = actionParameter
+//                            .getChoices(pendingArgs, InteractionInitiatedBy.USER);
+//
+//                    shouldBlankout = 
+//                            ! isPartOfChoicesConsideringDependentArgs(paramValue, choices);
+//
+//                } else if(hasAutoComplete) {
+//
+//                    //don't blank-out, even though could fail validation later 
+//                    shouldBlankout = false;
+//                }
+//            }
+//
+//            if(shouldBlankout) {
+//                clearParameterValue(actionParameter);
+//            }
 
         });
 
     }
 
-    private boolean isPartOfChoicesConsideringDependentArgs(
-            ManagedObject paramValue, 
-            Can<ManagedObject> choices) {
-
-        val pendingValue = paramValue.getPojo();
-
-        return choices
-                .stream()
-                .anyMatch(choice->Objects.equals(pendingValue, choice.getPojo()));
-    }
+//    private boolean isPartOfChoicesConsideringDependentArgs(
+//            ManagedObject paramValue, 
+//            Can<ManagedObject> choices) {
+//
+//        val pendingValue = paramValue.getPojo();
+//        return choices
+//                .stream()
+//                .anyMatch(choice->Objects.equals(pendingValue, choice.getPojo()));
+//    }
 
 
 }
