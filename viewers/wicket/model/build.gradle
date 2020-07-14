@@ -12,7 +12,6 @@ dependencies {
     compile project(':isis-parent:isis:isis-viewer-common')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis:isis-core-metamodel')
-//    compile project (':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
     testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
     testCompile ('com.google.guava:guava:28.1-jre')
 }

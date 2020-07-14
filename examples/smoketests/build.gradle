@@ -18,10 +18,4 @@ dependencies {
     testCompile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.moxy', version: '2.7.5'
     testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
     testCompile group: 'org.apache.directory.server', name: 'apacheds-test-framework', version: '2.0.0.AM25'
-
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-
-    testCompileOnly 'org.projectlombok:lombok:1.18.12'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }

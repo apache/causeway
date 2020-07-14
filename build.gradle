@@ -34,4 +34,8 @@ subprojects {
         mavenLocal()
     }
 
+    test {
+        ignoreFailures = true
+    }
+
 }

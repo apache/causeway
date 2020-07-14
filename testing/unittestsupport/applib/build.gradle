@@ -23,7 +23,8 @@ dependencies {
     compile group: 'org.picocontainer', name: 'picocontainer', version: '2.15'
     compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
-    compileOnly group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+
+    compile group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
 }
 
 task packageTests(type: Jar) {
