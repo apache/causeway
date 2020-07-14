@@ -108,6 +108,11 @@ public interface SpecificationLoader {
 
     Class<?> lookupType(ObjectSpecId objectSpecId);
 
+    /**
+     * queue {@code objectSpec} for later validation
+     * @param objectSpec
+     */
+    void validateLater(ObjectSpecification objectSpec);
 
     // -- SHORTCUTS
 
@@ -133,5 +138,5 @@ public interface SpecificationLoader {
     }
 
 
-    void revalidateIfNecessary();
+    
 }

@@ -371,6 +371,11 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addValidator(new TitlesAndTranslationsValidator());
 
         addValidator((objectSpec, validator) -> {
+            
+            if(Object.class.equals(objectSpec.getCorrespondingClass())) {
+                return false;
+            }
+            
             final long numActions = objectSpec.streamObjectActions(Contributed.INCLUDED).count();
             if (numActions > 0L) {
                 

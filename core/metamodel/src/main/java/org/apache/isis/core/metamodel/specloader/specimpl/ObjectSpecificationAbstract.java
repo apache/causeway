@@ -318,7 +318,7 @@ implements ObjectSpecification {
         }
 
         if(revalidate) {
-            getSpecificationLoader().revalidateIfNecessary();
+            getSpecificationLoader().validateLater(this);
         }
     }
 

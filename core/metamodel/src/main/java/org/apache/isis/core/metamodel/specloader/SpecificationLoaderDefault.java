@@ -21,6 +21,9 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -51,6 +54,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
@@ -207,6 +211,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val knownSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         val stopWatch = _Timing.now();
+        
+        //XXX[ISIS-2403] these classes only get discovered by validators, so just preload their specs
+        // (an optimization, not strictly required)
+        loadSpecifications(ApplicationFeatureType.class/*, ...*/);
 
         log.info(" - adding types from ValueTypeProviders");
 
@@ -289,7 +297,14 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private _Lazy<ValidationFailures> validationResult = 
             _Lazy.threadSafe(this::collectFailuresFromMetaModel);
 
+    private final AtomicBoolean validationInProgress = new AtomicBoolean(false);
+    
+    private final BlockingQueue<ObjectSpecification> validationQueue = new LinkedBlockingQueue<>();
+    
     private ValidationFailures collectFailuresFromMetaModel() {
+        //XXX while doing this don't trigger revalidateIfNecessary on self
+        //otherwise will deadlock
+        validationInProgress.set(true);               
         val failures = new ValidationFailures();
         programmingModel.streamValidators()
         .map(MetaModelValidatorAbstract.class::cast)
@@ -305,6 +320,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             }
         });
         log.debug("Done");
+        validationInProgress.set(false);
         return failures;
     }
 
@@ -384,22 +400,40 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return cachedSpec;
     }
 
-    public void revalidateIfNecessary() {
+    @Override
+    public void validateLater(ObjectSpecification objectSpec) {
         if(!isMetamodelFullyIntrospected()) {
+            // don't trigger validation during bootstrapping
+            // getValidationResult() is lazily populated later on first request anyway
+            return; 
+        }
+        if(!isisConfiguration.getCore().getMetaModel().getIntrospector().isValidateIncrementally()) {
+            // re-validation after the initial one can be turned off by means of above config option
             return;
         }
-        if(!this.isisConfiguration.getCore().getMetaModel().getIntrospector().isValidateIncrementally()) {
-            return;
+        
+        log.info("re-validation triggered by {}", objectSpec);
+        
+        // validators might discover new specs 
+        // to prevent deadlocks, we queue up validation requests to be processed later
+        if(validationInProgress.get()) {
+            validationQueue.offer(objectSpec);
+            return; 
         }
-
-        if (this.validationResult.isMemoized()) {
-            this.validationResult.clear();
-            final ValidationFailures validationFailures = this.getValidationResult();
-
-            if(validationFailures.hasFailures()) {
-                throw _Exceptions.illegalState(String.join("\n", validationFailures.getMessages("[%d] %s")));
-            }
+        
+        while(validationQueue.poll()!=null) {
+            // keep re-validating until the queue is empty
+            validationResult.clear();
+            getValidationResult();            
         }
+        
+        // only after things have settled we offer feedback to the user (interface) 
+        
+        final ValidationFailures validationFailures = getValidationResult();
+        if(validationFailures.hasFailures()) {
+            throw _Exceptions.illegalState(String.join("\n", validationFailures.getMessages("[%d] %s")));
+        }
+        
     }
 
     // -- LOOKUP
