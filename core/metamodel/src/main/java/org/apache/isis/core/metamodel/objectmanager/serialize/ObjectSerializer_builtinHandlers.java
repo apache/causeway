@@ -54,12 +54,12 @@ final class ObjectSerializer_builtinHandlers {
         @SneakyThrows
         @Override
         public byte[] serialize(ManagedObject object) {
-            val bos = new ByteArrayOutputStream(16*4096); // 16k initial buffer size
-            val oos = new ObjectOutputStream(bos);
-            oos.writeObject(object.getPojo());
-            oos.flush();
-            oos.close();
-            return _Bytes.compress(bos.toByteArray());
+            val bos = new ByteArrayOutputStream(16*1024); // 16k initial buffer size
+            try(val oos = new ObjectOutputStream(bos)){
+                oos.writeObject(object.getPojo());
+                oos.flush();
+                return _Bytes.compress(bos.toByteArray());
+            } 
         }
         
         @SneakyThrows
@@ -70,12 +70,12 @@ final class ObjectSerializer_builtinHandlers {
         }
         
         private <T> T unmarshall(Class<T> type, byte[] input) throws IOException, ClassNotFoundException {
-            val bis = new ByteArrayInputStream(_Bytes.decompress(input));
-            val ois = new ObjectInputStream(bis);
-            @SuppressWarnings("unchecked")
-            val t = (T) ois.readObject();
-            bis.close(); 
-            return t;
+            try(val bis = new ByteArrayInputStream(_Bytes.decompress(input))){
+                val ois = new ObjectInputStream(bis);
+                @SuppressWarnings("unchecked")
+                val t = (T) ois.readObject();
+                return t;
+            }
         }
         
     }
