@@ -34,18 +34,18 @@ public class GridLoaderServiceDefault_resourceNameFor_Test {
         gridLoaderServiceDefault = new GridLoaderServiceDefault();
     }
 
-//    @Test fails with ISIS-2374
+    @Test
     public void when_default_exists() {
         final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo.class, null));
         Assert.assertThat(s, is(equalTo("Foo.layout.xml")));
     }
 
-    //    @Test fails with ISIS-2374
+    @Test
     public void when_fallback_exists() {
         final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo2.class, null));
         Assert.assertThat(s, is(equalTo("Foo2.layout.fallback.xml")));
     }
-    //    @Test fails with ISIS-2374
+    @Test
     public void when_default_and_fallback_both_exist() {
         final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo3.class, null));
         Assert.assertThat(s, is(equalTo("Foo3.layout.xml")));
