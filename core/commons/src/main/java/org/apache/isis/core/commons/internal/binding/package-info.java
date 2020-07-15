@@ -16,21 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.commons.binding;
-
 /**
- * @param <T>
+ * <h1>Internal API</h1>
+ * Internal classes, contributing to the internal proprietary API.
+ * These may be changed or removed without notice!
+ * <p>
+ * <b>WARNING</b>:
+ * Do NOT use any of the classes provided by this package!
+ * </p>
  */
-public interface Bindable<T> extends Observable<T>, Writable<T> {
-
-    void bind(Observable<? extends T> observable);
-
-    void unbind();
-
-    boolean isBound();
-
-    void bindBidirectional(Bindable<T> other);
-
-    void unbindBidirectional(Bindable<T> other);
-
-}
+package org.apache.isis.core.commons.internal.binding;

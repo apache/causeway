@@ -21,16 +21,8 @@ package org.apache.isis.core.commons.binding;
 /**
  * @param <T>
  */
-public interface Bindable<T> extends Observable<T>, Writable<T> {
+@FunctionalInterface
+public interface InvalidationListener {
 
-    void bind(Observable<? extends T> observable);
-
-    void unbind();
-
-    boolean isBound();
-
-    void bindBidirectional(Bindable<T> other);
-
-    void unbindBidirectional(Bindable<T> other);
-
+    public void invalidated(Observable<?> observable);
 }

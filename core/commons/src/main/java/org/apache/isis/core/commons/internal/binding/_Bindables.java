@@ -16,21 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.commons.binding;
+package org.apache.isis.core.commons.internal.binding;
+
+import lombok.val;
 
 /**
- * @param <T>
+ * <h1>- internal use only -</h1>
+ * 
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * These may be changed or removed without notice!
+ * </p>
+ *
+ * @since 2.0
  */
-public interface Bindable<T> extends Observable<T>, Writable<T> {
+public class _Bindables {
 
-    void bind(Observable<? extends T> observable);
-
-    void unbind();
-
-    boolean isBound();
-
-    void bindBidirectional(Bindable<T> other);
-
-    void unbindBidirectional(Bindable<T> other);
-
+    private static class SimpleBindable<T> extends _BindableAbstract<T> {}
+    
+    public static <T> _BindableAbstract<T> empty() {
+        return new SimpleBindable<T>();
+    }
+    
+    public static <T> _BindableAbstract<T> forValue(T initialValue) {
+        val bindable = new SimpleBindable<T>();
+        bindable.setValue(initialValue);
+        return bindable;
+    }
+    
 }

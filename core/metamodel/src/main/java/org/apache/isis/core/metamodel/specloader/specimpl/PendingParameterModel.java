@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.binding.ChangeListener;
+import org.apache.isis.core.commons.binding.InvalidationListener;
+import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
@@ -78,12 +80,10 @@ public class PendingParameterModel {
         @Getter @NonNull private int paramNr;
         @Getter @NonNull private PendingParameterModel model;
         
-        @Override
         public Object getBean() {
             return model;
         }
 
-        @Override
         public String getName() {
             val paramMeta = model.getHead().getMetaModel().getParameters().getElseFail(paramNr);
             return paramMeta.getName();
@@ -116,22 +116,6 @@ public class PendingParameterModel {
             changeListeners.remove(listener);
         }
 
-//        @Override
-//        public void addListener(InvalidationListener listener) {
-//            invalidationListeners.add(listener);
-//        }
-//
-//        @Override
-//        public void removeListener(InvalidationListener listener) {
-//            invalidationListeners.remove(listener);
-//        }
-
-        @Override
-        public void bind(Bindable<ManagedObject> observable) {
-            // TODO Auto-generated method stub
-            
-        }
-
         @Override
         public void unbind() {
             // TODO Auto-generated method stub
@@ -145,6 +129,12 @@ public class PendingParameterModel {
         }
 
         @Override
+        public void bind(Observable<? extends ManagedObject> observable) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
         public void bindBidirectional(Bindable<ManagedObject> other) {
             // TODO Auto-generated method stub
             
@@ -155,6 +145,19 @@ public class PendingParameterModel {
             // TODO Auto-generated method stub
             
         }
+
+        @Override
+        public void addListener(InvalidationListener listener) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void removeListener(InvalidationListener listener) {
+            // TODO Auto-generated method stub
+            
+        }
+
         
     }
     

@@ -21,16 +21,9 @@ package org.apache.isis.core.commons.binding;
 /**
  * @param <T>
  */
-public interface Bindable<T> extends Observable<T>, Writable<T> {
+public interface Writable<T> {
 
-    void bind(Observable<? extends T> observable);
-
-    void unbind();
-
-    boolean isBound();
-
-    void bindBidirectional(Bindable<T> other);
-
-    void unbindBidirectional(Bindable<T> other);
+    T getValue();
+    void setValue(T value);
 
 }

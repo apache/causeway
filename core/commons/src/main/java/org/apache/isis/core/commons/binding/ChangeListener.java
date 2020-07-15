@@ -18,8 +18,11 @@
  */
 package org.apache.isis.core.commons.binding;
 
+/**
+ * @param <T>
+ */
+@FunctionalInterface
 public interface ChangeListener<T> {
 
-    void changed(Bindable<? extends T> bindable, T oldValue, T newValue);
-
+    void changed(Observable<? extends T> observable, T oldValue, T newValue);
 }
