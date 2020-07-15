@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.tree;
+package demoapp.dom.annotations.PropertyLayout.navigable;
 
 import java.io.File;
 import java.util.Optional;
@@ -26,35 +26,32 @@ import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 import lombok.val;
 
-public class FileSystemTreeAdapter implements TreeAdapter<FileNode> {
+public class FileSystemTreeAdapter implements TreeAdapter<FileNodeVm> {
 
     @Override
-    public Optional<FileNode> parentOf(FileNode value) {
-        if(value.getType()==FileNode.Type.FileSystemRoot) {
+    public Optional<FileNodeVm> parentOf(FileNodeVm value) {
+        if(value.getType() == FileNodeVm.Type.FileSystemRoot) {
             return Optional.empty();
         }
         val parentFolderIfAny = value.asFile().getParentFile();
-        if(parentFolderIfAny==null) {
-            return Optional.empty(); // unexpected code reach, but just in case
-        }
         return Optional.ofNullable(parentFolderIfAny)
-                .map(FileNodeFactory::toFileNode);
+                .map(FileNodeVm::new);
     }
 
     @Override
-    public int childCountOf(FileNode value) {
+    public int childCountOf(FileNodeVm value) {
         return (int) streamChildFiles(value).count();
     }
 
     @Override
-    public Stream<FileNode> childrenOf(FileNode value) {
+    public Stream<FileNodeVm> childrenOf(FileNodeVm value) {
         return streamChildFiles(value)
-                .map(FileNodeFactory::toFileNode);
+                .map(FileNodeVm::new);
     }
 
     // -- HELPER
 
-    private static Stream<File> streamChildFiles(FileNode value){
+    private static Stream<File> streamChildFiles(FileNodeVm value){
         val file = value.asFile();
         val childFiles = file.listFiles();
         if(childFiles==null) {

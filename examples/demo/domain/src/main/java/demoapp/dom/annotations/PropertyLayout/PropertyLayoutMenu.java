@@ -19,6 +19,7 @@
 package demoapp.dom.annotations.PropertyLayout;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -28,10 +29,11 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm;
 import demoapp.dom.annotations.PropertyLayout.describedAs.PropertyLayoutDescribedAsVm;
-import demoapp.dom.annotations.PropertyLayout.hidden.PropertyLayoutHiddenChildVm;
 import demoapp.dom.annotations.PropertyLayout.hidden.PropertyLayoutHiddenVm;
+import demoapp.dom.annotations.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
 import demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineVm;
 import demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm;
+import demoapp.dom.annotations.PropertyLayout.navigable.FileNodeVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyLayoutMenu")
 @Log4j2
@@ -78,6 +80,12 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     public PropertyLayoutNamedVm named(){
         return new PropertyLayoutNamedVm();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-tree", describedAs = "Trees and Breadcrumbs")
+    public FileNodeVm navigable(){
+        return new FileNodeVm();
     }
 
 

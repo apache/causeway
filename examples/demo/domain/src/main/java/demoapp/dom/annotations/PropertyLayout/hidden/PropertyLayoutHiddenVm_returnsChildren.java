@@ -9,6 +9,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import demoapp.dom.annotations.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
+
 @Action(
     semantics = SemanticsOf.SAFE
 )

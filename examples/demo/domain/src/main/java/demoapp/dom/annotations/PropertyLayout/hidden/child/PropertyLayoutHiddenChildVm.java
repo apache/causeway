@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.PropertyLayout.hidden;
+package demoapp.dom.annotations.PropertyLayout.hidden.child;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -38,6 +38,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.annotations.PropertyLayout.hidden.PropertyLayoutHiddenVm;
 
 //tag::class[]
 @XmlRootElement(name = "child")
