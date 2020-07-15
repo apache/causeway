@@ -16,30 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.PropertyLayout.named;
+package demoapp.dom.annotations.PropertyLayout.cssClass;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-//@Property() // TODO: ISIS-2405: this fails as attempts to invoke as an action, and heuristics replace null with the view model object.
+@Property()
+@CssClassMetaAnnotation             // <.>
 @PropertyLayout(
-    named = "Mixin named using @PropertyLayout"
-    , describedAs = "@PropertyLayout(named = \"...\")"
-    , hidden = Where.ALL_TABLES
+    describedAs =
+        "@CssClassMetaAnnotation"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutNamedVm_annotatedMixin {
+public class PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotation {
+    // ...
+//end::class[]
 
-    private final PropertyLayoutNamedVm propertyLayoutNamedVm;
+    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
+    @MemberOrder(name = "meta-annotated", sequence = "2")
     public String prop() {
-        return propertyLayoutNamedVm.getPropertyUsingAnnotation();
+        return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
     }
 
+//tag::class[]
 }
 //end::class[]

@@ -123,6 +123,7 @@ as a replacement for
                 <mb3:named>@PropertyLayout</mb3:named>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="cssClass"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="multiLine"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
             </mb3:section>

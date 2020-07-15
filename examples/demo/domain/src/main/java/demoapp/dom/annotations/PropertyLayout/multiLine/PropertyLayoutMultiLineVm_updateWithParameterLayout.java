@@ -25,8 +25,8 @@ public class PropertyLayoutMultiLineVm_updateWithParameterLayout {
                 , describedAs =
                     "@ParameterLayout(multiLine = 5)"
             )
-            final String newValue) {
-        propertyLayoutMultiLineVm.setPropertyUsingAnnotation(newValue);
+            final String parameterUsingAnnotation) {
+        propertyLayoutMultiLineVm.setPropertyUsingAnnotation(parameterUsingAnnotation);
         return propertyLayoutMultiLineVm;
     }
 //end::annotation[]

@@ -17,16 +17,17 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Properties" id="properties">
-				<cpt:property id="propertyUsingAnnotation"/>
+			<cpt:fieldSet name="Annotation" id="annotation"/>
+			<cpt:fieldSet name="Layout File" id="layout-file">
 <!-- tag::layout-file[] -->
 				<cpt:property id="propertyUsingLayout">
 					<cpt:describedAs>Described using layout.xml</cpt:describedAs>
 				</cpt:property>
 <!-- end::layout-file[] -->
 			</cpt:fieldSet>
-			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
 			<cpt:fieldSet name="Contributed" id="contributed"/>
+			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
+			<cpt:fieldSet name="Meta-annotated Overridden" id="meta-annotated-overridden"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">

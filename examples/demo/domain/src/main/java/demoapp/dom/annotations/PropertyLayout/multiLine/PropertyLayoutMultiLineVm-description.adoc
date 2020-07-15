@@ -51,6 +51,16 @@ One advantage of the layout file over the annotation is that the layout file is 
 
 TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
 
+== Mixins
+
+The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
+
+[source,java,indent=0]
+----
+include::PropertyLayoutMultiLineVm_mixinProperty.java[tags=class]
+----
+<.> explicitly specifies that the contributed property should use a textbox
+
 == Meta-annotations
 
 The multiline hint can also be specified using a custom meta-annotation:
@@ -83,6 +93,16 @@ include::PropertyLayoutMultiLineVm_updateWithMetaAnnotation.java[tags=meta-annot
 ----
 <.> hint is inherited from the meta-annotation
 
+* or can be applied to mixin:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+----
+<.> hint is inherited from the meta-annotation
+
+=== Overriding Meta Annotations
+
 The meta-annotation can itself be overridden:
 
 * in a property:
@@ -99,6 +119,16 @@ include::PropertyLayoutMultiLineVm.java[tags=meta-annotated-overridden]
 [source,java,indent=0]
 ----
 include::PropertyLayoutMultiLineVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> hint from meta-annotation ...
+<.> \... is overridden by the `@ParameterLayout` annotation
+
+
+* or a mixin:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@ParameterLayout` annotation

@@ -25,8 +25,8 @@ public class PropertyLayoutCssClassVm_updateWithParameterLayout {
                 , describedAs =
                     "@ParameterLayout(cssClass = \"red\")"
             )
-            final String newValue) {
-        propertyLayoutCssClassVm.setPropertyUsingAnnotation(newValue);
+            final String parameterUsingAnnotation) {
+        propertyLayoutCssClassVm.setPropertyUsingAnnotation(parameterUsingAnnotation);
         return propertyLayoutCssClassVm;
     }
 //end::annotation[]

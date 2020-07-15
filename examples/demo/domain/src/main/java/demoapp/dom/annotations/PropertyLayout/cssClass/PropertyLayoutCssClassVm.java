@@ -59,9 +59,8 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
         cssClass = "red"
         , describedAs =
             "@PropertyLayout(cssClass = \"red\")"
-        , hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "properties", sequence = "1")
+    @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -72,9 +71,8 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" cssClass=\"red\"/>"
-        , hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "properties", sequence = "2")
+    @MemberOrder(name = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -85,7 +83,6 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
     @CssClassMetaAnnotation                         // <.>
     @PropertyLayout(
         describedAs = "@CssClassMetaAnnotation"
-        , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
@@ -100,9 +97,8 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
         cssClass = "blue"                               // <.>
         , describedAs =
             "@CssClassMetaAnnotation @PropertyLayout(...)"
-        , hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "meta-annotated", sequence = "2")
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

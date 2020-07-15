@@ -16,32 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.PropertyLayout.cssClass;
+package demoapp.dom.annotations.PropertyLayout.named;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
+//tag::meta-annotation-overridden[]
 @Property()
+@NamedMetaAnnotation                        // <.>
 @PropertyLayout(
-    cssClass = "red"
+    named = "Mixin name overridden"         // <.>
     , describedAs =
-        "cssClass = \"red\" "
-    , hidden = Where.ALL_TABLES
+        "@NamedMetaAnnotation @PropertyLayout(...)"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutCssClassVm_annotatedMixin {
+public class PropertyLayoutNamedVm_mixinPropertyWithMetaAnnotationOverridden {
+    // ...
+//end::meta-annotation-overridden[]
 
-    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
+    private final PropertyLayoutNamedVm propertyLayoutNamedVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
     public String prop() {
-        return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
+        return propertyLayoutNamedVm.getPropertyUsingAnnotation();
     }
 
+//tag::meta-annotation-overridden[]
 }
-//end::class[]
+//end::meta-annotation-overridden[]

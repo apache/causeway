@@ -26,8 +26,8 @@ public class PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden {
                 , describedAs =
                     "@CssClassMetaAnnotation @ParameterLayout(...)"
             )
-            final String newValue) {
-        propertyLayoutCssClassVm.setPropertyUsingMetaAnnotationButOverridden(newValue);
+            final String parameterUsingMetaAnnotationButOverridden) {
+        propertyLayoutCssClassVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
         return propertyLayoutCssClassVm;
     }
 //end::meta-annotation-overridden[]

@@ -59,9 +59,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
         multiLine = 5                           // <.>
         , describedAs =
             "@PropertyLayout(multiLine = 5)"
-        , hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "properties", sequence = "1")
+    @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -69,15 +68,15 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
 
 //tag::annotation-readonly[]
     @Property(
-            optionality = Optionality.OPTIONAL
-            , editing = Editing.DISABLED                // <.>
+        optionality = Optionality.OPTIONAL
+        , editing = Editing.DISABLED                // <.>
     )
     @PropertyLayout(
         multiLine = 5
         , describedAs =
             "@PropertyLayout(multiLine = 5)"
-        , hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "properties", sequence = "2")
+    )
+    @MemberOrder(name = "annotation", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotationReadOnly;
@@ -88,9 +87,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" multiLine=\"5\"/>"
-        , hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "properties", sequence = "3")
+    @MemberOrder(name = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -101,7 +99,6 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @MultiLineMetaAnnotation                        // <.>
     @PropertyLayout(
         describedAs = "@MultiLineMetaAnnotation"
-        , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
@@ -116,9 +113,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
         multiLine = 3                                   // <.>
         , describedAs =
             "@MultiLineMetaAnnotation @PropertyLayout(...)"
-        , hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "meta-annotated", sequence = "2")
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

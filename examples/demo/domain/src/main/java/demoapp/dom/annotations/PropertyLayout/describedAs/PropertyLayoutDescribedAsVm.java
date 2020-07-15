@@ -58,9 +58,8 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@PropertyLayout(describedAs= \"...\")"
-        , hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "properties", sequence = "1")
+    @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -68,10 +67,8 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(                                        // <.>
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "properties", sequence = "2")
+    @PropertyLayout()                                       // <.>
+    @MemberOrder(name = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -82,7 +79,6 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @DescribedAsMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs = "@DescribedAsMetaAnnotation"
-        , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
@@ -96,14 +92,12 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@DescribedAsMetaAnnotation @PropertyLayout(...)"   // <.>
-        , hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "meta-annotated", sequence = "2")
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
-
 
 }
 //end::class[]

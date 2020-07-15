@@ -19,27 +19,30 @@
 package demoapp.dom.annotations.PropertyLayout.multiLine;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-//@Property() // TODO: ISIS-2405: this fails as attempts to invoke as an action, and heuristics replace null with the view model object.
+@Property()
+@MultiLineMetaAnnotation            // <.>
 @PropertyLayout(
-    multiLine = 5
-    , describedAs = "@PropertyLayout(multiLine = 5)"
-    , hidden = Where.ALL_TABLES
+    describedAs =
+        "@MultiLineMetaAnnotation"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutMultiLineVm_annotatedMixin {
+public class PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotation {
+    // ...
+//end::class[]
 
     private final PropertyLayoutMultiLineVm propertyLayoutMultiLineVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
+    @MemberOrder(name = "meta-annotated", sequence = "2")
     public String prop() {
         return propertyLayoutMultiLineVm.getPropertyUsingAnnotation();
     }
 
+//tag::class[]
 }
 //end::class[]

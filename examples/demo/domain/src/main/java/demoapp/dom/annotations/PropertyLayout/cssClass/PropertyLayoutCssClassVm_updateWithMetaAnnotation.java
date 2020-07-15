@@ -24,8 +24,8 @@ public class PropertyLayoutCssClassVm_updateWithMetaAnnotation {
             @ParameterLayout(
                 describedAs = "@CssClassMetaAnnotation"
             )
-            final String newValue) {
-        propertyLayoutCssClassVm.setPropertyUsingMetaAnnotation(newValue);
+            final String parameterUsingMetaAnnotation) {
+        propertyLayoutCssClassVm.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
         return propertyLayoutCssClassVm;
     }
 //end::meta-annotation[]

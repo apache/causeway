@@ -24,8 +24,8 @@ public class PropertyLayoutDescribedAsVm_updateWithParameterLayout {
                 describedAs =
                     "@ParameterLayout(describedAs = \"...\")"   // <.>
             )
-            final String newValue) {
-        propertyLayoutDescribedAsVm.setPropertyUsingAnnotation(newValue);
+            final String parameterUsingAnnotation) {
+        propertyLayoutDescribedAsVm.setPropertyUsingAnnotation(parameterUsingAnnotation);
         return propertyLayoutDescribedAsVm;
     }
 //end::annotation[]

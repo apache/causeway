@@ -24,8 +24,8 @@ public class PropertyLayoutDescribedAsVm_updateWithMetaAnnotation {
             @ParameterLayout(
                 describedAs = "@DescribedAsMetaAnnotation"
             )
-            final String newValue) {
-        propertyLayoutDescribedAsVm.setPropertyUsingMetaAnnotation(newValue);
+            final String parameterUsingMetaAnnotation) {
+        propertyLayoutDescribedAsVm.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
         return propertyLayoutDescribedAsVm;
     }
 //end::meta-annotation[]

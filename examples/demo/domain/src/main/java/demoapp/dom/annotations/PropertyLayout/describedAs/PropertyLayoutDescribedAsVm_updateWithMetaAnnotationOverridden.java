@@ -25,8 +25,8 @@ public class PropertyLayoutDescribedAsVm_updateWithMetaAnnotationOverridden {
                 describedAs =                                               // <.>
                     "@DescribedAsMetaAnnotation @ParameterLayout(...)"
             )
-            final String newValue) {
-        propertyLayoutDescribedAsVm.setPropertyUsingMetaAnnotationButOverridden(newValue);
+            final String parameterUsingMetaAnnotationButOverridden) {
+        propertyLayoutDescribedAsVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
         return propertyLayoutDescribedAsVm;
     }
 //end::meta-annotation-overridden[]

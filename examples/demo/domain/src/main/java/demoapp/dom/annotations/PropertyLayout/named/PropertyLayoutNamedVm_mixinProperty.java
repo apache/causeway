@@ -16,30 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.PropertyLayout.describedAs;
+package demoapp.dom.annotations.PropertyLayout.named;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-//@Property() // TODO: ISIS-2405: this fails as attempts to invoke as an action, and heuristics replace null with the view model object.
+@Property()
 @PropertyLayout(
-    describedAs =
-            "Mixin described using @PropertyLayout(describedAs = \"...\")"
-    , hidden = Where.ALL_TABLES
+    named = "Mixin named using @PropertyLayout"     // <.>
+    , describedAs =
+        "@PropertyLayout(named = \"...\")"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutDescribedAsVm_annotatedMixin {
+public class PropertyLayoutNamedVm_mixinProperty {
+    // ...
+//end::class[]
 
-    private final PropertyLayoutDescribedAsVm propertyLayoutDescribedAsVm;
+    private final PropertyLayoutNamedVm propertyLayoutNamedVm;
 
     @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
-        return propertyLayoutDescribedAsVm.getPropertyUsingAnnotation();
+        return propertyLayoutNamedVm.getPropertyUsingAnnotation();
     }
 
+//tag::class[]
 }
 //end::class[]

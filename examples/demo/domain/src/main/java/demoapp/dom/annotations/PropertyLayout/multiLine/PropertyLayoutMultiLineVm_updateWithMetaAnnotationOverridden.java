@@ -26,8 +26,8 @@ public class PropertyLayoutMultiLineVm_updateWithMetaAnnotationOverridden {
                 , describedAs =
                     "@MultiLineMetaAnnotation @ParameterLayout(...)"
             )
-            final String newValue) {
-        propertyLayoutMultiLineVm.setPropertyUsingMetaAnnotationButOverridden(newValue);
+            final String parameterUsingMetaAnnotationButOverridden) {
+        propertyLayoutMultiLineVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
         return propertyLayoutMultiLineVm;
     }
 //end::meta-annotation-overridden[]

@@ -28,6 +28,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm;
 import demoapp.dom.annotations.PropertyLayout.describedAs.PropertyLayoutDescribedAsVm;
+import demoapp.dom.annotations.PropertyLayout.hidden.PropertyLayoutHiddenChildVm;
+import demoapp.dom.annotations.PropertyLayout.hidden.PropertyLayoutHiddenVm;
 import demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineVm;
 import demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm;
 
@@ -43,6 +45,15 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     public PropertyLayoutDescribedAsVm describedAs(){
         return new PropertyLayoutDescribedAsVm();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public PropertyLayoutHiddenVm hidden() {
+        val vm = new PropertyLayoutHiddenVm("value");
+        vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 1", vm));
+        vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 2", vm));
+        vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 3", vm));
+        return vm;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
