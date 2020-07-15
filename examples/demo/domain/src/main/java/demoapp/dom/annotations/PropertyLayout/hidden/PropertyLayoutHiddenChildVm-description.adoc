@@ -1,1 +1,60 @@
-TODO
+This (child) object displays the visibility of variations of the `hidden` hint.
+
+
+
+.Hidden Variants
+[cols="^1m,2a,2a",options=header,frame="all"]
+|===
+^| Where
+^| This (child) object
+^| Notes
+
+| NOWHERE
+| * propertyHidden +
+Nowhere
+| Visible at all times
+
+| EVERYWHERE
+| * property +
+HiddenEverywhere
+
+| Should not be visible at all.
+
+| ANYWHERE
+| * property +
+HiddenAnywhere
+| Should not be visible at all +
+(synonym for EVERYWHERE)
+
+| ALL_TABLES
+| * propertyHidden +
+AllTables
+| Visible in the object form, but _not_ visible in the child collection nor in the standalone list returned by the action.
+
+| OBJECT_FORMS
+| * propertyHidden +
+ObjectForms
+| Visible in collections, but _not_ in the object's detail.
+
+| STANDALONE_TABLES
+| * propertyHidden +
+StandaloneTables
+| Visible in the object form and collection, but _not_ in the standalone list returned by the action.
+
+| ALL_EXCEPT_ +
+STANDALONE_TABLES
+| * propertyHidden +
+AllExceptStandaloneTables
+| Visible only in the standalone list returned by the action.
+
+| PARENTED_TABLES
+| * propertyHidden +
+ParentedTables
+| Visible everywhere _except_ in the collection.
+
+| REFERENCES_PARENT
+| * propertyHidden +
+ReferencesParent
+| Visible everywhere _except_ in the collection, where the type of the property is the referencing parent object.
+
+|===

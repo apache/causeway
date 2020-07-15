@@ -9,7 +9,6 @@
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
-			<cpt:action id="returnsStandaloneList"/>
 			<cpt:action id="rebuildMetamodel"/>
 		</bs3:col>
 		<bs3:col span="2">
@@ -19,9 +18,9 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Annotation" id="annotation"/>
+			<cpt:fieldSet name="Annotated" id="annotation"/>
 			<cpt:fieldSet name="Layout File" id="layout-file">
-			<!-- tag::layout-file[] -->
+<!-- tag::layout-file[] -->
 				<cpt:property id="propertyHiddenNowhereUsingLayout" hidden="NOWHERE"/>
 <!-- end::layout-file[] -->
 			</cpt:fieldSet>
@@ -30,7 +29,9 @@
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
 			<cpt:fieldSet name="Meta-annotated Overridden" id="meta-annotated-overridden"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-			<cpt:collection id="children"/>
+			<cpt:collection id="children">
+				<cpt:action id="returnsChildren"/>
+			</cpt:collection>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >

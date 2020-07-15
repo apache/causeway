@@ -12,7 +12,7 @@ Names can also include HTML markup.
 This can optionally be escaped.
 
 
-== Annotation
+== Annotated
 
 The name can be specified explicitly using an annotation:
 
@@ -42,7 +42,7 @@ For properties (not parameters), the name can be specified using the `Xxx.layout
 ----
 include::PropertyLayoutNamedVm.java[tags=layout-file]
 ----
-<.> `named` attribute is _not_ present.
+<.> `named` hint is _not_ present.
 
 * layout file snippet:
 +
@@ -59,7 +59,7 @@ One advantage of the layout file over the annotation is that the layout file is 
 
 TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
 
-== Meta-annotations
+== Meta-annotated
 
 The name can also be specified using a custom meta-annotation:
 

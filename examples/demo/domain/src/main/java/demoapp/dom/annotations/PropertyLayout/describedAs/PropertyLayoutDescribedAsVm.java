@@ -56,7 +56,7 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
 //tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        describedAs =
+        describedAs =                                   // <.>
             "@PropertyLayout(describedAs= \"...\")"
     )
     @MemberOrder(name = "annotation", sequence = "1")

@@ -33,6 +33,10 @@ body {
     margin-bottom: 0px;
 }
 
+header.navbar-fixed-top {
+    position: sticky;
+}
+
 .navbar-fixed-top {
     position: initial;
     right: initial;

@@ -56,17 +56,6 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @NoArgsConstructor
 public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
 
-    public PropertyLayoutHiddenVm(String value) {
-        setPropertyHiddenNowhereUsingAnnotation(value);
-        setPropertyHiddenNowhereUsingLayout(value);
-
-        setPropertyUsingMetaAnnotation(value);
-        setPropertyUsingMetaAnnotationButOverridden(value);
-
-        setPropertyHiddenAnywhere(value);
-        setPropertyHiddenEverywhere(value);
-    }
-
     public String title() {
         return "PropertyLayout#hidden";
     }
@@ -89,7 +78,6 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" hidden=\"NOWHERE\"/>"
-        , hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "layout-file", sequence = "1")
     @XmlElement(required = false)
@@ -108,7 +96,7 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenEverywhere;
-//end::variants-annotation[]
+//end::variants-everywhere[]
 
 //tag::variants-anywhere[]
     @Property(optionality = Optionality.OPTIONAL)
@@ -135,7 +123,7 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @HiddenEverywhereMetaAnnotation                        // <.>
     @PropertyLayout(
-        describedAs = "@HiddenAllTablesMetaAnnotation"
+        describedAs = "@HiddenEverywhereMetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
@@ -147,9 +135,9 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @HiddenEverywhereMetaAnnotation                     // <.>
     @PropertyLayout(
-        hidden = Where.NOWHERE                         // <.>
+        hidden = Where.NOWHERE                          // <.>
         , describedAs =
-            "@HiddenAllTablesMetaAnnotation " +
+            "@HiddenEverywhereMetaAnnotation " +
             "@PropertyLayout(hidden = Where.NOWHERE)"
     )
     @MemberOrder(name = "meta-annotated", sequence = "2")

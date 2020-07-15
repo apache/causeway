@@ -6,7 +6,7 @@ The "multiLine" hint indicates that a textbox of the specified number of lines s
 
 The hint is currently supported only for properties and parameters of type ``String``s.
 
-== Annotation
+== Annotated
 
 The multiline hint can be specified explicitly using an annotation:
 
@@ -36,7 +36,7 @@ For properties (not parameters), the multiline hint can be specified using the `
 ----
 include::PropertyLayoutMultiLineVm.java[tags=layout-file]
 ----
-<.> `multiLine` attribute is _not_ present.
+<.> `multiLine` hint is _not_ present.
 
 * layout file snippet:
 +
@@ -51,7 +51,7 @@ One advantage of the layout file over the annotation is that the layout file is 
 
 TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
 
-== Mixins
+== Contributed
 
 The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
 
@@ -61,7 +61,7 @@ include::PropertyLayoutMultiLineVm_mixinProperty.java[tags=class]
 ----
 <.> explicitly specifies that the contributed property should use a textbox
 
-== Meta-annotations
+== Meta-annotated
 
 The multiline hint can also be specified using a custom meta-annotation:
 
@@ -101,7 +101,7 @@ include::PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotation.java[tags=cla
 ----
 <.> hint is inherited from the meta-annotation
 
-=== Overriding Meta Annotations
+=== Meta-annotated Overridden
 
 The meta-annotation can itself be overridden:
 

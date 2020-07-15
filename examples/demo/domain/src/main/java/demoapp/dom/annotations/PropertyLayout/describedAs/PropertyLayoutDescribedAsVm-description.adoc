@@ -6,7 +6,7 @@ The description of a property or parameter is used as the tooltip of the field i
 
 
 
-== Annotation
+== Annotated
 
 The description can be specified explicitly using an annotation:
 
@@ -36,7 +36,7 @@ For properties (not parameters), the description can be specified using the `Xxx
 ----
 include::PropertyLayoutDescribedAsVm.java[tags=layout-file]
 ----
-<.> `describedAs` attribute is _not_ present.
+<.> `describedAs` hint is _not_ present.
 
 * layout file snippet:
 +
@@ -53,7 +53,7 @@ One advantage of the layout file over the annotation is that the layout file is 
 
 TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
 
-== Mixins
+== Contributed
 
 The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
 
@@ -63,7 +63,7 @@ include::PropertyLayoutDescribedAsVm_mixinProperty.java[tags=class]
 ----
 <.> explicitly specifies the description of the contributed property
 
-== Meta-annotations
+== Meta-annotated
 
 The name can also be specified using a custom meta-annotation:
 
@@ -103,7 +103,7 @@ include::PropertyLayoutDescribedAsVm_mixinPropertyWithMetaAnnotation.java[tags=c
 ----
 <.> hint is inherited from the meta-annotation
 
-=== Overriding Meta Annotations
+=== Meta-annotated Overridden
 
 The meta-annotation can itself be overridden:
 

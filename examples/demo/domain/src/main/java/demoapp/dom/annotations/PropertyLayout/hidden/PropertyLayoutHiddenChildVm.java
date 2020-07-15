@@ -52,6 +52,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
 
     public PropertyLayoutHiddenChildVm(String value, PropertyLayoutHiddenVm parent) {
         setPropertyHiddenNowhere(value);
+        setPropertyHiddenEverywhere(value);
 
         setPropertyHiddenAllTables(value);
         setPropertyHiddenObjectForms(value);
@@ -74,10 +75,21 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
         , describedAs =
             "@PropertyLayout(hidden = Where.NOWHERE)"
     )
-    @MemberOrder(name = "properties", sequence = "1")
+    @MemberOrder(name = "variants", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenNowhere;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(
+        hidden = Where.EVERYWHERE                        // <.>
+        , describedAs =
+            "@PropertyLayout(hidden = Where.EVERYWHERE)"
+    )
+    @MemberOrder(name = "properties", sequence = "2")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyHiddenEverywhere;
 //end::annotation[]
 
 //tag::variants-all_tables[]

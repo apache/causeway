@@ -210,3 +210,42 @@ div.paragraph a.a-has-code:hover {
 div.sectionbody > div.ulist > ul {
     margin-left: -23px;
 }
+
+header.navbar-fixed-top {
+    position: sticky;
+}
+
+table.tableblock .halign-center {
+    text-align: center;
+}
+
+table.tableblock .valign-top {
+    vertical-align: top;
+}
+
+table.tableblock td.tableblock > div.content > div.ulist > ul {
+    padding-inline-start: 20px;
+}
+
+table.tableblock > thead > tr > th.halign-center {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+table.tableblock > tbody > tr.tableblock  {
+    padding: 10px;
+}
+
+table.tableblock.grid-all,
+table.tableblock.grid-all th.tableblock,
+table.tableblock.grid-all td.tableblock {
+    border: 1px solid #ddddd8;
+}
+
+table.tableblock.grid-all th.tableblock {
+    background-color: #eeeee8;
+}
+
+table.tableblock.grid-all td.tableblock {
+    padding: 5px;
+}

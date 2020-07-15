@@ -1,1 +1,220 @@
-TODO
+The `hidden` hint indicates that the property should be hidden in certain contexts.
+Most commonly, this is to hide properties in tables (parented, standalone, or both).
+
+* for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+
+* there is equivalent for a  parameter (though parameters can be hidden dynamically using a `hide...()` supporting method)
+
+Because some of the `hidden` variants relate to tables, this view model has a collection of child objects with those child objects annotated to show the relevant options.
+There is also an action that returns this same set of child objects as a standalone list.
+
+The table below summarises the properties of the two objects, and where they should be visible.
+
+.Hidden Variants
+[cols="^1m,2a,2a,2a",options=header,frame="all"]
+|===
+^| Where
+^| This object
+^| Child object
+^| Notes
+
+| NOWHERE
+| * propertyHidden +
+NowhereUsingAnnotation +
+* propertyHidden +
+NowhereUsingLayout +
+* propertyUsing +
+MetaAnnotation +
+ButOverridden
+
+| * propertyHidden +
+Nowhere
+| Visible at all times
+
+| EVERYWHERE
+| * property +
+HiddenEverywhere +
+* property +
+UsingMetaAnnotation
+| * property +
+HiddenEverywhere
+
+| Should not be visible at all.
+
+| ANYWHERE
+| * property +
+HiddenAnywhere
+|
+| Should not be visible at all +
+(synonym for EVERYWHERE)
+
+| ALL_TABLES
+|
+| * propertyHidden +
+AllTables
+| Visible in the object form, but _not_ visible in the child collection nor in the standalone list returned by the action.
+
+| OBJECT_FORMS
+|
+| * propertyHidden +
+ObjectForms
+| Visible in collections, but _not_ in the object's detail.
+
+| STANDALONE_TABLES
+|
+| * propertyHidden +
+StandaloneTables
+| Visible in the object form and collection, but _not_ in the standalone list returned by the action.
+
+| ALL_EXCEPT_ +
+STANDALONE_TABLES
+|
+| * propertyHidden +
+AllExceptStandaloneTables
+| Visible only in the standalone list returned by the action.
+
+| PARENTED_TABLES
+|
+| * propertyHidden +
+ParentedTables
+| Visible everywhere _except_ in the collection.
+
+| REFERENCES_PARENT
+|
+| * propertyHidden +
+ReferencesParent
+| Visible everywhere _except_ in the collection, where the type of the property is the referencing parent object.
+
+|===
+
+
+== Annotated
+
+The `hidden` hint can be specified explicitly using an annotation:
+
+* for properties, using `@PropertyLayout#hidden()`:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHiddenVm.java[tags=annotation]
+----
+<.> explicitly indicate that the property should be visible in all contexts.
+
+Note that there is no equivalent for `@ParameterLayout`.
+
+== Layout File
+
+For properties (not parameters), the `hidden` hint can be specified using the `Xxx.layout.xml` file:
+
+* property definition:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHiddenVm.java[tags=layout-file]
+----
+<.> `hidden` hint is _not_ present.
+
+* layout file snippet:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyHiddenNowhereUsingLayout" hidden="NOWHERE"/>
+----
+
+One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
+
+TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
+
+== Variants
+
+As the table above outlined, the `hidden` species the the context ("where") the property is to be hidden.
+
+This (parent) object has two variants:
+
+* Everywhere:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHiddenVm.java[tags=variants-everywhere]
+----
+
+* Anywhere:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHiddenVm.java[tags=variants-anywhere]
+----
+
+Neither of these properties should be visible in the UI.
+
+
+== Meta-annotated
+
+The `hidden` hint can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::HiddenEverywhereMetaAnnotation.java[tags=class]
+----
+<.> annotated for property .
+<.> annotation can be applied to a property (either its getter or the field directly)
+<.> annotation can be applied to a parameter
+<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHiddenVm.java[tags=meta-annotated]
+----
+<.> hint is inherited from the meta-annotation
+
+* or can be applied to mixin:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHiddenVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+----
+<.> hint is inherited from the meta-annotation
+
+Neither of these properties should be visible in the UI.
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHiddenVm.java[tags=meta-annotated-overridden]
+----
+<.> hint from meta-annotation ...
+<.> \... is overridden by the `@PropertyLayout` annotation
+
+
+* or a mixin:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHiddenVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> hint from meta-annotation ...
+<.> \... is overridden by the `@ParameterLayout` annotation
+
+In both cases, even though the meta-annotation indicates that the property should be hidden everywhere, the override indicates that they should be hidden nowhere.
+Both properties should therefore be visible in the UI.
+
+== Children
+
+The `children` collection illustrates the visibility of the child objects' properties when viewed in a collection:
+
+* the `propertyHiddenObjectForms` property is visible as a column in the collection, but won't be visible in the object's page itself
+
+* the `propertyHiddenStandalone` property similarly is visible here, but won't be visible in the standalone list returned by the "returns children" action
+
+* the `propertyHiddenNowhere` property similar is visible here, and will also be visible on the object's page.
+
+The child object has a number of other properties, each using a different `hidden` variant; click through to inspect.

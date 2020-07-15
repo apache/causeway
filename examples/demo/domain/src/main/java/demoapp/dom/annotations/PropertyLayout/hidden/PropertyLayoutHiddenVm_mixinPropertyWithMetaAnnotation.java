@@ -21,31 +21,28 @@ package demoapp.dom.annotations.PropertyLayout.hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::meta-annotation-overridden[]
+//tag::class[]
 @Property()
-@HiddenEverywhereMetaAnnotation                 // <.>
+@HiddenEverywhereMetaAnnotation             // <.>
 @PropertyLayout(
-    hidden = Where.ALL_TABLES                   // <.>
-    , describedAs =
-        "@HiddenEverywhereMetaAnnotation " +
-        "@PropertyLayout(hidden = ALL_TABLES)"
+    describedAs =
+        "@HiddenEverywhereMetaAnnotation"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutHiddenChildVm_mixinPropertyWithMetaAnnotationOverridden {
+public class PropertyLayoutHiddenVm_mixinPropertyWithMetaAnnotation {
     // ...
-//end::meta-annotation-overridden[]
+//end::class[]
 
-    private final PropertyLayoutHiddenChildVm propertyLayoutHiddenChildVm;
+    private final PropertyLayoutHiddenVm propertyLayoutHiddenVm;
 
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
+    @MemberOrder(name = "meta-annotated", sequence = "2")
     public String prop() {
-        return propertyLayoutHiddenChildVm.getPropertyHiddenNowhere();
+        return propertyLayoutHiddenVm.getPropertyHiddenNowhereUsingAnnotation();
     }
 
-//tag::meta-annotation-overridden[]
+//tag::class[]
 }
-//end::meta-annotation-overridden[]
+//end::class[]

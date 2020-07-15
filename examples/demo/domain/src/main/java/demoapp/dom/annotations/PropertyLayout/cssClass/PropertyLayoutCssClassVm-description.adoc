@@ -1,4 +1,4 @@
-The "cssClass" hint indicates that the `<div>` containing the property or parameter component within the UI should set the specified CSS class:
+The `cssClass` hint indicates that the `<div>` containing the property or parameter component within the UI should set the specified CSS class:
 
 * for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
@@ -6,9 +6,9 @@ The "cssClass" hint indicates that the `<div>` containing the property or parame
 
 The `application.css` file can then be used to apply styling to that CSS class
 
-== Annotation
+== Annotated
 
-The cssClass hint can be specified explicitly using an annotation:
+The `cssClass` hint can be specified explicitly using an annotation:
 
 * for properties, using `@PropertyLayout#cssClass()`:
 +
@@ -36,7 +36,7 @@ For properties (not parameters), the CSS class hint can be specified using the `
 ----
 include::PropertyLayoutCssClassVm.java[tags=layout-file]
 ----
-<.> `cssClass` attribute is _not_ present.
+<.> `cssClass` hint is _not_ present.
 
 * layout file snippet:
 +
@@ -51,7 +51,7 @@ One advantage of the layout file over the annotation is that the layout file is 
 
 TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
 
-== Mixins
+== Contributed
 
 The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
 
@@ -61,7 +61,7 @@ include::PropertyLayoutCssClassVm_mixinProperty.java[tags=class]
 ----
 <.> explicitly specifies the CSS class hint for the contributed property
 
-== Meta-annotations
+== Meta-annotated
 
 The CSS class hint can also be specified using a custom meta-annotation:
 
@@ -101,7 +101,7 @@ include::PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotation.java[tags=clas
 ----
 <.> hint is inherited from the meta-annotation
 
-=== Overriding Meta Annotations
+=== Meta-annotated Overridden
 
 The meta-annotation can itself be overridden:
 

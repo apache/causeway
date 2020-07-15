@@ -56,7 +56,7 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 //tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        cssClass = "red"
+        cssClass = "red"                                // <.>
         , describedAs =
             "@PropertyLayout(cssClass = \"red\")"
     )

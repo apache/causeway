@@ -49,7 +49,7 @@ public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     public PropertyLayoutHiddenVm hidden() {
-        val vm = new PropertyLayoutHiddenVm("value");
+        val vm = new PropertyLayoutHiddenVm();
         vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 1", vm));
         vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 2", vm));
         vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 3", vm));
