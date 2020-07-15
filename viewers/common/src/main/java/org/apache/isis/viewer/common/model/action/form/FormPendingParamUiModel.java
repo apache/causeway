@@ -21,7 +21,7 @@ package org.apache.isis.viewer.common.model.action.form;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 
 import lombok.Value;
@@ -37,7 +37,7 @@ public class FormPendingParamUiModel {
     public static FormPendingParamUiModel of(
             InteractionHead head,
             ParameterUiModel paramUiModel, 
-            PendingParameterModel pendingArgs) {
+            ParameterNegotiationModel pendingArgs) {
 
         val objectActionParamter = paramUiModel.getMetaModel();
         val pendingArgValues = pendingArgs.getParamValues();

@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -182,7 +183,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Can<ManagedObject> getAutoComplete(
-            final PendingParameterModel pendingArgs,
+            final ParameterNegotiationModel pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -215,7 +216,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Can<ManagedObject> getChoices(
-            final PendingParameterModel pendingArgs,
+            final ParameterNegotiationModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val paramSpec = getSpecification();        
@@ -235,7 +236,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     @NonNull
     public ManagedObject getDefault(
-            @NonNull final PendingParameterModel pendingArgs) {
+            @NonNull final ParameterNegotiationModel pendingArgs) {
         
         val paramSpec = getSpecification();
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);

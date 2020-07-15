@@ -24,12 +24,12 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
@@ -47,7 +47,7 @@ implements ParameterUiModel {
     
     @Getter(onMethod = @__(@Override)) 
     @Setter(onMethod = @__(@Override))
-    private transient PendingParameterModel pendingParameterModel;
+    private transient ParameterNegotiationModel pendingParameterModel;
 
     /**
      * Creates a model representing an action parameter of an action of a parent

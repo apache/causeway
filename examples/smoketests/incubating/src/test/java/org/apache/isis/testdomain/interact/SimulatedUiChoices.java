@@ -19,8 +19,8 @@
 package org.apache.isis.testdomain.interact;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import lombok.val;
 
@@ -35,7 +35,7 @@ public class SimulatedUiChoices {
 
     private final ComboBox<ManagedObject> choiceBox = new ComboBox<>();
 
-    public void bind(PendingParameterModel pendingArgs, int paramNr) {
+    public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
 
         val actionMeta = pendingArgs.getHead().getMetaModel();
         val paramMetaList = actionMeta.getParameters();

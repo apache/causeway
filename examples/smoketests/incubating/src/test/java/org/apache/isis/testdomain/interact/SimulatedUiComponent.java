@@ -18,10 +18,10 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel.BindableManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel.BindableManagedObject;
 
 import lombok.val;
 
@@ -35,7 +35,7 @@ public class SimulatedUiComponent {
 
     private ObjectActionParameter paramMeta;
     
-    public void bind(PendingParameterModel pendingArgs, int paramNr) {
+    public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
         
         val actionMeta = pendingArgs.getHead().getMetaModel();
         val paramMetaList = actionMeta.getParameters();

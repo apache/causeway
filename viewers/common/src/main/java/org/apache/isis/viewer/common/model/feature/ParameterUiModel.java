@@ -21,9 +21,9 @@ package org.apache.isis.viewer.common.model.feature;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import lombok.NonNull;
 
@@ -44,8 +44,8 @@ public interface ParameterUiModel extends ScalarUiModel {
     
     // -- PENDING PARAMETER MODEL
 
-    PendingParameterModel getPendingParameterModel();
-    void setPendingParameterModel(PendingParameterModel pendingArgs);
+    ParameterNegotiationModel getPendingParameterModel();
+    void setPendingParameterModel(ParameterNegotiationModel pendingArgs);
 
     // -- SHORTCUTS
     

@@ -29,8 +29,8 @@ import java.util.Optional;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import lombok.NonNull;
 import lombok.val;
@@ -78,7 +78,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object getDefault(@NonNull PendingParameterModel pendingArgs) {
+    public Object getDefault(@NonNull ParameterNegotiationModel pendingArgs) {
             
         // call with args: defaultNAct(X x, Y y, ...) 
         

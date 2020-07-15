@@ -27,8 +27,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
@@ -64,7 +64,7 @@ public class UiActionHandler {
             
             val pendingParameterModel = managedAction.getInteractionHead().defaults();
             
-            Dialog<PendingParameterModel> dialog = new Dialog<>();
+            Dialog<ParameterNegotiationModel> dialog = new Dialog<>();
             dialog.setTitle("<Title>");
             dialog.setHeaderText("<HeaderText>");
            

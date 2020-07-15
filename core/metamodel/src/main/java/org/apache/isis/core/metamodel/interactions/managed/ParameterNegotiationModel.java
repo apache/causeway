@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.specloader.specimpl;
+package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.binding.InvalidationListener;
 import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
@@ -40,13 +39,16 @@ import lombok.val;
 
 
 /**
- * Model used to negotiate the paramValues of an action by means of an UI dialog.
+ * Model used to negotiate the paramValues of an action by means of an UI dialog. 
+ * <p>
+ * This supports aspects of UI component binding to pending values and possible choices,
+ * as well as validation. 
  *  
  * @since 2.0.0
  */
 @Getter 
 @RequiredArgsConstructor(staticName = "of")
-public class PendingParameterModel {
+public class ParameterNegotiationModel {
 
     @NonNull private final ActionInteractionHead head;
     @NonNull private Can<ManagedObject> paramValues;
@@ -78,7 +80,7 @@ public class PendingParameterModel {
     public static class BindableManagedObject implements Bindable<ManagedObject> {
 
         @Getter @NonNull private int paramNr;
-        @Getter @NonNull private PendingParameterModel model;
+        @Getter @NonNull private ParameterNegotiationModel model;
         
         public Object getBean() {
             return model;

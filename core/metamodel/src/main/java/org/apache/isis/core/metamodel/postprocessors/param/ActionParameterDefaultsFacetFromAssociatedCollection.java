@@ -25,7 +25,7 @@ import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 
 import lombok.NonNull;
 
@@ -38,7 +38,7 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
     }
 
     @Override
-    public Object getDefault(@NonNull PendingParameterModel pendingArgs) {
+    public Object getDefault(@NonNull ParameterNegotiationModel pendingArgs) {
         
         return _selectedPojos.get();
     }

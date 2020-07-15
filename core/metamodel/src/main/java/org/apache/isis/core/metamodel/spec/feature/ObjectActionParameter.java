@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import lombok.NonNull;
 
@@ -89,7 +89,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * user can choose from, based on the input search argument.
      */
     Can<ManagedObject> getAutoComplete(
-            PendingParameterModel pendingArgs,
+            ParameterNegotiationModel pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -107,14 +107,14 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * user can choose from.
      */
     Can<ManagedObject> getChoices(
-            PendingParameterModel pendingArgs,
+            ParameterNegotiationModel pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /** 
      * Needs to account for 2 scenarios,
      * <ul>
      * <li>there is no default providing facet associated with this parameter, 
-     * we return the corresponding value from the given {@link PendingParameterModel}</li>
+     * we return the corresponding value from the given {@link ParameterNegotiationModel}</li>
      * <li>there is a default providing facet associated with this parameter, 
      * it may return {@code null}, but in any case the value is wrapped in a 
      * non-null {@link ManagedObject}</li>
@@ -122,7 +122,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return a {@link ManagedObject}, {@code null} is represented by an empty 
      * but non-null {@link ManagedObject}
      */
-    @NonNull ManagedObject getDefault(PendingParameterModel pendingArgs);
+    @NonNull ManagedObject getDefault(ParameterNegotiationModel pendingArgs);
     
     @NonNull default ManagedObject getEmpty() {
         return ManagedObject.of(getSpecification(), null);

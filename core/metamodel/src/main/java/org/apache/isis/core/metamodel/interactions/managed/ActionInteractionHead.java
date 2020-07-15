@@ -24,7 +24,6 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -67,13 +66,13 @@ implements HasMetaModel<ObjectAction> {
         .collect(Can.toCan());
     }
     
-    public PendingParameterModel model(
+    public ParameterNegotiationModel model(
             @NonNull Can<ManagedObject> paramValues) {
-        return PendingParameterModel.of(this, paramValues);
+        return ParameterNegotiationModel.of(this, paramValues);
     }
     
-    public PendingParameterModel emptyModel() {
-        return PendingParameterModel.of(this, getEmptyParameterValues());
+    public ParameterNegotiationModel emptyModel() {
+        return ParameterNegotiationModel.of(this, getEmptyParameterValues());
     }
     
     /**
@@ -82,7 +81,7 @@ implements HasMetaModel<ObjectAction> {
      * ActionParameterNegotiation (wiki)
      * </a> 
      */
-    public PendingParameterModel defaults() {
+    public ParameterNegotiationModel defaults() {
         
         // first pass to calculate proposed fixed point
         // second pass to verify we have found a fixed point

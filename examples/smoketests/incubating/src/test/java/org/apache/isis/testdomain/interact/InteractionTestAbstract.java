@@ -40,9 +40,9 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
     @Inject protected ObjectManager objectManager;
     @Inject protected IsisInteractionFactory interactionFactory;
     
-    static {
-        new javafx.embed.swing.JFXPanel(); // Initializes the JavaFx Platform
-    }
+//    static {
+//        new javafx.embed.swing.JFXPanel(); // Initializes the JavaFx Platform
+//    }
 
     protected ActionInteraction startActionInteractionOn(Class<?> type, String actionId) {
         val viewModel = factoryService.viewModel(type);
