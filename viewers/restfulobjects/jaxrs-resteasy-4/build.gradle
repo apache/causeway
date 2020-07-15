@@ -11,7 +11,7 @@ dependencies {
     testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer')
     testCompile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-applib')
-    testCompile group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+    testCompile(Libs.javaxJdo)
 }
 
 task packageTests(type: Jar) {

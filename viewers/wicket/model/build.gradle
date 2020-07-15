@@ -13,7 +13,7 @@ dependencies {
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
-    testCompile ('com.google.guava:guava:28.1-jre')
+    testCompile(Libs.guava)
 }
 
 task packageTests(type: Jar) {

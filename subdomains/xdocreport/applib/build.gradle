@@ -8,7 +8,7 @@ dependencies {
     compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.pdf', version: '1.0.6'
     compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.core', version: '1.0.6'
     testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
-    testCompile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+    testCompile(Libs.guava)
 }
 
 task packageTests(type: Jar) {

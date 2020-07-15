@@ -3,7 +3,7 @@ dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-core-config')
     compile project(':isis-parent:isis:isis-core-security')
-    compile('io.swagger:swagger-core:1.6.0') {
+    compile(Libs.swaggerCore) {
         exclude(module: 'guava')
         exclude(module: 'validation-api')
         exclude(module: 'snakeyaml')
@@ -17,11 +17,11 @@ dependencies {
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis:isis-core-runtimeservices')
 
-    testCompile('org.junit.jupiter:junit-jupiter-api:5.6.2')
-    testCompile('org.junit.jupiter:junit-jupiter-engine:5.6.2')
-    testCompile('org.junit.vintage:junit-vintage-engine:5.6.2')
+    testCompile(Libs.junitJupiterApi)
+    testCompile(Libs.junitJupiterEngine)
+    testCompile(Libs.junitVintageEngine)
     testCompile('org.jmock:jmock:2.11.0')
-    testCompile('org.jmock:jmock-junit4:2.11.0') {
+    testCompile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')
         exclude(module: 'byte-buddy')
     }

@@ -4,7 +4,7 @@ dependencies {
     compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.10'
     compile group: 'org.objenesis', name: 'objenesis', version: '2.6'
     compile project(':isis-parent:isis:isis-core-commons')
-    testCompile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+    testCompile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')
         exclude(module: 'byte-buddy')
     }

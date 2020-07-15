@@ -5,7 +5,7 @@ dependencies {
     compile(group: 'com.github.javafaker', name: 'javafaker', version: '1.0.1') {
         exclude(module: 'snakeyaml')
     }
-    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+    compile(Libs.guava)
     testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
 }
 

@@ -3,7 +3,7 @@ description = 'Apache Isis Ext - REST Client'
 dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-core-commons')
-    compile group: 'org.springframework', name: 'spring-context', version: '5.2.6.RELEASE'
+    compile (Libs.springContext)
 }
 
 task packageTests(type: Jar) {

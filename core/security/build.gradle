@@ -2,16 +2,16 @@ description = 'Apache Isis Core - Security'
 dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-core-config')
-    compile('org.springframework.boot:spring-boot-starter-log4j2:2.2.7.RELEASE') {
+    compile(Libs.springBootStarterLog4j2) {
         exclude(module: 'slf4j-api')
     }
-    testCompile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+    testCompile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')
     }
-    testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '2.1'
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
-    testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
+    testCompile(Libs.hamcrestLibrary)
+    testCompile(Libs.junitJupiterApi)
+    testCompile(Libs.junitJupiterEngine)
+    testCompile(Libs.junitVintageEngine)
 }
 
 task packageTests(type: Jar) {

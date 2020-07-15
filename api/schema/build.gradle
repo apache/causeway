@@ -13,7 +13,7 @@ sourceSets {
 dependencies {
     compile project(':isis-parent:isis:isis-core-commons')
 
-    compile 'org.springframework:spring-context:5.2.6.RELEASE'
+    compile (Libs.springContext)
     compile 'joda-time:joda-time:2.10.6'
 
     // These dependencies are required in order to build on jdk11

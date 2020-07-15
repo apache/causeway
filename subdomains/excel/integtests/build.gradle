@@ -5,7 +5,7 @@ dependencies {
     testCompile project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-applib')
     testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
     testCompile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-datanucleus5')
-    testCompile group: 'org.hsqldb', name: 'hsqldb', version: '2.5.0'
+    testCompile(Libs.hsqldb)
 }
 
 task packageTests(type: Jar) {

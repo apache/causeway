@@ -2,7 +2,7 @@ description = 'Apache Isis Core - Runtime Services'
 dependencies {
     compile project(':isis-parent:isis:isis-core-runtime')
     compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
-    compile group: 'org.hsqldb', name: 'hsqldb', version: '2.5.0'
+    compile(Libs.hsqldb)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis:isis-core-config')
     testCompile project(':isis-parent:isis:isis-core-metamodel')

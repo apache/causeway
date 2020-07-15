@@ -25,7 +25,7 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-web', version: '5.2.6.RELEASE'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+    testCompile(Libs.jmockJunit4) {
         exclude(module: 'asm')
         exclude(module: 'junit-dep')
     }

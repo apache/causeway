@@ -5,7 +5,7 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: '2.10.6'
     compile project(':isis-parent:isis:isis-subdomains:isis-subdomains-spring:isis-subdomains-spring-applib')
     providedCompile project(':isis-parent:isis:isis-testing:isis-testing-integtestsupport:isis-testing-integtestsupport-applib')
-    compileOnly group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+    compileOnly(Libs.javaxJdo)
     providedCompile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib')
     providedCompile project(':isis-parent:isis:isis-core-runtime')
 }

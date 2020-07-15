@@ -9,7 +9,7 @@ dependencies {
     compile(group: 'org.apache.wicket', name: 'wicket-devutils', version: '8.8.0') {
         exclude(module: 'slf4j-api')
     }
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
+    compile(Libs.slf4jApi)
     compile(group: 'org.apache.wicket', name: 'wicket-extensions', version: '8.8.0') {
         exclude(module: 'slf4j-api')
     }
@@ -63,14 +63,14 @@ dependencies {
     compile(group: 'de.agilecoders.wicket', name: 'wicket-bootstrap-themes', version: '2.0.13') {
         exclude(module: 'wicket-core')
     }
-    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+    compile(Libs.guava)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis:isis-core-metamodel')
-    testCompile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+    testCompile(Libs.jmockJunit4) {
         exclude(module: 'asm')
         exclude(module: 'junit-dep')
     }
-    compileOnly group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+    compileOnly(Libs.javaxJdo)
 }
 
 task packageTests(type: Jar) {

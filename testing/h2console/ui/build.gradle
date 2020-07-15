@@ -2,7 +2,7 @@ group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - H2 Console (ui)'
 dependencies {
     compile project(':isis-parent:isis:isis-core-webapp')
-    compile group: 'com.h2database', name: 'h2', version: '1.4.200'
+    compile (Libs.h2)
 }
 
 task packageTests(type: Jar) {

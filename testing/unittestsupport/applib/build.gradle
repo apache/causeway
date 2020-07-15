@@ -2,18 +2,18 @@ group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - Unit Test Support (applib)'
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.7.RELEASE') {
+    compile(Libs.springBootStarterTest) {
         exclude(module: 'asm')
         exclude(module: 'spring-test')
         exclude(module: 'spring-core')
         exclude(module: 'spring-boot-starter-logging')
         exclude(module: 'slf4j-api')
     }
-    compile group: 'org.springframework', name: 'spring-test', version: '5.2.6.RELEASE'
+    compile(Libs.springTest)
     compile(group: 'org.jmock', name: 'jmock', version: '2.11.0') {
         exclude(module: 'asm')
     }
-    compile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+    compile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')
         exclude(module: 'asm')
         exclude(module: 'byte-buddy')
@@ -21,10 +21,10 @@ dependencies {
     compile group: 'com.approvaltests', name: 'approvaltests', version: '4.0.2'
     compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
     compile group: 'org.picocontainer', name: 'picocontainer', version: '2.15'
-    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
+    compile(Libs.guava)
+    compile(Libs.slf4jApi)
 
-    compile group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+    compile(Libs.javaxJdo)
 
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
     testCompile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')

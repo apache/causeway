@@ -3,9 +3,9 @@ apply plugin: 'war'
 
 dependencies {
     compile project(':isis-parent:isis:isis-core-commons')
-    compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
-    compile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
-    compile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
+    compile (Libs.junitJupiterApi)
+    compile (Libs.junitJupiterEngine)
+    compile (Libs.junitVintageEngine)
     compile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
     compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.10'
     compile(group: 'org.mockito', name: 'mockito-core', version: '3.1.0') {
@@ -13,26 +13,26 @@ dependencies {
         exclude(module: 'byte-buddy-agent')
     }
     compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
-    compile group: 'org.hamcrest', name: 'hamcrest-library', version: '2.1'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.7.RELEASE') {
+    compile(Libs.hamcrestLibrary)
+    compile (Libs.slf4jApi)
+    compile(Libs.springBootStarterTest) {
         exclude(module: 'asm')
         exclude(module: 'spring-test')
         exclude(module: 'spring-core')
         exclude(module: 'spring-boot-starter-logging')
         exclude(module: 'slf4j-api')
     }
-    compile group: 'org.springframework', name: 'spring-test', version: '5.2.6.RELEASE'
+    compile(Libs.springTest)
     compile group: 'org.picocontainer', name: 'picocontainer', version: '2.15'
     compile(group: 'org.jmock', name: 'jmock', version: '2.11.0') {
         exclude(module: 'asm')
     }
-    compile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+    compile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')
         exclude(module: 'asm')
         exclude(module: 'byte-buddy')
     }
-    compileOnly group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+    compileOnly (Libs.javaxJdo)
 }
 
 task packageTests(type: Jar) {

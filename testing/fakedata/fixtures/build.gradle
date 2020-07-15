@@ -5,7 +5,7 @@ dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
     compile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-datanucleus5')
-    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+    compile(Libs.guava)
 }
 
 task packageTests(type: Jar) {

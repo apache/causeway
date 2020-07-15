@@ -3,7 +3,7 @@ description = 'Apache Isis Ext - Flyway Impl'
 dependencies {
     compile project(':isis-parent:isis:isis-core-config')
     compile group: 'org.flywaydb', name: 'flyway-core', version: '6.0.8'
-    compile group: 'org.springframework', name: 'spring-context', version: '5.2.6.RELEASE'
+    compile (Libs.springContext)
     compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.2.7.RELEASE'
     compile group: 'org.springframework', name: 'spring-jdbc', version: '5.2.6.RELEASE'
 }

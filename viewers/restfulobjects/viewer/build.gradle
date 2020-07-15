@@ -7,7 +7,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: '2.10.4'
     testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    compileOnly group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m13'
+    compileOnly(Libs.javaxJdo)
 }
 
 task packageTests(type: Jar) {
