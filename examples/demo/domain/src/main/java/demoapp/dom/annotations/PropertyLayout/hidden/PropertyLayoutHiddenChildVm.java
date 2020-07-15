@@ -53,6 +53,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
     public PropertyLayoutHiddenChildVm(String value, PropertyLayoutHiddenVm parent) {
         setPropertyHiddenNowhere(value);
         setPropertyHiddenEverywhere(value);
+        setPropertyHiddenAnywhere(value);
 
         setPropertyHiddenAllTables(value);
         setPropertyHiddenObjectForms(value);
@@ -68,7 +69,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
         return "PropertyLayout#hidden (child object)";
     }
 
-//tag::annotation[]
+//tag::variants-nowhere[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         hidden = Where.NOWHERE                           // <.>
@@ -79,18 +80,33 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenNowhere;
+//end::variants-nowhere[]
 
+//tag::variants-everywhere[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         hidden = Where.EVERYWHERE                        // <.>
         , describedAs =
             "@PropertyLayout(hidden = Where.EVERYWHERE)"
     )
-    @MemberOrder(name = "properties", sequence = "2")
+    @MemberOrder(name = "variants", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenEverywhere;
-//end::annotation[]
+//end::variants-everywhere[]
+
+//tag::variants-anywhere[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(
+        hidden = Where.ANYWHERE                        // <.>
+        , describedAs =
+            "@PropertyLayout(hidden = Where.ANYWHERE)"
+    )
+    @MemberOrder(name = "variants", sequence = "2.1")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyHiddenAnywhere;
+//end::variants-everywhere[]
 
 //tag::variants-all_tables[]
     @Property(optionality = Optionality.OPTIONAL)

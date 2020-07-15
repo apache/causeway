@@ -8,85 +8,6 @@ Most commonly, this is to hide properties in tables (parented, standalone, or bo
 Because some of the `hidden` variants relate to tables, this view model has a collection of child objects with those child objects annotated to show the relevant options.
 There is also an action that returns this same set of child objects as a standalone list.
 
-The table below summarises the properties of the two objects, and where they should be visible.
-
-.Hidden Variants
-[cols="^1m,2a,2a,2a",options=header,frame="all"]
-|===
-^| Where
-^| This object
-^| Child object
-^| Notes
-
-| NOWHERE
-| * propertyHidden +
-NowhereUsingAnnotation +
-* propertyHidden +
-NowhereUsingLayout +
-* propertyUsing +
-MetaAnnotation +
-ButOverridden
-
-| * propertyHidden +
-Nowhere
-| Visible at all times
-
-| EVERYWHERE
-| * property +
-HiddenEverywhere +
-* property +
-UsingMetaAnnotation
-| * property +
-HiddenEverywhere
-
-| Should not be visible at all.
-
-| ANYWHERE
-| * property +
-HiddenAnywhere
-|
-| Should not be visible at all +
-(synonym for EVERYWHERE)
-
-| ALL_TABLES
-|
-| * propertyHidden +
-AllTables
-| Visible in the object form, but _not_ visible in the child collection nor in the standalone list returned by the action.
-
-| OBJECT_FORMS
-|
-| * propertyHidden +
-ObjectForms
-| Visible in collections, but _not_ in the object's detail.
-
-| STANDALONE_TABLES
-|
-| * propertyHidden +
-StandaloneTables
-| Visible in the object form and collection, but _not_ in the standalone list returned by the action.
-
-| ALL_EXCEPT_ +
-STANDALONE_TABLES
-|
-| * propertyHidden +
-AllExceptStandaloneTables
-| Visible only in the standalone list returned by the action.
-
-| PARENTED_TABLES
-|
-| * propertyHidden +
-ParentedTables
-| Visible everywhere _except_ in the collection.
-
-| REFERENCES_PARENT
-|
-| * propertyHidden +
-ReferencesParent
-| Visible everywhere _except_ in the collection, where the type of the property is the referencing parent object.
-
-|===
-
 
 == Annotated
 
@@ -127,9 +48,36 @@ TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see t
 
 == Variants
 
-As the table above outlined, the `hidden` species the the context ("where") the property is to be hidden.
+The table below lists the properties of this object, and the context (if any) in which it should be visible.
 
-This (parent) object has two variants:
+NOTE: there are other variants, the child object has all possible variants.
+
+.Hidden Variants
+[cols="^1m,2m,2a",options=header,frame="all"]
+|===
+^| Where
+^| This object
+^| Notes
+
+| NOWHERE
+| propertyHiddenNowhereUsingAnnotation
+propertyHiddenNowhereUsingLayout
+propertyUsingMetaAnnotationButOverridden
+| Visible at all times
+
+| EVERYWHERE
+| propertyHiddenEverywhere
+propertyUsingMetaAnnotation
+| Should not be visible at all.
+
+| ANYWHERE
+| propertyHiddenAnywhere
+| Should not be visible at all +
+(synonym for EVERYWHERE)
+
+|===
+
+The source for the `propertyHiddenNowhereUsingAnnotation` property is quoted above; but the other two properties are:
 
 * Everywhere:
 +
