@@ -3,18 +3,18 @@ apply plugin: 'war'
 
 dependencies {
     compile project(':isis-parent:isis:isis-core-commons')
-    compile (Libs.junitJupiterApi)
-    compile (Libs.junitJupiterEngine)
-    compile (Libs.junitVintageEngine)
-    compile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
-    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.10'
-    compile(group: 'org.mockito', name: 'mockito-core', version: '3.1.0') {
+    compile(Libs.junitJupiterApi)
+    compile(Libs.junitJupiterEngine)
+    compile(Libs.junitVintageEngine)
+    compile(Libs.assertjCore)
+    compile(Libs.byteBuddy)
+    compile(Libs.mockitoCore) {
         exclude(module: 'byte-buddy')
         exclude(module: 'byte-buddy-agent')
     }
     compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
     compile(Libs.hamcrestLibrary)
-    compile (Libs.slf4jApi)
+    compile(Libs.slf4jApi)
     compile(Libs.springBootStarterTest) {
         exclude(module: 'asm')
         exclude(module: 'spring-test')
@@ -23,8 +23,8 @@ dependencies {
         exclude(module: 'slf4j-api')
     }
     compile(Libs.springTest)
-    compile group: 'org.picocontainer', name: 'picocontainer', version: '2.15'
-    compile(group: 'org.jmock', name: 'jmock', version: '2.11.0') {
+    compile(Libs.picocontainer)
+    compile(Libs.jmock) {
         exclude(module: 'asm')
     }
     compile(Libs.jmockJunit4) {
@@ -32,7 +32,7 @@ dependencies {
         exclude(module: 'asm')
         exclude(module: 'byte-buddy')
     }
-    compileOnly (Libs.javaxJdo)
+    compileOnly(Libs.javaxJdo)
 }
 
 task packageTests(type: Jar) {

@@ -3,7 +3,7 @@ description = 'Apache Isis Ext - Wicket Viewer - fullcalendar (ui)'
 dependencies {
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-fullcalendar:isis-extensions-fullcalendar-applib')
     compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui')
-    compile group: 'net.ftlines.wicket-fullcalendar', name: 'wicket-fullcalendar-core', version: '4.2'
+    compile(Libs.wicketFullCalendarCore)
 }
 
 task packageTests(type: Jar) {

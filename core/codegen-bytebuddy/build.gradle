@@ -1,8 +1,8 @@
 description = 'Apache Isis Core - Code Gen (ByteBuddy)'
 apply plugin: 'war'
 dependencies {
-    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.10'
-    compile group: 'org.objenesis', name: 'objenesis', version: '2.6'
+    compile (Libs.byteBuddy)
+    compile (Libs.objenesis)
     compile project(':isis-parent:isis:isis-core-commons')
     testCompile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')

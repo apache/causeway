@@ -20,12 +20,12 @@ dependencies {
     testCompile(Libs.junitJupiterApi)
     testCompile(Libs.junitJupiterEngine)
     testCompile(Libs.junitVintageEngine)
-    testCompile('org.jmock:jmock:2.11.0')
+    testCompile(Libs.jmock)
     testCompile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')
         exclude(module: 'byte-buddy')
     }
-    testCompile('org.hibernate.validator:hibernate-validator:6.0.19.Final')
+    testCompile(Libs.hibernateValidator)
 }
 
 task packageTests(type: Jar) {

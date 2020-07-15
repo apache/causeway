@@ -2,39 +2,39 @@ group = 'org.apache.isis.viewer'
 description = 'Apache Isis Viewer - Wicket (UI Components)'
 dependencies {
     compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-model')
-    compile(group: 'org.apache.wicket', name: 'wicket-core', version: '8.8.0') {
+    compile(Libs.wicketCore) {
         exclude(module: 'slf4j-api')
         exclude(module: 'commons-io')
     }
-    compile(group: 'org.apache.wicket', name: 'wicket-devutils', version: '8.8.0') {
+    compile(Libs.wicketDevutils) {
         exclude(module: 'slf4j-api')
     }
     compile(Libs.slf4jApi)
-    compile(group: 'org.apache.wicket', name: 'wicket-extensions', version: '8.8.0') {
+    compile(Libs.wicketExtensions) {
         exclude(module: 'slf4j-api')
     }
-    compile(group: 'org.apache.wicket', name: 'wicket-auth-roles', version: '8.8.0') {
+    compile(Libs.wicketAuthRoles) {
         exclude(module: 'slf4j-api')
     }
-    compile(group: 'org.apache.wicket', name: 'wicket-spring', version: '8.8.0') {
+    compile(Libs.wicketSpring) {
         exclude(module: 'javax.inject')
         exclude(module: 'asm')
         exclude(module: 'slf4j-api')
         exclude(module: 'cglib')
     }
-    compile(group: 'org.wicketstuff', name: 'wicketstuff-select2', version: '8.8.0') {
+    compile(Libs.wicketstuffSelect2) {
         exclude(module: 'wicket-core')
     }
-    compile group: 'org.webjars', name: 'select2', version: '4.0.10'
-    compile(group: 'org.webjars', name: 'jquery-ui', version: '1.12.1') {
+    compile(Libs.select2)
+    compile(Libs.jqueryUi) {
         exclude(module: 'jquery')
     }
-    compile(group: 'de.agilecoders.wicket.webjars', name: 'wicket-webjars', version: '2.0.15') {
+    compile(Libs.wicketWebjars) {
         exclude(module: 'wicket-core')
         exclude(module: 'wicket-request')
         exclude(module: 'slf4j-api')
     }
-    compile(group: 'de.agilecoders.wicket', name: 'wicket-bootstrap-core', version: '2.0.13') {
+    compile(Libs.wicketBootstrapCore) {
         exclude(module: 'wicket-util')
         exclude(module: 'wicket-request')
         exclude(module: 'wicket-core')
@@ -42,7 +42,7 @@ dependencies {
         exclude(module: 'slf4j-api')
         exclude(module: 'guava')
     }
-    compile(group: 'de.agilecoders.wicket', name: 'wicket-bootstrap-extensions', version: '2.0.13') {
+    compile(Libs.wicketBootstrapExtensions) {
         exclude(module: 'wicket-util')
         exclude(module: 'wicket-request')
         exclude(module: 'wicket-core')
@@ -59,8 +59,8 @@ dependencies {
         exclude(module: 'summernote')
         exclude(module: 'guava')
     }
-    compile group: 'org.webjars.bower', name: 'summernote', version: '0.8.11'
-    compile(group: 'de.agilecoders.wicket', name: 'wicket-bootstrap-themes', version: '2.0.13') {
+    compile(Libs.summernote)
+    compile(Libs.wicketBootstrapThemes) {
         exclude(module: 'wicket-core')
     }
     compile(Libs.guava)

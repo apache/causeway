@@ -4,8 +4,8 @@ apply plugin: 'war'
 dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-core-commons')
-    compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.19.Final'
-    compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '2.2.7.RELEASE'
+    compile (Libs.hibernateValidator)
+    compile (Libs.springBootConfigurationProcessor)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis-applib')
 }

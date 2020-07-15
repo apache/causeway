@@ -4,7 +4,7 @@ dependencies {
     compile project(':isis-parent:isis:isis-core-webapp')
     compile project(':isis-parent:isis:isis-viewer-common')
     compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-rendering')
-    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: '2.10.4'
+    compile(Libs.jacksonModuleJaxbAnnotations)
     testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     compileOnly(Libs.javaxJdo)

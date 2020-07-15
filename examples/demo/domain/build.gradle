@@ -8,8 +8,8 @@ dependencies {
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib')
 
-    //compile('commons-httpclient:commons-httpclient:3.1')  // did not work for me
-    compile('org.apache.httpcomponents:httpclient:4.5.12')
+    // ISIS-2374 compile('commons-httpclient:commons-httpclient:3.1')  // did not work for me
+    compile(Libs.httpClient)
 
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-exceldownload:isis-extensions-exceldownload-ui')
     compile project(':isis-parent:isis:isis-testing:isis-testing-h2console:isis-testing-h2console-ui')

@@ -4,10 +4,10 @@ dependencies {
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib')
     compile project(':isis-parent:isis:isis-core-metamodel')
     compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui')
-    compile(group: 'com.vladsch.flexmark', name: 'flexmark-all', version: '0.34.32') {
+    compile(Libs.flexmarkAll) {
         exclude(module: 'jsoup')
     }
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
+    compile(Libs.jsoup)
 }
 
 task packageTests(type: Jar) {

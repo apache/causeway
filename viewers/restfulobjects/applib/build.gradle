@@ -2,7 +2,7 @@ group = 'org.apache.isis.viewer'
 description = 'Apache Isis Viewer - RO (AppLib)'
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.4'
+    compile(Libs.jacksonDatabind)
     testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 }

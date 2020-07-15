@@ -6,25 +6,25 @@ dependencies {
     compile project(':isis-parent:isis-schema')
     compile project(':isis-parent:isis:isis-core-commons')
 
-    compile 'javax:javaee-api:8.0'
-    compile 'com.google.code.findbugs:annotations:2.0.1'
-    compile (Libs.springContext)
-    compile 'joda-time:joda-time:2.10.6'
+    compile(Libs.javaeeApi)
+    compile(Libs.findbugsAnnotations)
+    compile(Libs.springContext)
+    compile(Libs.jodaTime)
 
     compile(Libs.springBootStarterLog4j2) {
         exclude(module: 'slf4j-api')
     }
-    compile (Libs.slf4jApi)
+    compile(Libs.slf4jApi)
 
     testCompile(Libs.junitJupiterApi)
     testCompile(Libs.junitJupiterEngine)
     testCompile(Libs.junitVintageEngine)
-    testCompile 'org.jmock:jmock:2.11.0'
+    testCompile(Libs.jmock)
     testCompile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')
         exclude(module: 'byte-buddy')
     }
-    testCompile 'org.assertj:assertj-core:3.13.2'
+    testCompile (Libs.assertjCore)
 }
 
 task packageTests(type: Jar) {

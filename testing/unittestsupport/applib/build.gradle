@@ -10,7 +10,7 @@ dependencies {
         exclude(module: 'slf4j-api')
     }
     compile(Libs.springTest)
-    compile(group: 'org.jmock', name: 'jmock', version: '2.11.0') {
+    compile(Libs.jmock) {
         exclude(module: 'asm')
     }
     compile(Libs.jmockJunit4) {
@@ -18,9 +18,9 @@ dependencies {
         exclude(module: 'asm')
         exclude(module: 'byte-buddy')
     }
-    compile group: 'com.approvaltests', name: 'approvaltests', version: '4.0.2'
+    compile(Libs.approvaltests)
     compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
-    compile group: 'org.picocontainer', name: 'picocontainer', version: '2.15'
+    compile(Libs.picocontainer)
     compile(Libs.guava)
     compile(Libs.slf4jApi)
 
@@ -31,7 +31,7 @@ dependencies {
     testCompile project(':isis-parent:isis-applib')
 
     // These dependencies are required in order to build on jdk11
-    compile('javax.xml.ws:jaxws-api:2.3.1')
+    compile(Libs.jaxwsApi)
 }
 
 task packageTests(type: Jar) {

@@ -3,7 +3,7 @@ description = 'Apache Isis Ext - CORS (impl)'
 apply plugin: 'war'
 dependencies {
     compile project(':isis-parent:isis:isis-core-metamodel')
-    compile group: 'org.ebaysf.web', name: 'cors-filter', version: '1.0.1'
+    compile(Libs.corsFilter)
     providedCompile project(':isis-parent:isis:isis-core-webapp')
 }
 

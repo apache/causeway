@@ -4,7 +4,7 @@ dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-core-commons')
     compile(Libs.javaxJdo)
-    compile group: 'org.datanucleus', name: 'datanucleus-rdbms', version: '5.2.1'
+    compile(Libs.datanucleusRdbms)
 }
 
 task packageTests(type: Jar) {

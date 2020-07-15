@@ -13,13 +13,13 @@ sourceSets {
 dependencies {
     compile project(':isis-parent:isis:isis-core-commons')
 
-    compile (Libs.springContext)
-    compile 'joda-time:joda-time:2.10.6'
+    compile(Libs.springContext)
+    compile(Libs.jodaTime)
 
     // These dependencies are required in order to build on jdk11
-    compile('javax.xml.bind:jaxb-api:2.3.1')  // not set in POM`s ??
-    compile('com.sun.xml.bind:jaxb-core:2.3.0.1')
-    compile('com.sun.xml.bind:jaxb-impl:2.3.2')
+    compile(Libs.jaxbApi)  // not set in POM`s ??
+    compile(Libs.jaxbCore)
+    compile(Libs.jaxbImpl)
 }
 
 task packageTests(type: Jar) {

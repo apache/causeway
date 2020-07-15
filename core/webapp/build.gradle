@@ -1,12 +1,12 @@
 description = 'Apache Isis Core - WebApp'
 dependencies {
     compile project(':isis-parent:isis:isis-core-runtime')
-    compile group: 'org.springframework', name: 'spring-web', version: '5.2.6.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-actuator', version: '2.2.7.RELEASE'
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.2.7.RELEASE') {
+    compile(Libs.springWeb)
+    compile(Libs.springBootActuator)
+    compile(Libs.springBootStarterThymeleaf) {
         exclude(module: 'spring-boot-starter')
     }
-    compile group: 'org.springframework.boot', name: 'spring-boot', version: '2.2.7.RELEASE'
+    compile(Libs.springBoot)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis:isis-core-runtime')
 }

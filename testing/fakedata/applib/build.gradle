@@ -2,7 +2,7 @@ group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - FakeData (applib)'
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile(group: 'com.github.javafaker', name: 'javafaker', version: '1.0.1') {
+    compile(Libs.javafaker) {
         exclude(module: 'snakeyaml')
     }
     compile(Libs.guava)

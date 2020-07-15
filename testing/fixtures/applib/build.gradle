@@ -2,7 +2,7 @@ group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - Fixtures (applib)'
 apply plugin: 'war'
 dependencies {
-    compile group: 'joda-time', name: 'joda-time', version: '2.10.6'
+    compile compile(Libs.jodaTime)
     compile project(':isis-parent:isis:isis-subdomains:isis-subdomains-spring:isis-subdomains-spring-applib')
     providedCompile project(':isis-parent:isis:isis-testing:isis-testing-integtestsupport:isis-testing-integtestsupport-applib')
     compileOnly(Libs.javaxJdo)

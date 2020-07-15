@@ -3,10 +3,10 @@ description = 'Apache Isis Security - Shiro'
 dependencies {
     compile project(':isis-parent:isis:isis-core-runtimeservices')
     compile project(':isis-parent:isis:isis-core-webapp')
-    compile(group: 'org.apache.shiro', name: 'shiro-core', version: '1.4.1') {
+    compile(Libs.shiroCore) {
         exclude(module: 'slf4j-api')
     }
-    compile group: 'org.apache.shiro', name: 'shiro-web', version: '1.4.1'
+    compile(Libs.shiroWeb)
     testCompile project(':isis-parent:isis:isis-core-runtime')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 }

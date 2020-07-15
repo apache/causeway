@@ -3,8 +3,8 @@ description = 'Apache Isis Inc - Viewer Vaadin (Model)'
 dependencies {
     compile project(':isis-parent:isis:isis-core-webapp')
     compile project(':isis-parent:isis:isis-viewer-common')
-    compile group: 'com.vaadin', name: 'vaadin', version: '14.2.0'
-    compile group: 'org.webjars.bowergithub.osano', name: 'cookieconsent', version: '3.1.0'
+    compile(Libs.vaadin)
+    compile(Libs.cookieconsent)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis:isis-core-metamodel')
 }

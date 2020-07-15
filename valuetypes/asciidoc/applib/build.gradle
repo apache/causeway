@@ -2,7 +2,7 @@ group = 'org.apache.isis.valuetypes'
 description = 'Apache Isis Val - Asciidoctor (applib)'
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile group: 'org.asciidoctor', name: 'asciidoctorj-api', version: '2.1.0'
+    compile(Libs.asciidoctorjApi)
 }
 
 task packageTests(type: Jar) {

@@ -1,12 +1,11 @@
 description = 'Apache Isis Core - Commons'
-//apply plugin: 'war'
 
 dependencies {
-    compile 'javax:javaee-api:8.0'
-    compile 'com.google.code.findbugs:annotations:2.0.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.10.4'
-    compile (Libs.springContext)
-    compile (Libs.springTx)
+    compile(Libs.javaeeApi)
+    compile(Libs.findbugsAnnotations)
+    compile(Libs.jacksonDatabind)
+    compile(Libs.springContext)
+    compile(Libs.springTx)
     compile(Libs.springBootStarter) {
         exclude(module: 'validation-api')
         exclude(module: 'spring-boot-starter-logging')
@@ -14,7 +13,7 @@ dependencies {
     compile(Libs.springBootStarterLog4j2) {
         exclude(module: 'slf4j-api')
     }
-    compile (Libs.slf4jApi)
+    compile(Libs.slf4jApi)
 
     compile(Libs.hamcrestLibrary)
 

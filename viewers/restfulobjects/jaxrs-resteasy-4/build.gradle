@@ -3,10 +3,10 @@ description = 'Apache Isis Viewer - RO (JAX-RS Resteasy v4)'
 dependencies {
     compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-rendering')
     compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer')
-    compile(group: 'org.jboss.resteasy', name: 'resteasy-spring-boot-starter', version: '4.4.0.Final') {
+    compile(Libs.resteasySpringBootStarter) {
         exclude(module: 'spring-boot-starter-logging')
     }
-    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: '2.10.4'
+    compile(Libs.jacksonModuleJaxbAnnotations)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer')

@@ -12,10 +12,10 @@ dependencies {
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-persistence-jdo')
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm')
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap:isis-extensions-shiro-realm-ldap-impl')
-    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.2.7.RELEASE'
-    testCompile group: 'org.glassfish.jersey.ext', name: 'jersey-spring5', version: '2.29.1'
-    testCompile group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
-    testCompile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.moxy', version: '2.7.5'
+    compile(Libs.springDataJpa)
+    testCompile(Libs.jerseySpring5)
+    testCompile(Libs.javaxJson)
+    testCompile(Libs.moxy)
     testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
-    testCompile group: 'org.apache.directory.server', name: 'apacheds-test-framework', version: '2.0.0.AM25'
+    testCompile(Libs.apachedsTestFramework)
 }

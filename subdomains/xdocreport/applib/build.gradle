@@ -2,11 +2,11 @@ group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - XdocReport (applib)'
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.xdocreport.document.docx', version: '1.0.6'
-    compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.xdocreport.template.freemarker', version: '1.0.6'
-    compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.xdocreport.converter.docx.xwpf', version: '1.0.6'
-    compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.pdf', version: '1.0.6'
-    compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.core', version: '1.0.6'
+    compile(Libs.xdocreportDocx)
+    compile(Libs.xdocreportFreemarker)
+    compile(Libs.xdocreportXwpf)
+    compile(Libs.xdocreportPdf)
+    compile(Libs.xdocreportCore)
     testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
     testCompile(Libs.guava)
 }

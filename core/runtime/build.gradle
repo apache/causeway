@@ -1,7 +1,7 @@
 description = 'Apache Isis Core - Runtime'
 dependencies {
     compile project(':isis-parent:isis:isis-core-metamodel')
-    compile('org.apache.commons:commons-email:1.5') {
+    compile(Libs.commonsEmail) {
         exclude(module: 'javax.mail')
         exclude(module: 'activation')
     }

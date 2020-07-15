@@ -2,11 +2,11 @@ group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - Base (applib)'
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile (Libs.guava)
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-    testCompile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    compile(Libs.guava)
+    compile(Libs.commonsLang3)
+    testCompile(Libs.reflections)
     testCompile project(':isis-parent:isis:isis-core-metamodel')
-    testCompile (Libs.javaxJdo)
+    testCompile(Libs.javaxJdo)
     testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
 }
 
