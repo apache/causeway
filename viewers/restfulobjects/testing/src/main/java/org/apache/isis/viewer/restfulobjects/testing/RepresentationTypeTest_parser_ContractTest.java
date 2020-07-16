@@ -16,12 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib;
+package org.apache.isis.viewer.restfulobjects.testing;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
 
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
 /**

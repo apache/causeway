@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.viewer.mappers;
+package org.apache.isis.viewer.restfulobjects.testing;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -36,6 +36,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
 
 /**
  * contract test.
@@ -52,8 +53,11 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
     @Before
     public void setUp() throws Exception {
-        exceptionMapper = new ExceptionMapperForRestfulObjectsApplication();
-        exceptionMapper.httpHeaders = mockHttpHeaders;
+        exceptionMapper = new ExceptionMapperForRestfulObjectsApplication() {
+            {
+                httpHeaders = mockHttpHeaders;
+            }
+        };
     }
 
     @Test

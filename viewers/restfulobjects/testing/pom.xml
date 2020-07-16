@@ -26,57 +26,34 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-viewer-restfulobjects-viewer</artifactId>
+    <artifactId>isis-viewer-restfulobjects-testing</artifactId>
 
-	<name>Apache Isis Viewer - RO (Viewer)</name>
+	<name>Apache Isis Viewer - RO (Testing)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.viewer</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/viewer</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.testing</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/testing</git-plugin.propertiesDir>
     </properties>
+
 
     <dependencies>
 
-		<dependency>
+        <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-webapp</artifactId>
-        </dependency>
-
-		<dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-common</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+            <artifactId>isis-viewer-restfulobjects-viewer</artifactId>
         </dependency>
-
-		<!-- JDO API (non transient, provided by plugin) -->
-		<dependency>
-			<!-- v3.2 not available yet, use datanucleus staging for now -->
-			<!-- <groupId>javax.jdo</groupId> -->
-			<!-- <artifactId>jdo-api</artifactId> -->
-			<groupId>org.datanucleus</groupId>
-			<artifactId>javax.jdo</artifactId>
-			<!-- provided by plugins -->
-			<scope>provided</scope>
-		</dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-        </dependency>
-
-        <!-- TESTING -->
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-internaltestsupport</artifactId>
-            <scope>test</scope>
         </dependency>
 
-    </dependencies>
+	</dependencies>
 
 
 </project>

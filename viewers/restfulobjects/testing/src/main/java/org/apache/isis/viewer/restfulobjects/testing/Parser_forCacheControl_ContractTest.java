@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib.util;
+package org.apache.isis.viewer.restfulobjects.testing;
 
 import javax.ws.rs.core.CacheControl;
 
@@ -25,6 +25,8 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
 public abstract class Parser_forCacheControl_ContractTest {
 

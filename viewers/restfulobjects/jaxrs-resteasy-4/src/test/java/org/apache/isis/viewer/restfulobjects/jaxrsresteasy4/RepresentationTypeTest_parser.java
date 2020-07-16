@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4;
 
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationTypeTest_parser_ContractTest;
+import org.apache.isis.viewer.restfulobjects.testing.RepresentationTypeTest_parser_ContractTest;
 
 public abstract class RepresentationTypeTest_parser extends RepresentationTypeTest_parser_ContractTest {
 

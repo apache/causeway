@@ -91,33 +91,13 @@
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
 
-		<!-- TEST DEPENDENCIES -->
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-metamodel</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
+		<!-- TESTING -->
 
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-restfulobjects-viewer</artifactId>
-			<type>test-jar</type>
+			<artifactId>isis-viewer-restfulobjects-testing</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
+			<version>2.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- JDO API -->
