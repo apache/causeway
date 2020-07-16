@@ -34,7 +34,9 @@ jobs:
     - name: Set up Gradle
       uses: eskatos/gradle-command-action@v1
       with:
-        arguments: build
+        wrapper-cache-enabled: true
+        dependencies-cache-enabled: true
+        arguments: --version
     
     - name: Print Gradle Version
       run: gradle --version
