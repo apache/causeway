@@ -152,6 +152,7 @@ project(':isis-parent:isis:isis-viewer-common').projectDir = "$rootDir/viewers/c
 project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-applib').projectDir = "$rootDir/viewers/restfulobjects/applib" as File
 project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-rendering').projectDir = "$rootDir/viewers/restfulobjects/rendering" as File
 project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer').projectDir = "$rootDir/viewers/restfulobjects/viewer" as File
+project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-testing').projectDir = "$rootDir/viewers/restfulobjects/testing" as File
 project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-jaxrsresteasy4').projectDir = "$rootDir/viewers/restfulobjects/jaxrs-resteasy-4" as File
 project(':isis-parent:isis:isis-viewer-restfulobjects').projectDir = "$rootDir/viewers/restfulobjects" as File
 project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-model').projectDir = "$rootDir/viewers/wicket/model" as File
