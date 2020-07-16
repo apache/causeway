@@ -20,6 +20,9 @@ webpack.generated.js
 node/
 node_modules/
 
+#Gradle
+.gradle
+
 *.exe
 *~
 *.swp
