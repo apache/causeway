@@ -18,11 +18,14 @@
  */
 package demoapp.dom.annotations.PropertyLayout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.clock.ClockService;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -34,6 +37,7 @@ import demoapp.dom.annotations.PropertyLayout.hidden.child.PropertyLayoutHiddenC
 import demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineVm;
 import demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm;
 import demoapp.dom.annotations.PropertyLayout.navigable.FileNodeVm;
+import demoapp.dom.annotations.PropertyLayout.renderDay.PropertyLayoutRenderDayVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyLayoutMenu")
 @Log4j2
@@ -93,5 +97,13 @@ public class PropertyLayoutMenu {
         return new FileNodeVm();
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-step-forward", describedAs = "Inclusive and exclusive date ranges")
+    public PropertyLayoutRenderDayVm renderDay(){
+        return new PropertyLayoutRenderDayVm(clockService.nowAsJodaLocalDate());
+    }
+
+    @Inject
+    ClockService clockService;
 
 }
