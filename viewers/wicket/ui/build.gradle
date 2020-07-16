@@ -1,0 +1,80 @@
+group = 'org.apache.isis.viewer'
+description = 'Apache Isis Viewer - Wicket (UI Components)'
+dependencies {
+    compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-model')
+    compile(Libs.wicketCore) {
+        exclude(module: 'slf4j-api')
+        exclude(module: 'commons-io')
+    }
+    compile(Libs.wicketDevutils) {
+        exclude(module: 'slf4j-api')
+    }
+    compile(Libs.slf4jApi)
+    compile(Libs.wicketExtensions) {
+        exclude(module: 'slf4j-api')
+    }
+    compile(Libs.wicketAuthRoles) {
+        exclude(module: 'slf4j-api')
+    }
+    compile(Libs.wicketSpring) {
+        exclude(module: 'javax.inject')
+        exclude(module: 'asm')
+        exclude(module: 'slf4j-api')
+        exclude(module: 'cglib')
+    }
+    compile(Libs.wicketstuffSelect2) {
+        exclude(module: 'wicket-core')
+    }
+    compile(Libs.select2)
+    compile(Libs.jqueryUi) {
+        exclude(module: 'jquery')
+    }
+    compile(Libs.wicketWebjars) {
+        exclude(module: 'wicket-core')
+        exclude(module: 'wicket-request')
+        exclude(module: 'slf4j-api')
+    }
+    compile(Libs.wicketBootstrapCore) {
+        exclude(module: 'wicket-util')
+        exclude(module: 'wicket-request')
+        exclude(module: 'wicket-core')
+        exclude(module: 'wicket-extensions')
+        exclude(module: 'slf4j-api')
+        exclude(module: 'guava')
+    }
+    compile(Libs.wicketBootstrapExtensions) {
+        exclude(module: 'wicket-util')
+        exclude(module: 'wicket-request')
+        exclude(module: 'wicket-core')
+        exclude(module: 'wicket-extensions')
+        exclude(module: 'bootstrap')
+        exclude(module: 'font-awesome')
+        exclude(module: 'jquery')
+        exclude(module: 'jquerypp')
+        exclude(module: 'jquery-ui')
+        exclude(module: 'typeaheadjs')
+        exclude(module: 'x-editable-bootstrap')
+        exclude(module: 'spin-js')
+        exclude(module: 'closure-compiler')
+        exclude(module: 'summernote')
+        exclude(module: 'guava')
+    }
+    compile(Libs.summernote)
+    compile(Libs.wicketBootstrapThemes) {
+        exclude(module: 'wicket-core')
+    }
+    compile(Libs.guava)
+    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':isis-parent:isis:isis-core-metamodel')
+    testCompile(Libs.jmockJunit4) {
+        exclude(module: 'asm')
+        exclude(module: 'junit-dep')
+    }
+    compileOnly(Libs.javaxJdo)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

@@ -1,0 +1,17 @@
+group = 'org.apache.isis.viewer'
+description = 'Apache Isis Viewer - RO (Viewer)'
+dependencies {
+    compile project(':isis-parent:isis:isis-core-webapp')
+    compile project(':isis-parent:isis:isis-viewer-common')
+    compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-rendering')
+    compile(Libs.jacksonModuleJaxbAnnotations)
+    testCompile project(':isis-parent:isis:isis-core-metamodel')
+    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    compileOnly(Libs.javaxJdo)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests
