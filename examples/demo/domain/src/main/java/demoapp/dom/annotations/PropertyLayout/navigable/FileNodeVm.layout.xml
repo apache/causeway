@@ -17,12 +17,14 @@
     </bs3:row>
 
     <bs3:row>
-        <bs3:col span="6">
+        <bs3:col span="3">
             <cpt:fieldSet name="Tree" id="tree"/>
             <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
         </bs3:col>
-        <bs3:col span="6">
+        <bs3:col span="3">
             <cpt:fieldSet name="Detail" id="detail"/>
+        </bs3:col>
+        <bs3:col span="6">
             <cpt:fieldSet name="Description" id="description" >
                 <cpt:action id="clearHints" position="PANEL" />
                 <cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>

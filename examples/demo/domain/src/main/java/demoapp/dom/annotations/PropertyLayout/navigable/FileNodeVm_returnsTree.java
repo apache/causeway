@@ -16,7 +16,7 @@ import demoapp.dom.annotations.PropertyLayout.hidden.PropertyLayoutHiddenVm;
     semantics = SemanticsOf.SAFE,
     associateWith = "tree"
 )
-@ActionLayout(cssClassFa="fa-tree", position = ActionLayout.Position.PANEL)
+@ActionLayout(cssClassFa="fa-sitemap", position = ActionLayout.Position.PANEL)
 @RequiredArgsConstructor
 public class FileNodeVm_returnsTree {
 

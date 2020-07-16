@@ -47,21 +47,16 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @NoArgsConstructor
 public class FileNodeVm implements HasAsciiDocDescription {
 
-    public static enum Type {
-        FileSystemRoot,
-        Folder,
-        File
-    }
-
     public FileNodeVm(File file) {
         this.path = file.getAbsolutePath();
         this.type = file.isDirectory()
                         ? file.getParent() == null  // ie root
-                            ? Type.FileSystemRoot
-                            : Type.Folder
-                        : Type.File;
+                            ? FileNodeType.FileSystemRoot
+                            : FileNodeType.Folder
+                        : FileNodeType.File;
     }
 
+//tag::title[]
     public String title() {
         if(this.path == null) {
             return "(root)";
@@ -69,10 +64,13 @@ public class FileNodeVm implements HasAsciiDocDescription {
         val file = asFile();
         return file.getName().length()!=0 ? file.getName() : file.toString();
     }
+//end::title[]
 
+//tag::iconName[]
     public String iconName() {
         return type!=null ? type.name() : "";
     }
+//end::iconName[]
 
 //tag::tree[]
     @Property
@@ -83,6 +81,7 @@ public class FileNodeVm implements HasAsciiDocDescription {
     }
 //end::tree[]
 
+//tag::navigable[]
     @Property
     @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE)
     @MemberOrder(name = "detail", sequence = "1")
@@ -92,22 +91,20 @@ public class FileNodeVm implements HasAsciiDocDescription {
                 ? new FileNodeVm(parentFile)
                 : null;
     }
+//end::navigable[]
 
     @Property
-    @PropertyLayout
+    @PropertyLayout(labelPosition = LabelPosition.TOP)
     @MemberOrder(name = "detail", sequence = "2")
     @Getter @Setter
     private String path;
 
     @Property
-    @PropertyLayout
+    @PropertyLayout(labelPosition = LabelPosition.TOP)
     @MemberOrder(name = "detail", sequence = "3")
     @Getter @Setter
-    private Type type;
+    private FileNodeType type;
 
-
-
-    // -- HELPER
 
     File asFile() {
         return new File(path);

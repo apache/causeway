@@ -40,16 +40,19 @@ import demoapp.dom.annotations.PropertyLayout.navigable.FileNodeVm;
 public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-css3", describedAs = "HTML styling")
     public PropertyLayoutCssClassVm cssClass(){
         return new PropertyLayoutCssClassVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-comment", describedAs = "shown as Tooltips")
     public PropertyLayoutDescribedAsVm describedAs(){
         return new PropertyLayoutDescribedAsVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties, eg in tables")
     public PropertyLayoutHiddenVm hidden() {
         val vm = new PropertyLayoutHiddenVm();
         vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 1", vm));
@@ -59,6 +62,7 @@ public class PropertyLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-align-justify", describedAs = "Textboxes")
     public PropertyLayoutMultiLineVm multiLine(){
         val vm = new PropertyLayoutMultiLineVm();
         vm.setPropertyUsingAnnotation(
@@ -78,12 +82,13 @@ public class PropertyLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-signature", describedAs = "Customised labels")
     public PropertyLayoutNamedVm named(){
         return new PropertyLayoutNamedVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-tree", describedAs = "Trees and Breadcrumbs")
+    @ActionLayout(cssClassFa="fa-sitemap", describedAs = "Breadcrumbs (and trees)")
     public FileNodeVm navigable(){
         return new FileNodeVm();
     }

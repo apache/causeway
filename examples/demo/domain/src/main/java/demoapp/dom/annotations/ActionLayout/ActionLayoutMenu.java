@@ -19,6 +19,7 @@
 package demoapp.dom.annotations.ActionLayout;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -31,11 +32,13 @@ import lombok.extern.log4j.Log4j2;
 public class ActionLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-map-pin", describedAs = "Position of action buttons")
     public demoapp.dom.annotations.ActionLayout.position.ActionLayoutPositionVm position(){
         return new demoapp.dom.annotations.ActionLayout.position.ActionLayoutPositionVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-terminal", describedAs = "Location and style of action's prompt dialog")
     public demoapp.dom.annotations.ActionLayout.promptStyle.ActionLayoutPromptStyleVm promptStyle(){
         return new demoapp.dom.annotations.ActionLayout.promptStyle.ActionLayoutPromptStyleVm();
     }

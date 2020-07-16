@@ -26,14 +26,15 @@ import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 import lombok.val;
 
+//tag::class[]
 public class FileSystemTreeAdapter implements TreeAdapter<FileNodeVm> {
 
     @Override
-    public Optional<FileNodeVm> parentOf(FileNodeVm value) {
-        if(value.getType() == FileNodeVm.Type.FileSystemRoot) {
+    public Optional<FileNodeVm> parentOf(FileNodeVm fileNode) {
+        if(fileNode.getType() == FileNodeType.FileSystemRoot) {
             return Optional.empty();
         }
-        val parentFolderIfAny = value.asFile().getParentFile();
+        val parentFolderIfAny = fileNode.asFile().getParentFile();
         return Optional.ofNullable(parentFolderIfAny)
                 .map(FileNodeVm::new);
     }
@@ -49,16 +50,14 @@ public class FileSystemTreeAdapter implements TreeAdapter<FileNodeVm> {
                 .map(FileNodeVm::new);
     }
 
-    // -- HELPER
 
-    private static Stream<File> streamChildFiles(FileNodeVm value){
-        val file = value.asFile();
+    private static Stream<File> streamChildFiles(FileNodeVm fileNode){
+        val file = fileNode.asFile();
         val childFiles = file.listFiles();
-        if(childFiles==null) {
-            return Stream.empty();
-        }
-        return Stream.of(childFiles)
-                .filter(f->!f.isHidden());
+        return childFiles != null
+                ? Stream.of(childFiles)
+                        .filter(f -> !f.isHidden())
+                : Stream.empty();
     }
-
 }
+//end::class[]

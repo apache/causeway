@@ -32,7 +32,7 @@ import org.apache.isis.applib.graph.tree.TreePath;
 
 import lombok.val;
 
-//tag::class[]
+//tag::sessionTree[]
 @Service
 @Named("demo.FileTreeNodeService")
 public class FileTreeNodeService {
@@ -45,17 +45,25 @@ public class FileTreeNodeService {
         }
         return tree;
     }
+//end::sessionTree[]
 
+//tag::newTree[]
     private static TreeNode<FileNodeVm> newTree() {
         TreeNode<FileNodeVm> tree;
         val rootFile = FileSystems.getDefault().getRootDirectories().iterator().next().toFile();
         val rootNode = new FileNodeVm(rootFile);
         tree = TreeNode.lazy(rootNode, FileSystemTreeAdapter.class);
-        // tree.expand(TreePath.of(0)); // expand the root node
+        tree.expand(TreePath.of(0)); // expand the root node
         return tree;
     }
+//end::newTree[]
+
+
+//tag::sessionTree[]
+
+    // ...
 
     @Inject
     private Provider<HttpSession> httpSessionProvider;
 }
-//end::class[]
+//end::sessionTree[]
