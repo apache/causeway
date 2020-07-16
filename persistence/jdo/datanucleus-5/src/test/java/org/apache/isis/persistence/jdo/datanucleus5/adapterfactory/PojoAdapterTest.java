@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.adapterfactory.pojo;
+package org.apache.isis.persistence.jdo.datanucleus5.adapterfactory;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

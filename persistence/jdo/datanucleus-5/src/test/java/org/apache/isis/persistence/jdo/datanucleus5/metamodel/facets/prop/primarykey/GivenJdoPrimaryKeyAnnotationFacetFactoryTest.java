@@ -24,14 +24,15 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.persistence.jdo.datanucleus5.testing.AbstractFacetFactoryTest;
 
 import lombok.val;
 
-public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest 
+extends AbstractFacetFactoryTest {
 
     private JdoPrimaryKeyAnnotationFacetFactory facetFactory;
 

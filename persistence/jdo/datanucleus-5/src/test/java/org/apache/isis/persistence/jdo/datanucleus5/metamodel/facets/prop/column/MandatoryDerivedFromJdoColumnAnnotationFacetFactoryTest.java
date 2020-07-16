@@ -24,13 +24,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.persistence.jdo.datanucleus5.testing.AbstractFacetFactoryTest;
 
 import lombok.val;
 
-public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest 
+extends AbstractFacetFactoryTest {
 
     private MandatoryFromJdoColumnAnnotationFacetFactory facetFactory;
     private Class<?> cls;

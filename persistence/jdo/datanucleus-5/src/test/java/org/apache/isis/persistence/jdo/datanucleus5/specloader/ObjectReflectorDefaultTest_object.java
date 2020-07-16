@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader;
+package org.apache.isis.persistence.jdo.datanucleus5.specloader;
 
 import org.datanucleus.enhancement.Persistable;
 import org.junit.jupiter.api.Test;
@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract {
 

@@ -25,13 +25,14 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.persistence.jdo.datanucleus5.testing.AbstractFacetFactoryTest;
 
 import lombok.val;
 
-public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest 
+extends AbstractFacetFactoryTest {
 
     private BigDecimalDerivedFromJdoColumnAnnotationFacetFactory facetFactory;
 

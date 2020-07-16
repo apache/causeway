@@ -6,7 +6,6 @@ dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-legacy:isis-legacy-applib')
     compile project(':isis-parent:isis:isis-core-metamodel')
-    testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
     compileOnly(Libs.javaxJdo)
     providedCompile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib')

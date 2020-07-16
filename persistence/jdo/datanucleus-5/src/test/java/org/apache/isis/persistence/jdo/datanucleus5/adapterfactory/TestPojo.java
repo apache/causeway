@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.adapterfactory.pojo;
+package org.apache.isis.persistence.jdo.datanucleus5.adapterfactory;
 
 public class TestPojo {
 

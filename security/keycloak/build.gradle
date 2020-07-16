@@ -3,7 +3,6 @@ description = 'Apache Isis Security - Keycloak'
 dependencies {
     compile project(':isis-parent:isis:isis-core-runtimeservices')
     compile project(':isis-parent:isis:isis-core-webapp')
-    testCompile project(':isis-parent:isis:isis-core-runtime')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 }
 
