@@ -1,0 +1,15 @@
+group = 'org.apache.isis.testing'
+description = 'Apache Isis Tst - Spec/Cucumber (applib)'
+dependencies {
+    compile project(':isis-parent:isis:isis-testing:isis-testing-integtestsupport:isis-testing-integtestsupport-applib')
+    compile(Libs.cucumberJava)
+    compile(Libs.cucumberSpring)
+    compile(Libs.cucumberJunit)
+    compile(Libs.junitJupiterApi)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

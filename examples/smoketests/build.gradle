@@ -1,0 +1,21 @@
+group = 'org.apache.isis.app'
+description = 'Apache Isis App - Smoketests'
+dependencies {
+    compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp')
+    compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-jdk11')
+    compile project(':isis-parent:isis:isis-security-shiro')
+    compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
+    compile project(':isis-parent:isis:isis-mappings:isis-mappings-restclient-api')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-modelannotation')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-model')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-encryption-jbcrypt')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-persistence-jdo')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm')
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap:isis-extensions-shiro-realm-ldap-impl')
+    compile(Libs.springDataJpa)
+    testCompile(Libs.jerseySpring5)
+    testCompile(Libs.javaxJson)
+    testCompile(Libs.moxy)
+    testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
+    testCompile(Libs.apachedsTestFramework)
+}

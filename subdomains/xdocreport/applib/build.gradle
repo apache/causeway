@@ -1,0 +1,18 @@
+group = 'org.apache.isis.subdomains'
+description = 'Apache Isis Sub - XdocReport (applib)'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile(Libs.xdocreportDocx)
+    compile(Libs.xdocreportFreemarker)
+    compile(Libs.xdocreportXwpf)
+    compile(Libs.xdocreportPdf)
+    compile(Libs.xdocreportCore)
+    testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
+    testCompile(Libs.guava)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

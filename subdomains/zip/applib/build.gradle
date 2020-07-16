@@ -1,0 +1,12 @@
+group = 'org.apache.isis.subdomains'
+description = 'Apache Isis Sub - Zip (applib)'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile(Libs.guava)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

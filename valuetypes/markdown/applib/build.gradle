@@ -1,0 +1,12 @@
+group = 'org.apache.isis.valuetypes'
+description = 'Apache Isis Val - Markdown (applib)'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compileOnly(Libs.flexmarkAll)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

@@ -1,0 +1,12 @@
+group = 'org.apache.isis.extensions'
+description = 'Apache Isis Ext - Security - Shiro LDAP Realm (impl)'
+dependencies {
+    compile project(':isis-parent:isis:isis-security-shiro')
+    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

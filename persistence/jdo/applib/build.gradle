@@ -1,0 +1,14 @@
+group = 'org.apache.isis.persistence'
+description = 'Apache Isis Persistence - JDO (applib)'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile project(':isis-parent:isis:isis-core-commons')
+    compile(Libs.javaxJdo)
+    compile(Libs.datanucleusRdbms)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

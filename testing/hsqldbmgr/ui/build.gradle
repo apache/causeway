@@ -1,0 +1,12 @@
+group = 'org.apache.isis.testing'
+description = 'Apache Isis Tst - HSQLDB Manager'
+dependencies {
+    compile project(':isis-parent:isis:isis-core-webapp')
+    compile(Libs.hsqldb)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

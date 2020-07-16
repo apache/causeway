@@ -1,0 +1,31 @@
+description = 'Apache Isis Core - Commons'
+
+dependencies {
+    compile(Libs.javaeeApi)
+    compile(Libs.findbugsAnnotations)
+    compile(Libs.jacksonDatabind)
+    compile(Libs.springContext)
+    compile(Libs.springTx)
+    compile(Libs.springBootStarter) {
+        exclude(module: 'validation-api')
+        exclude(module: 'spring-boot-starter-logging')
+    }
+    compile(Libs.springBootStarterLog4j2) {
+        exclude(module: 'slf4j-api')
+    }
+    compile(Libs.slf4jApi)
+
+    compile(Libs.hamcrestLibrary)
+
+    testCompile(Libs.junitJupiterApi)
+    testCompile(Libs.junitJupiterEngine)
+    testCompile(Libs.junitVintageEngine)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests
+
+

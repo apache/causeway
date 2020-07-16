@@ -1,0 +1,12 @@
+group = 'org.apache.isis.valuetypes'
+description = 'Apache Isis Val - Asciidoctor (applib)'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile(Libs.asciidoctorjApi)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

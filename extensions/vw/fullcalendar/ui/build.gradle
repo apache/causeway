@@ -1,0 +1,13 @@
+group = 'org.apache.isis.extensions'
+description = 'Apache Isis Ext - Wicket Viewer - fullcalendar (ui)'
+dependencies {
+    compile project(':isis-parent:isis:isis-extensions:isis-extensions-fullcalendar:isis-extensions-fullcalendar-applib')
+    compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui')
+    compile(Libs.wicketFullCalendarCore)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

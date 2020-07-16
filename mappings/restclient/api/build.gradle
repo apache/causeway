@@ -1,0 +1,13 @@
+group = 'org.apache.isis.mappings'
+description = 'Apache Isis Ext - REST Client'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile project(':isis-parent:isis:isis-core-commons')
+    compile (Libs.springContext)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

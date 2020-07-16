@@ -1,0 +1,16 @@
+group = 'org.apache.isis.testing'
+description = 'Apache Isis Tst - FakeData (applib)'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile(Libs.javafaker) {
+        exclude(module: 'snakeyaml')
+    }
+    compile(Libs.guava)
+    testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

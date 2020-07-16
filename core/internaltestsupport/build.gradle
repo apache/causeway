@@ -1,0 +1,42 @@
+description = 'Apache Isis Core - Unit Test Support'
+apply plugin: 'war'
+
+dependencies {
+    compile project(':isis-parent:isis:isis-core-commons')
+    compile(Libs.junitJupiterApi)
+    compile(Libs.junitJupiterEngine)
+    compile(Libs.junitVintageEngine)
+    compile(Libs.assertjCore)
+    compile(Libs.byteBuddy)
+    compile(Libs.mockitoCore) {
+        exclude(module: 'byte-buddy')
+        exclude(module: 'byte-buddy-agent')
+    }
+    compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
+    compile(Libs.hamcrestLibrary)
+    compile(Libs.slf4jApi)
+    compile(Libs.springBootStarterTest) {
+        exclude(module: 'asm')
+        exclude(module: 'spring-test')
+        exclude(module: 'spring-core')
+        exclude(module: 'spring-boot-starter-logging')
+        exclude(module: 'slf4j-api')
+    }
+    compile(Libs.springTest)
+    compile(Libs.picocontainer)
+    compile(Libs.jmock) {
+        exclude(module: 'asm')
+    }
+    compile(Libs.jmockJunit4) {
+        exclude(module: 'junit-dep')
+        exclude(module: 'asm')
+        exclude(module: 'byte-buddy')
+    }
+    compileOnly(Libs.javaxJdo)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

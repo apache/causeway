@@ -1,0 +1,35 @@
+description = 'Apache Isis Core - MetaModel'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile project(':isis-parent:isis:isis-core-config')
+    compile project(':isis-parent:isis:isis-core-security')
+    compile(Libs.swaggerCore) {
+        exclude(module: 'guava')
+        exclude(module: 'validation-api')
+        exclude(module: 'snakeyaml')
+        exclude(module: 'slf4j-api')
+        exclude(module: 'commons-lang3')
+    }
+    compile project(':isis-parent:isis:isis-core-commons')
+
+    testCompile project(':isis-parent:isis:isis-core-config')
+    testCompile project(':isis-parent:isis-applib')
+    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':isis-parent:isis:isis-core-runtimeservices')
+
+    testCompile(Libs.junitJupiterApi)
+    testCompile(Libs.junitJupiterEngine)
+    testCompile(Libs.junitVintageEngine)
+    testCompile(Libs.jmock)
+    testCompile(Libs.jmockJunit4) {
+        exclude(module: 'junit-dep')
+        exclude(module: 'byte-buddy')
+    }
+    testCompile(Libs.hibernateValidator)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    archiveClassifier = 'tests'
+}
+artifacts.archives packageTests

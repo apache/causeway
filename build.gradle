@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "io.freefair.gradle:lombok-plugin:5.1.0"
+    }
+}
+
+apply from: '/dependencies.gradle'
+
+allprojects {
+    apply plugin: "io.freefair.lombok"
+    apply plugin: 'maven'
+    group = 'org.apache.isis'
+    version = '2.0.0-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: "io.freefair.lombok"
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+        jcenter()
+
+        maven { url "http://repo.maven.apache.org/maven2" }
+        maven { url "https://repo.maven.apache.org/maven2" }
+        maven { url "https://repository.apache.org/" }
+        maven { url "https://repository.jboss.org/nexus/content/groups/public-jboss/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "https://repository.apache.org/snapshots" }
+        maven { url "https://repo1.maven.org/maven2" }
+        mavenLocal()
+    }
+
+    test {
+        ignoreFailures = true
+    }
+
+}

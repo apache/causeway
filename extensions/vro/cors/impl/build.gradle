@@ -1,0 +1,14 @@
+group = 'org.apache.isis.extensions'
+description = 'Apache Isis Ext - CORS (impl)'
+apply plugin: 'war'
+dependencies {
+    compile project(':isis-parent:isis:isis-core-metamodel')
+    compile(Libs.corsFilter)
+    providedCompile project(':isis-parent:isis:isis-core-webapp')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

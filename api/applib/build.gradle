@@ -1,0 +1,36 @@
+description = 'Apache Isis Core - AppLib'
+apply plugin: 'war'
+apply plugin: 'io.freefair.lombok'
+
+dependencies {
+    compile project(':isis-parent:isis-schema')
+    compile project(':isis-parent:isis:isis-core-commons')
+
+    compile(Libs.javaeeApi)
+    compile(Libs.findbugsAnnotations)
+    compile(Libs.springContext)
+    compile(Libs.jodaTime)
+
+    compile(Libs.springBootStarterLog4j2) {
+        exclude(module: 'slf4j-api')
+    }
+    compile(Libs.slf4jApi)
+
+    testCompile(Libs.junitJupiterApi)
+    testCompile(Libs.junitJupiterEngine)
+    testCompile(Libs.junitVintageEngine)
+    testCompile(Libs.jmock)
+    testCompile(Libs.jmockJunit4) {
+        exclude(module: 'junit-dep')
+        exclude(module: 'byte-buddy')
+    }
+    testCompile (Libs.assertjCore)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests
+
+

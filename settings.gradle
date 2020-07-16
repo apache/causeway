@@ -1,0 +1,268 @@
+rootProject.name = 'isis-all'
+include ':isis-parent:isis-schema'
+include ':isis-parent:isis-applib'
+include ':isis-parent:isis:isis-core-codegen-bytebuddy'
+include ':isis-parent:isis:isis-core-commons'
+include ':isis-parent:isis:isis-core-config'
+include ':isis-parent:isis:isis-core-internaltestsupport'
+include ':isis-parent:isis:isis-core-metamodel'
+include ':isis-parent:isis:isis-core-runtime'
+include ':isis-parent:isis:isis-core-runtimeservices'
+include ':isis-parent:isis:isis-core-webapp'
+include ':isis-parent:isis:isis-core-security'
+include ':isis-parent:isis:isis-security-bypass'
+include ':isis-parent:isis:isis-security-shiro'
+include ':isis-parent:isis:isis-security-keycloak'
+include ':isis-parent:isis:isis-viewer-common'
+include ':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-applib'
+include ':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-rendering'
+include ':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer'
+include ':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-jaxrsresteasy4'
+include ':isis-parent:isis:isis-viewer-restfulobjects'
+include ':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-model'
+include ':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-viewer'
+include ':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui'
+include ':isis-parent:isis:isis-viewer-wicket'
+include ':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib'
+include ':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-datanucleus5'
+include ':isis-parent:isis:isis-persistence-jdo'
+include ':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-applib'
+include ':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-model'
+include ':isis-parent:isis:isis-persistence-jpa'
+include ':isis-parent:isis'
+include ':isis-parent:isis:isis-extensions:isis-extensions-flyway:isis-extensions-flyway-impl'
+include ':isis-parent:isis:isis-extensions:isis-extensions-flyway'
+include ':isis-parent:isis:isis-extensions:isis-extensions-modelannotation'
+include ':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-api'
+include ':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-model'
+include ':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-encryption-jbcrypt'
+include ':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-persistence-jdo'
+include ':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm'
+include ':isis-parent:isis:isis-extensions:isis-extensions-secman'
+include ':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap:isis-extensions-shiro-realm-ldap-impl'
+include ':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap'
+include ':isis-parent:isis:isis-extensions:isis-extensions-cors:isis-extensions-cors-impl'
+include ':isis-parent:isis:isis-extensions:isis-extensions-cors'
+include ':isis-parent:isis:isis-extensions:isis-extensions-exceldownload:isis-extensions-exceldownload-ui'
+include ':isis-parent:isis:isis-extensions:isis-extensions-exceldownload'
+include ':isis-parent:isis:isis-extensions:isis-extensions-fullcalendar:isis-extensions-fullcalendar-applib'
+include ':isis-parent:isis:isis-extensions:isis-extensions-fullcalendar:isis-extensions-fullcalendar-ui'
+include ':isis-parent:isis:isis-extensions:isis-extensions-fullcalendar'
+include ':isis-parent:isis:isis-extensions:isis-extensions-pdfjs:isis-extensions-pdfjs-applib'
+include ':isis-parent:isis:isis-extensions:isis-extensions-pdfjs:isis-extensions-pdfjs-metamodel'
+include ':isis-parent:isis:isis-extensions:isis-extensions-pdfjs:isis-extensions-pdfjs-ui'
+include ':isis-parent:isis:isis-extensions:isis-extensions-pdfjs'
+include ':isis-parent:isis:isis-extensions'
+include ':isis-parent:isis:isis-incubator:isis-incubator-microprofile'
+include ':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-model'
+include ':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-viewer'
+include ':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-ui'
+include ':isis-parent:isis:isis-incubator:isis-viewer-vaadin'
+include ':isis-parent:isis:isis-incubator'
+include ':isis-parent:isis:isis-legacy:isis-legacy-applib'
+include ':isis-parent:isis:isis-legacy:isis-legacy-commons'
+include ':isis-parent:isis:isis-legacy:isis-legacy-metamodel'
+include ':isis-parent:isis:isis-legacy:isis-legacy-runtime'
+include ':isis-parent:isis:isis-legacy:isis-legacy-restclient'
+include ':isis-parent:isis:isis-legacy'
+include ':isis-parent:isis:isis-mappings:isis-mappings-jaxrsclient:isis-mappings-jaxrsclient-api'
+include ':isis-parent:isis:isis-mappings:isis-mappings-jaxrsclient'
+include ':isis-parent:isis:isis-mappings:isis-mappings-restclient-api'
+include ':isis-parent:isis:isis-mappings:isis-mappings-restclient'
+include ':isis-parent:isis:isis-mappings'
+include ':isis-parent:isis:isis-mavendeps:isis-mavendeps-jdk11'
+include ':isis-parent:isis:isis-mavendeps:isis-mavendeps-unittests'
+include ':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests'
+include ':isis-parent:isis:isis-mavendeps:isis-mavendeps-integspecs'
+include ':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp'
+include ':isis-parent:isis:isis-mavendeps'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-base:isis-subdomains-base-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-base'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-docx:isis-subdomains-docx-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-docx'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-excel:isis-subdomains-excel-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-excel-fixtures'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-excel-integtests'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-excel:isis-subdomains-excel-testing'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-excel'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-freemarker:isis-subdomains-freemarker-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-freemarker'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-ognl-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-ognl'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-pdfbox:isis-subdomains-pdfbox-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-pdfbox'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-spring:isis-subdomains-spring-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-spring'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-xdocreport:isis-subdomains-xdocreport-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-xdocreport'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-zip:isis-subdomains-zip-applib'
+include ':isis-parent:isis:isis-subdomains:isis-subdomains-zip'
+include ':isis-parent:isis:isis-subdomains'
+include ':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-applib'
+include ':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-fixtures'
+include ':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-integtests'
+include ':isis-parent:isis:isis-testing:isis-testing-fakedata'
+include ':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib'
+include ':isis-parent:isis:isis-testing:isis-testing-fixtures'
+include ':isis-parent:isis:isis-testing:isis-testing-h2console:isis-testing-h2console-ui'
+include ':isis-parent:isis:isis-testing:isis-testing-h2console'
+include ':isis-parent:isis:isis-testing:isis-testing-hsqldbmgr:isis-testing-hsqldbmgr-ui'
+include ':isis-parent:isis:isis-testing:isis-testing-hsqldbmgr'
+include ':isis-parent:isis:isis-testing:isis-testing-specsupport:isis-testing-specsupport-applib'
+include ':isis-parent:isis:isis-testing:isis-testing-specsupport'
+include ':isis-parent:isis:isis-testing:isis-testing-integtestsupport:isis-testing-integtestsupport-applib'
+include ':isis-parent:isis:isis-testing:isis-testing-integtestsupport'
+include ':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib'
+include ':isis-parent:isis:isis-testing:isis-testing-unittestsupport'
+include ':isis-parent:isis:isis-testing'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui:isis-valuetypes-asciidoc-ui-vaa'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui:isis-valuetypes-asciidoc-ui-wkt'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-ui'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse-applib'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse:isis-valuetypes-sse-metamodel'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse:isis-valuetypes-sse-ui'
+include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse'
+include ':isis-parent:isis:isis-valuetypes'
+//include ':isis-app-starter-parent:demo-parent:demo-domain'
+//include ':isis-app-starter-parent:demo-parent:demo-wicket'
+include ':isis-app-starter-parent:demo-parent'
+include ':isis-app-starter-parent:smoketests'
+
+project(':isis-parent:isis-schema').projectDir = "$rootDir/api/schema" as File
+project(':isis-parent:isis-applib').projectDir = "$rootDir/api/applib" as File
+project(':isis-parent:isis:isis-core-codegen-bytebuddy').projectDir = "$rootDir/core/codegen-bytebuddy" as File
+project(':isis-parent:isis:isis-core-commons').projectDir = "$rootDir/core/commons" as File
+project(':isis-parent:isis:isis-core-config').projectDir = "$rootDir/core/config" as File
+project(':isis-parent:isis:isis-core-internaltestsupport').projectDir = "$rootDir/core/internaltestsupport" as File
+project(':isis-parent:isis:isis-core-metamodel').projectDir = "$rootDir/core/metamodel" as File
+project(':isis-parent:isis:isis-core-runtime').projectDir = "$rootDir/core/runtime" as File
+project(':isis-parent:isis:isis-core-runtimeservices').projectDir = "$rootDir/core/runtimeservices" as File
+project(':isis-parent:isis:isis-core-webapp').projectDir = "$rootDir/core/webapp" as File
+project(':isis-parent:isis:isis-core-security').projectDir = "$rootDir/core/security" as File
+project(':isis-parent:isis:isis-security-bypass').projectDir = "$rootDir/security/bypass" as File
+project(':isis-parent:isis:isis-security-shiro').projectDir = "$rootDir/security/shiro" as File
+project(':isis-parent:isis:isis-security-keycloak').projectDir = "$rootDir/security/keycloak" as File
+project(':isis-parent:isis:isis-viewer-common').projectDir = "$rootDir/viewers/common" as File
+project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-applib').projectDir = "$rootDir/viewers/restfulobjects/applib" as File
+project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-rendering').projectDir = "$rootDir/viewers/restfulobjects/rendering" as File
+project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer').projectDir = "$rootDir/viewers/restfulobjects/viewer" as File
+project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-jaxrsresteasy4').projectDir = "$rootDir/viewers/restfulobjects/jaxrs-resteasy-4" as File
+project(':isis-parent:isis:isis-viewer-restfulobjects').projectDir = "$rootDir/viewers/restfulobjects" as File
+project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-model').projectDir = "$rootDir/viewers/wicket/model" as File
+project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-viewer').projectDir = "$rootDir/viewers/wicket/viewer" as File
+project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui').projectDir = "$rootDir/viewers/wicket/ui" as File
+project(':isis-parent:isis:isis-viewer-wicket').projectDir = "$rootDir/viewers/wicket" as File
+project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib').projectDir = "$rootDir/persistence/jdo/applib" as File
+project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-datanucleus5').projectDir = "$rootDir/persistence/jdo/datanucleus-5" as File
+project(':isis-parent:isis:isis-persistence-jdo').projectDir = "$rootDir/persistence/jdo" as File
+project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-applib').projectDir = "$rootDir/persistence/jpa/applib" as File
+project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-model').projectDir = "$rootDir/persistence/jpa/model" as File
+project(':isis-parent:isis:isis-persistence-jpa').projectDir = "$rootDir/persistence/jpa" as File
+project(':isis-parent:isis').projectDir = "$rootDir/core" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-flyway:isis-extensions-flyway-impl').projectDir = "$rootDir/extensions/core/flyway/impl" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-flyway').projectDir = "$rootDir/extensions/core/flyway" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-modelannotation').projectDir = "$rootDir/extensions/core/model-annotation" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-api').projectDir = "$rootDir/extensions/security/secman/api" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-model').projectDir = "$rootDir/extensions/security/secman/model" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-encryption-jbcrypt').projectDir = "$rootDir/extensions/security/secman/encryption-jbcrypt" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-persistence-jdo').projectDir = "$rootDir/extensions/security/secman/persistence-jdo" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm').projectDir = "$rootDir/extensions/security/secman/shiro-realm" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-secman').projectDir = "$rootDir/extensions/security/secman" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap:isis-extensions-shiro-realm-ldap-impl').projectDir = "$rootDir/extensions/security/shiro-realm-ldap/impl" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap').projectDir = "$rootDir/extensions/security/shiro-realm-ldap" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-cors:isis-extensions-cors-impl').projectDir = "$rootDir/extensions/vro/cors/impl" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-cors').projectDir = "$rootDir/extensions/vro/cors" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-exceldownload:isis-extensions-exceldownload-ui').projectDir = "$rootDir/extensions/vw/exceldownload/ui" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-exceldownload').projectDir = "$rootDir/extensions/vw/exceldownload" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-fullcalendar:isis-extensions-fullcalendar-applib').projectDir = "$rootDir/extensions/vw/fullcalendar/applib" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-fullcalendar:isis-extensions-fullcalendar-ui').projectDir = "$rootDir/extensions/vw/fullcalendar/ui" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-fullcalendar').projectDir = "$rootDir/extensions/vw/fullcalendar" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-pdfjs:isis-extensions-pdfjs-applib').projectDir = "$rootDir/extensions/vw/pdfjs/applib" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-pdfjs:isis-extensions-pdfjs-metamodel').projectDir = "$rootDir/extensions/vw/pdfjs/metamodel" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-pdfjs:isis-extensions-pdfjs-ui').projectDir = "$rootDir/extensions/vw/pdfjs/ui" as File
+project(':isis-parent:isis:isis-extensions:isis-extensions-pdfjs').projectDir = "$rootDir/extensions/vw/pdfjs" as File
+project(':isis-parent:isis:isis-extensions').projectDir = "$rootDir/extensions" as File
+project(':isis-parent:isis:isis-incubator:isis-incubator-microprofile').projectDir = "$rootDir/incubator/mappings/microprofile" as File
+project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-model').projectDir = "$rootDir/incubator/viewers/vaadin/model" as File
+project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-viewer').projectDir = "$rootDir/incubator/viewers/vaadin/viewer" as File
+project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-ui').projectDir = "$rootDir/incubator/viewers/vaadin/ui" as File
+project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin').projectDir = "$rootDir/incubator/viewers/vaadin" as File
+project(':isis-parent:isis:isis-incubator').projectDir = "$rootDir/incubator" as File
+project(':isis-parent:isis:isis-legacy:isis-legacy-applib').projectDir = "$rootDir/legacy/extensions/core/applib" as File
+project(':isis-parent:isis:isis-legacy:isis-legacy-commons').projectDir = "$rootDir/legacy/extensions/core/commons" as File
+project(':isis-parent:isis:isis-legacy:isis-legacy-metamodel').projectDir = "$rootDir/legacy/extensions/core/metamodel" as File
+project(':isis-parent:isis:isis-legacy:isis-legacy-runtime').projectDir = "$rootDir/legacy/extensions/core/runtime" as File
+project(':isis-parent:isis:isis-legacy:isis-legacy-restclient').projectDir = "$rootDir/legacy/mappings/restclient" as File
+project(':isis-parent:isis:isis-legacy').projectDir = "$rootDir/legacy" as File
+project(':isis-parent:isis:isis-mappings:isis-mappings-jaxrsclient:isis-mappings-jaxrsclient-api').projectDir = "$rootDir/mappings/jaxrsclient/api" as File
+project(':isis-parent:isis:isis-mappings:isis-mappings-jaxrsclient').projectDir = "$rootDir/mappings/jaxrsclient" as File
+project(':isis-parent:isis:isis-mappings:isis-mappings-restclient-api').projectDir = "$rootDir/mappings/restclient/api" as File
+project(':isis-parent:isis:isis-mappings:isis-mappings-restclient').projectDir = "$rootDir/mappings/restclient" as File
+project(':isis-parent:isis:isis-mappings').projectDir = "$rootDir/mappings" as File
+project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-jdk11').projectDir = "$rootDir/mavendeps/jdk11" as File
+project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-unittests').projectDir = "$rootDir/mavendeps/unittests" as File
+project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests').projectDir = "$rootDir/mavendeps/integtests" as File
+project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integspecs').projectDir = "$rootDir/mavendeps/integspecs" as File
+project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp').projectDir = "$rootDir/mavendeps/webapp" as File
+project(':isis-parent:isis:isis-mavendeps').projectDir = "$rootDir/mavendeps" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-base:isis-subdomains-base-applib').projectDir = "$rootDir/subdomains/base/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-base').projectDir = "$rootDir/subdomains/base" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-docx:isis-subdomains-docx-applib').projectDir = "$rootDir/subdomains/docx/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-docx').projectDir = "$rootDir/subdomains/docx" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-excel:isis-subdomains-excel-applib').projectDir = "$rootDir/subdomains/excel/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-excel-fixtures').projectDir = "$rootDir/subdomains/excel/fixture" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-excel-integtests').projectDir = "$rootDir/subdomains/excel/integtests" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-excel:isis-subdomains-excel-testing').projectDir = "$rootDir/subdomains/excel/testing" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-excel').projectDir = "$rootDir/subdomains/excel" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-freemarker:isis-subdomains-freemarker-applib').projectDir = "$rootDir/subdomains/freemarker/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-freemarker').projectDir = "$rootDir/subdomains/freemarker" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-ognl-applib').projectDir = "$rootDir/subdomains/ognl/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-ognl').projectDir = "$rootDir/subdomains/ognl" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-pdfbox:isis-subdomains-pdfbox-applib').projectDir = "$rootDir/subdomains/pdfbox/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-pdfbox').projectDir = "$rootDir/subdomains/pdfbox" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-spring:isis-subdomains-spring-applib').projectDir = "$rootDir/subdomains/spring/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-spring').projectDir = "$rootDir/subdomains/spring" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-xdocreport:isis-subdomains-xdocreport-applib').projectDir = "$rootDir/subdomains/xdocreport/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-xdocreport').projectDir = "$rootDir/subdomains/xdocreport" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-zip:isis-subdomains-zip-applib').projectDir = "$rootDir/subdomains/zip/applib" as File
+project(':isis-parent:isis:isis-subdomains:isis-subdomains-zip').projectDir = "$rootDir/subdomains/zip" as File
+project(':isis-parent:isis:isis-subdomains').projectDir = "$rootDir/subdomains" as File
+project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-applib').projectDir = "$rootDir/testing/fakedata/applib" as File
+project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-fixtures').projectDir = "$rootDir/testing/fakedata/fixtures" as File
+project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-integtests').projectDir = "$rootDir/testing/fakedata/integtests" as File
+project(':isis-parent:isis:isis-testing:isis-testing-fakedata').projectDir = "$rootDir/testing/fakedata" as File
+project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib').projectDir = "$rootDir/testing/fixtures/applib" as File
+project(':isis-parent:isis:isis-testing:isis-testing-fixtures').projectDir = "$rootDir/testing/fixtures" as File
+project(':isis-parent:isis:isis-testing:isis-testing-h2console:isis-testing-h2console-ui').projectDir = "$rootDir/testing/h2console/ui" as File
+project(':isis-parent:isis:isis-testing:isis-testing-h2console').projectDir = "$rootDir/testing/h2console" as File
+project(':isis-parent:isis:isis-testing:isis-testing-hsqldbmgr:isis-testing-hsqldbmgr-ui').projectDir = "$rootDir/testing/hsqldbmgr/ui" as File
+project(':isis-parent:isis:isis-testing:isis-testing-hsqldbmgr').projectDir = "$rootDir/testing/hsqldbmgr" as File
+project(':isis-parent:isis:isis-testing:isis-testing-specsupport:isis-testing-specsupport-applib').projectDir = "$rootDir/testing/specsupport/applib" as File
+project(':isis-parent:isis:isis-testing:isis-testing-specsupport').projectDir = "$rootDir/testing/specsupport" as File
+project(':isis-parent:isis:isis-testing:isis-testing-integtestsupport:isis-testing-integtestsupport-applib').projectDir = "$rootDir/testing/integtestsupport/applib" as File
+project(':isis-parent:isis:isis-testing:isis-testing-integtestsupport').projectDir = "$rootDir/testing/integtestsupport" as File
+project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib').projectDir = "$rootDir/testing/unittestsupport/applib" as File
+project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport').projectDir = "$rootDir/testing/unittestsupport" as File
+project(':isis-parent:isis:isis-testing').projectDir = "$rootDir/testing" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib').projectDir = "$rootDir/valuetypes/asciidoc/applib" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui:isis-valuetypes-asciidoc-ui-vaa').projectDir = "$rootDir/valuetypes/asciidoc/ui/vaadin" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui:isis-valuetypes-asciidoc-ui-wkt').projectDir = "$rootDir/valuetypes/asciidoc/ui/wicket" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui').projectDir = "$rootDir/valuetypes/asciidoc/ui" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc').projectDir = "$rootDir/valuetypes/asciidoc" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib').projectDir = "$rootDir/valuetypes/markdown/applib" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-ui').projectDir = "$rootDir/valuetypes/markdown/ui" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown').projectDir = "$rootDir/valuetypes/markdown" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse-applib').projectDir = "$rootDir/valuetypes/sse/applib" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse:isis-valuetypes-sse-metamodel').projectDir = "$rootDir/valuetypes/sse/metamodel" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse:isis-valuetypes-sse-ui').projectDir = "$rootDir/valuetypes/sse/ui" as File
+project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse').projectDir = "$rootDir/valuetypes/sse" as File
+project(':isis-parent:isis:isis-valuetypes').projectDir = "$rootDir/valuetypes" as File
+//project(':isis-app-starter-parent:demo-parent:demo-domain').projectDir = "$rootDir/examples/demo/domain" as File
+//project(':isis-app-starter-parent:demo-parent:demo-wicket').projectDir = "$rootDir/examples/demo/wicket" as File
+project(':isis-app-starter-parent:demo-parent').projectDir = "$rootDir/examples/demo" as File
+project(':isis-app-starter-parent:smoketests').projectDir = "$rootDir/examples/smoketests" as File

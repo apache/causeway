@@ -1,0 +1,29 @@
+group = 'org.apache.isis.testing'
+description = 'Apache Isis Tst - Integ Test Support (applib)'
+
+dependencies {
+    compile(Libs.springBootStarterTest) {
+        exclude(module: 'asm')
+        exclude(module: 'spring-test')
+        exclude(module: 'spring-core')
+        exclude(module: 'spring-boot-starter-logging')
+        exclude(module: 'slf4j-api')
+        exclude(module: 'junit-vintage-engine')
+    }
+    compile (Libs.springTest)
+    compile (Libs.approvaltests)
+    compile (Libs.hamcrestLibrary)
+    compile (Libs.slf4jApi)
+    compile project(':isis-parent:isis:isis-security-bypass')
+    compile project(':isis-parent:isis:isis-core-runtimeservices')
+    compile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-datanucleus5')
+    compile(Libs.hsqldb)
+    compile (Libs.h2)
+    compileOnly (Libs.javaxJdo)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

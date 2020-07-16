@@ -1,0 +1,20 @@
+group = 'org.apache.isis.legacy'
+description = 'Apache Isis Legacy - Metamodel'
+apply plugin: 'war'
+dependencies {
+    compile(Libs.guava)
+    compile project(':isis-parent:isis-applib')
+    compile project(':isis-parent:isis:isis-legacy:isis-legacy-applib')
+    compile project(':isis-parent:isis:isis-core-metamodel')
+    testCompile project(':isis-parent:isis:isis-core-config')
+    testCompile project(':isis-parent:isis:isis-core-metamodel')
+    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    compileOnly(Libs.javaxJdo)
+    providedCompile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

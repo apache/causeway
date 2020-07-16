@@ -1,0 +1,41 @@
+group = 'org.apache.isis.testing'
+description = 'Apache Isis Tst - Unit Test Support (applib)'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile(Libs.springBootStarterTest) {
+        exclude(module: 'asm')
+        exclude(module: 'spring-test')
+        exclude(module: 'spring-core')
+        exclude(module: 'spring-boot-starter-logging')
+        exclude(module: 'slf4j-api')
+    }
+    compile(Libs.springTest)
+    compile(Libs.jmock) {
+        exclude(module: 'asm')
+    }
+    compile(Libs.jmockJunit4) {
+        exclude(module: 'junit-dep')
+        exclude(module: 'asm')
+        exclude(module: 'byte-buddy')
+    }
+    compile(Libs.approvaltests)
+    compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
+    compile(Libs.picocontainer)
+    compile(Libs.guava)
+    compile(Libs.slf4jApi)
+
+    compile(Libs.javaxJdo)
+
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
+    testCompile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
+    testCompile project(':isis-parent:isis-applib')
+
+    // These dependencies are required in order to build on jdk11
+    compile(Libs.jaxwsApi)
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests
