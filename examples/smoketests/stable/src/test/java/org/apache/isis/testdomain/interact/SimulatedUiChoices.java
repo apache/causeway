@@ -18,23 +18,23 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import org.apache.isis.core.commons.binding.Bindable;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-import javafx.scene.control.ComboBox;
-
-@SuppressWarnings("restriction")
 public class SimulatedUiChoices {
 
-    //    static interface ChoicesBinding {
-    //        void propagateValueToBackend(ManagedObject newPendingParameterValue);
-    //    }
+    private final Bindable<Can<ManagedObject>> choiceBox = 
+            _Bindables.empty();
 
-    private final ComboBox<ManagedObject> choiceBox = new ComboBox<>();
-
+    private final Bindable<ManagedObject> selectedItem = 
+            _Bindables.empty();
+    
     public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
 
         val actionMeta = pendingArgs.getHead().getMetaModel();
@@ -43,10 +43,10 @@ public class SimulatedUiChoices {
 
         val choices = paramMeta.getChoices(pendingArgs, InteractionInitiatedBy.USER);
 
-        choices.stream()
-        .forEach(choiceBox.getItems()::add);
-
-        choiceBox.getSelectionModel().selectedItemProperty().addListener((e, o, n)->{
+        choiceBox.setValue(choices.stream()
+                .collect(Can.toCan()));
+        
+        selectedItem.addListener((e,o,n)->{
             // propagate changes from UI to backend
             pendingArgs.setParamValue(paramNr, n); // does not trigger change listeners
         });
@@ -54,18 +54,18 @@ public class SimulatedUiChoices {
         pendingArgs.getBindableParamValue(paramNr).addListener((e, o, n)->{
             // propagate changes from backend to UI
             //TODO disable change-listeners
-            choiceBox.getSelectionModel().select(n); // does trigger change listeners???
+            selectedItem.setValue(n); // does trigger change listeners
             //TODO enable change-listeners
         });
-
+        
     }
 
     public void simulateChoiceSelect(int choiceIndex) {
-        choiceBox.getSelectionModel().clearAndSelect(choiceIndex);
+        selectedItem.setValue(choiceBox.getValue().getElseFail(choiceIndex));
     }
 
     public ManagedObject getValue() {
-        return choiceBox.getSelectionModel().selectedItemProperty().get(); 
+        return selectedItem.getValue(); 
     }
 
 

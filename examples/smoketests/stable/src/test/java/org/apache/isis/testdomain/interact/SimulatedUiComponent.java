@@ -18,20 +18,17 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import org.apache.isis.core.commons.binding.Bindable;
+import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel.BindableManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.val;
 
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-
-@SuppressWarnings("restriction")
 public class SimulatedUiComponent {
     
-    private SimpleObjectProperty<ManagedObject> valueProperty = new SimpleObjectProperty<>();
+    private Bindable<ManagedObject> value = _Bindables.empty();
 
     private ObjectActionParameter paramMeta;
     
@@ -41,22 +38,17 @@ public class SimulatedUiComponent {
         val paramMetaList = actionMeta.getParameters();
         paramMeta = paramMetaList.getElseFail(paramNr);
         
-        valueProperty.setValue(pendingArgs.getParamValue(paramNr)); //sync models
-        valueProperty.bindBidirectional(adapt(pendingArgs.getBindableParamValue(paramNr)));
-    }
-
-    private Property<ManagedObject> adapt(BindableManagedObject bindableParamValue) {
-        // TODO Auto-generated method stub
-        return null;
+        value.setValue(pendingArgs.getParamValue(paramNr)); //sync models
+        value.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
     }
 
     public void simulateValueChange(Object newValue) {
         val paramSpec = paramMeta.getSpecification();
-        valueProperty.set(ManagedObject.of(paramSpec, newValue));
+        value.setValue(ManagedObject.of(paramSpec, newValue));
     }
 
     public ManagedObject getValue() {
-        return valueProperty.get();
+        return value.getValue();
     }
 
     
