@@ -54,6 +54,11 @@
 
     <dependencies>
     
+    	<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+        </dependency>
+    
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtimeservices</artifactId>
@@ -64,12 +69,7 @@
             <artifactId>isis-core-webapp</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
+        <!-- TESTING -->
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>

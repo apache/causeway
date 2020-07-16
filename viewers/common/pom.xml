@@ -50,17 +50,11 @@
 			<version>5.13.0</version> <!-- must correspond to entry in /viewer/common/.../FontAwesomeDecorator.java -->
 		</dependency>
 	
-	<!-- TEST DEPENDENCIES -->
+		<!-- TESTING -->
+		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-internaltestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
-            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 

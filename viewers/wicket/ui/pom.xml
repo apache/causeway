@@ -324,36 +324,14 @@
 			<scope>provided</scope>
 		</dependency>
 
-        <!-- TEST DEPENDENCIES -->
+        <!-- TESTING -->
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
-		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-        	<groupId>org.jmock</groupId>
-        	<artifactId>jmock-junit4</artifactId>
-        	<exclusions>
-        		<exclusion>
-        			<groupId>org.ow2.asm</groupId>
-        			<artifactId>asm</artifactId>
-        		</exclusion>
-                <exclusion>
-                    <!-- for dependency convergence -->
-                    <groupId>junit</groupId>
-                    <artifactId>junit-dep</artifactId>
-                </exclusion>
-            </exclusions>
-        	<scope>test</scope>
-        </dependency>
     </dependencies>
 
 

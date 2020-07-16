@@ -36,7 +36,6 @@
 			<artifactId>isis-viewer-common</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
@@ -68,13 +67,6 @@
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-internaltestsupport</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-metamodel</artifactId>
-			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 

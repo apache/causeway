@@ -68,7 +68,6 @@
 
 	<dependencies>
 
-
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jpa-applib</artifactId>
@@ -80,27 +79,6 @@
 		</dependency>
 
 		<!-- TESTING -->
-		
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtimeservices</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
 		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
