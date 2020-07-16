@@ -18,23 +18,21 @@
 
 set -eo pipefail
 
-if [ -z "$BATCH_MODE_FLAG" ] || [ "$BATCH_MODE_FLAG" != "off" ]; then
-  BATCH_MODE=--batch-mode
-fi
-
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
   PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
 fi
 
-if [ -z "$MVN_STAGES" ]; then
-  MVN_STAGES="clean install"
-fi
-if [ -z "$SETTINGS_XML" ]; then
-  SETTINGS_XML=$PROJECT_ROOT_PATH/.m2/settings.xml
-fi
-
 sh $SCRIPT_DIR/_print-environment.sh "build-core-using-gradle"
+
+# use maven to run the JAXB Java Source Generator
+# this step could be migrated to run with gradle instead
+# that would be the api/schema/build.gradle file to put some love to
+
+cd $PROJECT_ROOT_PATH/api/schema
+mvn generate-sources
+
+# build the rest with gradle ...
 
 cd $PROJECT_ROOT_PATH
 
