@@ -7,7 +7,7 @@ buildscript {
     }
 }
 
-apply from: '/dependencies.gradle'
+apply from: 'dependencies.gradle'
 
 allprojects {
     apply plugin: "io.freefair.lombok"
