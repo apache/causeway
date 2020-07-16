@@ -42,14 +42,14 @@ public class PojoAdapterTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private ObjectAdapter adapter;
-    private RuntimeTestPojo domainObject;
+    private TestPojo domainObject;
 
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private AuthenticationSession mockAuthenticationSession;
 
     @Before
     public void setUp() throws Exception {
-        domainObject = new RuntimeTestPojo();
+        domainObject = new TestPojo();
 
         adapter = PojoAdapter.of(
                 domainObject, 
