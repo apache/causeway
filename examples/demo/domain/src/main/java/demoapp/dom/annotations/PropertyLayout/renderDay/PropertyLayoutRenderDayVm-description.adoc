@@ -1,12 +1,26 @@
-CAUTION: TODO - not yet updated...
+The "renderDay" hint applies to date fields, and indicates that the date rendered should be one day before the day actually held in the property.
 
-The "renderDay" hint indicates that a textbox of the specified number of lines should be used to render a property or parameter:
+The typical use case for this is when two date properties together model an interval, namely a "startDate" and an "endDate".
+
+* If these are both inclusive, ie "[startDate, endDate]", then there will be a day "missing" between adjacent intervals.
++
+For example, ['Mon 1 Jan', 'Sun 7 Jan'], then ['Mon 8 Jan', 'Sun 14 Jan'], and so on.
+
+* If instead the end date is exclusive, ie "[startDate, endDate)", then adjacent intervals can use the same date for both the end of one interval and the start of the next.
++
+For example,  ['Mon 1 Jan', 'Mon 8 Jan'), then ['Mon 8 Jan', 'Mon 15 Jan')`.
+
+This UI hint therefore allows the domain object to use an exclusive end date, thus simplifying business logic, but to be rendered the day before, as if with an inclusive end date.
+
+The hint applies to both properties and parameters:
 
 * for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
 * for parameters, the hint can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
 
-The hint is currently supported only for properties and parameters of type ``String``s.
+The hint is supported only for properties and parameters representing dates/times.
+
+// TODO: java.time datatypes not yet supported.
 
 == Annotated
 
@@ -16,17 +30,17 @@ The renderDay hint can be specified explicitly using an annotation:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm.java[tags=render-as-day]
+include::PropertyLayoutRenderDayVm.java[tags=render-as-day-before]
 ----
-<.> explicitly specifies that the property should use a textbox
+<.> explicitly specifies that the property should be rendered as the day before.
 
 * for parameters, using `@ParameterLayout#renderDay()`:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutRenderDayVm_updateEndDateWithParameterLayout.java[tags=annotation]
 ----
-<.> explicitly specifies that the parameter should use a textbox
+<.> explicitly specifies that the parameter should be rendered as the day before.
 
 == Layout File
 
@@ -44,10 +58,8 @@ include::PropertyLayoutRenderDayVm.java[tags=layout-file]
 +
 [source,xml,indent=0,tabsize=4]
 ----
-<cpt:property id="propertyUsingLayout" renderDay="5"/>
+<cpt:property id="endDateLayoutFile" renderedAsDayBefore="true"/>
 ----
-// TODO: for some reason this doesn't include correctly in the app...
-//include::PropertyLayoutRenderDayVm.layout.xml[tags=layout-file]
 
 One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
 
@@ -59,9 +71,9 @@ The `@PropertyLayout` can also be applied at the class-level to mixin properties
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_mixinProperty.java[tags=class]
+include::PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout.java[tags=class]
 ----
-<.> explicitly specifies that the contributed property should use a textbox
+<.> explicitly specifies that the contributed property should be rendered as the day before
 
 == Meta-annotated
 
@@ -71,7 +83,7 @@ The renderDay hint can also be specified using a custom meta-annotation:
 +
 [source,java]
 ----
-include::RenderDayMetaAnnotation.java[tags=class]
+include::RenderDayMetaAnnotationEndDateExclusive.java[tags=class]
 ----
 <.> annotated for property ...
 <.> \... and also for parameter.
@@ -83,7 +95,7 @@ include::RenderDayMetaAnnotation.java[tags=class]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm.java[tags=meta-annotated]
+include::PropertyLayoutRenderDayVm.java[tags=meta-annotation]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -91,7 +103,7 @@ include::PropertyLayoutRenderDayVm.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -99,7 +111,7 @@ include::PropertyLayoutRenderDayVm_updateWithMetaAnnotation.java[tags=meta-annot
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+include::PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -111,18 +123,18 @@ The meta-annotation can itself be overridden:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm.java[tags=meta-annotated-overridden]
+include::PropertyLayoutRenderDayVm.java[tags=meta-annotation-overridden]
 ----
-<.> hint from meta-annotation ...
+<.> hint from meta-annotation (deliberately incorrectly annotated) ...
 <.> \... is overridden by the `@PropertyLayout` annotation
 
 * or a parameter:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
-<.> hint from meta-annotation ...
+<.> hint from meta-annotation (deliberately incorrectly annotated) ...
 <.> \... is overridden by the `@ParameterLayout` annotation
 
 
@@ -130,8 +142,8 @@ include::PropertyLayoutRenderDayVm_updateWithMetaAnnotationOverridden.java[tags=
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
-<.> hint from meta-annotation ...
+<.> hint from meta-annotation (deliberately incorrectly annotated) ...
 <.> \... is overridden by the `@ParameterLayout` annotation
 

@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "endDateExclusive", associateWithSequence = "2"
+    associateWith = "endDateUsingMetaAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotation {
@@ -40,17 +40,17 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotation {
 //tag::meta-annotation[]
     public PropertyLayoutRenderDayVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @RenderDayMetaAnnotationEndDateExclusive                            // <.>
+            @RenderDayMetaAnnotationEndDateExclusive        // <.>
             @ParameterLayout(
                 describedAs = "@RenderDayAsDayBeforeMetaAnnotation"
             )
             final LocalDate endDateExclusive) {
-        propertyLayoutRenderDayVm.setEndDateExclusive(endDateExclusive);
+        propertyLayoutRenderDayVm.setEndDateUsingMetaAnnotation(endDateExclusive);
         return propertyLayoutRenderDayVm;
     }
 //end::meta-annotation[]
     public LocalDate default0Act() {
-        return propertyLayoutRenderDayVm.getEndDateExclusive();
+        return propertyLayoutRenderDayVm.getEndDateUsingMetaAnnotation();
     }
 
 }

@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -36,7 +35,6 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
-import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.schema.jaxbadapters.JodaLocalDateStringAdapter;
 
 import lombok.Getter;
@@ -58,8 +56,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 
     public PropertyLayoutRenderDayVm(LocalDate localDate) {
-        startDateInclusive = localDate;
-        endDateExclusive = startDateInclusive.plusDays(7);
+        startDate = localDate;
+        endDate = startDate.plusDays(7);
     }
 
     public String title() {
@@ -77,7 +75,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
     @Getter @Setter
-    private LocalDate startDateInclusive;
+    private LocalDate startDate;
 //end::render-not-specified[]
 
 //tag::render-as-day-before[]
@@ -91,7 +89,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
     @Getter @Setter
-    private LocalDate endDateExclusive;
+    private LocalDate endDate;
 //end::render-as-day-before[]
 
 //tag::render-as-day[]
@@ -99,12 +97,56 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @PropertyLayout(
         renderDay = RenderDay.AS_DAY             // <.>
         , describedAs =
-            "Value of getEndDateExclusive(), but @PropertyLayout(renderDay = AS_DAY)"
+            "Value of getEndDate(), but @PropertyLayout(renderDay = AS_DAY)"
     )
     @MemberOrder(name = "annotation", sequence = "3")
-    public LocalDate getEndDateExclusiveRaw() {
-        return getEndDateExclusive();
+    public LocalDate getEndDateRaw() {
+        return getEndDate();
     }
 //end::render-as-day[]
+
+//tag::layout-file[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(                                // <.>
+        describedAs =
+            "<cpt:property id=\"endDateLayoutFile\" " +
+            "renderedAsDayBefore=\"true\"/>"
+    )
+    @MemberOrder(name = "layout-file", sequence = "1")
+    @XmlElement(required = false)
+    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @Getter @Setter
+    private LocalDate endDateUsingLayout;
+//end::layout-file[]
+
+//tag::meta-annotation[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @RenderDayMetaAnnotationEndDateExclusive        // <.>
+    @PropertyLayout(
+        describedAs =
+            "@RenderDayMetaAnnotationEndDateExclusive"
+    )
+    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @XmlElement(required = false)
+    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @Getter @Setter
+    private LocalDate endDateUsingMetaAnnotation;
+//end::meta-annotation[]
+
+//tag::meta-annotation-overridden[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @RenderDayMetaAnnotationStartDateInclusive      // <.>
+    @PropertyLayout(
+        renderDay = RenderDay.AS_DAY_BEFORE
+        , describedAs =
+            "@RenderDayMetaAnnotationEndDateExclusive"
+    )
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+    @XmlElement(required = false)
+    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @Getter @Setter
+    private LocalDate endDateUsingMetaAnnotationButOverridden;
+//end::meta-annotation-overridden[]
+
 }
 //end::class[]

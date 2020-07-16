@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "endDateExclusive", associateWithSequence = "1"
+    associateWith = "endDate", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_updateEndDateWithParameterLayout {
@@ -29,12 +29,12 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithParameterLayout {
                     "@ParameterLayout(renderDay = AS_DAY_BEFORE)"
             )
             final LocalDate endDate) {
-        propertyLayoutRenderDayVm.setEndDateExclusive(endDate);
+        propertyLayoutRenderDayVm.setEndDate(endDate);
         return propertyLayoutRenderDayVm;
     }
 //end::annotation[]
     public LocalDate default0Act() {
-        return propertyLayoutRenderDayVm.getEndDateExclusive();
+        return propertyLayoutRenderDayVm.getEndDate();
     }
 
 }

@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "endDateExclusive", associateWithSequence = "3"
+    associateWith = "endDateUsingMetaAnnotationButOverridden", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden {
@@ -23,7 +23,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
 //tag::meta-annotation-overridden[]
     public PropertyLayoutRenderDayVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @RenderDayMetaAnnotationStartDateInclusive          // <.>  // deliberately incorrectly annotated
+            @RenderDayMetaAnnotationStartDateInclusive          // <.>
             @ParameterLayout(
                 renderDay = RenderDay.AS_DAY_BEFORE             // <.>
                 , describedAs =
@@ -31,12 +31,12 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
                     "@ParameterLayout(renderDay = AS_DAY_BEFORE)"
             )
             final LocalDate endDate) {
-        propertyLayoutRenderDayVm.setEndDateExclusive(endDate);
+        propertyLayoutRenderDayVm.setEndDateUsingMetaAnnotationButOverridden(endDate);
         return propertyLayoutRenderDayVm;
     }
 //end::meta-annotation-overridden[]
     public LocalDate default0Act() {
-        return propertyLayoutRenderDayVm.getEndDateExclusive();
+        return propertyLayoutRenderDayVm.getEndDateUsingMetaAnnotationButOverridden();
     }
 
 }

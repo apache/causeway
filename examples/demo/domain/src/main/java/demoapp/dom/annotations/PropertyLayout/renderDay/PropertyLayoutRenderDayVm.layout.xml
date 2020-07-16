@@ -21,7 +21,7 @@
 			<cpt:fieldSet name="Annotated" id="annotation"/>
 			<cpt:fieldSet name="Layout File" id="layout-file">
 <!-- tag::layout-file[] -->
-				<cpt:property id="propertyUsingLayout" multiLine="5"/>
+				<cpt:property id="endDateLayoutFile" renderedAsDayBefore="true"/>
 <!-- end::layout-file[] -->
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Contributed" id="contributed"/>

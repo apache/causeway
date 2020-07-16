@@ -18,8 +18,8 @@
  */
 package demoapp.dom.types.javalang.bytes.holder;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import demoapp.dom.types.Samples;
 
@@ -40,11 +39,8 @@ public class WrapperByteHolder_actionReturningCollection {
     private final WrapperByteHolder holder;
 
     public Collection<Byte> act() {
-        final Collection<Byte> bytes = new ArrayList<>();
-        val initial = holder.getReadOnlyProperty();
-        samples.stream()
-                .forEach(bytes::add);
-        return bytes;
+        return samples.stream()
+                .collect(Collectors.toList());
     }
 
     @Inject

@@ -30,12 +30,12 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Property()
 @PropertyLayout(
-    renderDay = RenderDay.AS_DAY_BEFORE     // <.>
+    renderDay = RenderDay.AS_DAY_BEFORE         // <.>
     , describedAs =
         "@PropertyLayout(renderDay = AS_DAY_BEFORE)"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutRenderDayVm_endDateExclusiveUsingMixinProperty {
+public class PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout {
     // ...
 //end::class[]
 
@@ -43,7 +43,7 @@ public class PropertyLayoutRenderDayVm_endDateExclusiveUsingMixinProperty {
 
     @MemberOrder(name = "contributed", sequence = "1")
     public LocalDate prop() {
-        return propertyLayoutRenderDayVm.getEndDateExclusive();
+        return propertyLayoutRenderDayVm.getEndDate();
     }
 
 //tag::class[]

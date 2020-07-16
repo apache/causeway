@@ -26,26 +26,25 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::meta-annotation-overridden[]
+//tag::class[]
 @Property()
-@RenderDayMetaAnnotationEndDateExclusive                                // <.>
+@RenderDayMetaAnnotationEndDateExclusive            // <.>
 @PropertyLayout(
-    multiLine = 3                                       // <.>
-    , describedAs =
-        "@RenderDayMetaAnnotation @PropertyLayout(...)"
+    describedAs =
+        "@RenderDayMetaAnnotationEndDateExclusive"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutRenderDayVm_mixinPropertyWithMetaAnnotationOverridden {
+public class PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotation {
     // ...
-//end::meta-annotation-overridden[]
+//end::class[]
 
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
+    @MemberOrder(name = "meta-annotated", sequence = "2")
     public LocalDate prop() {
-        return propertyLayoutRenderDayVm.getEndDateExclusive();
+        return propertyLayoutRenderDayVm.getEndDate();
     }
 
-//tag::meta-annotation-overridden[]
+//tag::class[]
 }
-//end::meta-annotation-overridden[]
+//end::class[]
