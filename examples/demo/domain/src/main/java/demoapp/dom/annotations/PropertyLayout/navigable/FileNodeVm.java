@@ -51,9 +51,9 @@ public class FileNodeVm implements HasAsciiDocDescription {
         this.path = file.getAbsolutePath();
         this.type = file.isDirectory()
                         ? file.getParent() == null  // ie root
-                            ? FileNodeType.FileSystemRoot
-                            : FileNodeType.Folder
-                        : FileNodeType.File;
+                            ? FileNodeType.FILE_SYSTEM_ROOT
+                            : FileNodeType.DIRECTORY
+                        : FileNodeType.FILE;
     }
 
 //tag::title[]

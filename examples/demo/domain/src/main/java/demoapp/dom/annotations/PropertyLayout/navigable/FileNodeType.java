@@ -23,9 +23,9 @@ import org.apache.isis.applib.util.Enums;
 //tag::class[]
 public enum FileNodeType {
 
-    FileSystemRoot,
-    Folder,
-    File;
+    FILE_SYSTEM_ROOT,
+    DIRECTORY,
+    FILE;
 
     public String title() {
         return Enums.getFriendlyNameOf(this);   // <.>

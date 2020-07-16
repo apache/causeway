@@ -9,18 +9,29 @@ This app uses the filesystem of the host computer to illustrate the idea:
 This allows the user to drill into the tree and inspect the individual files, without "losing their place".
 
 The mechanics of creating the tree are shown below.
+But first, let's discuss the `navigable` hint as a means to construct breadcrumbs.
 
-For all ``FileNode``s except the root (see the `path` property), a breadcrumb trail is rendered.
-The framework constructs this based on the `navigable` hint, associated with no more than one property of the object.
-This points back to the logical parent of the domain object:
+== Navigable (Breadcrumbs)
+
+For all ``FileNode``s a breadcrumb trail is rendered.
+The one node where this is not visible is the initial root node (see the `path` property), because it has no parent.
+
+The framework constructs the breadcrumbs using the value returned by the property with the `navigable` hint.
+This hint should be used on no more than one property of the object, and points back to the logical parent of the domain object:
 
 [source,java,indent=0]
 ----
 include::FileNodeVm.java[tags=navigable]
 ----
 
-TIP: for a domain entity, the implementation would be a lookup of the parent entity from a repository.
+In the case of this demo app, the parent also happens to be a `FileNode`.
+However, in general, any type of the parent can be different from the type of the child.
+The returned parent is itself queried recursively, until eventually an object is returned that has no parent.
+The framework renders the breadcrumbs from this sequence of parents.
+
+TIP: For a domain entity, the implementation above would be a lookup of the parent entity from a repository.
 For a view model, we can simply instantiate the parent (view models have value semantics in this respect).
+
 
 
 It's common for hierarchical objects to indicate their nature using an icon:
@@ -64,7 +75,11 @@ The `TreeNode` value type itself is created using:
 include::FileTreeNodeService.java[tags=newTree]
 ----
 
-This requires an implementation of the `TreeAdapter<T>` SPI:
+This requires an implementation of the `TreeAdapter<T>` SPI, discussed next.
+
+=== TreeAdapter SPI
+
+To render a `TreeNode`, the application must provide an implementation of the `TreeAdapter<T>` SPI:
 
 [source,java]
 ----
@@ -76,7 +91,6 @@ public interface TreeAdapter<T> {
 ----
 
 In the case of the demo app, the implementation is `FileSystemTreeAdapter`, which navigate the host computer's filesystem:
-
 
 [source,java,indent=0]
 ----

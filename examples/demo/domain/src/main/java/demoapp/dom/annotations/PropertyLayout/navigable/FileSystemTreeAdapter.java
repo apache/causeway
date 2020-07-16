@@ -31,7 +31,7 @@ public class FileSystemTreeAdapter implements TreeAdapter<FileNodeVm> {
 
     @Override
     public Optional<FileNodeVm> parentOf(FileNodeVm fileNode) {
-        if(fileNode.getType() == FileNodeType.FileSystemRoot) {
+        if(fileNode.getType() == FileNodeType.FILE_SYSTEM_ROOT) {
             return Optional.empty();
         }
         val parentFolderIfAny = fileNode.asFile().getParentFile();
@@ -49,7 +49,6 @@ public class FileSystemTreeAdapter implements TreeAdapter<FileNodeVm> {
         return streamChildFiles(value)
                 .map(FileNodeVm::new);
     }
-
 
     private static Stream<File> streamChildFiles(FileNodeVm fileNode){
         val file = fileNode.asFile();
