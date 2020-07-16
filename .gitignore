@@ -22,6 +22,8 @@ node_modules/
 
 #Gradle
 .gradle
+gradlew
+gradlew.*
 
 *.exe
 *~
@@ -33,6 +35,7 @@ target/
 target-ide/
 logs/
 .factorypath
+tmp/
 
 JArchitectOut/
 *.jdproj
