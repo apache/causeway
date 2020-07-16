@@ -48,7 +48,7 @@ where `FileNodeType` is:
 include::FileNodeType.java[tags=class]
 ----
 
-Note that there are SVG files for each of the instances of this enum, namely `FileNodeVm-FileSystemRoot.svg`, `FileNodeVm-Folder.svg` and `FileNodeVm-File.svg`.
+Note that there are SVG files for each of the instances of this enum, namely `FileNodeVm-FILE_SYSTEM_ROOT.svg`, `FileNodeVm-DIRECTORY.svg` and `FileNodeVm-FILE.svg`.
 
 
 == Tree
