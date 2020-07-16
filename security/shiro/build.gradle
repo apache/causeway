@@ -7,7 +7,6 @@ dependencies {
         exclude(module: 'slf4j-api')
     }
     compile(Libs.shiroWeb)
-    testCompile project(':isis-parent:isis:isis-core-runtime')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 }
 

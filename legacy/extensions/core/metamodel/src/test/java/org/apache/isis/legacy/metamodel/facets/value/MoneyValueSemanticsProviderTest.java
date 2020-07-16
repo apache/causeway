@@ -27,13 +27,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.apache.isis.legacy.applib.value.Money;
-import org.apache.isis.legacy.metamodel.facets.value.money.MoneyValueSemanticsProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
+import org.apache.isis.legacy.applib.value.Money;
+import org.apache.isis.legacy.metamodel.facets.value.money.MoneyValueSemanticsProvider;
 
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

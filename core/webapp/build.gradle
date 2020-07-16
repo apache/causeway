@@ -8,7 +8,6 @@ dependencies {
     }
     compile(Libs.springBoot)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile project(':isis-parent:isis:isis-core-runtime')
 }
 
 task packageTests(type: Jar) {

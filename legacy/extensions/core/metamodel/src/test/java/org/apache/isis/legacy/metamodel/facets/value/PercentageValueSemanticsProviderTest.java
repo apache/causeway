@@ -28,7 +28,6 @@ import static org.junit.Assert.assertNull;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
 import org.apache.isis.legacy.applib.value.Percentage;
 import org.apache.isis.legacy.metamodel.facets.value.percentage.PercentageValueSemanticsProvider;
 

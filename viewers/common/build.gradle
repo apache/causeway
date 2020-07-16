@@ -4,7 +4,6 @@ dependencies {
     compile project(':isis-parent:isis:isis-core-webapp')
     compile(Libs.fontAwesome)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile project(':isis-parent:isis:isis-core-metamodel')
 }
 
 task packageTests(type: Jar) {

@@ -16,6 +16,8 @@ dependencies {
     }
     compile(Libs.slf4jApi)
 
+	testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+
     testCompile(Libs.junitJupiterApi)
     testCompile(Libs.junitJupiterEngine)
     testCompile(Libs.junitVintageEngine)
@@ -25,6 +27,7 @@ dependencies {
         exclude(module: 'byte-buddy')
     }
     testCompile (Libs.assertjCore)
+    
 }
 
 task packageTests(type: Jar) {

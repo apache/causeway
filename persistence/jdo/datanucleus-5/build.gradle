@@ -8,9 +8,6 @@ dependencies {
     implementation(Libs.datanucleusJdoQuery)
     implementation(Libs.datanucleusRdbms)
     implementation(Libs.datanucleusJodatime)
-    testCompile project(':isis-parent:isis:isis-core-runtime')
-    testCompile project(':isis-parent:isis:isis-core-config')
-    testCompile project(':isis-parent:isis:isis-core-runtimeservices')
     testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 }

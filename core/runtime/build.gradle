@@ -6,8 +6,6 @@ dependencies {
         exclude(module: 'activation')
     }
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile project(':isis-parent:isis-applib')
-    testCompile project(':isis-parent:isis:isis-core-metamodel')
 }
 
 task packageTests(type: Jar) {

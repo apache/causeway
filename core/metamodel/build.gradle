@@ -12,10 +12,7 @@ dependencies {
     }
     compile project(':isis-parent:isis:isis-core-commons')
 
-    testCompile project(':isis-parent:isis:isis-core-config')
-    testCompile project(':isis-parent:isis-applib')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile project(':isis-parent:isis:isis-core-runtimeservices')
 
     testCompile(Libs.junitJupiterApi)
     testCompile(Libs.junitJupiterEngine)

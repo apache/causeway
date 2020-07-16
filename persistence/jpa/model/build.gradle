@@ -3,10 +3,6 @@ description = 'Apache Isis Persistence - JPA (model)'
 dependencies {
     compile project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-applib')
     compile project(':isis-parent:isis:isis-core-runtime')
-    testCompile project(':isis-parent:isis:isis-core-runtime')
-    testCompile project(':isis-parent:isis:isis-core-config')
-    testCompile project(':isis-parent:isis:isis-core-runtimeservices')
-    testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 }
 

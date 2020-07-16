@@ -3,7 +3,6 @@ description = 'Apache Isis Viewer - RO (AppLib)'
 dependencies {
     compile project(':isis-parent:isis-applib')
     compile(Libs.jacksonDatabind)
-    testCompile project(':isis-parent:isis:isis-core-metamodel')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 }
 

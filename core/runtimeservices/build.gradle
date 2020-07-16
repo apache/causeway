@@ -4,9 +4,6 @@ dependencies {
     compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
     compile(Libs.hsqldb)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile project(':isis-parent:isis:isis-core-config')
-    testCompile project(':isis-parent:isis:isis-core-metamodel')
-    testCompile project(':isis-parent:isis:isis-core-runtime')
 }
 
 task packageTests(type: Jar) {

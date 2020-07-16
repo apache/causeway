@@ -6,7 +6,6 @@ dependencies {
     compile(Libs.vaadin)
     compile(Libs.cookieconsent)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile project(':isis-parent:isis:isis-core-metamodel')
 }
 
 task packageTests(type: Jar) {

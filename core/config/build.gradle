@@ -7,7 +7,6 @@ dependencies {
     compile (Libs.hibernateValidator)
     compile (Libs.springBootConfigurationProcessor)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile project(':isis-parent:isis-applib')
 }
 
 task packageTests(type: Jar) {
