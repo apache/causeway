@@ -87,13 +87,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-        	<groupId>org.apache.isis.core</groupId>
-        	<artifactId>isis-applib</artifactId>
-        	<type>test-jar</type>
-        </dependency>
-
-
     </dependencies>
 
 </project>

@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.config.unittestsupport.IsisConfigurationLegacy;
+import org.apache.isis.core.internaltestsupport.config.IsisConfigurationLegacy;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 

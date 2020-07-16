@@ -21,10 +21,11 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.applib.unittestsupport.ValueTypeContractTestAbstract;
+import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstract<ParentedOid> {
+public class CollectionOidTest_valueSemantics 
+extends ValueTypeContractTestAbstract<ParentedOid> {
 
     private final RootOid parent = Oid.Factory.root(ObjectSpecId.of("CUS"), "123");
     private final RootOid otherParent = Oid.Factory.root(ObjectSpecId.of("CUS"), "124");
