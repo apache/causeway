@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel;
+package org.apache.isis.core.metamodel._testing;
 
 import java.util.List;
 import java.util.Map;

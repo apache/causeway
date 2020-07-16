@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services;
+package org.apache.isis.core.metamodel._testing;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

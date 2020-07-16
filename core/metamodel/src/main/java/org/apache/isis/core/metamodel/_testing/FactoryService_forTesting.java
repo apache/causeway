@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel;
+package org.apache.isis.core.metamodel._testing;
 
 import java.util.function.Consumer;
 
@@ -29,7 +29,6 @@ import org.springframework.beans.factory.InjectionPoint;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.services.ServiceInjectorLegacy;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import lombok.NonNull;

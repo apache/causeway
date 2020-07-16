@@ -90,35 +90,6 @@ under the License.
             <scope>test</scope>
         </dependency>
 
-<!--
-        <dependency>
-            <groupId>org.apache.isis.subdomains</groupId>
-            <artifactId>isis-subdomains-base-applib</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
--->
-
-<!--
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.danhaywood.java</groupId>
-            <artifactId>danhaywood-java-assertjext</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
-            <scope>test</scope>
-        </dependency>
--->
-
         <dependency>
             <groupId>org.apache.isis.persistence</groupId>
             <artifactId>isis-persistence-jdo-datanucleus5</artifactId>
