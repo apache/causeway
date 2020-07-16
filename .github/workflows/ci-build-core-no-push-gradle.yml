@@ -31,16 +31,13 @@ jobs:
       with:
         java-version: 11
     
-    - name: Set up Gradle
+    - name: Set up Gradle and print Version
       uses: eskatos/gradle-command-action@v1
       with:
         gradle-version: 6.5.1
         wrapper-cache-enabled: true
         dependencies-cache-enabled: true
         arguments: --version
-    
-    - name: Print Gradle Version
-      run: gradle --version
     
     - name: Setup Script Environment
       shell: bash
@@ -53,9 +50,9 @@ jobs:
         echo MVN_STAGES       \: $MVN_STAGES
         echo ======================================
     
-#    - name: Build Core
-#      shell: bash
-#      run: bash $CI_SCRIPTS_PATH/build-core.sh
+    - name: Build Core (w/ Gradle)
+      shell: bash
+      run: bash $CI_SCRIPTS_PATH/build-core-using-gradle.sh
 #      env:
 #        # also build and run smoketests and kroviz
 #        MVN_ADDITIONAL_OPTS: -Dsmoketests-module -Dkroviz-module
