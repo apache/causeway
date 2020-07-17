@@ -21,9 +21,10 @@ node/
 node_modules/
 
 #Gradle
-.gradle
 gradlew
 gradlew.*
+/.gradle/
+**/build/
 
 #Lombok (don't accept config alterations, might lead to a maintenance hell)
 lombok.config

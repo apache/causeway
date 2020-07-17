@@ -1,4 +1,4 @@
-name: Site
+name: Build Site (w/ Antora)
 
 on:
   push:

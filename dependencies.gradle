@@ -69,6 +69,7 @@ ext {
             jaxbApi                         : "javax.xml.bind:jaxb-api:$jaxApiVersion",
             jaxbCore                        : "com.sun.xml.bind:jaxb-core:2.3.0.1",
             jaxbImpl                        : "com.sun.xml.bind:jaxb-impl:2.3.2",
+            jaxbXjc                         : "com.sun.xml.bind:jaxb-xjc:2.3.2",
             jaxwsApi                        : "javax.xml.ws:jaxws-api:$jaxApiVersion",
             jbcrypt                         : "org.mindrot:jbcrypt:0.4",
             jerseySpring5                   : "org.glassfish.jersey.ext:jersey-spring5:2.29.1",

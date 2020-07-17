@@ -1,4 +1,4 @@
-name: Core
+name: Build and Test (w/ Maven)
 
 on:
   push:
