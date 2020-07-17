@@ -18,15 +18,6 @@ These objects both implement a common interface, `IsisImageHolder`:
 include::holder/IsisImageHolder.java[tags=class]
 ----
 
-There is also an extension of this interface, `IsisImageHolder2`, with default methods demonstrating the use of label positions:
-
-[source,java]
-----
-include::holder/IsisImageHolder2.java[tags=class]
-----
-
-<.> The default methods have annotations that are automatically inherited.
-<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
 
 
 == Mixin actions
@@ -75,3 +66,20 @@ include::holder/IsisImageHolder_mixinProperty.java[tags=class]
 ----
 
 
+== @PropertyLayout(labelPosition=...)
+
+There is also an extended interface, `IsisImageHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/IsisImageHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Position to the left
+<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Position label on top
+<.> Position label to the right
++
+CAUTION: currently not supported
+<.> Hide the label compleely.

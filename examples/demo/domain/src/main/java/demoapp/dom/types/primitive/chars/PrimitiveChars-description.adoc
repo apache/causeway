@@ -16,16 +16,6 @@ These objects both implement a common interface, `PrimitiveCharHolder`:
 include::holder/PrimitiveCharHolder.java[tags=class]
 ----
 
-There is also an extension of this interface, `PrimitiveCharHolder2`, with default methods demonstrating the use of label positions:
-
-[source,java]
-----
-include::holder/PrimitiveCharHolder2.java[tags=class]
-----
-
-<.> The default methods have annotations that are automatically inherited.
-<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
-
 
 == Mixin actions
 
@@ -57,3 +47,20 @@ We also use the interface to contribute a mixin property:
 include::holder/PrimitiveCharHolder_mixinProperty.java[tags=class]
 ----
 
+== @PropertyLayout(labelPosition=...)
+
+To demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`, the entity and view model objects both implement the extended `PrimitiveCharHolder2` interface:
+
+[source,java]
+----
+include::holder/PrimitiveCharHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Position to the left
+<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Position label on top
+<.> Position label to the right
++
+CAUTION: currently not supported
+<.> Hide the label compleely.

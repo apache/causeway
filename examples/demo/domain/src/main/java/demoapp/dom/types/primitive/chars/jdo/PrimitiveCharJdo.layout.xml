@@ -20,8 +20,8 @@
 		<bs3:col span="6">
 			<cpt:fieldSet name="Read Only Properties" id="read-only-properties"/>
 			<cpt:fieldSet name="Editable Properties" id="editable-properties"/>
-			<cpt:fieldSet name="Label Positions" id="label-positions"/>
 			<cpt:fieldSet name="Contributed by Mixins" id="contributed"/>
+			<cpt:fieldSet name="@PropertyLayout(labelPosition=...)" id="label-positions"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">

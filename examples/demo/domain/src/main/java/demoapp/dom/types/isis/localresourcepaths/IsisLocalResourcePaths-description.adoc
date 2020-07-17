@@ -21,16 +21,6 @@ CAUTION: TODO - to document
 //include::holder/IsisLocalResourcePathHolder.java[tags=class]
 //----
 //
-//There is also an extension of this interface, `IsisLocalResourcePathHolder2`, with default methods demonstrating the use of label positions:
-//
-//[source,java]
-//----
-//include::holder/IsisLocalResourcePathHolder2.java[tags=class]
-//----
-//
-//<.> The default methods have annotations that are automatically inherited.
-//<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
-//
 //
 //== Mixin actions
 //
@@ -78,3 +68,22 @@ CAUTION: TODO - to document
 //----
 //
 //
+
+
+//== @PropertyLayout(labelPosition=...)
+//
+//There is also an extended interface, `IsisLocalResourcePathHolder2`, with default methods demonstrating the use of label positions:
+//
+//[source,java]
+//----
+//include::holder/IsisLocalResourcePathHolder2.java[tags=class]
+//----
+//
+//<.> The default methods have annotations that are automatically inherited.
+//<.> Position to the left
+//<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+//<.> Position label on top
+//<.> Position label to the right
+//+
+//CAUTION: currently not supported
+//<.> Hide the label compleely.

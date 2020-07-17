@@ -18,14 +18,6 @@ include::holder/JavaSqlDateHolder.java[tags=class]
 
 There is also an extension of this interface, `JavaSqlDateHolder2`, with default methods demonstrating the use of label positions:
 
-[source,java]
-----
-include::holder/JavaSqlDateHolder2.java[tags=class]
-----
-
-<.> The default methods have annotations that are automatically inherited.
-<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
-
 
 == Mixin actions
 
@@ -72,4 +64,37 @@ We also use the interface to contribute a mixin property:
 include::holder/JavaSqlDateHolder_mixinProperty.java[tags=class]
 ----
 
+
+== @PropertyLayout(labelPosition=...)
+
+To demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`, the entity and view model objects both implement the extended `JavaSqlDateHolder2` interface:
+
+[source,java]
+----
+include::holder/JavaSqlDateHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Position to the left
+<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Position label on top
+<.> Position label to the right
++
+CAUTION: currently not supported
+<.> Hide the label compleely.
+
+
+== @PropertyLayout(renderDay=...)
+
+To demonstrate support for `@PropertyLayout(renderDay=...)` -- to simplify the modelling "[inclusive, exclusive)" date ranges -- the entity and view model objects both implement the extended `JavaSqlDateHolder3` interface.
+All methods have a default implementation:
+
+[source,java]
+----
+include::holder/JavaSqlDateHolder3.java[tags=class]
+----
+
+<.> Render the value as the day before
+<.> Render the value unchanged
+<.> Render the value as the day before
 

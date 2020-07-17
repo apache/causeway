@@ -27,22 +27,24 @@ import org.apache.isis.applib.annotation.Where;
 //tag::class[]
 public interface JodaLocalDateHolder2 extends JodaLocalDateHolder {
 
-    @Property
-    @PropertyLayout(                                                        // <.>
-            labelPosition = LabelPosition.LEFT,
-            describedAs = "labelPosition=LEFT",
-            hidden = Where.ALL_TABLES
+    @Property                                               // <.>
+    @PropertyLayout(
+        labelPosition = LabelPosition.LEFT,                 // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=LEFT)",
+        hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "label-positions", sequence = "1")                  // <.>
+    @MemberOrder(name = "label-positions", sequence = "1")  // <.>
     default org.joda.time.LocalDate getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.TOP,
-            describedAs = "labelPosition=TOP",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.TOP,                  // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=TOP)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "2")
     default org.joda.time.LocalDate getReadOnlyPropertyDerivedLabelPositionTop() {
@@ -51,9 +53,10 @@ public interface JodaLocalDateHolder2 extends JodaLocalDateHolder {
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.RIGHT,    // TODO: not honoured
-            describedAs = "labelPosition=RIGHT",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.RIGHT,                // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=RIGHT)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "3")
     default org.joda.time.LocalDate getReadOnlyPropertyDerivedLabelPositionRight() {
@@ -62,9 +65,10 @@ public interface JodaLocalDateHolder2 extends JodaLocalDateHolder {
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.NONE,
-            describedAs = "labelPosition=NONE",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.NONE,                 // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=NONE)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "4")
     default org.joda.time.LocalDate getReadOnlyPropertyDerivedLabelPositionNone() {

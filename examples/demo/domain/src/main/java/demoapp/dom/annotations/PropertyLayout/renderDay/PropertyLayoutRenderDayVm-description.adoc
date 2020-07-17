@@ -22,6 +22,8 @@ The hint is supported only for properties and parameters representing dates/time
 
 // TODO: java.time datatypes not yet supported.
 
+TIP: You can inspect the "raw" data of the domain object, using the "download as XML" action.
+
 == Annotated
 
 The renderDay hint can be specified explicitly using an annotation:

@@ -28,22 +28,24 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 //tag::class[]
 public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs.holder.IsisAsciiDocHolder {
 
-    @Property
-    @PropertyLayout(                                                        // <.>
-            labelPosition = LabelPosition.LEFT,
-            describedAs = "labelPosition=LEFT",
-            hidden = Where.ALL_TABLES
+    @Property                                               // <.>
+    @PropertyLayout(
+        labelPosition = LabelPosition.LEFT,                 // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=LEFT)",
+        hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "label-positions", sequence = "1")                  // <.>
+    @MemberOrder(name = "label-positions", sequence = "1")  // <.>
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.TOP,
-            describedAs = "labelPosition=TOP",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.TOP,                  // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=TOP)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "2")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionTop() {
@@ -52,9 +54,10 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.RIGHT,    // TODO: not honoured
-            describedAs = "labelPosition=RIGHT",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.RIGHT,                // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=RIGHT)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "3")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionRight() {
@@ -63,9 +66,10 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.NONE,
-            describedAs = "labelPosition=NONE",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.NONE,                 // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=NONE)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "4")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionNone() {

@@ -29,22 +29,24 @@ import org.apache.isis.applib.value.Image;
 //tag::class[]
 public interface IsisImageHolder2 extends IsisImageHolder {
 
-    @Property
-    @PropertyLayout(                                                        // <.>
-            labelPosition = LabelPosition.LEFT,
-            describedAs = "labelPosition=LEFT",
-            hidden = Where.ALL_TABLES
+    @Property                                               // <.>
+    @PropertyLayout(
+        labelPosition = LabelPosition.LEFT,                 // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=LEFT)",
+        hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "label-positions", sequence = "1")                  // <.>
+    @MemberOrder(name = "label-positions", sequence = "1")  // <.>
     default Image getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.TOP,
-            describedAs = "labelPosition=TOP",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.TOP,                  // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=TOP)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "2")
     default Image getReadOnlyPropertyDerivedLabelPositionTop() {
@@ -53,9 +55,10 @@ public interface IsisImageHolder2 extends IsisImageHolder {
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.RIGHT,    // TODO: not honoured
-            describedAs = "labelPosition=RIGHT",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.RIGHT,                // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=RIGHT)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "3")
     default Image getReadOnlyPropertyDerivedLabelPositionRight() {
@@ -64,9 +67,10 @@ public interface IsisImageHolder2 extends IsisImageHolder {
 
     @Property
     @PropertyLayout(
-            labelPosition = LabelPosition.NONE,
-            describedAs = "labelPosition=NONE",
-            hidden = Where.ALL_TABLES
+        labelPosition = LabelPosition.NONE,                 // <.>
+        describedAs =
+            "@PropertyLayout(labelPosition=NONE)",
+        hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "4")
     default Image getReadOnlyPropertyDerivedLabelPositionNone() {

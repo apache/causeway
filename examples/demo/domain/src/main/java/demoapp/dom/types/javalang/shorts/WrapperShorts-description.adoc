@@ -16,17 +16,6 @@ These objects both implement a common interface, `WrapperShortHolder`:
 include::holder/WrapperShortHolder.java[tags=class]
 ----
 
-There is also an extension of this interface, `WrapperShortHolder2`, with default methods demonstrating the use of label positions:
-
-[source,java]
-----
-include::holder/WrapperShortHolder2.java[tags=class]
-----
-
-<.> The default methods have annotations that are automatically inherited.
-<.> Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
-
-
 == Mixin actions
 
 A number of mixin actions contribute through this interface, demonstrate the use of `Short` as a parameter and as a return type.
@@ -73,3 +62,20 @@ include::holder/WrapperShortHolder_mixinProperty.java[tags=class]
 ----
 
 
+== @PropertyLayout(labelPosition=...)
+
+There is also an extended interface, `WrapperShortHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/WrapperShortHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Position to the left
+<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Position label on top
+<.> Position label to the right
++
+CAUTION: currently not supported
+<.> Hide the label compleely.

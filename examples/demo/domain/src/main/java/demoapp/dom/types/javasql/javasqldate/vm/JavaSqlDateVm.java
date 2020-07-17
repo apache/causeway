@@ -39,6 +39,7 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.javasql.javasqldate.holder.JavaSqlDateHolder;
+import demoapp.dom.types.javasql.javasqldate.holder.JavaSqlDateHolder3;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +51,7 @@ import demoapp.dom.types.javasql.javasqldate.holder.JavaSqlDateHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaSqlDateVm
-        implements HasAsciiDocDescription, JavaSqlDateHolder {
+        implements HasAsciiDocDescription, JavaSqlDateHolder3 {
 
 //end::class[]
     public JavaSqlDateVm(java.sql.Date initialValue) {
