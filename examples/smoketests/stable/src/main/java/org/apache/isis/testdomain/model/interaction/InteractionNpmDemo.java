@@ -45,6 +45,6 @@ public class InteractionNpmDemo {
 
     @Property
     @PropertyLayout(multiLine=3)
-    @XmlElement @Getter @Setter private String stringMultiline;
+    @XmlElement @Getter @Setter private String stringMultiline; // not used yet for any tests
     
 }

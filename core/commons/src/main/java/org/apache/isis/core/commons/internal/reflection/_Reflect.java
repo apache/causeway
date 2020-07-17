@@ -33,10 +33,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Map;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -52,6 +54,7 @@ import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.functions._Predicates;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -403,6 +406,20 @@ public final class _Reflect {
     }
 
     // -- FIND GETTER
+    
+    @SneakyThrows
+    public static Stream<PropertyDescriptor> streamGetters(@NonNull Class<?> cls) {
+        return Stream.of(
+                Introspector.getBeanInfo(cls, Object.class)
+                    .getPropertyDescriptors())
+                .filter(pd->pd.getReadMethod()!=null);
+    }
+    
+    public static Map<String, Method> getGettersByName(@NonNull Class<?> cls) {
+        return streamGetters(cls)
+                .collect(Collectors.toMap(PropertyDescriptor::getName, PropertyDescriptor::getReadMethod));
+    }
+
 
     public static Method getGetter(Class<?> cls, String propertyName) throws IntrospectionException {
         final BeanInfo beanInfo = Introspector.getBeanInfo(cls);

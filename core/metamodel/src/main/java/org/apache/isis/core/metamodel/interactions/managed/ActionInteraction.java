@@ -109,7 +109,10 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
     
-    
+    /**
+     * @deprecated TODO we might rather make validation the responsibility of the {@link ParameterNegotiationModel}
+     * and then maybe provide something like {@code invokeWith(ParameterNegotiationModel model, ... callback)} here
+     */
     public ActionInteraction useParameters(
             @NonNull final Function<ManagedAction, Can<ManagedObject>> actionParameterProvider, 
             final ParameterInvalidCallback parameterInvalidCallback) {
