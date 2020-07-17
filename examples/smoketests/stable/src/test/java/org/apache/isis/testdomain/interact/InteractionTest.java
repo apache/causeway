@@ -36,6 +36,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -129,17 +130,17 @@ class InteractionTest extends InteractionTestAbstract {
 
     }
 
-    @Test //TODO API not yet provides a convenient means to get the action-meta when not usable    
+    @Test    
     void mixinActionInteraction_whenDisabled_shouldProvideActionMetadata() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled")
-                .checkVisibility(Where.OBJECT_FORMS);
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
         
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        assertFalse(actionInteraction.getManagedAction().isPresent()); // since usability should be vetoed
+        assertTrue(actionInteraction.getMetamodel().isPresent()); // but should always provide access to metamodel
         
-        actionInteraction.checkUsability(Where.OBJECT_FORMS);
-        
-        val actionMeta = managedAction.getAction();
+        val actionMeta = actionInteraction.getMetamodel().get();
         assertEquals(2, actionMeta.getParameterCount());
     }
     

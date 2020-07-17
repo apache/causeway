@@ -183,7 +183,7 @@ public class ObjectViewFx extends VBox {
                     
                     val uiButton = _fx.add(container, 
                             uiComponentFactory.buttonFor(
-                                    UiComponentFactory.ButtonRequest.of(
+                                    UiComponentFactory.ButtonRequest.of( 
                                         managedAction, 
                                         DisablingUiModel.of(interaction), 
                                         actionEventHandler)));

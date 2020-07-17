@@ -27,8 +27,10 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
@@ -58,12 +60,24 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
                 ? _Either.left(managedAction.get())
                 : _Either.right(InteractionVeto.notFound(MemberType.ACTION, memberId));
 
-        return new ActionInteraction(chain);
+        return new ActionInteraction(
+                managedAction.map(ManagedAction::getAction),
+                chain);
     }
 
-    ActionInteraction(@NonNull _Either<ManagedAction, InteractionVeto> chain) {
+    ActionInteraction(
+            @NonNull final Optional<ObjectAction> metamodel, 
+            @NonNull final _Either<ManagedAction, InteractionVeto> chain) {
         super(chain);
+        this.metamodel = metamodel;
     }
+    
+    /**
+     * optionally the action's metamodel, based on whether even exists (eg. was found by memberId) 
+     */
+    @Getter
+    private final Optional<ObjectAction> metamodel;
+    
 
     public ActionInteraction checkSemanticConstraint(@NonNull SemanticConstraint semanticConstraint) {
 
