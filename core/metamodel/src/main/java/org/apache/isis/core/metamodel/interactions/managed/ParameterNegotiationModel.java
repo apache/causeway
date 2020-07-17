@@ -18,16 +18,16 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
-import java.util.Map;
-
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.binding.Bindable;
+import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.binding._BindableAbstract;
 import org.apache.isis.core.commons.internal.binding._Bindables;
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -57,8 +57,16 @@ public class ParameterNegotiationModel {
     
     @Getter private final ActionInteractionHead head;
     private final Can<Bindable<ManagedObject>> paramValues;
+
+    @NonNull public ManagedObject getActionTarget() {
+        return getHead().getTarget();
+    }
     
-    public Can<ManagedObject> getParamValues() {
+    @NonNull public ObjectActionParameter getParamMetamodel(int paramNr) {
+        return head.getMetaModel().getParameters().getElseFail(paramNr);
+    }
+    
+    @NonNull public Can<ManagedObject> getParamValues() {
         return paramValues.map(Bindable::getValue);
     }
     
@@ -66,15 +74,14 @@ public class ParameterNegotiationModel {
         return paramValues.getElseFail(paramNr);
     }
     
-    @NonNull public Bindable<Can<ManagedObject>> getBindableParamChoices(int paramNr) {
-        //TODO
-        return null;
-    }
-    
-    @NonNull public ManagedObject getActionTarget() {
-        return getHead().getTarget();
+    @NonNull public Observable<Can<ManagedObject>> getObservableParamChoices(int paramNr) {
+        val choices = getParamMetamodel(paramNr).getChoices(this, InteractionInitiatedBy.USER);
+        //TODO well not quite, also need to listen to any param value changes, that invalidate these choices
+        return _Bindables.forValue(choices);
     }
 
+    // -- RATHER INTERNAL ... 
+    
     @NonNull public ManagedObject getParamValue(int paramNr) {
         return paramValues.getElseFail(paramNr).getValue();
     }
@@ -83,8 +90,8 @@ public class ParameterNegotiationModel {
         paramValues.getElseFail(paramNr).setValue(newParamValue);
     }
 
-    public ManagedObject adaptParamValuePojo(int paramNr, @Nullable Object newParamValuePojo) {
-        val paramMeta = head.getMetaModel().getParameters().getElseFail(paramNr);
+    @NonNull public ManagedObject adaptParamValuePojo(int paramNr, @Nullable Object newParamValuePojo) {
+        val paramMeta = getParamMetamodel(paramNr);
         val paramSpec = paramMeta.getSpecification();
         val paramValue = newParamValuePojo!=null
                 ? ManagedObject.of(paramSpec, newParamValuePojo)
@@ -101,7 +108,7 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private ParameterNegotiationModel model;
 
         public String getName() {
-            val paramMeta = model.getHead().getMetaModel().getParameters().getElseFail(paramNr);
+            val paramMeta = model.getParamMetamodel(paramNr);
             return paramMeta.getName();
         }
         
