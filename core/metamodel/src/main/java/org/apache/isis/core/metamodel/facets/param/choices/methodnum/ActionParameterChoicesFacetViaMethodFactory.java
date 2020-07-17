@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 
 import lombok.val;
@@ -59,12 +59,12 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         // attach ActionChoicesFacet if choicesNumMethod is found ...
 
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForParam(actionMethod, PREFIX)); 
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.NON_SCALAR)
-                .paramIndexToMethodName(namingConvention)
+                .paramIndexToMethodNameProviders(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
 

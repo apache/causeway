@@ -50,8 +50,9 @@ public class InteractionNpmDemo_biArgDisabled {
     }
     
     //TODO[ISIS-2362] supporting methods (no arg): rename -> validate()
-    @Model
-    public String validateAct() {
+    //TODO[ISIS-2362] supporting methods (all args): rename -> validate(params)
+    //@Model //FIXME not recognized by method finders (metamodel)
+    public String validateAct(Parameters params) {
         return "Never valid for demonstration.";
     }
 }

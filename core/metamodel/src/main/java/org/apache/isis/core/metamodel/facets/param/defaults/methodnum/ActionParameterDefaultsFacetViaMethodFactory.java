@@ -62,12 +62,12 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
         // attach DefaultFacetForParameters if defaultNumMethod is found ...
         
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForParam(actionMethod, PREFIX));
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.SAME_AS_PARAMETER_TYPE)
-                .paramIndexToMethodName(namingConvention)
+                .paramIndexToMethodNameProviders(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
         

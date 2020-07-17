@@ -52,15 +52,19 @@ public class InteractionNpmDemo_biArgEnabled {
         return a + b;
     }
     
-    //TODO[ISIS-2362] parameter supporting methods, to be referenced by param name defaultA(...), choicesB(...) ...
-    
+    // -- PARAM 0
+
+    // [ISIS-2362] parameter supporting methods, to be referenced by param name
     @Model 
-    public int default0Act(Parameters params) {
+    public int defaultA(Parameters params) { 
         return 5;
     }
     
+    // -- PARAM 1
+    
+    // [ISIS-2362] parameter supporting methods, to be referenced by param name
     @Model
-    public int[] choices1Act(Parameters params) {
+    public int[] choicesB(Parameters params) {
         return new int[] {1, 2, 3, 4};
     }
 }

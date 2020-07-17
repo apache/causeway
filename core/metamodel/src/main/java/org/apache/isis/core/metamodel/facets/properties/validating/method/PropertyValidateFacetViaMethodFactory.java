@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodFinder2;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -45,12 +45,13 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
 
         val cls = processMethodContext.getCls();
         val getterMethod = processMethodContext.getMethod();
-        val namingConvention = PREFIX_BASED_NAMING.providerForMember(getterMethod, PREFIX);
+        
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForMember(getterMethod, PREFIX));
         val returnType = getterMethod.getReturnType();
 
-        val validateMethod = MethodFinderUtils.findMethod_returningText(
+        val validateMethod = MethodFinder2.findMethod_returningText(
                 cls,
-                namingConvention.get(),
+                namingConvention.map(x->x.get()),
                 new Class[] { returnType });
         if (validateMethod == null) {
             return;

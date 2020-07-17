@@ -25,7 +25,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodFinder2;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -49,12 +49,12 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         final Method actionOrGetter = processMethodContext.getMethod();
         
-        val namingConvention = PREFIX_BASED_NAMING.providerForMember(actionOrGetter, PREFIX);
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForMember(actionOrGetter, PREFIX));
         
         val cls = processMethodContext.getCls();
-        Method hideMethod = MethodFinderUtils.findMethod(
+        Method hideMethod = MethodFinder2.findMethod(
                 cls, 
-                namingConvention.get(), 
+                namingConvention.map(x->x.get()), 
                 boolean.class, 
                 NO_ARG);
         if (hideMethod == null) {
@@ -62,9 +62,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
             boolean searchExactMatch = !noParamsOnly;
             if(searchExactMatch) {
-                hideMethod = MethodFinderUtils.findMethod(
+                hideMethod = MethodFinder2.findMethod(
                         cls, 
-                        namingConvention.get(), 
+                        namingConvention.map(x->x.get()), 
                         boolean.class, 
                         actionOrGetter.getParameterTypes());
             }

@@ -18,9 +18,11 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -65,7 +67,16 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 class NewParameterModelTest extends InteractionTestAbstract {
+    
+    //InteractionNpmDemo_biArgDisabled#validateAct()
 
+    
+    @Test// @Disabled("bug when processing ")
+    void metamodel_shouldBeValid() {
+        val specLoader = super.objectManager.getMetaModelContext().getSpecificationLoader(); 
+        assertEquals(Collections.<String>emptyList(), specLoader.getValidationResult().getMessages());
+    }
+    
     @Test
     void paramAnnotations_whenNpm_shouldBeRecognized() {
 
@@ -171,7 +182,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
         
         assertTrue(param0Choices.getValue().isEmpty());
         
-        val expectedChoices = new InteractionNpmDemo_biArgEnabled(null).choices1Act(null);
+        val expectedChoices = new InteractionNpmDemo_biArgEnabled(null).choicesB(null);
         val actualChoices = param1Choices.getValue();
         
         assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
