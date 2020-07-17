@@ -36,6 +36,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -314,13 +315,16 @@ class InteractionTest extends InteractionTestAbstract {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .checkUsability(Where.OBJECT_FORMS);
 
+        assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
+
+        val managedAction = actionInteraction.getManagedAction().get(); 
+        val pendingArgs = managedAction.startParameterNegotiation();
+
+        pendingArgs.getBindableParamChoices(0);
+        
         //TODO simplify the API ...
         
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
         val actionMeta = managedAction.getAction();
-        
-        val pendingArgs = managedAction.getInteractionHead().defaults();
-        
         val paramMetaList = actionMeta.getParameters();
         
         val param0Meta = paramMetaList.getElseFail(0);

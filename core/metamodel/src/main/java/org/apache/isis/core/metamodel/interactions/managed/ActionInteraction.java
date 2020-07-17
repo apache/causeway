@@ -78,7 +78,6 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     @Getter
     private final Optional<ObjectAction> metamodel;
     
-
     public ActionInteraction checkSemanticConstraint(@NonNull SemanticConstraint semanticConstraint) {
 
         chain = chain.leftRemap(action->{
@@ -196,6 +195,8 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         @NonNull private Can<ManagedObject> parameterList = Can.empty();
         private Result interactionResult;
     }
+
+
 
     
 

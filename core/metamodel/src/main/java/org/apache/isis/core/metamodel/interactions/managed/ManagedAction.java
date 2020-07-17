@@ -70,6 +70,14 @@ public final class ManagedAction extends ManagedMember {
         this.interactionHead = action.interactionHead(owner);
     }
 
+    /**
+     * @returns a new {@link ParameterNegotiationModel} that is associated with this managed-action;
+     * parameters if any are initialized with their defaults (taking into account any supporting methods)
+     */
+    public ParameterNegotiationModel startParameterNegotiation() {
+        return getInteractionHead().defaults();
+    }
+    
     @Override
     public ObjectAction getMember() {
         return getAction();

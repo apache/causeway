@@ -18,20 +18,18 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.binding.Bindable;
-import org.apache.isis.core.commons.binding.ChangeListener;
-import org.apache.isis.core.commons.binding.InvalidationListener;
-import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.binding._BindableAbstract;
+import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -39,32 +37,50 @@ import lombok.val;
 
 
 /**
- * Model used to negotiate the paramValues of an action by means of an UI dialog. 
+ * Model used to negotiate the parameter values of an action by means of an UI dialog. 
  * <p>
  * This supports aspects of UI component binding to pending values and possible choices,
- * as well as validation. 
+ * as well as validation failures. 
  *  
  * @since 2.0.0
  */
-@Getter 
-@RequiredArgsConstructor(staticName = "of")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParameterNegotiationModel {
-
-    @NonNull private final ActionInteractionHead head;
-    @NonNull private Can<ManagedObject> paramValues;
     
-    // -- SHORTCUTS
+    public static ParameterNegotiationModel of(
+            @NonNull final ActionInteractionHead head,
+            @NonNull final Can<ManagedObject> initialParamValues) {
+        return new ParameterNegotiationModel(
+                head, 
+                initialParamValues.map(_Bindables::forValue));
+    }
+    
+    @Getter private final ActionInteractionHead head;
+    private final Can<Bindable<ManagedObject>> paramValues;
+    
+    public Can<ManagedObject> getParamValues() {
+        return paramValues.map(Bindable::getValue);
+    }
+    
+    @NonNull public Bindable<ManagedObject> getBindableParamValue(int paramNr) {
+        return paramValues.getElseFail(paramNr);
+    }
+    
+    @NonNull public Bindable<Can<ManagedObject>> getBindableParamChoices(int paramNr) {
+        //TODO
+        return null;
+    }
     
     @NonNull public ManagedObject getActionTarget() {
         return getHead().getTarget();
     }
 
-    @NonNull public ManagedObject getParamValue(int paramNum) {
-        return paramValues.getElseFail(paramNum);
+    @NonNull public ManagedObject getParamValue(int paramNr) {
+        return paramValues.getElseFail(paramNr).getValue();
     }
 
     public void setParamValue(int paramNr, @NonNull ManagedObject newParamValue) {
-        paramValues = paramValues.replace(paramNr, newParamValue);
+        paramValues.getElseFail(paramNr).setValue(newParamValue);
     }
 
     public ManagedObject adaptParamValuePojo(int paramNr, @Nullable Object newParamValuePojo) {
@@ -76,15 +92,13 @@ public class ParameterNegotiationModel {
         return paramValue;
     }
 
+    // -- TODO UNDER CONSTRUCTION ...
+    
     @RequiredArgsConstructor(staticName = "of")
-    public static class BindableManagedObject implements Bindable<ManagedObject> {
+    public static class BindableParameter extends _BindableAbstract<ManagedObject> {
 
         @Getter @NonNull private int paramNr;
         @Getter @NonNull private ParameterNegotiationModel model;
-        
-        public Object getBean() {
-            return model;
-        }
 
         public String getName() {
             val paramMeta = model.getHead().getMetaModel().getParameters().getElseFail(paramNr);
@@ -100,76 +114,11 @@ public class ParameterNegotiationModel {
         public void setValue(final ManagedObject newValue) {
             val oldValue = getValue(); 
             model.setParamValue(paramNr, newValue);
-            changeListeners.forEach(listener->{
-                listener.changed(this, oldValue, newValue);
-            }); 
         }
         
-        private final List<ChangeListener<? super ManagedObject>> changeListeners = new ArrayList<>();
-//        private final List<InvalidationListener> invalidationListeners = new ArrayList<>();
-
-        @Override
-        public void addListener(ChangeListener<? super ManagedObject> listener) {
-            changeListeners.add(listener);
-        }
-
-        @Override
-        public void removeListener(ChangeListener<? super ManagedObject> listener) {
-            changeListeners.remove(listener);
-        }
-
-        @Override
-        public void unbind() {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public boolean isBound() {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public void bind(Observable<? extends ManagedObject> observable) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void bindBidirectional(Bindable<ManagedObject> other) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void unbindBidirectional(Bindable<ManagedObject> other) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void addListener(InvalidationListener listener) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void removeListener(InvalidationListener listener) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        
     }
+
+
     
-    private final Map<Integer, BindableManagedObject> 
-        bindableParamValueByParamNr = _Maps.newConcurrentHashMap();
-    
-    public BindableManagedObject getBindableParamValue(final int paramNr) {
-        return bindableParamValueByParamNr
-                .computeIfAbsent(paramNr, __->
-                    BindableManagedObject.of(paramNr, this));
-    }
     
 }
