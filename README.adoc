@@ -4,9 +4,9 @@
 :toc-placement!:
 
 image:https://maven-badges.herokuapp.com/maven-central/org.apache.isis.core/isis-applib/badge.svg[]
+image:https://github.com/apache/isis/workflows/Build%20and%20Test%20(w/%20Maven)/badge.svg[]
+image:https://github.com/apache/isis/workflows/Build%20and%20Test%20(w/%20Gradle)/badge.svg[]
 image:https://sonarcloud.io/api/project_badges/measure?project=apache_isis&metric=alert_status[link="https://sonarcloud.io/dashboard?id=apache_isis"]
-image:https://github.com/apache/isis/workflows/Core/badge.svg[link="https://github.com/apache/isis/actions?query=workflow%3A%22Core%22"]
-image:https://github.com/apache/isis/workflows/Site/badge.svg[link="https://github.com/apache/isis/actions?query=workflow%3A%22Site%22"]
 image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly/badge.svg[link="https://github.com/apache-isis-committers/isis-nightly/actions?query=workflow%3A%22Nightly%22"]
 
 _http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
