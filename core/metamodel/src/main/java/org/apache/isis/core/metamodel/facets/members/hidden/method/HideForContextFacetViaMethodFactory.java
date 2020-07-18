@@ -49,7 +49,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         final Method actionOrGetter = processMethodContext.getMethod();
         
-        val namingConvention = getNamingConventionForPropertyAndCollectionSupport(actionOrGetter, PREFIX);
+        val namingConvention = getNamingConventionForPropertyAndCollectionSupport(processMethodContext, PREFIX);
         
         val cls = processMethodContext.getCls();
         Method hideMethod = MethodFinder2.findMethod(

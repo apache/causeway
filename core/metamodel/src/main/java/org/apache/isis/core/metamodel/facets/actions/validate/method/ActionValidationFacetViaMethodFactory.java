@@ -52,10 +52,9 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private void handleValidateAllArgsMethod(final ProcessMethodContext processMethodContext) {
 
-        val actionMethod = processMethodContext.getMethod();
         val facetHolder = processMethodContext.getFacetHolder();
 
-        val namingConvention = getNamingConventionForActionSupport(actionMethod, PREFIX);
+        val namingConvention = getNamingConventionForActionSupport(processMethodContext, PREFIX);
         
         val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)

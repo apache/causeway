@@ -70,44 +70,53 @@ public final class MethodLiteralConstants {
     
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForAction {
-        @Nullable String getActionSupportingMethodName(Method actionMethod, String prefix);
+        @Nullable String getActionSupportingMethodName(Method actionMethod, String prefix, boolean isMixin);
     }
     
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForParameter {
-        @Nullable String getParameterSupportingMethodName(Method actionMethod, String prefix, int paramNum);
+        @Nullable String getParameterSupportingMethodName(Method actionMethod, String prefix, boolean isMixin, int paramNum);
         
         /** paramNum to param-supporting-method name provider */
-        default IntFunction<String> providerForParam(Method actionMethod, String prefix) {
-            return paramNum->getParameterSupportingMethodName(actionMethod, prefix, paramNum);
+        default IntFunction<String> providerForParam(Method actionMethod, String prefix, boolean isMixin) {
+            return paramNum->getParameterSupportingMethodName(actionMethod, prefix, isMixin, paramNum);
         }
     }
     
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForPropertyAndCollection {
         /** automatically deals with properties getters and actions */
-        @Nullable String getMemberSupportingMethodName(Member member, String prefix);
+        @Nullable String getMemberSupportingMethodName(Member member, String prefix, boolean isMixin);
     }
 
     // -- SUPPORTING METHOD NAMING CONVENTION
     
-    public static final Can<SupportingMethodNameProviderForAction> ACTIONS = Can.of(
-            (Method actionMethod, String prefix)->
+    public static final Can<SupportingMethodNameProviderForAction> NAMING_ACTIONS = Can.of(
+            (Method actionMethod, String prefix, boolean isMixin)->
                 prefix + StringExtensions.asCapitalizedName(actionMethod.getName()),
-            (Method actionMethod, String prefix)->
-                prefix //TODO restrict to mixins
+            (Method actionMethod, String prefix, boolean isMixin)->
+                isMixin 
+                    // prefix only notation is restricted to mixins
+                    ? prefix   
+                    : null
             );
-    public static final Can<SupportingMethodNameProviderForParameter> PARAMETERS = Can.of(
-            (Method actionMethod, String prefix, int paramNum)->
+    public static final Can<SupportingMethodNameProviderForParameter> NAMING_PARAMETERS = Can.of(
+            (Method actionMethod, String prefix, boolean isMixin, int paramNum)->
                 prefix + paramNum + StringExtensions.asCapitalizedName(actionMethod.getName()),
-            (Method actionMethod, String prefix, int paramNum)-> //TODO restrict to mixins
-                prefix + StringExtensions.asCapitalizedName(actionMethod.getParameters()[paramNum].getName())
+            (Method actionMethod, String prefix, boolean isMixin, int paramNum)->
+                isMixin 
+                    // no action name reference notation is restricted to mixins
+                    ? prefix + StringExtensions.asCapitalizedName(actionMethod.getParameters()[paramNum].getName())   
+                    : null
             );
-    public static final Can<SupportingMethodNameProviderForPropertyAndCollection> PROPERTIES_AND_COLLECTIONS = Can.of(
-            (Member member, String prefix)->
+    public static final Can<SupportingMethodNameProviderForPropertyAndCollection> NAMING_PROPERTIES_AND_COLLECTIONS = Can.of(
+            (Member member, String prefix, boolean isMixin)->
                 prefix + getCapitalizedMemberName(member),
-            (Member member, String prefix)->
-                prefix //TODO restrict to mixins
+            (Member member, String prefix, boolean isMixin)->
+                isMixin 
+                    // prefix only notation is restricted to mixins
+                    ? prefix   
+                    : null
             );
     
     // -- HELPER

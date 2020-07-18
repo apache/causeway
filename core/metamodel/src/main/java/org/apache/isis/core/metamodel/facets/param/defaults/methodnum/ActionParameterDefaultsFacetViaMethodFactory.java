@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 
 import lombok.val;
@@ -62,7 +62,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
         // attach DefaultFacetForParameters if defaultNumMethod is found ...
         
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = getNamingConventionForParameterSupport(actionMethod, PREFIX);
+        val namingConvention = getNamingConventionForParameterSupport(processMethodContext, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)

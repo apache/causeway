@@ -54,8 +54,8 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
 
         val getterOrMixinMain = processMethodContext.getMethod();
         val namingConvention = processMethodContext.isMixinMain() 
-                ? getNamingConventionForActionSupport(getterOrMixinMain, PREFIX)
-                : getNamingConventionForPropertyAndCollectionSupport(getterOrMixinMain, PREFIX); // handles getters
+                ? getNamingConventionForActionSupport(processMethodContext, PREFIX)
+                : getNamingConventionForPropertyAndCollectionSupport(processMethodContext, PREFIX); // handles getters
         
         val cls = processMethodContext.getCls();
         val returnType = getterOrMixinMain.getReturnType();
