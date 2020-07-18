@@ -64,7 +64,7 @@ public class ParameterSupport {
         }
         
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
-        @NonNull IntFunction<String> paramIndexToMethodName;
+        @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders;
         @NonNull EnumSet<SearchAlgorithm> searchAlgorithms; 
         @NonNull ReturnType returnType;
         
@@ -72,6 +72,12 @@ public class ParameterSupport {
         
         @Getter(lazy = true)
         Class<?>[] paramTypes = getProcessMethodContext().getMethod().getParameterTypes();
+        
+        Can<String> getSupporingMethodNameCandidates(final int paramNr) {
+            //TODO optimization make unique, without loosing order
+            return getParamIndexToMethodNameProviders()
+                    .map(provider->provider.apply(paramNr));
+        }
     }
     
     @Value(staticConstructor = "of")
@@ -140,7 +146,8 @@ public class ParameterSupport {
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
-        val methodName = searchRequest.getParamIndexToMethodName().apply(paramIndex);
+        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
+                
         val paramType = paramTypes[paramIndex];
         val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
         
@@ -148,20 +155,20 @@ public class ParameterSupport {
         
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            supportingMethodAndPpmConstructor = MethodFinderUtils
-                .findMethodWithPPMArg_returningBoolean(type, methodName, paramTypes, additionalParamTypes);
+            supportingMethodAndPpmConstructor = MethodFinder2
+                .findMethodWithPPMArg_returningBoolean(type, methodNames, paramTypes, additionalParamTypes);
             break;
         case TEXT:
-            supportingMethodAndPpmConstructor = MethodFinderUtils
-                .findMethodWithPPMArg_returningText(type, methodName, paramTypes, additionalParamTypes);
+            supportingMethodAndPpmConstructor = MethodFinder2
+                .findMethodWithPPMArg_returningText(type, methodNames, paramTypes, additionalParamTypes);
             break;
         case NON_SCALAR:
-            supportingMethodAndPpmConstructor = MethodFinderUtils
-                .findMethodWithPPMArg_returningNonScalar(type, methodName, paramType, paramTypes, additionalParamTypes);
+            supportingMethodAndPpmConstructor = MethodFinder2
+                .findMethodWithPPMArg_returningNonScalar(type, methodNames, paramType, paramTypes, additionalParamTypes);
             break;
         case SAME_AS_PARAMETER_TYPE:
-            supportingMethodAndPpmConstructor = MethodFinderUtils
-                .findMethodWithPPMArg(type, methodName, paramType, paramTypes, additionalParamTypes);
+            supportingMethodAndPpmConstructor = MethodFinder2
+                .findMethodWithPPMArg(type, methodNames, paramType, paramTypes, additionalParamTypes);
             break;
         default:
             supportingMethodAndPpmConstructor = null;
@@ -196,7 +203,7 @@ public class ParameterSupport {
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
-        val methodName = searchRequest.getParamIndexToMethodName().apply(paramIndex);
+        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
         val paramType = paramTypes[paramIndex];
         val singleArg = new Class<?>[]{paramType};
         
@@ -204,20 +211,20 @@ public class ParameterSupport {
         
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            supportingMethod = MethodFinderUtils
-                .findMethod_returningBoolean(type, methodName, singleArg);
+            supportingMethod = MethodFinder2
+                .findMethod_returningBoolean(type, methodNames, singleArg);
             break;
         case TEXT:
-            supportingMethod = MethodFinderUtils
-                .findMethod_returningText(type, methodName, singleArg);
+            supportingMethod = MethodFinder2
+                .findMethod_returningText(type, methodNames, singleArg);
             break;
         case NON_SCALAR:
-            supportingMethod = MethodFinderUtils
-                .findMethod_returningNonScalar(type, methodName, paramType, singleArg);
+            supportingMethod = MethodFinder2
+                .findMethod_returningNonScalar(type, methodNames, paramType, singleArg);
             break;
         case SAME_AS_PARAMETER_TYPE:
-            supportingMethod = MethodFinderUtils
-                .findMethod(type, methodName, paramType, singleArg);
+            supportingMethod = MethodFinder2
+                .findMethod(type, methodNames, paramType, singleArg);
             break;
         default:
             supportingMethod = null;
@@ -242,7 +249,7 @@ public class ParameterSupport {
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
-        val methodName = searchRequest.getParamIndexToMethodName().apply(paramIndex);
+        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
         val paramType = paramTypes[paramIndex];
         val additionalParamType = searchRequest.getAdditionalParamType();
         val additionalParamCount = additionalParamType!=null ? 1 : 0;
@@ -256,20 +263,20 @@ public class ParameterSupport {
             
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
-                supportingMethod = MethodFinderUtils
-                    .findMethod_returningBoolean(type, methodName, paramTypesToLookFor);
+                supportingMethod = MethodFinder2
+                    .findMethod_returningBoolean(type, methodNames, paramTypesToLookFor);
                 break;
             case TEXT:
-                supportingMethod = MethodFinderUtils
-                    .findMethod_returningText(type, methodName, paramTypesToLookFor);
+                supportingMethod = MethodFinder2
+                    .findMethod_returningText(type, methodNames, paramTypesToLookFor);
                 break;
             case NON_SCALAR:
-                supportingMethod = MethodFinderUtils
-                    .findMethod_returningNonScalar(type, methodName, paramType, paramTypesToLookFor);
+                supportingMethod = MethodFinder2
+                    .findMethod_returningNonScalar(type, methodNames, paramType, paramTypesToLookFor);
                 break;
             case SAME_AS_PARAMETER_TYPE:
-                supportingMethod = MethodFinderUtils
-                    .findMethod(type, methodName, paramType, paramTypesToLookFor);
+                supportingMethod = MethodFinder2
+                    .findMethod(type, methodNames, paramType, paramTypesToLookFor);
                 break;
             default:
                 supportingMethod = null;
@@ -322,7 +329,7 @@ public class ParameterSupport {
         
         return String.format("%s.%s(%s) : %s",
                 searchRequest.getProcessMethodContext().getCls().getSimpleName(),
-                searchRequest.getParamIndexToMethodName().apply(paramIndex),
+                searchRequest.getSupporingMethodNameCandidates(paramIndex),
                 toString(searchRequest.getParamTypes()),
                 searchRequest.getReturnType().name()
                 );

@@ -57,12 +57,12 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
         // attach ActionParameterHiddenFacet if hideNumMethod is found ...
         
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForParam(actionMethod, PREFIX));
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.BOOLEAN)
-                .paramIndexToMethodName(namingConvention)
+                .paramIndexToMethodNameProviders(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
         

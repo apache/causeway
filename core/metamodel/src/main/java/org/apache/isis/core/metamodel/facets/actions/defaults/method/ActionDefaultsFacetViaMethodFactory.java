@@ -23,10 +23,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodFinder2;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -71,10 +70,10 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
             final Class<?> returnType) {
 
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = PREFIX_BASED_NAMING.providerForAction(actionMethod, PREFIX);
         val cls = processMethodContext.getCls();
-        return MethodFinderUtils.findMethod(
-                cls, namingConvention.get(), returnType, NO_ARG);
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForAction(actionMethod, PREFIX));
+        return MethodFinder2.findMethod(
+                cls, namingConvention.map(x->x.get()), returnType, NO_ARG);
     }
 
 }

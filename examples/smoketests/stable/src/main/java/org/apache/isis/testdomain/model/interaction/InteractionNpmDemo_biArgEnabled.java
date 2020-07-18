@@ -19,6 +19,8 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
@@ -33,27 +35,34 @@ public class InteractionNpmDemo_biArgEnabled {
     private final InteractionNpmDemo holder;
     
     @Value @Accessors(fluent = true)            
-    public static class Parameters {                                   
- 
-        //@Parameter @ParameterLayout //TODO[ISIS-2362] support these here
+    public static class Parameters {      
         int a;
-        //@Parameter @ParameterLayout //TODO[ISIS-2362] support these here
         int b;
     }
     
-    
     @Model
-    public int act(Parameters params) {
-        return params.a() + params.b();
+    public int act(
+            
+            @Parameter(maxLength = 2) // setup so we can test for this facet 
+            @ParameterLayout(describedAs = "first") // setup so we can test for this facet
+            int a,
+            
+            int b) {
+        
+        return a + b;
     }
     
-    // parameter supporting methods, to be referenced by param name ...
-    
+    // -- PARAM 0
+
+    // [ISIS-2362] parameter supporting methods, to be referenced by param name
     @Model 
-    public int defaultA(Parameters params) {
+    public int defaultA(Parameters params) { 
         return 5;
     }
     
+    // -- PARAM 1
+    
+    // [ISIS-2362] parameter supporting methods, to be referenced by param name
     @Model
     public int[] choicesB(Parameters params) {
         return new int[] {1, 2, 3, 4};

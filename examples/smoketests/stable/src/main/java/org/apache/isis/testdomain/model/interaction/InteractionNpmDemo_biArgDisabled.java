@@ -33,17 +33,14 @@ public class InteractionNpmDemo_biArgDisabled {
     private final InteractionNpmDemo holder;
     
     @Value @Accessors(fluent = true)            
-    public static class Parameters {                                   
- 
-        //@Parameter @ParameterLayout //TODO[ISIS-2362] support these here
+    public static class Parameters {      
         int a;
-        //@Parameter @ParameterLayout //TODO[ISIS-2362] support these here
         int b;
     }
     
     @Model
-    public int act(Parameters params) {
-        return params.a() + params.b();
+    public int act(int a, int b) {
+        return a + b;
     }
     
     //TODO[ISIS-2362] supporting methods (no arg): rename -> disable()
@@ -53,8 +50,9 @@ public class InteractionNpmDemo_biArgDisabled {
     }
     
     //TODO[ISIS-2362] supporting methods (no arg): rename -> validate()
-    @Model
-    public String validateAct() {
+    //TODO[ISIS-2362] supporting methods (all args): rename -> validate(params)
+    //@Model //FIXME not recognized by method finders (metamodel)
+    public String validateAct(Parameters params) {
         return "Never valid for demonstration.";
     }
 }

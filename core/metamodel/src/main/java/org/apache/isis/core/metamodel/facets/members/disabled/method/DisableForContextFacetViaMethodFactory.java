@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodFinder2;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -54,22 +54,22 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         Method disableMethod = null;
         
-        val namingConvention = PREFIX_BASED_NAMING.providerForMember(actionOrGetter, PREFIX);
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForMember(actionOrGetter, PREFIX));
 
         boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
         boolean searchExactMatch = !noParamsOnly;
         if(searchExactMatch) {
             // search for exact match
-            disableMethod = MethodFinderUtils.findMethod_returningText(
+            disableMethod = MethodFinder2.findMethod_returningText(
                     cls,
-                    namingConvention.get(),
+                    namingConvention.map(x->x.get()),
                     actionOrGetter.getParameterTypes());
         }
         if (disableMethod == null) {
             // search for no-arg version
-            disableMethod = MethodFinderUtils.findMethod_returningText(
+            disableMethod = MethodFinder2.findMethod_returningText(
                     cls,
-                    namingConvention.get(),
+                    namingConvention.map(x->x.get()),
                     NO_ARG);
         }
         if (disableMethod == null) {

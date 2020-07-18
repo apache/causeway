@@ -36,8 +36,10 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
 implements MethodPrefixBasedFacetFactory {
     
-    protected static final SupportingMethodNamingConvention PREFIX_BASED_NAMING = 
-            SupportingMethodNamingConvention.PREFIX_PARAMNUM_ACTION;
+    protected static final Can<SupportingMethodNamingConvention> PREFIX_BASED_NAMING = 
+            Can.of(
+                    SupportingMethodNamingConvention.PREFIX_PARAMNUM_ACTION,
+                    SupportingMethodNamingConvention.PREFIX_PARAMNAME_USING_PARAMETERS_RECORD); // new since v2 [ISIS-2362]
     
     @Getter(onMethod = @__(@Override))
     private final Can<String> prefixes;

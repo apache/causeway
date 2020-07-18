@@ -25,7 +25,7 @@ import java.util.Collection;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodFinder2;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -80,10 +80,10 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
 
         val cls = processMethodContext.getCls();
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = PREFIX_BASED_NAMING.providerForAction(actionMethod, PREFIX);
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForAction(actionMethod, PREFIX));
         
         Method choicesMethod = 
-                MethodFinderUtils.findMethod(cls, namingConvention.get(), returnType, NO_ARG);
+                MethodFinder2.findMethod(cls, namingConvention.map(x->x.get()), returnType, NO_ARG);
         return choicesMethod;
     }
 

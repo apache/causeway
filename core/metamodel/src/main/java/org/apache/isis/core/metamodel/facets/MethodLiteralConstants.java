@@ -79,16 +79,16 @@ public final class MethodLiteralConstants {
 
             @Override
             protected String getActionSupportingMethodName(Method actionMethod, String prefix) {
-                final String capitalizedName = 
+                final String capitalizedActionName = 
                         StringExtensions.asCapitalizedName(actionMethod.getName());
-                return prefix + capitalizedName;
+                return prefix + capitalizedActionName;
             }
 
             @Override
             protected String getParameterSupportingMethodName(Method actionMethod, String prefix, int paramNum) {
-                final String capitalizedName = 
+                final String capitalizedActionName = 
                         StringExtensions.asCapitalizedName(actionMethod.getName());
-                return prefix + paramNum + capitalizedName;
+                return prefix + paramNum + capitalizedActionName;
             }
             
             @Override
@@ -110,7 +110,27 @@ public final class MethodLiteralConstants {
                 return prefix + capitalizedName;
             }
             
+        },
+        
+        /** version 2.x, introduced for mixins eg. hide(...), hideParamname(...)*/
+        PREFIX_PARAMNAME_USING_PARAMETERS_RECORD {
+            @Override
+            protected String getActionSupportingMethodName(Method actionMethod, String prefix) {
+                return prefix;
+            }
+            @Override
+            protected String getParameterSupportingMethodName(Method actionMethod, String prefix, int paramNum) {
+                final String capitalizedParamName = 
+                        StringExtensions.asCapitalizedName(actionMethod.getParameters()[paramNum].getName());
+                return prefix + capitalizedParamName;
+            }
+            @Override
+            protected String getMemberSupportingMethodName(Member member, String prefix) {
+                // same as classic ???
+                return PREFIX_PARAMNUM_ACTION.getMemberSupportingMethodName(member, prefix);
+            }
         }
+        
         ;
         
         protected abstract String getActionSupportingMethodName(Method actionMethod, String prefix);

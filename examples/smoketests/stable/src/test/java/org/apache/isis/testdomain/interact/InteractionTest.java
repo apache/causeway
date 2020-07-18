@@ -35,7 +35,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -129,17 +128,17 @@ class InteractionTest extends InteractionTestAbstract {
 
     }
 
-    @Test //TODO API not yet provides a convenient means to get the action-meta when not usable    
+    @Test    
     void mixinActionInteraction_whenDisabled_shouldProvideActionMetadata() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled")
-                .checkVisibility(Where.OBJECT_FORMS);
+                .checkVisibility(Where.OBJECT_FORMS)
+                .checkUsability(Where.OBJECT_FORMS);
         
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        assertFalse(actionInteraction.getManagedAction().isPresent()); // since usability should be vetoed
+        assertTrue(actionInteraction.getMetamodel().isPresent()); // but should always provide access to metamodel
         
-        actionInteraction.checkUsability(Where.OBJECT_FORMS);
-        
-        val actionMeta = managedAction.getAction();
+        val actionMeta = actionInteraction.getMetamodel().get();
         assertEquals(2, actionMeta.getParameterCount());
     }
     
@@ -313,28 +312,20 @@ class InteractionTest extends InteractionTestAbstract {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .checkUsability(Where.OBJECT_FORMS);
 
-        //TODO simplify the API ...
+        assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
+
+        val managedAction = actionInteraction.getManagedAction().get(); 
+        val pendingArgs = managedAction.startParameterNegotiation();
+
+        val param0Choices = pendingArgs.getObservableParamChoices(0); // observable
+        val param1Choices = pendingArgs.getObservableParamChoices(1); // observable
         
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val actionMeta = managedAction.getAction();
-        
-        val pendingArgs = managedAction.getInteractionHead().defaults();
-        
-        val paramMetaList = actionMeta.getParameters();
-        
-        val param0Meta = paramMetaList.getElseFail(0);
-        val param1Meta = paramMetaList.getElseFail(1);
-        
-        val choices0 = param0Meta.getChoices(pendingArgs, InteractionInitiatedBy.USER); 
-        val choices1 = param1Meta.getChoices(pendingArgs, InteractionInitiatedBy.USER);
-        
-        assertTrue(choices0.isEmpty());
+        assertTrue(param0Choices.getValue().isEmpty());
         
         val expectedChoices = new InteractionDemo_biArgEnabled(null).choices1Act();
-        val actualChoices = choices1;
+        val actualChoices = param1Choices.getValue();
         
         assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
-        
     }
     
     @Test 
@@ -344,8 +335,10 @@ class InteractionTest extends InteractionTestAbstract {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .checkUsability(Where.OBJECT_FORMS);
 
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
+        
+        val managedAction = actionInteraction.getManagedAction().get();
+        val pendingArgs = managedAction.startParameterNegotiation();
         final int choiceParamNr = 1;
         
         //TODO also test param 0 ... SimulatedUiComponent<T>
@@ -380,6 +373,12 @@ class InteractionTest extends InteractionTestAbstract {
         
     }
     
+    //TODO when changing a bound param value, that influences another's defaults, those other parameter's 
+    //     must fire their change events (unless changed by user interaction already ... don't mess with 
+    //     the user's decision)
+    
+    //TODO when changing a bound param value, that influences another's choices, those other choices 
+    //     must fire their change events 
         
     
   //TODO test whether actions do emit their domain events

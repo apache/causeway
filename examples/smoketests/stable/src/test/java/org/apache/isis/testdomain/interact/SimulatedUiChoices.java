@@ -21,11 +21,8 @@ package org.apache.isis.testdomain.interact;
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.binding._Bindables;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-import lombok.val;
 
 public class SimulatedUiChoices {
 
@@ -36,28 +33,8 @@ public class SimulatedUiChoices {
             _Bindables.empty();
     
     public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
-
-        val actionMeta = pendingArgs.getHead().getMetaModel();
-        val paramMetaList = actionMeta.getParameters();
-        val paramMeta = paramMetaList.getElseFail(paramNr);
-
-        val choices = paramMeta.getChoices(pendingArgs, InteractionInitiatedBy.USER);
-
-        choiceBox.setValue(choices.stream()
-                .collect(Can.toCan()));
-        
-        selectedItem.addListener((e,o,n)->{
-            // propagate changes from UI to backend
-            pendingArgs.setParamValue(paramNr, n); // does not trigger change listeners
-        });
-
-        pendingArgs.getBindableParamValue(paramNr).addListener((e, o, n)->{
-            // propagate changes from backend to UI
-            //TODO disable change-listeners
-            selectedItem.setValue(n); // does trigger change listeners
-            //TODO enable change-listeners
-        });
-        
+        choiceBox.bind(pendingArgs.getObservableParamChoices(paramNr));
+        selectedItem.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
     }
 
     public void simulateChoiceSelect(int choiceIndex) {
@@ -67,6 +44,5 @@ public class SimulatedUiChoices {
     public ManagedObject getValue() {
         return selectedItem.getValue(); 
     }
-
 
 }

@@ -39,7 +39,7 @@ import lombok.NonNull;
  *
  * @since 2.0
  */
-abstract class _BindableAbstract<T> implements Bindable<T> {
+public abstract class _BindableAbstract<T> implements Bindable<T> {
 
     private T value;
     private Observable<? extends T> observable = null;;
@@ -95,7 +95,7 @@ abstract class _BindableAbstract<T> implements Bindable<T> {
     @Override
     public void setValue(T newValue) {
         if (isBound()) {
-            throw _Exceptions.unrecoverable("Cannot set a bound value.");
+            throw _Exceptions.unrecoverable("Cannot set value on a bound bindable.");
         }
         if (value != newValue) {
             value = newValue;

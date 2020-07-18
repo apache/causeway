@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodFinder2;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -53,15 +53,15 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
 
         val getterOrMixinMain = processMethodContext.getMethod();
         val namingConvention = processMethodContext.isMixinMain() 
-                ? PREFIX_BASED_NAMING.providerForAction(getterOrMixinMain, PREFIX)
-                : PREFIX_BASED_NAMING.providerForMember(getterOrMixinMain, PREFIX); // handles getters
+                ? PREFIX_BASED_NAMING.map(naming->naming.providerForAction(getterOrMixinMain, PREFIX))
+                : PREFIX_BASED_NAMING.map(naming->naming.providerForMember(getterOrMixinMain, PREFIX)); // handles getters
 
         val cls = processMethodContext.getCls();
         val returnType = getterOrMixinMain.getReturnType();
-        val method = MethodFinderUtils
+        val method = MethodFinder2
                 .findMethod(
                     cls,
-                    namingConvention.get(), 
+                    namingConvention.map(x->x.get()), 
                     returnType, 
                     NO_ARG);
         if (method == null) {

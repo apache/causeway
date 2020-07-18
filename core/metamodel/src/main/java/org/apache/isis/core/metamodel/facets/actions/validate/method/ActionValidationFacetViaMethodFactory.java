@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodFinder2;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
@@ -56,11 +56,11 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         val paramTypes = actionMethod.getParameterTypes();
 
-        val namingConvention = PREFIX_BASED_NAMING.providerForAction(actionMethod, PREFIX);
+        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForAction(actionMethod, PREFIX));
         
-        final Method validateMethod = MethodFinderUtils.findMethod_returningText(
+        final Method validateMethod = MethodFinder2.findMethod_returningText(
                 cls,
-                namingConvention.get(),
+                namingConvention.map(x->x.get()),
                 paramTypes);
         if (validateMethod == null) {
             return;
