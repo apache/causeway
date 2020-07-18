@@ -1,4 +1,10 @@
 description = 'Apache Isis Core - Runtime Services'
+
+sourceSets.test.resources { 
+	srcDirs = ["src/test/java"]
+	include "**/*.*" 
+}
+
 dependencies {
     compile project(':isis-parent:isis:isis-core-runtime')
     compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
