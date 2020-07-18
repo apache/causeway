@@ -54,7 +54,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
         // attach ActionParameterChoicesFacet if autoCompleteNumMethod is found ...
         
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = getNamingProvidersForParameters(actionMethod, PREFIX);
+        val namingConvention = getNamingConventionForParameterSupport(actionMethod, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)

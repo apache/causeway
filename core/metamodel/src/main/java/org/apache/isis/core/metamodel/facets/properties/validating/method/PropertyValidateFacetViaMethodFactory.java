@@ -46,12 +46,12 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
         val cls = processMethodContext.getCls();
         val getterMethod = processMethodContext.getMethod();
         
-        val namingConvention = getNamingProvidersForPropertiesAndCollections(getterMethod, PREFIX);
+        val namingConvention = getNamingConventionForPropertyAndCollectionSupport(getterMethod, PREFIX);
         val returnType = getterMethod.getReturnType();
 
         val validateMethod = MethodFinder2.findMethod_returningText(
                 cls,
-                namingConvention.map(x->x.get()),
+                namingConvention,
                 new Class[] { returnType })
                 .findFirst()
                 .orElse(null);

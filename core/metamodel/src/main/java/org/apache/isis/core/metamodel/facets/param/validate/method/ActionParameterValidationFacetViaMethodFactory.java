@@ -58,7 +58,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
         // in any case single-arg, either same as param-type or PPM style 
         
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = getNamingProvidersForParameters(actionMethod, PREFIX);
+        val namingConvention = getNamingConventionForParameterSupport(actionMethod, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)

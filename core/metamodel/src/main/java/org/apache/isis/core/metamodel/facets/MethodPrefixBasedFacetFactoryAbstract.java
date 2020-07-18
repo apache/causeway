@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.function.IntFunction;
-import java.util.function.Supplier;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
@@ -39,22 +38,22 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
 implements MethodPrefixBasedFacetFactory {
     
-    protected static final Can<Supplier<String>> getNamingProvidersForActions(
+    protected static final Can<String> getNamingConventionForActionSupport(
             final Method actionMethod, final String prefix) {
         return MethodLiteralConstants.ACTIONS
-                .map(naming->naming.providerForAction(actionMethod, prefix));
+                .map(naming->naming.getActionSupportingMethodName(actionMethod, prefix));
     }
     
-    protected static final Can<IntFunction<String>> getNamingProvidersForParameters(
+    protected static final Can<IntFunction<String>> getNamingConventionForParameterSupport(
             final Method actionMethod, final String prefix) {
         return MethodLiteralConstants.PARAMETERS
                 .map(naming->naming.providerForParam(actionMethod, prefix));
     }
     
-    protected static final Can<Supplier<String>> getNamingProvidersForPropertiesAndCollections(
+    protected static final Can<String> getNamingConventionForPropertyAndCollectionSupport(
             final Method actionMethod, final String prefix) {
         return MethodLiteralConstants.PROPERTIES_AND_COLLECTIONS
-                .map(naming->naming.providerForMember(actionMethod, prefix));
+                .map(naming->naming.getMemberSupportingMethodName(actionMethod, prefix));
     }
     
     @Getter(onMethod = @__(@Override))

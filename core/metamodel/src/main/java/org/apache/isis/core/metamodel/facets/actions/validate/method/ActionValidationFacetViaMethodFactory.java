@@ -55,12 +55,12 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val actionMethod = processMethodContext.getMethod();
         val facetHolder = processMethodContext.getFacetHolder();
 
-        val namingConvention = getNamingProvidersForActions(actionMethod, PREFIX);
+        val namingConvention = getNamingConventionForActionSupport(actionMethod, PREFIX);
         
         val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ActionSupport.ActionSupportingMethodSearchRequest.ReturnType.TEXT)
-                .methodNames(namingConvention.map(x->x.get()))
+                .methodNames(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES))
                 .build();
         

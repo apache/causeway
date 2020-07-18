@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.function.IntFunction;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -72,11 +71,6 @@ public final class MethodLiteralConstants {
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForAction {
         @Nullable String getActionSupportingMethodName(Method actionMethod, String prefix);
-        
-        /** action-supporting-method name provider */
-        default Supplier<String> providerForAction(Method actionMethod, String prefix) {
-            return ()->getActionSupportingMethodName(actionMethod, prefix);
-        }
     }
     
     @FunctionalInterface
@@ -85,8 +79,7 @@ public final class MethodLiteralConstants {
         
         /** paramNum to param-supporting-method name provider */
         default IntFunction<String> providerForParam(Method actionMethod, String prefix) {
-            return paramNum->getParameterSupportingMethodName(
-                    actionMethod, prefix, paramNum);
+            return paramNum->getParameterSupportingMethodName(actionMethod, prefix, paramNum);
         }
     }
     
@@ -94,12 +87,6 @@ public final class MethodLiteralConstants {
     public static interface SupportingMethodNameProviderForPropertyAndCollection {
         /** automatically deals with properties getters and actions */
         @Nullable String getMemberSupportingMethodName(Member member, String prefix);
-        
-        /** member-supporting-method name provider */
-        default Supplier<String> providerForMember(Member member, String prefix) {
-            return ()->getMemberSupportingMethodName(member, prefix);
-        }
-
     }
 
     // -- SUPPORTING METHOD NAMING CONVENTION
@@ -142,93 +129,6 @@ public final class MethodLiteralConstants {
                 StringExtensions.asCapitalizedName(member.getName());
         return capitalizedName;
     }
-    
-    // -- SUPPORTING METHOD NAMING CONVENTION
-    
-//    public static enum SupportingMethodNamingConvention {
-//
-//        /** version 1.x classic eg. hideAct(...), hide0Act(...)*/
-//        PREFIX_PARAMNUM_ACTION {
-//
-//            @Override
-//            protected String getActionSupportingMethodName(Method actionMethod, String prefix) {
-//                final String capitalizedActionName = 
-//                        StringExtensions.asCapitalizedName(actionMethod.getName());
-//                return prefix + capitalizedActionName;
-//            }
-//
-//            @Override
-//            protected String getParameterSupportingMethodName(Method actionMethod, String prefix, int paramNum) {
-//                final String capitalizedActionName = 
-//                        StringExtensions.asCapitalizedName(actionMethod.getName());
-//                return prefix + paramNum + capitalizedActionName;
-//            }
-//            
-//            @Override
-//            protected String getMemberSupportingMethodName(Member member, String prefix) {
-//                if(member instanceof Method) {
-//                    final Method method = (Method)member;
-//                    if(method.getParameterCount()>0) {
-//                        // definitely an action not a getter
-//                        return getActionSupportingMethodName(method, prefix);
-//                    }
-//                    // either a no-arg action or a getter 
-//                    final String capitalizedName = 
-//                            StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(member.getName());
-//                    return prefix + capitalizedName;
-//                }
-//                // must be a field then 
-//                final String capitalizedName = 
-//                        StringExtensions.asCapitalizedName(member.getName());
-//                return prefix + capitalizedName;
-//            }
-//            
-//        },
-//        
-//        /** version 2.x, introduced for mixins eg. hide(...), hideParamname(...)*/
-//        PREFIX_PARAMNAME_USING_PARAMETERS_RECORD {
-//            @Override
-//            protected String getActionSupportingMethodName(Method actionMethod, String prefix) {
-//                return prefix;
-//            }
-//            @Override
-//            protected String getParameterSupportingMethodName(Method actionMethod, String prefix, int paramNum) {
-//                final String capitalizedParamName = 
-//                        StringExtensions.asCapitalizedName(actionMethod.getParameters()[paramNum].getName());
-//                return prefix + capitalizedParamName;
-//            }
-//            @Override
-//            protected String getMemberSupportingMethodName(Member member, String prefix) {
-//                // prefix only
-//                return prefix;
-//            }
-//        }
-//        
-//        ;
-//        
-//        protected abstract String getActionSupportingMethodName(Method actionMethod, String prefix);
-//        protected abstract String getParameterSupportingMethodName(Method actionMethod, String prefix, int paramNum);
-//        /** automatically deals with properties getters and actions */
-//        protected abstract String getMemberSupportingMethodName(Member member, String prefix);
-//
-//        /** paramNum to param-supporting-method name provider */
-//        public IntFunction<String> providerForParam(Method actionMethod, String prefix) {
-//            return paramNum->getParameterSupportingMethodName(
-//                    actionMethod, prefix, paramNum);
-//        }
-//        
-//        /** action-supporting-method name provider */
-//        public Supplier<String> providerForAction(Method actionMethod, String prefix) {
-//            return ()->getActionSupportingMethodName(actionMethod, prefix);
-//        }
-//        
-//        /** member-supporting-method name provider */
-//        public Supplier<String> providerForMember(Member member, String prefix) {
-//            return ()->getMemberSupportingMethodName(member, prefix);
-//        }
-//        
-//    }
-     
     
     // -- DEPRECATIONS
     

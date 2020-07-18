@@ -54,7 +54,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         Method disableMethod = null;
         
-        val namingConvention = getNamingProvidersForPropertiesAndCollections(actionOrGetter, PREFIX);
+        val namingConvention = getNamingConventionForPropertyAndCollectionSupport(actionOrGetter, PREFIX);
 
         boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
         boolean searchExactMatch = !noParamsOnly;
@@ -62,7 +62,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             // search for exact match
             disableMethod = MethodFinder2.findMethod_returningText(
                     cls,
-                    namingConvention.map(x->x.get()),
+                    namingConvention,
                     actionOrGetter.getParameterTypes())
                     .findFirst()
                     .orElse(null);
@@ -71,7 +71,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             // search for no-arg version
             disableMethod = MethodFinder2.findMethod_returningText(
                     cls,
-                    namingConvention.map(x->x.get()),
+                    namingConvention,
                     NO_ARG)
                     .findFirst()
                     .orElse(null);

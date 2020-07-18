@@ -59,7 +59,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         // attach ActionChoicesFacet if choicesNumMethod is found ...
 
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = getNamingProvidersForParameters(actionMethod, PREFIX);
+        val namingConvention = getNamingConventionForParameterSupport(actionMethod, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
