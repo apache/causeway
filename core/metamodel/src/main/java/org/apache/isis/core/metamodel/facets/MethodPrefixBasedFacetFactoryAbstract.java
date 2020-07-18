@@ -18,10 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
+import java.lang.reflect.Method;
+import java.util.function.IntFunction;
+import java.util.function.Supplier;
+
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodLiteralConstants.SupportingMethodNamingConvention;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -36,10 +39,23 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
 implements MethodPrefixBasedFacetFactory {
     
-    protected static final Can<SupportingMethodNamingConvention> PREFIX_BASED_NAMING = 
-            Can.of(
-                    SupportingMethodNamingConvention.PREFIX_PARAMNUM_ACTION,
-                    SupportingMethodNamingConvention.PREFIX_PARAMNAME_USING_PARAMETERS_RECORD); // new since v2 [ISIS-2362]
+    protected static final Can<Supplier<String>> getNamingProvidersForActions(
+            final Method actionMethod, final String prefix) {
+        return MethodLiteralConstants.ACTIONS
+                .map(naming->naming.providerForAction(actionMethod, prefix));
+    }
+    
+    protected static final Can<IntFunction<String>> getNamingProvidersForParameters(
+            final Method actionMethod, final String prefix) {
+        return MethodLiteralConstants.PARAMETERS
+                .map(naming->naming.providerForParam(actionMethod, prefix));
+    }
+    
+    protected static final Can<Supplier<String>> getNamingProvidersForPropertiesAndCollections(
+            final Method actionMethod, final String prefix) {
+        return MethodLiteralConstants.PROPERTIES_AND_COLLECTIONS
+                .map(naming->naming.providerForMember(actionMethod, prefix));
+    }
     
     @Getter(onMethod = @__(@Override))
     private final Can<String> prefixes;

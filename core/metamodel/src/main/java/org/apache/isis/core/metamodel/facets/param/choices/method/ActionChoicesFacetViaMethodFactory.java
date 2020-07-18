@@ -80,7 +80,7 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
 
         val cls = processMethodContext.getCls();
         val actionMethod = processMethodContext.getMethod();
-        val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForAction(actionMethod, PREFIX));
+        val namingConvention = getNamingProvidersForActions(actionMethod, PREFIX);
         
         Method choicesMethod = 
                 MethodFinder2.findMethod(cls, namingConvention.map(x->x.get()), returnType, NO_ARG)
