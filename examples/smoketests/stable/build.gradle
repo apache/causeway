@@ -6,6 +6,10 @@ plugins {
 group = 'org.apache.isis.app'
 description = 'Apache Isis App - Smoketests'
 
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
 sourceSets {
 	main {
         resources {
@@ -38,7 +42,9 @@ dependencies {
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm')
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap:isis-extensions-shiro-realm-ldap-impl')
     compile(Libs.springDataJpa)
-    testCompile(Libs.jerseySpring5)
+    testCompile(Libs.jerseySpring5) {
+        exclude(module: 'jersey-server')
+    }
     testCompile(Libs.javaxJson)
     testCompile(Libs.moxy)
     testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')

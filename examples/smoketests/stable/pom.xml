@@ -25,4 +25,16 @@
 
 	<name>Apache Isis App - Smoketests (stable)</name>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-spring5</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.glassfish.jersey.core</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
 </project>
