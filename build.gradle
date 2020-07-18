@@ -42,7 +42,7 @@ subprojects {
     }
 
     test {
-        ignoreFailures = true
+        ignoreFailures = false
     }
 
 }

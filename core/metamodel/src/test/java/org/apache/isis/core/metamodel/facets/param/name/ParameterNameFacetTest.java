@@ -21,16 +21,16 @@ package org.apache.isis.core.metamodel.facets.param.name;
 import java.lang.reflect.Method;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava
 import lombok.val;
 
 /**
- * Detached from its module because we need the javac -parameter flag set when compiling this test 
+ * needs the javac -parameter flag set when compiling this test 
  */
 public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -62,6 +62,9 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         .init(new ProgrammingModelInitFilterDefault(), metaModelContext);
         
         super.setUpFacetedMethodAndParameter();
+        
+        // verify that 
+        assertEquals(127, programmingModel.streamFactories().count());
     }
 
     @Override
@@ -71,6 +74,22 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         programmingModel = null;
     }
 
+    @Test //verify we have the javac -parameter flag set when compiling this class
+    public void verifyTestEnvironmentIsSetupCorrectly() {
+
+        class Customer {
+            @SuppressWarnings("unused")
+            public void someAction(final String anAwesomeName) { }
+        }
+        
+        val someAction = _Reflect.streamAllMethods(Customer.class, false)
+        .filter(method->method.getName().equals("someAction"))
+        .findFirst()
+        .get();
+        
+        assertEquals("anAwesomeName", someAction.getParameters()[0].getName());
+    }
+    
     @Test
     public void someActionParameterShouldHaveProperName() {
 
@@ -83,15 +102,16 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
         // when
-        final FacetFactory.ProcessParameterContext processParameterContext = 
+        val processParameterContext = 
                 new FacetFactory.ProcessParameterContext(
                         Customer.class, actionMethod, 0, null, facetedMethodParameter);
+        
         programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then
-        final NamedFacet namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
-        assertThat(namedFacet.value(), is("An Awesome Name"));
+        val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
+        assertEquals("An Awesome Name", namedFacet.value());
 
     }
 
@@ -113,15 +133,15 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
         // when
-        final FacetFactory.ProcessParameterContext processParameterContext = 
+        val processParameterContext = 
                 new FacetFactory.ProcessParameterContext(
                         Customer.class, actionMethod, 0, null, facetedMethodParameter);
         programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then
-        final NamedFacet namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
-        Assert.assertNotNull(namedFacet);
-        assertThat(namedFacet.value(), is("Even Better Name"));
+        val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
+        assertNotNull(namedFacet);
+        assertEquals("Even Better Name", namedFacet.value());
 
     }
 

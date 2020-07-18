@@ -1,5 +1,11 @@
 description = 'Apache Isis Core - MetaModel'
 
+apply plugin: 'java'
+
+compileTestJava {
+    options.compilerArgs << '-parameters'
+}
+
 sourceSets {
 	main {
         resources {
@@ -41,6 +47,7 @@ dependencies {
         exclude(module: 'byte-buddy')
     }
     testCompile(Libs.hibernateValidator)
+    
 }
 
 task packageTests(type: Jar) {
