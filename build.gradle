@@ -8,6 +8,11 @@ buildscript {
 }
 
 apply from: './dependencies.gradle'
+def javaVersion = JavaVersion.current()
+
+task test {
+	println "Using JDK version: $javaVersion"
+}
 
 allprojects {
     apply plugin: "io.freefair.lombok"
