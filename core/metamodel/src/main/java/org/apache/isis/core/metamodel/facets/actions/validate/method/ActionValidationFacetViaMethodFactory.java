@@ -52,11 +52,8 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private void handleValidateAllArgsMethod(final ProcessMethodContext processMethodContext) {
 
-        //val cls = processMethodContext.getCls();
         val actionMethod = processMethodContext.getMethod();
         val facetHolder = processMethodContext.getFacetHolder();
-
-        //val paramTypes = actionMethod.getParameterTypes();
 
         val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForAction(actionMethod, PREFIX));
         
@@ -84,28 +81,6 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
                     new ActionValidationFacetViaMethod(
                             validateMethod, translationService, translationContext, ppmFactory, facetHolder));
         });
-        
-//        final Method validateMethod = MethodFinder2.findMethod_returningText(
-//                cls,
-//                namingConvention.map(x->x.get()),
-//                paramTypes);
-//        
-//        val validateMethodPpm = MethodFinder2.findMethodWithPPMArg_returningText(
-//                cls,
-//                namingConvention.map(x->x.get()),
-//                paramTypes,
-//                Can.empty());
-//        if (validateMethod == null) {
-//            return;
-//        }
-//        processMethodContext.removeMethod(validateMethod);
-//
-//        final TranslationService translationService = getTranslationService();
-//        final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
-//        final ActionValidationFacetViaMethod facet = 
-//                new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
-//        super.addFacet(facet);
-        
 
     }
 
