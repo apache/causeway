@@ -1,10 +1,18 @@
 description = 'Apache Isis Core - MetaModel'
 
 sourceSets {
+	main {
+        resources {
+            srcDirs += "src/main/java"
+            include "**/*"
+            exclude "**/*.java"
+        }
+    }
     test {
         resources {
             srcDirs += "src/test/java"
-            include "**/*.xml" 
+            include "**/*"
+            exclude "**/*.java"
         }
     }
 }
