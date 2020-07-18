@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.actions.validate.method;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -38,12 +40,20 @@ public class ActionValidationFacetViaMethod extends ActionValidationFacetAbstrac
     private final Method method;
     private final TranslationService translationService;
     private final String translationContext;
+    private final Optional<Constructor<?>> ppmFactory;
 
-    public ActionValidationFacetViaMethod(final Method method, final TranslationService translationService, final String translationContext, final FacetHolder holder) {
+    public ActionValidationFacetViaMethod(
+            final Method method, 
+            final TranslationService translationService, 
+            final String translationContext, 
+            Optional<Constructor<?>> ppmFactory, 
+            final FacetHolder holder) {
+        
         super(holder);
         this.method = method;
         this.translationService = translationService;
         this.translationContext = translationContext;
+        this.ppmFactory = ppmFactory;
     }
 
     /**
@@ -62,7 +72,11 @@ public class ActionValidationFacetViaMethod extends ActionValidationFacetAbstrac
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
-        final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapters);
+        
+        final Object returnValue = ppmFactory.isPresent()
+                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, proposedArgumentAdapters)
+                : ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapters);
+
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

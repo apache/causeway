@@ -126,8 +126,8 @@ public final class MethodLiteralConstants {
             }
             @Override
             protected String getMemberSupportingMethodName(Member member, String prefix) {
-                // same as classic ???
-                return PREFIX_PARAMNUM_ACTION.getMemberSupportingMethodName(member, prefix);
+                // prefix only
+                return prefix;
             }
         }
         

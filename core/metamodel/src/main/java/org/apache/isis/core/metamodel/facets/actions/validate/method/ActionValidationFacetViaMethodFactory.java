@@ -19,15 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.actions.validate.method;
 
-import java.lang.reflect.Method;
+import java.util.EnumSet;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinder2;
+import org.apache.isis.core.metamodel.facets.ActionSupport;
+import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
+import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
 
 import lombok.val;
 
@@ -50,29 +52,61 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private void handleValidateAllArgsMethod(final ProcessMethodContext processMethodContext) {
 
-        val cls = processMethodContext.getCls();
+        //val cls = processMethodContext.getCls();
         val actionMethod = processMethodContext.getMethod();
         val facetHolder = processMethodContext.getFacetHolder();
 
-        val paramTypes = actionMethod.getParameterTypes();
+        //val paramTypes = actionMethod.getParameterTypes();
 
         val namingConvention = PREFIX_BASED_NAMING.map(naming->naming.providerForAction(actionMethod, PREFIX));
         
-        final Method validateMethod = MethodFinder2.findMethod_returningText(
-                cls,
-                namingConvention.map(x->x.get()),
-                paramTypes);
-        if (validateMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(validateMethod);
+        val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
+                .processMethodContext(processMethodContext)
+                .returnType(ActionSupport.ActionSupportingMethodSearchRequest.ReturnType.TEXT)
+                .methodNames(namingConvention.map(x->x.get()))
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES))
+                .build();
+        
+        ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
+            val validateMethod = searchResult.getSupportingMethod();
+            
+            processMethodContext.removeMethod(validateMethod);
+            
+            if (facetHolder.containsNonFallbackFacet(ActionValidationFacetViaMethod.class)) {
+                throw new MetaModelException( processMethodContext.getCls() + " uses both old and new 'validate' syntax - "
+                        + "must use one or other");
+            }
 
-        final TranslationService translationService = getTranslationService();
-        // sadness: same as in TranslationFactory
-        final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
-        final ActionValidationFacetViaMethod facet = 
-                new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
-        super.addFacet(facet);
+            val ppmFactory = searchResult.getPpmFactory();
+            val translationService = getTranslationService();
+            val translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
+            super.addFacet(
+                    new ActionValidationFacetViaMethod(
+                            validateMethod, translationService, translationContext, ppmFactory, facetHolder));
+        });
+        
+//        final Method validateMethod = MethodFinder2.findMethod_returningText(
+//                cls,
+//                namingConvention.map(x->x.get()),
+//                paramTypes);
+//        
+//        val validateMethodPpm = MethodFinder2.findMethodWithPPMArg_returningText(
+//                cls,
+//                namingConvention.map(x->x.get()),
+//                paramTypes,
+//                Can.empty());
+//        if (validateMethod == null) {
+//            return;
+//        }
+//        processMethodContext.removeMethod(validateMethod);
+//
+//        final TranslationService translationService = getTranslationService();
+//        final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
+//        final ActionValidationFacetViaMethod facet = 
+//                new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
+//        super.addFacet(facet);
+        
+
     }
 
 

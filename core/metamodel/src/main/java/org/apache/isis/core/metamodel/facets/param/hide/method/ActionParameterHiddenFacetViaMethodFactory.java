@@ -64,7 +64,7 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
                 .returnType(ReturnType.BOOLEAN)
                 .paramIndexToMethodNameProviders(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
-                .build();
+                .build(); 
         
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
             

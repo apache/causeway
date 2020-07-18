@@ -43,16 +43,37 @@ public class InteractionNpmDemo_biArgDisabled {
         return a + b;
     }
     
-    //TODO[ISIS-2362] supporting methods (no arg): rename -> disable()
     @Model
-    public String disableAct() {
+    public boolean hide() {
+        return false;
+    }
+    
+    @Model
+    public String disable() {
         return "Disabled for demonstration.";
     }
     
-    //TODO[ISIS-2362] supporting methods (no arg): rename -> validate()
-    //TODO[ISIS-2362] supporting methods (all args): rename -> validate(params)
-    //@Model //FIXME not recognized by method finders (metamodel)
-    public String validateAct(Parameters params) {
+    @Model
+    public String validate(Parameters params) {
         return "Never valid for demonstration.";
     }
+    
+    // -- PARAM SUPPORTING METHODS 
+    
+    // testing whether all of these get picked up by the meta-model
+    
+    @Model public boolean hideA(Parameters params) { return false; }         
+    @Model public String disableA(Parameters params) { return null; }                           
+    @Model public String validateA(Parameters params) { return null; }
+    @Model public int[] choicesA(Parameters params) { return null; }          
+    @Model public int[] autoCompleteA(Parameters params, String search) { return null; }
+    @Model public int defaultA(Parameters params) { return 0; }
+    
+    @Model public boolean hideB(Parameters params) { return false; }         
+    @Model public String disableB(Parameters params) { return null; }                           
+    @Model public String validateB(Parameters params) { return null; }
+    @Model public int[] choicesB(Parameters params) { return null; }          
+    @Model public int[] autoCompleteB(Parameters params, String search) { return null; }
+    @Model public int defaultB(Parameters params) { return 0; }
+    
 }
