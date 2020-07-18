@@ -25,8 +25,8 @@ ext {
     junitVersion = "5.6.2"
     poiVersion = "4.1.1"
     shiroVersion = "1.4.1"
-    springBootVersion = "2.2.7.RELEASE"
-    springVersion = "5.2.6.RELEASE"
+    springBootVersion = "2.3.1.RELEASE"
+    springVersion = "5.2.7.RELEASE"
     wicketVersion = "8.8.0"
     wicketBootstrapVersion = "2.0.13"
     xdocreportVersion = "1.0.6"
@@ -104,7 +104,7 @@ ext {
             springBootStarterThymeleaf      : "org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion",
             springBootStarterWeb            : "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
             springContext                   : "org.springframework:spring-context:$springVersion",
-            springDataJpa                   : "org.springframework:spring-data-jpa:$springVersion",
+            springDataJpa                   : "org.springframework.data:spring-data-jpa:$springBootVersion",
             springTx                        : "org.springframework:spring-tx:$springVersion",
             springTest                      : "org.springframework:spring-test:$springVersion",
             springWeb                       : "org.springframework:spring-web:$springVersion",

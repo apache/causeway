@@ -267,4 +267,4 @@ project(':isis-parent:isis:isis-valuetypes').projectDir = "$rootDir/valuetypes" 
 //project(':isis-app-starter-parent:demo-parent:demo-domain').projectDir = "$rootDir/examples/demo/domain" as File
 //project(':isis-app-starter-parent:demo-parent:demo-wicket').projectDir = "$rootDir/examples/demo/wicket" as File
 project(':isis-app-starter-parent:demo-parent').projectDir = "$rootDir/examples/demo" as File
-project(':isis-app-starter-parent:smoketests').projectDir = "$rootDir/examples/smoketests" as File
+project(':isis-app-starter-parent:smoketests').projectDir = "$rootDir/examples/smoketests/stable" as File

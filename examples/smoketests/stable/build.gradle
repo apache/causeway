@@ -4,6 +4,8 @@ dependencies {
     compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp')
     compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-jdk11')
     compile project(':isis-parent:isis:isis-security-shiro')
+    compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer')
+    compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-jaxrsresteasy4')
     compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
     compile project(':isis-parent:isis:isis-mappings:isis-mappings-restclient-api')
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-modelannotation')
