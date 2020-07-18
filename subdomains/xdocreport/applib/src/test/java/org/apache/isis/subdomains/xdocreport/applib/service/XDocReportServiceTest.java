@@ -69,6 +69,7 @@ public class XDocReportServiceTest {
         final byte[] docxBytes = service.render(templateBytes, dataModel, OutputType.DOCX);
 
         // then
+        new File("target").mkdir(); // create the target folder if needed [gradle]
         IOUtils.write(docxBytes,new FileOutputStream(new File("target/Project.docx")));
     }
 
