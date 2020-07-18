@@ -1,0 +1,15 @@
+<persistence
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+	version="2.2">
+
+	<persistence-unit name="PUinSupportOfGradleBuild">
+		<class>org.apache.isis.testdomain.jdo.entities.JdoProductComment</class>
+		<class>org.apache.isis.testdomain.jdo.entities.JdoInventory</class>
+		<class>org.apache.isis.testdomain.jdo.entities.JdoBook</class>
+		<class>org.apache.isis.testdomain.jdo.entities.JdoProduct</class>
+	</persistence-unit>
+
+</persistence>

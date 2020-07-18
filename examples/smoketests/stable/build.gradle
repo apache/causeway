@@ -1,5 +1,28 @@
+plugins {
+  id 'java'
+  id "org.rm3l.datanucleus-gradle-plugin" version "1.5.0"
+}
+
 group = 'org.apache.isis.app'
 description = 'Apache Isis App - Smoketests'
+
+sourceSets {
+	main {
+        resources {
+            srcDirs += "src/main/java"
+            include "**/*"
+            exclude "**/*.java"
+        }
+    }
+    test {
+        resources {
+            srcDirs += "src/test/java"
+            include "**/*"
+            exclude "**/*.java"
+        }
+    }
+}
+
 dependencies {
     compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp')
     compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-jdk11')
@@ -21,3 +44,42 @@ dependencies {
     testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
     testCompile(Libs.apachedsTestFramework)
 }
+
+datanucleus {
+  enhance {
+    api 'JDO'
+    log4jConfiguration 'logging-dn-enhance.properties'
+	verbose true
+    persistenceUnitName 'PUinSupportOfGradleBuild'
+    //... other options are possible
+  }
+}
+
+
+test {
+	// enable JUnit Platform (a.k.a. JUnit 5) support
+	useJUnitPlatform()
+	
+	// explicitly include or exclude tests
+	//  include 'org/foo/**'
+	//  exclude 'org/boo/**'
+	
+	// show standard out and standard error of the test JVM(s) on the console
+	testLogging.showStandardStreams = true
+	
+	// set heap size for the test JVM(s)
+	minHeapSize = "128m"
+	maxHeapSize = "512m"
+	
+	// set JVM arguments for the test JVM(s)
+	jvmArgs '-XX:MaxPermSize=256m'
+	
+	// listen to events in the test execution lifecycle
+	beforeTest { descriptor ->
+	   logger.lifecycle("Running test: " + descriptor)
+	}
+	
+	// Fail the 'test' task on the first test failure
+	failFast = true
+}
+
