@@ -1,11 +1,17 @@
+plugins {
+    id "org.openrepose.gradle.plugins.jaxb" version "2.5.0"
+}
 description = 'Apache Isis Core - Schemas'
-apply plugin: 'war'
+apply plugin: 'java-library'
 apply plugin: 'io.freefair.lombok'
+
+def episodesDir = "${project.buildDir}/generated-sources/xjc/META-INF"
+def javaVersion = JavaVersion.current()
 
 sourceSets {
     main {
         java {
-            srcDir 'target/generated-sources/xjc'
+            srcDirs += "${buildDir}/generated-sources/xjc"
         }
     }
 }
@@ -15,11 +21,20 @@ dependencies {
 
     compile(Libs.springContext)
     compile(Libs.jodaTime)
-
-    // These dependencies are required in order to build on jdk11
-    compile(Libs.jaxbApi)  // not set in POM`s ??
-    compile(Libs.jaxbCore)
-    compile(Libs.jaxbImpl)
+    
+    if (javaVersion > JavaVersion.VERSION_1_8) {
+    // These dependencies are required in order to build on jdk versions > 1.8
+    	api(Libs.jaxbApi)
+    	implementation(Libs.jaxbImpl)
+    	implementation(Libs.jaxbCore)
+    }
+    
+    // jaxb plugin dependencies
+    jaxb(Libs.jaxbApi)
+    jaxb(Libs.jaxbCore)
+    jaxb(Libs.jaxbImpl)
+    jaxb(Libs.jaxbXjc)
+    jaxb("org.jvnet.jaxb2_commons:jaxb2-namespace-prefix:1.3")
 }
 
 task packageTests(type: Jar) {
@@ -27,3 +42,34 @@ task packageTests(type: Jar) {
     classifier = 'tests'
 }
 artifacts.archives packageTests
+
+jaxb {
+	xsdDir = "${project.projectDir}/src/main/resources/org/apache/isis/schema"
+ 	xsdIncludes = ['**/*.xsd']
+ 	bindingsDir = "${project.projectDir}/src/main/resources/org/apache/isis/schema"
+ 	bindings = ['*.xml']
+ 	xjc {
+ 		accessExternalSchema = 'file'
+ 		args = ["-Xnamespace-prefix"]
+ 	}
+}
+
+xjc.configure {
+	doLast {
+	  	mkdir "${episodesDir}"
+	  	copy {
+		    from file("${project.buildDir}/generated-resources/episodes/isis.apache.org-schema-common.episode")
+		    into "${episodesDir}"
+		}
+	}
+}
+
+compileJava {
+	dependsOn xjc
+}
+
+// required due to bug 
+// https://github.com/rackerlabs/gradle-jaxb-plugin/issues/36
+tasks.named("xsd-dependency-tree").configure {
+    outputs.upToDateWhen { false }
+}
