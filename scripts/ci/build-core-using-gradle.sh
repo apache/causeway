@@ -25,14 +25,11 @@ fi
 
 sh $SCRIPT_DIR/_print-environment.sh "build-core-using-gradle"
 
-# use maven to run the JAXB Java Source Generator
-# this step could be migrated to run with gradle instead
-# that would be the api/schema/build.gradle file to put some love to
+##un-comment if we want maven to run the JAXB Java Source Generator
+##cd $PROJECT_ROOT_PATH/api/schema
+##mvn generate-sources
 
-cd $PROJECT_ROOT_PATH/api/schema
-mvn generate-sources
-
-# build the rest with gradle ...
+# build with gradle ...
 
 cd $PROJECT_ROOT_PATH
 
