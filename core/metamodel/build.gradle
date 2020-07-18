@@ -1,4 +1,14 @@
 description = 'Apache Isis Core - MetaModel'
+
+sourceSets {
+    test {
+        resources {
+            srcDirs += "src/test/java"
+            include "**/*.xml" 
+        }
+    }
+}
+
 dependencies {
     compile project(':isis-parent:isis-applib')
     compile project(':isis-parent:isis:isis-core-config')

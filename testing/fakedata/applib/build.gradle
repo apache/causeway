@@ -1,5 +1,11 @@
 group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - FakeData (applib)'
+
+sourceSets.main.resources { 
+	srcDirs = ["src/main/java"]
+	include "**/*.*" 
+}
+
 dependencies {
     compile project(':isis-parent:isis-applib')
     compile(Libs.javafaker) {
