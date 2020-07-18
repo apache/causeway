@@ -71,7 +71,7 @@ test {
 	//  exclude 'org/boo/**'
 	
 	// show standard out and standard error of the test JVM(s) on the console
-	testLogging.showStandardStreams = true
+	testLogging.showStandardStreams = false
 	
 	// set heap size for the test JVM(s)
 	minHeapSize = "128m"
