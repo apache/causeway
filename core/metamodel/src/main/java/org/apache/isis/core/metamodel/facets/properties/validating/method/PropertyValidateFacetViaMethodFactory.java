@@ -52,7 +52,9 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
         val validateMethod = MethodFinder2.findMethod_returningText(
                 cls,
                 namingConvention.map(x->x.get()),
-                new Class[] { returnType });
+                new Class[] { returnType })
+                .findFirst()
+                .orElse(null);
         if (validateMethod == null) {
             return;
         }

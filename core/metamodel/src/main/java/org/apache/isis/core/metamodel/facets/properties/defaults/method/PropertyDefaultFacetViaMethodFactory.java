@@ -63,7 +63,9 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
                     cls,
                     namingConvention.map(x->x.get()), 
                     returnType, 
-                    NO_ARG);
+                    NO_ARG)
+                .findFirst()
+                .orElse(null);
         if (method == null) {
             return;
         }

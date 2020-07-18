@@ -56,7 +56,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 cls, 
                 namingConvention.map(x->x.get()), 
                 boolean.class, 
-                NO_ARG);
+                NO_ARG)
+                .findFirst()
+                .orElse(null);
         if (hideMethod == null) {
 
             boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
@@ -66,7 +68,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                         cls, 
                         namingConvention.map(x->x.get()), 
                         boolean.class, 
-                        actionOrGetter.getParameterTypes());
+                        actionOrGetter.getParameterTypes())
+                        .findFirst()
+                        .orElse(null);
             }
         }
 

@@ -25,13 +25,10 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils.MethodAndPpmConstructor;
 
@@ -41,17 +38,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
-import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 
  * @since 2.0
  *
  */
-@UtilityClass 
-@Log4j2
-public class ParameterSupport {
+public final class ParameterSupport {
     
     @Value @Builder
     public static class ParamSupportingMethodSearchRequest {
@@ -74,7 +67,6 @@ public class ParameterSupport {
         Class<?>[] paramTypes = getProcessMethodContext().getMethod().getParameterTypes();
         
         Can<String> getSupporingMethodNameCandidates(final int paramNr) {
-            //TODO optimization make unique, without loosing order
             return getParamIndexToMethodNameProviders()
                     .map(provider->provider.apply(paramNr));
         }
@@ -91,9 +83,10 @@ public class ParameterSupport {
     
     @FunctionalInterface
     public static interface SearchFunction {
-        ParameterSupport.ParamSupportingMethodSearchResult search(
-                final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest,
-                final int paramNum);
+        void search(
+                ParamSupportingMethodSearchRequest searchRequest,
+                int paramNum,
+                Consumer<ParamSupportingMethodSearchResult> onMethodFound);
     }
     
     @RequiredArgsConstructor
@@ -104,44 +97,34 @@ public class ParameterSupport {
         SINGLEARG_BEING_PARAMTYPE(ParameterSupport::singleArgBeingParamType)
         ;
         private final SearchFunction searchFunction;
-        public ParameterSupport.ParamSupportingMethodSearchResult search(
-                final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest,
-                final int paramNum) {
-            return searchFunction.search(searchRequest, paramNum);
+        public void search(
+                final ParamSupportingMethodSearchRequest searchRequest,
+                final int paramNum,
+                Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
+            searchFunction.search(searchRequest, paramNum, onMethodFound);
         }
     }
 
     public static void findParamSupportingMethods(
-            final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest, 
-            final Consumer<ParameterSupport.ParamSupportingMethodSearchResult> onMethodFound) {
+            final ParamSupportingMethodSearchRequest searchRequest, 
+            final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
         
         val actionMethod = searchRequest.getProcessMethodContext().getMethod();
         val paramCount = actionMethod.getParameterCount();
         
         for (int i = 0; i < paramCount; i++) {
             for (val searchAlgorithm : searchRequest.searchAlgorithms) { 
-
                 val paramNum = i;
-                val searchResult = searchAlgorithm.search(searchRequest, paramNum); 
-                
-                if(log.isDebugEnabled()) {
-                    log.debug("search algorithm={} {}{}",
-                            searchAlgorithm.name(),
-                            searchResult != null ? "FOUND " : "",
-                            toString(searchRequest, paramNum));
-                }
-    
-                if (searchResult != null) {
-                    onMethodFound.accept(searchResult);
-                }
+                searchAlgorithm.search(searchRequest, paramNum, onMethodFound); 
             }
         }
         
     }
 
-    private static ParameterSupport.ParamSupportingMethodSearchResult findParamSupportingMethodWithPPMArg(
-            final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest,
-            final int paramIndex) {
+    private static void findParamSupportingMethodWithPPMArg(
+            final ParamSupportingMethodSearchRequest searchRequest,
+            final int paramIndex,
+            final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
         
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
@@ -151,54 +134,52 @@ public class ParameterSupport {
         val paramType = paramTypes[paramIndex];
         val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
         
-        final MethodAndPpmConstructor supportingMethodAndPpmConstructor;
-        
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            supportingMethodAndPpmConstructor = MethodFinder2
-                .findMethodWithPPMArg_returningBoolean(type, methodNames, paramTypes, additionalParamTypes);
+            MethodFinder2
+                .findMethodWithPPMArg_returningBoolean(type, methodNames, paramTypes, additionalParamTypes)
+                .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
+                .forEach(onMethodFound);
             break;
         case TEXT:
-            supportingMethodAndPpmConstructor = MethodFinder2
-                .findMethodWithPPMArg_returningText(type, methodNames, paramTypes, additionalParamTypes);
+            MethodFinder2
+                .findMethodWithPPMArg_returningText(type, methodNames, paramTypes, additionalParamTypes)
+                .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
+                .forEach(onMethodFound);
             break;
         case NON_SCALAR:
-            supportingMethodAndPpmConstructor = MethodFinder2
-                .findMethodWithPPMArg_returningNonScalar(type, methodNames, paramType, paramTypes, additionalParamTypes);
+            MethodFinder2
+                .findMethodWithPPMArg_returningNonScalar(type, methodNames, paramType, paramTypes, additionalParamTypes)
+                .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
+                .forEach(onMethodFound);
             break;
         case SAME_AS_PARAMETER_TYPE:
-            supportingMethodAndPpmConstructor = MethodFinder2
-                .findMethodWithPPMArg(type, methodNames, paramType, paramTypes, additionalParamTypes);
+            MethodFinder2
+                .findMethodWithPPMArg(type, methodNames, paramType, paramTypes, additionalParamTypes)
+                .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
+                .forEach(onMethodFound);
             break;
         default:
-            supportingMethodAndPpmConstructor = null;
+
         }
-        
-        if(log.isDebugEnabled()) {
-            
-            log.debug(". signature (<any>, {}) {}", 
-                    toString(additionalParamTypes.toArray(_Constants.emptyClasses)),
-                    supportingMethodAndPpmConstructor != null 
-                        ? "found -> " + supportingMethodAndPpmConstructor.getSupportingMethod() 
-                        : "");
-        }
-        
-        if(supportingMethodAndPpmConstructor != null) {
-            val searchResult = ParamSupportingMethodSearchResult
-                    .of(paramIndex, paramType, 
-                            supportingMethodAndPpmConstructor.getSupportingMethod(), 
-                            supportingMethodAndPpmConstructor.getSupportingMethod().getReturnType(),
-                            Optional.of(supportingMethodAndPpmConstructor.getPpmFactory()));
-            return searchResult;
-        }
-        
-        return null;
         
     }
     
-    private static ParameterSupport.ParamSupportingMethodSearchResult singleArgBeingParamType(
-            final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest,
-            final int paramIndex) {
+    private static ParamSupportingMethodSearchResult toSearchResult(
+            final int paramIndex,
+            final Class<?> paramType,
+            final MethodAndPpmConstructor supportingMethodAndPpmConstructor) {
+        return ParamSupportingMethodSearchResult
+                .of(paramIndex, paramType, 
+                        supportingMethodAndPpmConstructor.getSupportingMethod(), 
+                        supportingMethodAndPpmConstructor.getSupportingMethod().getReturnType(),
+                        Optional.of(supportingMethodAndPpmConstructor.getPpmFactory()));
+    }
+    
+    private static void singleArgBeingParamType(
+            final ParamSupportingMethodSearchRequest searchRequest,
+            final int paramIndex,
+            final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
         
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
@@ -207,44 +188,43 @@ public class ParameterSupport {
         val paramType = paramTypes[paramIndex];
         val singleArg = new Class<?>[]{paramType};
         
-        final Method supportingMethod;
-        
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            supportingMethod = MethodFinder2
-                .findMethod_returningBoolean(type, methodNames, singleArg);
+            MethodFinder2
+                .findMethod_returningBoolean(type, methodNames, singleArg)
+                .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
+                .forEach(onMethodFound);
             break;
         case TEXT:
-            supportingMethod = MethodFinder2
-                .findMethod_returningText(type, methodNames, singleArg);
+            MethodFinder2
+                .findMethod_returningText(type, methodNames, singleArg)
+                .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
+                .forEach(onMethodFound);
             break;
         case NON_SCALAR:
-            supportingMethod = MethodFinder2
-                .findMethod_returningNonScalar(type, methodNames, paramType, singleArg);
+            MethodFinder2
+                .findMethod_returningNonScalar(type, methodNames, paramType, singleArg)
+                .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
+                .forEach(onMethodFound);
             break;
         case SAME_AS_PARAMETER_TYPE:
-            supportingMethod = MethodFinder2
-                .findMethod(type, methodNames, paramType, singleArg);
+            MethodFinder2
+                .findMethod(type, methodNames, paramType, singleArg)
+                .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
+                .forEach(onMethodFound);
             break;
         default:
-            supportingMethod = null;
         }
 
-        if(supportingMethod != null) {
-            val searchResult = ParamSupportingMethodSearchResult
-                    .of(paramIndex, paramType, supportingMethod, supportingMethod.getReturnType(), Optional.empty());
-            return searchResult;
-        }
-     
-        return null;
     }
     
     /*
      * search successively for the supporting method, trimming number of param types each loop
      */
-    private static ParameterSupport.ParamSupportingMethodSearchResult findParamSupportingMethod(
-            final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest,
-            final int paramIndex) {
+    private static void findParamSupportingMethod(
+            final ParamSupportingMethodSearchRequest searchRequest,
+            final int paramIndex,
+            final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
@@ -264,41 +244,52 @@ public class ParameterSupport {
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
                 supportingMethod = MethodFinder2
-                    .findMethod_returningBoolean(type, methodNames, paramTypesToLookFor);
+                    .findMethod_returningBoolean(type, methodNames, paramTypesToLookFor)
+                    .findFirst()
+                    .orElse(null);
                 break;
             case TEXT:
                 supportingMethod = MethodFinder2
-                    .findMethod_returningText(type, methodNames, paramTypesToLookFor);
+                    .findMethod_returningText(type, methodNames, paramTypesToLookFor)
+                    .findFirst()
+                    .orElse(null);
                 break;
             case NON_SCALAR:
                 supportingMethod = MethodFinder2
-                    .findMethod_returningNonScalar(type, methodNames, paramType, paramTypesToLookFor);
+                    .findMethod_returningNonScalar(type, methodNames, paramType, paramTypesToLookFor)
+                    .findFirst()
+                    .orElse(null);
                 break;
             case SAME_AS_PARAMETER_TYPE:
                 supportingMethod = MethodFinder2
-                    .findMethod(type, methodNames, paramType, paramTypesToLookFor);
+                    .findMethod(type, methodNames, paramType, paramTypesToLookFor)
+                    .findFirst()
+                    .orElse(null);
                 break;
             default:
                 supportingMethod = null;
             }
             
-            if(log.isDebugEnabled()) {
-                log.debug(". signature ({}) {}", 
-                        toString(paramTypesToLookFor),
-                        supportingMethod != null ? "found -> " + supportingMethod : "");
-            }
-            
             if(supportingMethod != null) {
-                val searchResult = ParamSupportingMethodSearchResult
-                        .of(paramIndex, paramType, supportingMethod, supportingMethod.getReturnType(), Optional.empty());
-                return searchResult;
+                onMethodFound.accept(toSearchResult(paramIndex, paramType, supportingMethod));
+                return;
             }
 
             // remove last, and search again
             paramsConsideredCount--;
         }
-
-        return null;
+        
+    }
+    
+    private static ParamSupportingMethodSearchResult toSearchResult(
+            final int paramIndex,
+            final Class<?> paramType,
+            final Method supportingMethod) {
+        return ParamSupportingMethodSearchResult
+                .of(paramIndex, paramType, 
+                        supportingMethod, 
+                        supportingMethod.getReturnType(),
+                        Optional.empty());
     }
     
     private static Class<?>[] concat(
@@ -322,24 +313,5 @@ public class ParameterSupport {
                 
         return withAdditional;
     }
-    
-    private String toString(
-            ParameterSupport.ParamSupportingMethodSearchRequest searchRequest, 
-            int paramIndex) {
-        
-        return String.format("%s.%s(%s) : %s",
-                searchRequest.getProcessMethodContext().getCls().getSimpleName(),
-                searchRequest.getSupporingMethodNameCandidates(paramIndex),
-                toString(searchRequest.getParamTypes()),
-                searchRequest.getReturnType().name()
-                );
-    }
-    
-    private String toString(Class<?>[] types) {
-        return _NullSafe.stream(types)
-                .map(Class::getSimpleName)
-                .collect(Collectors.joining(","));
-    }
-    
     
 }

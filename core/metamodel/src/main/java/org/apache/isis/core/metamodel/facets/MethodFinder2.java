@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
@@ -26,13 +27,12 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils.MethodAndPpmConst
 
 /**
  * An extension to {@link MethodFinderUtils} in support of multiple simultaneous naming conventions.
- * @apiNote each method name candidate is processed in sequence as given by {@code Can<String> names}, 
- * first one found wins  
+ * @apiNote each method name candidate is processed in sequence as given by {@code Can<String> names} 
  */
 //@Log4j2
 public final class MethodFinder2 {
 
-    public static Method findMethod(
+    public static Stream<Method> findMethod(
             final Class<?> type,
             final Can<String> names,
             final Class<?> expectedReturnType,
@@ -42,127 +42,117 @@ public final class MethodFinder2 {
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethod(type, name, expectedReturnType, paramTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     }
     
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES
     
-    public static Method findMethod_returningBoolean(
+    public static Stream<Method> findMethod_returningBoolean(
             final Class<?> type,
             final Can<String> names, 
             final Class<?>[] paramTypes) {
+        
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethod_returningBoolean(type, name, paramTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     }
     
-    public static Method findMethod_returningText(
+    public static Stream<Method> findMethod_returningText(
             final Class<?> type,
             final Can<String> names, 
             final Class<?>[] paramTypes) {
+        
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethod_returningText(type, name, paramTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     }
     
-    public static Method findMethod_returningNonScalar(
+    public static Stream<Method> findMethod_returningNonScalar(
             final Class<?> type,
             final Can<String> names,  
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes) {
+        
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethod_returningNonScalar(type, name, elementReturnType, paramTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     }
     
     
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PPM)
     
-    public static MethodAndPpmConstructor findMethodWithPPMArg(
+    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg(
             final Class<?> type, 
             final Can<String> names, 
             final Class<?> returnType,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
+        
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg(type, name, returnType, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     }
     
-    public static MethodAndPpmConstructor findMethodWithPPMArg_returningAnyOf(
+    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningAnyOf(
             final Class<?>[] returnTypes,
             final Class<?> type,
             final Can<String> names, 
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
+        
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg_returningAnyOf(returnTypes, type, name, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     } 
 
-    public static MethodAndPpmConstructor findMethodWithPPMArg_returningBoolean(
+    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningBoolean(
             final Class<?> type, 
             final Can<String> names, 
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
+        
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg_returningBoolean(type, name, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     }
 
-    public static MethodAndPpmConstructor findMethodWithPPMArg_returningText(
+    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningText(
             final Class<?> type, 
             final Can<String> names, 
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
+        
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg_returningText(type, name, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     }
 
-    public static MethodAndPpmConstructor findMethodWithPPMArg_returningNonScalar(
+    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningNonScalar(
             final Class<?> type, 
             final Can<String> names, 
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes, 
             final Can<Class<?>> additionalParamTypes) {
+        
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg_returningNonScalar(type, name, elementReturnType, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
+        .filter(_NullSafe::isPresent);
     }
 
 

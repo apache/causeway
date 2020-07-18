@@ -65,7 +65,9 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
                         cls, 
                         namingConvention.map(x->x.get()), 
                         NO_RETURN, 
-                        STRING_ARG);
+                        STRING_ARG)
+                .findFirst()
+                .orElse(null);
         if (autoCompleteMethod == null) {
             return;
         }

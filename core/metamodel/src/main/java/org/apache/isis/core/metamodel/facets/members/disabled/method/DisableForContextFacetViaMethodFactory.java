@@ -63,14 +63,18 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             disableMethod = MethodFinder2.findMethod_returningText(
                     cls,
                     namingConvention.map(x->x.get()),
-                    actionOrGetter.getParameterTypes());
+                    actionOrGetter.getParameterTypes())
+                    .findFirst()
+                    .orElse(null);
         }
         if (disableMethod == null) {
             // search for no-arg version
             disableMethod = MethodFinder2.findMethod_returningText(
                     cls,
                     namingConvention.map(x->x.get()),
-                    NO_ARG);
+                    NO_ARG)
+                    .findFirst()
+                    .orElse(null);
         }
         if (disableMethod == null) {
             return;

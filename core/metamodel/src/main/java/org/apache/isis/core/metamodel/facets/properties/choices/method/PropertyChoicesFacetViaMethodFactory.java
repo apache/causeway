@@ -64,7 +64,9 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
                     cls, 
                     namingConvention.map(x->x.get()), 
                     NO_RETURN, 
-                    NO_ARG);
+                    NO_ARG)
+                .findFirst()
+                .orElse(null);
         if (choicesMethod == null) {
             return;
         }
