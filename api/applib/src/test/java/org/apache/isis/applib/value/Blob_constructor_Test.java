@@ -21,16 +21,16 @@ package org.apache.isis.applib.value;
 
 import org.junit.Test;
 
-public class ClobTest_constructor {
+public class Blob_constructor_Test {
 
     @Test
     public void happyCase() throws Exception {
-        new Clob("validName", "application", "xml", "abc");
+        new Blob("validName", "application", "xml", new byte[]{0,1});
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void name_cannotContainColon() throws Exception {
-        new Clob("with a colon : in it", "application", "xml", "abc");
+        new Blob("with a colon : in it", "application", "xml", new byte[]{0,1});
     }
 
 }

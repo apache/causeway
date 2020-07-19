@@ -52,12 +52,6 @@ import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
-import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
-import org.apache.isis.schema.jaxbadapters.JodaDateTimeXMLGregorianCalendarAdapter;
-import org.apache.isis.schema.jaxbadapters.JodaLocalDateTimeXMLGregorianCalendarAdapter;
-import org.apache.isis.schema.jaxbadapters.JodaLocalDateXMLGregorianCalendarAdapter;
-import org.apache.isis.schema.jaxbadapters.JodaLocalTimeXMLGregorianCalendarAdapter;
-import org.apache.isis.schema.jaxbadapters.XmlCalendarFactory;
 
 import static org.apache.isis.core.commons.internal.collections._Maps.entry;
 

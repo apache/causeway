@@ -31,6 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
@@ -41,7 +42,6 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.PeriodDto;
-import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 @Service
 @Named("isisApplib.ContentMappingServiceForCommandDto")
@@ -121,7 +121,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
             // it will have been populated.  We therefore copy the value in from CommandWithDto entity.
             if(commandDto.getTimestamp() == null) {
                 final Timestamp timestamp = command.getTimestamp();
-                commandDto.setTimestamp(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+                commandDto.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(timestamp));
             }
 
             CommandDtoUtils.setUserData(commandDto,
@@ -140,8 +140,8 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
                     CommandWithDto.USERDATA_KEY_EXCEPTION, command.getException());
 
             PeriodDto timings = CommandDtoUtils.timingsFor(commandDto);
-            timings.setStartedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(command.getStartedAt()));
-            timings.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(command.getCompletedAt()));
+            timings.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(command.getStartedAt()));
+            timings.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(command.getCompletedAt()));
 
             return commandDto;
         }

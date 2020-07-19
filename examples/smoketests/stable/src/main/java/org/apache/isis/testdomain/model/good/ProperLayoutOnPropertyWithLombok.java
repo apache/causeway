@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.util.JaxbAdapters.LocalDateAdapter;
+import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters.LocalDateToStringAdapter;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +38,7 @@ public class ProperLayoutOnPropertyWithLombok {
 
     @Property(editing=Editing.ENABLED)
     @PropertyLayout(describedAs="java.time.LocalDate")
-    @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    @XmlElement @XmlJavaTypeAdapter(LocalDateToStringAdapter.class)
     @Getter @Setter private LocalDate javaLocalDate;
     
 }

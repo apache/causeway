@@ -36,10 +36,10 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
@@ -115,7 +115,7 @@ public class BulkUpdateLineItemForDemoToDoItem
     @Getter @Setter
     private String ownedBy;
 
-    @Getter @Setter @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
+    @Getter @Setter @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     private LocalDate dueBy;
 
     @Getter @Setter

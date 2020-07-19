@@ -16,23 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths;
+package org.apache.isis.applib.jaxbadapters;
 
-import java.util.stream.Stream;
+import java.time.OffsetTime;
+import java.time.ZoneOffset;
 
-import org.springframework.stereotype.Service;
+import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+public class JavaTimeJaxbAdapters_OffsetTimeAdapter_Test extends JaxbXmlAdaptersContractTest<OffsetTime> {
 
-import demoapp.dom.types.Samples;
-
-@Service
-public class IsisLocalResourcePathsSamples implements Samples<LocalResourcePath> {
-
-    @Override
-    public Stream<LocalResourcePath> stream() {
-        return Stream.of("/h2console/", "/swagger-ui/", "/restful/")
-                .map(LocalResourcePath::new);
+    public JavaTimeJaxbAdapters_OffsetTimeAdapter_Test() {
+        super(new JavaTimeJaxbAdapters.OffsetTimeAdapter(), OffsetTime.of(9, 54, 1, 123_000_000, ZoneOffset.ofTotalSeconds(-120))
+        );
     }
+
 
 }

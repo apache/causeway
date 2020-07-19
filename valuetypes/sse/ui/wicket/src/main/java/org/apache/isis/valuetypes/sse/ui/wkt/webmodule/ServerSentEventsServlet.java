@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.isis.applib.util.JaxbAdapters;
+import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
@@ -123,7 +123,7 @@ public class ServerSentEventsServlet extends HttpServlet {
     private void fork(final AsyncContext asyncContext, final SseChannel eventStream) {
 
         val response = asyncContext.getResponse();
-        val marshaller = new JaxbAdapters.MarkupAdapter();
+        val marshaller = new Markup.JaxbXmlAdapter();
 
         eventStream.listenWhile(source->{
 

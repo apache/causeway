@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.LongAdder;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
+import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
@@ -47,7 +48,6 @@ import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.MetricsDto;
 import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
-import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -579,7 +579,7 @@ public class Interaction implements HasUniqueId {
                     final MetricsDto metricsDto = metricsFor(execution);
 
                     final PeriodDto periodDto = timingsFor(metricsDto);
-                    periodDto.setStartedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+                    periodDto.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(timestamp));
 
                     final ObjectCountsDto objectCountsDto = objectCountsFor(metricsDto);
                     numberObjectsLoadedFor(objectCountsDto).setBefore(numberObjectsLoaded);
@@ -603,7 +603,7 @@ public class Interaction implements HasUniqueId {
                     final MetricsDto metricsDto = metricsFor(execution);
 
                     final PeriodDto periodDto = timingsFor(metricsDto);
-                    periodDto.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+                    periodDto.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(timestamp));
 
                     final ObjectCountsDto objectCountsDto = objectCountsFor(metricsDto);
                     numberObjectsLoadedFor(objectCountsDto).setAfter(numberObjectsLoaded);

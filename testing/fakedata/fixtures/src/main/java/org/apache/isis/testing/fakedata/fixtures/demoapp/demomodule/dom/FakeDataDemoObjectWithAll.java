@@ -49,7 +49,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Password;

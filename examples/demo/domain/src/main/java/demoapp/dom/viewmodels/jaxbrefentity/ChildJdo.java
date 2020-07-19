@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
 import lombok.Getter;
 import lombok.Setter;

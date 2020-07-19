@@ -16,23 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths;
 
-import java.util.stream.Stream;
+package org.apache.isis.applib.value;
 
-import org.springframework.stereotype.Service;
+import org.junit.Test;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+public class Clob_constructor_Test {
 
-import demoapp.dom.types.Samples;
+    @Test
+    public void happyCase() throws Exception {
+        new Clob("validName", "application", "xml", "abc");
+    }
 
-@Service
-public class IsisLocalResourcePathsSamples implements Samples<LocalResourcePath> {
-
-    @Override
-    public Stream<LocalResourcePath> stream() {
-        return Stream.of("/h2console/", "/swagger-ui/", "/restful/")
-                .map(LocalResourcePath::new);
+    @Test(expected=IllegalArgumentException.class)
+    public void name_cannotContainColon() throws Exception {
+        new Clob("with a colon : in it", "application", "xml", "abc");
     }
 
 }

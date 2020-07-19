@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
+import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.core.commons.internal.base._Lazy;
@@ -39,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.chg.v2.ObjectsDto;
 import org.apache.isis.schema.common.v2.OidsDto;
-import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 import lombok.ToString;
 import lombok.val;
@@ -210,7 +210,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
         changesDto.setSequence(sequence);
 
         changesDto.setUser(userName);
-        changesDto.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(completedAt));
+        changesDto.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(completedAt));
 
         changesDto.setObjects(objectsDto);
         return changesDto;

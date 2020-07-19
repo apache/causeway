@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.util.JaxbAdapters;
+import org.apache.isis.applib.jaxb.JavaSqlJaxbAdapters;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -62,26 +62,26 @@ public class JavaSqlTimestampVm
     @Title(prepend = "java.sql.Timestamp view model: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlTimestampAdapter.class)                 // <.>
+    @XmlJavaTypeAdapter(JavaSqlJaxbAdapters.TimestampToStringAdapter.class)                 // <.>
     @Getter @Setter
     private java.sql.Timestamp readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlTimestampAdapter.class)
+    @XmlJavaTypeAdapter(JavaSqlJaxbAdapters.TimestampToStringAdapter.class)
     @Getter @Setter
     private java.sql.Timestamp readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlTimestampAdapter.class)
+    @XmlJavaTypeAdapter(JavaSqlJaxbAdapters.TimestampToStringAdapter.class)
     @Getter @Setter
     private java.sql.Timestamp readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
-    @XmlJavaTypeAdapter(JaxbAdapters.SqlTimestampAdapter.class)
+    @XmlJavaTypeAdapter(JavaSqlJaxbAdapters.TimestampToStringAdapter.class)
     @Getter @Setter
     private java.sql.Timestamp readWriteOptionalProperty;
 

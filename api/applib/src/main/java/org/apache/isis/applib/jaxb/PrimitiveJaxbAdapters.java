@@ -16,23 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths;
+package org.apache.isis.applib.jaxb;
 
-import java.util.stream.Stream;
+import java.nio.charset.StandardCharsets;
 
-import org.springframework.stereotype.Service;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.base._Strings;
 
-import demoapp.dom.types.Samples;
+public final class PrimitiveJaxbAdapters {
 
-@Service
-public class IsisLocalResourcePathsSamples implements Samples<LocalResourcePath> {
+    /**
+     * Uses compression. (thread-safe)
+     */
+    public static final class BytesAdapter extends XmlAdapter<String, byte[]> {
 
-    @Override
-    public Stream<LocalResourcePath> stream() {
-        return Stream.of("/h2console/", "/swagger-ui/", "/restful/")
-                .map(LocalResourcePath::new);
+        @Override
+        public byte[] unmarshal(String v) throws Exception {
+            return _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(v, StandardCharsets.UTF_8));
+        }
+
+        @Override
+        public String marshal(byte[] v) throws Exception {
+            return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(v), StandardCharsets.UTF_8);
+        }
+
     }
-
 }

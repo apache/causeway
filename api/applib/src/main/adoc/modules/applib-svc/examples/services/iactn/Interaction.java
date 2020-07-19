@@ -47,7 +47,6 @@ import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.MetricsDto;
 import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
-import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 import lombok.Getter;
 import lombok.Setter;

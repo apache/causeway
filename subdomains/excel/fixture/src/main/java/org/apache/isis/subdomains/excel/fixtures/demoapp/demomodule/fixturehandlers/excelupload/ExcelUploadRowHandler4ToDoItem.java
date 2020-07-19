@@ -33,8 +33,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.subdomains.excel.testing.ExcelFixture;
 import org.apache.isis.subdomains.excel.testing.ExcelFixtureRowHandler;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
@@ -72,7 +72,7 @@ public class ExcelUploadRowHandler4ToDoItem implements ExcelFixtureRowHandler {
     @Getter @Setter
     private String ownedBy;
 
-    @Getter @Setter @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
+    @Getter @Setter @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     private LocalDate dueBy;
 
     @Getter @Setter

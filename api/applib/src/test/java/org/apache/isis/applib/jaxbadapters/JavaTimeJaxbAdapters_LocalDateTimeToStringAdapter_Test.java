@@ -16,23 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths;
+package org.apache.isis.applib.jaxbadapters;
 
-import java.util.stream.Stream;
+import java.time.LocalDateTime;
 
-import org.springframework.stereotype.Service;
+import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+public class JavaTimeJaxbAdapters_LocalDateTimeToStringAdapter_Test extends JaxbXmlAdaptersContractTest<LocalDateTime> {
 
-import demoapp.dom.types.Samples;
-
-@Service
-public class IsisLocalResourcePathsSamples implements Samples<LocalResourcePath> {
-
-    @Override
-    public Stream<LocalResourcePath> stream() {
-        return Stream.of("/h2console/", "/swagger-ui/", "/restful/")
-                .map(LocalResourcePath::new);
+    public JavaTimeJaxbAdapters_LocalDateTimeToStringAdapter_Test() {
+        super(new JavaTimeJaxbAdapters.LocalDateTimeToStringAdapter()
+                , LocalDateTime.of(2015, 5, 23, 9, 54, 1));
     }
 
 }

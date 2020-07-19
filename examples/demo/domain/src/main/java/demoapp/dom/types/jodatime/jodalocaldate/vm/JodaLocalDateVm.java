@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.util.JaxbAdapters;
+import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -62,26 +62,26 @@ public class JodaLocalDateVm
     @Title(prepend = "org.joda.time.LocalDate view model: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)                    // <.>
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)                    // <.>
     @Getter @Setter
     private org.joda.time.LocalDate readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.LocalDate readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.LocalDate readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
-    @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.LocalDate readWriteOptionalProperty;
 

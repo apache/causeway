@@ -16,23 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths;
+package org.apache.isis.applib.value;
 
-import java.util.stream.Stream;
+import java.nio.charset.StandardCharsets;
 
-import org.springframework.stereotype.Service;
+import org.apache.isis.applib.jaxbadapters.JaxbXmlAdaptersContractTest;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+public class Blob_JaxbXmlAdapter_Test extends JaxbXmlAdaptersContractTest<Blob> {
 
-import demoapp.dom.types.Samples;
-
-@Service
-public class IsisLocalResourcePathsSamples implements Samples<LocalResourcePath> {
-
-    @Override
-    public Stream<LocalResourcePath> stream() {
-        return Stream.of("/h2console/", "/swagger-ui/", "/restful/")
-                .map(LocalResourcePath::new);
+    public Blob_JaxbXmlAdapter_Test() {
+        super(new Blob.JaxbXmlAdapter()
+                , new Blob("sample", "text/plain", JaxbXmlAdaptersContractTest.sampleComplexString.getBytes(StandardCharsets.UTF_8)));
     }
 
 }

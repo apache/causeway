@@ -16,21 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.jaxbadapters;
 
-package org.apache.isis.applib.value;
+import java.time.LocalDate;
 
-import org.junit.Test;
+import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 
-public class BlobTest_constructor {
+public class JavaTimeJaxbAdapters_LocalDateToStringAdapter_Test extends JaxbXmlAdaptersContractTest<LocalDate> {
 
-    @Test
-    public void happyCase() throws Exception {
-        new Blob("validName", "application", "xml", new byte[]{0,1});
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void name_cannotContainColon() throws Exception {
-        new Blob("with a colon : in it", "application", "xml", new byte[]{0,1});
+    public JavaTimeJaxbAdapters_LocalDateToStringAdapter_Test() {
+        super(new JavaTimeJaxbAdapters.LocalDateToStringAdapter()
+                , LocalDate.of(2015, 5, 23));
     }
 
 }

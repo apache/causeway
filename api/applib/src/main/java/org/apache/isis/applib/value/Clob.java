@@ -21,10 +21,14 @@ package org.apache.isis.applib.value;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.core.commons.internal.base._Strings;
 
 import lombok.val;
@@ -142,4 +146,45 @@ public final class Clob implements NamedWithMimeType {
         return getName() + " [" + getMimeType().getBaseType() + "]: " + getChars().length() + " chars";
     }
 
+    /**
+     * (thread-safe)
+     * @implNote see also ClobValueSemanticsProvider
+     */
+    public static final class JaxbXmlAdapter extends XmlAdapter<String, Clob> {
+
+        private final PrimitiveJaxbAdapters.BytesAdapter bytesAdapter = new PrimitiveJaxbAdapters.BytesAdapter(); // thread-safe
+
+        @Override
+        public Clob unmarshal(String data) throws Exception {
+            if(data==null) {
+                return null;
+            }
+            final int colonIdx = data.indexOf(':');
+            final String name  = data.substring(0, colonIdx);
+            final int colon2Idx  = data.indexOf(":", colonIdx+1);
+            final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
+            final String payload = data.substring(colon2Idx+1);
+            final byte[] bytes = bytesAdapter.unmarshal(payload);
+            try {
+                return new Clob(name, new MimeType(mimeTypeBase), new String(bytes, StandardCharsets.UTF_8));
+            } catch (MimeTypeParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public String marshal(Clob clob) throws Exception {
+            if(clob==null) {
+                return null;
+            }
+            return new StringBuilder()
+            .append(clob.getName())
+            .append(':')
+            .append(clob.getMimeType().getBaseType())
+            .append(':')
+            .append(bytesAdapter.marshal(clob.getChars().toString().getBytes(StandardCharsets.UTF_8)))
+            .toString();
+        }
+
+    }
 }

@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.core.commons.internal.base._Bytes;
@@ -63,7 +62,7 @@ public class BlobDemo {
 
     @Property(editing=Editing.ENABLED)
     @PropertyLayout
-    @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)
+    @XmlElement @XmlJavaTypeAdapter(Blob.JaxbXmlAdapter.class)
     @Getter @Setter private Blob logo;
     
 }

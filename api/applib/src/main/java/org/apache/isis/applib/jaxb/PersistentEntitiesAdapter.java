@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.jaxbadapters;
+package org.apache.isis.applib.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1434,7 +1434,9 @@ The framework supports following temporal values from the Java Time API (and Jod
 
 ==== View Model Example
 
-If used with JAXB View Models, you need to specify specific XmlAdapters as provided by org.apache.isis.applib.util.JaxbAdapters.*. See this JAXB Viewmodel example using lombok:
+TODO: have moved classes to `org.apache.isis.applib.jaxb`.
+
+If used with JAXB View Models, you need to specify specific XmlAdapters as provided by org.apache.isis.applib.jaxbadapters.JaxbAdapters.*. See this JAXB Viewmodel example using lombok:
 
 [source,java]
 ----

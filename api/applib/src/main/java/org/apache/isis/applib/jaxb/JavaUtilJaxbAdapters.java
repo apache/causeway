@@ -16,44 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.schema.jaxbadapters;
+package org.apache.isis.applib.jaxb;
+
+import java.util.Date;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.joda.time.LocalTime;
+import lombok.experimental.UtilityClass;
 
 /**
- * Note: not actually registered as a JAXB adapter.
+ * Provides JAXB XmlAdapters for Java util temporal types.
+ *
+ * <p>
+ * Example:<pre>
+ * &#64;XmlElement &#64;XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateAdapter.class)
+ * &#64;Getter &#64;Setter private java.utilDate javaLocalDate;
+ * </pre>
+ * 
+ *  
+ * @since 2.0
  */
-public final class JodaLocalTimeStringAdapter {
-    private JodaLocalTimeStringAdapter() {
-    }
+@UtilityClass
+public final class JavaUtilJaxbAdapters {
 
-    public static LocalTime parse(final String localTimeStr) {
-        if (Strings.isNullOrEmpty(localTimeStr)) {
-            return null;
-        }
-        return LocalTime.parse(localTimeStr);
-    }
-
-    public static String print(LocalTime localTime) {
-        if (localTime == null) {
-            return null;
-        }
-        return localTime.toString();
-    }
-
-    public static class ForJaxb extends XmlAdapter<String, LocalTime> {
+    public static final class DateToStringAdapter extends XmlAdapter<String, Date> {
 
         @Override
-        public LocalTime unmarshal(final String localTimeStr) throws Exception {
-            return JodaLocalTimeStringAdapter.parse(localTimeStr);
+        public Date unmarshal(String v) throws Exception {
+            return v!=null ? new Date(Long.parseLong(v)) : null;
         }
 
         @Override
-        public String marshal(final LocalTime localTime) throws Exception {
-            return JodaLocalTimeStringAdapter.print(localTime);
+        public String marshal(Date v) throws Exception {
+            return v!=null ? Long.toString(v.getTime()) : null;
         }
     }
-
 }

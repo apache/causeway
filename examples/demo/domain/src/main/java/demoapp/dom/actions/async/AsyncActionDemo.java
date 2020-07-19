@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.util.JaxbAdapters;
+import org.apache.isis.applib.value.Markup;
 import org.apache.isis.valuetypes.sse.applib.annotations.ServerSentEvents;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
 import org.apache.isis.valuetypes.sse.applib.service.SseService.ExecutionBehavior;
@@ -53,7 +53,7 @@ public class AsyncActionDemo implements HasAsciiDocDescription {
     @XmlTransient
     @Inject SseService eventStreamService;
 
-    @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.MarkupAdapter.class)
+    @XmlElement @XmlJavaTypeAdapter(Markup.JaxbXmlAdapter.class)
     @Property
     @ServerSentEvents(observe=DemoTask.class) // bind to a SSE channel
     @Getter @Setter ListeningMarkup progressView;

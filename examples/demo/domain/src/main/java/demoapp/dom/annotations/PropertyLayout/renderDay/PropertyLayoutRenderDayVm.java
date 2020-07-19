@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
-import org.apache.isis.schema.jaxbadapters.JodaLocalDateStringAdapter;
+import org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -73,7 +73,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     )
     @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = false)
-    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private LocalDate startDate;
 //end::render-not-specified[]
@@ -87,7 +87,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     )
     @MemberOrder(name = "annotation", sequence = "2")
     @XmlElement(required = false)
-    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private LocalDate endDate;
 //end::render-as-day-before[]
@@ -114,7 +114,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     )
     @MemberOrder(name = "layout-file", sequence = "1")
     @XmlElement(required = false)
-    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private LocalDate endDateUsingLayout;
 //end::layout-file[]
@@ -128,7 +128,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
-    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private LocalDate endDateUsingMetaAnnotation;
 //end::meta-annotation[]
@@ -143,7 +143,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
-    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private LocalDate endDateUsingMetaAnnotationButOverridden;
 //end::meta-annotation-overridden[]

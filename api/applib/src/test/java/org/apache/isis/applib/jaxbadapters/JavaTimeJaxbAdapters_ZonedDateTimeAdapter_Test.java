@@ -16,13 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.jaxbadapters;
 
-package org.apache.isis.schema.jaxbadapters;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
-class Strings {
+import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 
-	public static boolean isNullOrEmpty(String x) {
-		return x == null || x.isEmpty();
-	}
+public class JavaTimeJaxbAdapters_ZonedDateTimeAdapter_Test extends JaxbXmlAdaptersContractTest<ZonedDateTime> {
+
+    public JavaTimeJaxbAdapters_ZonedDateTimeAdapter_Test() {
+        super(new JavaTimeJaxbAdapters.ZonedDateTimeAdapter()
+                , ZonedDateTime.of(2015, 5, 23, 9, 54, 1, 0, ZoneOffset.UTC));
+    }
 
 }
