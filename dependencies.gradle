@@ -40,7 +40,6 @@ ext {
             commonsFileupload               : "commons-fileupload:commons-fileupload:1.4",
             commonsIo                       : "commons-io:commons-io:2.6",
             commonsLang3                    : "org.apache.commons:commons-lang3:3.9",
-            corsFilter                      : "org.ebaysf.web:cors-filter:1.0.1",
             cookieconsent                   : "org.webjars.bowergithub.osano:cookieconsent:3.1.0",
             cucumberJava                    : "io.cucumber:cucumber-java:$cucumberVersion",
             cucumberSpring                  : "io.cucumber:cucumber-spring:$cucumberVersion",

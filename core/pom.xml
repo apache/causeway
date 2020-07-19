@@ -164,7 +164,6 @@
 
 		<select2.version>4.0.10</select2.version>
 		<shiro.version>1.4.1</shiro.version>
-		<cors-filter.version>1.0.1</cors-filter.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.26</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
 		<spring-framework.version>5.2.7.RELEASE</spring-framework.version>
@@ -1199,12 +1198,6 @@
 				<version>${shiro.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.ebaysf.web</groupId>
-				<artifactId>cors-filter</artifactId>
-				<version>${cors-filter.version}</version>
-			</dependency>
-			
 			<dependency>
 	            <groupId>com.vaadin</groupId>
 	            <artifactId>vaadin-bom</artifactId>
