@@ -18,29 +18,49 @@
  */
 package org.apache.isis.extensions.cors.impl;
 
+import java.util.Collections;
+
+import javax.inject.Named;
+import javax.servlet.Filter;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.cors.impl.webmodule.WebModuleCors;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@Import({
-        // @Service's
-        WebModuleCors.class
-})
+@Named("isisMapCors.WebModuleServerCors")
+@Qualifier("CORS")
 public class IsisModuleExtCorsImpl {
+	public static final int CORS_FILTER_ORDER = OrderPrecedence.EARLY - 100;
 
     private final IsisConfiguration configuration;
     
     public IsisModuleExtCorsImpl(IsisConfiguration configuration) {
 		this.configuration = configuration;
 	}
+    
+    @Bean
+	@Order(OrderPrecedence.EARLY)
+    public FilterRegistrationBean<Filter> corsFilterRegistration() {
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(corsFilter());
+        filterRegistrationBean.setUrlPatterns(Collections.singletonList("/*"));
+        filterRegistrationBean.setOrder(CORS_FILTER_ORDER);
+        return filterRegistrationBean;
+    }
 	
-	@Bean
+	public CorsFilter corsFilter() {
+		return new CorsFilter(corsConfigurationSource());
+	}
+	
 	private CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		corsConfiguration.setAllowCredentials(true);
