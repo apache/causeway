@@ -1,10 +1,10 @@
 group = 'org.apache.isis.extensions'
 description = 'Apache Isis Ext - CORS (impl)'
-apply plugin: 'war'
+apply plugin: 'java-library'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-metamodel')
-    compile(Libs.corsFilter)
-    providedCompile project(':isis-parent:isis:isis-core-webapp')
+    implementation project(':isis-parent:isis:isis-core-metamodel')
+    implementation(Libs.springWeb)
+    implementation project(':isis-parent:isis:isis-core-webapp')
 }
 
 task packageTests(type: Jar) {
