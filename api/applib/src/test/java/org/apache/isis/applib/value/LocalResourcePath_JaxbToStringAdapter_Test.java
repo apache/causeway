@@ -24,7 +24,7 @@ public class LocalResourcePath_JaxbToStringAdapter_Test extends JaxbXmlAdaptersC
 
     public LocalResourcePath_JaxbToStringAdapter_Test() {
         super(new LocalResourcePath.JaxbToStringAdapter()
-                , new LocalResourcePath(JaxbXmlAdaptersContractTest.sampleComplexString));
+                , new LocalResourcePath("/restful/"));
     }
 
 }
