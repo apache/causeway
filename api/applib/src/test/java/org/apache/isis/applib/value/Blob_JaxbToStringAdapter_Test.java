@@ -16,18 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.jaxbadapters;
+package org.apache.isis.applib.value;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.nio.charset.StandardCharsets;
 
-import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
+import org.apache.isis.applib.jaxbadapters.JaxbXmlAdaptersContractTest;
 
-public class JavaTimeJaxbAdapters_OffsetDateTimeAdapter_Test extends JaxbXmlAdaptersContractTest<OffsetDateTime> {
+public class Blob_JaxbToStringAdapter_Test extends JaxbXmlAdaptersContractTest<Blob> {
 
-    public JavaTimeJaxbAdapters_OffsetDateTimeAdapter_Test() {
-        super(new JavaTimeJaxbAdapters.OffsetDateTimeAdapter()
-                , OffsetDateTime.of(2015, 5, 23, 9, 54, 1, 0, ZoneOffset.UTC));
+    public Blob_JaxbToStringAdapter_Test() {
+        super(new Blob.JaxbToStringAdapter()
+                , new Blob("sample", "text/plain", JaxbXmlAdaptersContractTest.sampleComplexString.getBytes(StandardCharsets.UTF_8)));
     }
 
 }

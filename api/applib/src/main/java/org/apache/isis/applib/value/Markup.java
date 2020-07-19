@@ -37,7 +37,7 @@ import org.apache.isis.core.commons.internal.base._Strings;
 // end::refguide[]
 @Value(semanticsProviderName = 
         "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
-@XmlJavaTypeAdapter(Markup.JaxbXmlAdapter.class)   // for JAXB view model support
+@XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
 public class Markup implements HasHtml, Serializable {   // TODO: should be final
 
     private static final long serialVersionUID = 1L;
@@ -84,7 +84,7 @@ public class Markup implements HasHtml, Serializable {   // TODO: should be fina
         return "Markup[length="+html.length()+", html="+html+"]";
     }
 
-    public static final class JaxbXmlAdapter extends XmlAdapter<String, Markup> {
+    public static final class JaxbToStringAdapter extends XmlAdapter<String, Markup> {
 
         /**
          * Is threadsafe, see <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Base64.Encoder.html">JDK8 javadocs</a>

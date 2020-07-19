@@ -230,7 +230,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         log.info(" - categorizing types from class-path scan");
 
-        val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
         val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         typeRegistry.snapshotIntrospectableTypes().entrySet()
@@ -262,9 +261,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
         introspect(valueTypeSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        log.info(" - introspecting {} domain services", domainServiceSpecs.size());
-        introspect(domainServiceSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-
+        log.info(" - introspecting {} managed beans contributing (aka domain services)", typeRegistry.getManagedBeansContributing().size());
         log.info(" - introspecting {} mixins", typeRegistry.getMixinTypes().size());
         log.info(" - introspecting {} entities", typeRegistry.getEntityTypes().size());
         log.info(" - introspecting {} view models", typeRegistry.getViewModelTypes().size());

@@ -16,23 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths;
+package org.apache.isis.applib.value;
 
-import java.util.stream.Stream;
+import org.apache.isis.applib.jaxbadapters.JaxbXmlAdaptersContractTest;
 
-import org.springframework.stereotype.Service;
+public class Password_JaxbToStringAdapter_Test extends JaxbXmlAdaptersContractTest<Password> {
 
-import org.apache.isis.applib.value.LocalResourcePath;
-
-import demoapp.dom.types.Samples;
-
-@Service
-public class IsisLocalResourcePathsSamples implements Samples<LocalResourcePath> {
-
-    @Override
-    public Stream<LocalResourcePath> stream() {
-        return Stream.of("/", "/db/", "/swagger-ui/index.thtml", "/restful/")
-                .map(LocalResourcePath::new);
+    public Password_JaxbToStringAdapter_Test() {
+        super(new Password.JaxbToStringAdapter()
+                , new Password(JaxbXmlAdaptersContractTest.sampleComplexString));
     }
 
 }

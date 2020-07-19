@@ -70,12 +70,11 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
         } catch (final InvalidPathException ex) {
             throw new IllegalArgumentException("Not parseable as a LocalResourcePath ('" + entry + "')", ex);
         }
-
     }
 
     @Override
     public String titleString(final Object object) {
-        return object != null ? object.toString(): "";
+        return object instanceof LocalResourcePath ? ((LocalResourcePath)object).getPath(): "";
     }
 
     @Override

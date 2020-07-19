@@ -37,7 +37,7 @@ import lombok.NonNull;
 // end::refguide[]
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
-@XmlJavaTypeAdapter(LocalResourcePath.JaxbJavaTypeAdapter.class)   // for JAXB view model support
+@XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class LocalResourcePath implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -97,24 +97,18 @@ public final class LocalResourcePath implements Serializable {
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(String.format("the given local path has an invalid syntax: '%s'", path), e);
         }
-
     }
 
-    public static final class JaxbJavaTypeAdapter extends XmlAdapter<String, LocalResourcePath> {
 
+    public static class JaxbToStringAdapter extends XmlAdapter<String, LocalResourcePath> {
         @Override
-        public LocalResourcePath unmarshal(String value) {
-            return value != null
-                    ? new LocalResourcePath(value)
-                    : null;
+        public LocalResourcePath unmarshal(String path) {
+            return path != null ? new LocalResourcePath(path) : null;
         }
 
         @Override
         public String marshal(LocalResourcePath localResourcePath) {
-            return localResourcePath != null
-                    ? localResourcePath.getPath()
-                    : null;
+            return localResourcePath != null ? localResourcePath.getPath() : null;
         }
     }
-
 }

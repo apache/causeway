@@ -123,7 +123,7 @@ public class ServerSentEventsServlet extends HttpServlet {
     private void fork(final AsyncContext asyncContext, final SseChannel eventStream) {
 
         val response = asyncContext.getResponse();
-        val marshaller = new Markup.JaxbXmlAdapter();
+        val marshaller = new Markup.JaxbToStringAdapter();
 
         eventStream.listenWhile(source->{
 

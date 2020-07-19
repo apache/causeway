@@ -53,7 +53,7 @@ public class AsyncActionDemo implements HasAsciiDocDescription {
     @XmlTransient
     @Inject SseService eventStreamService;
 
-    @XmlElement @XmlJavaTypeAdapter(Markup.JaxbXmlAdapter.class)
+    @XmlElement @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)
     @Property
     @ServerSentEvents(observe=DemoTask.class) // bind to a SSE channel
     @Getter @Setter ListeningMarkup progressView;

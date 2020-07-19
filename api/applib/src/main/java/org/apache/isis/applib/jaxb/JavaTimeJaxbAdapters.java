@@ -109,7 +109,7 @@ public final class JavaTimeJaxbAdapters {
         }
     }
 
-    public static final class OffsetDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
+    public static final class OffsetDateTimeToStringAdapter extends XmlAdapter<String, OffsetDateTime> {
 
         @Override
         public OffsetDateTime unmarshal(String v) {
@@ -137,30 +137,38 @@ public final class JavaTimeJaxbAdapters {
 
     }
 
-    public static final class DurationAdapter extends XmlAdapter<String, Duration> {
+    public static final class DurationToStringAdapter extends XmlAdapter<String, Duration> {
 
         @Override
-        public Duration unmarshal(String v) throws Exception {
-            return v!=null ? Duration.parse(v) : null;
+        public Duration unmarshal(String v) {
+            return v!=null
+                    ? Duration.parse(v)
+                    : null;
         }
 
         @Override
-        public String marshal(Duration v) throws Exception {
-            return v!=null ? v.toString() : null;
+        public String marshal(Duration v) {
+            return v!=null
+                    ? v.toString()
+                    : null;
         }
 
     }
 
-    public static final class PeriodAdapter extends XmlAdapter<String, Period> {
+    public static final class PeriodToStringAdapter extends XmlAdapter<String, Period> {
 
         @Override
-        public Period unmarshal(String v) throws Exception {
-            return v!=null ? Period.parse(v) : null;
+        public Period unmarshal(String v) {
+            return v!=null
+                    ? Period.parse(v)
+                    : null;
         }
 
         @Override
-        public String marshal(Period v) throws Exception {
-            return v!=null ? v.toString() : null;
+        public String marshal(Period v) {
+            return v!=null
+                    ? v.toString()
+                    : null;
         }
 
     }

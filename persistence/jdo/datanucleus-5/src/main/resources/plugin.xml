@@ -78,6 +78,13 @@
                 converter-name="isis.markup-string" />
     </extension>
 
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.isis.applib.value.LocalResourcePath"
+                dfg="true"
+                converter-name="isis.localresourcepath-string" />
+    </extension>
+
     <!--
     http://www.datanucleus.org/extensions/type_converter.html
     -->
@@ -98,6 +105,18 @@
                 member-type="org.apache.isis.applib.value.Markup"
                 datastore-type="java.lang.String"
                 converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.IsisMarkupConverter"/>
+    </extension>
+
+
+    <!--
+    http://www.datanucleus.org/extensions/type_converter.html
+    -->
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="isis.localresourcepath-string"
+                member-type="org.apache.isis.applib.value.LocalResourcePath"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.IsisLocalResourcePathConverter"/>
     </extension>
 
 </plugin>

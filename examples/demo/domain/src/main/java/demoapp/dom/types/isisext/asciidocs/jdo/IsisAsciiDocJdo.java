@@ -58,25 +58,26 @@ public class IsisAsciiDocJdo                                          // <.>
 
 //tag::class[]
     public String title() {
-        return "AsciiDoc JDO entity: " + bookmarkService.bookmarkFor(this).getIdentifier();
+        return "AsciiDoc JDO entity: " +
+            bookmarkService.bookmarkFor(this).getIdentifier();
     }
 
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false", jdbcType = "CLOB")                            // <.>
+    @Column(allowsNull = "false", jdbcType = "CLOB")                // <.>
     @Getter @Setter
     private AsciiDoc readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                        // <.>
+    @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "editable-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
     private AsciiDoc readWriteProperty;
 
-    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(hidden = Where.ALL_TABLES)
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                                // <.>
+    @Column(allowsNull = "true")                                    // <.>
     @Getter @Setter
     private AsciiDoc readOnlyOptionalProperty;
 

@@ -16,14 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.value;
+package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters;
 
-import org.apache.isis.applib.jaxbadapters.JaxbXmlAdaptersContractTest;
+import org.datanucleus.store.types.converters.TypeConverter;
 
-class Clob_JaxbXmlAdapter_Test extends JaxbXmlAdaptersContractTest<Clob> {
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.applib.value.Markup;
 
-    public Clob_JaxbXmlAdapter_Test() {
-        super(new Clob.JaxbXmlAdapter()
-                , new Clob("sample", "text/plain", JaxbXmlAdaptersContractTest.sampleComplexString));
+public class IsisLocalResourcePathConverter implements TypeConverter<LocalResourcePath, String>{
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toDatastoreType(final LocalResourcePath memberValue) {
+        return memberValue != null
+                ? memberValue.getPath()
+                        : null;
     }
+
+    @Override
+    public LocalResourcePath toMemberType(final String datastoreValue) {
+        return datastoreValue != null
+                ? new LocalResourcePath(datastoreValue)
+                        : null;
+    }
+
 }

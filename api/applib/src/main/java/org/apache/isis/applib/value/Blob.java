@@ -39,7 +39,7 @@ import lombok.val;
 // end::refguide[]
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider")
-@XmlJavaTypeAdapter(Blob.JaxbXmlAdapter.class)   // for JAXB view model support
+@XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class Blob implements NamedWithMimeType {
 
     /**
@@ -161,7 +161,7 @@ public final class Blob implements NamedWithMimeType {
      * (thread-safe)
      * @implNote see also BlobValueSemanticsProvider
      */
-    public static final class JaxbXmlAdapter extends XmlAdapter<String, Blob> {
+    public static final class JaxbToStringAdapter extends XmlAdapter<String, Blob> {
 
         private final PrimitiveJaxbAdapters.BytesAdapter bytesAdapter = new PrimitiveJaxbAdapters.BytesAdapter(); // thread-safe
 
@@ -188,13 +188,12 @@ public final class Blob implements NamedWithMimeType {
             if(blob==null) {
                 return null;
             }
-            return new StringBuilder()
-            .append(blob.getName())
-            .append(':')
-            .append(blob.getMimeType().getBaseType())
-            .append(':')
-            .append(bytesAdapter.marshal(blob.getBytes()))
-            .toString();
+            String s = blob.getName() +
+                    ':' +
+                    blob.getMimeType().getBaseType() +
+                    ':' +
+                    bytesAdapter.marshal(blob.getBytes());
+            return s;
         }
 
     }

@@ -62,26 +62,26 @@ public class JavaTimeOffsetDateTimeVm
     @Title(prepend = "java.time.OffsetDateTime view model: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeAdapter.class)               // <.>
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)               // <.>
     @Getter @Setter
     private java.time.OffsetDateTime readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeAdapter.class)
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
     @Getter @Setter
     private java.time.OffsetDateTime readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeAdapter.class)
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
     @Getter @Setter
     private java.time.OffsetDateTime readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
-    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeAdapter.class)
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
     @Getter @Setter
     private java.time.OffsetDateTime readWriteOptionalProperty;
 

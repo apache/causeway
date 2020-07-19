@@ -24,6 +24,7 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Value;
 
@@ -31,6 +32,7 @@ import org.apache.isis.applib.annotation.Value;
 // end::refguide[]
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider")
 @XmlAccessorType(XmlAccessType.FIELD)
+// @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class) // TODO: not automatically registered because not secure enough.  Instead we should set up some sort of mechanism to encrypt.
 @lombok.Value
 public class Password implements Serializable {
     
@@ -63,8 +65,19 @@ public class Password implements Serializable {
     }
 
 
+    public static class JaxbToStringAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<String, Password> {
+        @Override
+        public Password unmarshal(String str) throws Exception {
+            return str != null
+                    ? new Password(str)
+                    : null;
+        }
 
-    
-
-    
+        @Override
+        public String marshal(Password password) throws Exception {
+            return password != null
+                    ? password.getPassword()
+                    : null;
+        }
+    }
 }

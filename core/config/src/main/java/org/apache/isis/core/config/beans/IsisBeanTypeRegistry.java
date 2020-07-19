@@ -66,6 +66,8 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     // -- DISTINCT CATEGORIES OF BEAN SORTS
     
     private final Map<Class<?>, String> managedBeanNamesByType = new HashMap<>();
+    @Getter private final Set<Class<?>> managedBeansContributing = new HashSet<>();
+    @Getter private final Set<Class<?>> managedBeansNotContributing = new HashSet<>();
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
@@ -176,7 +178,11 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             
             switch (sort) {
             case MANAGED_BEAN_CONTRIBUTING:
+                managedBeansContributing.add(type);
+                managedBeanNamesByType.put(type, typeMeta.getEffectiveBeanName());
+                return;
             case MANAGED_BEAN_NOT_CONTRIBUTING:
+                managedBeansNotContributing.add(type);
                 managedBeanNamesByType.put(type, typeMeta.getEffectiveBeanName());
                 return;
             case MIXIN:

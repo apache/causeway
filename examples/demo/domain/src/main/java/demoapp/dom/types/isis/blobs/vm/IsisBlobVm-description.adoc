@@ -1,4 +1,4 @@
-JAXB can be configured to support the Apache Isis `Blob` type using `@XmlJavaTypeAdapter`:
+The Apache Isis `Blob` value type provides its own implementation of `@XmlJavaTypeAdapter`, meaning that JAXB can serialize the state of this value type without any further annotations required on the view model itself:
 
 [source,java]
 ----

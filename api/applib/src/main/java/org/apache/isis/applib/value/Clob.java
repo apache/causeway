@@ -27,7 +27,9 @@ import java.util.Objects;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.core.commons.internal.base._Strings;
 
@@ -35,6 +37,9 @@ import lombok.val;
 
 // tag::refguide[]
 // end::refguide[]
+@Value(semanticsProviderName =
+        "org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider")
+@XmlJavaTypeAdapter(Clob.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class Clob implements NamedWithMimeType {
 
     private static final long serialVersionUID = 8694189924062378527L;
@@ -150,7 +155,7 @@ public final class Clob implements NamedWithMimeType {
      * (thread-safe)
      * @implNote see also ClobValueSemanticsProvider
      */
-    public static final class JaxbXmlAdapter extends XmlAdapter<String, Clob> {
+    public static final class JaxbToStringAdapter extends XmlAdapter<String, Clob> {
 
         private final PrimitiveJaxbAdapters.BytesAdapter bytesAdapter = new PrimitiveJaxbAdapters.BytesAdapter(); // thread-safe
 

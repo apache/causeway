@@ -60,8 +60,7 @@ public class IsisBlobJdo                                            // <.>
     @Persistent(defaultFetchGroup="false", columns = {              // <.>
             @Column(name = "readOnlyProperty_name"),
             @Column(name = "readOnlyProperty_mimetype"),
-            @Column(name = "readOnlyProperty_bytes"
-            )
+            @Column(name = "readOnlyProperty_bytes")
     })
     @Getter @Setter
     private Blob readOnlyProperty;
@@ -71,8 +70,7 @@ public class IsisBlobJdo                                            // <.>
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteProperty_name"),
             @Column(name = "readWriteProperty_mimetype"),
-            @Column(name = "readWriteProperty_bytes"
-            )
+            @Column(name = "readWriteProperty_bytes")
     })
     @Getter @Setter
     private Blob readWriteProperty;
@@ -94,7 +92,7 @@ public class IsisBlobJdo                                            // <.>
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteOptionalProperty_name",
-                    allowsNull = "true"),                           // <.>
+                    allowsNull = "true"),
             @Column(name = "readWriteOptionalProperty_mimetype",
                     allowsNull = "true"),
             @Column(name = "readWriteOptionalProperty_bytes",

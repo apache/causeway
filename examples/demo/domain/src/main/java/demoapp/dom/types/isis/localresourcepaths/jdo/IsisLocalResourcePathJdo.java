@@ -22,7 +22,9 @@ import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -44,7 +46,7 @@ import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHol
 @DomainObject(
         objectType = "demo.IsisLocalResourcePathJdo"
 )
-public class IsisLocalResourcePathJdo                                          // <.>
+public class IsisLocalResourcePathJdo                                   // <.>
         implements HasAsciiDocDescription, IsisLocalResourcePathHolder2 {
 
 //end::class[]
@@ -56,25 +58,26 @@ public class IsisLocalResourcePathJdo                                          /
 //tag::class[]
     @Title(prepend = "LocalResourcePath JDO entity: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                               // <.>
+    @Column(allowsNull = "false")                                       // <.>
     @Getter @Setter
     private LocalResourcePath readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                        // <.>
+    @Property(editing = Editing.ENABLED)                                // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private LocalResourcePath readWriteProperty;
 
-    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @Property(optionality = Optionality.OPTIONAL)                       // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                                // <.>
+    @Column(allowsNull = "true")                                        // <.>
     @Getter @Setter
     private LocalResourcePath readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
-    @Column(allowsNull = "true")
+    @NotPersistent
+    // @Column(allowsNull = "true")
     @Getter @Setter
     private LocalResourcePath readWriteOptionalProperty;
 

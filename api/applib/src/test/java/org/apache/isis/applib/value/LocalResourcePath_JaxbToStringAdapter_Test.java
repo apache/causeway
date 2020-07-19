@@ -20,11 +20,11 @@ package org.apache.isis.applib.value;
 
 import org.apache.isis.applib.jaxbadapters.JaxbXmlAdaptersContractTest;
 
-public class Markup_JaxbXmlAdapter_Test extends JaxbXmlAdaptersContractTest<Markup> {
+public class LocalResourcePath_JaxbToStringAdapter_Test extends JaxbXmlAdaptersContractTest<LocalResourcePath> {
 
-    public Markup_JaxbXmlAdapter_Test() {
-        super(new Markup.JaxbXmlAdapter()
-                , new Markup(JaxbXmlAdaptersContractTest.sampleComplexString));
+    public LocalResourcePath_JaxbToStringAdapter_Test() {
+        super(new LocalResourcePath.JaxbToStringAdapter()
+                , new LocalResourcePath(JaxbXmlAdaptersContractTest.sampleComplexString));
     }
 
 }

@@ -18,15 +18,12 @@
  */
 package org.apache.isis.applib.value;
 
-import java.nio.charset.StandardCharsets;
-
 import org.apache.isis.applib.jaxbadapters.JaxbXmlAdaptersContractTest;
 
-public class Blob_JaxbXmlAdapter_Test extends JaxbXmlAdaptersContractTest<Blob> {
+class Clob_JaxbToStringAdapter_Test extends JaxbXmlAdaptersContractTest<Clob> {
 
-    public Blob_JaxbXmlAdapter_Test() {
-        super(new Blob.JaxbXmlAdapter()
-                , new Blob("sample", "text/plain", JaxbXmlAdaptersContractTest.sampleComplexString.getBytes(StandardCharsets.UTF_8)));
+    public Clob_JaxbToStringAdapter_Test() {
+        super(new Clob.JaxbToStringAdapter()
+                , new Clob("sample", "text/plain", JaxbXmlAdaptersContractTest.sampleComplexString));
     }
-
 }

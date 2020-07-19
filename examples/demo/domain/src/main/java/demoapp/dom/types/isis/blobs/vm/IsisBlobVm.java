@@ -63,27 +63,23 @@ public class IsisBlobVm
     }
 
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @XmlJavaTypeAdapter(Blob.JaxbXmlAdapter.class)                         // <.>
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private Blob readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
-    @XmlJavaTypeAdapter(Blob.JaxbXmlAdapter.class)
     @XmlElement(required = true)
     @Getter @Setter
     private Blob readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @XmlJavaTypeAdapter(Blob.JaxbXmlAdapter.class)
     @Getter @Setter
     private Blob readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
-    @XmlJavaTypeAdapter(Blob.JaxbXmlAdapter.class)
     @Getter @Setter
     private Blob readWriteOptionalProperty;
 
