@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.booleans.holder.WrapperBooleanHolder;
+import demoapp.dom.types.javalang.booleans.holder.WrapperBooleanHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.booleans.holder.WrapperBooleanHolder;
         objectType = "demo.WrapperBooleanJdo"
 )
 public class WrapperBooleanJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperBooleanHolder {
+        implements HasAsciiDocDescription, WrapperBooleanHolder2 {
 
 //end::class[]
     public WrapperBooleanJdo(Boolean initialValue) {

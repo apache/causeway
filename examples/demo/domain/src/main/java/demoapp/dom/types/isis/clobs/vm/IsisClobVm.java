@@ -30,16 +30,14 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Clob;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.clobs.holder.IsisClobHolder;
+import demoapp.dom.types.isis.clobs.holder.IsisClobHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -51,7 +49,7 @@ import demoapp.dom.types.isis.clobs.holder.IsisClobHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class IsisClobVm
-        implements HasAsciiDocDescription, IsisClobHolder {
+        implements HasAsciiDocDescription, IsisClobHolder2 {
 
 //end::class[]
     public IsisClobVm(Clob initialValue) {

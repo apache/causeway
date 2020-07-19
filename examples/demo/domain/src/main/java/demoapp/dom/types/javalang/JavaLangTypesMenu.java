@@ -30,8 +30,6 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.javalang.strings.JavaLangStrings;
 import demoapp.dom.types.javalang.voids.JavaLangVoids;
-import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
-import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaLangTypesMenu")
 @DomainObjectLayout(named="JavaLangTypes")

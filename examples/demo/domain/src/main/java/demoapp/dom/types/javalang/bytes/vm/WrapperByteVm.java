@@ -36,7 +36,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder;
+import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperByteVm
-        implements HasAsciiDocDescription, WrapperByteHolder {
+        implements HasAsciiDocDescription, WrapperByteHolder2 {
 
 //end::class[]
     public WrapperByteVm(Byte initialValue) {

@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder;
+import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder;
         objectType = "demo.WrapperByteJdo"
 )
 public class WrapperByteJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperByteHolder {
+        implements HasAsciiDocDescription, WrapperByteHolder2 {
 
 //end::class[]
     public WrapperByteJdo(Byte initialValue) {

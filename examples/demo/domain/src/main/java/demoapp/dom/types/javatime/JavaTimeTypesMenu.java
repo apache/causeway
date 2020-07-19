@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -57,13 +58,18 @@ public class JavaTimeTypesMenu {
         return new JavaTimeOffsetDateTimes();
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            hidden = Where.EVERYWHERE   // TODO: ISIS-2409 - NPE
+    )
     @ActionLayout(cssClassFa="fa-clock")
     public JavaTimeOffsetTimes offsetTimes(){
         return new JavaTimeOffsetTimes();
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Action(semantics = SemanticsOf.SAFE,
+            hidden = Where.EVERYWHERE   // TODO: ISIS-2410 - does not render/parse correctly
+    )
     @ActionLayout(cssClassFa="fa-clock")
     public JavaTimeZonedDateTimes zonedDateTimes(){
         return new JavaTimeZonedDateTimes();

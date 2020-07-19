@@ -18,9 +18,10 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
+import java.awt.Image;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.Image;
 
 import lombok.RequiredArgsConstructor;
 

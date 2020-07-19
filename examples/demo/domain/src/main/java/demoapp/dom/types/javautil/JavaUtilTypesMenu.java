@@ -36,7 +36,7 @@ import demoapp.dom.types.javautil.uuids.JavaUtilUuids;
 public class JavaUtilTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-hashtag")
     public JavaUtilUuids uuids(){
         return new JavaUtilUuids();
     }

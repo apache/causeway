@@ -52,7 +52,7 @@ public final class Blob ... {
 }
 ----
 
-Properties of this type can be mapped with xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] using:
+Mandatory properties of this type can be mapped with xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] using:
 
 [source,java]
 ----
@@ -60,12 +60,15 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.Column;
 
 @Persistent(defaultFetchGroup="false", columns = {
-    @Column(name = "someImage_name"),
-    @Column(name = "someImage_mimetype"),
-    @Column(name = "someImage_bytes",
-            jdbcType = "BLOB",
-            sqlType = "LONGVARBINARY")
+    @Column(name = "someImage_name"
+            , allowsNull = "false"),
+    @Column(name = "someImage_mimetype"
+            , allowsNull = "false"),
+    @Column(name = "someImage_bytes"
+            , allowsNull = "false")
 })
 private Blob someImage;
 ----
+
+while optional properties can be mapped the same, but using `allowsNull = "true` for each of the ``@Column``s.
 

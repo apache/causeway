@@ -30,15 +30,13 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javautil.uuids.holder.JavaUtilUuidHolder;
+import demoapp.dom.types.javautil.uuids.holder.JavaUtilUuidHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +48,7 @@ import demoapp.dom.types.javautil.uuids.holder.JavaUtilUuidHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaUtilUuidVm
-        implements HasAsciiDocDescription, JavaUtilUuidHolder {
+        implements HasAsciiDocDescription, JavaUtilUuidHolder2 {
 
 //end::class[]
     public JavaUtilUuidVm(java.util.UUID initialValue) {

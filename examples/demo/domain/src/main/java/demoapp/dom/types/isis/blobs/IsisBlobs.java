@@ -41,8 +41,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities;
 import demoapp.dom.types.isis.blobs.jdo.IsisBlobJdo;
+import demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities;
 import demoapp.dom.types.isis.blobs.vm.IsisBlobVm;
 
 @XmlRootElement(name = "Demo")

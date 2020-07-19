@@ -41,8 +41,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities;
 import demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdo;
+import demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities;
 import demoapp.dom.types.isis.passwords.vm.IsisPasswordVm;
 
 @XmlRootElement(name = "Demo")

@@ -36,7 +36,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.floats.holder.WrapperFloatHolder;
+import demoapp.dom.types.javalang.floats.holder.WrapperFloatHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.floats.holder.WrapperFloatHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperFloatVm
-        implements HasAsciiDocDescription, WrapperFloatHolder {
+        implements HasAsciiDocDescription, WrapperFloatHolder2 {
 
 //end::class[]
     public WrapperFloatVm(Float initialValue) {

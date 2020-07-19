@@ -25,8 +25,6 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom.types.javasql.javasqltimestamp.holder.JavaSqlTimestampHolder2;
-
 //tag::class[]
 public interface JavaUtilDateHolder3 extends JavaUtilDateHolder2 {
 

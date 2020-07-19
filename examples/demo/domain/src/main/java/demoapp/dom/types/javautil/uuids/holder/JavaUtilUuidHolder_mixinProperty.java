@@ -25,8 +25,6 @@ import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
-
 
 //tag::class[]
 @Property()

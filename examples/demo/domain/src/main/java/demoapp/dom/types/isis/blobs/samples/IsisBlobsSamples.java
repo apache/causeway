@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.isis.blobs.samples;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;

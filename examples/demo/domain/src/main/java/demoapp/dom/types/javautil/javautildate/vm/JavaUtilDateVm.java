@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder;
+import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder3;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +50,7 @@ import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaUtilDateVm
-        implements HasAsciiDocDescription, JavaUtilDateHolder {
+        implements HasAsciiDocDescription, JavaUtilDateHolder3 {
 
 //end::class[]
     public JavaUtilDateVm(java.util.Date initialValue) {

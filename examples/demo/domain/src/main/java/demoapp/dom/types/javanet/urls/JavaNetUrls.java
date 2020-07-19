@@ -41,8 +41,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities;
 import demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdo;
+import demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities;
 import demoapp.dom.types.javanet.urls.vm.JavaNetUrlVm;
 
 @XmlRootElement(name = "Demo")

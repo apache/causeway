@@ -19,6 +19,7 @@
 package demoapp.dom.types.javaawt.images;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -41,8 +42,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoEntities;
 import demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdo;
+import demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoEntities;
 import demoapp.dom.types.javaawt.images.vm.JavaAwtImageVm;
 
 @XmlRootElement(name = "Demo")
@@ -58,10 +59,10 @@ public class JavaAwtImages implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaAwtImageVm openViewModel(Image initialValue) {
+    public JavaAwtImageVm openViewModel(java.awt.Image initialValue) {
         return new JavaAwtImageVm(initialValue);
     }
-    public Image default0OpenViewModel() {
+    public java.awt.Image default0OpenViewModel() {
         return samples.single();
     }
 
@@ -76,6 +77,6 @@ public class JavaAwtImages implements HasAsciiDocDescription {
 
     @Inject
     @XmlTransient
-    Samples<Image> samples;
+    Samples<java.awt.Image> samples;
 
 }

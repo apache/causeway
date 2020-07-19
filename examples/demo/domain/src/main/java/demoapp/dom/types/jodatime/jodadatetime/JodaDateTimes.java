@@ -39,8 +39,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities;
 import demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdo;
+import demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities;
 import demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples;
 import demoapp.dom.types.jodatime.jodadatetime.vm.JodaDateTimeVm;
 

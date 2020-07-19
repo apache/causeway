@@ -43,12 +43,12 @@ public class JavaAwtImageHolder_updateReadOnlyOptionalProperty {
 
     public JavaAwtImageHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Image newValue
+            java.awt.Image newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public Image default0Act() {
+    public java.awt.Image default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

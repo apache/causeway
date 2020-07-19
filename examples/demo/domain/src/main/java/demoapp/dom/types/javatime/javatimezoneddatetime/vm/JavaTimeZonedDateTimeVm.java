@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDateTimeHolder;
+import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDateTimeHolder3;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +50,7 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDate
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeZonedDateTimeVm
-        implements HasAsciiDocDescription, JavaTimeZonedDateTimeHolder {
+        implements HasAsciiDocDescription, JavaTimeZonedDateTimeHolder3 {
 
 //end::class[]
     public JavaTimeZonedDateTimeVm(java.time.ZonedDateTime initialValue) {

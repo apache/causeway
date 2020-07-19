@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder;
+import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder3;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +50,7 @@ import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHo
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeOffsetTimeVm
-        implements HasAsciiDocDescription, JavaTimeOffsetTimeHolder {
+        implements HasAsciiDocDescription, JavaTimeOffsetTimeHolder3 {
 
 //end::class[]
     public JavaTimeOffsetTimeVm(java.time.OffsetTime initialValue) {

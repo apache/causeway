@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.floats.holder.WrapperFloatHolder;
+import demoapp.dom.types.javalang.floats.holder.WrapperFloatHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.floats.holder.WrapperFloatHolder;
         objectType = "demo.WrapperFloatJdo"
 )
 public class WrapperFloatJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperFloatHolder {
+        implements HasAsciiDocDescription, WrapperFloatHolder2 {
 
 //end::class[]
     public WrapperFloatJdo(Float initialValue) {

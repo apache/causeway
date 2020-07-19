@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.integers.holder.WrapperIntegerHolder;
+import demoapp.dom.types.javalang.integers.holder.WrapperIntegerHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.integers.holder.WrapperIntegerHolder;
         objectType = "demo.WrapperIntegerJdo"
 )
 public class WrapperIntegerJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperIntegerHolder {
+        implements HasAsciiDocDescription, WrapperIntegerHolder2 {
 
 //end::class[]
     public WrapperIntegerJdo(Integer initialValue) {

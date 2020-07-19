@@ -39,8 +39,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities;
 import demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdo;
+import demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities;
 import demoapp.dom.types.primitive.bytes.vm.PrimitiveByteVm;
 
 @XmlRootElement(name = "Demo")

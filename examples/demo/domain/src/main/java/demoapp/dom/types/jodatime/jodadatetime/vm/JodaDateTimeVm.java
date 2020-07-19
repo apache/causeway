@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.jodatime.jodadatetime.holder.JodaDateTimeHolder;
+import demoapp.dom.types.jodatime.jodadatetime.holder.JodaDateTimeHolder3;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +50,7 @@ import demoapp.dom.types.jodatime.jodadatetime.holder.JodaDateTimeHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JodaDateTimeVm
-        implements HasAsciiDocDescription, JodaDateTimeHolder {
+        implements HasAsciiDocDescription, JodaDateTimeHolder3 {
 
 //end::class[]
     public JodaDateTimeVm(org.joda.time.DateTime initialValue) {

@@ -67,7 +67,7 @@ public final class Clob ... {
 }
 ----
 
-Properties of this type can be mapped to xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] using:
+Mandatory properties of this type can be mapped to xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] using:
 
 [source,java]
 ----
@@ -75,12 +75,15 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.Column;
 
 @Persistent(defaultFetchGroup="false", columns = {
-    @Column(name = "someClob_name"),
-    @Column(name = "someClob_mimetype"),
-    @Column(name = "someClob_chars",
-            jdbcType = "CLOB",
-            sqlType = "LONGVARCHAR")
+    @Column(name = "someClob_name"
+            , allowsNull = "false"),
+    @Column(name = "someClob_mimetype"
+            , allowsNull = "false"),
+    @Column(name = "someClob_chars"
+            , jdbcType = "CLOB"
+            , allowsNull = "false")
 })
 private Clob someClob;
 ----
 
+while optional properties can be mapped the same, but using `allowsNull = "true` for each of the ``@Column``s.

@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder;
+import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder;
 )
 @lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveDoubleVm
-        implements HasAsciiDocDescription, PrimitiveDoubleHolder {
+        implements HasAsciiDocDescription, PrimitiveDoubleHolder2 {
 
 //end::class[]
     public PrimitiveDoubleVm(double initialValue) {

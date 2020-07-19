@@ -36,7 +36,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.booleans.holder.WrapperBooleanHolder;
+import demoapp.dom.types.javalang.booleans.holder.WrapperBooleanHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.booleans.holder.WrapperBooleanHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperBooleanVm
-        implements HasAsciiDocDescription, WrapperBooleanHolder {
+        implements HasAsciiDocDescription, WrapperBooleanHolder2 {
 
 //end::class[]
     public WrapperBooleanVm(Boolean initialValue) {

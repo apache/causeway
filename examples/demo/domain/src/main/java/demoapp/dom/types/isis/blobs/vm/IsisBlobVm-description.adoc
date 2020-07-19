@@ -1,4 +1,4 @@
-JAXB supports `Blob` out-of-the-box, so no special annotations are required.
+JAXB can be configured to support the Apache Isis `Blob` type using `@XmlJavaTypeAdapter`:
 
 [source,java]
 ----

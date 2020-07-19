@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDateTimeHolder;
+import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDateTimeHolder3;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -44,7 +44,7 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDate
         objectType = "demo.JavaTimeZonedDateTimeJdo"
 )
 public class JavaTimeZonedDateTimeJdo                                          // <.>
-        implements HasAsciiDocDescription, JavaTimeZonedDateTimeHolder {
+        implements HasAsciiDocDescription, JavaTimeZonedDateTimeHolder3 {
 
 //end::class[]
     public JavaTimeZonedDateTimeJdo(java.time.ZonedDateTime initialValue) {

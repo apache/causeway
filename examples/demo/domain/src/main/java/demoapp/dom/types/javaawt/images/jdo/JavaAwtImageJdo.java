@@ -29,16 +29,14 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.value.Image;
+
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder;
+import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -47,10 +45,10 @@ import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder;
         objectType = "demo.JavaAwtImageJdo"
 )
 public class JavaAwtImageJdo                                          // <.>
-        implements HasAsciiDocDescription, JavaAwtImageHolder {
+        implements HasAsciiDocDescription, JavaAwtImageHolder2 {
 
 //end::class[]
-    public JavaAwtImageJdo(Image initialValue) {
+    public JavaAwtImageJdo(java.awt.Image initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -60,25 +58,25 @@ public class JavaAwtImageJdo                                          // <.>
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private Image readOnlyProperty;
+    private java.awt.Image readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
-    private Image readWriteProperty;
+    private java.awt.Image readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private Image readOnlyOptionalProperty;
+    private java.awt.Image readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private Image readWriteOptionalProperty;
+    private java.awt.Image readWriteOptionalProperty;
 
 }
 //end::class[]

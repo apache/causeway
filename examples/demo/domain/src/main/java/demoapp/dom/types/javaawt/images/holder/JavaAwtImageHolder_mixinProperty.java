@@ -26,8 +26,6 @@ import org.apache.isis.applib.value.Image;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
-
 
 //tag::class[]
 @Property()
@@ -38,7 +36,7 @@ public class JavaAwtImageHolder_mixinProperty {
     private final JavaAwtImageHolder holder;
 
     @MemberOrder(name = "contributed", sequence = "1")
-    public Image prop() {
+    public java.awt.Image prop() {
         return holder.getReadOnlyProperty();
     }
 

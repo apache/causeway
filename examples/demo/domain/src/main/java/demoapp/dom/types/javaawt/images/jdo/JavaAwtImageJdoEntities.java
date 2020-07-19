@@ -13,7 +13,7 @@ import org.apache.isis.applib.value.Image;
 @Service
 public class JavaAwtImageJdoEntities {
 
-    public Optional<JavaAwtImageJdo> find(final Image readOnlyProperty) {
+    public Optional<JavaAwtImageJdo> find(final java.awt.Image readOnlyProperty) {
         return repositoryService.firstMatch(JavaAwtImageJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
     }
 

@@ -20,7 +20,6 @@ package demoapp.dom.types.javaawt.images.holder;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -47,19 +46,19 @@ public class JavaAwtImageHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaAwtImageHolder holder;
 
-    public JavaAwtImageHolder act(Image newValue) {
+    public JavaAwtImageHolder act(java.awt.Image newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Image default0Act() {
+    public java.awt.Image default0Act() {
         return holder.getReadOnlyProperty();
     }
-    public List<Image> choices0Act() {
+    public List<java.awt.Image> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<Image> samples;
+    Samples<java.awt.Image> samples;
 }
 //end::class[]

@@ -18,12 +18,12 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime.holder;
 
-import org.joda.time.DateTime;
-
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+
+import org.joda.time.DateTime;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;

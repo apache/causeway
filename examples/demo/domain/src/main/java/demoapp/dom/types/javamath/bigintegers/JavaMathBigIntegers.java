@@ -41,8 +41,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities;
 import demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdo;
+import demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities;
 import demoapp.dom.types.javamath.bigintegers.vm.JavaMathBigIntegerVm;
 
 @XmlRootElement(name = "Demo")

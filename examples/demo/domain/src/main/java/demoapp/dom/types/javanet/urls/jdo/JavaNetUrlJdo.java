@@ -29,15 +29,13 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javanet.urls.holder.JavaNetUrlHolder;
+import demoapp.dom.types.javanet.urls.holder.JavaNetUrlHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -46,7 +44,7 @@ import demoapp.dom.types.javanet.urls.holder.JavaNetUrlHolder;
         objectType = "demo.JavaNetUrlJdo"
 )
 public class JavaNetUrlJdo                                          // <.>
-        implements HasAsciiDocDescription, JavaNetUrlHolder {
+        implements HasAsciiDocDescription, JavaNetUrlHolder2 {
 
 //end::class[]
     public JavaNetUrlJdo(java.net.URL initialValue) {

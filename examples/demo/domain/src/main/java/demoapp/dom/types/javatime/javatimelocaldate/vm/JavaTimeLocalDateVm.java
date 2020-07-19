@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimelocaldate.holder.JavaTimeLocalDateHolder;
+import demoapp.dom.types.javatime.javatimelocaldate.holder.JavaTimeLocalDateHolder3;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +50,7 @@ import demoapp.dom.types.javatime.javatimelocaldate.holder.JavaTimeLocalDateHold
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeLocalDateVm
-        implements HasAsciiDocDescription, JavaTimeLocalDateHolder {
+        implements HasAsciiDocDescription, JavaTimeLocalDateHolder3 {
 
 //end::class[]
     public JavaTimeLocalDateVm(java.time.LocalDate initialValue) {

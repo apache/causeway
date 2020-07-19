@@ -39,11 +39,11 @@ public class JavaAwtImageHolder_updateReadOnlyProperty {
 
     private final JavaAwtImageHolder holder;
 
-    public JavaAwtImageHolder act(Image newValue) {
+    public JavaAwtImageHolder act(java.awt.Image newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Image default0Act() {
+    public java.awt.Image default0Act() {
         return holder.getReadOnlyProperty();
     }
 

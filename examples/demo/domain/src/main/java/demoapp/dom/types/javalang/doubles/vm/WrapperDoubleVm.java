@@ -36,7 +36,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder;
+import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperDoubleVm
-        implements HasAsciiDocDescription, WrapperDoubleHolder {
+        implements HasAsciiDocDescription, WrapperDoubleHolder2 {
 
 //end::class[]
     public WrapperDoubleVm(Double initialValue) {

@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -34,8 +35,6 @@ import demoapp.dom.types.isis.images.IsisImages;
 import demoapp.dom.types.isis.localresourcepaths.IsisLocalResourcePaths;
 import demoapp.dom.types.isis.markups.IsisMarkups;
 import demoapp.dom.types.isis.passwords.IsisPasswords;
-import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
-import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.IsisTypesMenu")
 @DomainObjectLayout(named="Isis Types")
@@ -54,7 +53,10 @@ public class IsisTypesMenu {
         return new IsisClobs();
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            hidden = Where.EVERYWHERE // TODO: ISIS-2411
+    )
     @ActionLayout(cssClassFa="fa-image")
     public IsisImages images(){
         return new IsisImages();

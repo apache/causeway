@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder;
+import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder3;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -44,7 +44,7 @@ import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder;
         objectType = "demo.JavaUtilDateJdo"
 )
 public class JavaUtilDateJdo                                          // <.>
-        implements HasAsciiDocDescription, JavaUtilDateHolder {
+        implements HasAsciiDocDescription, JavaUtilDateHolder3 {
 
 //end::class[]
     public JavaUtilDateJdo(java.util.Date initialValue) {

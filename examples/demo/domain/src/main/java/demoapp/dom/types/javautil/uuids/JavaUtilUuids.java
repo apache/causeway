@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javautil.uuids;
 
-import java.net.URL;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,8 +40,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities;
 import demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdo;
+import demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities;
 import demoapp.dom.types.javautil.uuids.vm.JavaUtilUuidVm;
 
 @XmlRootElement(name = "Demo")

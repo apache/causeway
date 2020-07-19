@@ -27,8 +27,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-import lombok.val;
-
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.TupleDemoMenu")
 @DomainObjectLayout(named="Tuple Demo")
 public class TupleDemoMenu {

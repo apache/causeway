@@ -36,7 +36,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.shorts.holder.WrapperShortHolder;
+import demoapp.dom.types.javalang.shorts.holder.WrapperShortHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.shorts.holder.WrapperShortHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperShortVm
-        implements HasAsciiDocDescription, WrapperShortHolder {
+        implements HasAsciiDocDescription, WrapperShortHolder2 {
 
 //end::class[]
     public WrapperShortVm(Short initialValue) {

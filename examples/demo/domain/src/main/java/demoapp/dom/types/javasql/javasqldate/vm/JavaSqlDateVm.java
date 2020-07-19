@@ -38,7 +38,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javasql.javasqldate.holder.JavaSqlDateHolder;
 import demoapp.dom.types.javasql.javasqldate.holder.JavaSqlDateHolder3;
 
 //tag::class[]

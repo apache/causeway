@@ -42,8 +42,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities;
 import demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdo;
+import demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities;
 import demoapp.dom.types.jodatime.jodalocaldatetime.vm.JodaLocalDateTimeVm;
 
 @XmlRootElement(name = "Demo")

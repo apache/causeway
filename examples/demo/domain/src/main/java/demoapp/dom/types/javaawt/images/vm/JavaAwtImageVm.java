@@ -30,16 +30,14 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Image;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder;
+import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -49,12 +47,12 @@ import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder;
         nature=Nature.VIEW_MODEL,
         objectType = "demo.JavaAwtImageVm"
 )
-@lombok.NoArgsConstructor                                                       // <.>
+@lombok.NoArgsConstructor                                               // <.>
 public class JavaAwtImageVm
-        implements HasAsciiDocDescription, JavaAwtImageHolder {
+        implements HasAsciiDocDescription, JavaAwtImageHolder2 {
 
 //end::class[]
-    public JavaAwtImageVm(Image initialValue) {
+    public JavaAwtImageVm(java.awt.Image initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -62,25 +60,25 @@ public class JavaAwtImageVm
 //tag::class[]
     @Title(prepend = "Image view model: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @XmlElement(required = true)                                                // <.>
+    @XmlElement(required = true)                                        // <.>
     @Getter @Setter
-    private Image readOnlyProperty;
+    private java.awt.Image readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                        // <.>
+    @Property(editing = Editing.ENABLED)                                // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private Image readWriteProperty;
+    private java.awt.Image readWriteProperty;
 
-    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @Property(optionality = Optionality.OPTIONAL)                       // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Getter @Setter
-    private Image readOnlyOptionalProperty;
+    private java.awt.Image readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Getter @Setter
-    private Image readWriteOptionalProperty;
+    private java.awt.Image readWriteOptionalProperty;
 
 }
 //end::class[]

@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.longs.holder.WrapperLongHolder;
+import demoapp.dom.types.javalang.longs.holder.WrapperLongHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.longs.holder.WrapperLongHolder;
         objectType = "demo.WrapperLongJdo"
 )
 public class WrapperLongJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperLongHolder {
+        implements HasAsciiDocDescription, WrapperLongHolder2 {
 
 //end::class[]
     public WrapperLongJdo(Long initialValue) {

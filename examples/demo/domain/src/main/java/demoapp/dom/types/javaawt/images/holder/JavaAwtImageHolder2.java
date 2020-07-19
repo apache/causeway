@@ -20,7 +20,6 @@ package demoapp.dom.types.javaawt.images.holder;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -37,7 +36,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "1")  // <.>
-    default Image getReadOnlyPropertyDerivedLabelPositionLeft() {
+    default java.awt.Image getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
@@ -49,7 +48,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "2")
-    default Image getReadOnlyPropertyDerivedLabelPositionTop() {
+    default java.awt.Image getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
 
@@ -61,7 +60,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "3")
-    default Image getReadOnlyPropertyDerivedLabelPositionRight() {
+    default java.awt.Image getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
 
@@ -73,7 +72,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "4")
-    default Image getReadOnlyPropertyDerivedLabelPositionNone() {
+    default java.awt.Image getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }
 

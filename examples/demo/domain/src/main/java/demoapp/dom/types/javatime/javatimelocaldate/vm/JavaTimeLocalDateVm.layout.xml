@@ -25,7 +25,6 @@
 			<cpt:fieldSet name="Contributed by Mixins" id="contributed"/>
 			<cpt:fieldSet name="@PropertyLayout(labelPosition=...)" id="label-positions"/>
 			<cpt:fieldSet name="@PropertyLayout(renderDay=...)" id="render-day"/>
-			<cpt:fieldSet name="@PropertyLayout(renderDay=...)" id="render-day"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">

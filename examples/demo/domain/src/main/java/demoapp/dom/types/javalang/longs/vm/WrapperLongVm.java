@@ -36,7 +36,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.longs.holder.WrapperLongHolder;
+import demoapp.dom.types.javalang.longs.holder.WrapperLongHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.longs.holder.WrapperLongHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperLongVm
-        implements HasAsciiDocDescription, WrapperLongHolder {
+        implements HasAsciiDocDescription, WrapperLongHolder2 {
 
 //end::class[]
     public WrapperLongVm(Long initialValue) {

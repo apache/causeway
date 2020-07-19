@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder;
+import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder;
         objectType = "demo.WrapperDoubleJdo"
 )
 public class WrapperDoubleJdo                                          // <.>
-        implements HasAsciiDocDescription, WrapperDoubleHolder {
+        implements HasAsciiDocDescription, WrapperDoubleHolder2 {
 
 //end::class[]
     public WrapperDoubleJdo(Double initialValue) {

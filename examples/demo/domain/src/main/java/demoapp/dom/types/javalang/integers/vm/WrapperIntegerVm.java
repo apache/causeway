@@ -36,7 +36,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.integers.holder.WrapperIntegerHolder;
+import demoapp.dom.types.javalang.integers.holder.WrapperIntegerHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.integers.holder.WrapperIntegerHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperIntegerVm
-        implements HasAsciiDocDescription, WrapperIntegerHolder {
+        implements HasAsciiDocDescription, WrapperIntegerHolder2 {
 
 //end::class[]
     public WrapperIntegerVm(Integer initialValue) {

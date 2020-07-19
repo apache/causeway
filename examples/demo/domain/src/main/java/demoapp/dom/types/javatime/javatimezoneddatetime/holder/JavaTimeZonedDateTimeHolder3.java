@@ -25,8 +25,6 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder2;
-
 //tag::class[]
 public interface JavaTimeZonedDateTimeHolder3 extends JavaTimeZonedDateTimeHolder2 {
 

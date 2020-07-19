@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
@@ -39,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isisext.asciidocs.holder.IsisAsciiDocHolder;
+import demoapp.dom.types.isisext.asciidocs.holder.IsisAsciiDocHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -51,7 +50,7 @@ import demoapp.dom.types.isisext.asciidocs.holder.IsisAsciiDocHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class IsisAsciiDocVm
-        implements HasAsciiDocDescription, IsisAsciiDocHolder {
+        implements HasAsciiDocDescription, IsisAsciiDocHolder2 {
 
 //end::class[]
     public IsisAsciiDocVm(AsciiDoc initialValue) {

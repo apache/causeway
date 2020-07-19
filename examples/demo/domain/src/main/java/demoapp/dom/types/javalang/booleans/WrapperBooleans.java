@@ -40,8 +40,8 @@ import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities;
 import demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdo;
+import demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities;
 import demoapp.dom.types.javalang.booleans.vm.WrapperBooleanVm;
 
 @XmlRootElement(name = "Demo")

@@ -18,12 +18,12 @@
  */
 package demoapp.dom.types.jodatime.jodalocaldatetime.holder;
 
-import org.joda.time.LocalDateTime;
-
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+
+import org.joda.time.LocalDateTime;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;

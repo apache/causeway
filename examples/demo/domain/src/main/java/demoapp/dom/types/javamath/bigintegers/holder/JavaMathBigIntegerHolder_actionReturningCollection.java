@@ -19,10 +19,8 @@
 package demoapp.dom.types.javamath.bigintegers.holder;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -30,7 +28,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import demoapp.dom.types.Samples;
 

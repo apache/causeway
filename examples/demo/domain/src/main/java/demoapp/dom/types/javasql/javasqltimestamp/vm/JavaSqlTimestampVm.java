@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javasql.javasqltimestamp.holder.JavaSqlTimestampHolder;
+import demoapp.dom.types.javasql.javasqltimestamp.holder.JavaSqlTimestampHolder3;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +50,7 @@ import demoapp.dom.types.javasql.javasqltimestamp.holder.JavaSqlTimestampHolder;
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaSqlTimestampVm
-        implements HasAsciiDocDescription, JavaSqlTimestampHolder {
+        implements HasAsciiDocDescription, JavaSqlTimestampHolder3 {
 
 //end::class[]
     public JavaSqlTimestampVm(java.sql.Timestamp initialValue) {

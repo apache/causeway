@@ -18,22 +18,20 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
-import org.apache.isis.applib.value.Image;
-
 //tag::class[]
 public interface JavaAwtImageHolder {
 
-    Image getReadOnlyProperty();
-    void setReadOnlyProperty(Image c);
+    java.awt.Image getReadOnlyProperty();
+    void setReadOnlyProperty(java.awt.Image c);
 
-    Image getReadWriteProperty();
-    void setReadWriteProperty(Image c);
+    java.awt.Image getReadWriteProperty();
+    void setReadWriteProperty(java.awt.Image c);
 
-    Image getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(Image c);
+    java.awt.Image getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(java.awt.Image c);
 
-    Image getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(Image c);
+    java.awt.Image getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(java.awt.Image c);
 
 }
 //end::class[]

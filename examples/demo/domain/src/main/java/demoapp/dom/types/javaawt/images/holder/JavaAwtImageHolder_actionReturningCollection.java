@@ -18,10 +18,8 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -30,7 +28,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Image;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import demoapp.dom.types.Samples;
 

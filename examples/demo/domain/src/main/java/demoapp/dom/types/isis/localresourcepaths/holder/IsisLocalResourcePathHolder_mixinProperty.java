@@ -26,8 +26,6 @@ import org.apache.isis.applib.value.LocalResourcePath;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
-
 
 //tag::class[]
 @Property()

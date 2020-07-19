@@ -21,7 +21,6 @@ package demoapp.dom.types.javamath.bigintegers.holder;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 

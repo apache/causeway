@@ -16,12 +16,11 @@ These objects both implement a common interface, `JavaSqlDateHolder`:
 include::holder/JavaSqlDateHolder.java[tags=class]
 ----
 
-There is also an extension of this interface, `JavaSqlDateHolder2`, with default methods demonstrating the use of label positions:
 
 
 == Mixin actions
 
-A number of mixin actions contribute through this interface, demonstrate the use of `java.sql.Date` as a parameter and as a return type.
+A number of mixin actions contribute through the common `JavaSqlDateHolder` interface, demonstrate the use of `java.sql.Date` as a parameter and as a return type.
 For example:
 
 * the `updateReadOnlyProperty` action is:

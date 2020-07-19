@@ -40,8 +40,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities;
 import demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdo;
+import demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities;
 import demoapp.dom.types.javatime.javatimeoffsettime.vm.JavaTimeOffsetTimeVm;
 
 @XmlRootElement(name = "Demo")

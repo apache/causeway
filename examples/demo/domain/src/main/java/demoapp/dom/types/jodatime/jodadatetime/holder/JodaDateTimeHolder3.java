@@ -25,8 +25,6 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder2;
-
 //tag::class[]
 public interface JodaDateTimeHolder3 extends JodaDateTimeHolder2 {
 

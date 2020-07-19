@@ -30,8 +30,6 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.isisext.asciidocs.IsisAsciiDocs;
 import demoapp.dom.types.isisext.markdowns.IsisMarkdowns;
-import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
-import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.IsisExtTypesMenu")
 @DomainObjectLayout(named="IsisExtTypes")

@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javaawt.images;
 
-import java.awt.Image;
 import java.awt.image.ColorModel;
 import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
@@ -27,8 +26,6 @@ import java.io.ByteArrayInputStream;
 import javax.imageio.ImageIO;
 
 import org.springframework.stereotype.Service;
-
-import org.apache.isis.core.commons.exceptions.IsisException;
 
 import lombok.SneakyThrows;
 

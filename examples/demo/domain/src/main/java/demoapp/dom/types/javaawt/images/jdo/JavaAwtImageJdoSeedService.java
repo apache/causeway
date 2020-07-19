@@ -1,17 +1,12 @@
 package demoapp.dom.types.javaawt.images.jdo;
 
-import java.util.stream.Stream;
-
 import javax.inject.Inject;
 
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Image;
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
@@ -39,6 +34,6 @@ public class JavaAwtImageJdoSeedService extends SeedServiceAbstract {
         RepositoryService repositoryService;
 
         @Inject
-        Samples<Image> samples;
+        Samples<java.awt.Image> samples;
     }
 }

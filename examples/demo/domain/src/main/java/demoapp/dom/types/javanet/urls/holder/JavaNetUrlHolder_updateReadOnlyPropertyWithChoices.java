@@ -21,7 +21,6 @@ package demoapp.dom.types.javanet.urls.holder;
 import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 

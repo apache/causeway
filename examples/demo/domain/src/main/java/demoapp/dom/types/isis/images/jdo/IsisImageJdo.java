@@ -29,16 +29,14 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Image;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.images.holder.IsisImageHolder;
+import demoapp.dom.types.isis.images.holder.IsisImageHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -47,7 +45,7 @@ import demoapp.dom.types.isis.images.holder.IsisImageHolder;
         objectType = "demo.IsisImageJdo"
 )
 public class IsisImageJdo                                          // <.>
-        implements HasAsciiDocDescription, IsisImageHolder {
+        implements HasAsciiDocDescription, IsisImageHolder2 {
 
 //end::class[]
     public IsisImageJdo(Image initialValue) {

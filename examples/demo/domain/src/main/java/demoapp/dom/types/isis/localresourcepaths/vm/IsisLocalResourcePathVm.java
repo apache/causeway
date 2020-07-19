@@ -30,16 +30,14 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.LocalResourcePath;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHolder;
+import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -51,7 +49,7 @@ import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHol
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class IsisLocalResourcePathVm
-        implements HasAsciiDocDescription, IsisLocalResourcePathHolder {
+        implements HasAsciiDocDescription, IsisLocalResourcePathHolder2 {
 
 //end::class[]
     public IsisLocalResourcePathVm(LocalResourcePath initialValue) {

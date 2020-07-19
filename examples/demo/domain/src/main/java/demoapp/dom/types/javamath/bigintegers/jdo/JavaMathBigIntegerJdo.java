@@ -29,15 +29,13 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javamath.bigintegers.holder.JavaMathBigIntegerHolder;
+import demoapp.dom.types.javamath.bigintegers.holder.JavaMathBigIntegerHolder2;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -46,7 +44,7 @@ import demoapp.dom.types.javamath.bigintegers.holder.JavaMathBigIntegerHolder;
         objectType = "demo.JavaMathBigIntegerJdo"
 )
 public class JavaMathBigIntegerJdo                                          // <.>
-        implements HasAsciiDocDescription, JavaMathBigIntegerHolder {
+        implements HasAsciiDocDescription, JavaMathBigIntegerHolder2 {
 
 //end::class[]
     public JavaMathBigIntegerJdo(java.math.BigInteger initialValue) {
