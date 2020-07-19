@@ -18,10 +18,14 @@
  */
 package org.apache.isis.extensions.cors.impl;
 
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.extensions.cors.impl.webmodule.WebModuleCors;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import org.apache.isis.extensions.cors.impl.webmodule.WebModuleCors;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @Import({
@@ -29,5 +33,24 @@ import org.apache.isis.extensions.cors.impl.webmodule.WebModuleCors;
         WebModuleCors.class
 })
 public class IsisModuleExtCorsImpl {
+
+    private final IsisConfiguration configuration;
+    
+    public IsisModuleExtCorsImpl(IsisConfiguration configuration) {
+		this.configuration = configuration;
+	}
+	
+	@Bean
+	private CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.setAllowCredentials(true);
+		corsConfiguration.setAllowedHeaders(configuration.getExtensions().getCors().getAllowedHeaders());
+		corsConfiguration.setAllowedMethods(configuration.getExtensions().getCors().getAllowedMethods());
+		corsConfiguration.setAllowedOrigins(configuration.getExtensions().getCors().getAllowedOrigins());
+		corsConfiguration.setExposedHeaders(configuration.getExtensions().getCors().getExposedHeaders());
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfiguration);
+		return source;
+	}
 
 }

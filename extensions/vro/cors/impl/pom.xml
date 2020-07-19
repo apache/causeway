@@ -42,8 +42,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.ebaysf.web</groupId>
-			<artifactId>cors-filter</artifactId>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-web</artifactId>
 		</dependency>
 
 	</dependencies>
