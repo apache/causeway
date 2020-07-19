@@ -36,7 +36,7 @@ public class InteractionDemo_biArgDisabled {
     }
     
     @Model
-    public String disableAct() {
+    public String disable() {
         return "Disabled for demonstration.";
     }
 }

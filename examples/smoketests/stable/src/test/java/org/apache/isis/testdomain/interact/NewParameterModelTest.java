@@ -156,7 +156,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
         val pendingArgs = managedAction.getInteractionHead().defaults();
      
         val expectedDefaults = Can.of(
-                new InteractionDemo_biArgEnabled(null).default0Act(),
+                new InteractionDemo_biArgEnabled(null).defaultA(null),
                 0);
         val actualDefaults = pendingArgs.getParamValues().stream()
                 .map(ManagedObject::getPojo)

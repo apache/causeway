@@ -35,24 +35,24 @@ public class InteractionDemo_multiEnum {
         return a.ordinal() * (b.ordinal() + c.ordinal());
     }
     
-    // -- PARAM 0
+    // -- PARAM A
     
     @Model 
-    public DemoEnum default0Act() {
+    public DemoEnum defaultA(Parameters.TriEnum p) {
         return DemoEnum.values()[1];
     }
     
-    // -- PARAM 1
+    // -- PARAM B
     
     @Model 
-    public DemoEnum default1Act() {
+    public DemoEnum defaultB(Parameters.TriEnum p) {
         return DemoEnum.values()[2];
     }
     
-    // -- PARAM 2
+    // -- PARAM C
     
     @Model 
-    public DemoEnum default2Act() {
+    public DemoEnum defaultC(Parameters.TriEnum p) {
         return DemoEnum.values()[3];
     }
 }

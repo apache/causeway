@@ -36,12 +36,12 @@ public class InteractionDemo_biArgEnabled {
     }
     
     @Model 
-    public int default0Act() {
+    public int defaultA(Parameters.BiInt p) {
         return 5;
     }
     
     @Model
-    public int[] choices1Act() {
+    public int[] choicesB(Parameters.BiInt p) {
         return new int[] {1, 2, 3, 4};
     }
 }

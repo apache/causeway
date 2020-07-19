@@ -35,39 +35,39 @@ public class InteractionDemo_multiInt {
         return a * (b + c);
     }
     
-    // -- PARAM 0
+    // -- PARAM A
     
     @Model 
-    public int default0Act() {
+    public int defaultA(Parameters.TriInt p) {
         return 2;
     }
     
     @Model
-    public int[] choices0Act() {
+    public int[] choicesA(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};
     }
     
-    // -- PARAM 1
+    // -- PARAM B
     
     @Model 
-    public int default1Act() {
+    public int defaultB(Parameters.TriInt p) {
         return 3;
     }
     
     @Model
-    public int[] choices1Act() {
+    public int[] choicesB(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};
     }
     
-    // -- PARAM 2
+    // -- PARAM C
     
     @Model 
-    public int default2Act() {
+    public int defaultC(Parameters.TriInt p) {
         return 4;
     }
     
     @Model
-    public int[] choices2Act() {
+    public int[] choicesC(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};
     }
 }

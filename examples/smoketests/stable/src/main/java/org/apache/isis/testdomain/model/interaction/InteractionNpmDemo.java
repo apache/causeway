@@ -20,18 +20,12 @@ package org.apache.isis.testdomain.model.interaction;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * NPM ... New Parameter Model (a Programming Model introduced in v2)
@@ -42,9 +36,5 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType="smoketests.InteractionNpmDemo", editing=Editing.ENABLED)
 public class InteractionNpmDemo {
-
-    @Property
-    @PropertyLayout(multiLine=3)
-    @XmlElement @Getter @Setter private String stringMultiline; // not used yet for any tests
     
 }
