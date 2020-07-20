@@ -6,3 +6,7 @@ include::PrimitiveIntJdo.java[tags="class"]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
 <.> no additional JDO annotations required.
+
+
+
+include::../PrimitiveInts-common.adoc[]

@@ -12,3 +12,5 @@ include::JavaTimeZonedDateTimeVm.java[tags=class]
 +
 Properties are optional by default in JAXB, so no additional annotation required.
 
+
+include::../JavaTimeZonedDateTimes-common.adoc[]

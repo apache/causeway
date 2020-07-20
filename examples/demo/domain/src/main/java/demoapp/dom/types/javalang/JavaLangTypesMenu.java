@@ -37,7 +37,7 @@ import demoapp.dom.types.javalang.voids.JavaLangVoids;
 public class JavaLangTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-font")
     public JavaLangStrings strings(){
         return new JavaLangStrings();
     }

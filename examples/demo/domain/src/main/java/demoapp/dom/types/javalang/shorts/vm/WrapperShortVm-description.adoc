@@ -11,3 +11,5 @@ include::WrapperShortVm.java[tags=class]
 +
 This is the default for JAXB so no additional annotation required.
 
+
+include::../WrapperShorts-common.adoc[]

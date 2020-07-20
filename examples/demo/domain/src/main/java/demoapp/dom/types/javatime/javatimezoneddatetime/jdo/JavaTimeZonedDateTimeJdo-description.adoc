@@ -13,3 +13,5 @@ Apache Isis assumes properties are mandatory, so no additional annotation is req
 <.> optional property as defined to JDO/DataNucleus
 
 
+
+include::../JavaTimeZonedDateTimes-common.adoc[]

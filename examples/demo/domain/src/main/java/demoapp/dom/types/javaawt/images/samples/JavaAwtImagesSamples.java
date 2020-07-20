@@ -32,7 +32,6 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javaawt.images.JavaAwtImageService;
 
 @Service
 public class JavaAwtImagesSamples implements Samples<Image> {

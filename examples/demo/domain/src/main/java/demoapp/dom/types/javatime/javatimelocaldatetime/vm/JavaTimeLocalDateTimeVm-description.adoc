@@ -12,3 +12,5 @@ include::JavaTimeLocalDateTimeVm.java[tags=class]
 +
 Properties are optional by default in JAXB, so no additional annotation required.
 
+
+include::../JavaTimeLocalDateTimes-common.adoc[]

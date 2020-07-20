@@ -28,7 +28,11 @@ public class ResourceReaderService {
         return readResource(aClass, resourceName, Collections.emptyMap());
     }
     public String readResource(Class<?> aClass, String resourceName, Map<String, Object> attributes) {
-        val resourceStream = aClass.getResourceAsStream(resourceName);
+        InputStream resourceStream = aClass.getResourceAsStream(resourceName);
+        if(resourceStream==null) {
+            // horrendous hack...
+            resourceStream = aClass.getResourceAsStream("../" + resourceName);
+        }
         if(resourceStream==null) {
             return String.format("Resource '%s' not found.", resourceName);
         }

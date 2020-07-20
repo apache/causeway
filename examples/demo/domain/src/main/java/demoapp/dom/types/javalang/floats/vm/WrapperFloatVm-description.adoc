@@ -11,3 +11,5 @@ include::WrapperFloatVm.java[tags=class]
 +
 This is the default for JAXB so no additional annotation required.
 
+
+include::../WrapperFloats-common.adoc[]

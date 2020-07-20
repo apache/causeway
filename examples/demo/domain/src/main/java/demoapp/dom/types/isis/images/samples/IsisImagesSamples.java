@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.value.Image;
 
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javaawt.images.JavaAwtImageService;
+import demoapp.dom.types.javaawt.images.samples.JavaAwtImageService;
 import demoapp.dom.types.javaawt.images.samples.JavaAwtImagesSamples;
 
 @Service

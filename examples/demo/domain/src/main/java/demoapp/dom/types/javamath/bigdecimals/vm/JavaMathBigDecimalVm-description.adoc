@@ -11,3 +11,4 @@ include::JavaMathBigDecimalVm.java[tags=class]
 +
 This is the default for JAXB so no additional annotation required.
 
+include::../JavaMathBigDecimals-common.adoc[]

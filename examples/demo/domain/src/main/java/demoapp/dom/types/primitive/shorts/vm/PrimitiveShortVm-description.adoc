@@ -6,3 +6,7 @@ include::PrimitiveShortVm.java[tags="class"]
 ----
 <.> a no-arg constructor is required by JAXB
 <.> no additional JAXB annotations required.
+
+
+
+include::../PrimitiveShorts-common.adoc[]

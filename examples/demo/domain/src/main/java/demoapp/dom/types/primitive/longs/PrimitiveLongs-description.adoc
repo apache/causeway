@@ -7,60 +7,21 @@ From here you can:
 
 Because `long` is a primitive value, the properties on these domain objects are mandatory.
 
-== Common interface
+== Common interfaces
 
-These objects both implement a common interface, `PrimitiveLongHolder`:
+The entity and view model types both implement some common interfaces.
+
+=== PrimitiveLongHolder
+
+The `PrimitiveLongHolder` interface is used to contribute a number of mixins to both types:
 
 [source,java]
 ----
 include::holder/PrimitiveLongHolder.java[tags=class]
 ----
 
+=== PrimitiveLongHolder2
 
-== Mixin actions
+The `PrimitiveLongHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
 
-A number of mixin actions contribute through this interface, demonstrate the use of `long` as a parameter and as a return type.
-For example:
-
-* the `updateReadOnlyProperty` action is:
-+
-[source,java]
-----
-include::holder/PrimitiveLongHolder_updateReadOnlyProperty.java[tags=class]
-----
-
-* the `actionReturning` action is:
-+
-[source,java]
-----
-include::holder/PrimitiveLongHolder_actionReturning.java[tags=class]
-----
-
-== Mixin properties
-
-We also use the interface to contribute a mixin property:
-
-* the `mixinProperty` property:
-+
-[source,java]
-----
-include::holder/PrimitiveLongHolder_mixinProperty.java[tags=class]
-----
-
-== @PropertyLayout(labelPosition=...)
-
-To demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`, the entity and view model objects both implement the extended `PrimitiveLongHolder2` interface:
-
-[source,java]
-----
-include::holder/PrimitiveLongHolder2.java[tags=class]
-----
-
-<.> The default methods have annotations that are automatically inherited.
-<.> Position to the left
-<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
-<.> Position label on top
-<.> Position label to the right
-+
-CAUTION: currently not supported
-<.> Hide the label compleely.
+Further details, along with the effect of this annotation, can be seen on the entity and view model object pages.

@@ -11,3 +11,5 @@ include::WrapperDoubleVm.java[tags=class]
 +
 This is the default for JAXB so no additional annotation required.
 
+
+include::../WrapperDoubles-common.adoc[]
