@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -71,10 +72,9 @@ final class ObjectSerializer_builtinHandlers {
         
         private <T> T unmarshall(Class<T> type, byte[] input) throws IOException, ClassNotFoundException {
             try(val bis = new ByteArrayInputStream(_Bytes.decompress(input))){
-                val ois = new ObjectInputStream(bis);
-                @SuppressWarnings("unchecked")
-                val t = (T) ois.readObject();
-                return t;
+                try(val ois = new ObjectInputStream(bis)) {
+                    return _Casts.uncheckedCast(ois.readObject());
+                }
             }
         }
         

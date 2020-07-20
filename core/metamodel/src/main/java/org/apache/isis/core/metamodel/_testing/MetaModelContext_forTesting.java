@@ -219,7 +219,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     
     public IsisBeanTypeRegistryHolder getIsisBeanTypeRegistryHolder() {
         if(isisBeanTypeRegistryHolder==null) {
-            
+            /*sonar-ignore-on*/        
             val typeRegistry = new IsisBeanTypeRegistry();
             
             isisBeanTypeRegistryHolder = new IsisBeanTypeRegistryHolder() {
@@ -228,6 +228,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
                     return typeRegistry;
                 }
             };
+            /*sonar-ignore-off*/
         }
         return isisBeanTypeRegistryHolder;
     }

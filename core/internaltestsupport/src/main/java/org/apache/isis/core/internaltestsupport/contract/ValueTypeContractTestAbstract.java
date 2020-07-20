@@ -23,12 +23,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 
 /**
@@ -56,10 +56,10 @@ public abstract class ValueTypeContractTestAbstract<T> {
     @Test
     public void notEqualToNull() throws Exception {
         for (final T o1 : getObjectsWithSameValue()) {
-            assertThat(o1.equals(null), is(false));
+            assertThat(o1==null, is(false));
         }
         for (final T o1 : getObjectsWithDifferentValue()) {
-            assertThat(o1.equals(null), is(false));
+            assertThat(o1==null, is(false));
         }
     }
 
