@@ -596,6 +596,7 @@ div.label-left label.control-label {
     width: 30%;
     float: left;
     padding-top: 2px;
+    padding-right: 2px;
     text-align: left;
 }
 

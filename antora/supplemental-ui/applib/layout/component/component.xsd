@@ -100,7 +100,7 @@
     <xs:attribute name="promptStyle" type="tns:promptStyle"/>
     <xs:attribute name="renderedAsDayBefore" type="xs:boolean"/>
     <xs:attribute name="typicalLength" type="xs:int"/>
-    <xs:attribute name="unchanging" type="xs:boolean"/>
+    <xs:attribute name="repainting" type="xs:boolean"/>
   </xs:complexType>
 
   <xs:complexType name="collection">
@@ -186,6 +186,14 @@
       <xs:enumeration value="RIGHT"/>
       <xs:enumeration value="TOP"/>
       <xs:enumeration value="NONE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="repainting">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="REPAINT"/>
+      <xs:enumeration value="NO_REPAINT"/>
+      <xs:enumeration value="NOT_SPECIFIED"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

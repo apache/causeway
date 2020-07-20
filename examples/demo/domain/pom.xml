@@ -63,6 +63,12 @@
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-pdfjs-applib</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-modelannotation</artifactId>
 		</dependency>
 		<dependency>

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
@@ -30,9 +31,11 @@ public class UnchangingFacetForPropertyXml extends UnchangingFacetAbstract {
         if(propertyLayout == null) {
             return null;
         }
-        final Boolean unchanging = propertyLayout.getUnchanging();
-        final boolean isUnchanging = unchanging != null && unchanging;
-        return new UnchangingFacetForPropertyXml(isUnchanging, holder);
+        final Repainting repainting = propertyLayout.getRepainting();
+        if(repainting == null || repainting == Repainting.NOT_SPECIFIED) {
+            return null;
+        }
+        return new UnchangingFacetForPropertyXml(repainting == Repainting.NO_REPAINT, holder);
     }
 
     private UnchangingFacetForPropertyXml(final boolean unchanging, FacetHolder holder) {

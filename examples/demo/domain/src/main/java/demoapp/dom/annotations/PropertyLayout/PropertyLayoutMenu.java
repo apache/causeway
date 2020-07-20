@@ -18,6 +18,8 @@
  */
 package demoapp.dom.annotations.PropertyLayout;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -26,6 +28,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.value.Blob;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -39,13 +42,15 @@ import demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineV
 import demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm;
 import demoapp.dom.annotations.PropertyLayout.navigable.FileNodeVm;
 import demoapp.dom.annotations.PropertyLayout.renderDay.PropertyLayoutRenderDayVm;
+import demoapp.dom.annotations.PropertyLayout.repainting.PropertyLayoutRepaintingVm;
+import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyLayoutMenu")
 @Log4j2
 public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-css3", describedAs = "HTML styling")
+    @ActionLayout(cssClassFa="fa-file-code", describedAs = "HTML styling")
     public PropertyLayoutCssClassVm cssClass(){
         return new PropertyLayoutCssClassVm();
     }
@@ -110,7 +115,27 @@ public class PropertyLayoutMenu {
         return new PropertyLayoutRenderDayVm(clockService.nowAsJodaLocalDate());
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-paint-brush", describedAs = "Performance hint for properties holding unchanging large objects")
+    public PropertyLayoutRepaintingVm repainting(){
+        val vm = new PropertyLayoutRepaintingVm();
+        vm.setEditMe("Modify this field to see if repainting occurs...");
+        samples.stream()
+                .filter(x -> x.getName().endsWith(".pdf"))
+                .findFirst()
+                .ifPresent(pdfBlob -> {
+                    vm.setPropertyUsingAnnotation(pdfBlob);
+                    vm.setPropertyUsingLayout(pdfBlob);
+                    vm.setPropertyUsingMetaAnnotation(pdfBlob);
+                    vm.setPropertyUsingMetaAnnotationButOverridden(pdfBlob);
+                });
+        return vm;
+    }
+
     @Inject
     ClockService clockService;
+
+    @Inject
+    Samples<Blob> samples;
 
 }

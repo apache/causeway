@@ -129,6 +129,7 @@ as a replacement for
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="navigable"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
             </mb3:section>
         </mb3:menu>
 
