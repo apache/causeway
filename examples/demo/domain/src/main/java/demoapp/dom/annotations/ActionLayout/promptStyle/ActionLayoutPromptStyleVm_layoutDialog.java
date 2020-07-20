@@ -20,6 +20,10 @@ package demoapp.dom.annotations.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -27,12 +31,17 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty3",
-        associateWithSequence = "2"
+    semantics = SemanticsOf.IDEMPOTENT,
+    associateWith = "readOnlyProperty3",
+    associateWithSequence = "2"
 )
-@ActionLayout(describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = DIALOG/></cpt:property>")
+@ActionLayout(
+    describedAs =
+        "<cpt:property id=\"...\">" +
+            "<cpt:action id=\"...\" promptStyle = DIALOG/>" +
+        "</cpt:property>")
 @RequiredArgsConstructor
+@DomainObjectLayout()
 public class ActionLayoutPromptStyleVm_layoutDialog {
 
     private final ActionLayoutPromptStyleVm stringViewModel;
