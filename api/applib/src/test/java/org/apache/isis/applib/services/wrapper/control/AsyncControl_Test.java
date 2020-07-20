@@ -112,7 +112,7 @@ public class AsyncControl_Test {
                 .containsExactlyInAnyOrder(ExecutionMode.SKIP_RULE_VALIDATION);
         Assertions.assertThat(control.getExecutorService())
                 .isSameAs(executorService);
-        Assertions.assertThat(control.getExceptionHandler())
+        Assertions.assertThat(control.getExceptionHandler().orElse(null))
                 .isSameAs(exceptionHandler);
     }
 
