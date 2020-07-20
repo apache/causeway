@@ -25,7 +25,7 @@ public class PropertyMaxLengthVm_updateWithParameterLayout {
             )
             @ParameterLayout(
                 describedAs =
-                    "@ParameterLayout(maxLength = 10)"
+                    "@Parameter(maxLength = 10)"
             )
             final String parameterUsingAnnotation) {
         propertyMaxLengthVm.setPropertyUsingAnnotation(parameterUsingAnnotation);

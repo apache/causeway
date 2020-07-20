@@ -109,7 +109,7 @@ include::PropertyLayoutNamedVm.java[tags=meta-annotated-overridden]
 include::PropertyLayoutNamedVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> name from meta-annotation ...
-<.> \... is overridden by the `@ParameterLayout` annotation
+<.> \... is overridden by the `@PropertyLayout` annotation
 
 
 == Markup

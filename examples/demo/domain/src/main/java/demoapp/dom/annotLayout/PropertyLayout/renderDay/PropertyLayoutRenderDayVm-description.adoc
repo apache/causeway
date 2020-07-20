@@ -147,5 +147,5 @@ include::PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden.jav
 include::PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation (deliberately incorrectly annotated) ...
-<.> \... is overridden by the `@ParameterLayout` annotation
+<.> \... is overridden by the `@PropertyLayout` annotation
 

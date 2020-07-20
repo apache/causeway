@@ -108,5 +108,5 @@ include::PropertyLayoutRepaintingVm.java[tags=meta-annotated-overridden]
 include::PropertyLayoutRepaintingVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
-<.> \... is overridden by the `@ParameterLayout` annotation
+<.> \... is overridden by the `@PropertyLayout` annotation
 

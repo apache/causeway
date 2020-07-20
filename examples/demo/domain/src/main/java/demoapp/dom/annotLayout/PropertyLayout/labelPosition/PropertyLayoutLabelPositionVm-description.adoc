@@ -131,7 +131,7 @@ include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden.java[t
 include::PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
-<.> \... is overridden by the `@ParameterLayout` annotation
+<.> \... is overridden by the `@PropertyLayout` annotation
 
 
 == Variants
