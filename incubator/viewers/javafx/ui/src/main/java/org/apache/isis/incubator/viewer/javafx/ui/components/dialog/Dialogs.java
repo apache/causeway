@@ -20,10 +20,10 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.dialog;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Optional;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
+
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -126,8 +126,9 @@ public class Dialogs {
         
         alert.getButtonTypes().setAll(buttonTypeConfirm, buttonTypeDeny);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonTypeConfirm){
+        ButtonType result = alert.showAndWait()
+                .orElse(null);
+        if (result == buttonTypeConfirm){
             // ... user chose OK
             return true;
         } else {

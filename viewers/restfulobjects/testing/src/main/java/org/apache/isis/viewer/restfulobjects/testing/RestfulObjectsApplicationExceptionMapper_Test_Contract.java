@@ -53,11 +53,13 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
     @Before
     public void setUp() throws Exception {
+        /*sonar-ignore-on*/
         exceptionMapper = new ExceptionMapperForRestfulObjectsApplication() {
             {
                 httpHeaders = mockHttpHeaders;
             }
         };
+        /*sonar-ignore-off*/
     }
 
     @Test

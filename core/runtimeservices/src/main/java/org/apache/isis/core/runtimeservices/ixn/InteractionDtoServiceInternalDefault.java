@@ -37,6 +37,8 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -71,9 +73,9 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final Interaction interaction = interactionContextProvider.get().getInteraction();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
-        //final Object targetPojo = targetAdapter.getPojo();
-        final Bookmark targetBookmark = targetAdapter.getRootOid().get().asBookmark();
-            // bookmarkService.bookmarkForElseThrow(targetPojo);
+        final Bookmark targetBookmark = targetAdapter.getRootOid()
+                .map(RootOid::asBookmark)
+                .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
         final String actionIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
         final String actionId = actionIdentifier.substring(actionIdentifier.indexOf('#')+1);
@@ -117,9 +119,9 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
-        //final Object targetPojo = targetAdapter.getPojo();
-        final Bookmark targetBookmark = targetAdapter.getRootOid().get().asBookmark(); 
-                //bookmarkService.bookmarkForElseThrow(targetPojo);
+        final Bookmark targetBookmark = targetAdapter.getRootOid()
+                .map(RootOid::asBookmark)
+                .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
         final String propertyIdentifier = property.getIdentifier().toClassAndNameIdentityString();
         final String propertyId = propertyIdentifier.substring(propertyIdentifier.indexOf('#')+1);

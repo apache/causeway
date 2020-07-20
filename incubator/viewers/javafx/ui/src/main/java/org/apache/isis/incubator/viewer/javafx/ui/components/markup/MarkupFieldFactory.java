@@ -98,6 +98,8 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     @Log4j2
     private static final class WebViewFitContent extends Region {
 
+        /*sonar-ignore-on*/
+        
         private final Consumer<String> hrefHandler;
         private final WebView webview = new WebView();
         private final WebEngine webEngine = webview.getEngine();
@@ -172,7 +174,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
                         "var myDiv = document.getElementById('mydiv');" +
                                 "if (myDiv != null) myDiv.offsetHeight");
                 if (result instanceof Integer) {
-                    val height = ((Integer) result).intValue();
+                    final int height = ((Integer) result).intValue();
                     return OptionalInt.of(height);
                 }
             } catch (JSException e) {
@@ -188,7 +190,8 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
                     "<div id=\"mydiv\">" + content + "</div>" +
                     "</body></html>";
         }
-
+        /*sonar-ignore-off*/
+        
     }
     
 

@@ -57,6 +57,8 @@ import lombok.val;
 
 public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
+    /*sonar-ignore-on*/
+    
     @Rule public JUnitRuleMockery2 context = 
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
@@ -212,5 +214,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null);
     }
-
+    
+    /*sonar-ignore-off*/
 }
