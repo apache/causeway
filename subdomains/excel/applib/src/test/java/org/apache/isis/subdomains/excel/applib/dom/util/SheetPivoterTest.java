@@ -32,6 +32,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import lombok.val;
 
 public class SheetPivoterTest {
@@ -457,7 +459,7 @@ public class SheetPivoterTest {
                     // OK skip
                 } else {
                     if (c.getCellType() == CellType.NUMERIC) {
-                        Assertions.assertThat(c.getNumericCellValue()).isNull();
+                        assertTrue(Double.isFinite(c.getNumericCellValue()));
                     } else {
                         Assertions.assertThat(c.getStringCellValue()).isEqualTo("");
                     }
