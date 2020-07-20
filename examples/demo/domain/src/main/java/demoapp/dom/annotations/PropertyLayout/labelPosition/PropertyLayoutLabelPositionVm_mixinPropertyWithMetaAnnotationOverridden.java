@@ -16,35 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.PropertyLayout.cssClass;
+package demoapp.dom.annotations.PropertyLayout.labelPosition;
 
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
+//tag::meta-annotation-overridden[]
 @Property()
+@LabelPositionTopMetaAnnotation                                 // <.>
 @PropertyLayout(
-    cssClass = "red"                // <.>
+    labelPosition = LabelPosition.LEFT                          // <.>
     , describedAs =
-        "@PropertyLayout(cssClass = \"red\")"
-    , hidden = Where.ALL_TABLES
+        "@LabelPositionTopMetaAnnotation @ParameterLayout(...)"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutCssClassVm_mixinProperty {
+public class PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotationOverridden {
     // ...
-//end::class[]
+//end::meta-annotation-overridden[]
 
-    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
+    private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
     public String prop() {
-        return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
+        return propertyLayoutLabelPositionVm.getPropertyUsingAnnotation();
     }
 
-//tag::class[]
+//tag::meta-annotation-overridden[]
 }
-//end::class[]
+//end::meta-annotation-overridden[]

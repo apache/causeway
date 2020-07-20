@@ -1,0 +1,47 @@
+== Mixin actions
+
+A number of mixin actions contribute through the `PrimitiveByteHolder` interface, demonstrate the use of `byte` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+include::holder/PrimitiveByteHolder_updateReadOnlyProperty.java[tags=class]
+----
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+include::holder/PrimitiveByteHolder_actionReturning.java[tags=class]
+----
+
+== Mixin properties
+
+We also use the interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/PrimitiveByteHolder_mixinProperty.java[tags=class]
+----
+
+== @PropertyLayout(labelPosition=...)
+
+The `PrimitiveByteHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`:
+
+[source,java]
+----
+include::holder/PrimitiveByteHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Position to the left
+<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Position label on top
+<.> Position label to the right
++
+CAUTION: currently not supported
+<.> Hide the label compleely.

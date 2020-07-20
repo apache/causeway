@@ -1,0 +1,79 @@
+== Mixin actions
+
+A number of mixin actions contribute through the `JavaTimeLocalDateHolder` interface, demonstrate the use of `java.time.LocalDate` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+include::holder/JavaTimeLocalDateHolder_updateReadOnlyProperty.java[tags=class]
+----
+
+* the `updateReadOnlyOptionalProperty` action is:
++
+[source,java]
+----
+include::holder/JavaTimeLocalDateHolder_updateReadOnlyOptionalProperty.java[tags=class]
+----
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+include::holder/JavaTimeLocalDateHolder_actionReturning.java[tags=class]
+----
+
+
+* the `actionReturningCollection` action is:
++
+[source,java]
+----
+include::holder/JavaTimeLocalDateHolder_actionReturningCollection.java[tags=class]
+----
+
+== Mixin properties
+
+We also use the interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/JavaTimeLocalDateHolder_mixinProperty.java[tags=class]
+----
+
+
+== @PropertyLayout(labelPosition=...)
+
+To demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`, the entity and view model objects both implement the extended `JavaTimeLocalDateHolder2` interface:
+
+[source,java]
+----
+include::holder/JavaTimeLocalDateHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Position to the left
+<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Position label on top
+<.> Position label to the right
++
+CAUTION: currently not supported
+<.> Hide the label compleely.
+
+
+== @PropertyLayout(renderDay=...)
+
+To demonstrate support for `@PropertyLayout(renderDay=...)` -- to simplify the modelling "[inclusive, exclusive)" date ranges -- the entity and view model objects both implement the extended `JavaTimeLocalDateHolder3` interface.
+All methods have a default implementation:
+
+[source,java]
+----
+include::holder/JavaTimeLocalDateHolder3.java[tags=class]
+----
+
+<.> Render the value as the day before
+<.> Render the value unchanged
+<.> Render the value as the day before
+

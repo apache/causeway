@@ -18,7 +18,7 @@ include::PropertyLayoutCssClassVm.java[tags=annotation]
 ----
 <.> explicitly specifies the CSS class to apply to the property `<div>`
 
-* for parameters, using `@ParameterLayout#multiLine()`:
+* for parameters, using `@ParameterLayout#cssClass()`:
 +
 [source,java,indent=0]
 ----

@@ -16,33 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotations.PropertyLayout.cssClass;
+package demoapp.dom.annotations.PropertyLayout.labelPosition;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
+@LabelPositionTopMetaAnnotation             // <.>
 @PropertyLayout(
-    cssClass = "red"                // <.>
-    , describedAs =
-        "@PropertyLayout(cssClass = \"red\")"
-    , hidden = Where.ALL_TABLES
+    describedAs =
+        "@LabelPositionTopMetaAnnotation"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutCssClassVm_mixinProperty {
+public class PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotation {
     // ...
 //end::class[]
 
-    private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
+    private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
+    @MemberOrder(name = "meta-annotated", sequence = "2")
     public String prop() {
-        return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
+        return propertyLayoutLabelPositionVm.getPropertyUsingAnnotation();
     }
 
 //tag::class[]

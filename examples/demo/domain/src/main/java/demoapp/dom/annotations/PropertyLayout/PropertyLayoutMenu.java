@@ -34,6 +34,7 @@ import demoapp.dom.annotations.PropertyLayout.cssClass.PropertyLayoutCssClassVm;
 import demoapp.dom.annotations.PropertyLayout.describedAs.PropertyLayoutDescribedAsVm;
 import demoapp.dom.annotations.PropertyLayout.hidden.PropertyLayoutHiddenVm;
 import demoapp.dom.annotations.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
+import demoapp.dom.annotations.PropertyLayout.labelPosition.PropertyLayoutLabelPositionVm;
 import demoapp.dom.annotations.PropertyLayout.multiLine.PropertyLayoutMultiLineVm;
 import demoapp.dom.annotations.PropertyLayout.named.PropertyLayoutNamedVm;
 import demoapp.dom.annotations.PropertyLayout.navigable.FileNodeVm;
@@ -50,9 +51,15 @@ public class PropertyLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment", describedAs = "shown as Tooltips")
+    @ActionLayout(cssClassFa="fa-comment", describedAs = "Descriptions shown as tooltips")
     public PropertyLayoutDescribedAsVm describedAs(){
         return new PropertyLayoutDescribedAsVm();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-tag", describedAs = "Label positions")
+    public PropertyLayoutLabelPositionVm labelPosition(){
+        return new PropertyLayoutLabelPositionVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -86,7 +93,7 @@ public class PropertyLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature", describedAs = "Customised labels")
+    @ActionLayout(cssClassFa="fa-signature", describedAs = "Customised label text")
     public PropertyLayoutNamedVm named(){
         return new PropertyLayoutNamedVm();
     }

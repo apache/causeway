@@ -1,0 +1,63 @@
+== Mixin actions
+
+A number of mixin actions contribute through the `IsisMarkdownHolder` interface, demonstrate the use of `Markdown` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+include::holder/IsisMarkdownHolder_updateReadOnlyProperty.java[tags=class]
+----
+
+* the `updateReadOnlyOptionalProperty` action is:
++
+[source,java]
+----
+include::holder/IsisMarkdownHolder_updateReadOnlyOptionalProperty.java[tags=class]
+----
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+include::holder/IsisMarkdownHolder_actionReturning.java[tags=class]
+----
+
+
+* the `actionReturningCollection` action is:
++
+[source,java]
+----
+include::holder/IsisMarkdownHolder_actionReturningCollection.java[tags=class]
+----
+
+== Mixin properties
+
+We also use the interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/IsisMarkdownHolder_mixinProperty.java[tags=class]
+----
+
+
+== @PropertyLayout(labelPosition=...)
+
+There is also an extended interface, `IsisMarkdownHolder2`, with default methods demonstrating the use of label positions:
+
+[source,java]
+----
+include::holder/IsisMarkdownHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Position to the left
+<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Position label on top
+<.> Position label to the right
++
+CAUTION: currently not supported
+<.> Hide the label compleely.

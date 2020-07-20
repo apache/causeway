@@ -1,0 +1,45 @@
+== Mixin actions
+
+A number of mixin actions contribute through the `PrimitiveBooleanHolder` interface, demonstrating the use of `boolean` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder_updateReadOnlyProperty.java[tags=class]
+----
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder_actionReturning.java[tags=class]
+----
+
+== Mixin properties
+
+We also use the `PrimitiveBooleanHolder` interface to contribute a mixin property:
+
+* the `mixinProperty` property:
++
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder_mixinProperty.java[tags=class]
+----
+
+== @PropertyLayout(labelPosition=...)
+
+The `PrimitiveBooleanHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`:
+
+[source,java]
+----
+include::holder/PrimitiveBooleanHolder2.java[tags=class]
+----
+
+<.> The default methods have annotations that are automatically inherited.
+<.> Position to the left
+<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Position label on top
+<.> Position label to the right
+<.> Hide the label compleely.

@@ -38,6 +38,10 @@ isis:
             delete.*:btn-danger
       domain-object:
         editing: false
+      property-layout:
+        label-position: LEFT
+      parameter-layout:
+        label-position: LEFT
 
   core:
     meta-model:
