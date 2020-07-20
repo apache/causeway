@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -289,18 +290,19 @@ final class ObjectMementoWkt implements Serializable {
             public boolean equals(
                     ObjectMementoWkt memento, 
                     ObjectMementoWkt otherMemento) {
-                return otherMemento.recreateStrategy == SERIALIZABLE && 
-                        Objects.equal(memento.serializedObject, otherMemento.serializedObject);
+                return otherMemento.recreateStrategy == SERIALIZABLE
+                        && Objects.equal(memento.objectSpecId, otherMemento.objectSpecId)
+                        && Objects.equal(memento.serializedObject, otherMemento.serializedObject);
             }
 
             @Override
             public int hashCode(ObjectMementoWkt memento) {
-                return memento.serializedObject.hashCode();
+                return Arrays.hashCode(memento.serializedObject); // potentially expensive, unfortunately cannot be cached in enum
             }
 
             @Override
             public String toString(ObjectMementoWkt memento) {
-                throw _Exceptions.notImplemented();
+                return "ObjectMementoWkt {SERIALIZABLE " + memento.objectSpecId + "}";
             }
 
             @Override
