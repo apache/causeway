@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;

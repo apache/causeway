@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.colum
 import java.lang.reflect.Method;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

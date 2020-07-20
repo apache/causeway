@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;

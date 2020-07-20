@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2.Mode;
 

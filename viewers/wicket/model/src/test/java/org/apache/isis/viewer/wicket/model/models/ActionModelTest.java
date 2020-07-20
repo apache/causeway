@@ -24,7 +24,7 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.wicket.model.models.PageParameterUtil.ParamNumAndOidString;

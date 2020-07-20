@@ -24,7 +24,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.testing.unittestsupport.applib.core.comparable.ComparableContractTester;
 

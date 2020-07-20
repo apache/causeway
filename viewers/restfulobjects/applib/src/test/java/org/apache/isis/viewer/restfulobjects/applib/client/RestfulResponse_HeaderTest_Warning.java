@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.applib.client;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 

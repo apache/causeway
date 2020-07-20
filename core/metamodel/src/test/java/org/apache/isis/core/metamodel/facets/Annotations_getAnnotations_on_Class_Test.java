@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.events.ui.TitleUiEvent;

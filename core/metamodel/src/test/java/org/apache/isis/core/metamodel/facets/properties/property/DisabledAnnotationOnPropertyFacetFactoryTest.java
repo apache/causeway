@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;

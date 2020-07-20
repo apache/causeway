@@ -22,7 +22,7 @@ package org.apache.isis.security.shiro;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.security.shiro.authorization.IsisPermission;
 

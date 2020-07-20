@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ComponentType_ConstantsTest {
 

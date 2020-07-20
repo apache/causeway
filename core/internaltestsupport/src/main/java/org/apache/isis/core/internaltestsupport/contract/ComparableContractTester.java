@@ -23,7 +23,7 @@ import java.util.List;
 import org.hamcrest.Matchers;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 

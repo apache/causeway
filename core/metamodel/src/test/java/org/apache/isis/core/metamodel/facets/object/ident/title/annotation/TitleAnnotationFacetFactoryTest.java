@@ -32,7 +32,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

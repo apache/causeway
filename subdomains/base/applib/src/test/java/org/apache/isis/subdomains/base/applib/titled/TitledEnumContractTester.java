@@ -20,7 +20,7 @@ package org.apache.isis.subdomains.base.applib.titled;
 
 import org.hamcrest.CoreMatchers;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.subdomains.base.applib.TitledEnum;

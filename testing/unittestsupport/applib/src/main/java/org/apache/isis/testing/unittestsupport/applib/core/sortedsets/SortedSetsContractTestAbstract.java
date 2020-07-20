@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.testing.unittestsupport.applib.core.AbstractApplyToAllContractTest;

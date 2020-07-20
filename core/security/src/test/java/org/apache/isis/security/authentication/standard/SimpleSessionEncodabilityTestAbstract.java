@@ -21,7 +21,7 @@ package org.apache.isis.security.authentication.standard;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.security.EncodabilityContractTest;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
