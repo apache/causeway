@@ -41,6 +41,7 @@ import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -69,7 +70,9 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxyContextHandler;
@@ -812,13 +815,22 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         try {
             return task.get();
         } catch(Exception ex) {
-            return (X)handleException(ex);
+            return _Casts.uncheckedCast(handleException(ex));
         }
     }
 
     @SneakyThrows
     private Object handleException(Exception ex) {
-        return getSyncControl().getExceptionHandler().handle(ex);
+        val exceptionHandler = getSyncControl().getExceptionHandler()
+                .orElse(null);
+        
+        if(exceptionHandler==null) {
+            log.warn("No ExceptionHandler was setup to handle this Exception", ex);
+        }
+        
+        return exceptionHandler!=null
+                ? exceptionHandler.handle(ex)
+                : null;
     }
 
     private Object singleArgUnderlyingElseThrow(Object[] args, String name) {
