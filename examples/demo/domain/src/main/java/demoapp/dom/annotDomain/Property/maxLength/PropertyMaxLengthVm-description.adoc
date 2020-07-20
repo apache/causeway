@@ -1,0 +1,135 @@
+The "maxLength" semantic specifies the maximum length that can be enreis intended to indicate the size that a textfield should be rendered as a visual indicator of the expected length:
+
+* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+
+* for parameters, the semantic can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
+
+This semantic applies only to strings.
+
+== Annotated
+
+The maxLength semantic can be specified explicitly using an annotation:
+
+* for properties, using `@Property#maxLength()`:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm.java[tags=annotation]
+----
+<.> explicitly specifies that the property should use a textbox
+
+* for parameters, using `@Parameter#maxLength()`:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm_updateWithParameterLayout.java[tags=annotation]
+----
+<.> explicitly specifies that the parameter should use a textbox
+
+== Layout File
+
+For properties (not parameters), the maxLength semantic can be specified using the `Xxx.layout.xml` file:
+
+* property definition:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm.java[tags=layout-file]
+----
+<.> `maxLength` semantic is _not_ present.
+
+* layout file snippet:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyUsingLayout" maxLength="10"/>
+----
+// TODO: for some reason this doesn't include correctly in the app...
+//include::PropertyMaxLengthVm.layout.xml[tags=layout-file]
+
+One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
+
+TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
+
+== Contributed
+
+The `@Property` can also be applied at the class-level to mixin properties:.
+
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm_mixinProperty.java[tags=class]
+----
+<.> explicitly specifies that the contributed property should use a textbox
+
+== Meta-annotated
+
+The maxLength semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::MaxLengthMetaAnnotation.java[tags=class]
+----
+<.> annotated for property ...
+<.> \... and also for parameter.
+<.> annotation can be applied to a property (either its getter or the field directly)
+<.> annotation can be applied to a parameter
+<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm.java[tags=meta-annotated]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or can be applied to a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or can be applied to mixin:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+----
+<.> semantic is inherited from the meta-annotation
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm.java[tags=meta-annotated-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Property` annotation
+
+* or a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@ParameterLayout` annotation
+
+
+* or a mixin:
++
+[source,java,indent=0]
+----
+include::PropertyMaxLengthVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@ParameterLayout` annotation
+

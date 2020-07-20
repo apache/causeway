@@ -105,15 +105,15 @@ as a replacement for
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>View Models</mb3:named>
+            <mb3:named>Domain Annotations</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.ViewModelMenu" id="stateful"/>
-                <mb3:serviceAction objectType="demo.ViewModelMenu" id="statefulRefsEntity"/>
+                <mb3:named>@Property</mb3:named>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Annotations</mb3:named>
+            <mb3:named>Layout Annotations</mb3:named>
             <mb3:section>
                 <mb3:named>@ActionLayout</mb3:named>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
@@ -130,6 +130,15 @@ as a replacement for
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="navigable"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="typicalLength"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>View Models</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="demo.ViewModelMenu" id="stateful"/>
+                <mb3:serviceAction objectType="demo.ViewModelMenu" id="statefulRefsEntity"/>
             </mb3:section>
         </mb3:menu>
 
