@@ -92,14 +92,13 @@
 	</build>
 
 	<dependencies>
-
-		<!-- DEMO DOMAIN -->
-
+	
+		<!-- DEMO DOMAIN + WEB -->
+	
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
-			<artifactId>demo-domain</artifactId>
+			<artifactId>demo-web</artifactId>
 			<version>${project.version}</version>
-			<type>jar</type>
 		</dependency>
 
 		<!-- JDK11+ SUPPORT -->

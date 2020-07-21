@@ -103,10 +103,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-cors-impl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-exceldownload-ui</artifactId>
 		</dependency>
 		<dependency>
@@ -144,6 +140,7 @@
 	<modules>
 		<module>domain</module>
 		<module>javafx</module>
+		<module>web</module>
 		<module>wicket</module>
 	</modules>
 

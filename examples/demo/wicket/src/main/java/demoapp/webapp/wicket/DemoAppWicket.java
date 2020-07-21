@@ -32,8 +32,8 @@ import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
-import demoapp.dom._infra.utils.ThereCanBeOnlyOne;
-import demoapp.webapp.DemoAppManifest;
+import demoapp.web.DemoAppManifest;
+import demoapp.web._infra.utils.ThereCanBeOnlyOne;
 
 /**
  * Bootstrap the application.

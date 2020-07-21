@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp;
+package demoapp.web;
 
 import java.util.Optional;
 
@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.cors.impl.IsisModuleExtCorsImpl;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
@@ -63,7 +64,7 @@ import demoapp.dom._infra.fixtures.DemoFixtureScript;
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     // CORS
-    //IsisModuleExtCorsImpl.class, // currently breaks Wicket
+    IsisModuleExtCorsImpl.class,
     
     IsisModuleTestingH2ConsoleUi.class,
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel

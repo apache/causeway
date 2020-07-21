@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.notifications;
+package demoapp.web.notifications;
 
 import lombok.Getter;
 import lombok.Setter;
