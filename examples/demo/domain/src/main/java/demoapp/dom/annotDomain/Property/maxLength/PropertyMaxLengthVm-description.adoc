@@ -1,10 +1,23 @@
-The "maxLength" semantic specifies the maximum length that can be enreis intended to indicate the size that a textfield should be rendered as a visual indicator of the expected length:
+The "maxLength" semantic specifies the maximum length of the value that can be held by the property.
+This corresponds to the number of characters that can be entered through the text field:
 
 * for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
 
 * for parameters, the semantic can be specified using either the `@Parameter` annotation, or a meta-annotation.
 
 This semantic applies only to strings.
+
+[IMPORTANT]
+====
+For domain entities this semantic should be accompanied with `@Column(maxLength=...)` so that the persistence layer implements the same constraint.
+====
+
+[NOTE]
+====
+`@Property#maxLength()` and `@PropertyLayout#typicalLength()` are not related - the first is a semantic that prevents the property from holding more than the specified number of characters, the latter is a layout hint relating to the size of the textfield.
+====
+
+
 
 == Annotated
 
@@ -26,15 +39,6 @@ include::PropertyMaxLengthVm_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that the parameter should use a textbox
 
-== Contributed
-
-The `@Property` can also be applied at the class-level to mixin properties:.
-
-[source,java,indent=0]
-----
-include::PropertyMaxLengthVm_mixinProperty.java[tags=class]
-----
-<.> explicitly specifies that the contributed property should use a textbox
 
 == Meta-annotated
 
@@ -68,13 +72,6 @@ include::PropertyMaxLengthVm_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> semantic is inherited from the meta-annotation
 
-* or can be applied to mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyMaxLengthVm_mixinPropertyWithMetaAnnotation.java[tags=class]
-----
-<.> semantic is inherited from the meta-annotation
 
 === Meta-annotated Overridden
 
@@ -99,12 +96,4 @@ include::PropertyMaxLengthVm_updateWithMetaAnnotationOverridden.java[tags=meta-a
 <.> \... is overridden by the `@Parameter` annotation
 
 
-* or a mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyMaxLengthVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Property` annotation
 

@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.maxLength;
+package demoapp.dom.annotDomain.Property.regexPattern;
+
+import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -43,55 +45,59 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutMaxLengthVm",
+        objectType = "demo.PropertyLayoutRegexPatternVm",
         editing = Editing.ENABLED
 )
-public class PropertyMaxLengthVm implements HasAsciiDocDescription {
+public class PropertyRegexPatternVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "PropertyLayout#maxLength";
+        return "PropertyLayout#regexPattern";
     }
 
 //tag::annotation[]
     @Property(
-        maxLength = 10                                  // <.>
+        regexPattern = "^\\w+@\\w+[.]com$"                          // <.>
+        , regexPatternReplacement = "Must be .com email address"    // <.>
+        , regexPatternFlags = Pattern.CASE_INSENSITIVE              // <.>
         , optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
         describedAs =
-            "@Property(maxLength = 10)"
+            "regexPattern = \"^\\w+@\\w+[.]com$\"\""
     )
     @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingAnnotation;
+    private String emailAddressPropertyUsingAnnotation;
 //end::annotation[]
 
 //tag::meta-annotated[]
     @Property(optionality = Optionality.OPTIONAL)
-    @MaxLengthMetaAnnotation                            // <.>
+    @RegexPatternMetaAnnotation                             // <.>
     @PropertyLayout(
-        describedAs = "@MaxLengthMetaAnnotation"
+        describedAs = "@RegexPatternMetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotation;
+    private String emailAddressPropertyUsingMetaAnnotation;
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
     @Property(
-        maxLength = 3                                   // <.>
+        regexPattern = "^\\w+@\\w+[.]org$"                          // <.>
+        , regexPatternReplacement = "Must be .org email address"    // <.>
+        , regexPatternFlags = Pattern.COMMENTS                      // <.>
         , optionality = Optionality.OPTIONAL)
-    @MaxLengthMetaAnnotation                            // <.>
+    @RegexPatternMetaAnnotation                                     // <.>
     @PropertyLayout(
         describedAs =
-            "@MaxLengthMetaAnnotation @PropertyLayout(...)"
+            "@RegexPatternMetaAnnotation @PropertyLayout(...)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
+    private String emailAddressPropertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
 
 }

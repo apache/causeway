@@ -1,0 +1,110 @@
+The "regexPattern" semantic specifies a regular expression that the value entered into the property must match:
+
+* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
+
+* for parameters, the semantic can be specified using either the `@Parameter` annotation, or a meta-annotation.
+
+This semantic applies only to strings.
+
+== Annotated
+
+The regexPattern semantic can be specified explicitly using an annotation:
+
+* for properties, using `@Property#regexPattern()`:
++
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm.java[tags=annotation]
+----
+<.> explicitly specifies that the property should use a textbox
+
+* for parameters, using `@Parameter#regexPattern()`:
++
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm_updateWithParameterLayout.java[tags=annotation]
+----
+<.> explicitly specifies that the parameter should use a textbox
+
+== Contributed
+
+The `@Property` can also be applied at the class-level to mixin properties:.
+
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm_mixinProperty.java[tags=class]
+----
+<.> explicitly specifies that the contributed property should use a textbox
+
+== Meta-annotated
+
+The regexPattern semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::RegexPatternMetaAnnotation.java[tags=class]
+----
+<.> annotated for property ...
+<.> \... and also for parameter.
+<.> annotation can be applied to a property (either its getter or the field directly)
+<.> annotation can be applied to a parameter
+<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm.java[tags=meta-annotated]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or can be applied to a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or can be applied to mixin:
++
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+----
+<.> semantic is inherited from the meta-annotation
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm.java[tags=meta-annotated-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Property` annotation
+
+* or a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Parameter` annotation
+
+
+* or a mixin:
++
+[source,java,indent=0]
+----
+include::PropertyRegexPatternVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Property` annotation
+

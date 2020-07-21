@@ -11,6 +11,11 @@ The Wicket viewer does not use this hint, instead preferring to render all textf
 In other words, providing this hint has no impact on the UI (as rendered by the Wicket viewer, at least).
 ====
 
+[NOTE]
+====
+`@Property#maxLength()` and `@PropertyLayout#typicalLength()` are not related - the first is a semantic that prevents the property from holding more than the specified number of characters, the latter is a layout hint relating to the size of the textfield.
+====
+
 == Annotated
 
 The typicalLength hint can be specified explicitly using an annotation:

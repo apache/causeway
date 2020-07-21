@@ -18,38 +18,40 @@
  */
 package demoapp.dom.annotDomain.Property;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.value.Blob;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
-import demoapp.dom.annotLayout.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthVm;
-import demoapp.dom.types.Samples;
+import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
 @Log4j2
 public class PropertyMenu {
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
     public PropertyMaxLengthVm maxLength(){
         val vm = new PropertyMaxLengthVm();
         vm.setPropertyUsingAnnotation("abcdefghij");
-        vm.setPropertyUsingLayout("abcdefghij");
         vm.setPropertyUsingMetaAnnotation("abcdefghij");
         vm.setPropertyUsingMetaAnnotationButOverridden("abc");
         return vm;
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-equals", describedAs = "Regular expressions, such as email")
+    public PropertyRegexPatternVm regexPattern(){
+        val vm = new PropertyRegexPatternVm();
+        vm.setEmailAddressPropertyUsingAnnotation("joe@bloggs.com");
+        vm.setEmailAddressPropertyUsingMetaAnnotation("flo@bloggs.com");
+        vm.setEmailAddressPropertyUsingMetaAnnotationButOverridden("mo@bloggs.org");
+        return vm;
+    }
 
 }
