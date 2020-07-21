@@ -57,15 +57,9 @@
 			<artifactId>isis-extensions-pdfjs-applib</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-modelannotation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-cors-impl</artifactId>
-			<optional>true</optional> <!--  eg. not required by JavaFX demo, in fact breaks JavaFX demo -->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
