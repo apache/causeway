@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -68,7 +69,10 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
 //end::annotation[]
 
 //tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
+    @Property(
+            optionality = Optionality.OPTIONAL
+            , hidden = Where.EVERYWHERE  // TODO: ISIS-2415
+    )
     @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
     @PropertyLayout(
         describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation"
@@ -82,7 +86,9 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
 //tag::meta-annotated-overridden[]
     @Property(
         mustSatisfy = OfRetirementAgeSpecification.class       // <.>
-        , optionality = Optionality.OPTIONAL)
+        , optionality = Optionality.OPTIONAL
+        , hidden = Where.EVERYWHERE  // TODO: ISIS-2415
+    )
     @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
     @PropertyLayout(
         describedAs =

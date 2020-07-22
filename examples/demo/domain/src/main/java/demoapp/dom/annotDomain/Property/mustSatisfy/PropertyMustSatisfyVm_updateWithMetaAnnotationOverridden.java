@@ -7,12 +7,14 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
     associateWith = "customerAgePropertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
+    , hidden = Where.EVERYWHERE  // TODO: ISIS-2415
 )
 @RequiredArgsConstructor
 public class PropertyMustSatisfyVm_updateWithMetaAnnotationOverridden {

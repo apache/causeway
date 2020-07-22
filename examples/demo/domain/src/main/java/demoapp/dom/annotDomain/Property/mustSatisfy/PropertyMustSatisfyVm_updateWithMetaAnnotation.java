@@ -43,7 +43,7 @@ public class PropertyMustSatisfyVm_updateWithMetaAnnotation {
                 describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation"
             )
             final Integer customerAgeParameterUsingMetaAnnotation) {
-        propertyMustSatisfyVm.setCustomerAgePropertyUsingAnnotation(customerAgeParameterUsingMetaAnnotation);
+        propertyMustSatisfyVm.setCustomerAgePropertyUsingMetaAnnotation(customerAgeParameterUsingMetaAnnotation);
         return propertyMustSatisfyVm;
     }
 //end::meta-annotation[]
