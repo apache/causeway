@@ -39,7 +39,7 @@ include::PropertyMaxLengthVm_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies the maximum length that can be entered for the property
 
-It could also be applied to mixin, but would have little effect because mixin properties are always read-only.
+The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
 
 == Meta-annotated
 
@@ -49,7 +49,7 @@ The maxLength semantic can also be specified using a custom meta-annotation:
 +
 [source,java]
 ----
-include::MaxLengthMetaAnnotation.java[tags=class]
+include::MaxLength10MetaAnnotation.java[tags=class]
 ----
 <.> annotated for property ...
 <.> \... and also for parameter.

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.maxLength;
+package demoapp.dom.annotDomain.Property.fileAccept;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,6 +31,8 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,10 +45,10 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutMaxLengthVm",
+        objectType = "demo.PropertyLayoutFileAcceptVm",
         editing = Editing.ENABLED
 )
-public class PropertyMaxLengthVm implements HasAsciiDocDescription {
+public class PropertyFileAcceptVm implements HasAsciiDocDescription {
 
     public String title() {
         return "PropertyLayout#maxLength";
@@ -54,45 +56,44 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
 
 //tag::annotation[]
     @Property(
-        maxLength = 10                                  // <.>
+        fileAccept = "pdf"                                  // <.>
         , optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
         describedAs =
-            "@Property(maxLength = 10)"
+            "@Property(fileAccept = \"pdf\")"
     )
     @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingAnnotation;
+    private Blob propertyUsingAnnotation;
 //end::annotation[]
 
 //tag::meta-annotated[]
     @Property(optionality = Optionality.OPTIONAL)
-    @MaxLength10MetaAnnotation                            // <.>
+    @FileAcceptPdfMetaAnnotation                            // <.>
     @PropertyLayout(
-        describedAs = "@MaxLength10MetaAnnotation"
+        describedAs = "@FileAcceptPdfMetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotation;
+    private Blob propertyUsingMetaAnnotation;
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
     @Property(
         maxLength = 3                                   // <.>
         , optionality = Optionality.OPTIONAL)
-    @MaxLength10MetaAnnotation                            // <.>
+    @FileAcceptPdfMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs =
-            "@MaxLength10MetaAnnotation " +
-            "@PropertyLayout(maxLength = 3)"
+            "@FileAcceptPdfMetaAnnotation @PropertyLayout(...)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
+    private Blob propertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
 
 }

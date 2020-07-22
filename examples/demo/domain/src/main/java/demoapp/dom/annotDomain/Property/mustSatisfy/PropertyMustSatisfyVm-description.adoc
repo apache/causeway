@@ -44,7 +44,7 @@ include::PropertyMustSatisfyVm_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that the parameter holds an integer in the range 18 to 65
 
-It could also be applied to mixin, but would have little effect because mixin properties are always read-only.
+The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
 
 // TODO: ISIS-2415
 //== Meta-annotated

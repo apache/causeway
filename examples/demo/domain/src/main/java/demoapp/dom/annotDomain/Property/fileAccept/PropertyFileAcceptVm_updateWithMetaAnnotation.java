@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.maxLength;
+package demoapp.dom.annotDomain.Property.fileAccept;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,24 +32,24 @@ import lombok.RequiredArgsConstructor;
     associateWith = "propertyUsingMetaAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
-public class PropertyMaxLengthVm_updateWithMetaAnnotation {
+public class PropertyFileAcceptVm_updateWithMetaAnnotation {
 
-    private final PropertyMaxLengthVm propertyMaxLengthVm;
+    private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::meta-annotation[]
-    public PropertyMaxLengthVm act(
+    public PropertyFileAcceptVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @MaxLength10MetaAnnotation                            // <.>
+            @FileAcceptPdfMetaAnnotation                            // <.>
             @ParameterLayout(
-                describedAs = "@MaxLength10MetaAnnotation"
+                describedAs = "@FileAcceptPdfMetaAnnotation"
             )
-            final String parameterUsingMetaAnnotation) {
-        propertyMaxLengthVm.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
-        return propertyMaxLengthVm;
+            final Blob parameterUsingMetaAnnotation) {
+        propertyFileAcceptVm.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
+        return propertyFileAcceptVm;
     }
 //end::meta-annotation[]
-    public String default0Act() {
-        return propertyMaxLengthVm.getPropertyUsingMetaAnnotation();
+    public Blob default0Act() {
+        return propertyFileAcceptVm.getPropertyUsingMetaAnnotation();
     }
 
 }

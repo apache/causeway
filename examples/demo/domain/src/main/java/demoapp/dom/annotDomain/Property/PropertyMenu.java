@@ -18,22 +18,44 @@
  */
 package demoapp.dom.annotDomain.Property;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.value.Blob;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import demoapp.dom.annotDomain.Property.fileAccept.PropertyFileAcceptVm;
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
 import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
+import demoapp.dom.types.Samples;
+import jnr.ffi.annotations.In;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
 @Log4j2
 public class PropertyMenu {
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-file-pdf", describedAs = "Length of text fields")
+    public PropertyFileAcceptVm fileAccept(){
+        val vm = new PropertyFileAcceptVm();
+
+        samples.stream()
+                .filter(x -> x.getName().endsWith(".pdf"))
+                .findFirst()
+                .ifPresent(blob -> {
+            vm.setPropertyUsingAnnotation(blob);
+            vm.setPropertyUsingMetaAnnotation(blob);
+            vm.setPropertyUsingMetaAnnotationButOverridden(blob);
+        });
+        return vm;
+    }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
@@ -65,4 +87,6 @@ public class PropertyMenu {
         return vm;
     }
 
+    @Inject
+    Samples<Blob> samples;
 }

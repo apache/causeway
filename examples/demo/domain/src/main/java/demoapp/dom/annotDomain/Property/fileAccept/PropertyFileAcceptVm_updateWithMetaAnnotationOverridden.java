@@ -1,10 +1,11 @@
-package demoapp.dom.annotDomain.Property.maxLength;
+package demoapp.dom.annotDomain.Property.fileAccept;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,29 +14,28 @@ import lombok.RequiredArgsConstructor;
     associateWith = "propertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
-public class PropertyMaxLengthVm_updateWithMetaAnnotationOverridden {
+public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
 
-    private final PropertyMaxLengthVm propertyMaxLengthVm;
+    private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::meta-annotation-overridden[]
-    public PropertyMaxLengthVm act(
+    public PropertyFileAcceptVm act(
             @Parameter(
                 maxLength = 3                                   // <.>
                 , optionality = Optionality.OPTIONAL
             )
-            @MaxLength10MetaAnnotation                            // <.>
+            @FileAcceptPdfMetaAnnotation                            // <.>
             @ParameterLayout(
                 describedAs =
-                    "@MaxLength10MetaAnnotation " +
-                    "@PropertyLayout(maxLength = 3)"
+                    "@FileAcceptPdfMetaAnnotation @ParameterLayout(...)"
             )
-            final String parameterUsingMetaAnnotationButOverridden) {
-        propertyMaxLengthVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
-        return propertyMaxLengthVm;
+            final Blob parameterUsingMetaAnnotationButOverridden) {
+        propertyFileAcceptVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
+        return propertyFileAcceptVm;
     }
 //end::meta-annotation-overridden[]
-    public String default0Act() {
-        return propertyMaxLengthVm.getPropertyUsingMetaAnnotationButOverridden();
+    public Blob default0Act() {
+        return propertyFileAcceptVm.getPropertyUsingMetaAnnotationButOverridden();
     }
 
 }

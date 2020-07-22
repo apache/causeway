@@ -1,42 +1,43 @@
-The "regexPattern" semantic specifies a regular expression that the value entered into the property must match:
+The "fileAccept" semantic specifies the file extension allowed when browsing for a file to upload:
 
 * for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
 
 * for parameters, the semantic can be specified using either the `@Parameter` annotation, or a meta-annotation.
 
-This semantic applies only to strings.
+This semantic applies only to ``Blob``s.
+
 
 == Annotated
 
-The regexPattern semantic can be specified explicitly using an annotation:
+The fileAccept semantic can be specified explicitly using an annotation:
 
-* for properties, using `@Property#regexPattern()`:
+* for properties, using `@Property#fileAccept()`:
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm.java[tags=annotation]
+include::PropertyFileAcceptVm.java[tags=annotation]
 ----
-<.> explicitly specifies that the property must match the regex pattern
+<.> explicitly specifies that only PDFs can be accepted for the property
 
-* for parameters, using `@Parameter#regexPattern()`:
+* for parameters, using `@Parameter#fileAccept()`:
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyFileAcceptVm_updateWithParameterLayout.java[tags=annotation]
 ----
-<.> explicitly specifies that the property must match the regex pattern
+<.> explicitly specifies that only PDFs can be accepted for the parameter
 
 The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
 
 == Meta-annotated
 
-The regexPattern semantic can also be specified using a custom meta-annotation:
+The fileAccept semantic can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
 [source,java]
 ----
-include::RegexPatternMetaAnnotation.java[tags=class]
+include::FileAcceptPdfMetaAnnotation.java[tags=class]
 ----
 <.> annotated for property ...
 <.> \... and also for parameter.
@@ -48,7 +49,7 @@ include::RegexPatternMetaAnnotation.java[tags=class]
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm.java[tags=meta-annotated]
+include::PropertyFileAcceptVm.java[tags=meta-annotated]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -56,10 +57,9 @@ include::PropertyRegexPatternVm.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyFileAcceptVm_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> semantic is inherited from the meta-annotation
-
 
 
 === Meta-annotated Overridden
@@ -70,7 +70,7 @@ The meta-annotation can itself be overridden:
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm.java[tags=meta-annotated-overridden]
+include::PropertyFileAcceptVm.java[tags=meta-annotated-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Property` annotation
@@ -79,9 +79,10 @@ include::PropertyRegexPatternVm.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyFileAcceptVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Parameter` annotation
+
 
 
