@@ -29,7 +29,7 @@ The maxLength semantic can be specified explicitly using an annotation:
 ----
 include::PropertyMaxLengthVm.java[tags=annotation]
 ----
-<.> explicitly specifies that the property should use a textbox
+<.> explicitly specifies the maximum length that can be entered for the property
 
 * for parameters, using `@Parameter#maxLength()`:
 +
@@ -37,8 +37,9 @@ include::PropertyMaxLengthVm.java[tags=annotation]
 ----
 include::PropertyMaxLengthVm_updateWithParameterLayout.java[tags=annotation]
 ----
-<.> explicitly specifies that the parameter should use a textbox
+<.> explicitly specifies the maximum length that can be entered for the property
 
+It could also be applied to mixin, but would have little effect because mixin properties are always read-only.
 
 == Meta-annotated
 

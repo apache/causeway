@@ -28,6 +28,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
+import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
@@ -41,6 +42,16 @@ public class PropertyMenu {
         vm.setPropertyUsingAnnotation("abcdefghij");
         vm.setPropertyUsingMetaAnnotation("abcdefghij");
         vm.setPropertyUsingMetaAnnotationButOverridden("abc");
+        return vm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-infinity", describedAs = "Regular expressions, such as email")
+    public PropertyMustSatisfyVm mustSatisfy(){
+        val vm = new PropertyMustSatisfyVm();
+        vm.setCustomerAgePropertyUsingAnnotation(18);
+        vm.setCustomerAgePropertyUsingMetaAnnotation(65);
+        vm.setCustomerAgePropertyUsingMetaAnnotationButOverridden(66);
         return vm;
     }
 

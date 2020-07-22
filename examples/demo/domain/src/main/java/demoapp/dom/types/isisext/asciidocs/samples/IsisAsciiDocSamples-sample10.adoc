@@ -1,3 +1,4 @@
+[#wrap_up]
 == Wrap-up
 
 NOTE: AsciiDoc is quite cool, you should try it!
@@ -9,7 +10,7 @@ Go to this URL to learn more about it:
 
 * http://asciidoc.org
 
-Or you could return to the xref:first[] or <<purpose,Purpose>>.
+Or you could return to the xref:#wrap_up[top of this page] or <<wrap_up,same thing, different syntax>>.
 =====
 
 CAUTION: caution!

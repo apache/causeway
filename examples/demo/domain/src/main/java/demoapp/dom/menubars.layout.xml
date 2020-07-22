@@ -109,6 +109,7 @@ as a replacement for
             <mb3:section>
                 <mb3:named>@Property</mb3:named>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="regexPattern"/>
             </mb3:section>
         </mb3:menu>

@@ -16,7 +16,7 @@ The regexPattern semantic can be specified explicitly using an annotation:
 ----
 include::PropertyRegexPatternVm.java[tags=annotation]
 ----
-<.> explicitly specifies that the property should use a textbox
+<.> explicitly specifies that the property must match the regex pattern
 
 * for parameters, using `@Parameter#regexPattern()`:
 +
@@ -24,17 +24,9 @@ include::PropertyRegexPatternVm.java[tags=annotation]
 ----
 include::PropertyRegexPatternVm_updateWithParameterLayout.java[tags=annotation]
 ----
-<.> explicitly specifies that the parameter should use a textbox
+<.> explicitly specifies that the property must match the regex pattern
 
-== Contributed
-
-The `@Property` can also be applied at the class-level to mixin properties:.
-
-[source,java,indent=0]
-----
-include::PropertyRegexPatternVm_mixinProperty.java[tags=class]
-----
-<.> explicitly specifies that the contributed property should use a textbox
+It could also be applied to mixin, but would have little effect because mixin properties are always read-only.
 
 == Meta-annotated
 
@@ -68,13 +60,7 @@ include::PropertyRegexPatternVm_updateWithMetaAnnotation.java[tags=meta-annotati
 ----
 <.> semantic is inherited from the meta-annotation
 
-* or can be applied to mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyRegexPatternVm_mixinPropertyWithMetaAnnotation.java[tags=class]
-----
-<.> semantic is inherited from the meta-annotation
+
 
 === Meta-annotated Overridden
 
@@ -98,13 +84,4 @@ include::PropertyRegexPatternVm_updateWithMetaAnnotationOverridden.java[tags=met
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Parameter` annotation
 
-
-* or a mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyRegexPatternVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Property` annotation
 

@@ -19,11 +19,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class LineBreaker {
     
-    @Inject private IsisInteractionTracker isisInteractionTracker;
-    
     @Action(semantics = SemanticsOf.SAFE)
     public void shutdown() {
-        log.info("about to shutown the JVM");
+        log.info("about to shutdown the JVM");
 
         // allow for current interaction to complete gracefully
         isisInteractionTracker.currentInteraction()
@@ -32,4 +30,7 @@ public class LineBreaker {
         });
     }
 
+    @Inject
+    IsisInteractionTracker isisInteractionTracker;
+    
 }

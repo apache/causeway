@@ -1,0 +1,109 @@
+The "mustSatisfy" semantic specifies an arbitrary constraint that the value entered into the property must satisfy:
+
+* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
+
+* for parameters, the semantic can be specified using either the `@Parameter` annotation, or a meta-annotation.
+
+The constraint is provided as a concrete class that implements the `org.apache.isis.applib.spec.Specification` interface.
+This is usually done by subclassing `AbstractSpecification` or `AbstractSpecification2`:
+
+[source,java,indent=0]
+----
+include::OfWorkingAgeSpecification.java[tags=class]
+----
+
+TIP: it is possible to inject domain services into ``Specification``S.
+
+This semantic can apply to all types, although the provided `Specification` must be compatible, in other words accept the same data type (or a supertype) of the property.
+
+
+== Annotated
+
+The mustSatisfy semantic can be specified explicitly using an annotation:
+
+* for properties, using `@Property#mustSatisfy()`:
++
+[source,java,indent=0]
+----
+include::PropertyMustSatisfyVm.java[tags=annotation]
+----
+<.> explicitly specifies that the property holds an integer in the range 18 to 65
++
+where `OfWorkingAgeSpecification` is:
++
+[source,java,indent=0]
+----
+include::OfWorkingAgeSpecification.java[tags=class]
+----
+
+* for parameters, using `@Parameter#mustSatisfy()`:
++
+[source,java,indent=0]
+----
+include::PropertyMustSatisfyVm_updateWithParameterLayout.java[tags=annotation]
+----
+<.> explicitly specifies that the parameter holds an integer in the range 18 to 65
+
+It could also be applied to mixin, but would have little effect because mixin properties are always read-only.
+
+== Meta-annotated
+
+The mustSatisfy semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::MustSatisfyOfWorkingAgeMetaAnnotation.java[tags=class]
+----
+<.> annotated for property ...
+<.> \... and also for parameter.
+<.> annotation can be applied to a property (either its getter or the field directly)
+<.> annotation can be applied to a parameter
+<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyMustSatisfyVm.java[tags=meta-annotated]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or can be applied to a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyMustSatisfyVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+----
+<.> semantic is inherited from the meta-annotation
+
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyMustSatisfyVm.java[tags=meta-annotated-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Property` annotation
+
+* or a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyMustSatisfyVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Parameter` annotation
+
+* where `OfRetirementAgeSpecification` is:
++
+[source,java,indent=0]
+----
+include::OfRetirementAgeSpecification.java[tags=class]
+----
