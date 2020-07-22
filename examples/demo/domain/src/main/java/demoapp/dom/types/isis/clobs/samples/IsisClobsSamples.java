@@ -52,6 +52,7 @@ public class IsisClobsSamples implements Samples<Clob> {
     private static NamedWithMimeType.CommonMimeType mimeTypeFor(String name) {
         if (name.endsWith(".txt")) return NamedWithMimeType.CommonMimeType.TXT;
         if (name.endsWith(".rtf")) return NamedWithMimeType.CommonMimeType.RTF;
+        if (name.endsWith(".xml")) return NamedWithMimeType.CommonMimeType.XML;
         throw new IllegalArgumentException(name);
     }
 
