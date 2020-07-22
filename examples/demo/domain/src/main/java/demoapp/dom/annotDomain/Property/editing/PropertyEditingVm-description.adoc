@@ -4,6 +4,21 @@ The "editing" semantic specifies that a property's value can be changed through 
 
 There is no corresponding semantic for parameters, parameters are implicitly editable.
 
+== Class Level
+
+Usually editing of properties is discouraged; it is usually better to modify state through an explicit action instead.
+For that reason, editing of properties is disabled by default (though that can be changed globally if necessary using the `isis.applib.annotation.domain-object.editing` configuration property).
+
+Editing can also be specified at the class level.
+This will override any configured defaults, but just for the properties of that class:
+
+[source,java,indent=0]
+----
+include::PropertyEditingVm.java[tags=class]
+----
+
+The property-level semantic can, in turn, overrides the configured or class-level default.
+
 
 == Annotated
 
@@ -31,7 +46,6 @@ include::EditingEnabledMetaAnnotation.java[tags=class]
 ----
 <.> annotated for property ...
 <.> annotation can be applied to a property (either its getter or the field directly)
-<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
 
 * and can be applied to a property:
 +

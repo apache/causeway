@@ -14,8 +14,7 @@ import org.apache.isis.applib.annotation.Property;
 @Property(editing = Editing.ENABLED)                // <.>
 @Inherited
 @Target({
-        ElementType.METHOD, ElementType.FIELD,      // <.>
-        ElementType.TYPE                            // <.>
+        ElementType.METHOD, ElementType.FIELD       // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EditingEnabledMetaAnnotation {

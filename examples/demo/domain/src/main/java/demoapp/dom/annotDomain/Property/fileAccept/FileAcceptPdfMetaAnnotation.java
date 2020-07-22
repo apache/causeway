@@ -15,8 +15,7 @@ import org.apache.isis.applib.annotation.Property;
 @Inherited
 @Target({
         ElementType.METHOD, ElementType.FIELD,      // <.>
-        ElementType.PARAMETER,                      // <.>
-        ElementType.TYPE                            // <.>
+        ElementType.PARAMETER                       // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FileAcceptPdfMetaAnnotation {

@@ -18,7 +18,6 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 @Target({
         ElementType.METHOD, ElementType.FIELD,      // <.>
         ElementType.PARAMETER,                      // <.>
-        ElementType.TYPE                            // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MaxLength10MetaAnnotation {

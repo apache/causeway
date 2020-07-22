@@ -108,6 +108,7 @@ as a replacement for
             <mb3:named>Domain Annotations</mb3:named>
             <mb3:section>
                 <mb3:named>@Property</mb3:named>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="editing"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>

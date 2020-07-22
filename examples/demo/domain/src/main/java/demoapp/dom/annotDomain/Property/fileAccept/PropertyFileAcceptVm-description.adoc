@@ -61,7 +61,6 @@ include::FileAcceptPdfMetaAnnotation.java[tags=class]
 <.> \... and also for parameter.
 <.> annotation can be applied to a property (either its getter or the field directly)
 <.> annotation can be applied to a parameter
-<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
 
 * and can be applied to a property:
 +

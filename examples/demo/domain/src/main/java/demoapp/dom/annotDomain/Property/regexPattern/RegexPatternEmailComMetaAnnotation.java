@@ -25,7 +25,6 @@ import org.apache.isis.applib.annotation.Property;
 @Target({
     ElementType.METHOD, ElementType.FIELD,                      // <.>
     ElementType.PARAMETER,                                      // <.>
-    ElementType.TYPE                                            // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegexPatternEmailComMetaAnnotation {
