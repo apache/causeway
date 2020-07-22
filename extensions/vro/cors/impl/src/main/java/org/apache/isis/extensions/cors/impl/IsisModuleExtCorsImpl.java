@@ -24,6 +24,7 @@ import javax.inject.Named;
 import javax.servlet.Filter;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -50,6 +51,10 @@ public class IsisModuleExtCorsImpl {
     @Bean
 	@Order(OrderPrecedence.EARLY)
     public FilterRegistrationBean<Filter> corsFilterRegistration() {
+        
+        // TODO do we want to restrict this filter to the REST URL only?
+        _Probe.errOut("REST URI %s", configuration.getViewer().getRestfulobjects().getBaseUri());
+        
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(corsFilter());
         filterRegistrationBean.setUrlPatterns(Collections.singletonList("/*"));
