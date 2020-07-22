@@ -21,16 +21,17 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyRegexPatternVm act(
+            @RegexPatternEmailComMetaAnnotation                             // <.>
             @Parameter(
-                regexPattern = "^[^@+]@[^\\.+]\\.org$"          // <.>
-                , regexPatternReplacement = "Must be .org email address"    // <.>
-                , regexPatternFlags = Pattern.COMMENTS                      // <.>
+                regexPattern = "^[^@+]@[^\\.+]\\.org$"                      // <.>
+                , regexPatternReplacement = "Must be .org email address"
+                , regexPatternFlags = Pattern.COMMENTS
                 , optionality = Optionality.OPTIONAL
             )
-            @RegexPatternMetaAnnotation                         // <.>
             @ParameterLayout(
                 describedAs =
-                    "@RegexPatternMetaAnnotation @ParameterLayout(...)"
+                    "@RegexPatternEmailComMetaAnnotation " +
+                    "@Parameter(regexPattern = \"^\\w+@\\w+[.]org$\"\")"
             )
             final String emailAddressParameterUsingMetaAnnotationButOverridden) {
         propertyRegexPatternVm.setEmailAddressPropertyUsingMetaAnnotationButOverridden(emailAddressParameterUsingMetaAnnotationButOverridden);

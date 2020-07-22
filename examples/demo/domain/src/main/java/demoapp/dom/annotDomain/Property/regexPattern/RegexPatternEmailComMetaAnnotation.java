@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Property;
     ElementType.TYPE                                            // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RegexPatternMetaAnnotation {
+public @interface RegexPatternEmailComMetaAnnotation {
 
 }
 //end::class[]

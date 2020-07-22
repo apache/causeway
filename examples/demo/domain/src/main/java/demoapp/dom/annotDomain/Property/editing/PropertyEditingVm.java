@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.mustSatisfy;
+package demoapp.dom.annotDomain.Property.editing;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,56 +43,59 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutMustSatisfyVm",
-        editing = Editing.ENABLED
+        objectType = "demo.PropertyLayoutEditingVm",
+        editing = Editing.DISABLED                              // <.>
 )
-public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
+public class PropertyEditingVm implements HasAsciiDocDescription {
+    // ...
+//end::class[]
 
     public String title() {
-        return "PropertyLayout#mustSatisfy";
+        return "PropertyLayout#editing";
     }
 
 //tag::annotation[]
     @Property(
-        mustSatisfy = OfWorkingAgeSpecification.class       // <.>
+        editing = Editing.ENABLED                               // <.>
     )
     @PropertyLayout(
         describedAs =
-            "mustSatisfy = OfWorkingAgeSpecification.class"
+            "@Property(editing = DISABLED)"
     )
     @MemberOrder(name = "annotation", sequence = "1")
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     @Getter @Setter
-    private Integer customerAgePropertyUsingAnnotation;
+    private String propertyUsingAnnotation;
 //end::annotation[]
 
 //tag::meta-annotated[]
-    @Property()
-    @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
+    @Property(optionality = Optionality.OPTIONAL)
+    @EditingEnabledMetaAnnotation                            // <.>
     @PropertyLayout(
-        describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation"
+        describedAs = "@EditingEnabledMetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     @Getter @Setter
-    private Integer customerAgePropertyUsingMetaAnnotation;
+    private String propertyUsingMetaAnnotation;
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
     @Property(
-        mustSatisfy = OfRetirementAgeSpecification.class       // <.>
+        editing = Editing.DISABLED                          // <.>
     )
+    @EditingEnabledMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs =
-            "@MustSatisfyOfWorkingAgeMetaAnnotation " +
-            "@PropertyLayout(mustSatisfy = OfRetirementAgeSpecification.class)"
+            "@EditingEnabledMetaAnnotation " +
+            "@PropertyLayout(editing = DISABLED)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     @Getter @Setter
-    private Integer customerAgePropertyUsingMetaAnnotationButOverridden;
+    private String propertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
 
+//tag::class[]
 }
 //end::class[]

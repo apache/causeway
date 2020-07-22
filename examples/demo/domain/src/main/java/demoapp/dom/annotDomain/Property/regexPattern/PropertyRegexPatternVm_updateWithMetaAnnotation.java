@@ -38,9 +38,9 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotation {
 //tag::meta-annotation[]
     public PropertyRegexPatternVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @RegexPatternMetaAnnotation                            // <.>
+            @RegexPatternEmailComMetaAnnotation                            // <.>
             @ParameterLayout(
-                describedAs = "@RegexPatternMetaAnnotation"
+                describedAs = "@RegexPatternEmailComMetaAnnotation"
             )
             final String emailAddressParameterUsingMetaAnnotation) {
         propertyRegexPatternVm.setEmailAddressPropertyUsingMetaAnnotation(emailAddressParameterUsingMetaAnnotation);

@@ -33,6 +33,7 @@ import org.apache.isis.applib.value.Clob;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import demoapp.dom.annotDomain.Property.editing.PropertyEditingVm;
 import demoapp.dom.annotDomain.Property.fileAccept.PropertyFileAcceptVm;
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
 import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
@@ -42,6 +43,17 @@ import demoapp.dom.types.Samples;
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
 @Log4j2
 public class PropertyMenu {
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Editable fields")
+    public PropertyEditingVm editing(){
+        val vm = new PropertyEditingVm();
+
+        vm.setPropertyUsingAnnotation("this property is editable");
+        vm.setPropertyUsingMetaAnnotation("this property is also editable");
+        vm.setPropertyUsingMetaAnnotationButOverridden("this property is NOT editable");
+        return vm;
+    }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-file-upload", describedAs = "Length of text fields")
@@ -88,18 +100,14 @@ public class PropertyMenu {
 
     private void setSampleBlob(String suffix, Consumer<Blob> blobConsumer) {
         blobSamples.stream()
-                .filter(x -> {
-                    return x.getName().endsWith(suffix);
-                })
+                .filter(x -> x.getName().endsWith(suffix))
                 .findFirst()
                 .ifPresent(blobConsumer);
     }
 
     private void setSampleClob(String suffix, Consumer<Clob> clobConsumer) {
         clobSamples.stream()
-                .filter(x -> {
-                    return x.getName().endsWith(suffix);
-                })
+                .filter(x -> x.getName().endsWith(suffix))
                 .findFirst()
                 .ifPresent(clobConsumer);
     }

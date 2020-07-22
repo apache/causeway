@@ -52,20 +52,19 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class PropertyFileAcceptVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "PropertyLayout#maxLength";
+        return "PropertyLayout#fileAccept";
     }
 
 //tag::annotation[]
     @Property(
         fileAccept = ".pdf"                                 // <.>
-        , optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
         describedAs =
             "@Property(fileAccept = \".pdf\")"
     )
     @MemberOrder(name = "annotation", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     @Getter @Setter
     private Blob pdfPropertyUsingAnnotation;
 //end::annotation[]
@@ -73,26 +72,25 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
 //tag::annotation-clob[]
     @Property(
         fileAccept = ".txt"                     // <.>
-        , optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
         describedAs =
             "@Property(fileAccept = \".txt\")"
     )
     @MemberOrder(name = "annotation", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     @Getter @Setter
     private Clob txtPropertyUsingAnnotation;
 //end::annotation-clob[]
 
 //tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
+    @Property()
     @FileAcceptPdfMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs = "@FileAcceptPdfMetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     @Getter @Setter
     private Blob pdfPropertyUsingMetaAnnotation;
 //end::meta-annotated[]
@@ -100,14 +98,14 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
 //tag::meta-annotated-overridden[]
     @Property(
         fileAccept = ".docx"                                // <.>
-        , optionality = Optionality.OPTIONAL)
+    )
     @FileAcceptPdfMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs =
             "@FileAcceptPdfMetaAnnotation @PropertyLayout(...)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     @Getter @Setter
     private Blob docxPropertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]

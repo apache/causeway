@@ -1,0 +1,58 @@
+The "editing" semantic specifies that a property's value can be changed through the UI:
+
+* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
+
+There is no corresponding semantic for parameters, parameters are implicitly editable.
+
+
+== Annotated
+
+The editing semantic can be specified explicitly using an annotation:
+
+* for properties, using `@Property#editing()`:
++
+[source,java,indent=0]
+----
+include::PropertyEditingVm.java[tags=annotation]
+----
+<.> explicitly specifies the maximum length that can be entered for the property
+
+The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
+
+== Meta-annotated
+
+The editing semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::EditingEnabledMetaAnnotation.java[tags=class]
+----
+<.> annotated for property ...
+<.> annotation can be applied to a property (either its getter or the field directly)
+<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyEditingVm.java[tags=meta-annotated]
+----
+<.> semantic is inherited from the meta-annotation
+
+
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyEditingVm.java[tags=meta-annotated-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Property` annotation
+

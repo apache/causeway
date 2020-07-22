@@ -37,8 +37,8 @@ public class PropertyMaxLengthVm_updateWithMetaAnnotation {
 
 //tag::meta-annotation[]
     public PropertyMaxLengthVm act(
-            @Parameter(optionality = Optionality.OPTIONAL)
             @MaxLength10MetaAnnotation                            // <.>
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 describedAs = "@MaxLength10MetaAnnotation"
             )

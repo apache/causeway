@@ -36,7 +36,7 @@ The regexPattern semantic can also be specified using a custom meta-annotation:
 +
 [source,java]
 ----
-include::RegexPatternMetaAnnotation.java[tags=class]
+include::RegexPatternEmailComMetaAnnotation.java[tags=class]
 ----
 <.> annotated for property ...
 <.> \... and also for parameter.

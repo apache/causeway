@@ -19,11 +19,11 @@ public class PropertyMaxLengthVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyMaxLengthVm act(
+            @MaxLength10MetaAnnotation                          // <.>
             @Parameter(
                 maxLength = 3                                   // <.>
                 , optionality = Optionality.OPTIONAL
             )
-            @MaxLength10MetaAnnotation                            // <.>
             @ParameterLayout(
                 describedAs =
                     "@MaxLength10MetaAnnotation " +

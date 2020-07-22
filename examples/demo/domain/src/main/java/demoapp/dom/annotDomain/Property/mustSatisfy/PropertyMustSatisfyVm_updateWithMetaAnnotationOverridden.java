@@ -22,10 +22,10 @@ public class PropertyMustSatisfyVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyMustSatisfyVm act(
+            @MustSatisfyOfWorkingAgeMetaAnnotation                  // <.>
             @Parameter(
-                mustSatisfy = OfRetirementAgeSpecification.class            // <.>
+                mustSatisfy = OfRetirementAgeSpecification.class    // <.>
             )
-            @MustSatisfyOfWorkingAgeMetaAnnotation                         // <.>
             @ParameterLayout(
                 describedAs =
                     "@MustSatisfyOfWorkingAgeMetaAnnotation " +
