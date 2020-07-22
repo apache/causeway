@@ -18,6 +18,8 @@
  */
 package demoapp.dom.annotDomain.Property;
 
+import java.util.function.Consumer;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -26,6 +28,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -35,7 +38,6 @@ import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
 import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
 import demoapp.dom.types.Samples;
-import jnr.ffi.annotations.In;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
 @Log4j2
@@ -46,14 +48,11 @@ public class PropertyMenu {
     public PropertyFileAcceptVm fileAccept(){
         val vm = new PropertyFileAcceptVm();
 
-        samples.stream()
-                .filter(x -> x.getName().endsWith(".pdf"))
-                .findFirst()
-                .ifPresent(blob -> {
-            vm.setPropertyUsingAnnotation(blob);
-            vm.setPropertyUsingMetaAnnotation(blob);
-            vm.setPropertyUsingMetaAnnotationButOverridden(blob);
-        });
+        setSampleBlob(".pdf", vm::setPdfPropertyUsingAnnotation);
+        setSampleBlob(".pdf", vm::setPdfPropertyUsingMetaAnnotation);
+        setSampleBlob(".docx", vm::setDocxPropertyUsingMetaAnnotationButOverridden);
+        setSampleClob(".txt", vm::setTxtPropertyUsingAnnotation);
+
         return vm;
     }
 
@@ -87,6 +86,26 @@ public class PropertyMenu {
         return vm;
     }
 
+    private void setSampleBlob(String suffix, Consumer<Blob> blobConsumer) {
+        blobSamples.stream()
+                .filter(x -> {
+                    return x.getName().endsWith(suffix);
+                })
+                .findFirst()
+                .ifPresent(blobConsumer);
+    }
+
+    private void setSampleClob(String suffix, Consumer<Clob> clobConsumer) {
+        clobSamples.stream()
+                .filter(x -> {
+                    return x.getName().endsWith(suffix);
+                })
+                .findFirst()
+                .ifPresent(clobConsumer);
+    }
+
     @Inject
-    Samples<Blob> samples;
+    Samples<Blob> blobSamples;
+    @Inject
+    Samples<Clob> clobSamples;
 }

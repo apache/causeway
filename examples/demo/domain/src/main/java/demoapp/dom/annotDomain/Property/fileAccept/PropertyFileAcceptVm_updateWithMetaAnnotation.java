@@ -44,12 +44,12 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotation {
                 describedAs = "@FileAcceptPdfMetaAnnotation"
             )
             final Blob parameterUsingMetaAnnotation) {
-        propertyFileAcceptVm.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
+        propertyFileAcceptVm.setPdfPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
         return propertyFileAcceptVm;
     }
 //end::meta-annotation[]
     public Blob default0Act() {
-        return propertyFileAcceptVm.getPropertyUsingMetaAnnotation();
+        return propertyFileAcceptVm.getPdfPropertyUsingMetaAnnotation();
     }
 
 }

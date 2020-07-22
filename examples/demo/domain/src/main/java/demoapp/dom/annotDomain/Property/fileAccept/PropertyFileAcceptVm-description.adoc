@@ -4,12 +4,12 @@ The "fileAccept" semantic specifies the file extension allowed when browsing for
 
 * for parameters, the semantic can be specified using either the `@Parameter` annotation, or a meta-annotation.
 
-This semantic applies only to ``Blob``s.
+This semantic applies only to ``Blob``s and ``Clob``s.
 
 
 == Annotated
 
-The fileAccept semantic can be specified explicitly using an annotation:
+The fileAccept semantic can be specified explicitly using an annotation (on a `Blob` property):
 
 * for properties, using `@Property#fileAccept()`:
 +
@@ -24,6 +24,24 @@ include::PropertyFileAcceptVm.java[tags=annotation]
 [source,java,indent=0]
 ----
 include::PropertyFileAcceptVm_updateWithParameterLayout.java[tags=annotation]
+----
+<.> explicitly specifies that only PDFs can be accepted for the parameter
+
+This also works for ``Clob``s:
+
+* for properties, using `@Property#fileAccept()`:
++
+[source,java,indent=0]
+----
+include::PropertyFileAcceptVm.java[tags=annotation-clob]
+----
+<.> explicitly specifies that only PDFs can be accepted for the property
+
+* for parameters, using `@Parameter#fileAccept()`:
++
+[source,java,indent=0]
+----
+include::PropertyFileAcceptVm_updateClobWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that only PDFs can be accepted for the parameter
 

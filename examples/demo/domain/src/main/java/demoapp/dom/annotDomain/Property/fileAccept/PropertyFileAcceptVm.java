@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 
 import lombok.Getter;
@@ -56,18 +57,33 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
 
 //tag::annotation[]
     @Property(
-        fileAccept = "pdf"                                  // <.>
+        fileAccept = ".pdf"                                 // <.>
         , optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
         describedAs =
-            "@Property(fileAccept = \"pdf\")"
+            "@Property(fileAccept = \".pdf\")"
     )
     @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private Blob propertyUsingAnnotation;
+    private Blob pdfPropertyUsingAnnotation;
 //end::annotation[]
+
+//tag::annotation-clob[]
+    @Property(
+        fileAccept = ".txt"                     // <.>
+        , optionality = Optionality.OPTIONAL
+    )
+    @PropertyLayout(
+        describedAs =
+            "@Property(fileAccept = \".txt\")"
+    )
+    @MemberOrder(name = "annotation", sequence = "1")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private Clob txtPropertyUsingAnnotation;
+//end::annotation-clob[]
 
 //tag::meta-annotated[]
     @Property(optionality = Optionality.OPTIONAL)
@@ -78,12 +94,12 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private Blob propertyUsingMetaAnnotation;
+    private Blob pdfPropertyUsingMetaAnnotation;
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
     @Property(
-        maxLength = 3                                   // <.>
+        fileAccept = ".docx"                                // <.>
         , optionality = Optionality.OPTIONAL)
     @FileAcceptPdfMetaAnnotation                            // <.>
     @PropertyLayout(
@@ -93,7 +109,7 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private Blob propertyUsingMetaAnnotationButOverridden;
+    private Blob docxPropertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
 
 }

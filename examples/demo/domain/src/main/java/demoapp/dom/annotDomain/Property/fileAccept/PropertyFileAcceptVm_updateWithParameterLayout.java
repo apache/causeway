@@ -29,12 +29,12 @@ public class PropertyFileAcceptVm_updateWithParameterLayout {
                     "@Parameter(fileAccept = \"pdf\")"
             )
             final Blob parameterUsingAnnotation) {
-        propertyFileAcceptVm.setPropertyUsingAnnotation(parameterUsingAnnotation);
+        propertyFileAcceptVm.setPdfPropertyUsingAnnotation(parameterUsingAnnotation);
         return propertyFileAcceptVm;
     }
 //end::annotation[]
     public Blob default0Act() {
-        return propertyFileAcceptVm.getPropertyUsingAnnotation();
+        return propertyFileAcceptVm.getPdfPropertyUsingAnnotation();
     }
 
 }

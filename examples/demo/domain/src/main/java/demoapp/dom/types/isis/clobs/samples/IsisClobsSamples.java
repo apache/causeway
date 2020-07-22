@@ -39,7 +39,7 @@ public class IsisClobsSamples implements Samples<Clob> {
     @Override
     public Stream<Clob> stream() {
         return Stream.of(
-                "document.txt", "file-sample_100kB.rtf")
+                "document.txt", "file-sample_100kB.rtf", "all_well.xml")
                 .map(this::loadClob);
     }
 
