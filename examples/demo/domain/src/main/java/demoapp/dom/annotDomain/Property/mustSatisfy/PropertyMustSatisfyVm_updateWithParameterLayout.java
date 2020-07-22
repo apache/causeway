@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
     associateWith = "customerAgePropertyUsingAnnotation", associateWithSequence = "1"
-    , hidden = Where.EVERYWHERE  // TODO: ISIS-2415
 )
 @RequiredArgsConstructor
 public class PropertyMustSatisfyVm_updateWithParameterLayout {

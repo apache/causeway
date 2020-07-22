@@ -71,7 +71,6 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
 //tag::meta-annotated[]
     @Property(
             optionality = Optionality.OPTIONAL
-            , hidden = Where.EVERYWHERE  // TODO: ISIS-2415
     )
     @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
     @PropertyLayout(
@@ -87,7 +86,6 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
     @Property(
         mustSatisfy = OfRetirementAgeSpecification.class       // <.>
         , optionality = Optionality.OPTIONAL
-        , hidden = Where.EVERYWHERE  // TODO: ISIS-2415
     )
     @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
     @PropertyLayout(

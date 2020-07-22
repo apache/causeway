@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
     associateWith = "customerAgePropertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
-    , hidden = Where.EVERYWHERE  // TODO: ISIS-2415
 )
 @RequiredArgsConstructor
 public class PropertyMustSatisfyVm_updateWithMetaAnnotationOverridden {
