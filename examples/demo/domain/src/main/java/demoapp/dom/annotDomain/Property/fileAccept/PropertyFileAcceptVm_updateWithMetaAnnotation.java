@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingMetaAnnotation", associateWithSequence = "1"
+    associateWith = "pdfPropertyUsingMetaAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyFileAcceptVm_updateWithMetaAnnotation {
@@ -43,8 +43,8 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotation {
             @ParameterLayout(
                 describedAs = "@FileAcceptPdfMetaAnnotation"
             )
-            final Blob parameterUsingMetaAnnotation) {
-        propertyFileAcceptVm.setPdfPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
+            final Blob pdfParameterUsingMetaAnnotation) {
+        propertyFileAcceptVm.setPdfPropertyUsingMetaAnnotation(pdfParameterUsingMetaAnnotation);
         return propertyFileAcceptVm;
     }
 //end::meta-annotation[]

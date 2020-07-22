@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingAnnotation", associateWithSequence = "1"
+    associateWith = "pdfPropertyUsingAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyFileAcceptVm_updateWithParameterLayout {
@@ -21,15 +21,15 @@ public class PropertyFileAcceptVm_updateWithParameterLayout {
 //tag::annotation[]
     public PropertyFileAcceptVm act(
             @Parameter(
-                fileAccept = "pdf"                                 // <.>
+                fileAccept = ".pdf"                     // <.>
                 , optionality = Optionality.OPTIONAL
             )
             @ParameterLayout(
                 describedAs =
-                    "@Parameter(fileAccept = \"pdf\")"
+                    "@Parameter(fileAccept = \".pdf\")"
             )
-            final Blob parameterUsingAnnotation) {
-        propertyFileAcceptVm.setPdfPropertyUsingAnnotation(parameterUsingAnnotation);
+            final Blob pdfParameterUsingAnnotation) {
+        propertyFileAcceptVm.setPdfPropertyUsingAnnotation(pdfParameterUsingAnnotation);
         return propertyFileAcceptVm;
     }
 //end::annotation[]

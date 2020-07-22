@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
+    associateWith = "docxPropertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
@@ -30,8 +30,8 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
                     "@FileAcceptPdfMetaAnnotation " +
                     "@ParameterLayout(fileAccept = \".docx\")"
             )
-            final Blob parameterUsingMetaAnnotationButOverridden) {
-        propertyFileAcceptVm.setDocxPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
+            final Blob docxParameterUsingMetaAnnotationButOverridden) {
+        propertyFileAcceptVm.setDocxPropertyUsingMetaAnnotationButOverridden(docxParameterUsingMetaAnnotationButOverridden);
         return propertyFileAcceptVm;
     }
 //end::meta-annotation-overridden[]

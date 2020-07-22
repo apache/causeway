@@ -44,7 +44,7 @@ import demoapp.dom.types.Samples;
 public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-file-pdf", describedAs = "Length of text fields")
+    @ActionLayout(cssClassFa="fa-file-upload", describedAs = "Length of text fields")
     public PropertyFileAcceptVm fileAccept(){
         val vm = new PropertyFileAcceptVm();
 
