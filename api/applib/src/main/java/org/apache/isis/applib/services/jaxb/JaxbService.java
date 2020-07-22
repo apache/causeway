@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -38,6 +39,8 @@ import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
+
+import lombok.NonNull;
 
 // tag::refguide[]
 public interface JaxbService {
@@ -131,13 +134,20 @@ public interface JaxbService {
         }
 
         protected Object internalFromXml(
-                final JAXBContext jaxbContext,
-                final String xml,
-                final Map<String, Object> unmarshallerProperties) throws JAXBException {
+                @NonNull final JAXBContext jaxbContext,
+                @Nullable final String xml,
+                @Nullable final Map<String, Object> unmarshallerProperties) throws JAXBException {
+            
+            if(xml==null) {
+                return null;
+            }
+            
             final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-            for (Map.Entry<String, Object> entry : unmarshallerProperties.entrySet()) {
-                unmarshaller.setProperty(entry.getKey(), entry.getValue());
+            if(unmarshallerProperties!=null) {
+                for (Map.Entry<String, Object> entry : unmarshallerProperties.entrySet()) {
+                    unmarshaller.setProperty(entry.getKey(), entry.getValue());
+                }
             }
 
             configure(unmarshaller);
