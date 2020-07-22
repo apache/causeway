@@ -6,9 +6,9 @@ import org.apache.isis.applib.spec.AbstractSpecification;
 public class OfWorkingAgeSpecification extends AbstractSpecification<Integer> {
     @Override
     public String satisfiesSafely(Integer candidate) {
-        return candidate > 65
+        return candidate >= 18 && candidate <= 65
                 ? null
-                : "Not of retirement age (66 and older)";
+                : "Not of working age [18-65]";
     }
 }
 //end::class[]
