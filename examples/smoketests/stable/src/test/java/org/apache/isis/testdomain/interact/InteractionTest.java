@@ -339,9 +339,20 @@ class InteractionTest extends InteractionTestAbstract {
         
         val managedAction = actionInteraction.getManagedAction().get();
         val pendingArgs = managedAction.startParameterNegotiation();
-        final int choiceParamNr = 1;
         
-        //TODO also test param 0 ... SimulatedUiComponent<T>
+        final int firstParamNr = 0;
+        
+        SimulatedUiComponent uiParam0 = new SimulatedUiComponent();
+        uiParam0.bind(pendingArgs, firstParamNr); // bind to first param
+        
+        // UI component's value should be initialized to initial defaults
+        assertEquals(new InteractionDemo_biArgEnabled(null).defaultA(null), uiParam0.getValue().getPojo());
+        
+        uiParam0.simulateValueChange(6);
+        // simulated change should have been propagated to the backend/model
+        assertEquals(6, pendingArgs.getParamValue(firstParamNr).getPojo());
+        
+        final int choiceParamNr = 1;
         
         SimulatedUiChoices uiParam1 = new SimulatedUiChoices();
         uiParam1.bind(pendingArgs, choiceParamNr); // bind to param that has choices
