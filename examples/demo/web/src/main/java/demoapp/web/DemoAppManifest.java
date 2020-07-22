@@ -64,7 +64,7 @@ import demoapp.dom._infra.fixtures.DemoFixtureScript;
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     // CORS
-    IsisModuleExtCorsImpl.class,
+    //IsisModuleExtCorsImpl.class, //TODO[ISIS-2407] breaks Wicket's bulk selection
     
     IsisModuleTestingH2ConsoleUi.class,
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
