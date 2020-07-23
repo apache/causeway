@@ -21,37 +21,17 @@ package org.apache.isis.testdomain.interact;
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-import lombok.val;
+abstract class HasValidation {
 
-public class SimulatedUiComponent extends HasValidation {
-    
-    private Bindable<ManagedObject> value = _Bindables.empty();
-
-    private ObjectActionParameter paramMeta;
+    protected final Bindable<String> validationMessage = _Bindables.empty();
     
     public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
-        
-        val actionMeta = pendingArgs.getHead().getMetaModel();
-        val paramMetaList = actionMeta.getParameters();
-        paramMeta = paramMetaList.getElseFail(paramNr);
-        
-        value.setValue(pendingArgs.getParamValue(paramNr)); //sync models
-        value.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
-        
-        super.bind(pendingArgs, paramNr);
+        validationMessage.bind(pendingArgs.getObservableParamValidation(paramNr));
     }
 
-    public void simulateValueChange(Object newValue) {
-        val paramSpec = paramMeta.getSpecification();
-        value.setValue(ManagedObject.of(paramSpec, newValue));
+    public String getValidationMessage() {
+        return validationMessage.getValue(); 
     }
-
-    public ManagedObject getValue() {
-        return value.getValue();
-    }
-
     
 }

@@ -21,8 +21,11 @@ package org.apache.isis.testdomain.interact;
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
@@ -89,6 +92,14 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
         
         assertArrayEquals(array1, array2);
         
+    }
+    
+    protected void assertEmpty(Object x) {
+        if(x instanceof CharSequence) {
+            assertTrue(_Strings.isEmpty((CharSequence)x));
+            return;
+        }
+        assertEquals(0L, _NullSafe.streamAutodetect(x).count());
     }
     
 }

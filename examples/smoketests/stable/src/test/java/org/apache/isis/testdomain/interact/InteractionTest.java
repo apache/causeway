@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
@@ -43,6 +44,7 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
+import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
@@ -384,14 +386,7 @@ class InteractionTest extends InteractionTestAbstract {
         
     }
     
-    //TODO when changing a bound param value, that influences another's defaults, those other parameter's 
-    //     must fire their change events (unless changed by user interaction already ... don't mess with 
-    //     the user's decision)
-    
-    //TODO when changing a bound param value, that influences another's choices, those other choices 
-    //     must fire their change events 
-        
-    
+  //TODO also deal with non-scalar parameter values 
   //TODO test whether actions do emit their domain events
   //TODO test whether actions can be vetoed via domain event interception
   //TODO test command reification

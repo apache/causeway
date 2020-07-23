@@ -27,7 +27,6 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Pa
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @Action
@@ -77,7 +76,7 @@ public class InteractionDemo_negotiate {
     // constraint considering all parameters
     @Model 
     public String validate(Params p) {
-        val sum = p.a + p.b + p.c;
+        final int sum = p.a + p.b + p.c;
         if(sum == 0) {
             return null; 
         }
@@ -90,9 +89,9 @@ public class InteractionDemo_negotiate {
     @Model public NumberRange defaultRangeB(Params p) { return NumberRange.NEGATIVE; }
     @Model public NumberRange defaultRangeC(Params p) { return NumberRange.ODD; }
     
-    @Model public int defaultA(Params p) { return p.rangeA().numbers()[0]; }
-    @Model public int defaultB(Params p) { return p.rangeB().numbers()[0]; }
-    @Model public int defaultC(Params p) { return p.rangeC().numbers()[0]; }
+    @Model public int defaultA(Params p) { return firstOf(p.rangeA()); }
+    @Model public int defaultB(Params p) { return firstOf(p.rangeB()); }
+    @Model public int defaultC(Params p) { return firstOf(p.rangeC()); }
 
     // -- choices
     
@@ -107,6 +106,12 @@ public class InteractionDemo_negotiate {
     @Model public String validateC(Params p) { return verifyContains(p.c(), p.rangeC()); }
     
     // -- HELPER
+    
+    private int firstOf(NumberRange range) {
+        return range!=null
+                ? range.numbers()[0]
+                : -99;
+    }
     
     private String verifyContains(int x, NumberRange range) {
         if(IntStream.of(range.numbers()).anyMatch(e->e==x)) {

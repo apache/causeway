@@ -24,17 +24,15 @@ import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class SimulatedUiChoices {
+public class SimulatedUiChoices extends HasValidation {
 
-    private final Bindable<Can<ManagedObject>> choiceBox = 
-            _Bindables.empty();
-
-    private final Bindable<ManagedObject> selectedItem = 
-            _Bindables.empty();
+    private final Bindable<Can<ManagedObject>> choiceBox = _Bindables.empty();
+    private final Bindable<ManagedObject> selectedItem = _Bindables.empty();
     
     public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
         choiceBox.bind(pendingArgs.getObservableParamChoices(paramNr));
         selectedItem.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
+        super.bind(pendingArgs, paramNr);
     }
 
     public void simulateChoiceSelect(int choiceIndex) {
@@ -44,5 +42,9 @@ public class SimulatedUiChoices {
     public ManagedObject getValue() {
         return selectedItem.getValue(); 
     }
-
+    
+    public Can<ManagedObject> getChoices() {
+        return choiceBox.getValue(); 
+    }
+    
 }

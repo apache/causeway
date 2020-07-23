@@ -23,7 +23,6 @@ import javax.annotation.Nullable;
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.binding._BindableAbstract;
 import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -79,6 +78,16 @@ public class ParameterNegotiationModel {
         //TODO well not quite, also need to listen to any param value changes, that invalidate these choices
         return _Bindables.forValue(choices);
     }
+    
+    @NonNull public Observable<String> getObservableParamValidation(int paramNr) {
+        // TODO listen to any user initiated value changes, then validate the corresponding parameter
+        return _Bindables.forValue(null);
+    }
+    
+    @NonNull public Bindable<String> getBindableParamSearchArgument(int paramNr) {
+        // TODO any changes should trigger an update to observableParamChoices
+        return _Bindables.forValue(null);
+    }
 
     // -- RATHER INTERNAL ... 
     
@@ -101,30 +110,29 @@ public class ParameterNegotiationModel {
 
     // -- TODO UNDER CONSTRUCTION ...
     
-    @RequiredArgsConstructor(staticName = "of")
-    public static class BindableParameter extends _BindableAbstract<ManagedObject> {
-
-        @Getter @NonNull private int paramNr;
-        @Getter @NonNull private ParameterNegotiationModel model;
-
-        public String getName() {
-            val paramMeta = model.getParamMetamodel(paramNr);
-            return paramMeta.getName();
-        }
-        
-        @Override
-        public ManagedObject getValue() {
-            return model.getParamValue(paramNr);
-        }
-        
-        @Override
-        public void setValue(final ManagedObject newValue) {
-            val oldValue = getValue(); 
-            model.setParamValue(paramNr, newValue);
-        }
-        
-    }
-
+//    @RequiredArgsConstructor(staticName = "of")
+//    public static class BindableParameter extends _BindableAbstract<ManagedObject> {
+//
+//        @Getter private final int paramNr;
+//        @Getter @NonNull private final ParameterNegotiationModel model;
+//
+//        public String getName() {
+//            val paramMeta = model.getParamMetamodel(paramNr);
+//            return paramMeta.getName();
+//        }
+//        
+//        @Override
+//        public ManagedObject getValue() {
+//            return model.getParamValue(paramNr);
+//        }
+//        
+//        @Override
+//        public void setValue(final ManagedObject newValue) {
+//            val oldValue = getValue(); 
+//            model.setParamValue(paramNr, newValue);
+//        }
+//        
+//    }
 
     
     

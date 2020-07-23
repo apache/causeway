@@ -21,37 +21,16 @@ package org.apache.isis.testdomain.interact;
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-import lombok.val;
+public class SimulatedUiAutoComplete extends SimulatedUiChoices {
 
-public class SimulatedUiComponent extends HasValidation {
-    
-    private Bindable<ManagedObject> value = _Bindables.empty();
-
-    private ObjectActionParameter paramMeta;
+    private final Bindable<String> searchText = 
+            _Bindables.empty();
     
     public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
-        
-        val actionMeta = pendingArgs.getHead().getMetaModel();
-        val paramMetaList = actionMeta.getParameters();
-        paramMeta = paramMetaList.getElseFail(paramNr);
-        
-        value.setValue(pendingArgs.getParamValue(paramNr)); //sync models
-        value.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
-        
+        searchText.bindBidirectional(pendingArgs.getBindableParamSearchArgument(paramNr));
         super.bind(pendingArgs, paramNr);
     }
 
-    public void simulateValueChange(Object newValue) {
-        val paramSpec = paramMeta.getSpecification();
-        value.setValue(ManagedObject.of(paramSpec, newValue));
-    }
 
-    public ManagedObject getValue() {
-        return value.getValue();
-    }
-
-    
 }
