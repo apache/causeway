@@ -22,7 +22,7 @@ import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 
-abstract class HasValidation {
+abstract class HasActionValidation {
 
     protected final Bindable<String> validationMessage = _Bindables.empty();
     

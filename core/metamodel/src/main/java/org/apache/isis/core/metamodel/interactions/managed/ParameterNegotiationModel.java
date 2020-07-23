@@ -81,12 +81,27 @@ public class ParameterNegotiationModel {
     
     @NonNull public Observable<String> getObservableParamValidation(int paramNr) {
         // TODO listen to any user initiated value changes, then validate the corresponding parameter
+        // but only after validationFeedback has been turned on
         return _Bindables.forValue(null);
     }
     
     @NonNull public Bindable<String> getBindableParamSearchArgument(int paramNr) {
         // TODO any changes should trigger an update to observableParamChoices
         return _Bindables.forValue(null);
+    }
+    
+    @NonNull public Observable<String> getObservableActionValidation() {
+        // TODO listen to any user initiated submit attempt then validate the action
+        // this also turns on validationFeedback
+        return _Bindables.forValue(null);
+    }
+    
+    /**
+     * Whether validation feedback is activated or not. Activates once user attempts to 'submit' an action.
+     */
+    @NonNull public Observable<Boolean> getObservableValidationFeedbackState() {
+        // TODO listen to any user initiated submit attempt then activate validationFeedback
+        return _Bindables.forValue(false);
     }
 
     // -- RATHER INTERNAL ... 

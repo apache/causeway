@@ -109,6 +109,12 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
     
+    public ActionInteraction submit(ParameterNegotiationModel pendingArgs) {
+        // TODO validate pendingArgs
+        // TODO only if all is sound, invoke the action
+        return this;
+    }
+    
     /**
      * @deprecated TODO we might rather make validation the responsibility of the {@link ParameterNegotiationModel}
      * and then maybe provide something like {@code invokeWith(ParameterNegotiationModel model, ... callback)} here
@@ -198,6 +204,8 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         @NonNull private Can<ManagedObject> parameterList = Can.empty();
         private Result interactionResult;
     }
+
+
 
 
 

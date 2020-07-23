@@ -75,6 +75,8 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
     SimulatedUiChoices uiParamB;
     SimulatedUiAutoComplete uiParamC;
     
+    SimulatedUiSubmit uiSubmit;
+    
     @BeforeEach
     void setUp() {
 
@@ -97,6 +99,8 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         uiParamB = new SimulatedUiChoices();
         uiParamC = new SimulatedUiAutoComplete();
         
+        uiSubmit = new SimulatedUiSubmit();
+        
         uiParamRangeA.bind(pendingArgs, NegotiationParams.RANGE_A.ordinal());
         uiParamRangeB.bind(pendingArgs, NegotiationParams.RANGE_B.ordinal());
         uiParamRangeC.bind(pendingArgs, NegotiationParams.RANGE_C.ordinal());
@@ -104,6 +108,8 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         uiParamA.bind(pendingArgs, NegotiationParams.A.ordinal());
         uiParamB.bind(pendingArgs, NegotiationParams.B.ordinal());
         uiParamC.bind(pendingArgs, NegotiationParams.C.ordinal());
+        
+        uiSubmit.bind(actionInteraction, pendingArgs);
         
         // verify that initial defaults are as expected
         
@@ -131,6 +137,8 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         assertEmpty(uiParamA.getValidationMessage());
         assertEmpty(uiParamB.getValidationMessage());
         assertEmpty(uiParamC.getValidationMessage());
+        
+        assertEmpty(uiSubmit.getValidationMessage());
         
     }
     

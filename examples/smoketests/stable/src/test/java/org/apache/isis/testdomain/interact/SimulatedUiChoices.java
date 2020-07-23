@@ -24,7 +24,7 @@ import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class SimulatedUiChoices extends HasValidation {
+public class SimulatedUiChoices extends HasParameterValidation {
 
     private final Bindable<Can<ManagedObject>> choiceBox = _Bindables.empty();
     private final Bindable<ManagedObject> selectedItem = _Bindables.empty();
