@@ -25,12 +25,12 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.RequiredArgsConstructor;
 
 //tag::meta-annotation-overridden[]
+@CssClassRedMetaAnnotation                              // <.>
 @Property()
-@CssClassMetaAnnotation                                 // <.>
 @PropertyLayout(
     cssClass = "blue"                                   // <.>
     , describedAs =
-        "@CssClassMetaAnnotation  @ParameterLayout(...)"
+        "@CssClassRedMetaAnnotation  @ParameterLayout(...)"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotationOverridden {

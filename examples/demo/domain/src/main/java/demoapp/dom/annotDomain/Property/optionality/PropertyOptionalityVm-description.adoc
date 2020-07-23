@@ -1,3 +1,5 @@
+CAUTION: TODO: can also use `@Nullable`, for parameters at least.
+
 The `optionality` semantic specifies that a property or parameter is either optional or mandatory:
 
 * for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation

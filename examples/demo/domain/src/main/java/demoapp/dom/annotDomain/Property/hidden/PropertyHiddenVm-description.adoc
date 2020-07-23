@@ -1,16 +1,16 @@
 The `hidden` hint indicates that the property should be hidden in certain contexts.
 Most commonly, this is to hide properties in tables (parented, standalone, or both).
 
-* for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the hint can be specified using either the `@Property` annotation, or a meta-annotation.
 
-* there is equivalent for a  parameter (though parameters can be hidden dynamically using a `hide...()` supporting method)
+* there is no equivalent for a  parameter (though parameters can be hidden dynamically using a `hide...()` supporting method)
 
 Because some of the `hidden` variants relate to tables, this view model has a collection of child objects with those child objects annotated to show the relevant options.
 There is also an action that returns this same set of child objects as a standalone list.
 
 [NOTE]
 ====
-It is also specify to hide properties using `@Property`.
+It is also specify to hide properties using `@PropertyLayout`.
 This is to allow the distinction between a property that is hidden as a deep domain concept, compared to a property that is hidden in some circumstances for cosmetic UI reasons.
 
 In the user interface, the effect is the same.
@@ -20,38 +20,15 @@ In the user interface, the effect is the same.
 
 The `hidden` hint can be specified explicitly using an annotation:
 
-* for properties, using `@PropertyLayout#hidden()`:
+* for properties, using `@Property#hidden()`:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutHiddenVm.java[tags=annotation]
+include::PropertyHiddenVm.java[tags=annotation]
 ----
 <.> explicitly indicate that the property should be visible in all contexts.
 
-Note that there is no equivalent for `@ParameterLayout`.
-
-== Layout File
-
-For properties (not parameters), the `hidden` hint can be specified using the `Xxx.layout.xml` file:
-
-* property definition:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutHiddenVm.java[tags=layout-file]
-----
-<.> `hidden` hint is _not_ present.
-
-* layout file snippet:
-+
-[source,xml,indent=0,tabsize=4]
-----
-<cpt:property id="propertyHiddenNowhereUsingLayout" hidden="NOWHERE"/>
-----
-
-One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
-
-TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
+Note that there is no equivalent for `@Parameter`.
 
 == Variants
 
@@ -90,14 +67,14 @@ The source for the `propertyHiddenNowhereUsingAnnotation` property is quoted abo
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutHiddenVm.java[tags=variants-everywhere]
+include::PropertyHiddenVm.java[tags=variants-everywhere]
 ----
 
 * Anywhere:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutHiddenVm.java[tags=variants-anywhere]
+include::PropertyHiddenVm.java[tags=variants-anywhere]
 ----
 
 Neither of these properties should be visible in the UI.
@@ -122,7 +99,7 @@ include::HiddenEverywhereMetaAnnotation.java[tags=class]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutHiddenVm.java[tags=meta-annotated]
+include::PropertyHiddenVm.java[tags=meta-annotated]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -130,7 +107,7 @@ include::PropertyLayoutHiddenVm.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutHiddenVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+include::PropertyHiddenVm_mixinPropertyWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -144,20 +121,20 @@ The meta-annotation can itself be overridden:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutHiddenVm.java[tags=meta-annotated-overridden]
+include::PropertyHiddenVm.java[tags=meta-annotated-overridden]
 ----
 <.> hint from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
+<.> \... is overridden by the `@Property` annotation
 
 
 * or a mixin:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutHiddenVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyHiddenVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
-<.> \... is overridden by the `@ParameterLayout` annotation
+<.> \... is overridden by the `@Parameter` annotation
 
 In both cases, even though the meta-annotation indicates that the property should be hidden everywhere, the override indicates that they should be hidden nowhere.
 Both properties should therefore be visible in the UI.

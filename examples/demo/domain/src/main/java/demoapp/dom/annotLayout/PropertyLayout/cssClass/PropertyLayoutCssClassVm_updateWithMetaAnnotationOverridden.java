@@ -19,12 +19,13 @@ public class PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyLayoutCssClassVm act(
+            @CssClassRedMetaAnnotation                             // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
-            @CssClassMetaAnnotation                             // <.>
             @ParameterLayout(
                 cssClass = "blue"                               // <.>
                 , describedAs =
-                    "@CssClassMetaAnnotation @ParameterLayout(...)"
+                    "@CssClassRedMetaAnnotation " +
+                    "@ParameterLayout(...)"
             )
             final String parameterUsingMetaAnnotationButOverridden) {
         propertyLayoutCssClassVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);

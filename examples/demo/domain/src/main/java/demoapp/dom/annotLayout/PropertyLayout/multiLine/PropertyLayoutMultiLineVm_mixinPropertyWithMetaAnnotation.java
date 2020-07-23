@@ -25,11 +25,11 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
+@MultiLine10MetaAnnotation            // <.>
 @Property()
-@MultiLineMetaAnnotation            // <.>
 @PropertyLayout(
     describedAs =
-        "@MultiLineMetaAnnotation"
+        "@MultiLine10MetaAnnotation"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotation {

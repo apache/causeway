@@ -61,19 +61,25 @@ public class PropertyLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-tag", describedAs = "Label positions")
-    public PropertyLayoutLabelPositionVm labelPosition(){
-        return new PropertyLayoutLabelPositionVm();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties, eg in tables")
     public PropertyLayoutHiddenVm hidden() {
         val vm = new PropertyLayoutHiddenVm();
+        vm.setPropertyHiddenAnywhere("hidden anywhere");
+        vm.setPropertyHiddenEverywhere("hidden everywhere");
+        vm.setPropertyHiddenNowhereUsingAnnotation("hidden nowhere using annotation");
+        vm.setPropertyUsingMetaAnnotation("using meta-annotation");
+        vm.setPropertyUsingMetaAnnotationButOverridden("using meta-annotation but overridden");
+
         vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 1", vm));
         vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 2", vm));
         vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 3", vm));
         return vm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-tag", describedAs = "Label positions")
+    public PropertyLayoutLabelPositionVm labelPosition(){
+        return new PropertyLayoutLabelPositionVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

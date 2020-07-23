@@ -86,8 +86,8 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @Property(optionality = Optionality.OPTIONAL)
     @DescribedAsMetaAnnotation                                  // <.>
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs =
             "@DescribedAsMetaAnnotation @PropertyLayout(...)"   // <.>

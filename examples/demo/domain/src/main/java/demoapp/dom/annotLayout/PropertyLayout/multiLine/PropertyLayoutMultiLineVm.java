@@ -94,10 +94,10 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
 //end::layout-file[]
 
 //tag::meta-annotated[]
+    @MultiLine10MetaAnnotation                        // <.>
     @Property(optionality = Optionality.OPTIONAL)
-    @MultiLineMetaAnnotation                        // <.>
     @PropertyLayout(
-        describedAs = "@MultiLineMetaAnnotation"
+        describedAs = "@MultiLine10MetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
@@ -106,12 +106,13 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
+    @MultiLine10MetaAnnotation                            // <.>
     @Property(optionality = Optionality.OPTIONAL)
-    @MultiLineMetaAnnotation                            // <.>
     @PropertyLayout(
         multiLine = 3                                   // <.>
         , describedAs =
-            "@MultiLineMetaAnnotation @PropertyLayout(...)"
+            "@MultiLine10MetaAnnotation " +
+            "@PropertyLayout(multiLine = 3)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)

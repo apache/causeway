@@ -133,15 +133,15 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @Property(optionality = Optionality.OPTIONAL)
     @HiddenEverywhereMetaAnnotation                     // <.>
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         hidden = Where.NOWHERE                          // <.>
         , describedAs =
             "@HiddenEverywhereMetaAnnotation " +
             "@PropertyLayout(hidden = Where.NOWHERE)"
     )
-    @MemberOrder(name = "meta-annotated", sequence = "2")
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

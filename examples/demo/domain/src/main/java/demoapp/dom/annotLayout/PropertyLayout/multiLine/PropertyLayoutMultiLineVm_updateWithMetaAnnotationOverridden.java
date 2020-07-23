@@ -19,12 +19,13 @@ public class PropertyLayoutMultiLineVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyLayoutMultiLineVm act(
+            @MultiLine10MetaAnnotation                            // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
-            @MultiLineMetaAnnotation                            // <.>
             @ParameterLayout(
                 multiLine = 3                                   // <.>
                 , describedAs =
-                    "@MultiLineMetaAnnotation @ParameterLayout(...)"
+                    "@MultiLine10MetaAnnotation " +
+                    "@ParameterLayout(multiLine = 3)"
             )
             final String parameterUsingMetaAnnotationButOverridden) {
         propertyLayoutMultiLineVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);

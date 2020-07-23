@@ -25,12 +25,13 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.RequiredArgsConstructor;
 
 //tag::meta-annotation-overridden[]
+@MultiLine10MetaAnnotation                                // <.>
 @Property()
-@MultiLineMetaAnnotation                                // <.>
 @PropertyLayout(
     multiLine = 3                                       // <.>
     , describedAs =
-        "@MultiLineMetaAnnotation @PropertyLayout(...)"
+        "@MultiLine10MetaAnnotation " +
+        "@PropertyLayout(multiLine = 3)"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotationOverridden {

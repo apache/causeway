@@ -69,7 +69,7 @@ The CSS class hint can also be specified using a custom meta-annotation:
 +
 [source,java]
 ----
-include::CssClassMetaAnnotation.java[tags=class]
+include::CssClassRedMetaAnnotation.java[tags=class]
 ----
 <.> annotated for a property ...
 <.> \... and for a parameter.

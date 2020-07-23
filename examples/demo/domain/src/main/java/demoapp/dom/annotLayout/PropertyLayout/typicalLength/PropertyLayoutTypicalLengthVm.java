@@ -78,8 +78,8 @@ public class PropertyLayoutTypicalLengthVm implements HasAsciiDocDescription {
 //end::layout-file[]
 
 //tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
     @TypicalLengthMetaAnnotation                            // <.>
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs = "@TypicalLengthMetaAnnotation"
     )
@@ -90,8 +90,8 @@ public class PropertyLayoutTypicalLengthVm implements HasAsciiDocDescription {
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @Property(optionality = Optionality.OPTIONAL)
     @TypicalLengthMetaAnnotation                            // <.>
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         typicalLength = 5                                   // <.>
         , describedAs =

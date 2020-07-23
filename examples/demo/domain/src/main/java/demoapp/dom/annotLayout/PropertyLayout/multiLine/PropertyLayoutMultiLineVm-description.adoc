@@ -69,7 +69,7 @@ The multiline hint can also be specified using a custom meta-annotation:
 +
 [source,java]
 ----
-include::MultiLineMetaAnnotation.java[tags=class]
+include::MultiLine10MetaAnnotation.java[tags=class]
 ----
 <.> annotated for a property ...
 <.> \... and for a parameter.

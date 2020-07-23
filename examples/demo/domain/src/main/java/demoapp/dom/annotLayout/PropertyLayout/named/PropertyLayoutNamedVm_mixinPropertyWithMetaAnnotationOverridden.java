@@ -25,8 +25,8 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.RequiredArgsConstructor;
 
 //tag::meta-annotation-overridden[]
-@Property()
 @NamedMetaAnnotation                                                // <.>
+@Property()
 @PropertyLayout(
     named = "@PropertyLayout overrides meta-annotation for mixin"   // <.>
     , describedAs =

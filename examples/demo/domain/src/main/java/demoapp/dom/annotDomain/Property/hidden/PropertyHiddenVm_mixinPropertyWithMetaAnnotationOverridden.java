@@ -16,37 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotLayout.PropertyLayout.renderDay;
-
-import org.joda.time.LocalDate;
+package demoapp.dom.annotDomain.Property.hidden;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDay;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::meta-annotation-overridden[]
-// deliberately incorrectly annotated
-@RenderDayMetaAnnotationStartDateInclusive          // <.>
-@Property()
+@HiddenEverywhereMetaAnnotation             // <.>
+@Property(
+    hidden = Where.NOWHERE                  // <.>
+)
 @PropertyLayout(
-    renderDay = RenderDay.AS_DAY_BEFORE             // <.>
-    , describedAs =
-        "@RenderDayMetaAnnotationStartDateInclusive" +
-        " @PropertyLayout(renderDay = AS_DAY_BEFORE"
+    describedAs =
+        "@HiddenEverywhereMetaAnnotation " +
+        "@Property(hidden = NOWHERE)"
 )
 @RequiredArgsConstructor
-public class PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotationOverridden {
+public class PropertyHiddenVm_mixinPropertyWithMetaAnnotationOverridden {
     // ...
 //end::meta-annotation-overridden[]
 
-    private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
+    private final PropertyHiddenVm propertyHiddenVm;
 
     @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
-    public LocalDate prop() {
-        return propertyLayoutRenderDayVm.getEndDate();
+    public String prop() {
+        return propertyHiddenVm.getPropertyHiddenNowhereUsingAnnotation();
     }
 
 //tag::meta-annotation-overridden[]

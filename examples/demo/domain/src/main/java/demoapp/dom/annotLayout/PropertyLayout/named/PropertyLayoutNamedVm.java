@@ -92,8 +92,8 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
+    @NamedMetaAnnotation                            // <.>
     @Property(optionality = Optionality.OPTIONAL)
-    @NamedMetaAnnotation                                // <.>
     @PropertyLayout(
         named = "@PropertyLayout name " +
                 "overrides meta-annotation"         // <.>

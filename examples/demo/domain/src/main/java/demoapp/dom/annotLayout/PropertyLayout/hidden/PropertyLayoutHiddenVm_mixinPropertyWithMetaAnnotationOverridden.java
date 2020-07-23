@@ -26,10 +26,10 @@ import org.apache.isis.applib.annotation.Where;
 import lombok.RequiredArgsConstructor;
 
 //tag::meta-annotation-overridden[]
+@HiddenEverywhereMetaAnnotation             // <.>
 @Property()
-@HiddenEverywhereMetaAnnotation                 // <.>
 @PropertyLayout(
-    hidden = Where.NOWHERE                   // <.>
+    hidden = Where.NOWHERE                  // <.>
     , describedAs =
         "@HiddenEverywhereMetaAnnotation " +
         "@PropertyLayout(hidden = NOWHERE)"

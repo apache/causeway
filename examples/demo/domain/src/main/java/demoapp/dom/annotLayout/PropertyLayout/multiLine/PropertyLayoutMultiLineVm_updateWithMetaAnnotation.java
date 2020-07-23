@@ -38,9 +38,9 @@ public class PropertyLayoutMultiLineVm_updateWithMetaAnnotation {
 //tag::meta-annotation[]
     public PropertyLayoutMultiLineVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @MultiLineMetaAnnotation                            // <.>
+            @MultiLine10MetaAnnotation                            // <.>
             @ParameterLayout(
-                describedAs = "@MultiLineMetaAnnotation"
+                describedAs = "@MultiLine10MetaAnnotation"
             )
             final String parameterUsingMetaAnnotation) {
         propertyLayoutMultiLineVm.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);

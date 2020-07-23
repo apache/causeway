@@ -27,12 +27,13 @@ import org.apache.isis.applib.value.Blob;
 import lombok.RequiredArgsConstructor;
 
 //tag::meta-annotation-overridden[]
-@Property()
 @RepaintingRepaintMetaAnnotation                                    // <.>
+@Property()
 @PropertyLayout(
     repainting = Repainting.NO_REPAINT                              // <.>
     , describedAs =
-        "@RepaintingNoRepaintMetaAnnotation @PropertyLayout(...)"
+        "@RepaintingRepaintMetaAnnotation " +
+        "@PropertyLayout(repainting = NO_REPAINT)"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRepaintingVm_mixinPropertyWithMetaAnnotationOverridden {

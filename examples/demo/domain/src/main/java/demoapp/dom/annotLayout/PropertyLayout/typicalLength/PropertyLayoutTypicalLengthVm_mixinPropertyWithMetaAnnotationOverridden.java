@@ -25,8 +25,8 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.RequiredArgsConstructor;
 
 //tag::meta-annotation-overridden[]
-@Property()
 @TypicalLengthMetaAnnotation                                // <.>
+@Property()
 @PropertyLayout(
     typicalLength = 3                                       // <.>
     , describedAs =

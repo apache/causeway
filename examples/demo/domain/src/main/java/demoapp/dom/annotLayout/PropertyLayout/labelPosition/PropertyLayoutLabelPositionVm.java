@@ -91,8 +91,8 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @Property(optionality = Optionality.OPTIONAL)
     @LabelPositionTopMetaAnnotation                         // <.>
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         labelPosition = LabelPosition.LEFT                  // <.>
         , describedAs =

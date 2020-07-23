@@ -22,8 +22,8 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
 
 //tag::meta-annotation-overridden[]
     public PropertyLayoutRenderDayVm act(
-            @Parameter(optionality = Optionality.OPTIONAL)
             @RenderDayMetaAnnotationStartDateInclusive          // <.>
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 renderDay = RenderDay.AS_DAY_BEFORE             // <.>
                 , describedAs =

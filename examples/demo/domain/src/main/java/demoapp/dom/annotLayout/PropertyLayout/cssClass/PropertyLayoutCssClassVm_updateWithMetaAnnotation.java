@@ -20,9 +20,9 @@ public class PropertyLayoutCssClassVm_updateWithMetaAnnotation {
 //tag::meta-annotation[]
     public PropertyLayoutCssClassVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @CssClassMetaAnnotation                            // <.>
+            @CssClassRedMetaAnnotation                            // <.>
             @ParameterLayout(
-                describedAs = "@CssClassMetaAnnotation"
+                describedAs = "@CssClassRedMetaAnnotation"
             )
             final String parameterUsingMetaAnnotation) {
         propertyLayoutCssClassVm.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);

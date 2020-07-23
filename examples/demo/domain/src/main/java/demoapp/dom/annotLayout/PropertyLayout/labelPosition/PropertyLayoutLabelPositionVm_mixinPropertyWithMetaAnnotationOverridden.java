@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.RequiredArgsConstructor;
 
 //tag::meta-annotation-overridden[]
-@Property()
 @LabelPositionTopMetaAnnotation                                 // <.>
+@Property()
 @PropertyLayout(
     labelPosition = LabelPosition.LEFT                          // <.>
     , describedAs =

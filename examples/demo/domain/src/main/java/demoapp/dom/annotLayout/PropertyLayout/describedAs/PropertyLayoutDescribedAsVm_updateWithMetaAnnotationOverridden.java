@@ -19,8 +19,8 @@ public class PropertyLayoutDescribedAsVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyLayoutDescribedAsVm act(
-            @Parameter(optionality = Optionality.OPTIONAL)
             @DescribedAsMetaAnnotation                                      // <.>
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 describedAs =                                               // <.>
                     "@DescribedAsMetaAnnotation @ParameterLayout(...)"

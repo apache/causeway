@@ -120,8 +120,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 //end::layout-file[]
 
 //tag::meta-annotation[]
-    @Property(optionality = Optionality.OPTIONAL)
     @RenderDayMetaAnnotationEndDateExclusive        // <.>
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs =
             "@RenderDayMetaAnnotationEndDateExclusive"
@@ -134,8 +134,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 //end::meta-annotation[]
 
 //tag::meta-annotation-overridden[]
-    @Property(optionality = Optionality.OPTIONAL)
     @RenderDayMetaAnnotationStartDateInclusive      // <.>
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         renderDay = RenderDay.AS_DAY_BEFORE
         , describedAs =

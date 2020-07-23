@@ -26,10 +26,10 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@CssClassMetaAnnotation             // <.>
+@CssClassRedMetaAnnotation             // <.>
 @PropertyLayout(
     describedAs =
-        "@CssClassMetaAnnotation"
+        "@CssClassRedMetaAnnotation"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotation {

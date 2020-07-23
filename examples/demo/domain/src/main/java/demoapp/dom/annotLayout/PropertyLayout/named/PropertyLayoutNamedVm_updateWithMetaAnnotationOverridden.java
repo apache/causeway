@@ -19,8 +19,8 @@ public class PropertyLayoutNamedVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyLayoutNamedVm act(
-            @Parameter(optionality = Optionality.OPTIONAL)
             @NamedMetaAnnotation                                        // <.>
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 named = "@ParameterLayout overrides meta-annotation"    // <.>
                 , describedAs =

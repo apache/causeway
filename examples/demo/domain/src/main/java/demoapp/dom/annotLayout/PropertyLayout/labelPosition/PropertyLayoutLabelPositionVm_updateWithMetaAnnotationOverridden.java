@@ -20,8 +20,8 @@ public class PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyLayoutLabelPositionVm act(
-            @Parameter(optionality = Optionality.OPTIONAL)
             @LabelPositionTopMetaAnnotation                             // <.>
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 labelPosition = LabelPosition.LEFT                      // <.>
                 , describedAs =

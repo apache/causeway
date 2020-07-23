@@ -35,6 +35,8 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.annotDomain.Property.editing.PropertyEditingVm;
 import demoapp.dom.annotDomain.Property.fileAccept.PropertyFileAcceptVm;
+import demoapp.dom.annotDomain.Property.hidden.PropertyHiddenVm;
+import demoapp.dom.annotDomain.Property.hidden.child.PropertyHiddenChildVm;
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
 import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
 import demoapp.dom.annotDomain.Property.optionality.PropertyOptionalityVm;
@@ -68,6 +70,23 @@ public class PropertyMenu {
 
         return vm;
     }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties, eg in tables")
+    public PropertyHiddenVm hidden() {
+        val vm = new PropertyHiddenVm();
+        vm.setPropertyHiddenAnywhere("hidden anywhere");
+        vm.setPropertyHiddenEverywhere("hidden everywhere");
+        vm.setPropertyHiddenNowhereUsingAnnotation("hidden nowhere using annotation");
+        vm.setPropertyUsingMetaAnnotation("using meta-annotation");
+        vm.setPropertyUsingMetaAnnotationButOverridden("using meta-annotation but overridden");
+
+        vm.getChildren().add(new PropertyHiddenChildVm("child 1", vm));
+        vm.getChildren().add(new PropertyHiddenChildVm("child 2", vm));
+        vm.getChildren().add(new PropertyHiddenChildVm("child 3", vm));
+        return vm;
+    }
+
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")

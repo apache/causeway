@@ -19,8 +19,8 @@ public class PropertyLayoutTypicalLengthVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyLayoutTypicalLengthVm act(
-            @Parameter(optionality = Optionality.OPTIONAL)
             @TypicalLengthMetaAnnotation                            // <.>
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 typicalLength = 3                                   // <.>
                 , describedAs =

@@ -26,8 +26,8 @@ import org.apache.isis.applib.value.Blob;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@Property()
 @RepaintingNoRepaintMetaAnnotation            // <.>
+@Property()
 @PropertyLayout(
     describedAs =
         "@RepaintingNoRepaintMetaAnnotation"

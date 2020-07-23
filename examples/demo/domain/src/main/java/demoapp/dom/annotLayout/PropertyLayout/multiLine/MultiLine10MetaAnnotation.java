@@ -1,4 +1,4 @@
-package demoapp.dom.annotLayout.PropertyLayout.cssClass;
+package demoapp.dom.annotLayout.PropertyLayout.multiLine;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -10,8 +10,8 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
 //tag::class[]
-@PropertyLayout(cssClass = "red")                   // <.>
-@ParameterLayout(cssClass = "red")                  // <.>
+@PropertyLayout(multiLine = 5)                      // <.>
+@ParameterLayout(multiLine = 5)                     // <.>
 @Inherited
 @Target({
         ElementType.METHOD, ElementType.FIELD,      // <.>
@@ -19,7 +19,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
         ElementType.TYPE                            // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CssClassMetaAnnotation {
+public @interface MultiLine10MetaAnnotation {
 
 }
 //end::class[]
