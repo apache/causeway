@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.mustSatisfy;
+package demoapp.dom.annotDomain.Property.optionality;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
@@ -26,29 +26,30 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
+
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "customerAgePropertyUsingMetaAnnotation", associateWithSequence = "1"
+    associateWith = "propertyUsingMetaAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
-public class PropertyMustSatisfyVm_updateWithMetaAnnotation {
+public class PropertyOptionalityVm_updateWithMetaAnnotation {
 
-    private final PropertyMustSatisfyVm propertyMustSatisfyVm;
+    private final PropertyOptionalityVm propertyOptionalityVm;
 
 //tag::meta-annotation[]
-    public PropertyMustSatisfyVm act(
-            @MustSatisfyOfWorkingAgeMetaAnnotation                            // <.>
+    public PropertyOptionalityVm act(
+            @OptionalityOptionalMetaAnnotation                            // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation"
+                describedAs = "@OptionalityOptionalMetaAnnotation"
             )
-            final Integer customerAgeParameterUsingMetaAnnotation) {
-        propertyMustSatisfyVm.setCustomerAgePropertyUsingMetaAnnotation(customerAgeParameterUsingMetaAnnotation);
-        return propertyMustSatisfyVm;
+            final String parameterUsingMetaAnnotation) {
+        propertyOptionalityVm.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
+        return propertyOptionalityVm;
     }
 //end::meta-annotation[]
-    public Integer default0Act() {
-        return propertyMustSatisfyVm.getCustomerAgePropertyUsingMetaAnnotation();
+    public String default0Act() {
+        return propertyOptionalityVm.getPropertyUsingMetaAnnotation();
     }
 
 }

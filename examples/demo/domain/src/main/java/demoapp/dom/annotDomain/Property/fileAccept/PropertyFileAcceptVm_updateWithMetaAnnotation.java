@@ -38,8 +38,8 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotation {
 
 //tag::meta-annotation[]
     public PropertyFileAcceptVm act(
-            @Parameter(optionality = Optionality.OPTIONAL)
             @FileAcceptPdfMetaAnnotation                            // <.>
+            @Parameter()
             @ParameterLayout(
                 describedAs = "@FileAcceptPdfMetaAnnotation"
             )

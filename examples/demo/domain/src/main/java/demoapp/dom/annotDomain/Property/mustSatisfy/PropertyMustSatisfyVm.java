@@ -68,8 +68,8 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
 //end::annotation[]
 
 //tag::meta-annotated[]
-    @Property()
     @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
+    @Property()
     @PropertyLayout(
         describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation"
     )

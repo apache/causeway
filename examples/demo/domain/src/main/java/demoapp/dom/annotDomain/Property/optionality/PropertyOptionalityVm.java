@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.fileAccept;
+package demoapp.dom.annotDomain.Property.optionality;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,9 +31,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,69 +43,73 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutFileAcceptVm",
+        objectType = "demo.PropertyLayoutOptionalityVm",
         editing = Editing.ENABLED
 )
-public class PropertyFileAcceptVm implements HasAsciiDocDescription {
+public class PropertyOptionalityVm implements HasAsciiDocDescription {
+    // ...
+//end::class[]
 
     public String title() {
-        return "PropertyLayout#fileAccept";
+        return "PropertyLayout#optionality";
     }
 
 //tag::annotation[]
     @Property(
-        fileAccept = ".pdf"                                 // <.>
+        optionality = Optionality.OPTIONAL              // <.>
     )
     @PropertyLayout(
         describedAs =
-            "@Property(fileAccept = \".pdf\")"
+            "@Property(optionality = OPTIONAL)"
     )
     @MemberOrder(name = "annotation", sequence = "1")
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     @Getter @Setter
-    private Blob pdfPropertyUsingAnnotation;
+    private String propertyUsingAnnotation;
 //end::annotation[]
 
-//tag::annotation-clob[]
+//tag::annotation-mandatory[]
     @Property(
-        fileAccept = ".txt"                     // <.>
+        optionality = Optionality.MANDATORY             // <.>
     )
     @PropertyLayout(
         describedAs =
-            "@Property(fileAccept = \".txt\")"
+            "@Property(optionality = MANDATORY)"
     )
-    @MemberOrder(name = "annotation", sequence = "1")
+    @MemberOrder(name = "annotation", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
-    private Clob txtPropertyUsingAnnotation;
-//end::annotation-clob[]
+    private String mandatoryPropertyUsingAnnotation;
+//end::annotation-mandatory[]
 
 //tag::meta-annotated[]
+    @OptionalityOptionalMetaAnnotation                  // <.>
     @Property()
-    @FileAcceptPdfMetaAnnotation                            // <.>
     @PropertyLayout(
-        describedAs = "@FileAcceptPdfMetaAnnotation"
+        describedAs = "@OptionalityOptionalMetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     @Getter @Setter
-    private Blob pdfPropertyUsingMetaAnnotation;
+    private String propertyUsingMetaAnnotation;
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @FileAcceptPdfMetaAnnotation                            // <.>
+    @OptionalityOptionalMetaAnnotation                  // <.>
     @Property(
-        fileAccept = ".docx"                                // <.>
+        optionality = Optionality.MANDATORY             // <.>
     )
     @PropertyLayout(
         describedAs =
-            "@FileAcceptPdfMetaAnnotation @PropertyLayout(...)"
+            "@OptionalityOptionalMetaAnnotation " +
+            "@PropertyLayout(optionality = MANDATORY)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private Blob docxPropertyUsingMetaAnnotationButOverridden;
+    private String propertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
 
+//tag::class[]
 }
 //end::class[]

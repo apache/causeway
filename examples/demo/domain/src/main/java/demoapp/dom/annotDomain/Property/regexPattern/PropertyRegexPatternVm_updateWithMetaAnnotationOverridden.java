@@ -26,7 +26,6 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
                 regexPattern = "^[^@+]@[^\\.+]\\.org$"                      // <.>
                 , regexPatternReplacement = "Must be .org email address"
                 , regexPatternFlags = Pattern.COMMENTS
-                , optionality = Optionality.OPTIONAL
             )
             @ParameterLayout(
                 describedAs =

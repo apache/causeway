@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.mustSatisfy;
+package demoapp.dom.annotDomain.Property.optionality;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
@@ -28,27 +28,29 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "customerAgePropertyUsingMetaAnnotation", associateWithSequence = "1"
+    associateWith = "mandatoryPropertyUsingAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
-public class PropertyMustSatisfyVm_updateWithMetaAnnotation {
+public class PropertyOptionalityVm_updateMandatoryWithParameterLayout {
 
-    private final PropertyMustSatisfyVm propertyMustSatisfyVm;
+    private final PropertyOptionalityVm propertyOptionalityVm;
 
-//tag::meta-annotation[]
-    public PropertyMustSatisfyVm act(
-            @MustSatisfyOfWorkingAgeMetaAnnotation                            // <.>
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(
-                describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation"
+//tag::annotation[]
+    public PropertyOptionalityVm act(
+            @Parameter(
+                optionality = Optionality.MANDATORY             // <.>
             )
-            final Integer customerAgeParameterUsingMetaAnnotation) {
-        propertyMustSatisfyVm.setCustomerAgePropertyUsingMetaAnnotation(customerAgeParameterUsingMetaAnnotation);
-        return propertyMustSatisfyVm;
+            @ParameterLayout(
+                describedAs =
+                    "@Parameter(optionality = MANDATORY)"
+            )
+            final String mandatoryParameterUsingAnnotation) {
+        propertyOptionalityVm.setMandatoryPropertyUsingAnnotation(mandatoryParameterUsingAnnotation);
+        return propertyOptionalityVm;
     }
-//end::meta-annotation[]
-    public Integer default0Act() {
-        return propertyMustSatisfyVm.getCustomerAgePropertyUsingMetaAnnotation();
+//end::annotation[]
+    public String default0Act() {
+        return propertyOptionalityVm.getPropertyUsingAnnotation();
     }
 
 }

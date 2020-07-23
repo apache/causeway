@@ -37,8 +37,8 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotation {
 
 //tag::meta-annotation[]
     public PropertyRegexPatternVm act(
-            @Parameter(optionality = Optionality.OPTIONAL)
             @RegexPatternEmailComMetaAnnotation                            // <.>
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 describedAs = "@RegexPatternEmailComMetaAnnotation"
             )

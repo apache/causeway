@@ -1,4 +1,4 @@
-The "editing" semantic specifies that a property's value can be changed through the UI:
+The `editing` semantic specifies that a property's value can be changed through the UI:
 
 * for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
 
@@ -22,7 +22,7 @@ The property-level semantic can, in turn, overrides the configured or class-leve
 
 == Annotated
 
-The editing semantic can be specified explicitly using an annotation:
+The `editing` semantic can be specified explicitly using an annotation:
 
 * for properties, using `@Property#editing()`:
 +
@@ -36,7 +36,7 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 == Meta-annotated
 
-The editing semantic can also be specified using a custom meta-annotation:
+The `editing` semantic can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
@@ -44,7 +44,7 @@ The editing semantic can also be specified using a custom meta-annotation:
 ----
 include::EditingEnabledMetaAnnotation.java[tags=class]
 ----
-<.> annotated for property ...
+<.> annotated for a property
 <.> annotation can be applied to a property (either its getter or the field directly)
 
 * and can be applied to a property:

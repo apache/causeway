@@ -37,6 +37,7 @@ import demoapp.dom.annotDomain.Property.editing.PropertyEditingVm;
 import demoapp.dom.annotDomain.Property.fileAccept.PropertyFileAcceptVm;
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
 import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
+import demoapp.dom.annotDomain.Property.optionality.PropertyOptionalityVm;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
 import demoapp.dom.types.Samples;
 
@@ -79,12 +80,23 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-infinity", describedAs = "Regular expressions, such as email")
+    @ActionLayout(cssClassFa="fa-star-half-alt", describedAs = "Regular expressions, such as email")
     public PropertyMustSatisfyVm mustSatisfy(){
         val vm = new PropertyMustSatisfyVm();
         vm.setCustomerAgePropertyUsingAnnotation(18);
         vm.setCustomerAgePropertyUsingMetaAnnotation(65);
         vm.setCustomerAgePropertyUsingMetaAnnotationButOverridden(66);
+        return vm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-infinity", describedAs = "Regular expressions, such as email")
+    public PropertyOptionalityVm optionality(){
+        val vm = new PropertyOptionalityVm();
+        vm.setPropertyUsingAnnotation(null);
+        vm.setMandatoryPropertyUsingAnnotation("mandatory");
+        vm.setPropertyUsingMetaAnnotation(null);
+        vm.setPropertyUsingMetaAnnotationButOverridden("mandatory");
         return vm;
     }
 

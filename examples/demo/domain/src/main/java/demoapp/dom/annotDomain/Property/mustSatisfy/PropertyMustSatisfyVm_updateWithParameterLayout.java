@@ -22,7 +22,6 @@ public class PropertyMustSatisfyVm_updateWithParameterLayout {
     public PropertyMustSatisfyVm act(
             @Parameter(
                 mustSatisfy = OfWorkingAgeSpecification.class   // <.>
-                , optionality = Optionality.OPTIONAL
             )
             @ParameterLayout(
                 describedAs =

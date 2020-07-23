@@ -1,0 +1,95 @@
+The `optionality` semantic specifies that a property or parameter is either optional or mandatory:
+
+* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
+
+* for parameters, the semantic can be specified using either the `@Parameter` annotation, or a meta-annotation
+
+Without an annotation, the framework assumes that the property or parameter is mandatory, ie required.
+
+[IMPORTANT]
+====
+In addition to specifying optionality at the framework level, it's also important to specify optionality for properties at the persistence layer.
+
+* in the case of entities persisted using JDO/DataNucleus, this can be done using `@Column(allowsNull=...)`.
+* in the case of view models serialized using JAXB, this can be done using `@XmlElement(required=...)`.
+
+Also note that JDO and JAXB assume a property is not required by default, whereas Apache Isis assumes that properties are required by default.
+====
+
+
+== Annotated
+
+The `optionality` semantic can be specified explicitly using an annotation:
+
+* for properties, using `@Property#optionality()`:
++
+[source,java,indent=0]
+----
+include::PropertyOptionalityVm.java[tags=annotation]
+----
+<.> explicitly specifies that the property is optional
+
+* for parameters, using `@Parameter#optionality()`:
++
+[source,java,indent=0]
+----
+include::PropertyOptionalityVm_updateWithParameterLayout.java[tags=annotation]
+----
+<.> explicitly specifies that the parameter is optional
+
+The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
+
+== Meta-annotated
+
+The `optionality` semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::OptionalityOptionalMetaAnnotation.java[tags=class]
+----
+<.> annotated for a property ...
+<.> \... and for a parameter.
+<.> annotation can be applied to a property (either its getter or the field directly)
+<.> annotation can be applied to a parameter
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyOptionalityVm.java[tags=meta-annotated]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or can be applied to a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyOptionalityVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+----
+<.> semantic is inherited from the meta-annotation
+
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyOptionalityVm.java[tags=meta-annotated-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Property` annotation
+
+* or a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyOptionalityVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Parameter` annotation
+

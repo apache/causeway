@@ -21,7 +21,6 @@ public class PropertyMaxLengthVm_updateWithParameterLayout {
     public PropertyMaxLengthVm act(
             @Parameter(
                 maxLength = 10                                 // <.>
-                , optionality = Optionality.OPTIONAL
             )
             @ParameterLayout(
                 describedAs =

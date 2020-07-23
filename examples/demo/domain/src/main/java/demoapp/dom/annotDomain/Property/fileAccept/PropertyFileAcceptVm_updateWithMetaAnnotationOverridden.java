@@ -20,11 +20,10 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
 
 //tag::meta-annotation-overridden[]
     public PropertyFileAcceptVm act(
+            @FileAcceptPdfMetaAnnotation                    // <.>
             @Parameter(
                 fileAccept = ".docx"                        // <.>
-                , optionality = Optionality.OPTIONAL
             )
-            @FileAcceptPdfMetaAnnotation                    // <.>
             @ParameterLayout(
                 describedAs =
                     "@FileAcceptPdfMetaAnnotation " +

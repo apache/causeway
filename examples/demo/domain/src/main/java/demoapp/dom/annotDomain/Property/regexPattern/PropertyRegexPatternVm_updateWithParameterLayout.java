@@ -21,7 +21,6 @@ public class PropertyRegexPatternVm_updateWithParameterLayout {
     public PropertyRegexPatternVm act(
             @Parameter(
                 regexPattern = "^[^@+]@[^\\.+]\\.com$"                  // <.>
-                , optionality = Optionality.OPTIONAL
             )
             @ParameterLayout(
                 describedAs =

@@ -71,8 +71,8 @@ public class PropertyRegexPatternVm implements HasAsciiDocDescription {
 //end::annotation[]
 
 //tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
     @RegexPatternEmailComMetaAnnotation                             // <.>
+    @Property()
     @PropertyLayout(
         describedAs = "@RegexPatternEmailComMetaAnnotation"
     )

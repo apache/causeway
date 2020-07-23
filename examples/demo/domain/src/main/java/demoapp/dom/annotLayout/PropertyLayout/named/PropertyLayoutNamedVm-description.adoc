@@ -69,8 +69,8 @@ The name can also be specified using a custom meta-annotation:
 ----
 include::NamedMetaAnnotation.java[tags=class]
 ----
-<.> annotated for property ...
-<.> \... and also for parameter.
+<.> annotated for a property ...
+<.> \... and for a parameter.
 <.> annotation can be applied to a property (either its getter or if using link:https://projectlombok.org/[Lombok] the field directly)
 <.> annotation can be applied to a parameter
 <.> annotation can be applied to a type (ie, meta-meta annotations recursively)

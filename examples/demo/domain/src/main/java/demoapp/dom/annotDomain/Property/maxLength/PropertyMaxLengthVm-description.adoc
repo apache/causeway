@@ -1,4 +1,4 @@
-The "maxLength" semantic specifies the maximum length of the value that can be held by the property.
+The `maxLength` semantic specifies the maximum length of the value that can be held by the property.
 This corresponds to the number of characters that can be entered through the text field:
 
 * for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
@@ -21,7 +21,7 @@ For domain entities this semantic should be accompanied with `@Column(maxLength=
 
 == Annotated
 
-The maxLength semantic can be specified explicitly using an annotation:
+The `maxLength` semantic can be specified explicitly using an annotation:
 
 * for properties, using `@Property#maxLength()`:
 +
@@ -43,7 +43,7 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 == Meta-annotated
 
-The maxLength semantic can also be specified using a custom meta-annotation:
+The `maxLength` semantic can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
@@ -51,8 +51,8 @@ The maxLength semantic can also be specified using a custom meta-annotation:
 ----
 include::MaxLength10MetaAnnotation.java[tags=class]
 ----
-<.> annotated for property ...
-<.> \... and also for parameter.
+<.> annotated for a property ...
+<.> \... and for a parameter.
 <.> annotation can be applied to a property (either its getter or the field directly)
 <.> annotation can be applied to a parameter
 
@@ -94,6 +94,3 @@ include::PropertyMaxLengthVm_updateWithMetaAnnotationOverridden.java[tags=meta-a
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Parameter` annotation
-
-
-

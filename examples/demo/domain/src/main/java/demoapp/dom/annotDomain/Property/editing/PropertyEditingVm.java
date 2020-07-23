@@ -44,7 +44,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         objectType = "demo.PropertyLayoutEditingVm",
-        editing = Editing.DISABLED                              // <.>
+        editing = Editing.DISABLED              // <.>
 )
 public class PropertyEditingVm implements HasAsciiDocDescription {
     // ...
@@ -56,35 +56,35 @@ public class PropertyEditingVm implements HasAsciiDocDescription {
 
 //tag::annotation[]
     @Property(
-        editing = Editing.ENABLED                               // <.>
+        editing = Editing.ENABLED               // <.>
     )
     @PropertyLayout(
         describedAs =
-            "@Property(editing = DISABLED)"
+            "@Property(editing = ENABLED)"
     )
     @MemberOrder(name = "annotation", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingAnnotation;
 //end::annotation[]
 
 //tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @EditingEnabledMetaAnnotation                            // <.>
+    @Property()
+    @EditingEnabledMetaAnnotation               // <.>
     @PropertyLayout(
         describedAs = "@EditingEnabledMetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
+    @EditingEnabledMetaAnnotation               // <.>
     @Property(
-        editing = Editing.DISABLED                          // <.>
+        editing = Editing.DISABLED              // <.>
     )
-    @EditingEnabledMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs =
             "@EditingEnabledMetaAnnotation " +

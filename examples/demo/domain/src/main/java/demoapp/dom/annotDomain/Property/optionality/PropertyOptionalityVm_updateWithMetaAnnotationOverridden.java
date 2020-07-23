@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.Property.maxLength;
+package demoapp.dom.annotDomain.Property.optionality;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
@@ -13,28 +13,28 @@ import lombok.RequiredArgsConstructor;
     associateWith = "propertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
-public class PropertyMaxLengthVm_updateWithMetaAnnotationOverridden {
+public class PropertyOptionalityVm_updateWithMetaAnnotationOverridden {
 
-    private final PropertyMaxLengthVm propertyMaxLengthVm;
+    private final PropertyOptionalityVm propertyOptionalityVm;
 
 //tag::meta-annotation-overridden[]
-    public PropertyMaxLengthVm act(
-            @MaxLength10MetaAnnotation                          // <.>
+    public PropertyOptionalityVm act(
+            @OptionalityOptionalMetaAnnotation                  // <.>
             @Parameter(
-                maxLength = 3                                   // <.>
+                optionality = Optionality.MANDATORY             // <.>
             )
             @ParameterLayout(
                 describedAs =
-                    "@MaxLength10MetaAnnotation " +
-                    "@PropertyLayout(maxLength = 3)"
+                    "@OptionalityOptionalMetaAnnotation " +
+                    "@ParameterLayout(optionality = MANDATORY)"
             )
             final String parameterUsingMetaAnnotationButOverridden) {
-        propertyMaxLengthVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
-        return propertyMaxLengthVm;
+        propertyOptionalityVm.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
+        return propertyOptionalityVm;
     }
 //end::meta-annotation-overridden[]
     public String default0Act() {
-        return propertyMaxLengthVm.getPropertyUsingMetaAnnotationButOverridden();
+        return propertyOptionalityVm.getPropertyUsingMetaAnnotationButOverridden();
     }
 
 }

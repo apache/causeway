@@ -67,13 +67,13 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
 //end::annotation[]
 
 //tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
     @MaxLength10MetaAnnotation                            // <.>
+    @Property()
     @PropertyLayout(
         describedAs = "@MaxLength10MetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
 //end::meta-annotated[]
@@ -82,14 +82,14 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
     @MaxLength10MetaAnnotation                          // <.>
     @Property(
         maxLength = 3                                   // <.>
-        , optionality = Optionality.OPTIONAL)
+    )
     @PropertyLayout(
         describedAs =
             "@MaxLength10MetaAnnotation " +
             "@PropertyLayout(maxLength = 3)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]

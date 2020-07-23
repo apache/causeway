@@ -1,4 +1,4 @@
-The "mustSatisfy" semantic specifies an arbitrary constraint that the value entered into the property must satisfy:
+The `mustSatisfy` semantic specifies an arbitrary constraint that the value entered into the property must satisfy:
 
 * for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
 
@@ -19,7 +19,7 @@ This semantic can apply to all types, although the provided `Specification` must
 
 == Annotated
 
-The mustSatisfy semantic can be specified explicitly using an annotation:
+The `mustSatisfy` semantic can be specified explicitly using an annotation:
 
 * for properties, using `@Property#mustSatisfy()`:
 +
@@ -50,7 +50,7 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 CAUTION: this feature is currently broken, see link:https://issues.apache.org/jira/browse/ISIS-2415[ISIS-2415].
 
-The mustSatisfy semantic can also be specified using a custom meta-annotation:
+The `mustSatisfy` semantic can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
@@ -58,8 +58,8 @@ The mustSatisfy semantic can also be specified using a custom meta-annotation:
 ----
 include::MustSatisfyOfWorkingAgeMetaAnnotation.java[tags=class]
 ----
-<.> annotated for property ...
-<.> \... and also for parameter.
+<.> annotated for a property ...
+<.> \... and for a parameter.
 <.> annotation can be applied to a property (either its getter or the field directly)
 <.> annotation can be applied to a parameter
 

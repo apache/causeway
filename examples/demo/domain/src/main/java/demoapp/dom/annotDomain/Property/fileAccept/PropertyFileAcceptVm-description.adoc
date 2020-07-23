@@ -1,4 +1,4 @@
-The "fileAccept" semantic specifies the file extension allowed when browsing for a file to upload:
+The `fileAccept` semantic specifies the file extension allowed when browsing for a file to upload:
 
 * for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
 
@@ -9,7 +9,7 @@ This semantic applies only to ``Blob``s and ``Clob``s.
 
 == Annotated
 
-The fileAccept semantic can be specified explicitly using an annotation (on a `Blob` property):
+The `fileAccept` semantic can be specified explicitly using an annotation (on a `Blob` property):
 
 * for properties, using `@Property#fileAccept()`:
 +
@@ -49,7 +49,7 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 == Meta-annotated
 
-The fileAccept semantic can also be specified using a custom meta-annotation:
+The `fileAccept` semantic can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
@@ -57,8 +57,8 @@ The fileAccept semantic can also be specified using a custom meta-annotation:
 ----
 include::FileAcceptPdfMetaAnnotation.java[tags=class]
 ----
-<.> annotated for property ...
-<.> \... and also for parameter.
+<.> annotated for a property ...
+<.> \... and for a parameter.
 <.> annotation can be applied to a property (either its getter or the field directly)
 <.> annotation can be applied to a parameter
 
@@ -100,6 +100,4 @@ include::PropertyFileAcceptVm_updateWithMetaAnnotationOverridden.java[tags=meta-
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Parameter` annotation
-
-
 

@@ -1,4 +1,4 @@
-The "regexPattern" semantic specifies a regular expression that the value entered into the property must match:
+The `regexPattern` semantic specifies a regular expression that the value entered into the property must match:
 
 * for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
 
@@ -8,7 +8,7 @@ This semantic applies only to strings.
 
 == Annotated
 
-The regexPattern semantic can be specified explicitly using an annotation:
+The `regexPattern` semantic can be specified explicitly using an annotation:
 
 * for properties, using `@Property#regexPattern()`:
 +
@@ -30,7 +30,7 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 == Meta-annotated
 
-The regexPattern semantic can also be specified using a custom meta-annotation:
+The `regexPattern` semantic can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
@@ -38,8 +38,8 @@ The regexPattern semantic can also be specified using a custom meta-annotation:
 ----
 include::RegexPatternEmailComMetaAnnotation.java[tags=class]
 ----
-<.> annotated for property ...
-<.> \... and also for parameter.
+<.> annotated for a property ...
+<.> \... and for a parameter.
 <.> annotation can be applied to a property (either its getter or the field directly)
 <.> annotation can be applied to a parameter
 
