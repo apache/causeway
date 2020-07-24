@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.model.interaction;
 import java.util.stream.IntStream;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
 
@@ -121,6 +122,9 @@ public class InteractionDemo_negotiate {
     }
     
     private int[] searchWithin(NumberRange range, String search) {
+        if(_Strings.isEmpty(search)) {
+            return new int[0];
+        }
         return IntStream.of(range.numbers())
         .filter(e->(""+e).contains(search))
         .toArray();

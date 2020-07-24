@@ -110,8 +110,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     }
     
     public ActionInteraction submit(ParameterNegotiationModel pendingArgs) {
-        // TODO validate pendingArgs
-        // TODO only if all is sound, invoke the action
+        pendingArgs.submit(this);
         return this;
     }
     

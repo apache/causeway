@@ -20,6 +20,7 @@ package org.apache.isis.core.commons.internal.primitives;
 
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.PrimitiveIterator;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -29,7 +30,9 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
+import lombok.AccessLevel;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -59,11 +62,24 @@ public class _Ints {
         public static @NonNull Bound exclusive(int value) { return of(value, true); }
     }
     
-    @Value(staticConstructor = "of")
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Range {
-        @NonNull Bound lowerBound;
-        @NonNull Bound upperBound;
+        
+        public static Range empty() {
+            return new Range(null, null, true);
+        }
+        
+        public static Range of(
+                @NonNull Bound lowerBound,
+                @NonNull Bound upperBound) {
+            return new Range(lowerBound, upperBound, false);
+        }
+        
+        private final Bound lowerBound;
+        private final Bound upperBound;
+        private final boolean empty;
         public boolean contains(int value) {
+            if(empty) return false;
             val isBelowLower = lowerBound.isInclusive() 
                     ? value < lowerBound.getValue() 
                     : value <= lowerBound.getValue();  
@@ -83,6 +99,7 @@ public class _Ints {
          * @return the value or if not within range, the nearest integer to the value, that is within range   
          */
         public int bounded(int value) {
+            if(empty) return value; // noop
             if(contains(value)) {
                 return value;
             }
@@ -95,12 +112,15 @@ public class _Ints {
                     : nearestToUpper;
         }
         private int nearestToLower() {
+            if(empty) throw _Exceptions.unsupportedOperation();
             return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;  
         }
         private int nearestToUpper() {
+            if(empty) throw _Exceptions.unsupportedOperation();
             return upperBound.isInclusive() ? upperBound.getValue() : upperBound.getValue()-1;
         }
         public @NonNull Optional<Range> intersect(@NonNull Range other) {
+            if(empty) return Optional.empty();
             final int s1 = this.nearestToLower();
             final int e1 = this.nearestToUpper();
             final int s2 = other.nearestToLower();
@@ -114,17 +134,44 @@ public class _Ints {
         }
         @Override
         public String toString() {
+            if(empty) return "[]";
             return String.format("%s%d,%d%S", 
                     lowerBound.isInclusive() ? '[' : '(', lowerBound.getValue(),
                     upperBound.getValue(), upperBound.isInclusive() ? ']' : ')');
         }
         public IntStream stream() {
+            if(empty) return IntStream.empty();
             return IntStream.rangeClosed(nearestToLower(), nearestToUpper());
+        }
+        public PrimitiveIterator.OfInt iterator() {
+            if(empty) return IntStream.empty().iterator();
+            return new PrimitiveIterator.OfInt() {
+                int next = nearestToLower();
+                final int upperIncluded = nearestToUpper();
+
+                @Override
+                public int nextInt() {
+                    if(!hasNext()) {
+                        throw _Exceptions.noSuchElement();
+                    }
+                    int result = next;
+                    next++;
+                    return result;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return next <= upperIncluded;
+                }
+            };
         }
     }
     
     // -- RANGE FACTORIES
     
+    /**
+     * Range includes a and b.
+     */
     public static Range rangeClosed(int a, int b) {
         if(a>b) {
             throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
@@ -132,7 +179,13 @@ public class _Ints {
         return Range.of(Bound.inclusive(a), Bound.inclusive(b));
     }
     
+    /**
+     * Range includes a but not b.
+     */
     public static Range rangeOpenEnded(int a, int b) {
+        if(a==b) {
+            return Range.empty();
+        }
         if(a>=b) {
             throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
         }

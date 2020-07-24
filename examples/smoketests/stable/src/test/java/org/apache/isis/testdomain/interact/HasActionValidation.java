@@ -26,8 +26,8 @@ abstract class HasActionValidation {
 
     protected final Bindable<String> validationMessage = _Bindables.empty();
     
-    public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
-        validationMessage.bind(pendingArgs.getObservableParamValidation(paramNr));
+    public void bind(ParameterNegotiationModel pendingArgs) {
+        validationMessage.bind(pendingArgs.getObservableActionValidation());
     }
 
     public String getValidationMessage() {

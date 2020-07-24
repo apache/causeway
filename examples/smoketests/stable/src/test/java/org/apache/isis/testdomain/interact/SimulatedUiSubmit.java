@@ -26,7 +26,7 @@ public class SimulatedUiSubmit extends HasActionValidation {
     private Runnable doSubmit; // might require a weak reference when actually implementing
     
     public void bind(final ActionInteraction interaction, final ParameterNegotiationModel pendingArgs) {
-        validationMessage.bind(pendingArgs.getObservableActionValidation());
+        super.bind(pendingArgs);
         doSubmit = ()->interaction.submit(pendingArgs);
     }
     

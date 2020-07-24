@@ -38,6 +38,12 @@ class IntsTest {
     }
 
     @Test
+    void emptyRange() {
+        val range = _Ints.rangeOpenEnded(3, 3);
+        assertEquals("[]", range.toString());
+    }
+    
+    @Test
     void rangeIntersection() {
         
         val intersection = _Ints.rangeClosed(3, 7)
@@ -74,6 +80,27 @@ class IntsTest {
                 .get();
         
         assertEquals("[5,7]", intersection.toString());
+    }
+    
+    @Test
+    void rangeIterator() {
+
+        val sb = new StringBuilder();
+        
+        val rangeIterator1 = _Ints.rangeClosed(3, 7).iterator();
+        while(rangeIterator1.hasNext()) {
+            sb.append(rangeIterator1.nextInt()).append(',');
+        }
+        assertEquals("3,4,5,6,7,", sb.toString());
+        sb.setLength(0);
+        
+        val rangeIterator2 = _Ints.rangeOpenEnded(3, 3).iterator();
+        while(rangeIterator2.hasNext()) {
+            sb.append(rangeIterator2.nextInt()).append(',');
+        }
+        assertEquals("", sb.toString());
+        sb.setLength(0);
+        
     }
 
 }

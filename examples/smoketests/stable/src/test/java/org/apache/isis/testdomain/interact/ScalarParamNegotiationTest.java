@@ -46,11 +46,8 @@ import lombok.val;
                 "isis.core.meta-model.introspector.mode=FULL",
                 "isis.applib.annotation.domain-object.editing=TRUE",
                 "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
-                "logging.level.DependentArgUtils=DEBUG"
         })
 @TestPropertySource({
-    //IsisPresets.DebugMetaModel,
-    //IsisPresets.DebugProgrammingModel,
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
@@ -78,7 +75,7 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
     SimulatedUiSubmit uiSubmit;
     
     @BeforeEach
-    void setUp() {
+    void setUpSimulatedUi() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "negotiate")
                 .checkVisibility(Where.OBJECT_FORMS)
@@ -140,22 +137,37 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         
         assertEmpty(uiSubmit.getValidationMessage());
         
+        // verify that validation feedback is not active
+        
+        assertFalse(pendingArgs.getObservableValidationFeedbackActive().getValue());
+        
     }
     
     @Test
     void paramC_whenSettingSearchArgument_shouldProvideChoices() {
-        //TODO implement
+        // TODO verify that the following also triggers change listeners
+        uiParamC.setSimulatedSearchArgument("-"); // select for all negative and odd numbers
+        assertComponentWiseUnwrappedEquals(new int[] {-3,-1}, uiParamC.getChoices());
+        // TODO such a change might set or clear paramC validation message once validation feedback is active
     }
 
     @Test
     void paramRangeA_whenChanging_shouldUpdateParamAChoices() {
-        //TODO implement
+        // TODO verify that the following also triggers change listeners
+        uiParamRangeA.simulateChoiceSelect(NumberRange.NEGATIVE.ordinal());
+        assertEquals(NumberRange.NEGATIVE, uiParamRangeA.getValue().getPojo());
+        assertComponentWiseUnwrappedEquals(NumberRange.NEGATIVE.numbers(), uiParamA.getChoices());
+        // TODO such a change might set or clear paramA validation message once validation feedback is active
     }
     
     @Test
-    void whenSimulatedSubmit_shouldTurnOnValidation() {
-        //TODO simulated submit attempt
-        //TODO should turn on validation feedback
+    void whenSimulatedSubmit_shouldActivateValidationFeedback() {
+        // simulated submit attempt, should activate validation feedback
+        uiSubmit.simulateSubmit();
+        assertTrue(pendingArgs.getObservableValidationFeedbackActive().getValue());
+        //TODO unless all validations give green light, submission must be vetoed
+        //TODO exceptions that occur during action invocation could either be rendered 
+        //     as message, error page or action validation message 
     }
   
 

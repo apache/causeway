@@ -32,5 +32,8 @@ public class SimulatedUiAutoComplete extends SimulatedUiChoices {
         super.bind(pendingArgs, paramNr);
     }
 
+    public void setSimulatedSearchArgument(String search) {
+        searchText.setValue(search);
+    }
 
 }
