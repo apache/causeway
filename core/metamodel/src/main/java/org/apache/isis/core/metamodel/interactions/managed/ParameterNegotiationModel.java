@@ -25,9 +25,10 @@ import javax.annotation.Nullable;
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.binding._BindableAbstract;
 import org.apache.isis.core.commons.internal.binding._Bindables;
+import org.apache.isis.core.commons.internal.binding._Observables;
+import org.apache.isis.core.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -62,10 +63,11 @@ public class ParameterNegotiationModel {
             @NonNull final ActionInteractionHead head,
             @NonNull final Can<ManagedObject> initialParamValues) {
         this.head = head;
+        this.validationFeedbackActive = _Bindables.forValue(false);
+        
         val paramNrIterator = IntStream.range(0, initialParamValues.size()).iterator();
         this.paramModels = initialParamValues
                 .map(initialValue->new ParameterModel(paramNrIterator.nextInt(), this, initialValue));
-        this.validationFeedbackActive = _Bindables.forValue(false);
     }
     
     // -- ACTION SPECIFIC
@@ -150,18 +152,9 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private final ObjectActionParameter metaModel;
         @Getter @NonNull private final ParameterNegotiationModel model;
         @Getter @NonNull private final _BindableAbstract<ManagedObject> bindableParamValue;
-        @Getter @NonNull private final _BindableAbstract<String> observableParamValidation;
+        @Getter @NonNull private final LazyObservable<String> observableParamValidation;
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
-        @Getter @NonNull private final _BindableAbstract<Can<ManagedObject>> observableParamChoices;
-        
-        private final _Lazy<Can<ManagedObject>> paramChoices = _Lazy.threadSafe(()->
-            getMetaModel().getChoices(getModel(), InteractionInitiatedBy.USER));
-        
-        private final _Lazy<Can<ManagedObject>> autoCompleteChoices = _Lazy.threadSafe(()->
-            getMetaModel().getAutoComplete(getModel(), getBindableParamSearchArgument().getValue(), InteractionInitiatedBy.USER));
-        
-        private final _Lazy<String> validationMessage = _Lazy.threadSafe(()->
-            getMetaModel().isValid(getModel().head, getValue(), InteractionInitiatedBy.USER)); // TODO consider all params
+        @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
         
         private ParameterModel(
                 int paramNr, 
@@ -178,32 +171,35 @@ public class ParameterNegotiationModel {
             });
             
             
-            bindableParamSearchArgument = _Bindables.forValue(null);
-            bindableParamSearchArgument.addListener((e,o,n)->{
-                autoCompleteChoices.clear();
-                //TODO also trigger updates to be propagated to UI
-            });
-
             // has either autoComplete, choices, or none
             observableParamChoices = metaModel.hasAutoComplete()
-            ? new _BindableAbstract<Can<ManagedObject>>() {
-                @Override
-                public Can<ManagedObject> getValue() {
-                    return autoCompleteChoices.get();
-                }
-            }
+            ? _Observables.forFactory(()->
+                getMetaModel().getAutoComplete(
+                        getModel(), 
+                        getBindableParamSearchArgument().getValue(), 
+                        InteractionInitiatedBy.USER))
             : metaModel.hasChoices() 
-                ? new _BindableAbstract<Can<ManagedObject>>() {
-                    @Override
-                    public Can<ManagedObject> getValue() {
-                        return paramChoices.get();
-                    }
-                }
-                : _Bindables.forValue(Can.empty());
+                ? _Observables.forFactory(()->
+                    getMetaModel().getChoices(getModel(), InteractionInitiatedBy.USER))
+                : _Observables.forFactory(Can::empty);
+
+                    
+            bindableParamSearchArgument = _Bindables.forValue(null);
+            if(metaModel.hasAutoComplete()) {
+                bindableParamSearchArgument.addListener((e,o,n)->{
+                    observableParamChoices.invalidate();
+                });
+            }
             
             // TODO listen to any user initiated value changes, then validate the corresponding parameter
             // but only after validationFeedback has been turned on
-            observableParamValidation = _Bindables.forValue(null);
+            observableParamValidation = _Observables.forFactory(()->
+                isValidationFeedbackActive()
+                ? getMetaModel().isValid(
+                        getModel().head, 
+                        getValue(), // TODO consider all params
+                        InteractionInitiatedBy.USER)
+                : (String)null); 
             
         }
         
@@ -216,10 +212,12 @@ public class ParameterNegotiationModel {
         }
         
         public void invalidateChoicesAndValidation() {
-            paramChoices.clear();
-            autoCompleteChoices.clear();
-            validationMessage.clear();
-            //TODO also trigger updates to be propagated to UI
+            observableParamChoices.invalidate();
+            observableParamValidation.invalidate();
+        }
+        
+        private boolean isValidationFeedbackActive() {
+            return getModel().getObservableValidationFeedbackActive().getValue();
         }
         
     }

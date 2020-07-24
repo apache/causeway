@@ -18,21 +18,35 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import java.util.concurrent.atomic.LongAdder;
+
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.Getter;
+
 public class SimulatedUiChoices extends HasParameterValidation {
 
     private final Bindable<Can<ManagedObject>> choiceBox = _Bindables.empty();
     private final Bindable<ManagedObject> selectedItem = _Bindables.empty();
     
+    @Getter private final LongAdder choiceBoxUpdateEventCount = new LongAdder();
+    @Getter private final LongAdder selectedItemUpdateEventCount = new LongAdder();
+    
     public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
         choiceBox.bind(pendingArgs.getObservableParamChoices(paramNr));
+        choiceBox.addListener((e,o,n)->{
+            choiceBoxUpdateEventCount.increment();
+        });
         selectedItem.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
         super.bind(pendingArgs, paramNr);
+        
+        selectedItem.addListener((e,o,n)->{
+            selectedItemUpdateEventCount.increment();
+        });
     }
 
     public void simulateChoiceSelect(int choiceIndex) {

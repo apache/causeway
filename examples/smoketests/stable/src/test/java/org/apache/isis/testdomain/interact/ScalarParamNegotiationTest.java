@@ -145,18 +145,36 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
     
     @Test
     void paramC_whenSettingSearchArgument_shouldProvideChoices() {
-        // TODO verify that the following also triggers change listeners
+        
+        final int eventCount0 = uiParamC.getChoiceBoxUpdateEventCount().intValue();
         uiParamC.setSimulatedSearchArgument("-"); // select for all negative and odd numbers
-        assertComponentWiseUnwrappedEquals(new int[] {-3,-1}, uiParamC.getChoices());
+        final int eventCount1 = uiParamC.getChoiceBoxUpdateEventCount().intValue();
+     
+        // verify that changing the search arg has triggered change listeners
+        assertEquals(eventCount0 + 1, eventCount1);
+        
+        assertComponentWiseUnwrappedEquals(new int[] {-3, -1}, uiParamC.getChoices());
+        final int eventCount2 = uiParamC.getChoiceBoxUpdateEventCount().intValue();
+        
+        // verify that no additional changes where triggered listeners
+        assertEquals(eventCount1, eventCount2);
+        
         // TODO such a change might set or clear paramC validation message once validation feedback is active
     }
 
     @Test
     void paramRangeA_whenChanging_shouldUpdateParamAChoices() {
-        // TODO verify that the following also triggers change listeners
+
+        final int eventCount0 = uiParamRangeA.getSelectedItemUpdateEventCount().intValue();
         uiParamRangeA.simulateChoiceSelect(NumberRange.NEGATIVE.ordinal());
+        final int eventCount1 = uiParamRangeA.getSelectedItemUpdateEventCount().intValue();
+        
+        // verify that changing paramRangeA has triggered change listeners
+        assertEquals(eventCount0 + 1, eventCount1);
+        
         assertEquals(NumberRange.NEGATIVE, uiParamRangeA.getValue().getPojo());
         assertComponentWiseUnwrappedEquals(NumberRange.NEGATIVE.numbers(), uiParamA.getChoices());
+
         // TODO such a change might set or clear paramA validation message once validation feedback is active
     }
     
