@@ -43,13 +43,13 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutMaxLengthVm",
+        objectType = "demo.PropertyMaxLengthVm",
         editing = Editing.ENABLED
 )
 public class PropertyMaxLengthVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "PropertyLayout#maxLength";
+        return "Property#maxLength";
     }
 
 //tag::annotation[]

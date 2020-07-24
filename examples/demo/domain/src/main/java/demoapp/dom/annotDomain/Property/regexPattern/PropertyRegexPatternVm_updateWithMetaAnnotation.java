@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingMetaAnnotation", associateWithSequence = "1"
+    associateWith = "emailAddressPropertyUsingMetaAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyRegexPatternVm_updateWithMetaAnnotation {

@@ -45,13 +45,13 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutRegexPatternVm",
+        objectType = "demo.PropertyRegexPatternVm",
         editing = Editing.ENABLED
 )
 public class PropertyRegexPatternVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "PropertyLayout#regexPattern";
+        return "Property#regexPattern";
     }
 
 //tag::annotation[]

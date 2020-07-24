@@ -1,5 +1,7 @@
 package demoapp.dom.annotDomain.Property.regexPattern;
 
+import java.util.regex.Pattern;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -10,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingAnnotation", associateWithSequence = "1"
+    associateWith = "emailAddressPropertyUsingAnnotation", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyRegexPatternVm_updateWithParameterLayout {
@@ -20,7 +22,9 @@ public class PropertyRegexPatternVm_updateWithParameterLayout {
 //tag::annotation[]
     public PropertyRegexPatternVm act(
             @Parameter(
-                regexPattern = "^[^@+]@[^\\.+]\\.com$"                  // <.>
+                regexPattern = "^\\w+@\\w+[.]com$"                  // <.>
+                , regexPatternReplacement = "Must be .com email address"
+                , regexPatternFlags = Pattern.CASE_INSENSITIVE
             )
             @ParameterLayout(
                 describedAs =

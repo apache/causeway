@@ -43,7 +43,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutEditingVm",
+        objectType = "demo.PropertyEditingVm",
         editing = Editing.DISABLED              // <.>
 )
 public class PropertyEditingVm implements HasAsciiDocDescription {
@@ -51,7 +51,7 @@ public class PropertyEditingVm implements HasAsciiDocDescription {
 //end::class[]
 
     public String title() {
-        return "PropertyLayout#editing";
+        return "Property#editing";
     }
 
 //tag::annotation[]

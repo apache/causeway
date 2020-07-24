@@ -46,13 +46,13 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutFileAcceptVm",
+        objectType = "demo.PropertyFileAcceptVm",
         editing = Editing.ENABLED
 )
 public class PropertyFileAcceptVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "PropertyLayout#fileAccept";
+        return "Property#fileAccept";
     }
 
 //tag::annotation[]

@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
+    associateWith = "emailAddressPropertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
@@ -23,7 +23,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
     public PropertyRegexPatternVm act(
             @RegexPatternEmailComMetaAnnotation                             // <.>
             @Parameter(
-                regexPattern = "^[^@+]@[^\\.+]\\.org$"                      // <.>
+                regexPattern = "^\\w+@\\w+[.]org$"                      // <.>
                 , regexPatternReplacement = "Must be .org email address"
                 , regexPatternFlags = Pattern.COMMENTS
             )
