@@ -22,12 +22,14 @@ import java.util.stream.IntStream;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 import lombok.experimental.Accessors;
 
 @Action
@@ -102,9 +104,9 @@ public class InteractionDemo_negotiate {
     
     // -- parameter specific validation
     
-    @Model public String validateA(Params p) { return verifyContains(p.a(), p.rangeA()); }
-    @Model public String validateB(Params p) { return verifyContains(p.b(), p.rangeB()); }
-    @Model public String validateC(Params p) { return verifyContains(p.c(), p.rangeC()); }
+    @Model public String validateA(Params p) { return verifyContains(p.a(), p.rangeA(), p); }
+    @Model public String validateB(Params p) { return verifyContains(p.b(), p.rangeB(), p); }
+    @Model public String validateC(Params p) { return verifyContains(p.c(), p.rangeC(), p); }
     
     // -- HELPER
     
@@ -114,11 +116,12 @@ public class InteractionDemo_negotiate {
                 : -99;
     }
     
-    private String verifyContains(int x, NumberRange range) {
+    private String verifyContains(int x, NumberRange range, Params p) {
         if(IntStream.of(range.numbers()).anyMatch(e->e==x)) {
             return null;
         }
-        return String.format("invalid, element not contained in %s got %d", range.name(), x);
+        val paramSet = _Lists.of(p.a, p.b, p.c);
+        return String.format("invalid, element not contained in %s got %d, param set %s", range.name(), x, paramSet);
     }
     
     private int[] searchWithin(NumberRange range, String search) {

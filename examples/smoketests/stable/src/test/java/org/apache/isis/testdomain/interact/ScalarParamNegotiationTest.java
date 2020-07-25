@@ -188,5 +188,25 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         //     as message, error page or action validation message 
     }
   
+    @Test
+    void paramRangeA_whenChanging_shouldRenderParamAInvalid() {
+
+        pendingArgs.activateValidationFeedback(); // turn on validation feedback for testing
+        assertEquals(null, uiParamA.getValidationMessage()); // expected pre condition
+        
+        final int eventCount0 = uiParamA.getValidationUpdateEventCount().intValue();
+        uiParamRangeA.simulateChoiceSelect(NumberRange.NEGATIVE.ordinal());
+        final int eventCount1 = uiParamA.getValidationUpdateEventCount().intValue();
+        
+        // verify that changing paramRangeA has triggered validation change listeners on paramA
+        assertEquals(eventCount0 + 1, eventCount1);
+    
+        // not only verify that paramA is invalid, but also that all pending args were considered
+        assertEquals("invalid, element not contained in NEGATIVE got 1, param set [1, -1, -3]", uiParamA.getValidationMessage());
+        
+    }
+    
+    
+    
 
 }

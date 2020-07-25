@@ -140,8 +140,15 @@ public class ParameterNegotiationModel {
         return paramValue;
     }
 
-    public void submit(@NonNull ActionInteraction actionInteraction) {
+    /**
+     * exposed for testing
+     */
+    public void activateValidationFeedback() {
         validationFeedbackActive.setValue(true);
+    }
+    
+    public void submit(@NonNull ActionInteraction actionInteraction) {
+        activateValidationFeedback();
         // TODO validate pendingArgs
         // TODO only if all is sound, invoke the action
     }

@@ -18,16 +18,24 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import java.util.concurrent.atomic.LongAdder;
+
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 
+import lombok.Getter;
+
 abstract class HasParameterValidation {
 
     protected final Bindable<String> validationMessage = _Bindables.empty();
+    @Getter private final LongAdder validationUpdateEventCount = new LongAdder();
     
     public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
         validationMessage.bind(pendingArgs.getObservableParamValidation(paramNr));
+        validationMessage.addListener((e,o,n)->{
+            validationUpdateEventCount.increment();
+        });
     }
 
     public String getValidationMessage() {
