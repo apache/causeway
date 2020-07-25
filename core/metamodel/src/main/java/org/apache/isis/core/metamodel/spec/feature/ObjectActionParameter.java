@@ -139,7 +139,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     /**
      * Whether this parameter is visible given the entered previous arguments
-     * @param targetAdapter
+     * @param head
      * @param pendingArgs
      * @param interactionInitiatedBy
      * @return
@@ -151,7 +151,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     /**
      * Whether this parameter is disabled given the entered previous arguments
-     * @param targetAdapter
+     * @param head
      * @param pendingArgs
      * @param interactionInitiatedBy
      * @return
@@ -164,16 +164,32 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     /**
      * Whether proposed value for this parameter is valid.
      *
+     * @param head
+     * @param pendingArgs
+     * @param interactionInitiatedBy
+     * @return
+     */
+    Consent isValid(
+            InteractionHead head,
+            Can<ManagedObject> pendingArgs,
+            InteractionInitiatedBy interactionInitiatedBy);
+
+    /**
+     * Whether proposed value for this parameter is valid.
+     *
      * @param adapter
      * @param proposedValue
      * @param interactionInitiatedBy
      * @return
+     * @deprecated use variant with all pendingArgs instead
      */
+    @Deprecated
     String isValid(
             InteractionHead head,
             ManagedObject proposedValue,
             InteractionInitiatedBy interactionInitiatedBy);
 
+    
     @Vetoed
     public static class Predicates {
         private Predicates(){}

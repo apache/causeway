@@ -156,7 +156,7 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         assertComponentWiseUnwrappedEquals(new int[] {-3, -1}, uiParamC.getChoices());
         final int eventCount2 = uiParamC.getChoiceBoxUpdateEventCount().intValue();
         
-        // verify that no additional changes where triggered listeners
+        // verify that no additional changes were triggered
         assertEquals(eventCount1, eventCount2);
         
         // TODO such a change might set or clear paramC validation message once validation feedback is active

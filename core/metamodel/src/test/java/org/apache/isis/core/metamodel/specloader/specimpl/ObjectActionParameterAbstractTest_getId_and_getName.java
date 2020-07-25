@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
@@ -90,6 +91,12 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
             return null;
         }
 
+        @Override
+        public Consent isValid(InteractionHead head, Can<ManagedObject> pendingArgs,
+                InteractionInitiatedBy interactionInitiatedBy) {
+            return null;
+        }
+        
         @Override
         public ObjectSpecification getSpecification() {
             return objectSpec;

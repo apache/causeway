@@ -58,6 +58,7 @@ public class ParameterNegotiationModel {
     @Getter private final ActionInteractionHead head;
     private final Can<ParameterModel> paramModels;
     private final _BindableAbstract<Boolean> validationFeedbackActive;
+    private final LazyObservable<String> observableActionValidation;
     
     private ParameterNegotiationModel(
             @NonNull final ActionInteractionHead head,
@@ -68,6 +69,13 @@ public class ParameterNegotiationModel {
         val paramNrIterator = IntStream.range(0, initialParamValues.size()).iterator();
         this.paramModels = initialParamValues
                 .map(initialValue->new ParameterModel(paramNrIterator.nextInt(), this, initialValue));
+        
+        this.observableActionValidation = _Observables.forFactory(()->
+            validationFeedbackActive.getValue()
+            ? head.getMetaModel()
+                    .isArgumentSetValid(getActionTarget(), getParamValues(), InteractionInitiatedBy.USER)
+                    .getReason()
+            : (String)null);
     }
     
     // -- ACTION SPECIFIC
@@ -81,9 +89,7 @@ public class ParameterNegotiationModel {
     }
     
     @NonNull public Observable<String> getObservableActionValidation() {
-        // TODO listen to any user initiated submit attempt then validate the action
-        // this also turns on validationFeedback
-        return _Bindables.forValue(null);
+        return observableActionValidation;
     }
     
     /**
@@ -142,6 +148,7 @@ public class ParameterNegotiationModel {
     
     private void onNewParamValue() {
         paramModels.forEach(ParameterModel::invalidateChoicesAndValidation);
+        observableActionValidation.invalidate();
     }
     
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
@@ -183,7 +190,7 @@ public class ParameterNegotiationModel {
                     getMetaModel().getChoices(getModel(), InteractionInitiatedBy.USER))
                 : _Observables.forFactory(Can::empty);
 
-                    
+            // if has autoComplete, then activate the search argument        
             bindableParamSearchArgument = _Bindables.forValue(null);
             if(metaModel.hasAutoComplete()) {
                 bindableParamSearchArgument.addListener((e,o,n)->{
@@ -191,16 +198,13 @@ public class ParameterNegotiationModel {
                 });
             }
             
-            // TODO listen to any user initiated value changes, then validate the corresponding parameter
-            // but only after validationFeedback has been turned on
+            // validate this parameter, but only when validationFeedback has been activated
             observableParamValidation = _Observables.forFactory(()->
                 isValidationFeedbackActive()
-                ? getMetaModel().isValid(
-                        getModel().head, 
-                        getValue(), // TODO consider all params
-                        InteractionInitiatedBy.USER)
+                ? getMetaModel()
+                        .isValid(getModel().head, getModel().getParamValues(), InteractionInitiatedBy.USER)
+                        .getReason()
                 : (String)null); 
-            
         }
         
         public String getName() {

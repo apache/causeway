@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,7 +45,6 @@ import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
@@ -336,10 +334,10 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final UsabilityContext ic = createArgumentUsabilityContext(
+        val usabilityContext = createArgumentUsabilityContext(
                 head, pendingArgs, getNumber(), interactionInitiatedBy);
 
-        final InteractionResult usableResult = InteractionUtils.isUsableResult(this, ic);
+        val usableResult = InteractionUtils.isUsableResult(this, usabilityContext);
         return usableResult.createConsent();
     }
 
@@ -358,6 +356,19 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     }
 
     @Override
+    public Consent isValid(
+            InteractionHead head, 
+            Can<ManagedObject> pendingArgs,
+            InteractionInitiatedBy interactionInitiatedBy) {
+        
+        val validityContext = createProposedArgumentInteractionContext(
+                head, pendingArgs, getNumber(), interactionInitiatedBy);
+        
+        val validResult = InteractionUtils.isValidResult(this, validityContext);
+        return validResult.createConsent();
+    }
+    
+    @Override @Deprecated
     public String isValid(
             final InteractionHead head,
             final ManagedObject proposedValue,
@@ -386,6 +397,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
      * to do this in two passes, one to build up the argument set as a single
      * unit, and then validate each in turn.
      */
+    @Deprecated
     private Can<ManagedObject> arguments(final ManagedObject proposedValue) {
         final int paramCount = getAction().getParameterCount();
         final int paramIndex = getNumber();
