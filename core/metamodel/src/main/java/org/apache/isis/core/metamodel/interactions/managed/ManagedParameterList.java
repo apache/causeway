@@ -31,6 +31,7 @@ import lombok.val;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of")
+@Deprecated // ParameterNegotiationModel has all we need
 public class ManagedParameterList implements Iterable<ManagedParameter> {
 
     @NonNull private final ManagedAction owningAction;

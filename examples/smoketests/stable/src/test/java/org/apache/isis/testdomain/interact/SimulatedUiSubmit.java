@@ -18,21 +18,29 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import java.util.function.Supplier;
+
+import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.Getter;
 
 public class SimulatedUiSubmit extends HasActionValidation {
 
-    private Runnable doSubmit; // might require a weak reference when actually implementing
+    // might require a weak reference when actually implementing
+    private Supplier<_Either<ManagedObject, InteractionVeto>> doSubmit; 
+    @Getter private _Either<ManagedObject, InteractionVeto> result;
     
     public void bind(final ActionInteraction interaction, final ParameterNegotiationModel pendingArgs) {
         super.bind(pendingArgs);
-        doSubmit = ()->interaction.submit(pendingArgs);
+        doSubmit = ()->interaction.invokeWith(pendingArgs);
     }
     
     public void simulateSubmit() {
-        doSubmit.run();
+        result = doSubmit.get();
     }
-
     
 }

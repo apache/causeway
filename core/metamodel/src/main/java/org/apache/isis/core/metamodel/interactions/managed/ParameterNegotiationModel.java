@@ -98,6 +98,21 @@ public class ParameterNegotiationModel {
     @NonNull public Observable<Boolean> getObservableValidationFeedbackActive() {
         return validationFeedbackActive;
     }
+    
+    public boolean isActionInvocationVetoed() {
+        activateValidationFeedback();
+        paramModels.forEach(ParameterModel::invalidateChoicesAndValidation);
+        observableActionValidation.invalidate();
+        
+        if(observableActionValidation.getValue()!=null) {
+            return true; // action invocation is vetoed by action validation
+        }
+        if(paramModels.stream()
+                .anyMatch(pm->pm.getObservableParamValidation().getValue()!=null)) {
+            return true; // action invocation is vetoed by param validation
+        }
+        return false;
+    }
 
     // -- PARAMETER SPECIFIC
     
@@ -145,12 +160,6 @@ public class ParameterNegotiationModel {
      */
     public void activateValidationFeedback() {
         validationFeedbackActive.setValue(true);
-    }
-    
-    public void submit(@NonNull ActionInteraction actionInteraction) {
-        activateValidationFeedback();
-        // TODO validate pendingArgs
-        // TODO only if all is sound, invoke the action
     }
     
     private void onNewParamValue() {
@@ -214,6 +223,7 @@ public class ParameterNegotiationModel {
                 : (String)null); 
         }
         
+        @SuppressWarnings("unused")
         public String getName() {
             return getMetaModel().getName();
         }

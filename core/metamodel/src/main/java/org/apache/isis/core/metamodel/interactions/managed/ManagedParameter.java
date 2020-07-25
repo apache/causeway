@@ -33,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of")
+@Deprecated // ParameterNegotiationModel has all we need
 public class ManagedParameter implements ManagedFeature {
     @NonNull private final ManagedAction owningAction;
     @NonNull private final ObjectActionParameter parameter;

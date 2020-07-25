@@ -109,9 +109,13 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
     
-    public ActionInteraction submit(ParameterNegotiationModel pendingArgs) {
-        pendingArgs.submit(this);
-        return this;
+    public _Either<ManagedObject, InteractionVeto> invokeWith(ParameterNegotiationModel pendingArgs) {
+        val action = chain.leftIfAny();
+        if(action==null || pendingArgs.isActionInvocationVetoed()) {
+            return _Either.rightNullable(null);
+        }
+        val actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
+        return actionResultOrVeto;
     }
     
     /**
