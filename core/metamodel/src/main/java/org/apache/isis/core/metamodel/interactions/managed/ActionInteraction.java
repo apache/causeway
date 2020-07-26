@@ -110,10 +110,13 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     }
     
     public _Either<ManagedObject, InteractionVeto> invokeWith(ParameterNegotiationModel pendingArgs) {
-        val action = chain.leftIfAny();
-        if(action==null || pendingArgs.isActionInvocationVetoed()) {
-            return _Either.rightNullable(null);
+        if(chain.isRight()) {
+            return _Either.right(chain.rightIfAny());
         }
+        if(pendingArgs.isActionInvocationVetoed()) {
+            return _Either.right(InteractionVeto.actionParamInvalid("validation failure(s)"));
+        }
+        val action = chain.leftIfAny();
         val actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
         return actionResultOrVeto;
     }
@@ -150,7 +153,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
             
             // validate entire param-list
             val validityVeto = action.getAction()
-                    .isArgumentSetValid(action.getOwner(), state.getParameterList(), InteractionInitiatedBy.USER);
+                    .isArgumentSetValid(action.getInteractionHead(), state.getParameterList(), InteractionInitiatedBy.USER);
             return validityVeto.isVetoed()
                     ? _Either.right(InteractionVeto.actionParamInvalid(validityVeto)) 
                     : _Either.left(action); 

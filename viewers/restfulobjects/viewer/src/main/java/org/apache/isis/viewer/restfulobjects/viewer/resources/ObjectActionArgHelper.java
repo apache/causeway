@@ -85,7 +85,7 @@ public class ObjectActionArgHelper {
         
         // validate entire argument set
         final Consent consent = action.isArgumentSetValid(
-                owner, proposedArguments, InteractionInitiatedBy.USER);
+                head, proposedArguments, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
             valid = false;

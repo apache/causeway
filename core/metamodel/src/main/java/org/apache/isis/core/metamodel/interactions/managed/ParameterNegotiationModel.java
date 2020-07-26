@@ -73,7 +73,7 @@ public class ParameterNegotiationModel {
         this.observableActionValidation = _Observables.forFactory(()->
             validationFeedbackActive.getValue()
             ? head.getMetaModel()
-                    .isArgumentSetValid(getActionTarget(), getParamValues(), InteractionInitiatedBy.USER)
+                    .isArgumentSetValid(head, getParamValues(), InteractionInitiatedBy.USER)
                     .getReason()
             : (String)null);
     }

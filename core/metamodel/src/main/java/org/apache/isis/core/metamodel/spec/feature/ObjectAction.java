@@ -144,17 +144,43 @@ public interface ObjectAction extends ObjectMember {
      * </p>
      */
     Consent isProposedArgumentSetValid(
-            ManagedObject object,
+            InteractionHead head,
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
+    /**
+     * Normally action validation is all performed by
+     * {@link #isProposedArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
+     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy) this method} to
+     * validate arguments individually, and then
+     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy) validate argument set}
+     * afterwards.
+     *
+     * <p>
+     * This method is in the API to allow viewers (eg the RO viewer) to call the different phases of validation
+     * individually.
+     * </p>
+     */
     Consent isEachIndividualArgumentValid(
-            ManagedObject objectAdapter,
+            InteractionHead head,
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
+    /**
+     * Normally action validation is all performed by
+     * {@link #isProposedArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
+     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy)} to
+     * validate arguments individually, and then
+     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy) this method} to
+     * validate the entire argument set afterwards.
+     *
+     * <p>
+     * This method is in the API to allow viewers (eg the RO viewer) to call the different phases of validation
+     * individually.
+     * </p>
+     */
     Consent isArgumentSetValid(
-            ManagedObject objectAdapter,
+            InteractionHead head,
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 

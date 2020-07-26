@@ -89,6 +89,10 @@ public class InteractionVeto implements Serializable {
         return of(VetoType.ACTION_PARAM_INVALID, vetoConsent);
     }
 
+    public static InteractionVeto actionParamInvalid(@NonNull String reason) {
+        return of(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
+    }
+    
     public String getReason() {
         return getVetoConsent().getReason();
     }
@@ -97,6 +101,9 @@ public class InteractionVeto implements Serializable {
         return getVetoConsent().getDescription();
     }
 
-
+    @Override
+    public String toString() {
+        return getReason();
+    }
     
 }

@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
@@ -618,6 +619,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final ObjectAction objectAction,
             final ContributeeMember contributeeMember) {
 
+        val head = objectAction.interactionHead(targetAdapter);
+        
         final ManagedObject contributeeAdapter;
         final Object[] contributeeArgs;
         if(contributeeMember != null) {
@@ -643,13 +646,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             } else {
                 checkVisibility(targetAdapter, objectAction);
                 checkUsability(targetAdapter, objectAction);
-                checkValidity(targetAdapter, objectAction, argAdapters);
+                checkValidity(head, objectAction, argAdapters);
             }
         });
         
         return runExecutionTask(()->{
             val interactionInitiatedBy = getInteractionInitiatedBy();
-            val head = objectAction.interactionHead(targetAdapter);
             
             val returnedAdapter = objectAction.execute(
                     head, argAdapters,
@@ -661,12 +663,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private void checkValidity(
-            final ManagedObject targetAdapter, 
+            final ActionInteractionHead head, 
             final ObjectAction objectAction, 
             final Can<ManagedObject> argAdapters) {
         
         val interactionResult = objectAction
-                .isProposedArgumentSetValid(targetAdapter, argAdapters,getInteractionInitiatedBy())
+                .isProposedArgumentSetValid(head, argAdapters,getInteractionInitiatedBy())
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }

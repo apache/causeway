@@ -75,8 +75,10 @@ public interface FormUiModel extends HasTitle {
         
         _Assert.assertEquals(getMetaModel().getParameterCount(), proposedArguments.size());
         
+        val head = getMetaModel().interactionHead(getOwner());
+        
         return getMetaModel().isProposedArgumentSetValid(
-                getOwner(), 
+                head, 
                 proposedArguments, 
                 InteractionInitiatedBy.USER);
         

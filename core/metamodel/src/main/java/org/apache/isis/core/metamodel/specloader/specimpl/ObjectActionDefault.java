@@ -260,68 +260,43 @@ implements ObjectAction {
 
     // -- validate
 
-    /**
-     * The Validates all arguments individually (by calling same helper that
-     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy)} delegates to)
-     * and if there are no validation errors, then validates the entire argument
-     * set (by calling same helper that
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)} delegates to).
-     *
-     * <p>
-     * The two other validation methods mentioned above are separated out to allow viewers (such as the RO viewer) to
-     * call the validation phases separately.
-     * </p>
-     */
+
     @Override
     public Consent isProposedArgumentSetValid(
-            final ManagedObject targetObject,
+            final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
 
-        validateArgumentsIndividually(targetObject, proposedArguments, interactionInitiatedBy, resultSet);
+        validateArgumentsIndividually(head, proposedArguments, interactionInitiatedBy, resultSet);
         if (resultSet.isAllowed()) {
             // only check the action's own validity if all the arguments are OK.
-            validateArgumentSet(targetObject, proposedArguments, interactionInitiatedBy, resultSet);
+            validateArgumentSet(head, proposedArguments, interactionInitiatedBy, resultSet);
         }
 
         return resultSet.createConsent();
     }
 
-    /**
-     * Normally action validation is all performed by
-     * {@link #isProposedArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
-     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy) this method} to
-     * validate arguments individually, and then
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy) validate argument set}
-     * afterwards.
-     *
-     * <p>
-     * This method is in the API to allow viewers (eg the RO viewer) to call the different phases of validation
-     * individually.
-     * </p>
-     */
+
     @Override
     public Consent isEachIndividualArgumentValid(
-            final ManagedObject objectAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
 
-        validateArgumentsIndividually(objectAdapter, proposedArguments, interactionInitiatedBy, resultSet);
+        validateArgumentsIndividually(head, proposedArguments, interactionInitiatedBy, resultSet);
 
         return resultSet.createConsent();
     }
 
     private void validateArgumentsIndividually(
-            final ManagedObject target,
+            final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
-        
-        val head = headFor(target);
         
         val actionParameters = getParameters();
         if (proposedArguments != null) {
@@ -335,49 +310,36 @@ implements ObjectAction {
         }
     }
 
-    /**
-     * Normally action validation is all performed by
-     * {@link #isProposedArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
-     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy)} to
-     * validate arguments individually, and then
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy) this method} to
-     * validate the entire argument set afterwards.
-     *
-     * <p>
-     * This method is in the API to allow viewers (eg the RO viewer) to call the different phases of validation
-     * individually.
-     * </p>
-     */
     @Override
     public Consent isArgumentSetValid(
-            final ManagedObject objectAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
-        validateArgumentSet(objectAdapter, proposedArguments, interactionInitiatedBy, resultSet);
+        validateArgumentSet(head, proposedArguments, interactionInitiatedBy, resultSet);
 
         return resultSet.createConsent();
     }
 
     protected void validateArgumentSet(
-            final ManagedObject objectAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
         val validityContext = createActionInvocationInteractionContext(
-                objectAdapter, proposedArguments, interactionInitiatedBy);
+                head, proposedArguments, interactionInitiatedBy);
         InteractionUtils.isValidResultSet(this, validityContext, resultSet);
     }
 
     ActionValidityContext createActionInvocationInteractionContext(
-            final ManagedObject target,
+            final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ActionValidityContext(
-                headFor(target), 
+                head, 
                 this, 
                 getIdentifier(), 
                 proposedArguments,
@@ -410,7 +372,7 @@ implements ObjectAction {
         }
 
         // do it?
-        final Consent validity = isProposedArgumentSetValid(target, arguments, interactionInitiatedBy);
+        final Consent validity = isProposedArgumentSetValid(head, arguments, interactionInitiatedBy);
         if(validity.isVetoed()) {
             throw new RecoverableException(validity.getReason());
         }

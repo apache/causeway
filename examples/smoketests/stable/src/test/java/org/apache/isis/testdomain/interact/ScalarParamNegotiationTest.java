@@ -18,13 +18,14 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -179,15 +180,16 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         // TODO such a change might set or clear paramA validation message once validation feedback is active
     }
     
-    @Test @Disabled //FIXME mixin issue, wrong target
+    @Test
     void whenSimulatedSubmit_shouldActivateValidationFeedback() {
         // simulated submit attempt, should activate validation feedback
         uiSubmit.simulateSubmit();
         assertTrue(pendingArgs.getObservableValidationFeedbackActive().getValue());
+
+        // unless all validations give green light, submission must be vetoed
+        assertEquals(null, uiSubmit.getResult().leftIfAny());
+        assertEquals("validation failure(s)", ""+uiSubmit.getResult().rightIfAny());
         
-        assertEquals(1, uiSubmit.getResult().leftIfAny());
-        
-        //TODO unless all validations give green light, submission must be vetoed
         //TODO exceptions that occur during action invocation could either be rendered 
         //     as message, error page or action validation message 
     }
