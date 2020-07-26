@@ -20,12 +20,9 @@ package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,21 +30,14 @@ import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 
 
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlText", associateWithSequence = "1"
-)
-@ActionLayout(promptStyle = PromptStyle.INLINE)
+@Property()
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlTextEditing {
+public class PropertyDomainEventVm_controlText {
 
     private final PropertyDomainEventVm propertyDomainEventVm;
 
-    public PropertyDomainEventVm act(final ControlStrategy controlStrategy) {
-        eventControlService.controlStrategy = controlStrategy;
-        return propertyDomainEventVm;
-    }
-    public ControlStrategy default0Act() {
+    @MemberOrder(name = "contributed", sequence = "1")
+    public ControlStrategy prop() {
         return eventControlService.controlStrategy;
     }
 

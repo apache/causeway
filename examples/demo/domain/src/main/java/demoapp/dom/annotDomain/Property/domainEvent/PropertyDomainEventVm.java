@@ -16,63 +16,64 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
+package demoapp.dom.annotDomain.Property.domainEvent;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventJdo;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.TextDomainEventAsVm"
+    nature=Nature.VIEW_MODEL,
+    objectType = "demo.PropertyDomainEventVm",
+    editing = Editing.ENABLED
 )
 @NoArgsConstructor
-public class TextDomainEventAsVm {
+public class PropertyDomainEventVm implements HasAsciiDocDescription {
+    // ...
+//end::class[]
 
-    public TextDomainEventAsVm(PropertyDomainEventJdo.TextDomainEvent ev) {
-        this.phase = ev.getEventPhase();
-        // this.subject = (PropertyDomainEventJdo) ev.getSubject();
-        this.hidden = ev.isHidden();
-        this.oldValue = ev.getOldValue();
-        this.newValue = ev.getOldValue();
-        this.disabledReason = ev.getDisabledReason();
-        this.invalidityReason = ev.getInvalidityReason();
+    public PropertyDomainEventVm(String text) {
+        this.text = text;
     }
 
-    @Getter @Setter
-    private AbstractDomainEvent.Phase phase;
+    public String title() {
+        return "Property#domainEvent";
+    }
 
-    @Getter @Setter
-    private PropertyDomainEventJdo subject;
+//tag::class[]
+    public static class TextDomainEvent                             // <.>
+        extends PropertyDomainEvent<PropertyDomainEventVm,String> {}
 
+    @Property(
+        domainEvent = TextDomainEvent.class                         // <.>
+    )
+    @PropertyLayout(
+        describedAs =
+            "@Property(domainEvent = TextDomainEvent.class)"
+    )
+    @MemberOrder(name = "annotation", sequence = "1")
+    @XmlElement(required = true)
     @Getter @Setter
-    private String oldValue;
-    @Getter @Setter
-    private String newValue;
-
-    @Getter @Setter
-    private boolean hidden;
-    @Getter @Setter
-    private String disabledReason;
-    @Getter @Setter
-    private String invalidityReason;
-
-
-
+    private String text;
 }
 //end::class[]
