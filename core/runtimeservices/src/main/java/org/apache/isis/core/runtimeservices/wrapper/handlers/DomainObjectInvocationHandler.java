@@ -668,7 +668,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final Can<ManagedObject> argAdapters) {
         
         val interactionResult = objectAction
-                .isProposedArgumentSetValid(head, argAdapters,getInteractionInitiatedBy())
+                .isArgumentSetValid(head, argAdapters,getInteractionInitiatedBy())
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }

@@ -77,7 +77,7 @@ public interface FormUiModel extends HasTitle {
         
         val head = getMetaModel().interactionHead(getOwner());
         
-        return getMetaModel().isProposedArgumentSetValid(
+        return getMetaModel().isArgumentSetValid(
                 head, 
                 proposedArguments, 
                 InteractionInitiatedBy.USER);

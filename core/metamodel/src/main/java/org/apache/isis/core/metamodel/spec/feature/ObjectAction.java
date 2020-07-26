@@ -129,31 +129,31 @@ public interface ObjectAction extends ObjectMember {
             InteractionInitiatedBy interactionInitiatedBy);
 
 
-    // -- isProposedArgumentSetValid, isEachIndividualArgumentValid, isArgumentSetValid
+    // -- isArgumentSetValid, isArgumentSetValidForParameters, isArgumentSetValidForAction
 
     /**
      * Whether the provided argument set is valid, represented as a {@link Consent}.
      *
      * <p>
      *     Basically just calls (the helper methods also called by) first
-     *     {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy)}
+     *     {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy)}
      *     and then
-     *     {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}
+     *     {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy)}
      *     Those methods are
      *     separated out so that viewers have more fine-grained control.
      * </p>
      */
-    Consent isProposedArgumentSetValid(
+    Consent isArgumentSetValid(
             InteractionHead head,
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Normally action validation is all performed by
-     * {@link #isProposedArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
-     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy) this method} to
+     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
+     * {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy) this method} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy) validate argument set}
+     * {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy) validate argument set}
      * afterwards.
      *
      * <p>
@@ -161,17 +161,17 @@ public interface ObjectAction extends ObjectMember {
      * individually.
      * </p>
      */
-    Consent isEachIndividualArgumentValid(
+    Consent isArgumentSetValidForParameters(
             InteractionHead head,
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Normally action validation is all performed by
-     * {@link #isProposedArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
-     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy)} to
+     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
+     * {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy)} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy) this method} to
+     * {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy) this method} to
      * validate the entire argument set afterwards.
      *
      * <p>
@@ -179,7 +179,7 @@ public interface ObjectAction extends ObjectMember {
      * individually.
      * </p>
      */
-    Consent isArgumentSetValid(
+    Consent isArgumentSetValidForAction(
             InteractionHead head,
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);

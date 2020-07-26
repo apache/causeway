@@ -262,7 +262,7 @@ implements ObjectAction {
 
 
     @Override
-    public Consent isProposedArgumentSetValid(
+    public Consent isArgumentSetValid(
             final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -280,7 +280,7 @@ implements ObjectAction {
 
 
     @Override
-    public Consent isEachIndividualArgumentValid(
+    public Consent isArgumentSetValidForParameters(
             final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -311,7 +311,7 @@ implements ObjectAction {
     }
 
     @Override
-    public Consent isArgumentSetValid(
+    public Consent isArgumentSetValidForAction(
             final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -372,7 +372,7 @@ implements ObjectAction {
         }
 
         // do it?
-        final Consent validity = isProposedArgumentSetValid(head, arguments, interactionInitiatedBy);
+        final Consent validity = isArgumentSetValid(head, arguments, interactionInitiatedBy);
         if(validity.isVetoed()) {
             throw new RecoverableException(validity.getReason());
         }

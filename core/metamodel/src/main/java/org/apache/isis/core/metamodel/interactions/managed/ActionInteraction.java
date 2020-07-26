@@ -153,7 +153,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
             
             // validate entire param-list
             val validityVeto = action.getAction()
-                    .isArgumentSetValid(action.getInteractionHead(), state.getParameterList(), InteractionInitiatedBy.USER);
+                    .isArgumentSetValidForAction(action.getInteractionHead(), state.getParameterList(), InteractionInitiatedBy.USER);
             return validityVeto.isVetoed()
                     ? _Either.right(InteractionVeto.actionParamInvalid(validityVeto)) 
                     : _Either.left(action); 
