@@ -216,12 +216,15 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                 @Override
                 public Object execute(final Interaction.PropertyEdit currentExecution) {
 
+                    // TODO: REVIEW - is this safe to do?
+                    ManagedObject newValueAdapterMutatable = newValueAdapter;
+
                     try {
 
                         // update the current execution with the DTO (memento)
                         final PropertyEditDto editDto =
                                 getInteractionDtoServiceInternal().asPropertyEditDto(
-                                        owningProperty, targetAdapter, newValueAdapter);
+                                        owningProperty, targetAdapter, newValueAdapterMutatable);
                         currentExecution.setDto(editDto);
 
 
@@ -235,7 +238,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
                         // ... post the executing event
                         final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-                        final Object newValue = UnwrapUtil.single(newValueAdapter);
+                        final Object newValue = UnwrapUtil.single(newValueAdapterMutatable);
 
                         final PropertyDomainEvent<?, ?> event =
                                 domainEventHelper.postEventForProperty(
@@ -244,13 +247,19 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                                         getIdentified(), head,
                                         oldValue, newValue);
 
+                        Object newValuePossiblyUpdated = event.getNewValue();
+                        if(!Objects.equals(newValuePossiblyUpdated, newValue)) {
+                            newValueAdapterMutatable = newValuePossiblyUpdated != null
+                                    ? getObjectManager().adapt(newValuePossiblyUpdated)
+                                    : null;
+                        }
+
                         // set event onto the execution
                         currentExecution.setEvent(event);
 
                         // invoke method
                         style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty,
-                                targetAdapter, newValueAdapter, interactionInitiatedBy);
-
+                                targetAdapter, newValueAdapterMutatable, interactionInitiatedBy);
 
 
                         // reading the actual value from the target object, playing it safe...
