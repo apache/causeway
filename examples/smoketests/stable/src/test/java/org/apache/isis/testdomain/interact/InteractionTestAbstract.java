@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Supplier;
+
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -101,5 +104,20 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
         }
         assertEquals(0L, _NullSafe.streamAutodetect(x).count());
     }
+    
+    protected void assertDoesIncrement(Supplier<LongAdder> adder, Runnable runnable) {
+        final int eventCount0 = adder.get().intValue();
+        runnable.run();
+        final int eventCount1 = adder.get().intValue();
+        assertEquals(eventCount0 + 1, eventCount1);
+    }
+    
+    protected void assertDoesNotIncrement(Supplier<LongAdder> adder, Runnable runnable) {
+        final int eventCount0 = adder.get().intValue();
+        runnable.run();
+        final int eventCount1 = adder.get().intValue();
+        assertEquals(eventCount0, eventCount1);
+    }
+    
     
 }

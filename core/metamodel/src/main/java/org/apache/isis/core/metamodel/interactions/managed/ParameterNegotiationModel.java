@@ -73,10 +73,14 @@ public class ParameterNegotiationModel {
         
         this.observableActionValidation = _Observables.forFactory(()->
             validationFeedbackActive.getValue()
-            ? head.getMetaModel()
-                    .isArgumentSetValidForAction(head, getParamValues(), InteractionInitiatedBy.USER)
-                    .getReason()
-            : (String)null);
+                ? validateParameterSetForAction()
+                : (String)null);
+        
+        // when activated make sure all validation is reassessed
+        this.validationFeedbackActive.addListener((e,o,n)->{
+            paramModels.forEach(ParameterModel::invalidateChoicesAndValidation);
+            observableActionValidation.invalidate();
+        });
     }
     
     // -- ACTION SPECIFIC
@@ -172,6 +176,16 @@ public class ParameterNegotiationModel {
     private void onNewParamValue() {
         paramModels.forEach(ParameterModel::invalidateChoicesAndValidation);
         observableActionValidation.invalidate();
+    }
+    
+    private String validateParameterSetForAction() {
+        val head = this.getHead();
+        val validityConsentForAction = head.getMetaModel()
+                .isArgumentSetValidForAction(head, this.getParamValues(), InteractionInitiatedBy.USER);
+        if(validityConsentForAction!=null && validityConsentForAction.isVetoed()) {
+            return validityConsentForAction.getReason(); 
+        }
+        return null;
     }
     
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
