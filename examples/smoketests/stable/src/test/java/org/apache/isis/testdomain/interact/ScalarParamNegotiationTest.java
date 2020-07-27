@@ -18,14 +18,14 @@
  */
 package org.apache.isis.testdomain.interact;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -188,12 +188,26 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
 
         // unless all validations give green light, submission must be vetoed
         assertEquals(null, uiSubmit.getResult().leftIfAny());
-        assertEquals("validation failure(s)", ""+uiSubmit.getResult().rightIfAny());
+        assertEquals("invalid, sum must be zero, got -3", ""+uiSubmit.getResult().rightIfAny());
+        
+        // change parameters, so we pass validation
+        
+        uiParamA.simulateChoiceSelect(3);
+        uiSubmit.simulateSubmit();
+
+//debug        
+//        val head = pendingArgs.getHead();
+//        val cons = head.getMetaModel().isArgumentSetValid(head, pendingArgs.getParamValues(), InteractionInitiatedBy.USER);
+//        System.out.println(cons.getReason());
+        
+        assertTrue(uiSubmit.getResult().isLeft());
+        assertEquals(0, uiSubmit.getResult().leftIfAny().getPojo());
+        
         
         //TODO exceptions that occur during action invocation could either be rendered 
         //     as message, error page or action validation message 
     }
-  
+
     @Test
     void paramRangeA_whenChanging_shouldRenderParamAInvalid() {
 

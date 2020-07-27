@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.internal.binding._BindableAbstract;
 import org.apache.isis.core.commons.internal.binding._Bindables;
 import org.apache.isis.core.commons.internal.binding._Observables;
 import org.apache.isis.core.commons.internal.binding._Observables.LazyObservable;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -98,21 +99,22 @@ public class ParameterNegotiationModel {
     @NonNull public Observable<Boolean> getObservableValidationFeedbackActive() {
         return validationFeedbackActive;
     }
-    
-    public boolean isActionInvocationVetoed() {
-        activateValidationFeedback();
-        paramModels.forEach(ParameterModel::invalidateChoicesAndValidation);
-        observableActionValidation.invalidate();
-        
-        if(observableActionValidation.getValue()!=null) {
-            return true; // action invocation is vetoed by action validation
-        }
-        if(paramModels.stream()
-                .anyMatch(pm->pm.getObservableParamValidation().getValue()!=null)) {
-            return true; // action invocation is vetoed by param validation
-        }
-        return false;
-    }
+
+//XXX remove, there is a more direct way to do this with validateParameterSet
+//    public boolean isActionInvocationVetoed() {
+//        activateValidationFeedback();
+//        paramModels.forEach(ParameterModel::invalidateChoicesAndValidation);
+//        observableActionValidation.invalidate();
+//        
+//        if(observableActionValidation.getValue()!=null) {
+//            return true; // action invocation is vetoed by action validation
+//        }
+//        if(paramModels.stream()
+//                .anyMatch(pm->pm.getObservableParamValidation().getValue()!=null)) {
+//            return true; // action invocation is vetoed by param validation
+//        }
+//        return false;
+//    }
 
     // -- PARAMETER SPECIFIC
     
@@ -137,6 +139,11 @@ public class ParameterNegotiationModel {
     }
 
     // -- RATHER INTERNAL ... 
+    
+    public Consent validateParameterSet() {
+        val head = this.getHead();
+        return head.getMetaModel().isArgumentSetValid(head, this.getParamValues(), InteractionInitiatedBy.USER);
+    }
     
     @NonNull public ManagedObject getParamValue(int paramNr) {
         return paramModels.getElseFail(paramNr).getValue();
@@ -242,6 +249,8 @@ public class ParameterNegotiationModel {
         }
         
     }
+
+    
 
 
 
