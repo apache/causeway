@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.isis.core.commons.collections.Can;
@@ -105,8 +106,15 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         return this;
     }
 
+    public ActionInteraction startParameterNegotiation(@NonNull Consumer<ParameterNegotiationModel> onModel) {
+        getManagedAction()
+            .map(ManagedAction::startParameterNegotiation)
+            .ifPresent(onModel);
+        return this;
+    }
+    
     public static interface ParameterInvalidCallback {
-        void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
+        void onParameterInvalid(ManagedParameter2 managedParameter, InteractionVeto veto);
     }
     
     public _Either<ManagedObject, InteractionVeto> invokeWith(ParameterNegotiationModel pendingArgs) {
@@ -212,11 +220,6 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         @NonNull private Can<ManagedObject> parameterList = Can.empty();
         private Result interactionResult;
     }
-
-
-
-
-
     
 
 }

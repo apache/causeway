@@ -25,7 +25,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter2;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -204,7 +205,15 @@ class DomainResourceHelper {
         val actionInteraction = (ActionInteraction) ActionInteraction.start(objectAdapter, actionId)
         .checkVisibility(where)
         .checkUsability(where, intent)
-        .checkSemanticConstraint(semanticConstraint)
+        .checkSemanticConstraint(semanticConstraint);
+
+//TODO can we simplify the API?        
+//        actionInteraction.startParameterNegotiation(pendingArgs->{
+//            actionInteraction.invokeWith(pendingArgs);
+//        });
+        
+        
+        actionInteraction
         .useParameters(action->{
             
             val argAdapters = ObjectActionArgHelper.of(resourceContext, action)
@@ -213,7 +222,7 @@ class DomainResourceHelper {
             return argAdapters;
             
         }, 
-                (ManagedParameter managedParameter, InteractionVeto veto)->{
+                (ManagedParameter2 managedParameter, InteractionVeto veto)->{
                     InteractionFailureHandler.onParameterInvalid(managedParameter, veto, arguments);
                 }
         );

@@ -32,10 +32,10 @@ import lombok.val;
 @Getter
 @RequiredArgsConstructor(staticName = "of")
 @Deprecated // ParameterNegotiationModel has all we need
-public class ManagedParameterList implements Iterable<ManagedParameter> {
+public class ManagedParameterList implements Iterable<ManagedParameter2> {
 
     @NonNull private final ManagedAction owningAction;
-    @NonNull private final Can<ManagedParameter> parameters;
+    @NonNull private final Can<ManagedParameter2> parameters;
     
     public static ManagedParameterList ofValues(ManagedAction owningAction, Can<ManagedObject> paramValueList) {
         
@@ -45,14 +45,14 @@ public class ManagedParameterList implements Iterable<ManagedParameter> {
             final ManagedObject paramValue = Optional
                     .ofNullable(paramValueIterator.next())
                     .orElse(ManagedObject.of(param.getSpecification(), null));
-            return ManagedParameter.of(owningAction, param, paramValue);
+            return ManagedParameter2.of(owningAction, param, paramValue);
         });
         
         return of(owningAction, parameters);
     }
 
     @Override
-    public Iterator<ManagedParameter> iterator() {
+    public Iterator<ManagedParameter2> iterator() {
         return getParameters().iterator();
     }
     

@@ -22,6 +22,7 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
@@ -32,6 +33,7 @@ import org.apache.isis.core.commons.internal.binding._Observables.LazyObservable
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
@@ -57,7 +59,7 @@ public class ParameterNegotiationModel {
     }
 
     @Getter private final ActionInteractionHead head;
-    private final Can<ParameterModel> paramModels;
+    @Getter private final Can<ParameterModel> paramModels;
     private final _BindableAbstract<Boolean> validationFeedbackActive;
     private final LazyObservable<String> observableActionValidation;
     
@@ -86,7 +88,9 @@ public class ParameterNegotiationModel {
     // -- ACTION SPECIFIC
 
     @NonNull public Can<ManagedObject> getParamValues() {
-        return paramModels.map(ParameterModel::getValue);
+        return paramModels
+                .map(ParameterModel::getValue)
+                .map(Bindable::getValue);
     }
     
     @NonNull public ManagedObject getActionTarget() {
@@ -103,22 +107,6 @@ public class ParameterNegotiationModel {
     @NonNull public Observable<Boolean> getObservableValidationFeedbackActive() {
         return validationFeedbackActive;
     }
-
-//XXX remove, there is a more direct way to do this with validateParameterSet
-//    public boolean isActionInvocationVetoed() {
-//        activateValidationFeedback();
-//        paramModels.forEach(ParameterModel::invalidateChoicesAndValidation);
-//        observableActionValidation.invalidate();
-//        
-//        if(observableActionValidation.getValue()!=null) {
-//            return true; // action invocation is vetoed by action validation
-//        }
-//        if(paramModels.stream()
-//                .anyMatch(pm->pm.getObservableParamValidation().getValue()!=null)) {
-//            return true; // action invocation is vetoed by param validation
-//        }
-//        return false;
-//    }
 
     // -- PARAMETER SPECIFIC
     
@@ -150,7 +138,7 @@ public class ParameterNegotiationModel {
     }
     
     @NonNull public ManagedObject getParamValue(int paramNr) {
-        return paramModels.getElseFail(paramNr).getValue();
+        return paramModels.getElseFail(paramNr).getValue().getValue();
     }
 
     public void setParamValue(int paramNr, @NonNull ManagedObject newParamValue) {
@@ -190,11 +178,12 @@ public class ParameterNegotiationModel {
     
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
     
-    private static class ParameterModel {
+    //TODO only expose ManagedParameter
+    public static class ParameterModel implements ManagedParameter {
 
-        @Getter private final int paramNr;
-        @Getter @NonNull private final ObjectActionParameter metaModel;
-        @Getter @NonNull private final ParameterNegotiationModel model;
+        @Getter(onMethod_ = {@Override}) private final int paramNr;
+        @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter metaModel;
+        @Getter(onMethod_ = {@Override}) @NonNull private final ParameterNegotiationModel negotiationModel;
         @Getter @NonNull private final _BindableAbstract<ManagedObject> bindableParamValue;
         @Getter @NonNull private final LazyObservable<String> observableParamValidation;
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
@@ -202,16 +191,16 @@ public class ParameterNegotiationModel {
         
         private ParameterModel(
                 int paramNr, 
-                @NonNull ParameterNegotiationModel model,
+                @NonNull ParameterNegotiationModel negotiationModel,
                 @NonNull ManagedObject initialValue) {
             
             this.paramNr = paramNr;
-            this.metaModel = model.getHead().getMetaModel().getParameters().getElseFail(paramNr);
-            this.model = model;
+            this.metaModel = negotiationModel.getHead().getMetaModel().getParameters().getElseFail(paramNr);
+            this.negotiationModel = negotiationModel;
             
             bindableParamValue = _Bindables.forValue(initialValue);
             bindableParamValue.addListener((e,o,n)->{
-                getModel().onNewParamValue();
+                getNegotiationModel().onNewParamValue();
             });
             
             
@@ -219,12 +208,12 @@ public class ParameterNegotiationModel {
             observableParamChoices = metaModel.hasAutoComplete()
             ? _Observables.forFactory(()->
                 getMetaModel().getAutoComplete(
-                        getModel(), 
+                        getNegotiationModel(), 
                         getBindableParamSearchArgument().getValue(), 
                         InteractionInitiatedBy.USER))
             : metaModel.hasChoices() 
                 ? _Observables.forFactory(()->
-                    getMetaModel().getChoices(getModel(), InteractionInitiatedBy.USER))
+                    getMetaModel().getChoices(getNegotiationModel(), InteractionInitiatedBy.USER))
                 : _Observables.forFactory(Can::empty);
 
             // if has autoComplete, then activate the search argument        
@@ -239,19 +228,14 @@ public class ParameterNegotiationModel {
             observableParamValidation = _Observables.forFactory(()->
                 isValidationFeedbackActive()
                 ? getMetaModel()
-                        .isValid(getModel().head, getModel().getParamValues(), InteractionInitiatedBy.USER)
+                        .isValid(getNegotiationModel().head, getNegotiationModel().getParamValues(), InteractionInitiatedBy.USER)
                         .getReason()
                 : (String)null); 
         }
         
-        @SuppressWarnings("unused")
-        public String getName() {
-            return getMetaModel().getName();
-        }
-        
-        public @NonNull ManagedObject getValue() {
-            return bindableParamValue.getValue();
-        }
+//        public @NonNull ManagedObject getValue() {
+//            return bindableParamValue.getValue();
+//        }
         
         public void invalidateChoicesAndValidation() {
             observableParamChoices.invalidate();
@@ -259,16 +243,47 @@ public class ParameterNegotiationModel {
         }
         
         private boolean isValidationFeedbackActive() {
-            return getModel().getObservableValidationFeedbackActive().getValue();
+            return getNegotiationModel().getObservableValidationFeedbackActive().getValue();
+        }
+        
+        // -- MANAGED PARAMETER 
+
+        @Override
+        public Identifier getIdentifier() {
+            return getMetaModel().getIdentifier();
+        }
+
+        @Override
+        public String getDisplayLabel() {
+            return getMetaModel().getName();
+        }
+
+        @Override
+        public ObjectSpecification getSpecification() {
+            return getMetaModel().getSpecification();
+        }
+
+        @Override
+        public Bindable<ManagedObject> getValue() {
+            return bindableParamValue;
+        }
+
+        @Override
+        public Observable<String> getValidationMessage() {
+            return observableParamValidation;
+        }
+
+        @Override
+        public Bindable<String> getSearchArgument() {
+            return bindableParamSearchArgument;
+        }
+
+        @Override
+        public Observable<Can<ManagedObject>> getChoices() {
+            return observableParamChoices;
         }
         
     }
 
-    
-
-
-
-
-    
     
 }

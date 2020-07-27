@@ -19,6 +19,7 @@
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -26,7 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter2;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
@@ -57,12 +58,15 @@ public class UiActionHandler {
 
         log.info("about to build an action prompt for {}", managedAction.getIdentifier());
         
-        if(managedAction.getAction().getParameterCount()>0) {
+        final int paramCount = managedAction.getAction().getParameterCount();
+        
+        if(paramCount>0) {
             // TODO get an ActionPrompt, then on invocation show the result in the content view
             
             //Dialogs.message("Warn", "ActionPrompt not supported yet!", null);
             
-            val pendingParameterModel = managedAction.getInteractionHead().defaults();
+            val pendingArgs = managedAction.startParameterNegotiation();
+            
             
             Dialog<ParameterNegotiationModel> dialog = new Dialog<>();
             dialog.setTitle("<Title>");
@@ -75,18 +79,11 @@ public class UiActionHandler {
             grid.setPadding(new Insets(20, 150, 10, 10));
             dialog.getDialogPane().setContent(grid);
             
-            val actionMeta = managedAction.getAction();
-            
-            actionMeta.getParameters()
-            .forEach(paramMeta->{
+            pendingArgs.getParamModels().forEach(paramModel->{
                 
-                val paramNr = paramMeta.getNumber(); // zero based
+                val paramNr = paramModel.getParamNr(); // zero based
                 
-                val initialValue = pendingParameterModel.getParamValue(paramNr);
-                val managedParameter = ManagedParameter.of(managedAction, paramMeta, initialValue);
-                
-                val uiField = uiComponentFactory.parameterFor(ComponentRequest.of(
-                        managedParameter));
+                val uiField = uiComponentFactory.parameterFor(ComponentRequest.of(paramModel));
                 
                 grid.add(uiField.getUiLabel(), 0, paramNr);
                 grid.add(uiField.getUiField(), 1, paramNr);
@@ -95,7 +92,7 @@ public class UiActionHandler {
             
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == ButtonType.OK) {
-                    return pendingParameterModel;
+                    return pendingArgs;
                 }
                 return null;
             });

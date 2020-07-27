@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter2;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -86,7 +86,7 @@ public class InteractionFailureHandler {
     
     // collect info for each individual param that is not valid
     public static void onParameterInvalid(
-            @NonNull final ManagedParameter managedParameter, 
+            @NonNull final ManagedParameter2 managedParameter, 
             @NonNull final InteractionVeto veto, 
             @NonNull final JsonRepresentation arguments) {
 

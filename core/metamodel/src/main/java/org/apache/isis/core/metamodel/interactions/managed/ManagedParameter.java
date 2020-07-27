@@ -18,58 +18,20 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
-import java.util.Optional;
-
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.commons.binding.Bindable;
+import org.apache.isis.core.commons.binding.Observable;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+public interface ManagedParameter extends ManagedFeature {
 
-@Getter
-@RequiredArgsConstructor(staticName = "of")
-@Deprecated // ParameterNegotiationModel has all we need
-public class ManagedParameter implements ManagedFeature {
-    @NonNull private final ManagedAction owningAction;
-    @NonNull private final ObjectActionParameter parameter;
-    
-    @Deprecated //TODO use a binder instead
-    @NonNull private final ManagedObject value;
-    
-    public ManagedObject getOwningObject() {
-        return getOwningAction().getOwner();
-    }
-    
-    public Optional<InteractionVeto> validate(ManagedObject proposedValue) {
-        
-        return Optional.ofNullable(
-            getParameter()
-                .isValid(getOwningAction().getInteractionHead(), proposedValue, InteractionInitiatedBy.USER))
-        .map(reasonNotValid->InteractionVeto.actionParamInvalid(new Veto(reasonNotValid)));
-    }
-    
-    public Optional<InteractionVeto> validate() {
-        return validate(getValue());
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return parameter.getIdentifier();
-    }
-
-    @Override
-    public String getDisplayLabel() {
-        return parameter.getName();
-    }
-
-    @Override
-    public ObjectSpecification getSpecification() {
-        return parameter.getSpecification();
-    }
+    int getParamNr();
+    ObjectActionParameter getMetaModel();
+    ParameterNegotiationModel getNegotiationModel();
+    Bindable<ManagedObject> getValue();
+    Observable<String> getValidationMessage();
+    Bindable<String> getSearchArgument();
+    Observable<Can<ManagedObject>> getChoices();
     
 }

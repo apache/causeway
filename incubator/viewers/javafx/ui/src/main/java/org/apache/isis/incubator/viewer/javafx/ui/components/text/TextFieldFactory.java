@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter2;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
@@ -60,9 +60,9 @@ public class TextFieldFactory implements UiComponentHandlerFx {
 
         val uiComponent = new TextField();
         
-        if(request.getManagedFeature() instanceof ManagedParameter) {
+        if(request.getManagedFeature() instanceof ManagedParameter2) {
             
-            val managedParameter = (ManagedParameter)request.getManagedFeature();
+            val managedParameter = (ManagedParameter2)request.getManagedFeature();
             
 //            uiComponent.textProperty().
 //            
