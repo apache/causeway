@@ -33,7 +33,6 @@ import org.apache.isis.core.commons.internal.binding._Observables.LazyObservable
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -61,7 +60,7 @@ public class ParameterNegotiationModel {
     }
 
     @Getter private final ActionInteractionHead head;
-    @Getter private final Can<ParameterModel> paramModels;
+    private final Can<ParameterModel> paramModels;
     private final _BindableAbstract<Boolean> validationFeedbackActive;
     private final LazyObservable<String> observableActionValidation;
     
@@ -117,13 +116,17 @@ public class ParameterNegotiationModel {
     public void setParamValues(@NonNull Can<ManagedObject> paramValues) {
         // allow overflow and underflow
         val valueIterator = paramValues.iterator();
-        getParamModels().forEach(paramModel->{
+        paramModels.forEach(paramModel->{
             if(!valueIterator.hasNext()) return;
             paramModel.getBindableParamValue().setValue(valueIterator.next());
         });
     }
     
     // -- PARAMETER SPECIFIC
+    
+    @NonNull public Can<? extends ManagedParameter> getParamModels() {
+        return paramModels;
+    }
     
     @NonNull public ObjectActionParameter getParamMetamodel(int paramNr) {
         return paramModels.getElseFail(paramNr).getMetaModel();
@@ -207,8 +210,7 @@ public class ParameterNegotiationModel {
     
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
     
-    //TODO only expose ManagedParameter
-    public static class ParameterModel implements ManagedParameter {
+    private static class ParameterModel implements ManagedParameter {
 
         @Getter(onMethod_ = {@Override}) private final int paramNr;
         @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter metaModel;

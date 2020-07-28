@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel.ParameterModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -61,8 +61,8 @@ public interface UiComponentFactory<B, C> {
         @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
         @NonNull private final Where where;
         
-        public static ComponentRequest of(ParameterModel parameterModel) {
-            return of(parameterModel, Optional.empty(), Where.ANYWHERE);
+        public static ComponentRequest of(ManagedParameter managedParameter) {
+            return of(managedParameter, Optional.empty(), Where.ANYWHERE);
         }
         
         // -- SHORTCUTS

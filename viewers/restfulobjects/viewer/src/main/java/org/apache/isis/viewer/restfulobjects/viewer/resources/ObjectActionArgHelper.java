@@ -66,67 +66,10 @@ public class ObjectActionArgHelper {
                         String.format("exception when parsing paramNr %d [%s]: %s", i, argRepr, e));
                 
                 argAdapters.add(_Either.right(veto));
-                
-                InteractionFailureHandler.collectParameterInvalid(paramMeta, veto, arguments);
-                
             }
         }
         return Can.ofCollection(argAdapters);
     }
-    
-//    @Deprecated // validation is the responsibility of the param neg model
-//    public Can<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
-//        
-//        val action = managedAction.getAction();
-//        val owner = managedAction.getOwner();
-//        val head = action.interactionHead(owner);
-//        
-//        final List<JsonRepresentation> argList = argListFor(action, arguments);
-//
-//        final List<ManagedObject> argAdapters = _Lists.newArrayList();
-//        val parameters = action.getParameters();
-//        boolean valid = true;
-//        for (int i = 0; i < argList.size(); i++) {
-//            final JsonRepresentation argRepr = argList.get(i);
-//            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
-//            try {
-//                final ManagedObject argAdapter = new JsonParserHelper(resourceContext, paramSpec)
-//                        .objectAdapterFor(argRepr);
-//                argAdapters.add(argAdapter);
-//
-//                // validate individual arg
-//                final ObjectActionParameter parameter = parameters.getElseFail(i);
-//                final String reasonNotValid = parameter.isValid(head, argAdapter, InteractionInitiatedBy.USER);
-//                if (reasonNotValid != null) {
-//                    argRepr.mapPut("invalidReason", reasonNotValid);
-//                    valid = false;
-//                }
-//            } catch (final IllegalArgumentException e) {
-//                argAdapters.add(ManagedObject.of(paramSpec, null));
-//                valid = false;
-//            }
-//        }
-//
-//        val proposedArguments = Can.ofCollection(argAdapters);
-//        
-//        
-//        // validate entire argument set
-//        final Consent consent = action.isArgumentSetValidForAction(
-//                head, proposedArguments, InteractionInitiatedBy.USER);
-//        if (consent.isVetoed()) {
-//            arguments.mapPut("x-ro-invalidReason", consent.getReason());
-//            valid = false;
-//        }
-//
-//        if(!valid) {
-//            throw RestfulObjectsApplicationException.createWithBody(
-//                    RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
-//                    arguments,
-//                    "Validation failed, see body for details");
-//        }
-//
-//        return proposedArguments;
-//    }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = _Lists.newArrayList();
@@ -143,19 +86,6 @@ public class ObjectActionArgHelper {
             }
         });
 
-        // legacy of ...
-        //        for (final Map.Entry<String, JsonRepresentation> arg : arguments.streamMap()) {
-        //            final String argName = arg.getKey();
-        //            if(argName.startsWith("x-ro")) {
-        //                continue;
-        //            }
-        //            if (action.getParameterById(argName) == null) {
-        //                String reason = String.format("Argument '%s' found but no such parameter", argName);
-        //                arguments.mapPut("x-ro-invalidReason", reason);
-        //                throw RestfulObjectsApplicationException.createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
-        //            }
-        //        }
-
         // ensure that an argument value has been provided for all non-optional
         // parameters
         val parameters = action.getParameters();
@@ -171,5 +101,7 @@ public class ObjectActionArgHelper {
         }
         return argList;
     }
+
+
 
 }

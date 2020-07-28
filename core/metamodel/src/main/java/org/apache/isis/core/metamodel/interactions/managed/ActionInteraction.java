@@ -136,71 +136,6 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         return Optional.empty();        
     }
     
-    
-//    /**
-//     * @deprecated TODO we might rather make validation the responsibility of the {@link ParameterNegotiationModel}
-//     * and then maybe provide something like {@code invokeWith(ParameterNegotiationModel model, ... callback)} here
-//     */
-//    public ActionInteraction useParameters( 
-//            final ParameterInvalidCallback parameterInvalidCallback) {
-//
-//        chain = chain.leftRemap(action->{
-//            
-//            state.setParameterList(actionParameterProvider.apply(action));
-//            
-//            val managedParameters = 
-//                    ManagedParameterList.ofValues(action, state.getParameterList());
-//            
-//            boolean invalid = false;
-//            for(val managedParameter : managedParameters) {
-//                // validate each individual argument
-//                val veto = managedParameter.validate();
-//                if(veto.isPresent()) {
-//                    invalid = true;
-//                    if(parameterInvalidCallback!=null) {
-//                        parameterInvalidCallback.onParameterInvalid(managedParameter, veto.get());
-//                    }
-//                }
-//            }
-//            
-//            if(invalid) {
-//                //TODO veto
-//            }
-//            
-//            // validate entire param-list
-//            val validityVeto = action.getAction()
-//                    .isArgumentSetValidForAction(action.getInteractionHead(), state.getParameterList(), InteractionInitiatedBy.USER);
-//            return validityVeto.isVetoed()
-//                    ? _Either.right(InteractionVeto.actionParamInvalid(validityVeto)) 
-//                    : _Either.left(action); 
-//                    
-//        });
-//        return this;
-//    }
-//
-//    public <X extends Throwable> 
-//    Result getResultElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
-//        
-//        chain = chain.leftRemap(action->{
-//            val actionResultOrVeto = action.invoke(state.getParameterList());
-//            
-//            if(actionResultOrVeto.isLeft()) {
-//                val actionResult = actionResultOrVeto.leftIfAny();
-//                state.setInteractionResult(Result.of(action, state.getParameterList(), actionResult));
-//                return _Either.left(action);
-//            } else {
-//                return _Either.right(actionResultOrVeto.rightIfAny());
-//            }
-//            
-//        });
-//        
-//        if (chain.isLeft()) {
-//            return state.getInteractionResult();
-//        } else {
-//            throw onFailure.apply(chain.rightIfAny());
-//        }
-//    }
-    
     /**
      * @return optionally the ManagedAction based on whether there 
      * was no interaction veto within the originating chain 
@@ -218,15 +153,6 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         return super.getManagedMemberElseThrow(onFailure);
     }
     
-    // -- HELPER
-    
-//    private final State state = new State();
-//    @Data
-//    private static class State {
-//        @NonNull private Can<ManagedObject> parameterList = Can.empty();
-//        private Result interactionResult;
-//    }
-
     
 
 }

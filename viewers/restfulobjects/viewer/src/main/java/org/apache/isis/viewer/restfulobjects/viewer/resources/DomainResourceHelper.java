@@ -221,16 +221,29 @@ class DomainResourceHelper {
         
         val hasParams = pendingArgs.getParamCount()>0; 
         
-        // parse parameters, if any
+        
         if(hasParams) {
         
+            // parse parameters ...
+            
             val action = pendingArgs.getHead().getMetaModel();
+            val vetoCount = new LongAdder();
             
             val paramsOrVetos = ObjectActionArgHelper
                     .parseArguments(resourceContext, action, arguments);
             
-            if(paramsOrVetos.stream()
-                    .anyMatch(_Either::isRight)) {
+            val paramsOrVetosIterator = paramsOrVetos.iterator();
+            
+            pendingArgs.getParamModels().forEach(paramModel->{
+                val paramOrVeto = paramsOrVetosIterator.next();
+                if(paramOrVeto.isRight()) {
+                    val veto = paramOrVeto.rightIfAny(); 
+                    InteractionFailureHandler.collectParameterInvalid(paramModel.getMetaModel(), veto, arguments);
+                    vetoCount.increment();
+                }
+            });
+            
+            if(vetoCount.intValue()>0) {
                 throw InteractionFailureHandler.onParameterListInvalid(
                         InteractionVeto.actionParamInvalid("error parsing arguments"), arguments);
             }
@@ -238,7 +251,8 @@ class DomainResourceHelper {
             val argAdapters = paramsOrVetos.map(_Either::leftIfAny);
             pendingArgs.setParamValues(argAdapters);
             
-            val vetoCount = new LongAdder();
+            // validate parameters ...
+            
             val individualParamConsents = pendingArgs.validateParameterSetForParameters();
             val paramConsentIterator = individualParamConsents.iterator(); 
             
@@ -270,7 +284,7 @@ class DomainResourceHelper {
         }
             
         if(resourceContext.isValidateOnly()) {
-            return Response.noContent().build();
+            return Response.noContent().build(); // do not progress any further
         }
         
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
