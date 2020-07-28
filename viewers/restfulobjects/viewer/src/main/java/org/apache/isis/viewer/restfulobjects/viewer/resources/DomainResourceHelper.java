@@ -232,13 +232,10 @@ class DomainResourceHelper {
             val paramsOrVetos = ObjectActionArgHelper
                     .parseArguments(resourceContext, action, arguments);
             
-            val paramsOrVetosIterator = paramsOrVetos.iterator();
-            
-            pendingArgs.getParamModels().forEach(paramModel->{
-                val paramOrVeto = paramsOrVetosIterator.next();
+            pendingArgs.getParamModels().zip(paramsOrVetos, (managedParam, paramOrVeto)->{
                 if(paramOrVeto.isRight()) {
                     val veto = paramOrVeto.rightIfAny(); 
-                    InteractionFailureHandler.collectParameterInvalid(paramModel.getMetaModel(), veto, arguments);
+                    InteractionFailureHandler.collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
                     vetoCount.increment();
                 }
             });
@@ -254,17 +251,13 @@ class DomainResourceHelper {
             // validate parameters ...
             
             val individualParamConsents = pendingArgs.validateParameterSetForParameters();
-            val paramConsentIterator = individualParamConsents.iterator(); 
             
-            pendingArgs.getParamModels().forEach(paramModel->{
-                val consent = paramConsentIterator.next();
-                
+            pendingArgs.getParamModels().zip(individualParamConsents, (paramModel, consent)->{
                 if(consent.isVetoed()) {
                     val veto = InteractionVeto.actionParamInvalid(consent);
                     InteractionFailureHandler.collectParameterInvalid(paramModel.getMetaModel(), veto, arguments);
                     vetoCount.increment();
                 }
-                
             });
             
             if(vetoCount.intValue()>0) {

@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -81,6 +82,11 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public Iterator<T> iterator() {
         return Collections.<T>emptyList().iterator();
+    }
+    
+    @Override
+    public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
+        // no-op
     }
 
     @Override

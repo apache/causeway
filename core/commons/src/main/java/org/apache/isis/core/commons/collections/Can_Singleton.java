@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -83,6 +84,11 @@ final class Can_Singleton<T> implements Can<T> {
         return Collections.singletonList(element).iterator();
     }
 
+    @Override
+    public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
+        action.accept(element, zippedIn.iterator().next());
+    }
+    
     @Override
     public Can<T> add(@NonNull T element) {
         return Can.ofStream(Stream.of(this.element, element)); // append

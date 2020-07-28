@@ -25,11 +25,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.internal.base._Casts;
+
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +97,16 @@ final class Can_Multiple<T> implements Can<T> {
     @Override
     public Iterator<T> iterator() {
         return Collections.unmodifiableList(elements).iterator();
+    }
+    
+    @Override
+    public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
+        requires(zippedIn, "zippedIn");
+        requires(action, "action");
+        val zippedInIterator = zippedIn.iterator();
+        stream().forEach(t->{
+            action.accept(t, zippedInIterator.next());
+        });
     }
 
     @Override

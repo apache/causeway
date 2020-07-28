@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -398,6 +399,8 @@ public interface Can<T> extends Iterable<T>, Serializable {
         requires(action, "action");
         stream().forEach(action);
     }
+    
+    <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action);
     
     // -- MANIPULATION
     
