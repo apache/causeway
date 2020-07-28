@@ -19,7 +19,7 @@
 
 ext {
     cucumberVersion = "5.1.2"
-    jacksonVersion = "2.10.4"
+    jacksonVersion = "2.11.1"
     jaxApiVersion = "2.3.1"
     jmockVersion = "2.11.0"
     junitVersion = "5.6.2"
