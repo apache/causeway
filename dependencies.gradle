@@ -25,9 +25,9 @@ ext {
     junitVersion = "5.6.2"
     poiVersion = "4.1.1"
     shiroVersion = "1.4.1"
-    springBootVersion = "2.3.1.RELEASE"
-    springVersion = "5.2.7.RELEASE"
-    wicketVersion = "8.8.0"
+    springBootVersion = "2.3.2.RELEASE"
+    springVersion = "5.2.8.RELEASE"
+    wicketVersion = "8.9.0"
     wicketBootstrapVersion = "2.0.13"
     xdocreportVersion = "1.0.6"
     Libs = [
@@ -109,8 +109,8 @@ ext {
             springWeb                       : "org.springframework:spring-web:$springVersion",
             summernote                      : "org.webjars.bower:summernote:0.8.11",
             swaggerCore                     : "io.swagger:swagger-core:1.6.0",
-            vaadin                          : "com.vaadin:vaadin:14.3.0",
-            vaadinSpring                    : "com.vaadin:vaadin-spring:12.2.0",
+            vaadin                          : "com.vaadin:vaadin:14.3.1",
+            vaadinSpring                    : "com.vaadin:vaadin-spring:12.3.0",
             wicketAuthRoles                 : "org.apache.wicket:wicket-auth-roles:$wicketVersion",
             wicketBootstrapCore             : "de.agilecoders.wicket:wicket-bootstrap-core:$wicketBootstrapVersion",
             wicketBootstrapExtensions       : "de.agilecoders.wicket:wicket-bootstrap-extensions:$wicketBootstrapVersion",
