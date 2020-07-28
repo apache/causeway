@@ -19,7 +19,6 @@
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter2;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;

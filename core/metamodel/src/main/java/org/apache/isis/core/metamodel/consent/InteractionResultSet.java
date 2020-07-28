@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.consent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class InteractionResultSet {
 
@@ -100,5 +101,9 @@ public class InteractionResultSet {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    public Stream<InteractionResult> stream() {
+        return results.stream();
     }
 }

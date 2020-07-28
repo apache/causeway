@@ -42,6 +42,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -161,7 +162,7 @@ public interface ObjectAction extends ObjectMember {
      * individually.
      * </p>
      */
-    Consent isArgumentSetValidForParameters(
+    InteractionResultSet isArgumentSetValidForParameters(
             InteractionHead head,
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);

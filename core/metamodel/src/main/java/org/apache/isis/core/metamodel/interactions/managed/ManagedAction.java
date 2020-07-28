@@ -92,7 +92,7 @@ public final class ManagedAction extends ManagedMember {
     
     public _Either<ManagedObject, InteractionVeto> invoke(@NonNull Can<ManagedObject> actionParameters) {
             
-        //TODO validate params, and handle invocation exceptions
+        // param validation is not our responsibility here
         
         val action = getAction();
         

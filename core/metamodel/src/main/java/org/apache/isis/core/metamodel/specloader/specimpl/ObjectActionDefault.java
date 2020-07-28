@@ -280,7 +280,7 @@ implements ObjectAction {
 
 
     @Override
-    public Consent isArgumentSetValidForParameters(
+    public InteractionResultSet isArgumentSetValidForParameters(
             final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -289,7 +289,7 @@ implements ObjectAction {
 
         validateArgumentsIndividually(head, proposedArguments, interactionInitiatedBy, resultSet);
 
-        return resultSet.createConsent();
+        return resultSet;
     }
 
     private void validateArgumentsIndividually(

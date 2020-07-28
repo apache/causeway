@@ -32,6 +32,8 @@ import org.apache.isis.core.commons.internal.binding._Observables;
 import org.apache.isis.core.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -75,7 +77,7 @@ public class ParameterNegotiationModel {
         
         this.observableActionValidation = _Observables.forFactory(()->
             validationFeedbackActive.getValue()
-                ? validateParameterSetForAction()
+                ? actionValidationMessage()
                 : (String)null);
         
         // when activated make sure all validation is reassessed
@@ -86,6 +88,10 @@ public class ParameterNegotiationModel {
     }
     
     // -- ACTION SPECIFIC
+    
+    public int getParamCount() {
+        return paramModels.size();
+    }
 
     @NonNull public Can<ManagedObject> getParamValues() {
         return paramModels
@@ -108,6 +114,15 @@ public class ParameterNegotiationModel {
         return validationFeedbackActive;
     }
 
+    public void setParamValues(@NonNull Can<ManagedObject> paramValues) {
+        // allow overflow and underflow
+        val valueIterator = paramValues.iterator();
+        getParamModels().forEach(paramModel->{
+            if(!valueIterator.hasNext()) return;
+            paramModel.getBindableParamValue().setValue(valueIterator.next());
+        });
+    }
+    
     // -- PARAMETER SPECIFIC
     
     @NonNull public ObjectActionParameter getParamMetamodel(int paramNr) {
@@ -132,10 +147,26 @@ public class ParameterNegotiationModel {
 
     // -- RATHER INTERNAL ... 
     
+    /** validates all, the action and each individual parameter */ 
     public Consent validateParameterSet() {
         val head = this.getHead();
         return head.getMetaModel().isArgumentSetValid(head, this.getParamValues(), InteractionInitiatedBy.USER);
     }
+    
+    public Consent validateParameterSetForAction() {
+        val head = this.getHead();
+        return head.getMetaModel().isArgumentSetValidForAction(head, this.getParamValues(), InteractionInitiatedBy.USER);
+    }
+    
+    public Can<Consent> validateParameterSetForParameters() {
+        val head = this.getHead();
+        return head.getMetaModel()
+                .isArgumentSetValidForParameters(head, this.getParamValues(), InteractionInitiatedBy.USER)
+                .stream()
+                .map(InteractionResult::createConsent)
+                .collect(Can.toCan());
+    }
+    
     
     @NonNull public ManagedObject getParamValue(int paramNr) {
         return paramModels.getElseFail(paramNr).getValue().getValue();
@@ -166,10 +197,8 @@ public class ParameterNegotiationModel {
         observableActionValidation.invalidate();
     }
     
-    private String validateParameterSetForAction() {
-        val head = this.getHead();
-        val validityConsentForAction = head.getMetaModel()
-                .isArgumentSetValidForAction(head, this.getParamValues(), InteractionInitiatedBy.USER);
+    private String actionValidationMessage() {
+        val validityConsentForAction = this.validateParameterSetForAction();
         if(validityConsentForAction!=null && validityConsentForAction.isVetoed()) {
             return validityConsentForAction.getReason(); 
         }

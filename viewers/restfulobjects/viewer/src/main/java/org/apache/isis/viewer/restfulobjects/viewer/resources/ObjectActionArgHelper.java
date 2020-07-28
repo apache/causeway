@@ -22,12 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -45,61 +43,90 @@ import lombok.val;
 @RequiredArgsConstructor(staticName = "of")
 public class ObjectActionArgHelper {
 
-    private final IResourceContext resourceContext;
-    private final ManagedAction managedAction;
-
-    public Can<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
+    public static Can<_Either<ManagedObject, InteractionVeto>> parseArguments(
+            final IResourceContext resourceContext,
+            final ObjectAction action,
+            final JsonRepresentation arguments) {
         
-        val action = managedAction.getAction();
-        val owner = managedAction.getOwner();
-        val head = action.interactionHead(owner);
+        val jsonArgList = argListFor(action, arguments);
         
-        final List<JsonRepresentation> argList = argListFor(action, arguments);
-
-        final List<ManagedObject> argAdapters = _Lists.newArrayList();
+        final List<_Either<ManagedObject, InteractionVeto>> argAdapters = _Lists.newArrayList();
         val parameters = action.getParameters();
-        boolean valid = true;
-        for (int i = 0; i < argList.size(); i++) {
-            final JsonRepresentation argRepr = argList.get(i);
-            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
+        for (int i = 0; i < jsonArgList.size(); i++) {
+            final JsonRepresentation argRepr = jsonArgList.get(i);
+            val paramMeta = parameters.getElseFail(i);
+            val paramSpec = paramMeta.getSpecification();
             try {
-                final ManagedObject argAdapter = new JsonParserHelper(resourceContext, paramSpec)
+                val argAdapter = new JsonParserHelper(resourceContext, paramSpec)
                         .objectAdapterFor(argRepr);
-                argAdapters.add(argAdapter);
-
-                // validate individual arg
-                final ObjectActionParameter parameter = parameters.getElseFail(i);
-                final String reasonNotValid = parameter.isValid(head, argAdapter, InteractionInitiatedBy.USER);
-                if (reasonNotValid != null) {
-                    argRepr.mapPut("invalidReason", reasonNotValid);
-                    valid = false;
-                }
-            } catch (final IllegalArgumentException e) {
-                argAdapters.add(ManagedObject.of(paramSpec, null));
-                valid = false;
+                argAdapters.add(_Either.left(argAdapter));
+            } catch (Exception e) {
+                
+                val veto = InteractionVeto.actionParamInvalid(
+                        String.format("exception when parsing paramNr %d [%s]: %s", i, argRepr, e));
+                
+                argAdapters.add(_Either.right(veto));
+                
+                InteractionFailureHandler.collectParameterInvalid(paramMeta, veto, arguments);
+                
             }
         }
-
-        val proposedArguments = Can.ofCollection(argAdapters);
-        
-        
-        // validate entire argument set
-        final Consent consent = action.isArgumentSetValidForAction(
-                head, proposedArguments, InteractionInitiatedBy.USER);
-        if (consent.isVetoed()) {
-            arguments.mapPut("x-ro-invalidReason", consent.getReason());
-            valid = false;
-        }
-
-        if(!valid) {
-            throw RestfulObjectsApplicationException.createWithBody(
-                    RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
-                    arguments,
-                    "Validation failed, see body for details");
-        }
-
-        return proposedArguments;
+        return Can.ofCollection(argAdapters);
     }
+    
+//    @Deprecated // validation is the responsibility of the param neg model
+//    public Can<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
+//        
+//        val action = managedAction.getAction();
+//        val owner = managedAction.getOwner();
+//        val head = action.interactionHead(owner);
+//        
+//        final List<JsonRepresentation> argList = argListFor(action, arguments);
+//
+//        final List<ManagedObject> argAdapters = _Lists.newArrayList();
+//        val parameters = action.getParameters();
+//        boolean valid = true;
+//        for (int i = 0; i < argList.size(); i++) {
+//            final JsonRepresentation argRepr = argList.get(i);
+//            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
+//            try {
+//                final ManagedObject argAdapter = new JsonParserHelper(resourceContext, paramSpec)
+//                        .objectAdapterFor(argRepr);
+//                argAdapters.add(argAdapter);
+//
+//                // validate individual arg
+//                final ObjectActionParameter parameter = parameters.getElseFail(i);
+//                final String reasonNotValid = parameter.isValid(head, argAdapter, InteractionInitiatedBy.USER);
+//                if (reasonNotValid != null) {
+//                    argRepr.mapPut("invalidReason", reasonNotValid);
+//                    valid = false;
+//                }
+//            } catch (final IllegalArgumentException e) {
+//                argAdapters.add(ManagedObject.of(paramSpec, null));
+//                valid = false;
+//            }
+//        }
+//
+//        val proposedArguments = Can.ofCollection(argAdapters);
+//        
+//        
+//        // validate entire argument set
+//        final Consent consent = action.isArgumentSetValidForAction(
+//                head, proposedArguments, InteractionInitiatedBy.USER);
+//        if (consent.isVetoed()) {
+//            arguments.mapPut("x-ro-invalidReason", consent.getReason());
+//            valid = false;
+//        }
+//
+//        if(!valid) {
+//            throw RestfulObjectsApplicationException.createWithBody(
+//                    RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
+//                    arguments,
+//                    "Validation failed, see body for details");
+//        }
+//
+//        return proposedArguments;
+//    }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = _Lists.newArrayList();

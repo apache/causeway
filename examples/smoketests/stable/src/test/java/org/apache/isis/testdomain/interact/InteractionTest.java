@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.interact;
 
-import java.util.NoSuchElementException;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -27,14 +25,10 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -44,7 +38,6 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
-import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
@@ -145,14 +138,16 @@ class InteractionTest extends InteractionTestAbstract {
     }
     
     @Test
-    void actionInteraction_whenEnabled_shouldAllowInvocation() throws Throwable {
+    void actionInteraction_whenEnabled_shouldAllowInvocation() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled")
         .checkVisibility(Where.OBJECT_FORMS)
         .checkUsability(Where.OBJECT_FORMS);
         
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
-        assertEquals(99, (int)result.getActionReturnedObject().getPojo());    
+        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        assertTrue(resultOrVeto.isLeft());
+        assertEquals(99, (int)resultOrVeto.leftIfAny().getPojo());    
     }
 
     @Test
@@ -161,10 +156,17 @@ class InteractionTest extends InteractionTestAbstract {
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
         .checkVisibility(Where.OBJECT_FORMS)
         .checkUsability(Where.OBJECT_FORMS);
+        
+        assertFalse(actionInteraction.startParameterNegotiation().isPresent());
 
-        assertThrows(IllegalAccessException.class, ()->{
-            actionInteraction.getResultElseThrow(veto->_Exceptions.illegalAccess("%s", veto.toString()));    
-        });
+        // even though when assembling valid parameters ...
+        val pendingArgs = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
+                .startParameterNegotiation().get();
+        
+        // we should not be able to invoke the action
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        assertTrue(resultOrVeto.isRight());
+        
     }
     
     @Test
@@ -176,11 +178,13 @@ class InteractionTest extends InteractionTestAbstract {
         
         val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
         
-        actionInteraction.useParameters(__->params, 
-                (managedParameter, veto)-> fail(veto.toString()));
+        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        pendingArgs.setParamValues(params);
         
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
-        assertEquals(46, (int)result.getActionReturnedObject().getPojo());
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        assertTrue(resultOrVeto.isLeft());
+        
+        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
     }
 
     @Test
@@ -192,15 +196,17 @@ class InteractionTest extends InteractionTestAbstract {
         
         val params = Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
         
-        actionInteraction.useParameters(__->params, 
-                (managedParameter, veto)-> fail(veto.toString()));
+        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        pendingArgs.setParamValues(params);
         
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
-        assertEquals(46, (int)result.getActionReturnedObject().getPojo());
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        assertTrue(resultOrVeto.isLeft());
+        
+        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
     }
     
     @Test
-    void actionInteraction_withTooLittleParams_shouldFail() {
+    void actionInteraction_withTooLittleParams_shouldIgnoreUnderflow() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
         .checkVisibility(Where.OBJECT_FORMS)
@@ -208,11 +214,13 @@ class InteractionTest extends InteractionTestAbstract {
         
         val params = Can.of(objectManager.adapt(12));
         
-        assertThrows(NoSuchElementException.class, ()->{
-            
-            actionInteraction.useParameters(__->params, 
-                    (managedParameter, veto)-> fail(veto.toString()));
-        });
+        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        pendingArgs.setParamValues(params);
+        
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        assertTrue(resultOrVeto.isLeft());
+        
+        assertEquals(12, (int)resultOrVeto.leftIfAny().getPojo());
 
     }
     

@@ -18,16 +18,19 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
+import java.util.concurrent.atomic.LongAdder;
+
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.Result;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter2;
-import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -207,33 +210,79 @@ class DomainResourceHelper {
         .checkUsability(where, intent)
         .checkSemanticConstraint(semanticConstraint);
 
-//TODO can we simplify the API?        
-//        actionInteraction.startParameterNegotiation(pendingArgs->{
-//            actionInteraction.invokeWith(pendingArgs);
-//        });
+        val pendingArgs = actionInteraction.startParameterNegotiation().orElse(null);
+
+        if(pendingArgs==null) {
+            // no such action or not visible or not usable
+            throw InteractionFailureHandler.onFailure(actionInteraction
+                    .getInteractionVeto()
+                    .orElseGet(()->InteractionVeto.notFound(MemberType.ACTION, actionId))); // unexpected code reach
+        }
         
+        val hasParams = pendingArgs.getParamCount()>0; 
         
-        actionInteraction
-        .useParameters(action->{
+        // parse parameters, if any
+        if(hasParams) {
+        
+            val action = pendingArgs.getHead().getMetaModel();
             
-            val argAdapters = ObjectActionArgHelper.of(resourceContext, action)
-                    .parseAndValidateArguments(arguments);
+            val paramsOrVetos = ObjectActionArgHelper
+                    .parseArguments(resourceContext, action, arguments);
             
-            return argAdapters;
+            if(paramsOrVetos.stream()
+                    .anyMatch(_Either::isRight)) {
+                throw InteractionFailureHandler.onParameterListInvalid(
+                        InteractionVeto.actionParamInvalid("error parsing arguments"), arguments);
+            }
             
-        }, 
-                (ManagedParameter2 managedParameter, InteractionVeto veto)->{
-                    InteractionFailureHandler.onParameterInvalid(managedParameter, veto, arguments);
+            val argAdapters = paramsOrVetos.map(_Either::leftIfAny);
+            pendingArgs.setParamValues(argAdapters);
+            
+            val vetoCount = new LongAdder();
+            val individualParamConsents = pendingArgs.validateParameterSetForParameters();
+            val paramConsentIterator = individualParamConsents.iterator(); 
+            
+            pendingArgs.getParamModels().forEach(paramModel->{
+                val consent = paramConsentIterator.next();
+                
+                if(consent.isVetoed()) {
+                    val veto = InteractionVeto.actionParamInvalid(consent);
+                    InteractionFailureHandler.collectParameterInvalid(paramModel.getMetaModel(), veto, arguments);
+                    vetoCount.increment();
                 }
-        );
+                
+            });
+            
+            if(vetoCount.intValue()>0) {
+                throw InteractionFailureHandler.onParameterListInvalid(
+                        InteractionVeto.actionParamInvalid(
+                                String.format("%d argument(s) failed validation", vetoCount.intValue())), 
+                            arguments);
+            }
+ 
+        }
         
+        val actionConsent = pendingArgs.validateParameterSetForAction();
+        if(actionConsent.isVetoed()) {
+            throw InteractionFailureHandler.onParameterListInvalid(
+                    InteractionVeto.invalid(actionConsent),
+                    arguments);
+        }
+            
         if(resourceContext.isValidateOnly()) {
-            actionInteraction.validateElseThrow(InteractionFailureHandler::onFailure);
             return Response.noContent().build();
         }
         
-        val actionInteractionResult = actionInteraction
-                .getResultElseThrow(InteractionFailureHandler::onFailure);
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        
+        if(resultOrVeto.isRight()) {
+            throw InteractionFailureHandler.onFailure(resultOrVeto.rightIfAny());
+        }
+        
+        val actionInteractionResult = Result.of(
+                actionInteraction.getManagedAction().orElse(null),
+                pendingArgs.getParamValues(), 
+                resultOrVeto.leftIfAny());
         
         val objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
 

@@ -19,19 +19,15 @@
 package org.apache.isis.testdomain.interact;
 
 import java.util.Collections;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
@@ -105,11 +101,13 @@ class NewParameterModelTest extends InteractionTestAbstract {
         
         val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
         
-        actionInteraction.useParameters(__->params, 
-                (managedParameter, veto)-> fail(veto.toString()));
+        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        pendingArgs.setParamValues(params);
         
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
-        assertEquals(46, (int)result.getActionReturnedObject().getPojo());
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        assertTrue(resultOrVeto.isLeft());
+        
+        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
     }
 
     @Test
@@ -121,15 +119,17 @@ class NewParameterModelTest extends InteractionTestAbstract {
         
         val params =  Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
         
-        actionInteraction.useParameters(__->params, 
-                (managedParameter, veto)-> fail(veto.toString()));
+        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        pendingArgs.setParamValues(params);
         
-        val result = actionInteraction.getResultElseThrow(veto->fail(veto.toString()));
-        assertEquals(46, (int)result.getActionReturnedObject().getPojo());
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        assertTrue(resultOrVeto.isLeft());
+        
+        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
     }
     
     @Test
-    void actionInteraction_withTooLittleParams_shouldFail() throws Throwable {
+    void actionInteraction_withTooLittleParams_shouldIgnoreUnderflow() throws Throwable {
 
         val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
         .checkVisibility(Where.OBJECT_FORMS)
@@ -137,12 +137,13 @@ class NewParameterModelTest extends InteractionTestAbstract {
         
         val params = Can.<ManagedObject>of();
         
-        assertThrows(NoSuchElementException.class, ()->{
-            
-            actionInteraction.useParameters(__->params, 
-                    (managedParameter, veto)-> fail(veto.toString()));
-        });
-
+        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        pendingArgs.setParamValues(params);
+        
+        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        assertTrue(resultOrVeto.isLeft());
+        
+        assertEquals(5, (int)resultOrVeto.leftIfAny().getPojo());
     }
     
     @Test
