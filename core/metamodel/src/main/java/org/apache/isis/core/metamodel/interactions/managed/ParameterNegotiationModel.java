@@ -264,10 +264,6 @@ public class ParameterNegotiationModel {
                 : (String)null); 
         }
         
-//        public @NonNull ManagedObject getValue() {
-//            return bindableParamValue.getValue();
-//        }
-        
         public void invalidateChoicesAndValidation() {
             observableParamChoices.invalidate();
             observableParamValidation.invalidate();

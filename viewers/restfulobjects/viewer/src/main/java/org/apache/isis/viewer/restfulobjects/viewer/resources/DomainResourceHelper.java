@@ -252,10 +252,10 @@ class DomainResourceHelper {
             
             val individualParamConsents = pendingArgs.validateParameterSetForParameters();
             
-            pendingArgs.getParamModels().zip(individualParamConsents, (paramModel, consent)->{
+            pendingArgs.getParamModels().zip(individualParamConsents, (managedParam, consent)->{
                 if(consent.isVetoed()) {
                     val veto = InteractionVeto.actionParamInvalid(consent);
-                    InteractionFailureHandler.collectParameterInvalid(paramModel.getMetaModel(), veto, arguments);
+                    InteractionFailureHandler.collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
                     vetoCount.increment();
                 }
             });
