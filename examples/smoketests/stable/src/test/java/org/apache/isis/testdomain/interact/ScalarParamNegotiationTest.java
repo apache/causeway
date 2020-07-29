@@ -79,9 +79,9 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
     @BeforeEach
     void setUpSimulatedUi() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "negotiate")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "negotiate", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
         

@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Either;
 
@@ -44,9 +43,9 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         this.chain = chain;
     }
     
-    public H checkVisibility(@NonNull final Where where) {
+    public H checkVisibility() {
         chain = chain.leftRemap(property->{
-            val visibilityVeto = property.checkVisibility(where);
+            val visibilityVeto = property.checkVisibility();
             return visibilityVeto.isPresent()
                 ? _Either.right(visibilityVeto.get()) 
                 : _Either.left(property); 
@@ -54,9 +53,9 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         return _Casts.uncheckedCast(this);
     }
     
-    public H checkUsability(@NonNull final Where where) {
+    public H checkUsability() {
         chain = chain.leftRemap(property->{
-            val usablitiyVeto = property.checkUsability(where);
+            val usablitiyVeto = property.checkUsability();
             return usablitiyVeto.isPresent()
                 ? _Either.right(usablitiyVeto.get()) 
                 : _Either.left(property); 
@@ -70,9 +69,9 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
      * @param intent
      * @return self
      */
-    public H checkUsability(@NonNull final Where where, @NonNull final AccessIntent intent) {
+    public H checkUsability(@NonNull final AccessIntent intent) {
         if(intent.isMutate()) {
-            return checkUsability(where);
+            return checkUsability();
         }
         return _Casts.uncheckedCast(this);
     }

@@ -163,12 +163,12 @@ public class ObjectViewFx extends VBox {
             protected void onAction(Pane container, ActionLayoutData actionData) {
                 
                 val owner = objectInteractor.getManagedObject();
-                val interaction = ActionInteraction.start(owner, actionData.getId());
-                interaction.checkVisibility(Where.OBJECT_FORMS)
+                val interaction = ActionInteraction.start(owner, actionData.getId(), Where.OBJECT_FORMS);
+                interaction.checkVisibility()
                 .getManagedAction()
                 .ifPresent(managedAction -> {
                     
-                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    interaction.checkUsability();
                     
                     val uiButton = _fx.add(container, 
                             uiComponentFactory.buttonFor(
@@ -188,11 +188,11 @@ public class ObjectViewFx extends VBox {
                 val formPane = (FormPane) container;
                 
                 val interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
-                interaction.checkVisibility(Where.OBJECT_FORMS)
+                interaction.checkVisibility()
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
                     
-                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    interaction.checkUsability();
                     
                     val request = UiComponentFactory.ComponentRequest.of(
                             managedProperty,
@@ -220,8 +220,8 @@ public class ObjectViewFx extends VBox {
                 
                 val owner = objectInteractor.getManagedObject();
                 
-                CollectionInteraction.start(owner, collectionData.getId())
-                .checkVisibility(Where.OBJECT_FORMS)
+                CollectionInteraction.start(owner, collectionData.getId(), Where.OBJECT_FORMS)
+                .checkVisibility()
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
                     

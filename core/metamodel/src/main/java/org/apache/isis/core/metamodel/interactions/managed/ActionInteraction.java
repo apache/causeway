@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -50,9 +51,10 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
 
     public static final ActionInteraction start(
             @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
+            @NonNull final String memberId,
+            @NonNull final Where where) {
 
-        val managedAction = ManagedAction.lookupAction(owner, memberId);
+        val managedAction = ManagedAction.lookupAction(owner, memberId, where);
 
         final _Either<ManagedAction, InteractionVeto> chain = managedAction.isPresent()
                 ? _Either.left(managedAction.get())

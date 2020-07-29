@@ -76,7 +76,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void paramAnnotations_whenNpm_shouldBeRecognized() {
 
-        val param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
+        val param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .getMetamodel().get().getParameters().getElseFail(0);
         
         // as with first param's @Parameter(maxLength = 2)
@@ -95,9 +95,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withParams_shouldProduceCorrectResult() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        .checkVisibility()
+        .checkUsability();
         
         val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
         
@@ -113,9 +113,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withTooManyParams_shouldIgnoreOverflow() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        .checkVisibility()
+        .checkUsability();
         
         val params =  Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
         
@@ -131,9 +131,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withTooLittleParams_shouldIgnoreUnderflow() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        .checkVisibility()
+        .checkUsability();
         
         val params = Can.<ManagedObject>of();
         
@@ -149,9 +149,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_shouldProvideParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
         val pendingArgs = managedAction.getInteractionHead().defaults();
@@ -169,9 +169,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_shouldProvideChoices() {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
 

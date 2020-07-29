@@ -323,9 +323,8 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             if (!visibilityConsent.isAllowed()) {
                 return;
             }
-
-            val managedCollection = ManagedCollection.of(owner, collection);
             
+            val managedCollection = ManagedCollection.of(owner, collection, where);
 
             appendCollectionTo(resourceContext, managedCollection, collectionRepresentation, suppression);
         });

@@ -180,12 +180,12 @@ public class ObjectViewVaa extends VerticalLayout {
             protected void onAction(HasComponents container, ActionLayoutData actionData) {
                 
                 val owner = objectInteractor.getManagedObject();
-                val interaction = ActionInteraction.start(owner, actionData.getId());
-                interaction.checkVisibility(Where.OBJECT_FORMS)
+                val interaction = ActionInteraction.start(owner, actionData.getId(), Where.OBJECT_FORMS);
+                interaction.checkVisibility()
                 .getManagedAction()
                 .ifPresent(managedAction -> {
                     
-                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    interaction.checkUsability();
                     
                     val uiButton = _vaa.add(container, 
                             uiComponentFactory.buttonFor(
@@ -204,11 +204,11 @@ public class ObjectViewVaa extends VerticalLayout {
                 val owner = objectInteractor.getManagedObject();
                 
                 val interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
-                interaction.checkVisibility(Where.OBJECT_FORMS)
+                interaction.checkVisibility()
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
                     
-                    interaction.checkUsability(Where.OBJECT_FORMS);
+                    interaction.checkUsability();
                     
                     val uiProperty = _vaa.add(container, 
                             uiComponentFactory.componentFor(
@@ -231,8 +231,8 @@ public class ObjectViewVaa extends VerticalLayout {
                 
                 val owner = objectInteractor.getManagedObject();
                 
-                CollectionInteraction.start(owner, collectionData.getId())
-                .checkVisibility(Where.OBJECT_FORMS)
+                CollectionInteraction.start(owner, collectionData.getId(), Where.OBJECT_FORMS)
+                .checkVisibility()
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
                     _vaa.add(container, new H3(managedCollection.getName()));

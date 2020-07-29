@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.routing.RoutingService;
@@ -43,16 +44,18 @@ public final class ManagedAction extends ManagedMember {
     
     public static final ManagedAction of(
             final @NonNull ManagedObject owner, 
-            final @NonNull ObjectAction action) {
-        return new ManagedAction(owner, action);
+            final @NonNull ObjectAction action,
+            final @NonNull Where where) {
+        return new ManagedAction(owner, action, where);
     }
     
     public static final Optional<ManagedAction> lookupAction(
             @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
+            @NonNull final String memberId,
+            @NonNull final Where where) {
         
         return ManagedMember.<ObjectAction>lookup(owner, MemberType.ACTION, memberId)
-        .map(objectAction -> of(owner, objectAction));
+        .map(objectAction -> of(owner, objectAction, where));
     }
     
     // -- IMPLEMENTATION
@@ -63,9 +66,10 @@ public final class ManagedAction extends ManagedMember {
 
     private ManagedAction(
             final @NonNull ManagedObject owner, 
-            final @NonNull ObjectAction action) {
+            final @NonNull ObjectAction action,
+            final @NonNull Where where) {
         
-        super(owner);
+        super(owner, where);
         this.action = action;
         this.interactionHead = action.interactionHead(owner);
     }

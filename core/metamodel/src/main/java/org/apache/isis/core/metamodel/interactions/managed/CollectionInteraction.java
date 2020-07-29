@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -32,9 +33,10 @@ public final class CollectionInteraction extends MemberInteraction<ManagedCollec
 
     public static final CollectionInteraction start(
             @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
+            @NonNull final String memberId,
+            @NonNull final Where where) {
     
-        val managedCollection = ManagedCollection.lookupCollection(owner, memberId);
+        val managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
         
         final _Either<ManagedCollection, InteractionVeto> chain = managedCollection.isPresent()
                 ? _Either.left(managedCollection.get())

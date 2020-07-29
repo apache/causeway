@@ -65,24 +65,24 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_whenEnabled_shouldHaveNoVeto() {
 
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled")
+        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw  
 
-        assertFalse(managedAction.checkVisibility(Where.OBJECT_FORMS).isPresent()); // is visible
-        assertFalse(managedAction.checkUsability(Where.OBJECT_FORMS).isPresent()); // can invoke 
+        assertFalse(managedAction.checkVisibility().isPresent()); // is visible
+        assertFalse(managedAction.checkUsability().isPresent()); // can invoke 
     }
     
     @Test 
     void actionInteraction_whenDisabled_shouldHaveVeto() {
 
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
+        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw  
 
 
-        assertFalse(managedAction.checkVisibility(Where.OBJECT_FORMS).isPresent()); // is visible
+        assertFalse(managedAction.checkVisibility().isPresent()); // is visible
 
         // cannot invoke
-        val veto = managedAction.checkUsability(Where.OBJECT_FORMS).get(); // should not throw
+        val veto = managedAction.checkUsability().get(); // should not throw
         assertNotNull(veto);
 
         assertEquals("Disabled for demonstration.", veto.getReason());
@@ -91,9 +91,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_whenEnabled_shouldProvideProperDecoratorModels() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         val disablingUiModel = DisablingUiModel.of(actionInteraction);
         assertFalse(disablingUiModel.isPresent());
@@ -102,9 +102,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_whenDisabled_shouldProvideProperDecoratorModels() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         val disablingUiModel = DisablingUiModel.of(actionInteraction).get();
         assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
@@ -113,9 +113,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_whenEnabled_shouldProvideActionMetadata() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
         val actionMeta = managedAction.getAction();
@@ -126,9 +126,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test    
     void mixinActionInteraction_whenDisabled_shouldProvideActionMetadata() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
         
         assertFalse(actionInteraction.getManagedAction().isPresent()); // since usability should be vetoed
         assertTrue(actionInteraction.getMetamodel().isPresent()); // but should always provide access to metamodel
@@ -140,9 +140,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_whenEnabled_shouldAllowInvocation() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
+        .checkVisibility()
+        .checkUsability();
         
         val pendingArgs = actionInteraction.startParameterNegotiation().get();
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
@@ -153,14 +153,14 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_whenDisabled_shouldVetoInvocation() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
+        .checkVisibility()
+        .checkUsability();
         
         assertFalse(actionInteraction.startParameterNegotiation().isPresent());
 
         // even though when assembling valid parameters ...
-        val pendingArgs = startActionInteractionOn(InteractionDemo.class, "noArgDisabled")
+        val pendingArgs = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
                 .startParameterNegotiation().get();
         
         // we should not be able to invoke the action
@@ -172,9 +172,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withParams_shouldProduceCorrectResult() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        .checkVisibility()
+        .checkUsability();
         
         val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
         
@@ -190,9 +190,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withTooManyParams_shouldIgnoreOverflow() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        .checkVisibility()
+        .checkUsability();
         
         val params = Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
         
@@ -208,9 +208,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withTooLittleParams_shouldIgnoreUnderflow() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-        .checkVisibility(Where.OBJECT_FORMS)
-        .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        .checkVisibility()
+        .checkUsability();
         
         val params = Can.of(objectManager.adapt(12));
         
@@ -227,9 +227,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_shouldProvideParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
         val pendingArgs = managedAction.getInteractionHead().defaults();
@@ -246,9 +246,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_whenHavingChoices_shouldProvideProperParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiInt")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiInt", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
         val pendingArgs = managedAction.getInteractionHead().defaults();
@@ -282,9 +282,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_whenHavingEnumChoices_shouldProvideProperParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiEnum")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiEnum", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
         val pendingArgs = managedAction.getInteractionHead().defaults();
@@ -318,9 +318,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_shouldProvideChoices() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
 
@@ -341,9 +341,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_shouldProvideParameterBinding() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled")
-                .checkVisibility(Where.OBJECT_FORMS)
-                .checkUsability(Where.OBJECT_FORMS);
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
         

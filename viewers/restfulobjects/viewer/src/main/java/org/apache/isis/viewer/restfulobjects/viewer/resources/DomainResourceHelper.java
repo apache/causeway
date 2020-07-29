@@ -205,9 +205,9 @@ class DomainResourceHelper {
         val where = resourceContext.getWhere();
         
         // lombok issue, needs explicit cast here 
-        val actionInteraction = (ActionInteraction) ActionInteraction.start(objectAdapter, actionId)
-        .checkVisibility(where)
-        .checkUsability(where, intent)
+        val actionInteraction = (ActionInteraction) ActionInteraction.start(objectAdapter, actionId, where)
+        .checkVisibility()
+        .checkUsability(intent)
         .checkSemanticConstraint(semanticConstraint);
 
         val pendingArgs = actionInteraction.startParameterNegotiation().orElse(null);

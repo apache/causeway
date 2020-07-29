@@ -78,8 +78,9 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
+        val where = resourceContext.getWhere();
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
-        renderer.with(ManagedAction.of(objectAdapter, objectMember)).usingLinkTo(linkTo).asFollowed();
+        renderer.with(ManagedAction.of(objectAdapter, objectMember, where)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 

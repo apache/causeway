@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -199,19 +198,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         setObject(adapter);
     }
 
-    public boolean whetherHidden() {
-        final Where where = getRenderingHint().asWhere();
-        return whetherHidden(where);
-    }
+    public abstract boolean whetherHidden();
 
-    protected abstract boolean whetherHidden(Where where);
-
-    public String whetherDisabled() {
-        final Where where = getRenderingHint().asWhere();
-        return whetherDisabled(where);
-    }
-
-    protected abstract String whetherDisabled(Where where);
+    public abstract String whetherDisabled();
 
     public abstract String validate(ManagedObject proposedAdapter);
 

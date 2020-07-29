@@ -104,16 +104,16 @@ implements PropertyUiModel {
     }
 
     @Override
-    public boolean whetherHidden(final Where where) {
+    public boolean whetherHidden() {
         return getManagedProperty()
-                .checkVisibility(where)
+                .checkVisibility()
                 .isPresent();
     }
 
     @Override
-    public String whetherDisabled(final Where where) {
+    public String whetherDisabled() {
         return getManagedProperty()
-                .checkUsability(where)
+                .checkUsability()
                 .map(InteractionVeto::getReason)
                 .orElse(null);
     }

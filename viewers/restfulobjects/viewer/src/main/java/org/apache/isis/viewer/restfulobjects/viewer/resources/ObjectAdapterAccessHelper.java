@@ -57,9 +57,9 @@ public class ObjectAdapterAccessHelper {
             @NonNull final SemanticConstraint semanticConstraint) {
         
         return ActionInteraction
-                .start(managedObject, actionId)
-                .checkVisibility(where)
-                .checkUsability(where, AccessIntent.MUTATE)
+                .start(managedObject, actionId, where)
+                .checkVisibility()
+                .checkUsability(AccessIntent.MUTATE)
                 .checkSemanticConstraint(semanticConstraint)
                 .getManagedActionElseThrow(InteractionFailureHandler::onFailure);
     }
@@ -70,8 +70,8 @@ public class ObjectAdapterAccessHelper {
         
         return PropertyInteraction
                 .start(managedObject, propertyId, where)
-                .checkVisibility(where)
-                .checkUsability(where, intent)
+                .checkVisibility()
+                .checkUsability(intent)
                 .getManagedPropertyElseThrow(InteractionFailureHandler::onFailure);
         
     }
@@ -81,9 +81,9 @@ public class ObjectAdapterAccessHelper {
             @NonNull final AccessIntent intent) {
 
         return CollectionInteraction
-                .start(managedObject, collectionId)
-                .checkVisibility(where)
-                .checkUsability(where, intent)
+                .start(managedObject, collectionId, where)
+                .checkVisibility()
+                .checkUsability(intent)
                 .getManagedCollectionElseThrow(InteractionFailureHandler::onFailure);
 
     }

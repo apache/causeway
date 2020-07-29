@@ -64,14 +64,15 @@ final class MenuUiModel_buildMenuItems {
                         continue;
                     }
 
-                    val managedAction = ManagedAction.lookupAction(serviceAdapter, actionLayoutData.getId())
+                    val managedAction = ManagedAction
+                            .lookupAction(serviceAdapter, actionLayoutData.getId(), Where.EVERYWHERE)
                             .orElse(null);
                     if (managedAction == null) {
                         log.warn("No such action {}", actionLayoutData.getId());
                         continue;
                     }
                     
-                    val visibilityVeto = managedAction.checkVisibility(Where.EVERYWHERE);
+                    val visibilityVeto = managedAction.checkVisibility();
                     if (visibilityVeto.isPresent()) {
                         continue;
                     }

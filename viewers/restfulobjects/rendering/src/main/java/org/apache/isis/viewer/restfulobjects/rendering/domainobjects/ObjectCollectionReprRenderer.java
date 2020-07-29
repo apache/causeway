@@ -138,10 +138,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
+        val where = resourceContext.getWhere();
         final JsonRepresentation representation = JsonRepresentation.newMap();
         final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null,
                 representation);
-        renderer.with(ManagedCollection.of(objectAdapter, objectMember)).asFollowed();
+        renderer.with(ManagedCollection.of(objectAdapter, objectMember, where)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 

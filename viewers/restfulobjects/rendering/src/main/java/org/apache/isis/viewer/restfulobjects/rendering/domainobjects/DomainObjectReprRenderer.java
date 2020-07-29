@@ -365,7 +365,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final ObjectCollectionReprRenderer renderer =
                     new ObjectCollectionReprRenderer(getResourceContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
-            renderer.with(ManagedCollection.of(objectAdapter, collection)).usingLinkTo(linkToBuilder);
+            val where = resourceContext.getWhere();
+            
+            renderer.with(ManagedCollection.of(objectAdapter, collection, where)).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
                 renderer.asEventSerialization();
             }
@@ -390,7 +392,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                     new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(), 
                             JsonRepresentation.newMap());
 
-            renderer.with(ManagedAction.of(objectAdapter, action)).usingLinkTo(linkToBuilder);
+            val where = resourceContext.getWhere();
+            
+            renderer.with(ManagedAction.of(objectAdapter, action, where)).usingLinkTo(linkToBuilder);
             members.mapPut(action.getId(), renderer.render());
         });
 

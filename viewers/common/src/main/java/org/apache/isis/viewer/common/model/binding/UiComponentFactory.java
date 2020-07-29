@@ -145,7 +145,7 @@ public interface UiComponentFactory<B, C> {
         }
 
         public boolean isReadOnly() {
-            return ((ManagedProperty)managedFeature).checkUsability(where).isPresent();
+            return ((ManagedProperty)managedFeature).checkUsability().isPresent();
         }
 
         @Deprecated

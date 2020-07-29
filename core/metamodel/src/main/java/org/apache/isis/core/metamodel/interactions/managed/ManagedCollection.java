@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -37,16 +38,18 @@ public final class ManagedCollection extends ManagedMember {
     
     public static final ManagedCollection of(
             final @NonNull ManagedObject owner, 
-            final @NonNull OneToManyAssociation collection) {
-        return new ManagedCollection(owner, collection);
+            final @NonNull OneToManyAssociation collection,
+            final @NonNull Where where) {
+        return new ManagedCollection(owner, collection, where);
     }
     
     public static final Optional<ManagedCollection> lookupCollection(
             @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
+            @NonNull final String memberId,
+            @NonNull final Where where) {
         
         return ManagedMember.<OneToManyAssociation>lookup(owner, MemberType.COLLECTION, memberId)
-        .map(objectAction -> of(owner, objectAction));
+        .map(objectAction -> of(owner, objectAction, where));
     }
     
     // -- IMPLEMENTATION
@@ -55,9 +58,10 @@ public final class ManagedCollection extends ManagedMember {
     
     private ManagedCollection(
             final @NonNull ManagedObject owner, 
-            final @NonNull OneToManyAssociation collection) {
+            final @NonNull OneToManyAssociation collection,
+            final @NonNull Where where) {
         
-        super(owner);
+        super(owner, where);
         this.collection = collection;
     }
 

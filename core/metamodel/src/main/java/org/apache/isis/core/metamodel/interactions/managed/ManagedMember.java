@@ -92,6 +92,8 @@ public abstract class ManagedMember implements ManagedFeature {
     public ManagedObject getOwner() {
         return owner = EntityUtil.reattach(owner);
     }
+    
+    @Getter @NonNull private final Where where;
 
     /**
      * Allows a managed property of a view model to replace its owner with a clone.
@@ -142,8 +144,7 @@ public abstract class ManagedMember implements ManagedFeature {
      * @param where
      * @return non-empty if hidden
      */
-    public Optional<InteractionVeto> checkVisibility(
-            @NonNull final Where where) {
+    public Optional<InteractionVeto> checkVisibility() {
 
         try {
             val visibilityConsent = 
@@ -166,8 +167,7 @@ public abstract class ManagedMember implements ManagedFeature {
      * @param where
      * @return non-empty if not usable/editable (meaning if read-only)
      */
-    public Optional<InteractionVeto> checkUsability(
-            @NonNull final Where where) {
+    public Optional<InteractionVeto> checkUsability() {
         
         try {
             

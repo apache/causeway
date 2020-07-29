@@ -57,15 +57,13 @@ public final class ManagedProperty extends ManagedMember {
     // -- IMPLEMENTATION
     
     @Getter private final OneToOneAssociation property;
-    @Getter private final Where where;
     
     private ManagedProperty(
             final @NonNull ManagedObject owner, 
             final @NonNull OneToOneAssociation property,
             final @NonNull Where where) {
-        super(owner);
+        super(owner, where);
         this.property = property;
-        this.where = where;
     }
 
     @Override
@@ -129,8 +127,8 @@ public final class ManagedProperty extends ManagedMember {
         val property = getProperty();
         val owner = getOwner();
         
-        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, where).isAllowed() 
-                && property.isVisible(owner, InteractionInitiatedBy.USER, where).isAllowed()
+        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed() 
+                && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getSpecification());
     }

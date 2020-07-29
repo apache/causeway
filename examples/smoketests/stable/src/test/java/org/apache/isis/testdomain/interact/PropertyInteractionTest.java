@@ -61,8 +61,8 @@ class PropertyInteractionTest extends InteractionTestAbstract {
         val managedProperty = startPropertyInteractionOn(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS)
                 .getManagedProperty().get(); // should not throw  
 
-        assertFalse(managedProperty.checkVisibility(Where.OBJECT_FORMS).isPresent()); // is visible
-        assertFalse(managedProperty.checkUsability(Where.OBJECT_FORMS).isPresent()); // can edit
+        assertFalse(managedProperty.checkVisibility().isPresent()); // is visible
+        assertFalse(managedProperty.checkUsability().isPresent()); // can edit
     }
     
     @Test 
@@ -72,10 +72,10 @@ class PropertyInteractionTest extends InteractionTestAbstract {
                 .getManagedProperty().get(); // should not throw  
 
 
-        assertFalse(managedProperty.checkVisibility(Where.OBJECT_FORMS).isPresent()); // is visible
+        assertFalse(managedProperty.checkVisibility().isPresent()); // is visible
 
         // verify we cannot edit
-        val veto = managedProperty.checkUsability(Where.OBJECT_FORMS).get(); // should not throw
+        val veto = managedProperty.checkUsability().get(); // should not throw
         assertNotNull(veto);
 
         assertEquals("Disabled for demonstration.", veto.getReason());

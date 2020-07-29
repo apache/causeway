@@ -74,21 +74,11 @@ implements ParameterUiModel {
     public ManagedAction getManagedAction() {
         if(managedAction==null) {
             val actionOwner = getParentUiModel().load();
-            managedAction = ManagedAction.of(actionOwner, getMetaModel().getAction()); 
+            // TODO 'where' is not used until whetherDisabled and whetherHidden are implemented
+            managedAction = ManagedAction.of(actionOwner, getMetaModel().getAction(), Where.ANYWHERE);  
         }
         return managedAction;  
     }
-    
-//    private transient ManagedParameter managedParameter;
-//    
-//    public ManagedParameter getManagedParameter() {
-//        if(managedParameter==null) {
-//            val parameter = getMetaModel();
-//            managedParameter = getManagedAction().managedParameter(parameter.getNumber()); 
-//        }
-//        return managedParameter;  
-//    } 
-    
 
     @Override
     public ObjectSpecification getScalarTypeSpec() {
@@ -106,13 +96,13 @@ implements ParameterUiModel {
     }
 
     @Override
-    public String whetherDisabled(Where where) {
+    public String whetherDisabled() {
         // always enabled TODO this is not true
         return null;
     }
 
     @Override
-    public boolean whetherHidden(Where where) {
+    public boolean whetherHidden() {
         // always enabled TODO this is not true
         return false;
     }

@@ -50,10 +50,10 @@ abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
 //        new javafx.embed.swing.JFXPanel(); // Initializes the JavaFx Platform
 //    }
 
-    protected ActionInteraction startActionInteractionOn(Class<?> type, String actionId) {
+    protected ActionInteraction startActionInteractionOn(Class<?> type, String actionId, Where where) {
         val viewModel = factoryService.viewModel(type);
         val managedObject = objectManager.adapt(viewModel);
-        return ActionInteraction.start(managedObject, actionId);
+        return ActionInteraction.start(managedObject, actionId, where);
     }
     
     protected PropertyInteraction startPropertyInteractionOn(Class<?> type, String propertyId, Where where) {
@@ -62,10 +62,10 @@ abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
         return PropertyInteraction.start(managedObject, propertyId, where);
     }
     
-    protected CollectionInteraction startCollectionInteractionOn(Class<?> type, String collectionId) {
+    protected CollectionInteraction startCollectionInteractionOn(Class<?> type, String collectionId, Where where) {
         val viewModel = factoryService.viewModel(type);
         val managedObject = objectManager.adapt(viewModel);
-        return CollectionInteraction.start(managedObject, collectionId);
+        return CollectionInteraction.start(managedObject, collectionId, where);
     }
 
     

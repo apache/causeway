@@ -453,8 +453,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         
         PropertyInteraction.start(objectAdapter, propertyId, resourceContext.getWhere())
-        .checkVisibility(resourceContext.getWhere())
-        .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
+        .checkVisibility()
+        .checkUsability(AccessIntent.MUTATE)
         .modifyProperty(property->{
             val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
                     .parseAsMapWithSingleValue(Util.asStringUtf8(body));
@@ -485,8 +485,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         
         PropertyInteraction.start(objectAdapter, propertyId, resourceContext.getWhere())
-        .checkVisibility(resourceContext.getWhere())
-        .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
+        .checkVisibility()
+        .checkUsability(AccessIntent.MUTATE)
         .modifyProperty(property->null)
         .validateElseThrow(InteractionFailureHandler::onFailure);
 
