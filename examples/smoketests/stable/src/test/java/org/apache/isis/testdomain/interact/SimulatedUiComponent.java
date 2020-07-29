@@ -20,33 +20,24 @@ package org.apache.isis.testdomain.interact;
 
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
-import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-
-import lombok.val;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class SimulatedUiComponent extends HasParameterValidation {
     
     private Bindable<ManagedObject> value = _Bindables.empty();
 
-    private ObjectActionParameter paramMeta;
+    private ObjectSpecification valueSpec;
     
-    public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
-        
-        val actionMeta = pendingArgs.getHead().getMetaModel();
-        val paramMetaList = actionMeta.getParameters();
-        paramMeta = paramMetaList.getElseFail(paramNr);
-        
-        value.setValue(pendingArgs.getParamValue(paramNr)); //sync models
-        value.bindBidirectional(pendingArgs.getBindableParamValue(paramNr));
-        
-        super.bind(pendingArgs, paramNr);
+    public void bind(ManagedParameter paramModel) {
+        valueSpec = paramModel.getMetaModel().getSpecification();
+        value.bindBidirectional(paramModel.getValue());
+        super.bind(paramModel);
     }
 
     public void simulateValueChange(Object newValue) {
-        val paramSpec = paramMeta.getSpecification();
-        value.setValue(ManagedObject.of(paramSpec, newValue));
+        value.setValue(ManagedObject.of(valueSpec, newValue));
     }
 
     public ManagedObject getValue() {

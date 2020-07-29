@@ -26,7 +26,6 @@ import lombok.Getter;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 public class TitledPanel extends VBox {
 
@@ -42,8 +41,6 @@ public class TitledPanel extends VBox {
             uiLabel = null;
         }
         super.setFillWidth(true);
-        
-        _fx.backround(this, Color.ALICEBLUE);
     }
     
     public FlowPane getUiActionBar() {

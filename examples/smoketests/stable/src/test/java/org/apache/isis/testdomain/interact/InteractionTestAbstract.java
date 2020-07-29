@@ -40,7 +40,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 
 import lombok.val;
 
-public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
+abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
     
     @Inject protected ObjectManager objectManager;
     @Inject protected IsisInteractionFactory interactionFactory;

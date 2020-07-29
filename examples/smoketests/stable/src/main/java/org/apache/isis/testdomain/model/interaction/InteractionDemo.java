@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -40,7 +41,13 @@ import lombok.Setter;
 public class InteractionDemo {
 
     @Property
-    @PropertyLayout(multiLine=3)
+    @PropertyLayout(multiLine=3, labelPosition = LabelPosition.TOP)
     @XmlElement @Getter @Setter private String stringMultiline;
+    
+    @Property(
+            editing = Editing.DISABLED,
+            editingDisabledReason = "Disabled for demonstration.")
+    @XmlElement @Getter @Setter private String stringDisabled;
+    
     
 }

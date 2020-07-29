@@ -60,7 +60,7 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class InteractionTest extends InteractionTestAbstract {
+class ActionInteractionTest extends InteractionTestAbstract {
 
     @Test 
     void actionInteraction_whenEnabled_shouldHaveNoVeto() {
@@ -353,7 +353,7 @@ class InteractionTest extends InteractionTestAbstract {
         final int firstParamNr = 0;
         
         SimulatedUiComponent uiParam0 = new SimulatedUiComponent();
-        uiParam0.bind(pendingArgs, firstParamNr); // bind to first param
+        uiParam0.bind(pendingArgs.getParamModels().getElseFail(firstParamNr)); // bind to first param
         
         // UI component's value should be initialized to initial defaults
         assertEquals(new InteractionDemo_biArgEnabled(null).defaultA(null), uiParam0.getValue().getPojo());
