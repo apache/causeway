@@ -19,11 +19,9 @@
 package org.apache.isis.incubator.viewer.javafx.ui.components.form;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 
 import lombok.NonNull;
 import lombok.val;
@@ -35,7 +33,7 @@ import javafx.scene.layout.GridPane;
 
 public class FormPane extends GridPane {
 
-    private final List<FormFieldFx<?>> fields = _Lists.newArrayList();
+    private final List<Node> fields = _Lists.newArrayList();
     private int rowCount = 0;
     
     public FormPane() {
@@ -47,27 +45,25 @@ public class FormPane extends GridPane {
         grid.setPadding(new Insets(25, 25, 25, 25));
     }
 
-    public FormPane addField(FormFieldFx<?> formField) {
+    public FormPane addField(LabelPosition labelPosition, Node uiFormLabel, Node uiFormField) {
         
-        fields.add(formField);
+        fields.add(uiFormField);
         
-        val labelPosition = Optional.ofNullable(formField.getLabelPosition())
-                    .orElse(LabelPosition.DEFAULT);
         switch(labelPosition) {
         case NONE:
-            addRow(formField.getUiFieldContainer());
+            addRow(uiFormField);
             break;
         case TOP:
-            addRow(formField.getUiLabel());
-            addRow(formField.getUiFieldContainer());
+            addRow(uiFormLabel);
+            addRow(uiFormField);
             break;
         case RIGHT:
-            addRow(formField.getUiFieldContainer(), formField.getUiLabel());
+            addRow(uiFormField, uiFormLabel);
             break;
         case LEFT:
         case DEFAULT:
         default:
-            addRow(formField.getUiLabel(), formField.getUiFieldContainer());
+            addRow(uiFormLabel, uiFormField);
             break;
         }
         return this;

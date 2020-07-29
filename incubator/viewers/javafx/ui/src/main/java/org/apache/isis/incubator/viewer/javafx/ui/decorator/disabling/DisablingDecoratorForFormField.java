@@ -22,20 +22,20 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import javafx.scene.Node;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class DisablingDecoratorForFormField implements DisablingDecorator<FormFieldFx<?>> {
+public class DisablingDecoratorForFormField implements DisablingDecorator<Node> {
 
     @Override
-    public void decorate(FormFieldFx<?> formField, DisablingUiModel disableUiModel) {
+    public void decorate(Node formField, DisablingUiModel disableUiModel) {
         
         val reason = disableUiModel.getReason();
         

@@ -18,10 +18,11 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 
+import javafx.scene.Node;
+
 public interface UiComponentHandlerFx 
-extends UiComponentFactory.Handler<FormFieldFx<?>> {
+extends UiComponentFactory.Handler<Node> {
 
 }

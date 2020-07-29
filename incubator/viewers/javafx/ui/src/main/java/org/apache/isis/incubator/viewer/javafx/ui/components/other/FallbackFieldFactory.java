@@ -20,15 +20,13 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.other;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 @org.springframework.stereotype.Component
@@ -41,14 +39,10 @@ public class FallbackFieldFactory implements UiComponentHandlerFx {
     }
 
     @Override
-    public FormFieldFx<?> handle(ComponentRequest request) {
+    public Node handle(ComponentRequest request) {
         
         val spec = request.getFeatureSpec();
-        val uiField = new Label(spec.getCorrespondingClass().getSimpleName() + " type not handled");
-        
-        val formField = new SimpleFormField<Void>(LabelPosition.TOP, uiField);
-        formField.setLabel(request.getDisplayLabel());
-        return formField;
+        return new Label(spec.getCorrespondingClass().getSimpleName() + " type not handled");
     }
 
 }

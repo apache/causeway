@@ -20,7 +20,6 @@ package org.apache.isis.incubator.viewer.javafx.model.context;
 
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
@@ -41,9 +40,9 @@ public interface UiContext {
     IconDecorator<MenuItem, MenuItem> getIconDecoratorForMenuItem();
    
     DisablingDecorator<Button> getDisablingDecoratorForButton();
-    DisablingDecorator<FormFieldFx<?>> getDisablingDecoratorForFormField();
+    DisablingDecorator<Node> getDisablingDecoratorForFormField();
     
     PrototypingDecorator<Button, Node> getPrototypingDecoratorForButton();
-    PrototypingDecorator<FormFieldFx<?>, FormFieldFx<?>> getPrototypingDecoratorForFormField();
+    PrototypingDecorator<Node, Node> getPrototypingDecoratorForFormField();
     
 }

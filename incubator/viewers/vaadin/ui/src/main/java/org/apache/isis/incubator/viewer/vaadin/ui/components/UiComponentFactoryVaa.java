@@ -90,6 +90,12 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Component Mapper failed to handle request %s", request));
     }
+
+    @Override
+    public LabelAndPosition<Component> labelFor(ComponentRequest request) {
+        throw _Exceptions.unsupportedOperation("unlikely to be needed for Vaadin, "
+                + "since Field components already have their own label");
+    }
     
     
 }

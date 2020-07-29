@@ -22,30 +22,35 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
+import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class PrototypingDecoratorForFormField implements PrototypingDecorator<FormFieldFx<?>, FormFieldFx<?>> {
+public class PrototypingDecoratorForFormField implements PrototypingDecorator<Node, Node> {
 
     private final PrototypingInfoPopupProvider prototypingInfoService;
     
     @Override
-    public FormFieldFx<?> decorate(final FormFieldFx<?> formField, final PrototypingUiModel prototypingUiModel) {
-        val infoLabel = new Label("ⓘ");
+    public Node decorate(final Node formField, final PrototypingUiModel prototypingUiModel) {
         
-        formField.getUiFieldContainer().getChildren().add(0, infoLabel);
+        val container = new HBox();
+        val infoLabel = _fx.add(container, new Label("ⓘ"));
+        _fx.add(container, formField);
+
         infoLabel.setTooltip(new Tooltip("Inspect Metamodel"));
         infoLabel.setOnMouseClicked(e->prototypingInfoService.showPrototypingPopup(prototypingUiModel));
-        return formField;
+        
+        return container;
     }
     
 }

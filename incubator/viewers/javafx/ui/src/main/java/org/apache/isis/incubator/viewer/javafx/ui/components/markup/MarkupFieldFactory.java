@@ -27,14 +27,9 @@ import org.springframework.core.annotation.Order;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
 
-import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.value.HasHtml;
-import org.apache.isis.applib.value.Markup;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -66,22 +61,13 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     }
 
     @Override
-    public FormFieldFx<?> handle(ComponentRequest request) {
+    public Node handle(ComponentRequest request) {
         
         val markupHtml = request.getFeatureValue(HasHtml.class)
                 .map(HasHtml::asHtml)
                 .orElse("");
-
         
-        val uiComponent = new WebViewFitContent(hostServices::showDocument, markupHtml);
-        
-        val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
-                .map(LabelAtFacet::label)
-                .orElse(LabelPosition.NOT_SPECIFIED);
-        
-        val formField = new SimpleFormField<Markup>(labelPosition, uiComponent);
-        formField.setLabel(request.getDisplayLabel());
-        return formField;
+        return new WebViewFitContent(hostServices::showDocument, markupHtml);
     }
 
     // -- HELPER

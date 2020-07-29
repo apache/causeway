@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -47,6 +48,13 @@ public interface UiComponentFactory<B, C> {
     B buttonFor(UiComponentFactory.ButtonRequest request);
     C componentFor(UiComponentFactory.ComponentRequest request);
     C parameterFor(UiComponentFactory.ComponentRequest request);
+    LabelAndPosition<C> labelFor(UiComponentFactory.ComponentRequest request);
+    
+    @Value(staticConstructor = "of")
+    public static class LabelAndPosition<T> {
+        @NonNull private final LabelPosition labelPosition;
+        @NonNull private final T uiLabel;
+    }
     
     @Value(staticConstructor = "of")
     public static class ButtonRequest {
@@ -125,6 +133,7 @@ public interface UiComponentFactory<B, C> {
                                     facetType.getName()));    
         }
         
+        @Deprecated
         public <T> Optional<T> getFeatureValue(@Nullable Class<T> type) {
             val managedProperty = (ManagedProperty)managedFeature;
             //TODO do a type check before the cast, so we can throw a more detailed exception
@@ -139,6 +148,7 @@ public interface UiComponentFactory<B, C> {
             return ((ManagedProperty)managedFeature).checkUsability(where).isPresent();
         }
 
+        @Deprecated
         public Optional<InteractionVeto> setFeatureValue(Object proposedNewValuePojo) {
             //TODO we are loosing any fields that are cached within ManagedObject
             val proposedNewValue = ManagedObject.of(getFeatureSpec(), proposedNewValuePojo);
@@ -156,5 +166,8 @@ public interface UiComponentFactory<B, C> {
     static interface Handler<T> 
     extends ChainOfResponsibility.Handler<UiComponentFactory.ComponentRequest, T> {
     }
+
+
+    
     
 }

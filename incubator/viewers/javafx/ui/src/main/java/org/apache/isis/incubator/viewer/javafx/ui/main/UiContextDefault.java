@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
@@ -58,12 +57,12 @@ public class UiContextDefault implements UiContext {
     @Getter(onMethod_ = {@Override})
     private final DisablingDecorator<Button> disablingDecoratorForButton;
     @Getter(onMethod_ = {@Override})
-    private final DisablingDecorator<FormFieldFx<?>> disablingDecoratorForFormField;
+    private final DisablingDecorator<Node> disablingDecoratorForFormField;
     
     @Getter(onMethod_ = {@Override})
     private final PrototypingDecorator<Button, Node> prototypingDecoratorForButton;
     @Getter(onMethod_ = {@Override})
-    private final PrototypingDecorator<FormFieldFx<?>, FormFieldFx<?>> prototypingDecoratorForFormField;
+    private final PrototypingDecorator<Node, Node> prototypingDecoratorForFormField;
     
     
 }

@@ -81,10 +81,13 @@ public class UiActionHandler {
                 
                 val paramNr = paramModel.getParamNr(); // zero based
                 
-                val uiField = uiComponentFactory.parameterFor(ComponentRequest.of(paramModel));
+                val request = ComponentRequest.of(paramModel);
                 
-                grid.add(uiField.getUiLabel(), 0, paramNr);
-                grid.add(uiField.getUiField(), 1, paramNr);
+                val labelAndPosition = uiComponentFactory.labelFor(request);
+                val uiField = uiComponentFactory.parameterFor(request);
+                
+                grid.add(labelAndPosition.getUiLabel(), 0, paramNr);
+                grid.add(uiField, 1, paramNr);
                 
             });
             

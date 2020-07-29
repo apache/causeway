@@ -22,20 +22,17 @@ import javax.inject.Inject;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.form.SimpleFormField;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
 @org.springframework.stereotype.Component
@@ -49,7 +46,7 @@ public class TextFieldFactory implements UiComponentHandlerFx {
     }
 
     @Override
-    public FormFieldFx<?> handle(ComponentRequest request) {
+    public Node handle(ComponentRequest request) {
 
         //TODO 1) move all the logic that is in the request to the underlying ManagedProperty
         // 2) pass the ManagedProperty over with the request object
@@ -76,13 +73,7 @@ public class TextFieldFactory implements UiComponentHandlerFx {
             //TODO bind to property model
         }
 
-        val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
-                .map(LabelAtFacet::label)
-                .orElse(LabelPosition.NOT_SPECIFIED);
-
-        val formField = new SimpleFormField<String>(labelPosition, uiComponent);
-        formField.setLabel(request.getDisplayLabel());
-        return formField;
+        return uiComponent;
     }
 
 

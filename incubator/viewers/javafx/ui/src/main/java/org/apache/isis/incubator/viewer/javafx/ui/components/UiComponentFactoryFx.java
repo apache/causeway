@@ -25,13 +25,13 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormField;
-import org.apache.isis.incubator.viewer.javafx.model.form.FormFieldFx;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
@@ -40,13 +40,14 @@ import lombok.val;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 @Service
-public class UiComponentFactoryFx implements UiComponentFactory<Node, FormFieldFx<?>> {
+public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
     private final boolean isPrototyping;
     private final UiContext uiContext;
-    private final ChainOfResponsibility<ComponentRequest, FormFieldFx<?>> chainOfHandlers;
+    private final ChainOfResponsibility<ComponentRequest, Node> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
     @Getter 
@@ -67,7 +68,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, FormFieldF
     }
     
     @Override
-    public FormFieldFx<?> componentFor(ComponentRequest request) {
+    public Node componentFor(ComponentRequest request) {
         
         val formField = chainOfHandlers
                 .handle(request)
@@ -109,12 +110,21 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, FormFieldF
     }
 
     @Override
-    public FormFieldFx<?> parameterFor(ComponentRequest request) {
+    public Node parameterFor(ComponentRequest request) {
         val formField = chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Component Mapper failed to handle request %s", request));
         return formField;
+    }
+    
+    @Override
+    public LabelAndPosition<Node> labelFor(ComponentRequest request) {
+        val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
+                .map(LabelAtFacet::label)
+                .orElse(LabelPosition.NOT_SPECIFIED);
+        val uiLabel = new Label(request.getDisplayLabel());
+        return LabelAndPosition.of(labelPosition, uiLabel);
     }
     
     
