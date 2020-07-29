@@ -18,12 +18,15 @@
  */
 package org.apache.isis.incubator.viewer.javafx.model.util;
 
+import java.util.function.Predicate;
+
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener.Change;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -70,7 +73,7 @@ public final class _fx {
     }
 
     // -- COMPONENT FACTORIES
-    
+
     public static <T extends Node> T add(Pane container, T component) {
         container.getChildren().add(component);
         return component;
@@ -81,14 +84,14 @@ public final class _fx {
         container.getChildren().add(component);
         return component;
     }
-    
+
     public static Button newButton(Pane container, String label, EventHandler<ActionEvent> eventHandler) {
         val component = new Button(label);
         container.getChildren().add(component);
         component.setOnAction(eventHandler);
         return component;
     }
-    
+
     public static HBox newHBox(Pane container) {
         val component = new HBox();
         container.getChildren().add(component);
@@ -104,19 +107,19 @@ public final class _fx {
         _fx.borderDashed(component, Color.GREEN); // debug
         return component;
     }
-    
+
     public static VBox newVBox(TitledPane container) {
         val component = new VBox();
         container.setContent(component);
         return component;
     }
-    
+
     public static FlowPane newFlowPane(Pane container) {
         val component = new FlowPane();
         container.getChildren().add(component);
         //component.prefWrapLengthProperty().bind(container.widthProperty());
         _fx.padding(component, 4, 8);
-        _fx.borderDashed(component, Color.RED); // debug
+        _fx.hideUntilPopulated(component);
         return component;
     }
 
@@ -125,13 +128,13 @@ public final class _fx {
         container.getChildren().add(component);
         return component;
     }
-    
+
     public static GridPane newGrid(TitledPane container) {
         val component = new GridPane();
         container.setContent(component);
         return component;
     }
-    
+
     public static <T extends Node> T addGridCell(GridPane container, T cellNode, int column, int row) {
         container.add(cellNode, column, row);
         return cellNode;
@@ -148,19 +151,19 @@ public final class _fx {
         container.getTabs().add(component);
         return component;
     }
-    
+
     public static Accordion newAccordion(Pane container) {
         val component = new Accordion();
         container.getChildren().add(component);
         return component;
     }
-    
+
     public static Menu newMenu(MenuBar container, String label) {
         val component = new Menu(label);
         container.getMenus().add(component);
         return component;
     }
-    
+
     public static MenuItem newMenuItem(Menu container, String label) {
         val component = new MenuItem(label);
         container.getItems().add(component);
@@ -168,14 +171,13 @@ public final class _fx {
     }
 
     public static TitledPane newTitledPane(Accordion container, String label) {
-        
         val component = new TitledPane();
         container.getPanes().add(component);
         component.setText(label);
         component.setAnimated(true);
         return component;
     }
-    
+
 
     /**
      * @param <S> The type of the TableView generic type (i.e. S == TableView&lt;S&gt;)
@@ -192,51 +194,119 @@ public final class _fx {
     }
 
     // -- ICONS
-    
+
     public static Image imageFromClassPath(@NonNull Class<?> cls, String resourceName) {
         return new Image(cls.getResourceAsStream(resourceName));
     }
-    
+
     public static ImageView iconForImage(Image image, int width, int height) {
         val icon = new ImageView(image);
         icon.setFitWidth(width);
         icon.setFitHeight(height);
         return icon;
     }
-    
+
     // -- LAYOUTS
-    
+
     public static void padding(Region region, int hPadding, int vPadding) {
         region.setPadding(new Insets(vPadding, hPadding, vPadding, hPadding));
     }
-    
-//    public static GridPane formLayout(GridPane component) {
-//        component.setAlignment(Pos.CENTER);
-//        component.setHgap(10);
-//        component.setVgap(10);
-//        component.setPadding(new Insets(25, 25, 25, 25));    
-//        return component;
-//    }
-    
+
+    //    public static GridPane formLayout(GridPane component) {
+    //        component.setAlignment(Pos.CENTER);
+    //        component.setHgap(10);
+    //        component.setVgap(10);
+    //        component.setPadding(new Insets(25, 25, 25, 25));    
+    //        return component;
+    //    }
+
     public static void toolbarLayout(FlowPane component) {
         component.setPadding(new Insets(15, 12, 15, 12));
         component.setHgap(10);
         component.setVgap(10);
         //component.setSpacing(10);
+
+        _fx.borderDashed(component, Color.RED); // debug
+        _fx.backround(component, Color.FLORALWHITE);
+
+        //        component.prefWidthProperty().bind(
+        //                container.widthProperty().multiply(0.98));
+        //        
+        //        component.maxWidthProperty().bind(
+        //                container.widthProperty().multiply(0.98));
+
+
+        //uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
+        //uiActionPanel.setAlignItems(Alignment.BASELINE);
+
     }
-    
+
+    public static void visistDepthFirst(Node component, Predicate<Node> onNode) {
+        val doContinue = onNode.test(component);
+        if(doContinue && (component instanceof Pane)) {
+            ((Pane) component).getChildrenUnmodifiable()
+            .forEach(child->visistDepthFirst(child, onNode));
+        }
+    }
+
+    private static boolean isEmptyOrHidden(Node component) {
+        if(component instanceof Pane) {
+            val children = ((Pane) component).getChildrenUnmodifiable();
+            if(children.isEmpty()) {
+                return true; // empty
+            }
+            //return true only if all children are empty or hidden    
+            val atLeastOneIsNonEmptyOrVisible = children.stream()
+                    .anyMatch(child->!isEmptyOrHidden(child));
+            return !atLeastOneIsNonEmptyOrVisible;
+        } 
+        return !component.isVisible();
+    }
+
+
+    public static void hideUntilPopulated(Pane component) {
+        component.setVisible(false);
+        component.getChildren().addListener((Change<? extends Node> change) -> {
+            if(change.next() && change.wasAdded()) {
+
+//                change.getAddedSubList().stream()
+//                .filter(_Predicates.instanceOf(Pane.class))
+//                .map(Pane.class::cast)
+//                .forEach(newPane->{
+//                    _Probe.errOut("newPane %s", ""+newPane);
+//                });
+
+
+                component.setVisible(true);
+            }
+        });
+
+//        component.setOnMouseClicked(e->{
+//
+//            _Probe.errOut("event %s", ""+e);
+//            
+//            visistDepthFirst(component, node->{
+//                _Probe.errOut("node %s", ""+node);
+//                return true;
+//            });
+//
+//        });
+
+    }
+
+
     // -- STYLES
-    
+
     public static <T extends Labeled> T h1(T component) {
         component.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
         return component;
     }
-    
+
     public static <T extends Labeled> T h2(T component) {
         component.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
         return component;
     }
-    
+
     public static <T extends Labeled> T h3(T component) {
         component.setFont(Font.font("Verdana", FontWeight.NORMAL, 17));
         return component;
@@ -246,7 +316,7 @@ public final class _fx {
         region.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
         return region;
     }
-    
+
     public static <T extends Region> T borderDashed(T region, Color color) {
         region.setBorder(new Border(new BorderStroke(
                 color, 
@@ -255,20 +325,20 @@ public final class _fx {
                 new BorderWidths(1))));
         return region;
     }
-    
+
     // -- HACKS
-    
+
     /**
      * {@code menu.setOnAction(action)} does nothing if the menu has no menu items
      */
     public static void setMenuOnAction(Menu menu, EventHandler<ActionEvent> action) {
-        
+
         _fx.newMenuItem(menu, "dummy");
         menu.addEventHandler(Menu.ON_SHOWN, event -> menu.hide());
         menu.addEventHandler(Menu.ON_SHOWING, event -> menu.fire());
-        
+
         menu.setOnAction(action);
     }
-    
+
 
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.panel;
 
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
 import lombok.Getter;
@@ -25,20 +26,32 @@ import lombok.Getter;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
-@Getter
 public class TitledPanel extends VBox {
 
-    private final Label uiLabel;
-    private final FlowPane uiActionBar;
+    @Getter private final Label uiLabel;
+    private FlowPane uiActionBar;
     
     public TitledPanel(String label) {
         super();
-        uiActionBar = _fx.newFlowPane(this);
-        uiLabel = _fx.newLabel(uiActionBar, label);
-        _fx.h3(uiLabel);
-        _fx.toolbarLayout(uiActionBar);
+        if(!_Strings.isEmpty(label)) {
+            uiLabel = _fx.newLabel(getUiActionBar(), label);
+            _fx.h3(uiLabel);    
+        } else {
+            uiLabel = null;
+        }
         super.setFillWidth(true);
+        
+        _fx.backround(this, Color.ALICEBLUE);
+    }
+    
+    public FlowPane getUiActionBar() {
+        if(uiActionBar==null) {
+            uiActionBar = _fx.newFlowPane(this);
+            _fx.toolbarLayout(uiActionBar);
+        }
+        return uiActionBar;
     }
     
 }

@@ -44,7 +44,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -73,7 +72,7 @@ public class UiController {
         contentView.setHbarPolicy(ScrollBarPolicy.NEVER);
         contentView.setVbarPolicy(ScrollBarPolicy.ALWAYS);
         contentPane.setFillWidth(true);
-        _fx.borderDashed(contentPane, Color.CRIMSON); //debug
+        //_fx.borderDashed(contentPane, Color.CRIMSON); //debug
         isisInteractionFactory.runAnonymous(this::buildMenu);
         renderHomepage();
     }

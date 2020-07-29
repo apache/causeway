@@ -54,7 +54,6 @@ import lombok.extern.log4j.Log4j2;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 @Log4j2
 public class ObjectViewFx extends VBox {
@@ -121,17 +120,7 @@ public class ObjectViewFx extends VBox {
             protected Pane newActionPanel(Pane container) {
                 val uiActionPanel = _fx.newFlowPane(container);
                 _fx.toolbarLayout(uiActionPanel);
-                
-                uiActionPanel.prefWidthProperty().bind(
-                        container.widthProperty().multiply(0.98));
-                
-                uiActionPanel.maxWidthProperty().bind(
-                        container.widthProperty().multiply(0.98));
-                
-                _fx.backround(uiActionPanel, Color.FLORALWHITE);
-                
-                //uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
-                //uiActionPanel.setAlignItems(Alignment.BASELINE);
+
                 return uiActionPanel;
             }
 
@@ -187,6 +176,7 @@ public class ObjectViewFx extends VBox {
                                         managedAction, 
                                         DisablingUiModel.of(interaction), 
                                         actionEventHandler)));
+                    
                 });
             }
 
