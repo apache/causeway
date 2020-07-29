@@ -400,6 +400,14 @@ public interface Can<T> extends Iterable<T>, Serializable {
         stream().forEach(action);
     }
     
+    /**
+     * Similar to {@link #forEach(Consumer)}, but zipps in {@code zippedIn} to iterate through 
+     * its elements and passes them over as the second argument to the {@code action}.
+     * @param <R>
+     * @param zippedIn must have at least as much elements as this {@code Can} 
+     * @param action
+     * @throws NoSuchElementException if {@code zippedIn} overflows
+     */
     <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action);
     
     // -- MANIPULATION
