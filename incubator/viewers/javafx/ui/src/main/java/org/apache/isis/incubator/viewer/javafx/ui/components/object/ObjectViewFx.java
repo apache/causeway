@@ -196,8 +196,7 @@ public class ObjectViewFx extends VBox {
                     
                     val request = UiComponentFactory.ComponentRequest.of(
                             managedProperty,
-                            DisablingUiModel.of(interaction),
-                            Where.OBJECT_FORMS);
+                            DisablingUiModel.of(interaction));
                     
                     val uiPropertyField = uiComponentFactory.componentFor(request);
                     val labelAndPostion = uiComponentFactory.labelFor(request);

@@ -24,7 +24,6 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.functions._Predicates;
@@ -67,10 +66,9 @@ public interface UiComponentFactory<B, C> {
     public static class ComponentRequest {
         @NonNull private final ManagedFeature managedFeature;
         @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
-        @NonNull private final Where where;
         
         public static ComponentRequest of(ManagedParameter managedParameter) {
-            return of(managedParameter, Optional.empty(), Where.ANYWHERE);
+            return of(managedParameter, Optional.empty());
         }
         
         // -- SHORTCUTS

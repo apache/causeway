@@ -214,8 +214,7 @@ public class ObjectViewVaa extends VerticalLayout {
                             uiComponentFactory.componentFor(
                                     UiComponentFactory.ComponentRequest.of(
                                             managedProperty,
-                                            DisablingUiModel.of(interaction),
-                                            Where.OBJECT_FORMS)));
+                                            DisablingUiModel.of(interaction))));
                     
                     // handle associated actions
                     val actionBar = newActionPanel(container);
