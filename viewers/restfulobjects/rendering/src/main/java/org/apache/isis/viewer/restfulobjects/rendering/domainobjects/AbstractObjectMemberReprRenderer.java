@@ -87,7 +87,7 @@ extends ReprRendererAbstract<R, ManagedMember> {
      * Used to determine whether to follow links; only populated for {@link Mode#INLINE inline} Mode.
      */
     private String memberId;
-    private final Where where;
+    protected final Where where;
 
     public AbstractObjectMemberReprRenderer(
             final IResourceContext resourceContext,

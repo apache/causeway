@@ -187,7 +187,7 @@ public class ObjectViewFx extends VBox {
                 
                 val formPane = (FormPane) container;
                 
-                val interaction = PropertyInteraction.start(owner, propertyData.getId());
+                val interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility(Where.OBJECT_FORMS)
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {

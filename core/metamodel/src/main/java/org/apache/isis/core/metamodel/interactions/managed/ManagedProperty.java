@@ -40,27 +40,32 @@ public final class ManagedProperty extends ManagedMember {
     
     public static final ManagedProperty of(
             final @NonNull ManagedObject owner, 
-            final @NonNull OneToOneAssociation property) {
-        return new ManagedProperty(owner, property);
+            final @NonNull OneToOneAssociation property,
+            final @NonNull Where where) {
+        return new ManagedProperty(owner, property, where);
     }
     
     public static final Optional<ManagedProperty> lookupProperty(
             @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
+            @NonNull final String memberId, 
+            @NonNull final Where where) {
         
         return ManagedMember.<OneToOneAssociation>lookup(owner, MemberType.PROPERTY, memberId)
-        .map(objectAction -> of(owner, objectAction));
+        .map(objectAction -> of(owner, objectAction, where));
     }
     
     // -- IMPLEMENTATION
     
     @Getter private final OneToOneAssociation property;
+    @Getter private final Where where;
     
     private ManagedProperty(
             final @NonNull ManagedObject owner, 
-            final @NonNull OneToOneAssociation property) {
+            final @NonNull OneToOneAssociation property,
+            final @NonNull Where where) {
         super(owner);
         this.property = property;
+        this.where = where;
     }
 
     @Override
@@ -120,7 +125,7 @@ public final class ManagedProperty extends ManagedMember {
      * If visibility is vetoed, returns an empty but specified ManagedObject.
      * @return the property value as to be used by the UI for representation
      */
-    public ManagedObject getPropertyValue(@NonNull Where where) {
+    public ManagedObject getPropertyValue() {
         val property = getProperty();
         val owner = getOwner();
         
@@ -132,3 +137,4 @@ public final class ManagedProperty extends ManagedMember {
     
     
 }
+

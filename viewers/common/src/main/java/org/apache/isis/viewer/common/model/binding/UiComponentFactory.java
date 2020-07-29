@@ -138,7 +138,7 @@ public interface UiComponentFactory<B, C> {
             val managedProperty = (ManagedProperty)managedFeature;
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type 
-            return Optional.ofNullable(managedProperty.getPropertyValue(where))
+            return Optional.ofNullable(managedProperty.getPropertyValue())
                     .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                     .map(ManagedObject::getPojo)
                     .map(type::cast);

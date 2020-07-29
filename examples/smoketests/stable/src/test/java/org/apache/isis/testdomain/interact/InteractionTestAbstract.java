@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Arrays;
@@ -55,10 +56,10 @@ abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
         return ActionInteraction.start(managedObject, actionId);
     }
     
-    protected PropertyInteraction startPropertyInteractionOn(Class<?> type, String propertyId) {
+    protected PropertyInteraction startPropertyInteractionOn(Class<?> type, String propertyId, Where where) {
         val viewModel = factoryService.viewModel(type);
         val managedObject = objectManager.adapt(viewModel);
-        return PropertyInteraction.start(managedObject, propertyId);
+        return PropertyInteraction.start(managedObject, propertyId, where);
     }
     
     protected CollectionInteraction startCollectionInteractionOn(Class<?> type, String collectionId) {

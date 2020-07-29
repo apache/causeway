@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -32,9 +33,10 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
 
     public static final PropertyInteraction start(
             @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
+            @NonNull final String memberId,
+            @NonNull final Where where) {
     
-        val managedProperty = ManagedProperty.lookupProperty(owner, memberId);
+        val managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
         
         final _Either<ManagedProperty, InteractionVeto> chain = managedProperty.isPresent()
                 ? _Either.left(managedProperty.get())

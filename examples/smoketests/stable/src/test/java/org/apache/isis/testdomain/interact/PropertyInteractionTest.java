@@ -58,7 +58,7 @@ class PropertyInteractionTest extends InteractionTestAbstract {
     @Test 
     void propertyInteraction_whenEnabled_shouldHaveNoVeto() {
 
-        val managedProperty = startPropertyInteractionOn(InteractionDemo.class, "stringMultiline")
+        val managedProperty = startPropertyInteractionOn(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS)
                 .getManagedProperty().get(); // should not throw  
 
         assertFalse(managedProperty.checkVisibility(Where.OBJECT_FORMS).isPresent()); // is visible
@@ -68,7 +68,7 @@ class PropertyInteractionTest extends InteractionTestAbstract {
     @Test 
     void propertyInteraction_whenDisabled_shouldHaveVeto() {
 
-        val managedProperty = startPropertyInteractionOn(InteractionDemo.class, "stringDisabled")
+        val managedProperty = startPropertyInteractionOn(InteractionDemo.class, "stringDisabled", Where.OBJECT_FORMS)
                 .getManagedProperty().get(); // should not throw  
 
 

@@ -326,7 +326,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(getResourceContext(), linkFollowerForProp, property.getId(), propertyRepresentation);
-            renderer.with(ManagedProperty.of(objectAdapter, property)).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.getWhere())).usingLinkTo(linkToBuilder);
 
             if (mode.isArgs()) {
                 renderer.asArguments();

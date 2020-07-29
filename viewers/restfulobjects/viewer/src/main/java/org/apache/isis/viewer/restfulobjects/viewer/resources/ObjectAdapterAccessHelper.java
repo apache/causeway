@@ -69,7 +69,7 @@ public class ObjectAdapterAccessHelper {
             @NonNull final AccessIntent intent) {
         
         return PropertyInteraction
-                .start(managedObject, propertyId)
+                .start(managedObject, propertyId, where)
                 .checkVisibility(where)
                 .checkUsability(where, intent)
                 .getManagedPropertyElseThrow(InteractionFailureHandler::onFailure);

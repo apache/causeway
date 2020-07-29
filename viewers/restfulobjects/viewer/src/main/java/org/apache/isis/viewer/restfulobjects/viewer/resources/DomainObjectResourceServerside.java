@@ -452,7 +452,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         
-        PropertyInteraction.start(objectAdapter, propertyId)
+        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.getWhere())
         .checkVisibility(resourceContext.getWhere())
         .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
         .modifyProperty(property->{
@@ -484,7 +484,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         
-        PropertyInteraction.start(objectAdapter, propertyId)
+        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.getWhere())
         .checkVisibility(resourceContext.getWhere())
         .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
         .modifyProperty(property->null)

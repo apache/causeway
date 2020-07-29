@@ -203,7 +203,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 
                 val owner = objectInteractor.getManagedObject();
                 
-                val interaction = PropertyInteraction.start(owner, propertyData.getId());
+                val interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility(Where.OBJECT_FORMS)
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {

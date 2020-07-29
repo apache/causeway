@@ -82,7 +82,8 @@ implements PropertyUiModel {
     public ManagedProperty getManagedProperty() {
         if(managedProperty==null) {
             val owner = getParentUiModel().getObject();
-            managedProperty = ManagedProperty.of(owner, getMetaModel()); 
+            val where = this.getRenderingHint().asWhere();
+            managedProperty = ManagedProperty.of(owner, getMetaModel(), where); 
         }
         return managedProperty;  
     } 
@@ -126,9 +127,7 @@ implements PropertyUiModel {
     }
 
     public void reset() {
-        val where = this.getRenderingHint().asWhere();
-        val propertyValue = getManagedProperty().getPropertyValue(where);
-        
+        val propertyValue = getManagedProperty().getPropertyValue();
         val presentationValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(propertyValue)
                 ? null
                 : propertyValue;

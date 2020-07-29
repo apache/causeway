@@ -353,7 +353,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(resourceContext, null, property.getId(), propertyRepresentation)
                     .asStandalone();
-            renderer.with(ManagedProperty.of(objectAdapter, property));
+            renderer.with(ManagedProperty.of(objectAdapter, property, where));
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();
 

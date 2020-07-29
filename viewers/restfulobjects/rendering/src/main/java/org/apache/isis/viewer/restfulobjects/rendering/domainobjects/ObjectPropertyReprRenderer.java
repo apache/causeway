@@ -179,7 +179,7 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         final JsonRepresentation representation = JsonRepresentation.newMap();
         final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, representation);
-        renderer.with(ManagedProperty.of(objectAdapter, objectMember)).asFollowed();
+        renderer.with(ManagedProperty.of(objectAdapter, objectMember, super.where)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
