@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class SimulatedUiComponent extends HasParameterValidation {
+public class SimulatedUiComponent extends HasValueValidation {
     
     private Bindable<ManagedObject> value = _Bindables.empty();
 

@@ -20,16 +20,16 @@ package org.apache.isis.testdomain.interact;
 
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 
 public class SimulatedUiAutoComplete extends SimulatedUiChoices {
 
     private final Bindable<String> searchText = 
             _Bindables.empty();
     
-    public void bind(ManagedParameter paramModel) {
-        searchText.bindBidirectional(paramModel.getSearchArgument());
-        super.bind(paramModel);
+    public void bind(ManagedValue managedValue) {
+        searchText.bindBidirectional(managedValue.getSearchArgument());
+        super.bind(managedValue);
     }
     
     public void setSimulatedSearchArgument(String search) {

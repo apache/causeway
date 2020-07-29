@@ -22,16 +22,16 @@ import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 
 import lombok.Getter;
 
-abstract class HasParameterValidation {
+abstract class HasValueValidation {
 
     protected final Bindable<String> validationMessage = _Bindables.empty();
     @Getter private final LongAdder validationUpdateEventCount = new LongAdder();
     
-    public void bind(ManagedParameter paramModel) {
+    public void bind(ManagedValue paramModel) {
         validationMessage.bind(paramModel.getValidationMessage());
         validationMessage.addListener((e,o,n)->{
             validationUpdateEventCount.increment();
