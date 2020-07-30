@@ -14,12 +14,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-  	<groupId>org.apache.isis</groupId>
-  	<artifactId>supplemental-model</artifactId>
-  	<version>1.0</version>
-  	
-  	<name>Apache Isis Supplemental - Legal Info</name>
-  	<description>
+	<groupId>org.apache.isis</groupId>
+	<artifactId>supplemental-model</artifactId>
+	<version>1.0</version>
+
+	<name>Apache Isis Supplemental - Legal Info</name>
+	<description>
   	For example, the templates used by many Apache distributions assemble a listing of project dependencies 
   	according to their organization name (and URL), along with the URL each project's website. When dependency 
   	POMs are missing this information, the dependency notice file that the Remote Resources Plugin renders can 
@@ -29,6 +29,16 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.0.0</version>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
