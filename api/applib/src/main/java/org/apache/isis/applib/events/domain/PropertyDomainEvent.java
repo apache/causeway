@@ -22,6 +22,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
 import lombok.Getter;
+import lombok.Setter;
 
 // tag::refguide[]
 public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
@@ -69,7 +70,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
      * (but null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
     // tag::refguide[]
-    @Getter
+    @Getter @Setter
     private T oldValue;
 
     // end::refguide[]
@@ -85,16 +86,10 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
      * </p>
      */
     // tag::refguide[]
-    @Getter
+    @Getter @Setter
     private T newValue;
 
     // end::refguide[]
-    /**
-     * Not API; for framework use only.
-     */
-    public void setOldValue(T oldValue) {
-        this.oldValue = oldValue;
-    }
 
 
 
