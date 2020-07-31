@@ -37,19 +37,19 @@ import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE)
 @RequiredArgsConstructor
-public class ActionDomainEventVm_controlUpdateTextEditing {
+public class ActionDomainEventVm_controlUpdateTextInvocation {
 
     private final ActionDomainEventVm actionDomainEventVm;
 
-    public ActionDomainEventVm act(final ControlStrategy controlStrategy) {
-        eventControlService.controlStrategy = controlStrategy;
+    public ActionDomainEventVm act(final ActionDomainEventControlStrategy controlStrategy) {
+        eventActionDomainEventControlService.controlStrategy = controlStrategy;
         return actionDomainEventVm;
     }
-    public ControlStrategy default0Act() {
-        return eventControlService.controlStrategy;
+    public ActionDomainEventControlStrategy default0Act() {
+        return eventActionDomainEventControlService.controlStrategy;
     }
 
     @Inject
-    ControlService eventControlService;
+    ActionDomainEventControlService eventActionDomainEventControlService;
 }
 //end::class[]

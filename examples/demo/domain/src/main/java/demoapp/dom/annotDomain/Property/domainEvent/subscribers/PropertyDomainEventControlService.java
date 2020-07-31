@@ -12,10 +12,9 @@ import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 
 // tag::class[]
 @DomainService(objectType = "demo.PropertyDomainEventControlService")
-@Named("demo.PropertyDomainEventControlService")
-class ControlService {
+class PropertyDomainEventControlService {
 
-    ControlStrategy controlStrategy = ControlStrategy.DO_NOTHING;   // <.>
+    PropertyDomainEventControlStrategy controlStrategy = PropertyDomainEventControlStrategy.DO_NOTHING;   // <.>
 
     @EventListener(PropertyDomainEventVm.TextDomainEvent.class)     // <.>
     public void on(PropertyDomainEventVm.TextDomainEvent ev) {

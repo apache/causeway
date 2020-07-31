@@ -13,10 +13,9 @@ import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm_mixinUpdat
 
 // tag::class[]
 @DomainService(objectType = "demo.ActionDomainEventControlService")
-@Named("demo.ActionDomainEventControlService")
-class ControlService {
+class ActionDomainEventControlService {
 
-    ControlStrategy controlStrategy = ControlStrategy.DO_NOTHING;         // <.>
+    ActionDomainEventControlStrategy controlStrategy = ActionDomainEventControlStrategy.DO_NOTHING;         // <.>
 
     @EventListener(ActionDomainEventVm.UpdateTextDomainEvent.class)       // <.>
     public void on(ActionDomainEventVm.UpdateTextDomainEvent ev) {

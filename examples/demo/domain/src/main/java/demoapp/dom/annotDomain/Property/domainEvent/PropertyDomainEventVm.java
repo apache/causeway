@@ -38,7 +38,6 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-//tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -48,6 +47,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
     editing = Editing.ENABLED
 )
 @NoArgsConstructor
+//tag::class[]
 public class PropertyDomainEventVm implements HasAsciiDocDescription {
     // ...
 //end::class[]
@@ -59,8 +59,8 @@ public class PropertyDomainEventVm implements HasAsciiDocDescription {
     public String title() {
         return "Property#domainEvent";
     }
-
 //tag::class[]
+
     public static class TextDomainEvent                             // <.>
         extends PropertyDomainEvent<PropertyDomainEventVm,String> {}
 

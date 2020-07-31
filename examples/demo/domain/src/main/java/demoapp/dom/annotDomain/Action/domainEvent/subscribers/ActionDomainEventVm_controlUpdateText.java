@@ -36,11 +36,11 @@ public class ActionDomainEventVm_controlUpdateText {
     private final ActionDomainEventVm actionDomainEventVm;
 
     @MemberOrder(name = "contributed", sequence = "1")
-    public ControlStrategy prop() {
-        return eventControlService.controlStrategy;
+    public ActionDomainEventControlStrategy prop() {
+        return eventActionDomainEventControlService.controlStrategy;
     }
 
     @Inject
-    ControlService eventControlService;
+    ActionDomainEventControlService eventActionDomainEventControlService;
 }
 //end::class[]

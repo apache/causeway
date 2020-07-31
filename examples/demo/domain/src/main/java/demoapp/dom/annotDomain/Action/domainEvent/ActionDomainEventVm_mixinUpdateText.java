@@ -31,19 +31,17 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , domainEvent =
-        ActionDomainEventVm_mixinUpdateText.DomainEvent.class       // <.>
+        ActionDomainEventVm_mixinUpdateText.DomainEvent.class           // <.>
     , associateWith = "text", associateWithSequence = "2"
 )
 @ActionLayout(
     describedAs =
-        "@Action(" +
-            "domainEvent = " +
-                "ActionDomainEventVm_mixinUpdateText.DomainEvent.class)"
+        "@Action(domainEvent = ActionDomainEventVm_mixinUpdateText.DomainEvent.class)"
 )
 @RequiredArgsConstructor
 public class ActionDomainEventVm_mixinUpdateText {
 
-    public static class DomainEvent                             // <.>
+    public static class DomainEvent                                     // <.>
             extends ActionDomainEvent<ActionDomainEventVm> {}
 
     private final ActionDomainEventVm actionDomainEventVm;
@@ -54,6 +52,5 @@ public class ActionDomainEventVm_mixinUpdateText {
     public String default0Act() {
         return actionDomainEventVm.getText();
     }
-
 }
 //end::class[]

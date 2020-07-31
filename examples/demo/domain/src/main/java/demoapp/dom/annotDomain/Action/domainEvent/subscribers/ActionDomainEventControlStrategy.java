@@ -10,7 +10,7 @@ import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm_mixinUpdateText;
 
 // tag::class[]
-enum ControlStrategy {
+enum ActionDomainEventControlStrategy {
 
     DO_NOTHING{
         @Override

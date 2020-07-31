@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,11 +36,11 @@ public class PropertyDomainEventVm_controlText {
     private final PropertyDomainEventVm propertyDomainEventVm;
 
     @MemberOrder(name = "contributed", sequence = "1")
-    public ControlStrategy prop() {
+    public PropertyDomainEventControlStrategy prop() {
         return eventControlService.controlStrategy;
     }
 
     @Inject
-    ControlService eventControlService;
+    PropertyDomainEventControlService eventControlService;
 }
 //end::class[]

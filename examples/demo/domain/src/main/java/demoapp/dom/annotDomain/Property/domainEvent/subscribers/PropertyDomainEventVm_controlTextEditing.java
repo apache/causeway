@@ -24,8 +24,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,15 +41,15 @@ public class PropertyDomainEventVm_controlTextEditing {
 
     private final PropertyDomainEventVm propertyDomainEventVm;
 
-    public PropertyDomainEventVm act(final ControlStrategy controlStrategy) {
+    public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
         eventControlService.controlStrategy = controlStrategy;
         return propertyDomainEventVm;
     }
-    public ControlStrategy default0Act() {
+    public PropertyDomainEventControlStrategy default0Act() {
         return eventControlService.controlStrategy;
     }
 
     @Inject
-    ControlService eventControlService;
+    PropertyDomainEventControlService eventControlService;
 }
 //end::class[]
