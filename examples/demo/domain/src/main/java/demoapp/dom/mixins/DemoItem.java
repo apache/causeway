@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@DomainObject(nature=Nature.INMEMORY_ENTITY, objectType = "demo.MixinDemoItem")
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.MixinDemoItem")
 @NoArgsConstructor 
 @AllArgsConstructor(staticName="of")
 public class DemoItem {

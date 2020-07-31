@@ -18,10 +18,15 @@
  */
 package org.apache.isis.extensions.cors.impl;
 
+import java.io.IOException;
 import java.util.Collections;
 
 import javax.inject.Named;
 import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -67,7 +72,16 @@ public class IsisModuleExtCorsImpl {
     }
 	
 	public CorsFilter corsFilter() {
-		return new CorsFilter(corsConfigurationSource());
+		return new CorsFilter(corsConfigurationSource()) {
+		    @Override
+		    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		            FilterChain filterChain) throws ServletException, IOException {
+		        
+		        log.info("request {}", request.getRequestURL());
+		        
+		        super.doFilterInternal(request, response, filterChain);
+		    }
+		};
 	}
 	
 	private CorsConfigurationSource corsConfigurationSource() {
