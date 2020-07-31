@@ -76,16 +76,20 @@ public interface Can<T> extends Iterable<T>, Serializable {
     int size();
     
     /**
+     * Will only ever return an empty Optional, if the elementIndex is out of bounds.
      * @param elementIndex
-     * @return optionally this Can's element with index {@code elementIndex} 
+     * @return optionally this Can's element with index {@code elementIndex}, 
+     * based on whether this index is within bounds 
      */
     Optional<T> get(int elementIndex);
     
     /**
      * Shortcut to {@code get(elementIndex).orElseThrow(...)}
+     * <p>
+     * Will only ever throw, if the elementIndex is out of bounds.
      * @param elementIndex
      * @return this Can's element with index {@code elementIndex}
-     * @throws NoSuchElementException
+     * @throws NoSuchElementException when the elementIndex is out of bounds
      * @see {@link #get(int)} 
      */
     default T getElseFail(final int elementIndex) {
