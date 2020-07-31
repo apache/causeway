@@ -109,7 +109,7 @@ extends RecreatableObjectFacetAbstract {
         .forEach(property->{
             final ManagedObject propertyValue = 
                     property.get(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
-            if(propertyValue != null) {
+            if(propertyValue != null && propertyValue.getPojo()!=null) {
                 memento.put(property.getId(), propertyValue.getPojo());
             }
         });
