@@ -62,7 +62,6 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public Node handle(ComponentRequest request) {
-        
         val markupHtml = request.getFeatureValue(HasHtml.class)
                 .map(HasHtml::asHtml)
                 .orElse("");

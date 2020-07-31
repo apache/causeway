@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -136,7 +137,7 @@ public interface UiComponentFactory<B, C> {
             val managedProperty = (ManagedProperty)managedFeature;
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type 
-            return Optional.ofNullable(managedProperty.getValue().getValue())
+            return Optional.ofNullable(managedProperty.getPropertyValue())
                     .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                     .map(ManagedObject::getPojo)
                     .map(type::cast);

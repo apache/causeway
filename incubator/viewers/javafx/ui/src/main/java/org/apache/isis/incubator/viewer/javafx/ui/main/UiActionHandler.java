@@ -58,7 +58,9 @@ public class UiActionHandler {
         
         final int paramCount = managedAction.getAction().getParameterCount();
         
-        if(paramCount>0) {
+        if(paramCount==0) {
+            invoke(managedAction, Can.empty(), onNewPageContent);     
+        } else {
             // TODO get an ActionPrompt, then on invocation show the result in the content view
             
             //Dialogs.message("Warn", "ActionPrompt not supported yet!", null);
@@ -99,11 +101,19 @@ public class UiActionHandler {
             });
             
             dialog.showAndWait().ifPresent(params->{
-                System.out.println("param negotiation result");
+                log.info("param negotiation done");
+                invoke(managedAction, params.getParamValues(), onNewPageContent);
             });
             
-            return;
-        }
+        } 
+        
+
+    }
+    
+    private void invoke(
+            ManagedAction managedAction, 
+            Can<ManagedObject> params,
+            Consumer<Node> onNewPageContent) {
         
         uiContext.getIsisInteractionFactory().runAnonymous(()->{
 
@@ -115,8 +125,8 @@ public class UiActionHandler {
             .ifPresent(actionResult->handleActionResult(actionResult, onNewPageContent));
 
         });
-
     }
+    
     
     public void handleActionResult(ManagedObject actionResult, Consumer<Node> onNewPageContent) {
         onNewPageContent.accept(uiComponentForActionResult(actionResult, onNewPageContent));
