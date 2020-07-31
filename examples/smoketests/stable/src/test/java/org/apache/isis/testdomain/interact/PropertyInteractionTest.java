@@ -63,6 +63,10 @@ class PropertyInteractionTest extends InteractionTestAbstract {
 
         assertFalse(managedProperty.checkVisibility().isPresent()); // is visible
         assertFalse(managedProperty.checkUsability().isPresent()); // can edit
+        
+        // verify, that the meta-model is valid
+        assertMetamodelValid();
+
     }
     
     @Test 

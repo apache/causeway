@@ -18,7 +18,6 @@
  */
 package org.apache.isis.testdomain.interact;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -66,11 +65,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
     
     //InteractionNpmDemo_biArgDisabled#validateAct()
 
-    
-    @Test// @Disabled("bug when processing ")
+    @Test
     void metamodel_shouldBeValid() {
-        val specLoader = super.objectManager.getMetaModelContext().getSpecificationLoader(); 
-        assertEquals(Collections.<String>emptyList(), specLoader.getValidationResult().getMessages());
+        assertMetamodelValid();
     }
     
     @Test

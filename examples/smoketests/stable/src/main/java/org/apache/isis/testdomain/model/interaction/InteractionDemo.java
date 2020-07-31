@@ -18,6 +18,10 @@
  */
 package org.apache.isis.testdomain.model.interaction;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -30,6 +34,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -40,14 +45,26 @@ import lombok.Setter;
 @DomainObject(nature=Nature.VIEW_MODEL, objectType="smoketests.InteractionDemo", editing=Editing.ENABLED)
 public class InteractionDemo {
 
-    @Property
-    @PropertyLayout(multiLine=3, labelPosition = LabelPosition.TOP)
-    @XmlElement @Getter @Setter private String stringMultiline;
-    
     @Property(
             editing = Editing.DISABLED,
             editingDisabledReason = "Disabled for demonstration.")
     @XmlElement @Getter @Setter private String stringDisabled;
     
+    @Property
+    @PropertyLayout(multiLine=3, labelPosition = LabelPosition.TOP)
+    @XmlElement @Getter @Setter private String stringMultiline;
+
+    // verify, all the parameter supporting methods get picked up
+    
+    @Model public boolean hideStringMultiline() { return false; }         
+    @Model public String disableStringMultiline() { return null; }                           
+    @Model public String validateStringMultiline(String proposeValue) { return null; }
+    @Model public String defaultStringMultiline() { return "default"; }
+    @Model public String[] choicesStringMultiline() { return new String[] {"Hello", "World"}; }          
+    @Model public List<String> autoCompleteStringMultiline(String search) { 
+        return Stream.of(choicesStringMultiline())
+                .filter(s->s.contains(search))
+                .collect(Collectors.toList()); 
+    }
     
 }

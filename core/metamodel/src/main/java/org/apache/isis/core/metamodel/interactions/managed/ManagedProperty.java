@@ -23,6 +23,8 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.binding.Bindable;
+import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -34,7 +36,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-public final class ManagedProperty extends ManagedMember {
+public final class ManagedProperty 
+extends ManagedMember 
+implements ManagedValue {
     
     // -- FACTORIES
     
@@ -131,6 +135,30 @@ public final class ManagedProperty extends ManagedMember {
                 && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getSpecification());
+    }
+
+    @Override
+    public Bindable<ManagedObject> getValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Observable<String> getValidationMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Bindable<String> getSearchArgument() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Observable<Can<ManagedObject>> getChoices() {
+        // TODO Auto-generated method stub
+        return null;
     }
     
     

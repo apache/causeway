@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import java.util.Collections;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 
@@ -46,10 +47,6 @@ abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
     @Inject protected ObjectManager objectManager;
     @Inject protected IsisInteractionFactory interactionFactory;
     
-//    static {
-//        new javafx.embed.swing.JFXPanel(); // Initializes the JavaFx Platform
-//    }
-
     protected ActionInteraction startActionInteractionOn(Class<?> type, String actionId, Where where) {
         val viewModel = factoryService.viewModel(type);
         val managedObject = objectManager.adapt(viewModel);
@@ -68,6 +65,10 @@ abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
         return CollectionInteraction.start(managedObject, collectionId, where);
     }
 
+    protected void assertMetamodelValid() {
+        val specLoader = objectManager.getMetaModelContext().getSpecificationLoader(); 
+        assertEquals(Collections.<String>emptyList(), specLoader.getValidationResult().getMessages());    
+    }
     
     protected void assertComponentWiseEquals(Object a, Object b) {
         

@@ -20,7 +20,7 @@ package org.apache.isis.testdomain.interact;
 
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -30,10 +30,10 @@ public class SimulatedUiComponent extends HasValueValidation {
 
     private ObjectSpecification valueSpec;
     
-    public void bind(ManagedParameter paramModel) {
-        valueSpec = paramModel.getMetaModel().getSpecification();
-        value.bindBidirectional(paramModel.getValue());
-        super.bind(paramModel);
+    public void bind(ManagedValue managedValue) {
+        valueSpec = managedValue.getSpecification();
+        value.bindBidirectional(managedValue.getValue());
+        super.bind(managedValue);
     }
 
     public void simulateValueChange(Object newValue) {
