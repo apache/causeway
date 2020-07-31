@@ -103,15 +103,6 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
             }
         }
     }
-    
-    
-//    private String encode(final byte[] bytes) {
-//        return _Strings.ofBytes(_Bytes.asUrlBase64.apply(bytes), StandardCharsets.UTF_8);
-//    }
-//
-//    public byte[] decode(final String str) {
-//        return _Bytes.ofUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
-//    }
 
 
 }
