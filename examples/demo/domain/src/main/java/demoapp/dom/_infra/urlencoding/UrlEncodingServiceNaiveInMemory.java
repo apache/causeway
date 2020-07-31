@@ -41,14 +41,19 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
     @Override
     public String encode(byte[] bytes) {
 
-        val encodedString = urlEncodingService.encode(bytes);
+        // web servers might have restrictions to header sizes of eg. max 4k or 8k  
+        // if the encodedString is reasonable small, we pass it through
+        val encodedString = urlEncodingService.encode(bytes); // from the default urlEncodingService
         if(encodedString.length()<4096) {
             return EncodingType.PASS_THROUGH.encode(encodedString);
         }
                 
+        // if the encodedString is not reasonable small, we calculate a hash,
+        // then store the encodedString in a map using this hash as the key
         val hashBytes = _Hashes.digest(Algorithm.SHA512, bytes)
                 .orElseThrow(()->_Exceptions.unrecoverable("failed to generate SHA-512 hash"));
         
+        // the key is exposed for web use with URLs, which requires us to encode them base64 URL safe 
         val base64Key = _Strings.ofBytes(_Bytes.asUrlBase64.apply(hashBytes), StandardCharsets.UTF_8);
         
         map.put(base64Key, encodedString);
@@ -81,6 +86,11 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
     
     // -- HELPER
     
+    /** 
+     * Puts one character in front of the input,
+     * or removes one character from the front of the input,
+     * such that we can differentiate, which EncodingType is to be applied.
+     */
     @RequiredArgsConstructor
     private static enum EncodingType {
         PASS_THROUGH('P'),
