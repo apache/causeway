@@ -27,7 +27,9 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.primitives._Ints;
 import org.apache.isis.core.commons.internal.primitives._Longs;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <h1>- internal use only -</h1>
@@ -42,7 +44,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0
  */
 @UtilityClass
-
+@Log4j2
 public final class _Assert {
 
 
@@ -171,9 +173,11 @@ public final class _Assert {
     }
 
     private static void fail(String message, Object expected, Object actual) {
-        throw _Exceptions.assertionError(
+        val error = _Exceptions.assertionError(
                 buildPrefix(message) 
                 + String.format("expected: <%s> but was: <%s>", ""+expected, ""+actual));
+        log.error(error); // in case exceptions get swallowed, make sure errors at least get logged
+        throw error;
     }
 
 

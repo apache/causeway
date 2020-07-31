@@ -18,9 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.ixn;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -33,7 +32,7 @@ public interface InteractionDtoServiceInternal {
     ActionInvocationDto asActionInvocationDto(
             ObjectAction objectAction,
             ManagedObject targetAdapter,
-            List<ManagedObject> argumentAdapters);
+            Can<ManagedObject> argumentAdapters);
 
     @Programmatic
     PropertyEditDto asPropertyEditDto(

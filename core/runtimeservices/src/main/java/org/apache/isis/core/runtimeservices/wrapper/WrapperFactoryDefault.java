@@ -72,6 +72,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -303,7 +304,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
 
-        val argAdapters = Arrays.asList(WrapperFactoryDefault.this.adaptersFor(args));
+        val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
         val targetList = Collections.singletonList(targetAdapter);
 
         CommandDto commandDto;
@@ -314,7 +315,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
-                commandDto = commandDtoServiceInternal.asCommandDto(targetList, property, argAdapters.get(0));
+                commandDto = commandDtoServiceInternal.asCommandDto(targetList, property, argAdapters.getElseFail(0));
                 break;
             default:
                 // shouldn't happen, already catered for this case previously

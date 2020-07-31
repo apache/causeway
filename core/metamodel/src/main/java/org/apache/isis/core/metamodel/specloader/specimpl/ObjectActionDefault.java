@@ -395,6 +395,9 @@ implements ObjectAction {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
+                "action's parameter count and provided argument count must match");
+        
         setupCommand(head.getTarget(), argumentAdapters);
         
         return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
@@ -616,7 +619,7 @@ implements ObjectAction {
                         : Collections.singletonList(targetAdapter);
 
                 val commandDto = commandDtoServiceInternal.asCommandDto(
-                        commandTargetAdapters, this, argumentAdapters.toList());
+                        commandTargetAdapters, this, argumentAdapters);
 
                 setupCommandDtoAndExecutionContext(commandDto);
 

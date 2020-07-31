@@ -44,6 +44,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Arrays;
@@ -152,6 +153,10 @@ implements ImperativeFacet {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
+        _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
+                "action's parameter count and provided argument count must match");
+        
         // similar code in PropertySetterOrClearFacetFDEA
         
         final CommandContext commandContext = getCommandContext();
@@ -426,7 +431,7 @@ implements ImperativeFacet {
 
                 // update the current execution with the DTO (memento)
                 val invocationDto = getInteractionDtoServiceInternal()
-                .asActionInvocationDto(owningAction, mixinElseRegularAdapter, argumentAdapters.toList());
+                .asActionInvocationDto(owningAction, mixinElseRegularAdapter, argumentAdapters);
                 
                 currentExecution.setDto(invocationDto);
                 

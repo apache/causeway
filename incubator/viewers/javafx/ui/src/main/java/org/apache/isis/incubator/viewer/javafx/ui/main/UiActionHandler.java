@@ -106,7 +106,6 @@ public class UiActionHandler {
             });
             
         } 
-        
 
     }
     
@@ -119,7 +118,7 @@ public class UiActionHandler {
 
             //Thread.sleep(1000); // simulate long running
 
-            val actionResultOrVeto = managedAction.invoke(Can.empty());
+            val actionResultOrVeto = managedAction.invoke(params);
             
             actionResultOrVeto.left()
             .ifPresent(actionResult->handleActionResult(actionResult, onNewPageContent));

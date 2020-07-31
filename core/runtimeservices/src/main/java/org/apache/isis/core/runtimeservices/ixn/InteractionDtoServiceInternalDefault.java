@@ -37,6 +37,8 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
@@ -68,8 +70,11 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
             final ManagedObject targetAdapter,
-            final List<ManagedObject> argumentAdapters) {
-
+            final Can<ManagedObject> argumentAdapters) {
+        
+        _Assert.assertEquals(objectAction.getParameterCount(), argumentAdapters.size(),
+                "action's parameter count and provided argument count must match");
+        
         final Interaction interaction = interactionContextProvider.get().getInteraction();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
