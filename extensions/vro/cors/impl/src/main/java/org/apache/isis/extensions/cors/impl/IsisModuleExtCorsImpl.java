@@ -23,9 +23,6 @@ import java.util.Collections;
 import javax.inject.Named;
 import javax.servlet.Filter;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.commons.internal.debug._Probe;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -36,9 +33,16 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.config.IsisConfiguration;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
 @Configuration
 @Named("isisMapCors.WebModuleServerCors")
 @Qualifier("CORS")
+@Log4j2
 public class IsisModuleExtCorsImpl {
 	public static final int CORS_FILTER_ORDER = OrderPrecedence.EARLY - 100;
 
@@ -52,12 +56,12 @@ public class IsisModuleExtCorsImpl {
 	@Order(OrderPrecedence.EARLY)
     public FilterRegistrationBean<Filter> corsFilterRegistration() {
         
-        // TODO do we want to restrict this filter to the REST URL only?
-        _Probe.errOut("REST URI %s", configuration.getViewer().getRestfulobjects().getBaseUri());
+        val resteasyBase = configuration.getAsMap().getOrDefault("resteasy.jaxrs.defaultPath", "/restful");
+        log.info("Setting up CORS to filter resteasy-base at '{}'", resteasyBase);
         
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(corsFilter());
-        filterRegistrationBean.setUrlPatterns(Collections.singletonList("/*"));
+        filterRegistrationBean.setUrlPatterns(Collections.singletonList(resteasyBase));
         filterRegistrationBean.setOrder(CORS_FILTER_ORDER);
         return filterRegistrationBean;
     }
