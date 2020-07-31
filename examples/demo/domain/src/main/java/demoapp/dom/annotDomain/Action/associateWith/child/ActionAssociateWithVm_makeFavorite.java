@@ -18,11 +18,13 @@
  */
 package demoapp.dom.annotDomain.Action.associateWith.child;
 
+import java.util.List;
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,29 +34,27 @@ import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 
 //tag::class[]
 @Action(
-    associateWith = "mixinChildren"         // <.>
-    , associateWithSequence = "2"
+    associateWith = "favorites"                                 // <.>
+    , associateWithSequence = "1"
 )
 @ActionLayout(
-    named = "Add"                           // <.>
-    , describedAs =
+    describedAs =
         "@Action(" +
-            "associateWith = \"mixinChildren\"" +
-            ", associateWithSequence = \"2\")"
+            "associateWith = \"favorites\"" +
+            ", associateWithSequence = \"1\")"
 )
 @RequiredArgsConstructor
-public class ActionAssociateWithVm_mixinChildrenRemoveChild {
+public class ActionAssociateWithVm_makeFavorite {
 
     private final ActionAssociateWithVm actionAssociateWithVm;
 
     public ActionAssociateWithVm act(ActionAssociateWithChildVm childVm) {
-        messageService.informUser(
-                "This is a dummy action and doesn't actually do anything. " +
-                "It's purpose is just to illustrate the 'associateWith' semantic");
+        actionAssociateWithVm.getFavorites().add(childVm);
+        actionAssociateWithVm.getChildren().removeIf(x -> Objects.equals(x.getValue(), childVm.getValue()));
         return actionAssociateWithVm;
     }
-
-    @Inject
-    MessageService messageService;
+    public List<ActionAssociateWithChildVm> choices0Act() {     // <.>
+        return actionAssociateWithVm.getChildren();
+    }
 }
 //end::class[]

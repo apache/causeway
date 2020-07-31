@@ -20,6 +20,7 @@ package demoapp.dom.annotDomain.Action.associateWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -43,6 +44,7 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.annotDomain.Action.associateWith.child.ActionAssociateWithChildVm;
@@ -90,6 +92,13 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     private List<ActionAssociateWithChildVm> children = new ArrayList<>();
 //end:children[]
 
+//tag:children-favorites[]
+    @Collection()
+    @CollectionLayout()
+    @Getter
+    private List<ActionAssociateWithChildVm> favorites = new ArrayList<>();
+//end:children-favorites[]
+
 //tag::action-associateWith-property[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
@@ -97,7 +106,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(domainEvent = UpdateTextDomainEvent.class)"
+            "@Action(associateWith = \"text\", associateWithSequence = \"1\")"
     )
     public ActionAssociateWithVm updateText(final String text) {
         setText(text);
@@ -115,10 +124,47 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(domainEvent = UpdateTextDomainEvent.class)"
+            "@Action(associateWith = \"children\"" +
+                     ", associateWithSequence = \"1\")"
     )
-    public ActionAssociateWithVm addChild(final String text) {
-        setText(text);
+    public ActionAssociateWithVm addChild(final String value) {
+        val childVm = new ActionAssociateWithChildVm(value);
+        getChildren().add(childVm);
+        return this;
+    }
+
+//end::action-associateWith-collection[]
+
+//tag::action-associateWith-collection[]
+    @Action(
+            semantics = SemanticsOf.IDEMPOTENT
+            , associateWith = "children", associateWithSequence = "2"   // <.>
+    )
+    @ActionLayout(
+        describedAs =
+            "@Action(associateWith = \"children\"" +
+                    ", associateWithSequence = \"2\")"
+    )
+    public ActionAssociateWithVm removeChild(final ActionAssociateWithChildVm child) {
+        getChildren().removeIf(x -> Objects.equals(x.getValue(), child.getValue()));
+        return this;
+    }
+//end::action-associateWith-collection[]
+
+//tag::action-associateWith-collection[]
+    @Action(
+            semantics = SemanticsOf.IDEMPOTENT
+            , associateWith = "children", associateWithSequence = "3"   // <.>
+    )
+    @ActionLayout(
+        describedAs =
+            "@Action(associateWith = \"children\"" +
+                    ", associateWithSequence = \"3\")"
+    )
+    public ActionAssociateWithVm removeChildren(final List<ActionAssociateWithChildVm> children) {
+        for (ActionAssociateWithChildVm child : children) {
+            removeChild(child);
+        }
         return this;
     }
 //end::action-associateWith-collection[]

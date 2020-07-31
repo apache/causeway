@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.annotDomain.Action.associateWith.child.ActionAssociateWithChildVm;
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
@@ -42,13 +43,20 @@ import demoapp.dom.types.Samples;
 public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Semantic relationship between actions and other properties or collections")
+    @ActionLayout(cssClassFa="fa-ring", describedAs = "Semantic relationship between actions and other properties or collections")
     public ActionAssociateWithVm associateWith(){
         val associateWithVm = new ActionAssociateWithVm("value");
         val children = associateWithVm.getChildren();
+        val favorites = associateWithVm.getFavorites();
+
+        // add to either one collection or the other
+        final boolean[] which = {false};
         samples.stream()
                 .map(ActionAssociateWithChildVm::new)
-                .forEach(children::add);
+                .forEach(e -> {
+                    (which[0] ? children : favorites).add(e);
+                    which[0] = !which[0];
+                });
         return associateWithVm;
     }
 
@@ -59,13 +67,7 @@ public class ActionMenu {
     }
 
 
-    public List<ActionAssociateWithChildVm> getChildren() {
-        return samples.stream()
-                .map(ActionAssociateWithChildVm::new)
-                .collect(Collectors.toList());
-    }
-
     @Inject
-    Samples<String> samples;
+    NameSamples samples;
 
 }

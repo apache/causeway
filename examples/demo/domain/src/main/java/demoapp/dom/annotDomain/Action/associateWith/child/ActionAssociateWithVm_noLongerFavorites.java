@@ -16,28 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Action.associateWith;
+package demoapp.dom.annotDomain.Action.associateWith.child;
+
+import java.util.List;
+import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
+
 
 //tag::class[]
-@Property()
-@PropertyLayout()
+@Action(
+    associateWith = "favorites"                                 // <.>
+    , associateWithSequence = "2"
+)
+@ActionLayout(
+    describedAs =
+        "@Action(" +
+            "associateWith = \"favorites\"" +
+            ", associateWithSequence = \"2\")"
+)
 @RequiredArgsConstructor
-public class ActionAssociateWithVm_mixinProperty {
+public class ActionAssociateWithVm_noLongerFavorites {
 
     private final ActionAssociateWithVm actionAssociateWithVm;
 
-    public String prop() {
-        return "Mixin property";
+    public ActionAssociateWithVm act(List<ActionAssociateWithChildVm> children) {
+        children.forEach(childVm -> {
+            actionAssociateWithVm.getFavorites()
+                    .removeIf(y -> Objects.equals(childVm.getValue(), y.getValue()));
+        });
+        actionAssociateWithVm.getChildren().addAll(children);
+
+        return actionAssociateWithVm;
     }
+    // no choices or autoComplete required                      // <.>
 }
 //end::class[]

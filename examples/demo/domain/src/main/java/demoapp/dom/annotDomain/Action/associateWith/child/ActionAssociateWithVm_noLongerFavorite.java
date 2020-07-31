@@ -19,34 +19,44 @@
 package demoapp.dom.annotDomain.Action.associateWith.child;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
-import demoapp.dom.types.Samples;
 
 
 //tag::class[]
-@Collection()
-@CollectionLayout()
+@Action(
+    associateWith = "favorites"                                 // <.>
+    , associateWithSequence = "2"
+)
+@ActionLayout(
+    describedAs =
+        "@Action(" +
+            "associateWith = \"favorites\"" +
+            ", associateWithSequence = \"2\")"
+)
 @RequiredArgsConstructor
-public class ActionAssociateWithVm_mixinChildren {
+public class ActionAssociateWithVm_noLongerFavorite {
 
     private final ActionAssociateWithVm actionAssociateWithVm;
 
-    public List<ActionAssociateWithChildVm> coll() {
-        return samples.stream()
-                .map(ActionAssociateWithChildVm::new)
-                .collect(Collectors.toList());
-    }
+    public ActionAssociateWithVm act(ActionAssociateWithChildVm childVm) {
+        actionAssociateWithVm.getFavorites()
+                .removeIf(y -> Objects.equals(childVm.getValue(), y.getValue()));
+        actionAssociateWithVm.getChildren().add(childVm);
 
-    @Inject
-    Samples<String> samples;
+        return actionAssociateWithVm;
+    }
+    // no choices or autoComplete required                      // <.>
+
 }
 //end::class[]

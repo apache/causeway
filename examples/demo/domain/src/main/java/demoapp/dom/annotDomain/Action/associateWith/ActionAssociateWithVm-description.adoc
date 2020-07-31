@@ -1,16 +1,10 @@
-CAUTION: TODO - to update
+The `associateWith` semantic specifies an action has a relationship with another property or another collection of the domain class.
 
-Usually a domain event is emitted by the framework to emit whenever the user interacts with an action.
-Domain service subscribers can influence this interaction, either by:
+* For properties, the association (currently) is used solely for layout purposes, so that the action will by default be rendered close to the property.
++
+This can of course be overridden using `@ActionLayout` or the layout file
 
-* hiding the action
-* disabling the action
-* validating arguments of the action invocation
-* performing arbitrary operations before the action has been invoked (including modifying the argument values to be used)
-* performing arbitrary operations after the action has been modified (including changing the apparent return value of the action)
-
-
-The `domainEvent` semantic specifies the class to be emitted; this must be a subclass of the abstract `org.apache.isis.applib.events.domain.ActionDomainEvent` class.
+* For collections,
 
 If no `domainEvent` is specified on the action itself, then the domain event class can be specified at the class level using `@DomainObject#actionDomainEvent`.
 And if not specified at the class level, then an instance of `org.apache.isis.applib.events.domain.ActionDomainEvent.Default` is emitted as the fallback.

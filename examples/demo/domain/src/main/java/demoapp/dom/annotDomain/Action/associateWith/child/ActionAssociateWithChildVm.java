@@ -42,7 +42,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyHiddenChildVm"
+        objectType = "demo.ActionAssociateWithChildVm"
 )
 @NoArgsConstructor
 public class ActionAssociateWithChildVm implements HasAsciiDocDescription {
@@ -52,7 +52,7 @@ public class ActionAssociateWithChildVm implements HasAsciiDocDescription {
     }
 
     public String title() {
-        return "Property#hidden (child object)";
+        return getValue();
     }
 
     @Property()
