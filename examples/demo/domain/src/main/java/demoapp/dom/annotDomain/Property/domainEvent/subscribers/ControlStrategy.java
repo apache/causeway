@@ -71,6 +71,7 @@ enum ControlStrategy {
                 case EXECUTING:
                     String newValue = ev.getNewValue().toUpperCase();
                     ev.setNewValue(newValue);
+
                     break;
             }
         }

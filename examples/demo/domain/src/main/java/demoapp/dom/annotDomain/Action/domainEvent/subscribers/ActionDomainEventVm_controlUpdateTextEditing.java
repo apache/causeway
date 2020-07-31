@@ -16,28 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Action;
+package demoapp.dom.annotDomain.Action.domainEvent.subscribers;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
-@Log4j2
-public class ActionMenu {
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of actions")
-    public ActionDomainEventVm domainEvent(){
-        return new ActionDomainEventVm("change me");
+//tag::class[]
+@Action(
+    semantics = SemanticsOf.IDEMPOTENT
+    , associateWith = "controlUpdateText", associateWithSequence = "1"
+)
+@ActionLayout(promptStyle = PromptStyle.INLINE)
+@RequiredArgsConstructor
+public class ActionDomainEventVm_controlUpdateTextEditing {
+
+    private final ActionDomainEventVm actionDomainEventVm;
+
+    public ActionDomainEventVm act(final ControlStrategy controlStrategy) {
+        eventControlService.controlStrategy = controlStrategy;
+        return actionDomainEventVm;
+    }
+    public ControlStrategy default0Act() {
+        return eventControlService.controlStrategy;
     }
 
-
-
+    @Inject
+    ControlService eventControlService;
 }
+//end::class[]

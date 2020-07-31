@@ -16,28 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Action;
+package demoapp.dom.annotDomain.Action.domainEvent.subscribers;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import javax.inject.Inject;
 
-import lombok.extern.log4j.Log4j2;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+
+import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
-@Log4j2
-public class ActionMenu {
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of actions")
-    public ActionDomainEventVm domainEvent(){
-        return new ActionDomainEventVm("change me");
+//tag::class[]
+@Property()
+@RequiredArgsConstructor
+public class ActionDomainEventVm_controlUpdateText {
+
+    private final ActionDomainEventVm actionDomainEventVm;
+
+    @MemberOrder(name = "contributed", sequence = "1")
+    public ControlStrategy prop() {
+        return eventControlService.controlStrategy;
     }
 
-
-
+    @Inject
+    ControlService eventControlService;
 }
+//end::class[]
