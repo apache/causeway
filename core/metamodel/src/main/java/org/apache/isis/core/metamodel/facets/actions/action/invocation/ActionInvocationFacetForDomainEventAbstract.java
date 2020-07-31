@@ -26,9 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -67,8 +65,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.Getter;
@@ -506,11 +502,11 @@ implements ImperativeFacet {
 
     private static Can<ManagedObject> updateArguments(
             @NonNull final Can<ManagedObject> argumentAdapters,
-            @NonNull final List<Object> arguments) {
+            @NonNull final List<Object> newArgumentPojos) {
 
-        // zip in the arguments from right
-        // element wise: update adapter if argument pojo differs from adapter pojo
-        return argumentAdapters.zipMap(arguments, (leftAdapter, rightPojo)->{
+        // zip in the newArgumentPojos from right
+        // element wise: update adapter if new-argument pojo differs from original adapter pojo
+        return argumentAdapters.zipMap(newArgumentPojos, (leftAdapter, rightPojo)->{
             val leftPojo = leftAdapter.getPojo(); // the original
             return Objects.equals(leftPojo, rightPojo)
                     ? leftAdapter
