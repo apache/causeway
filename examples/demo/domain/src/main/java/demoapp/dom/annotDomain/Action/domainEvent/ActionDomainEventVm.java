@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent;
+package demoapp.dom.annotDomain.Action.domainEvent;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,13 +24,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.events.domain.PropertyDomainEvent;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,37 +44,47 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
     nature=Nature.VIEW_MODEL,
-    objectType = "demo.PropertyDomainEventVm",
-    editing = Editing.ENABLED
+    objectType = "demo.ActionDomainEventVm"
 )
 @NoArgsConstructor
 //tag::class[]
-public class PropertyDomainEventVm implements HasAsciiDocDescription {
+public class ActionDomainEventVm implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public PropertyDomainEventVm(String text) {
+    public ActionDomainEventVm(String text) {
         this.text = text;
     }
 
     public String title() {
-        return "Property#domainEvent";
+        return "Action#domainEvent";
     }
-//tag::class[]
 
-    public static class TextDomainEvent                             // <.>
-        extends PropertyDomainEvent<PropertyDomainEventVm,String> {}
-
-    @Property(
-        domainEvent = TextDomainEvent.class                         // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@Property(domainEvent = TextDomainEvent.class)"
-    )
+    @Property()
     @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
+//tag::class[]
+
+    public static class UpdateTextDomainEvent                       // <.>
+            extends ActionDomainEvent<ActionDomainEventVm> {}
+
+    @Action(
+            semantics = SemanticsOf.IDEMPOTENT
+            , domainEvent = UpdateTextDomainEvent.class             // <.>
+            , associateWith = "text", associateWithSequence = "1"
+    )
+    @ActionLayout(
+        describedAs =
+            "@Action(domainEvent = UpdateTextDomainEvent.class)"
+    )
+    public ActionDomainEventVm updateText(final String text) {
+        setText(text);
+        return this;
+    }
+    public String default0UpdateText() {
+        return getText();
+    }
 }
 //end::class[]

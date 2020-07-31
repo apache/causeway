@@ -16,31 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
+package demoapp.dom.annotDomain.Action.associateWith.child;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
+import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
+import demoapp.dom.types.Samples;
 
 
 //tag::class[]
-@Property()
+@Collection()
+@CollectionLayout()
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlText {
+public class ActionAssociateWithVm_mixinChildren {
 
-    private final PropertyDomainEventVm propertyDomainEventVm;
+    private final ActionAssociateWithVm actionAssociateWithVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
-    public PropertyDomainEventControlStrategy prop() {
-        return eventControlService.controlStrategy;
+    public List<ActionAssociateWithChildVm> coll() {
+        return samples.stream()
+                .map(ActionAssociateWithChildVm::new)
+                .collect(Collectors.toList());
     }
 
     @Inject
-    PropertyDomainEventControlService eventControlService;
+    Samples<String> samples;
 }
 //end::class[]

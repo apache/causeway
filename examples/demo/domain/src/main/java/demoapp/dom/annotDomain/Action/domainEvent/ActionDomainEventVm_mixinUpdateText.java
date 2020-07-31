@@ -16,40 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
-
-import javax.inject.Inject;
+package demoapp.dom.annotDomain.Action.domainEvent;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 
 
 //tag::class[]
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlText", associateWithSequence = "1"
+    semantics = SemanticsOf.SAFE
+    , domainEvent =
+        ActionDomainEventVm_mixinUpdateText.DomainEvent.class           // <.>
+    , associateWith = "text", associateWithSequence = "2"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE)
+@ActionLayout(
+    describedAs =
+        "@Action(domainEvent = ActionDomainEventVm_mixinUpdateText.DomainEvent.class)"
+)
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlTextEditing {
+public class ActionDomainEventVm_mixinUpdateText {
 
-    private final PropertyDomainEventVm propertyDomainEventVm;
+    public static class DomainEvent                                     // <.>
+            extends ActionDomainEvent<ActionDomainEventVm> {}
 
-    public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
-        eventControlService.controlStrategy = controlStrategy;
-        return propertyDomainEventVm;
+    private final ActionDomainEventVm actionDomainEventVm;
+
+    public ActionDomainEventVm act(final String text) {
+        return actionDomainEventVm;
     }
-    public PropertyDomainEventControlStrategy default0Act() {
-        return eventControlService.controlStrategy;
+    public String default0Act() {
+        return actionDomainEventVm.getText();
     }
-
-    @Inject
-    PropertyDomainEventControlService eventControlService;
 }
 //end::class[]

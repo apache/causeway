@@ -1,0 +1,122 @@
+Usually a domain event is emitted by the framework to emit whenever the user interacts with an action.
+Domain service subscribers can influence this interaction, either by:
+
+* hiding the action
+* disabling the action
+* validating arguments of the action invocation
+* performing arbitrary operations before the action has been invoked (including modifying the argument values to be used)
+* performing arbitrary operations after the action has been modified (including changing the apparent return value of the action)
+
+
+The `domainEvent` semantic specifies the class to be emitted; this must be a subclass of the abstract `org.apache.isis.applib.events.domain.ActionDomainEvent` class.
+
+If no `domainEvent` is specified on the action itself, then the domain event class can be specified at the class level using `@DomainObject#actionDomainEvent`.
+And if not specified at the class level, then an instance of `org.apache.isis.applib.events.domain.ActionDomainEvent.Default` is emitted as the fallback.
+
+[TIP]
+====
+The fallback domain event can be suppressed using the `isis.applib.annotation.action.domain-event.post-for-default` configuration property.
+====
+
+== Annotated Actions
+
+The demo defines two actions that are annotated using `domainEvent` semantic:
+
+* in the `ActionDomainEventVm` is a regular action, "updateText":
++
+[source,java]
+----
+include::ActionDomainEventVm.java[tags=class]
+----
+<.> the event class to emit; genericised by the target type
+<.> indicates that the framework should emit this type
+
+* The `ActionDomainEventVm_mixinUpdateText` defines a mixin action, also annotated:
++
+[source,java]
+----
+include::ActionDomainEventVm_mixinUpdateText.java[tags=class]
+----
+
+<.> the event class to emit; genericised by the target type
++
+TIP: it's idiomatic to use a nested static class here.
+
+<.> indicates that the framework should emit this type
+
+== Subscriber
+
+The `ActionDomainEventControlService` is the subscriber:
+
+[source,java]
+----
+include::subscribers/ActionDomainEventControlService.java[tags=class]
+----
+<.> holds which "strategy" should be used to modify the interactions with the text field
+<.> subscribes using the Spring event bus
+
+== Influencing the Interaction
+
+The mechanisms to influence the interactions are implemented as an enum.
+The `DO_NOTHING` enum, unsurprisingly, does nothing:
+
+[source,java]
+----
+include::subscribers/ActionDomainEventControlStrategy.java[tags=class]
+----
+
+There are seven further options:
+
+* hide (two examples)
++
+[source,java,indent=0]
+----
+include::subscribers/ActionDomainEventControlStrategy.java[tags=hide]
+----
+
+* disable (two examples)
++
+[source,java,indent=0]
+----
+include::subscribers/ActionDomainEventControlStrategy.java[tags=disable]
+----
+
+* validate
++
+[source,java,indent=0]
+----
+include::subscribers/ActionDomainEventControlStrategy.java[tags=validate]
+----
+
+* executing
++
+[source,java,indent=0]
+----
+include::subscribers/ActionDomainEventControlStrategy.java[tags=executing]
+----
+
+* executed
++
+[source,java,indent=0]
+----
+include::subscribers/ActionDomainEventControlStrategy.java[tags=executed]
+----
+
+=== Selecting the Strategy
+
+Selecting which strategy is in force is implemented using two mixins which work together:
+
+* the `controlUpdateText` mixin property just surfaces the selected strategy as a read-only value:
++
+[source,java]
+----
+include::subscribers/ActionDomainEventVm_controlUpdateText.java[tags=class]
+----
+
+* while the `controlUpdateTextInvocation` mixin action allows the strategy to be changed:
++
+[source,java]
+----
+include::subscribers/ActionDomainEventVm_controlUpdateTextInvocation.java[tags=class]
+----
+

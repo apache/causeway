@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
+package demoapp.dom.annotDomain.Action.domainEvent.subscribers;
 
 import javax.inject.Inject;
 
@@ -25,22 +25,22 @@ import org.apache.isis.applib.annotation.Property;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
+import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
 
 
 //tag::class[]
 @Property()
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlText {
+public class ActionDomainEventVm_controlUpdateText {
 
-    private final PropertyDomainEventVm propertyDomainEventVm;
+    private final ActionDomainEventVm actionDomainEventVm;
 
     @MemberOrder(name = "contributed", sequence = "1")
-    public PropertyDomainEventControlStrategy prop() {
-        return eventControlService.controlStrategy;
+    public ActionDomainEventControlStrategy prop() {
+        return eventActionDomainEventControlService.controlStrategy;
     }
 
     @Inject
-    PropertyDomainEventControlService eventControlService;
+    ActionDomainEventControlService eventActionDomainEventControlService;
 }
 //end::class[]

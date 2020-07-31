@@ -1,4 +1,6 @@
-JDO supports `Clob` out-of-the-box, so no special annotations are required.
+Apache Isis implements the relevant JDO extension points to allow the `Clob` type to be persisted.
+To do so correctly, it requires that the column names for the three constituent parts of a `Clob` are specified using `@Column`.
+It's also necessary to specify the `jdbcType` to hold the characters:
 
 [source,java]
 ----

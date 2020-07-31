@@ -1,6 +1,7 @@
 package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.event.EventListener;
 
@@ -11,9 +12,9 @@ import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 
 // tag::class[]
 @DomainService(objectType = "demo.PropertyDomainEventControlService")
-class ControlService {
+class PropertyDomainEventControlService {
 
-    ControlStrategy controlStrategy = ControlStrategy.DO_NOTHING;   // <.>
+    PropertyDomainEventControlStrategy controlStrategy = PropertyDomainEventControlStrategy.DO_NOTHING;   // <.>
 
     @EventListener(PropertyDomainEventVm.TextDomainEvent.class)     // <.>
     public void on(PropertyDomainEventVm.TextDomainEvent ev) {

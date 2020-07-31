@@ -1,3 +1,5 @@
+CAUTION: TODO - these notes may be incorrect.
+
 JDO supports `Image` out-of-the-box, so no special annotations are required.
 
 [source,java]

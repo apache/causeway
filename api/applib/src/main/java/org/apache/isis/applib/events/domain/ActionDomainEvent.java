@@ -25,6 +25,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
 import lombok.Getter;
+import lombok.Setter;
 
 // tag::refguide[]
 public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
@@ -110,9 +111,16 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     /**
      * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
      * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
+     *
+     * <p>
+     *     The argument values can also be modified by event handlders
+     *     during the {@link Phase#EXECUTING} phase.    The new value must be
+     *     the same type as the expected value; the framework performs
+     *     no sanity checks.
+     * </p>
      */
     // tag::refguide[]
-    @Getter
+    @Getter @Setter
     private List<Object> arguments;
 
     // end::refguide[]
@@ -165,12 +173,6 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     @Override
     public void setMixedIn(final Object mixedIn) {
         this.mixedIn = mixedIn;
-    }
-    /**
-     * Not API - set by the framework.
-     */
-    public void setArguments(List<Object> arguments) {
-        this.arguments = arguments;
     }
 
 

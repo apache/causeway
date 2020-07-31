@@ -16,31 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
+package demoapp.dom.annotDomain.Action.associateWith;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 
 
 //tag::class[]
 @Property()
+@PropertyLayout()
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlText {
+public class ActionAssociateWithVm_mixinProperty {
 
-    private final PropertyDomainEventVm propertyDomainEventVm;
+    private final ActionAssociateWithVm actionAssociateWithVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
-    public PropertyDomainEventControlStrategy prop() {
-        return eventControlService.controlStrategy;
+    public String prop() {
+        return "Mixin property";
     }
-
-    @Inject
-    PropertyDomainEventControlService eventControlService;
 }
 //end::class[]

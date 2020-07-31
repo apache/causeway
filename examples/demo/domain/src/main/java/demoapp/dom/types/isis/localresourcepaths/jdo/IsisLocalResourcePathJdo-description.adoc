@@ -1,4 +1,7 @@
-JDO supports `LocalResourcePath` out-of-the-box, so no special annotations are required.
+Apache Isis implements the relevant JDO extension points to allow the `LocalResourcePath` type to be persisted.
+No special annotations are required, though `@Column` can be used to fine-tune the mapping.
+The most common usage is to indicate whether the column can be null.
+Since the column ultimately maps down to a string, the column's length could also be specified:
 
 [source,java]
 ----

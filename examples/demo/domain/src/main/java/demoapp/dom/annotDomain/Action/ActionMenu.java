@@ -18,20 +18,54 @@
  */
 package demoapp.dom.annotDomain.Action;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
+import demoapp.dom.annotDomain.Action.associateWith.child.ActionAssociateWithChildVm;
+import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
 @Log4j2
 public class ActionMenu {
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Semantic relationship between actions and other properties or collections")
+    public ActionAssociateWithVm associateWith(){
+        val associateWithVm = new ActionAssociateWithVm("value");
+        val children = associateWithVm.getChildren();
+        samples.stream()
+                .map(ActionAssociateWithChildVm::new)
+                .forEach(children::add);
+        return associateWithVm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of actions")
+    public ActionDomainEventVm domainEvent(){
+        return new ActionDomainEventVm("change me");
+    }
+
+
+    public List<ActionAssociateWithChildVm> getChildren() {
+        return samples.stream()
+                .map(ActionAssociateWithChildVm::new)
+                .collect(Collectors.toList());
+    }
+
+    @Inject
+    Samples<String> samples;
 
 }

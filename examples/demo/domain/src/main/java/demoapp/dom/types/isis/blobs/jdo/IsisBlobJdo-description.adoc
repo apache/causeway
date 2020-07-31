@@ -1,4 +1,5 @@
-JDO supports `Blob` out-of-the-box, so no special annotations are required.
+Apache Isis implements the relevant JDO extension points to allow the `Blob` type to be persisted.
+To do so correctly, it requires that the column names for the three constituent parts of a `Blob` are specified using `@Column`:
 
 [source,java]
 ----

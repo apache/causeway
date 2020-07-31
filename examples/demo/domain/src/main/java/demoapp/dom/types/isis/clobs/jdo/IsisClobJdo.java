@@ -60,7 +60,7 @@ public class IsisClobJdo                                          // <.>
     @Persistent(defaultFetchGroup="false", columns = {              // <.>
             @Column(name = "readOnlyProperty_name"),
             @Column(name = "readOnlyProperty_mimetype"),
-            @Column(name = "readOnlyProperty_bytes"
+            @Column(name = "readOnlyProperty_chars"
                     , jdbcType = "CLOB"
             )
     })
@@ -72,7 +72,7 @@ public class IsisClobJdo                                          // <.>
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteProperty_name"),
             @Column(name = "readWriteProperty_mimetype"),
-            @Column(name = "readWriteProperty_bytes"
+            @Column(name = "readWriteProperty_chars"
                     , jdbcType = "CLOB"
             )
     })
@@ -86,7 +86,7 @@ public class IsisClobJdo                                          // <.>
                     allowsNull = "true"),                           // <.>
             @Column(name = "readOnlyOptionalProperty_mimetype",
                     allowsNull = "true"),
-            @Column(name = "readOnlyOptionalProperty_bytes"
+            @Column(name = "readOnlyOptionalProperty_chars"
                     , jdbcType = "CLOB"
                     , allowsNull = "true")
     })

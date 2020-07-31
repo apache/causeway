@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent;
+package demoapp.dom.annotDomain.Action.associateWith.child;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,12 +25,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,42 +36,31 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@XmlRootElement(name = "root")
+//tag::class[]
+@XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-    nature=Nature.VIEW_MODEL,
-    objectType = "demo.PropertyDomainEventVm",
-    editing = Editing.ENABLED
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.PropertyHiddenChildVm"
 )
 @NoArgsConstructor
-//tag::class[]
-public class PropertyDomainEventVm implements HasAsciiDocDescription {
-    // ...
-//end::class[]
+public class ActionAssociateWithChildVm implements HasAsciiDocDescription {
 
-    public PropertyDomainEventVm(String text) {
-        this.text = text;
+    public ActionAssociateWithChildVm(String value) {
+        setValue(value);
     }
 
     public String title() {
-        return "Property#domainEvent";
+        return "Property#hidden (child object)";
     }
-//tag::class[]
 
-    public static class TextDomainEvent                             // <.>
-        extends PropertyDomainEvent<PropertyDomainEventVm,String> {}
-
-    @Property(
-        domainEvent = TextDomainEvent.class                         // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@Property(domainEvent = TextDomainEvent.class)"
-    )
+    @Property()
+    @PropertyLayout()
     @MemberOrder(name = "annotation", sequence = "1")
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     @Getter @Setter
-    private String text;
+    private String value;
+
 }
 //end::class[]

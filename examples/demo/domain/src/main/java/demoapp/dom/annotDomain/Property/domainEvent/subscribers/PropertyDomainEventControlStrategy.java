@@ -6,7 +6,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 
 // tag::class[]
-enum ControlStrategy {
+enum PropertyDomainEventControlStrategy {
 
     DO_NOTHING{
         @Override
@@ -71,6 +71,7 @@ enum ControlStrategy {
                 case EXECUTING:
                     String newValue = ev.getNewValue().toUpperCase();
                     ev.setNewValue(newValue);
+
                     break;
             }
         }

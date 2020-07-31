@@ -16,40 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
+package demoapp.dom.annotDomain.Action.associateWith.child;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
+import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 
 
 //tag::class[]
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlText", associateWithSequence = "1"
+    associateWith = "mixinChildren"         // <.>
+    , associateWithSequence = "1"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE)
+@ActionLayout(
+    named = "Remove"                        // <.>
+    , describedAs =
+        "@Action(" +
+            "associateWith = \"mixinChildren\"" +
+            ", associateWithSequence = \"1\")"
+)
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlTextEditing {
+public class ActionAssociateWithVm_mixinChildrenAddChild {
 
-    private final PropertyDomainEventVm propertyDomainEventVm;
+    private final ActionAssociateWithVm actionAssociateWithVm;
 
-    public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
-        eventControlService.controlStrategy = controlStrategy;
-        return propertyDomainEventVm;
-    }
-    public PropertyDomainEventControlStrategy default0Act() {
-        return eventControlService.controlStrategy;
+    public ActionAssociateWithVm act(ActionAssociateWithChildVm childVm) {
+        messageService.informUser(
+                "This is a dummy action and doesn't actually do anything. " +
+                "It's purpose is just to illustrate the 'associateWith' semantic");
+        return actionAssociateWithVm;
     }
 
     @Inject
-    PropertyDomainEventControlService eventControlService;
+    MessageService messageService;
 }
 //end::class[]
