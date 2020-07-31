@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;
@@ -50,9 +51,11 @@ public class InteractionDemo {
             editingDisabledReason = "Disabled for demonstration.")
     @XmlElement @Getter @Setter private String stringDisabled;
     
+    @Model public List<String> autoCompleteStringDisabled(String search) { return null;}
+    
     @Property
     @PropertyLayout(multiLine=3, labelPosition = LabelPosition.TOP)
-    @XmlElement @Getter @Setter private String stringMultiline;
+    @XmlElement @Getter @Setter private String stringMultiline = "initial";
 
     // verify, all the parameter supporting methods get picked up
     
@@ -60,9 +63,17 @@ public class InteractionDemo {
     @Model public String disableStringMultiline() { return null; }                           
     @Model public String validateStringMultiline(String proposeValue) { return null; }
     @Model public String defaultStringMultiline() { return "default"; }
-    @Model public String[] choicesStringMultiline() { return new String[] {"Hello", "World"}; }          
-    @Model public List<String> autoCompleteStringMultiline(String search) { 
-        return Stream.of(choicesStringMultiline())
+    @Model public String[] choicesStringMultiline() { return new String[] {"Hello", "World"}; }
+    
+    // -- auto search tests
+    
+    @Property
+    @XmlElement @Getter @Setter private String string2 = "initial";
+    
+    @Model public List<String> autoCompleteString2(String search) { 
+        return _Strings.isEmpty(search)
+                ? null
+                : Stream.of(choicesStringMultiline())
                 .filter(s->s.contains(search))
                 .collect(Collectors.toList()); 
     }

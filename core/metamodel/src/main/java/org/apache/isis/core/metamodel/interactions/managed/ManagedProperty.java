@@ -23,9 +23,10 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.binding._Observables;
+import org.apache.isis.core.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -36,9 +37,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-public final class ManagedProperty 
-extends ManagedMember 
-implements ManagedValue {
+public final class ManagedProperty extends ManagedMember {
     
     // -- FACTORIES
     
@@ -68,6 +67,7 @@ implements ManagedValue {
             final @NonNull Where where) {
         super(owner, where);
         this.property = property;
+        observablePropValue = _Observables.forFactory(this::reassessPropertyValue);
     }
 
     @Override
@@ -119,6 +119,7 @@ implements ManagedValue {
 
         ManagedObject managedObject = property.set(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
         setOwner(managedObject);
+        observablePropValue.invalidate();
         return Optional.empty();
     }
 
@@ -127,7 +128,7 @@ implements ManagedValue {
      * If visibility is vetoed, returns an empty but specified ManagedObject.
      * @return the property value as to be used by the UI for representation
      */
-    public ManagedObject getPropertyValue() {
+    private ManagedObject reassessPropertyValue() {
         val property = getProperty();
         val owner = getOwner();
         
@@ -136,29 +137,24 @@ implements ManagedValue {
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getSpecification());
     }
+    
+    
+    // -- NEGOTIATION
 
-    @Override
-    public Bindable<ManagedObject> getValue() {
-        // TODO Auto-generated method stub
-        return null;
+    public PropertyNegotiationModel startNegotiation() {
+        return new PropertyNegotiationModel(this);
     }
 
-    @Override
-    public Observable<String> getValidationMessage() {
-        // TODO Auto-generated method stub
-        return null;
+    // -- BINDING
+    
+    @NonNull private final LazyObservable<ManagedObject> observablePropValue;
+    
+    public Observable<ManagedObject> getValue() {
+        return observablePropValue;
     }
 
-    @Override
-    public Bindable<String> getSearchArgument() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Observable<Can<ManagedObject>> getChoices() {
-        // TODO Auto-generated method stub
-        return null;
+    public ManagedObject getPropertyValue() {
+        return getValue().getValue();
     }
     
     

@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.interact;
 
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.internal.binding._Bindables;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -36,6 +37,11 @@ public class SimulatedUiComponent extends HasValueValidation {
         super.bind(managedValue);
     }
 
+    /** just listening, no validation */
+    public void bind(ManagedProperty managedProperty) {
+        value.bind(managedProperty.getValue());
+    }
+    
     public void simulateValueChange(Object newValue) {
         value.setValue(ManagedObject.of(valueSpec, newValue));
     }
@@ -43,6 +49,8 @@ public class SimulatedUiComponent extends HasValueValidation {
     public ManagedObject getValue() {
         return value.getValue();
     }
+
+    
 
     
 }
