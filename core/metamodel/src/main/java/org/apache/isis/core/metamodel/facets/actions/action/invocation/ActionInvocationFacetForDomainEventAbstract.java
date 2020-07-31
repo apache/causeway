@@ -25,7 +25,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -64,9 +67,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -418,6 +424,9 @@ implements ImperativeFacet {
         public Object execute(final ActionInvocation currentExecution) {
 
             try {
+                // it's possible that an event handler changes these en-route
+                // so we take a non-final copy
+                Can<ManagedObject> argumentAdapters = this.argumentAdapters;
 
                 // update the current execution with the DTO (memento)
                 val invocationDto = getInteractionDtoServiceInternal()
@@ -444,6 +453,11 @@ implements ImperativeFacet {
                         owningAction, owningAction,
                         head, argumentAdapters,
                         null);
+
+                // the event handlers may have updated the argument themselves
+                argumentAdapters = updateArguments(
+                                argumentAdapters, actionDomainEvent.getArguments(),
+                                owningAction.getParameters());
 
                 // set event onto the execution
                 currentExecution.setEvent(actionDomainEvent);
@@ -489,9 +503,40 @@ implements ImperativeFacet {
 
                 return ThrowableExtensions.handleInvocationException(e, method.getName(), recovery);
             }
-
-
         }
+    }
+
+    private static Can<ManagedObject> updateArguments(
+            @NonNull final Can<ManagedObject> argumentAdapters,
+            @NonNull final List<Object> arguments,
+            @NonNull final Can<ObjectActionParameter> parameters) {
+
+        Can<ManagedObject> argumentAdaptersToReturn = argumentAdapters;
+
+        val objectParamSpecs = parameters.stream()
+                .map(ObjectFeature::getSpecification)
+                .collect(Collectors.toList());
+
+        int bound = argumentAdapters.size();
+        for (int i = 0; i < bound; i++) {
+
+            Optional<ManagedObject> argAdapterIfAny = argumentAdapters.get(i);
+            if (argAdapterIfAny.isPresent()) {
+                // the argumentAdapter will always be present
+                // (we only ever query within the available args)
+
+                val argumentAdapter = argAdapterIfAny.get();
+                val origArgPojo = argumentAdapter.getPojo();
+                val actualArgPojo = arguments.get(0);
+                if (!Objects.equals(origArgPojo, actualArgPojo)) {
+                    val objectSpec = objectParamSpecs.get(i);
+                    argumentAdaptersToReturn = argumentAdaptersToReturn.replace(i,
+                            ManagedObject.of(objectSpec, actualArgPojo));
+
+                }
+            }
+        }
+        return argumentAdaptersToReturn;
     }
 
 }

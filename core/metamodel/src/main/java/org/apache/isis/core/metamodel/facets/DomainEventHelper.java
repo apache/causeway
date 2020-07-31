@@ -24,6 +24,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
@@ -45,6 +48,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
@@ -155,6 +159,7 @@ public class DomainEventHelper {
             }
 
             metamodelEventService.fireActionDomainEvent(event);
+
             return event;
         } catch (Exception e) {
             throw new FatalException(e);
@@ -166,8 +171,8 @@ public class DomainEventHelper {
             final Identifier identifier,
             final S source,
             final Object... arguments) 
-        throws InstantiationException, IllegalAccessException, IllegalArgumentException, 
-        InvocationTargetException, NoSuchMethodException, SecurityException {
+        throws IllegalArgumentException,
+            NoSuchMethodException, SecurityException {
 
         val constructors = _Reflect.getPublicConstructors(type);
 
