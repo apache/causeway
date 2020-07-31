@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -107,6 +108,14 @@ final class Can_Multiple<T> implements Can<T> {
         stream().forEach(t->{
             action.accept(t, zippedInIterator.next());
         });
+    }
+    
+    @Override
+    public <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper) {
+        requires(zippedIn, "zippedIn");
+        requires(mapper, "mapper");
+        val zippedInIterator = zippedIn.iterator();
+        return map(t->mapper.apply(t, zippedInIterator.next()));
     }
 
     @Override

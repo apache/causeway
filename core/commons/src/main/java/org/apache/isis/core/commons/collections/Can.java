@@ -26,6 +26,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -409,6 +410,17 @@ public interface Can<T> extends Iterable<T>, Serializable {
      * @throws NoSuchElementException if {@code zippedIn} overflows
      */
     <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action);
+    
+    /**
+     * Similar to {@link #map(Function)}, but zipps in {@code zippedIn} to iterate through 
+     * its elements and passes them over as the second argument to the {@code mapper}.
+     * @param <R>
+     * @param <Z>
+     * @param zippedIn must have at least as much elements as this {@code Can}
+     * @param mapper
+     * @throws NoSuchElementException if {@code zippedIn} overflows
+     */
+    <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper);
     
     // -- MANIPULATION
     

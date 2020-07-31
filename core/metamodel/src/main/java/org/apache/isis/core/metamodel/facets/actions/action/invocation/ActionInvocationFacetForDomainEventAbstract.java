@@ -455,9 +455,7 @@ implements ImperativeFacet {
                         null);
 
                 // the event handlers may have updated the argument themselves
-                argumentAdapters = updateArguments(
-                                argumentAdapters, actionDomainEvent.getArguments(),
-                                owningAction.getParameters());
+                argumentAdapters = updateArguments(argumentAdapters, actionDomainEvent.getArguments());
 
                 // set event onto the execution
                 currentExecution.setEvent(actionDomainEvent);
@@ -508,35 +506,16 @@ implements ImperativeFacet {
 
     private static Can<ManagedObject> updateArguments(
             @NonNull final Can<ManagedObject> argumentAdapters,
-            @NonNull final List<Object> arguments,
-            @NonNull final Can<ObjectActionParameter> parameters) {
+            @NonNull final List<Object> arguments) {
 
-        Can<ManagedObject> argumentAdaptersToReturn = argumentAdapters;
-
-        val objectParamSpecs = parameters.stream()
-                .map(ObjectFeature::getSpecification)
-                .collect(Collectors.toList());
-
-        int bound = argumentAdapters.size();
-        for (int i = 0; i < bound; i++) {
-
-            Optional<ManagedObject> argAdapterIfAny = argumentAdapters.get(i);
-            if (argAdapterIfAny.isPresent()) {
-                // the argumentAdapter will always be present
-                // (we only ever query within the available args)
-
-                val argumentAdapter = argAdapterIfAny.get();
-                val origArgPojo = argumentAdapter.getPojo();
-                val actualArgPojo = arguments.get(0);
-                if (!Objects.equals(origArgPojo, actualArgPojo)) {
-                    val objectSpec = objectParamSpecs.get(i);
-                    argumentAdaptersToReturn = argumentAdaptersToReturn.replace(i,
-                            ManagedObject.of(objectSpec, actualArgPojo));
-
-                }
-            }
-        }
-        return argumentAdaptersToReturn;
+        // zip in the arguments from right
+        // element wise: update adapter if argument pojo differs from adapter pojo
+        return argumentAdapters.zipMap(arguments, (leftAdapter, rightPojo)->{
+            val leftPojo = leftAdapter.getPojo(); // the original
+            return Objects.equals(leftPojo, rightPojo)
+                    ? leftAdapter
+                    : ManagedObject.of(leftAdapter.getSpecification(), rightPojo);
+        });
     }
 
 }
