@@ -38,13 +38,17 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
     // this is a memory leak, so don't do this in a real app...
     private final Map<String, String> map = new HashMap<>();
 
+    // this is set with respect to the Spring's server.max-http-header-size option in the application.properties
+    // note: we reserve 4K of the total header size for other header attributes 
+    private final int maxIdentifierSize = 12*1024; // 12K
+    
     @Override
     public String encode(byte[] bytes) {
 
         // web servers might have restrictions to header sizes of eg. max 4k or 8k  
         // if the encodedString is reasonable small, we pass it through
         val encodedString = urlEncodingService.encode(bytes); // from the default urlEncodingService
-        if(encodedString.length()<4096) {
+        if(encodedString.length()<maxIdentifierSize) {
             return EncodingType.PASS_THROUGH.encode(encodedString);
         }
                 
