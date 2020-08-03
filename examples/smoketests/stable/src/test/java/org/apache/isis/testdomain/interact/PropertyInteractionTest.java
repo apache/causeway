@@ -26,8 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -66,7 +69,23 @@ class PropertyInteractionTest extends InteractionTestAbstract {
         
         // verify, that the meta-model is valid
         assertMetamodelValid();
-
+        
+        // verify, that we have the LabelAtFacet
+        
+        val labelAtFacet = managedProperty.getMember().getFacet(LabelAtFacet.class);
+        assertNotNull(labelAtFacet);
+        
+        val labelPos = labelAtFacet.label();
+        assertEquals(LabelPosition.TOP, labelPos);
+        
+        // verify, that we have the MultiLineFacet
+        
+        val multiLineFacet = managedProperty.getMember().getFacet(MultiLineFacet.class);
+        assertNotNull(multiLineFacet);
+        
+        val numberOfLines = multiLineFacet.numberOfLines();
+        assertEquals(3, numberOfLines);
+        
     }
     
     @Test 
