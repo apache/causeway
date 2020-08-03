@@ -41,7 +41,7 @@ public class FallbackFieldFactory implements UiComponentHandlerFx {
     @Override
     public Node handle(ComponentRequest request) {
         
-        val spec = request.getFeatureSpec();
+        val spec = request.getFeatureTypeSpec();
         return new Label(spec.getCorrespondingClass().getSimpleName() + " type not handled");
     }
 

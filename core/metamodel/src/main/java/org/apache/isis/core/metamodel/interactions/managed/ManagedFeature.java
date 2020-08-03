@@ -18,7 +18,14 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ManagedFeature {
@@ -43,6 +50,38 @@ public interface ManagedFeature {
     default Class<?> getCorrespondingClass() {
         return getSpecification().getCorrespondingClass();    
     }
+    
+    FacetHolder getMetaModel();
 
+    /**
+     * @param facetType
+     * @return Optionally the feature's facet of the specified {@code facetType} 
+     * (as per the type it reports from {@link Facet#facetType()}), based on existence.
+     */
+    default <T extends Facet> Optional<T> getFacet(@Nullable Class<T> facetType) {
+        return facetType!=null
+                ? Optional.ofNullable(getMetaModel().getFacet(facetType))
+                : Optional.empty();
+    }
+    
+    /**
+     * @param facetType
+     * @return Whether there exists a facet for this feature, that is of the 
+     * specified {@code facetType} (as per the type it reports from {@link Facet#facetType()}).
+     */
+    default <T extends Facet> boolean hasFacet(@Nullable Class<T> facetType) {
+        return facetType!=null
+                ? getFacet(facetType)!=null
+                : false;
+    }
+    
+    default <T extends Facet> T getFacetElseFail(@Nullable Class<T> facetType) {
+        return getFacet(facetType)
+                .orElseThrow(()->_Exceptions
+                        .noSuchElement("Feature %s has no such facet %s",
+                                getIdentifier(),
+                                facetType.getName()));    
+    }
+    
     
 }

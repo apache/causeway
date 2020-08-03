@@ -36,7 +36,7 @@ public class BlobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(ComponentRequest request) {
-        return request.hasFeatureFacet(BlobValueFacet.class);
+        return request.hasFeatureTypeFacet(BlobValueFacet.class);
     }
 
     @Override

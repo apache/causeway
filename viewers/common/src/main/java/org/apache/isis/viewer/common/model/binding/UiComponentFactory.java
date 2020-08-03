@@ -25,15 +25,14 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -78,7 +77,7 @@ public interface UiComponentFactory<B, C> {
             return managedFeature.getDisplayLabel();   
         }
         
-        public ObjectSpecification getFeatureSpec() {
+        public ObjectSpecification getFeatureTypeSpec() {
             return managedFeature.getSpecification();    
         }
         
@@ -107,29 +106,10 @@ public interface UiComponentFactory<B, C> {
          * @return Whether there exists a facet for this feature, that is of the 
          * specified {@code facetType} (as per the type it reports from {@link Facet#facetType()}).
          */
-        public <T extends Facet> boolean hasFeatureFacet(@Nullable Class<T> facetType) {
+        public <T extends Facet> boolean hasFeatureTypeFacet(@Nullable Class<T> facetType) {
             return facetType!=null
-                    ? getFeatureSpec().getFacet(facetType)!=null
+                    ? getFeatureTypeSpec().getFacet(facetType)!=null
                     : false;
-        }
-
-        /**
-         * @param facetType
-         * @return Optionally the feature's facet of the specified {@code facetType} 
-         * (as per the type it reports from {@link Facet#facetType()}), based on existence.
-         */
-        public <T extends Facet> Optional<T> getFeatureFacet(@Nullable Class<T> facetType) {
-            return facetType!=null
-                    ? Optional.ofNullable(getFeatureSpec().getFacet(facetType))
-                    : Optional.empty();
-        }
-        
-        public <T extends Facet> T getFeatureFacetElseFail(@Nullable Class<T> facetType) {
-            return getFeatureFacet(facetType)
-                    .orElseThrow(()->_Exceptions
-                            .noSuchElement("Feature %s has no such facet %s",
-                                    managedFeature.getIdentifier(),
-                                    facetType.getName()));    
         }
         
         @Deprecated
@@ -150,9 +130,10 @@ public interface UiComponentFactory<B, C> {
         @Deprecated
         public Optional<InteractionVeto> setFeatureValue(Object proposedNewValuePojo) {
             //TODO we are loosing any fields that are cached within ManagedObject
-            val proposedNewValue = ManagedObject.of(getFeatureSpec(), proposedNewValuePojo);
+            val proposedNewValue = ManagedObject.of(getFeatureTypeSpec(), proposedNewValuePojo);
             return ((ManagedProperty)managedFeature).modifyProperty(proposedNewValue);
         }
+
         
     }
     

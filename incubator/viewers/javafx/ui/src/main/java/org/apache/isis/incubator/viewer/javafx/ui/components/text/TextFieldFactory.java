@@ -42,7 +42,7 @@ public class TextFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(ComponentRequest request) {
-        return request.hasFeatureFacet(StringValueFacet.class);
+        return request.hasFeatureTypeFacet(StringValueFacet.class);
     }
 
     @Override

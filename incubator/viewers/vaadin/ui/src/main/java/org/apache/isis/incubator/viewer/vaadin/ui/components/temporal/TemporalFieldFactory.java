@@ -43,7 +43,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     @Override
     public boolean isHandling(ComponentRequest request) {
         return request.isFeatureTypeEqualTo(java.sql.Date.class)
-            ||(request.hasFeatureFacet(TemporalValueFacet.class)
+            ||(request.hasFeatureTypeFacet(TemporalValueFacet.class)
                 // TODO lift this restrictions, as we support more types
                 && (
                         request.isFeatureTypeEqualTo(LocalDate.class)
@@ -94,9 +94,9 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     
     private TemporalCharacteristic getTemporalCharacteristic(ComponentRequest request) {
         @SuppressWarnings("rawtypes")
-        val temporalFacet = request.getFeatureFacet(TemporalValueFacet.class);
-        if(temporalFacet.isPresent()) {
-            return temporalFacet.get().getTemporalCharacteristic();
+        val temporalFacet = request.getFeatureTypeSpec().getFacet(TemporalValueFacet.class);
+        if(temporalFacet!=null) {
+            return temporalFacet.getTemporalCharacteristic();
         }
         if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
             return TemporalCharacteristic.DATE_ONLY;
@@ -109,9 +109,9 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     
     private OffsetCharacteristic getOffsetCharacteristic(ComponentRequest request) {
         @SuppressWarnings("rawtypes")
-        val temporalFacet = request.getFeatureFacet(TemporalValueFacet.class);
-        if(temporalFacet.isPresent()) {
-            return temporalFacet.get().getOffsetCharacteristic();
+        val temporalFacet = request.getFeatureTypeSpec().getFacet(TemporalValueFacet.class);
+        if(temporalFacet!=null) {
+            return temporalFacet.getOffsetCharacteristic();
         }
         if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
             return OffsetCharacteristic.LOCAL;

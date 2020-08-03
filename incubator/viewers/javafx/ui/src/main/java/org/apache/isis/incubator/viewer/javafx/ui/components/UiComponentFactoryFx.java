@@ -120,7 +120,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
     
     @Override
     public LabelAndPosition<Node> labelFor(ComponentRequest request) {
-        val labelPosition = request.getFeatureFacet(LabelAtFacet.class)
+        val labelPosition = request.getManagedFeature().getFacet(LabelAtFacet.class)
                 .map(LabelAtFacet::label)
                 .orElse(LabelPosition.NOT_SPECIFIED);
         val uiLabel = new Label(request.getDisplayLabel());
