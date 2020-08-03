@@ -72,7 +72,7 @@ class PropertyInteractionTest extends InteractionTestAbstract {
         
         // verify, that we have the LabelAtFacet
         
-        val labelAtFacet = managedProperty.getMember().getFacet(LabelAtFacet.class);
+        val labelAtFacet = managedProperty.getMetaModel().getFacet(LabelAtFacet.class);
         assertNotNull(labelAtFacet);
         
         val labelPos = labelAtFacet.label();
@@ -80,7 +80,7 @@ class PropertyInteractionTest extends InteractionTestAbstract {
         
         // verify, that we have the MultiLineFacet
         
-        val multiLineFacet = managedProperty.getMember().getFacet(MultiLineFacet.class);
+        val multiLineFacet = managedProperty.getMetaModel().getFacet(MultiLineFacet.class);
         assertNotNull(multiLineFacet);
         
         val numberOfLines = multiLineFacet.numberOfLines();

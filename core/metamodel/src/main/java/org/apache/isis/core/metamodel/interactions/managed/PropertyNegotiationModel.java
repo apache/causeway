@@ -44,13 +44,13 @@ public class PropertyNegotiationModel implements ManagedValue {
     
     PropertyNegotiationModel(ManagedProperty managedProperty) {
         this.managedProperty = managedProperty;
-        val property = managedProperty.getMember();
+        val propMeta = managedProperty.getMetaModel();
         
         validationFeedbackActive = _Bindables.forValue(false);
         
         val currentValue = managedProperty.getPropertyValue();
         val defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
-            ? property.getDefault(managedProperty.getOwner())
+            ? propMeta.getDefault(managedProperty.getOwner())
             : currentValue;
         
         proposedValue = _Bindables.forValue(defaultValue);
@@ -59,20 +59,20 @@ public class PropertyNegotiationModel implements ManagedValue {
         });
         
         // has either autoComplete, choices, or none
-        choices = property.hasAutoComplete()
+        choices = propMeta.hasAutoComplete()
         ? _Observables.forFactory(()->
-            property.getAutoComplete(
+            propMeta.getAutoComplete(
                     managedProperty.getOwner(),
                     getSearchArgument().getValue(), 
                     InteractionInitiatedBy.USER))
-        : property.hasChoices() 
+        : propMeta.hasChoices() 
             ? _Observables.forFactory(()->
-                property.getChoices(managedProperty.getOwner(), InteractionInitiatedBy.USER))
+                propMeta.getChoices(managedProperty.getOwner(), InteractionInitiatedBy.USER))
             : _Observables.forFactory(Can::empty);
 
         // if has autoComplete, then activate the search argument        
         searchArgument = _Bindables.forValue(null);
-        if(property.hasAutoComplete()) {
+        if(propMeta.hasAutoComplete()) {
             searchArgument.addListener((e,o,n)->{
                 choices.invalidate();
             });

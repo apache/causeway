@@ -109,31 +109,31 @@ public abstract class ManagedMember implements ManagedFeature {
     }
 
 
-    public abstract ObjectMember getMember();
+    public abstract ObjectMember getMetaModel();
     
     public abstract MemberType getMemberType();
     
     @Override
     public ObjectSpecification getSpecification() {
-        return getMember().getSpecification();
+        return getMetaModel().getSpecification();
     }
     
     public String getId() {
-        return getMember().getId();
+        return getMetaModel().getId();
     }
     
     public String getName() {
-        return getMember().getName();
+        return getMetaModel().getName();
     }
     
     @Override
     public Identifier getIdentifier() {
-        return getMember().getIdentifier();
+        return getMetaModel().getIdentifier();
     }
     
     @Override
     public String getDisplayLabel() {
-        return getMember().getName();
+        return getMetaModel().getName();
     }
     
     @Getter @Setter @NonNull 
@@ -148,7 +148,7 @@ public abstract class ManagedMember implements ManagedFeature {
 
         try {
             val visibilityConsent = 
-                    getMember()
+                    getMetaModel()
                     .isVisible(getOwner(), InteractionInitiatedBy.USER, where);
             
             return visibilityConsent.isVetoed()
@@ -172,7 +172,7 @@ public abstract class ManagedMember implements ManagedFeature {
         try {
             
             val usabilityConsent = 
-                    getMember()
+                    getMetaModel()
                     .isUsable(getOwner(), InteractionInitiatedBy.USER, where);
             
             return usabilityConsent.isVetoed()

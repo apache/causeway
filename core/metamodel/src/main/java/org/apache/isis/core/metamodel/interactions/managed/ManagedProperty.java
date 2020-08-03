@@ -71,7 +71,7 @@ public final class ManagedProperty extends ManagedMember {
     }
 
     @Override
-    public OneToOneAssociation getMember() {
+    public OneToOneAssociation getMetaModel() {
         return getProperty();
     }
 

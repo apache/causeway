@@ -82,10 +82,10 @@ class PropertyBindingTest extends InteractionTestAbstract {
         
         // verify that initial choices are as expected
         
-        assertTrue(managedPropA.getMember().hasChoices());
+        assertTrue(managedPropA.getMetaModel().hasChoices());
         assertComponentWiseUnwrappedEquals(new String[] {"Hello", "World"}, uiPropAChoices.getChoices());
         
-        assertTrue(managedPropB.getMember().hasAutoComplete());
+        assertTrue(managedPropB.getMetaModel().hasAutoComplete());
         assertComponentWiseUnwrappedEquals(new String[] {}, uiPropBAutoComplete.getChoices());
         
         // verify that initial validation messages are all empty, 

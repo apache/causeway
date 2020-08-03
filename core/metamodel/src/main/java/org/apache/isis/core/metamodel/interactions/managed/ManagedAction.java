@@ -83,7 +83,7 @@ public final class ManagedAction extends ManagedMember {
     }
     
     @Override
-    public ObjectAction getMember() {
+    public ObjectAction getMetaModel() {
         return getAction();
     }
     
