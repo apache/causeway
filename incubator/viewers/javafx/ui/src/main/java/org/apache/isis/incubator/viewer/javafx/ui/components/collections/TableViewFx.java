@@ -26,7 +26,10 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Multimaps;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -96,14 +99,6 @@ public class TableViewFx extends VBox {
             @NonNull final UiContext uiContext,
             @NonNull final ObjectSpecification elementSpec, 
             @Nullable final Collection<ManagedObject> objects) {
-        
-        //            final ComboBox<ManagedObject> listBox = new ComboBox<>();
-        //            listBox.setLabel(label + " #" + objects.size());
-        //            listBox.setItems(objects);
-        //            if (!objects.isEmpty()) {
-        //                listBox.setValue(objects.get(0));
-        //            }
-        //            listBox.setItemLabelGenerator(o -> o.titleString(null));
 
         val objectGrid = new TableView<ManagedObject>();
         super.getChildren().add(objectGrid);
@@ -113,18 +108,42 @@ public class TableViewFx extends VBox {
             return;
         }
         
-        elementSpec
-        .streamAssociations(Contributed.INCLUDED)
-        .filter(assoc -> assoc.getFeatureType().isProperty())
-        .forEach(property -> {
+        val columnMetaModels = elementSpec
+                .streamAssociations(Contributed.INCLUDED)
+                .filter(assoc -> assoc.getFeatureType().isProperty())
+                .collect(Can.toCan());
+ 
+        // rather prepare all table cells into a multi-map eagerly, 
+        // than having to spawn new transactions/interactions for each table cell when rendered lazily 
+        val table = _Multimaps.<RootOid, String, String>newMapMultimap();
+        
+        _NullSafe.stream(objects)
+        .forEach(object->{
+           
+            val id = object.getRootOid().orElse(null);
+            if(id==null) {
+                return;
+            }
             
+            columnMetaModels.forEach(property->{
+                table.putElement(id, property.getId(), stringifyPropertyValue(uiContext, property, object));
+            });
+            
+        });
+        
+        columnMetaModels.forEach(property->{
             val column = _fx.newColumn(objectGrid, property.getName(), String.class);
-            column.setCellValueFactory(targetObject->null);
-            
             column.setCellValueFactory(cellDataFeatures -> {
                 log.debug("about to get property value for property {}", property.getId());                
                 val targetObject = cellDataFeatures.getValue();
-                return _fx.newStringReadonly(stringifyPropertyValue(uiContext, property, targetObject));
+                
+                val cellValue = targetObject.getRootOid()
+                .map(id->table.getElement(id, property.getId()))
+                .orElseGet(()->String.format("table cell not found for object '%s' (property-id: '%s')",
+                        ""+targetObject, 
+                        property.getId())); 
+
+                return _fx.newStringReadonly(cellValue);
             });
         });
         
@@ -149,7 +168,7 @@ public class TableViewFx extends VBox {
             ObjectAssociation property, 
             ManagedObject targetObject) {
         
-        return uiContext.getIsisInteractionFactory().callAnonymous(()->{
+        //return uiContext.getIsisInteractionFactory().callAnonymous(()->{
             
             try {
                 val propertyValue = property.get(targetObject);
@@ -160,7 +179,7 @@ public class TableViewFx extends VBox {
                 return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
             }
             
-        });
+        //});
         
         
     }
