@@ -20,12 +20,15 @@ package demoapp.dom.viewmodels.jaxbrefentity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
@@ -36,7 +39,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -56,6 +58,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 )
 public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
+    @XmlTransient @Inject 
+    private transient ChildJdoEntities childJdoEntities;
+    
     public String title() {
         return String.format("%s; %s children", getMessage(), getChildren().size());
     }
@@ -99,14 +104,12 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
         return this;
     }
     
-    //XXX shortcut for debugging (wicket only)
+    //XXX shortcut for debugging
     @Action(associateWith = "children", associateWithSequence = "2", semantics = SemanticsOf.NON_IDEMPOTENT)
     public StatefulVmJaxbRefsEntity addAll() {
-        val all = CommonContextUtils
-                .getCommonContext()
-                .getServiceRegistry()
-                .lookupServiceElseFail(ChildJdoEntities.class)
-                .all();
+        Objects.requireNonNull(childJdoEntities, 
+                "ViewModel must have its injections points resolved, before any actions can be invoked.");
+        val all = childJdoEntities.all();
         getChildren().clear();
         getChildren().addAll(all);
         return this;

@@ -76,6 +76,23 @@
 			<type>pom</type>
 		</dependency>
 
+		<!-- EXTENSIONS -->
+	
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-ui-wkt</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-sse-ui-wkt</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-pdfjs-ui</artifactId>
