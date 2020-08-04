@@ -71,7 +71,7 @@ public interface ManagedFeature {
      */
     default <T extends Facet> boolean hasFacet(@Nullable Class<T> facetType) {
         return facetType!=null
-                ? getFacet(facetType)!=null
+                ? getMetaModel().getFacet(facetType)!=null
                 : false;
     }
     
