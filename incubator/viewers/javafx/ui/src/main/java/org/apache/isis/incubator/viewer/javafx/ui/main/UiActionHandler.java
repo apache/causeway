@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -133,7 +134,7 @@ public class UiActionHandler {
     
     private Node uiComponentForActionResult(ManagedObject actionResult, Consumer<Node> onNewPageContent) {
         if (actionResult.getSpecification().isParentedOrFreeCollection()) {
-            return TableViewFx.fromCollection(uiContext, actionResult);
+            return TableViewFx.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
         } else {
             return ObjectViewFx.fromObject(
                     uiContext,

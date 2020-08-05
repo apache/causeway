@@ -232,7 +232,7 @@ public class ObjectViewFx extends VBox {
                     }
                     
                     _fx.add(titledPanel, 
-                            TableViewFx.forManagedCollection(uiContext, managedCollection));
+                            TableViewFx.forManagedCollection(uiContext, managedCollection, Where.PARENTED_TABLES));
 
                 });
                 

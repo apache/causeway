@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
@@ -36,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
@@ -62,8 +64,13 @@ public class TableViewFx extends VBox {
     /**
      * Constructs a (page-able) {@link Grid} from given {@code collection}  
      * @param collection - of (wrapped) domain objects
+     * @param where 
      */
-    public static TableViewFx fromCollection(UiContext uiContext, ManagedObject collection) {
+    public static TableViewFx fromCollection(
+            final @NonNull UiContext uiContext, 
+            final @NonNull ManagedObject collection, 
+            final @NonNull Where where) {
+        
         val collectionFacet = collection.getSpecification()
                 .getFacet(CollectionFacet.class);
         
@@ -71,24 +78,36 @@ public class TableViewFx extends VBox {
                 .collect(Collectors.toList());
         
         return inferElementSpecification(objects)
-                .map(elementSpec->new TableViewFx(uiContext, elementSpec, objects))
+                .map(elementSpec->new TableViewFx(uiContext, elementSpec, objects, where))
                 .orElseGet(TableViewFx::empty);
     }
     
     /**
      * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
      * @param managedCollection
+     * @param where 
      */
-    public static TableViewFx forManagedCollection(UiContext uiContext, ManagedCollection managedCollection) {
+    public static TableViewFx forManagedCollection(
+            final @NonNull UiContext uiContext, 
+            final @NonNull ManagedCollection managedCollection, 
+            final @NonNull Where where) {
         
         val elementSpec = managedCollection.getElementSpecification(); 
         val elements = managedCollection.streamElements()
                 .collect(Collectors.toList());
         return elements.isEmpty()
                 ? empty()
-                : new TableViewFx(uiContext, elementSpec, elements);
+                : new TableViewFx(uiContext, elementSpec, elements, where);
     }
     
+    private Can<OneToOneAssociation> columnProperties(ObjectSpecification elementSpec, Where where) {
+        return elementSpec.streamProperties(Contributed.INCLUDED)
+                .filter(ObjectAssociation.Predicates.staticallyVisible(where))
+//                        model.isParented()
+//                        ? Where.PARENTED_TABLES
+//                        : Where.STANDALONE_TABLES))
+                .collect(Can.toCan());
+    }
     
     /**
      * 
@@ -98,7 +117,8 @@ public class TableViewFx extends VBox {
     private TableViewFx(
             @NonNull final UiContext uiContext,
             @NonNull final ObjectSpecification elementSpec, 
-            @Nullable final Collection<ManagedObject> objects) {
+            @Nullable final Collection<ManagedObject> objects,
+            @NonNull final Where where) {
 
         val objectGrid = new TableView<ManagedObject>();
         super.getChildren().add(objectGrid);
@@ -108,10 +128,7 @@ public class TableViewFx extends VBox {
             return;
         }
         
-        val columnMetaModels = elementSpec
-                .streamAssociations(Contributed.INCLUDED)
-                .filter(assoc -> assoc.getFeatureType().isProperty())
-                .collect(Can.toCan());
+        val columnProperties = columnProperties(elementSpec, where);
  
         // rather prepare all table cells into a multi-map eagerly, 
         // than having to spawn new transactions/interactions for each table cell when rendered lazily 
@@ -125,13 +142,13 @@ public class TableViewFx extends VBox {
                 return;
             }
             
-            columnMetaModels.forEach(property->{
+            columnProperties.forEach(property->{
                 table.putElement(id, property.getId(), stringifyPropertyValue(uiContext, property, object));
             });
             
         });
         
-        columnMetaModels.forEach(property->{
+        columnProperties.forEach(property->{
             val column = _fx.newColumn(objectGrid, property.getName(), String.class);
             column.setCellValueFactory(cellDataFeatures -> {
                 log.debug("about to get property value for property {}", property.getId());                
