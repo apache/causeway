@@ -31,11 +31,11 @@ import org.apache.wicket.Component;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
@@ -53,7 +53,6 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
-import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFinder;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
@@ -95,6 +94,7 @@ implements LinksProvider, UiHintContainer {
         return colModel;
     }
 
+    //XXX lombok enum issue, cannot use val here ...
     public static EntityCollectionModel createStandalone(
             ManagedObject collectionAsAdapter, 
             ModelAbstract<?> model) {
@@ -102,20 +102,20 @@ implements LinksProvider, UiHintContainer {
         // dynamically determine the spec of the elements
         // (ie so a List<Object> can be rendered according to the runtime type of its elements,
         // rather than the compile-time type
-        final LowestCommonSuperclassFinder lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
-
-        //XXX lombok issue, cannot use val here
+        final ClassExtensions.CommonSuperclassFinder commonSuperClassFinder = 
+                new ClassExtensions.CommonSuperclassFinder();
+        
         final ObjectMementoService mementoService = model.getMementoService();
 
         final List<ObjectMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
                 .filter(_NullSafe::isPresent)
-                .peek(lowestCommonSuperclassFinder::collect)
+                .peek(commonSuperClassFinder::collect)
                 .map(mementoService::mementoForPojo)
                 .collect(Collectors.toList());
 
         final SpecificationLoader specificationLoader = model.getSpecificationLoader();
 
-        final ObjectSpecification elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
+        final ObjectSpecification elementSpec = commonSuperClassFinder.getCommonSuperclass()
                 .map(specificationLoader::loadSpecification)
                 .orElseGet(()->collectionAsAdapter.getSpecification().getElementSpecification().orElse(null));
 
@@ -466,14 +466,9 @@ implements LinksProvider, UiHintContainer {
         return collectionMemento;
     }
 
-    private static Iterable<Object> asIterable(ManagedObject resultAdapter) {
-        return _Casts.uncheckedCast(resultAdapter.getPojo());
+    private static Stream<?> streamElementsOf(ManagedObject resultAdapter) {
+        return _NullSafe.streamAutodetect(resultAdapter.getPojo());
     }
-
-    private static Stream<Object> streamElementsOf(ManagedObject resultAdapter) {
-        return _NullSafe.stream(asIterable(resultAdapter));
-    }
-
 
     public boolean toggleSelectionOn(ManagedObject selectedAdapter) {
         //XXX lombok issue, cannot use val here

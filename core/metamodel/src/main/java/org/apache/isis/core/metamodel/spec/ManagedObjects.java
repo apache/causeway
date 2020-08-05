@@ -283,6 +283,43 @@ public final class ManagedObjects {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + suffix;
     }
     
+    // -- COMMON SUPER TYPE FINDER
+    
+    /**
+     * Find an ObjectSpecification that is common to all provided {@code objects} 
+     * @param objects
+     * @return optionally the common ObjectSpecification based on whether provided {@code objects}
+     * are not empty
+     */
+    public static Optional<ObjectSpecification> commonSpecification(
+            @Nullable final Can<ManagedObject> objects) {
+        
+        if (_NullSafe.isEmpty(objects)) {
+            return Optional.empty();
+        }
+        val firstElement = objects.getSingletonOrFail();
+        val firstElementSpec = firstElement.getSpecification();
+        
+        if(objects.getCardinality().isOne()) {
+            return Optional.of(firstElementSpec);
+        }
+
+        val commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
+        objects.stream()
+        .map(ManagedObject::getPojo)
+        .filter(_NullSafe::isPresent)
+        .forEach(commonSuperClassFinder::collect);
+        
+        val commonSuperClass = commonSuperClassFinder.getCommonSuperclass().orElse(null);
+        if(commonSuperClass!=null && commonSuperClass!=firstElement.getSpecification().getCorrespondingClass()) {
+            val specificationLoader = firstElementSpec.getMetaModelContext().getSpecificationLoader();
+            val commonSpec = specificationLoader.loadSpecification(commonSuperClass);
+            return Optional.of(commonSpec);
+        }
+        
+        return Optional.of(firstElementSpec);
+    }
+    
     // -- ADABT UTILITIES
     
     public static Can<ManagedObject> adaptMultipleOfType(
@@ -816,8 +853,6 @@ public final class ManagedObjects {
         }
         
     }
-
-
     
 
 }

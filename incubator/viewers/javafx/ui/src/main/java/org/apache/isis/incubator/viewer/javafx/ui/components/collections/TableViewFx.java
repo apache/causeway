@@ -18,10 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.collections;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -34,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -54,13 +52,13 @@ import javafx.scene.layout.VBox;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Log4j2
 public class TableViewFx extends VBox {
-    
+
     private static final String NULL_LITERAL = "<NULL>";
-    
+
     public static TableViewFx empty() {
         return new TableViewFx();
     }
-            
+
     /**
      * Constructs a (page-able) {@link Grid} from given {@code collection}  
      * @param collection - of (wrapped) domain objects
@@ -70,18 +68,18 @@ public class TableViewFx extends VBox {
             final @NonNull UiContext uiContext, 
             final @NonNull ManagedObject collection, 
             final @NonNull Where where) {
-        
+
         val collectionFacet = collection.getSpecification()
                 .getFacet(CollectionFacet.class);
-        
+
         val objects = collectionFacet.stream(collection)
-                .collect(Collectors.toList());
-        
-        return inferElementSpecification(objects)
+                .collect(Can.toCan());
+
+        return ManagedObjects.commonSpecification(objects)
                 .map(elementSpec->new TableViewFx(uiContext, elementSpec, objects, where))
                 .orElseGet(TableViewFx::empty);
     }
-    
+
     /**
      * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
      * @param managedCollection
@@ -91,24 +89,23 @@ public class TableViewFx extends VBox {
             final @NonNull UiContext uiContext, 
             final @NonNull ManagedCollection managedCollection, 
             final @NonNull Where where) {
-        
+
         val elementSpec = managedCollection.getElementSpecification(); 
         val elements = managedCollection.streamElements()
-                .collect(Collectors.toList());
+                .collect(Can.toCan());
         return elements.isEmpty()
                 ? empty()
                 : new TableViewFx(uiContext, elementSpec, elements, where);
     }
-    
+
     private Can<OneToOneAssociation> columnProperties(ObjectSpecification elementSpec, Where where) {
+
+        //TODO honor column order (as per layout)
         return elementSpec.streamProperties(Contributed.INCLUDED)
                 .filter(ObjectAssociation.Predicates.staticallyVisible(where))
-//                        model.isParented()
-//                        ? Where.PARENTED_TABLES
-//                        : Where.STANDALONE_TABLES))
                 .collect(Can.toCan());
     }
-    
+
     /**
      * 
      * @param elementSpec - as is common to all given {@code objects} aka elements 
@@ -117,88 +114,82 @@ public class TableViewFx extends VBox {
     private TableViewFx(
             @NonNull final UiContext uiContext,
             @NonNull final ObjectSpecification elementSpec, 
-            @Nullable final Collection<ManagedObject> objects,
+            @Nullable final Can<ManagedObject> objects,
             @NonNull final Where where) {
 
         val objectGrid = new TableView<ManagedObject>();
         super.getChildren().add(objectGrid);
-        
+
         if (_NullSafe.isEmpty(objects)) {
             objectGrid.setPlaceholder(new Label("No rows to display"));
             return;
         }
-        
+
         val columnProperties = columnProperties(elementSpec, where);
- 
+
         // rather prepare all table cells into a multi-map eagerly, 
         // than having to spawn new transactions/interactions for each table cell when rendered lazily 
         val table = _Multimaps.<RootOid, String, String>newMapMultimap();
-        
+
         _NullSafe.stream(objects)
         .forEach(object->{
-           
+
             val id = object.getRootOid().orElse(null);
             if(id==null) {
                 return;
             }
+
+            //TODO add object link as first column
             
             columnProperties.forEach(property->{
                 table.putElement(id, property.getId(), stringifyPropertyValue(uiContext, property, object));
             });
-            
+
         });
+
+        //TODO add object link as first column
         
         columnProperties.forEach(property->{
             val column = _fx.newColumn(objectGrid, property.getName(), String.class);
             column.setCellValueFactory(cellDataFeatures -> {
                 log.debug("about to get property value for property {}", property.getId());                
                 val targetObject = cellDataFeatures.getValue();
-                
+
                 val cellValue = targetObject.getRootOid()
-                .map(id->table.getElement(id, property.getId()))
-                .orElseGet(()->String.format("table cell not found for object '%s' (property-id: '%s')",
-                        ""+targetObject, 
-                        property.getId())); 
+                        .map(id->table.getElement(id, property.getId()))
+                        .orElseGet(()->String.format("table cell not found for object '%s' (property-id: '%s')",
+                                ""+targetObject, 
+                                property.getId())); 
 
                 return _fx.newStringReadonly(cellValue);
             });
         });
-        
+
         // populate the model        
-        objectGrid.getItems().addAll(objects);
         
+        objects.forEach(objectGrid.getItems()::add);
+
         //objectGrid.recalculateColumnWidths();
         //objectGrid.setColumnReorderingAllowed(true);
-        
+
     }
-    
-    private static Optional<ObjectSpecification> inferElementSpecification(List<ManagedObject> objects) {
-        if (_NullSafe.isEmpty(objects)) {
-            return Optional.empty();
-        }
-        val elementSpec = objects.iterator().next().getSpecification();
-        return Optional.of(elementSpec);
-    }
-    
+
+
+
     private String stringifyPropertyValue(
             UiContext uiContext,
             ObjectAssociation property, 
             ManagedObject targetObject) {
-        
-        //return uiContext.getIsisInteractionFactory().callAnonymous(()->{
-            
-            try {
-                val propertyValue = property.get(targetObject);
-                return propertyValue == null 
-                        ? NULL_LITERAL
-                        : propertyValue.titleString();
-            } catch (Exception e) {
-                return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
-            }
-            
-        //});
-        
-        
+
+        try {
+            val propertyValue = property.get(targetObject);
+            return propertyValue == null 
+                    ? NULL_LITERAL
+                            : propertyValue.titleString();
+        } catch (Exception e) {
+            return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
+        }
+
     }
-    
+
 }

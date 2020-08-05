@@ -45,4 +45,5 @@ public interface UiContext {
     PrototypingDecorator<Button, Node> getPrototypingDecoratorForButton();
     PrototypingDecorator<Node, Node> getPrototypingDecoratorForFormField();
     
+    
 }

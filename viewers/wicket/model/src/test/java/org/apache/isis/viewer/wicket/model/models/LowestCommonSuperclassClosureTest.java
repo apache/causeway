@@ -26,6 +26,10 @@ import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
+
+import lombok.val;
+
 public class LowestCommonSuperclassClosureTest {
 
     static class Animal {}
@@ -36,24 +40,23 @@ public class LowestCommonSuperclassClosureTest {
 
     @Test
     public void nothingInCommon() {
-        assertLowestCommonOfListIs(Arrays.asList(new Animal(), new Mineral(), new Vegetable()), Object.class);
+        assertCommonOfListIs(Arrays.asList(new Animal(), new Mineral(), new Vegetable()), Object.class);
     }
 
     @Test
     public void superclassInCommon() {
-        assertLowestCommonOfListIs(Arrays.asList(new Animal(), new Mammal()), Animal.class);
+        assertCommonOfListIs(Arrays.asList(new Animal(), new Mammal()), Animal.class);
     }
 
     @Test
     public void subclassInCommon() {
-        assertLowestCommonOfListIs(Arrays.asList(new Lion(), new Lion()), Lion.class);
+        assertCommonOfListIs(Arrays.asList(new Lion(), new Lion()), Lion.class);
     }
 
-    private static void assertLowestCommonOfListIs(List<Object> list, Class<?> expected) {
-        Util.LowestCommonSuperclassFinder finder = 
-                new Util.LowestCommonSuperclassFinder();
-        list.forEach(finder::collect);
-        assertEquals(expected, finder.getLowestCommonSuperclass().get());
+    private static void assertCommonOfListIs(List<Object> list, Class<?> expected) {
+        val commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
+        list.forEach(commonSuperClassFinder::collect);
+        assertEquals(expected, commonSuperClassFinder.getCommonSuperclass().get());
     }
 
 
