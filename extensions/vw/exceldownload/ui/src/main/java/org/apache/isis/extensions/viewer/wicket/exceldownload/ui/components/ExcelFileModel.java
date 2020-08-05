@@ -29,8 +29,6 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -41,10 +39,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 import lombok.val;
@@ -83,6 +83,16 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
     }
 
+    private Can<OneToOneAssociation> columnProperties() {
+        val typeOfSpec = model.getTypeOfSpecification();
+        return typeOfSpec.streamProperties(Contributed.INCLUDED)
+                .filter(ObjectAssociation.Predicates.staticallyVisible(
+                        model.isParented()
+                        ? Where.PARENTED_TABLES
+                        : Where.STANDALONE_TABLES))
+                .collect(Can.toCan());
+    }
+    
     private File createFile() throws IOException, FileNotFoundException {
         try(final Workbook wb = new XSSFWorkbook()) {
             String sheetName = model.getName();
@@ -92,39 +102,14 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             try(final FileOutputStream fos = new FileOutputStream(tempFile)) {
                 final Sheet sheet = wb.createSheet(sheetName);
         
-                final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-        
-        
-                //XXX legacy of 1.15.1
-                //            @SuppressWarnings("unchecked")
-                //            final Filter<ObjectAssociation> filter = Filters.and(
-                //                    ObjectAssociationFilters.PROPERTIES, 
-                //                    ObjectAssociationFilters.staticallyVisible(model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES));
-                //            
-                final Predicate<ObjectAssociation> filter = oa->{
-                    if(!oa.isPropertyOrCollection())
-                        return false;
-                    //            	if(model.getEntityModel()!=null && model.getEntityModel().getObject()!=null &&
-                    //            		oa.isVisible(
-                    //            			model.getEntityModel().getObject(), 
-                    //            			InteractionInitiatedBy.USER, 
-                    //            			model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES).isVetoed() )
-                    //            			return false;
-                    return true;
-                };            
-        
-                final List<? extends ObjectAssociation> propertyList = typeOfSpec
-                        .streamAssociations(Contributed.INCLUDED)
-                        .filter(filter)
-                        .collect(Collectors.toList());
+                val columnProperties = columnProperties();
         
                 final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
                 Row row = rowFactory.newRow();
         
-        
                 // header row
                 int i=0;
-                for (ObjectAssociation property : propertyList) {
+                for (ObjectAssociation property : columnProperties) {
                     final Cell cell = row.createCell((short) i++);
                     cell.setCellValue(property.getName());
                 }
@@ -136,7 +121,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                 for (val objectAdapter : adapters) {
                     row = rowFactory.newRow();
                     i=0;
-                    for (final ObjectAssociation property : propertyList) {
+                    for (final ObjectAssociation property : columnProperties) {
                         final Cell cell = row.createCell((short) i++);
                         setCellValue(objectAdapter, property, cell, dateCellStyle);
                     }
