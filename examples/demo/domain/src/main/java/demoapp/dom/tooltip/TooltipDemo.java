@@ -105,6 +105,11 @@ public class TooltipDemo implements HasAsciiDocDescription {
         return this;
     }
     
+    @Model
+    public String validateBiArgAction(String firstArg, String secondArg) {
+        return "always fail for demonstration";
+    }
+    
     @Action(semantics=SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
             named = "With Arguments And Confirm",
@@ -127,6 +132,11 @@ public class TooltipDemo implements HasAsciiDocDescription {
             ){
 
         return this;
+    }
+    
+    @Model
+    public String validateBiArgActionWithConfirm(String firstArg, String secondArg) {
+        return "always fail for demonstration";
     }
     
 

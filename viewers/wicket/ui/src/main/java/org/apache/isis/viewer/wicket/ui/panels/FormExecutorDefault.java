@@ -444,12 +444,16 @@ implements FormExecutor {
             @Nullable final Form<?> feedbackFormIfAny,
             @NonNull final Recognition recognition) {
 
-        val errorMsg = recognition.toMessage(getTranslationService());
-        
         if(targetIfAny != null && feedbackFormIfAny != null) {
+            //[ISIS-2419] for a consistent user experience with action dialog validation messages,
+            //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION. 
+            val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
+                    ? recognition.toMessageNoCategory(getTranslationService())
+                    : recognition.toMessage(getTranslationService());
             targetIfAny.add(feedbackFormIfAny);
             feedbackFormIfAny.error(errorMsg);
         } else {
+            val errorMsg = recognition.toMessage(getTranslationService());
             getMessageService().warnUser(errorMsg);
         }
     }
