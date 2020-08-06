@@ -18,21 +18,17 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
-import java.util.function.Consumer;
-
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
-import org.apache.isis.incubator.viewer.javafx.ui.components.object.ObjectViewFx;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +36,6 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.GridPane;
@@ -51,16 +46,17 @@ import javafx.scene.layout.GridPane;
 public class UiActionHandler {
 
     private final UiContext uiContext;
+    private final IsisInteractionFactory isisInteractionFactory;
     private final UiComponentFactoryFx uiComponentFactory;
 
-    public void handleActionLinkClicked(ManagedAction managedAction, Consumer<Node> onNewPageContent) {
+    public void handleActionLinkClicked(ManagedAction managedAction) {
 
         log.info("about to build an action prompt for {}", managedAction.getIdentifier());
         
         final int paramCount = managedAction.getAction().getParameterCount();
         
         if(paramCount==0) {
-            invoke(managedAction, Can.empty(), onNewPageContent);     
+            invoke(managedAction, Can.empty());     
         } else {
             // TODO get an ActionPrompt, then on invocation show the result in the content view
             
@@ -103,7 +99,7 @@ public class UiActionHandler {
             
             dialog.showAndWait().ifPresent(params->{
                 log.info("param negotiation done");
-                invoke(managedAction, params.getParamValues(), onNewPageContent);
+                invoke(managedAction, params.getParamValues());
             });
             
         } 
@@ -112,36 +108,18 @@ public class UiActionHandler {
     
     private void invoke(
             ManagedAction managedAction, 
-            Can<ManagedObject> params,
-            Consumer<Node> onNewPageContent) {
+            Can<ManagedObject> params) {
         
-        uiContext.getIsisInteractionFactory().runAnonymous(()->{
+        isisInteractionFactory.runAnonymous(()->{
 
             //Thread.sleep(1000); // simulate long running
 
             val actionResultOrVeto = managedAction.invoke(params);
             
             actionResultOrVeto.left()
-            .ifPresent(actionResult->handleActionResult(actionResult, onNewPageContent));
+            .ifPresent(actionResult->uiContext.route(actionResult));
 
         });
-    }
-    
-    
-    public void handleActionResult(ManagedObject actionResult, Consumer<Node> onNewPageContent) {
-        onNewPageContent.accept(uiComponentForActionResult(actionResult, onNewPageContent));
-    }
-    
-    private Node uiComponentForActionResult(ManagedObject actionResult, Consumer<Node> onNewPageContent) {
-        if (actionResult.getSpecification().isParentedOrFreeCollection()) {
-            return TableViewFx.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
-        } else {
-            return ObjectViewFx.fromObject(
-                    uiContext,
-                    uiComponentFactory, 
-                    action->handleActionLinkClicked(action, onNewPageContent), 
-                    actionResult);
-        }
     }
 
 

@@ -18,8 +18,13 @@
  */
 package org.apache.isis.incubator.viewer.javafx.model.context;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
+import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
@@ -31,8 +36,20 @@ import javafx.scene.control.MenuItem;
 
 public interface UiContext {
 
+    JavaFxViewerConfig getJavaFxViewerConfig();
+    
     IsisInteractionFactory getIsisInteractionFactory();
     ActionUiModelFactoryFx getActionUiModelFactory();
+    
+    void newPage(Node content);
+    void setNewPageHandler(Consumer<Node> onNewPage);
+    
+    Node pageFor(ManagedObject object);
+    void setPageFactory(Function<ManagedObject, Node> pageFactory);
+    
+    default void route(ManagedObject object) {
+        newPage(pageFor(object));    
+    }
     
     // -- DECORATORS
     

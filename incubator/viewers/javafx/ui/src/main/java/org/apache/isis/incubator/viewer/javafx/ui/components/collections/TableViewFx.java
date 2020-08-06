@@ -45,6 +45,7 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
@@ -84,12 +85,14 @@ public class TableViewFx extends VBox {
      * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
      * @param managedCollection
      * @param where 
+     * @param collectionData 
      */
     public static TableViewFx forManagedCollection(
             final @NonNull UiContext uiContext, 
             final @NonNull ManagedCollection managedCollection, 
             final @NonNull Where where) {
 
+        
         val elementSpec = managedCollection.getElementSpecification(); 
         val elements = managedCollection.streamElements()
                 .collect(Can.toCan());
@@ -139,16 +142,25 @@ public class TableViewFx extends VBox {
                 return;
             }
 
-            //TODO add object link as first column
-            
             columnProperties.forEach(property->{
                 table.putElement(id, property.getId(), stringifyPropertyValue(uiContext, property, object));
             });
 
         });
 
-        //TODO add object link as first column
+        // object link as first column
+        val firstColumn = _fx.newColumn(objectGrid, "", Button.class);
         
+        firstColumn.setCellValueFactory(cellDataFeatures -> {
+            val objectIcon = uiContext.getJavaFxViewerConfig().getObjectFallbackIcon();
+            val uiObjectRefLink = _fx.bottonForImage(objectIcon, 24, 24);
+            val targetObject = cellDataFeatures.getValue();
+            
+            uiObjectRefLink.setOnAction(e->{uiContext.route(targetObject);});
+            return _fx.newObjectReadonly(uiObjectRefLink);
+        });
+        
+        // property columns
         columnProperties.forEach(property->{
             val column = _fx.newColumn(objectGrid, property.getName(), String.class);
             column.setCellValueFactory(cellDataFeatures -> {

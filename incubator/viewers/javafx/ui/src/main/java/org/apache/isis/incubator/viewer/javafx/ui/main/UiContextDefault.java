@@ -18,19 +18,25 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
 import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -41,11 +47,32 @@ import javafx.scene.control.MenuItem;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UiContextDefault implements UiContext {
 
-    //private final UiActionHandler uiActionHandler;
+    @Getter(onMethod_ = {@Override})
+    private final JavaFxViewerConfig javaFxViewerConfig;
     @Getter(onMethod_ = {@Override})
     private final IsisInteractionFactory isisInteractionFactory;
     @Getter(onMethod_ = {@Override})
     private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
+    
+    @Setter(onMethod_ = {@Override})
+    private Consumer<Node> newPageHandler;
+    
+    @Override
+    public void newPage(Node content) {
+        if(newPageHandler!=null && content!=null) {
+            newPageHandler.accept(content);
+        }
+    }
+    
+    @Setter(onMethod_ = {@Override})
+    private Function<ManagedObject, Node> pageFactory;
+    
+    @Override
+    public Node pageFor(ManagedObject object) {
+        return pageFactory!=null
+                ? pageFactory.apply(object)
+                : null;
+    }
     
     // -- DECORATORS
 
@@ -63,6 +90,8 @@ public class UiContextDefault implements UiContext {
     private final PrototypingDecorator<Button, Node> prototypingDecoratorForButton;
     @Getter(onMethod_ = {@Override})
     private final PrototypingDecorator<Node, Node> prototypingDecoratorForFormField;
+    
+    
     
     
 }

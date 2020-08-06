@@ -82,7 +82,7 @@ public class ObjectViewFx extends VBox {
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
         
-        val gridVisistor = new UiGridLayout.Visitor<Pane, TabPane>(this) {
+        val gridVisitor = new UiGridLayout.Visitor<Pane, TabPane>(this) {
 
             @Override
             protected void onObjectTitle(Pane container, DomainObjectLayoutData domainObjectData) {
@@ -232,7 +232,10 @@ public class ObjectViewFx extends VBox {
                     }
                     
                     _fx.add(titledPanel, 
-                            TableViewFx.forManagedCollection(uiContext, managedCollection, Where.PARENTED_TABLES));
+                            TableViewFx.forManagedCollection(
+                                    uiContext, 
+                                    managedCollection, 
+                                    Where.PARENTED_TABLES));
 
                 });
                 
@@ -240,7 +243,7 @@ public class ObjectViewFx extends VBox {
 
         };
 
-        uiGridLayout.visit(gridVisistor);
+        uiGridLayout.visit(gridVisitor);
         //setWidthFull();
 
     }

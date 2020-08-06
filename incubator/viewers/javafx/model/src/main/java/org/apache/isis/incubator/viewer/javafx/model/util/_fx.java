@@ -24,6 +24,7 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
@@ -33,6 +34,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.Menu;
@@ -68,8 +70,11 @@ public final class _fx {
     // -- OBSERVABLES
 
     public static ObservableValue<String> newStringReadonly(String value) {
-        val string = new ReadOnlyStringWrapper(value);
-        return string;
+        return new ReadOnlyStringWrapper(value);
+    }
+    
+    public static <T> ObservableValue<T> newObjectReadonly(T value) {
+        return new ReadOnlyObjectWrapper<T>(value);
     }
 
     // -- COMPONENT FACTORIES
@@ -204,6 +209,21 @@ public final class _fx {
         icon.setFitWidth(width);
         icon.setFitHeight(height);
         return icon;
+    }
+    
+    public static Button bottonForImage(Image image, int width, int height) {
+        val icon = new ImageView(image);
+        icon.setPreserveRatio(true);
+        icon.setFitWidth(width-2);
+        icon.setFitHeight(height-2);
+        
+        val btn = new Button();
+        btn.setGraphic(icon);
+        btn.setMaxSize(width, height);
+        btn.setMinSize(width, height);
+        btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        
+        return btn;
     }
 
     // -- LAYOUTS

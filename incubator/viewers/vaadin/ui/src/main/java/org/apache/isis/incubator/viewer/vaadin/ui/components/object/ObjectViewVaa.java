@@ -86,7 +86,7 @@ public class ObjectViewVaa extends VerticalLayout {
         // force new row
         //formLayout.getElement().appendChild(ElementFactory.createBr());
 
-        val gridVisistor = new UiGridLayout.Visitor<HasComponents, Tabs>(this) {
+        val gridVisitor = new UiGridLayout.Visitor<HasComponents, Tabs>(this) {
 
             @Override
             protected void onObjectTitle(HasComponents container, DomainObjectLayoutData domainObjectData) {
@@ -251,7 +251,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
         };
 
-        uiGridLayout.visit(gridVisistor);
+        uiGridLayout.visit(gridVisitor);
         setWidthFull();
 
     }

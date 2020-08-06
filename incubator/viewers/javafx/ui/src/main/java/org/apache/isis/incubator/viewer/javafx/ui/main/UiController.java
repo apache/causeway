@@ -18,17 +18,23 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
+import java.util.function.Supplier;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.object.ObjectViewFx;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -55,7 +61,8 @@ public class UiController {
     private final HeaderUiModelProvider headerUiModelProvider;
     private final IsisInteractionFactory isisInteractionFactory;
     private final UiContext uiContext;
-    private final UiActionHandler uiActionHandler; 
+    private final UiActionHandler uiActionHandler;
+    private final UiComponentFactoryFx uiComponentFactory;
 
     @FXML private MenuBar menuBarLeft;
     @FXML private MenuBar menuBarRight;
@@ -67,6 +74,10 @@ public class UiController {
     @FXML
     public void initialize() {
         log.info("about to initialize");
+
+        uiContext.setNewPageHandler(this::replaceContent);
+        uiContext.setPageFactory(this::uiComponentForActionResult);
+        
         contentView.setFitToWidth(true);
         contentView.setFitToHeight(true);
         contentView.setHbarPolicy(ScrollBarPolicy.NEVER);
@@ -74,7 +85,16 @@ public class UiController {
         contentPane.setFillWidth(true);
         //_fx.borderDashed(contentPane, Color.CRIMSON); //debug
         isisInteractionFactory.runAnonymous(this::buildMenu);
+        
         renderHomepage();
+    }
+    
+    public void renderObject(Supplier<ManagedObject> objectSupplier) {
+        isisInteractionFactory.runAnonymous(()->{
+            val object = objectSupplier.get();
+            log.info("about to render object {}", object);
+            uiContext.route(object);
+        });
     }
     
     private void buildMenu() {
@@ -94,16 +114,12 @@ public class UiController {
         
         // let the MenuBuilderFx populate the menu-bars ... 
         
-        val leftMenuBuilder = MenuBuilderFx.of(uiContext, menuBarLeft, this::onActionLinkClicked);
-        val rightMenuBuilder = MenuBuilderFx.of(uiContext, menuBarRight, this::onActionLinkClicked);
+        val leftMenuBuilder = MenuBuilderFx.of(uiContext, menuBarLeft, uiActionHandler::handleActionLinkClicked);
+        val rightMenuBuilder = MenuBuilderFx.of(uiContext, menuBarRight, uiActionHandler::handleActionLinkClicked);
         
         header.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
         header.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);
         header.getTertiary().buildMenuItems(commonContext, rightMenuBuilder);
-    }
-
-    private void onActionLinkClicked(ManagedAction managedAction) {
-        uiActionHandler.handleActionLinkClicked(managedAction, this::replaceContent);
     }
     
     private void replaceContent(Node node) {
@@ -113,10 +129,20 @@ public class UiController {
     
     private void renderHomepage() {
         log.info("about to render homepage");
-        isisInteractionFactory.runAnonymous(()->{
-            val homepageViewmodel = metaModelContext.getHomePageAdapter();
-            uiActionHandler.handleActionResult(homepageViewmodel, this::replaceContent);
-        });
+        renderObject(metaModelContext::getHomePageAdapter);
     }
+    
+    private Node uiComponentForActionResult(ManagedObject actionResult) {
+        if (actionResult.getSpecification().isParentedOrFreeCollection()) {
+            return TableViewFx.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
+        } else {
+            return ObjectViewFx.fromObject(
+                    uiContext,
+                    uiComponentFactory, 
+                    uiActionHandler::handleActionLinkClicked, 
+                    actionResult);
+        }
+    }
+
     
 }

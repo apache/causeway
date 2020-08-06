@@ -53,6 +53,7 @@ public class DemoAppJavaFx {
                 .applicationTitle("Apache Isis Demo")
                 .applicationIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "icon.png"))
                 .brandingIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "gift_32.png"))
+                .objectFallbackIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "object_fallback_icon.png"))
                 .build();
     }
 
