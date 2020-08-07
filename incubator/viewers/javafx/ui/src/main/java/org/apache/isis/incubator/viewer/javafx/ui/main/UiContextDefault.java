@@ -20,6 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.ui.main;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -37,6 +38,8 @@ import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDeco
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -45,6 +48,7 @@ import javafx.scene.control.MenuItem;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
 public class UiContextDefault implements UiContext {
 
     @Getter(onMethod_ = {@Override})
@@ -57,21 +61,21 @@ public class UiContextDefault implements UiContext {
     @Setter(onMethod_ = {@Override})
     private Consumer<Node> newPageHandler;
     
-    @Override
-    public void newPage(Node content) {
-        if(newPageHandler!=null && content!=null) {
-            newPageHandler.accept(content);
-        }
-    }
-    
     @Setter(onMethod_ = {@Override})
     private Function<ManagedObject, Node> pageFactory;
+
+    @Override
+    public void route(ManagedObject object) {
+        log.info("about to render object {}", object);
+        newPage(pageFor(object));
+    }
     
     @Override
-    public Node pageFor(ManagedObject object) {
-        return pageFactory!=null
-                ? pageFactory.apply(object)
-                : null;
+    public void route(Supplier<ManagedObject> objectSupplier) {
+        isisInteractionFactory.runAnonymous(()->{
+            val object = objectSupplier.get();
+            route(object);
+        });
     }
     
     // -- DECORATORS
@@ -90,6 +94,20 @@ public class UiContextDefault implements UiContext {
     private final PrototypingDecorator<Button, Node> prototypingDecoratorForButton;
     @Getter(onMethod_ = {@Override})
     private final PrototypingDecorator<Node, Node> prototypingDecoratorForFormField;
+    
+    // -- HELPER
+    
+    private void newPage(Node content) {
+        if(newPageHandler!=null && content!=null) {
+            newPageHandler.accept(content);
+        }
+    }
+    
+    private Node pageFor(ManagedObject object) {
+        return pageFactory!=null
+                ? pageFactory.apply(object)
+                : null;
+    }
     
     
 }

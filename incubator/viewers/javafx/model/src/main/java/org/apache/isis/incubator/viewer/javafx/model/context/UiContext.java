@@ -20,6 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.model.context;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
@@ -41,15 +42,11 @@ public interface UiContext {
     IsisInteractionFactory getIsisInteractionFactory();
     ActionUiModelFactoryFx getActionUiModelFactory();
     
-    void newPage(Node content);
     void setNewPageHandler(Consumer<Node> onNewPage);
-    
-    Node pageFor(ManagedObject object);
     void setPageFactory(Function<ManagedObject, Node> pageFactory);
     
-    default void route(ManagedObject object) {
-        newPage(pageFor(object));    
-    }
+    void route(ManagedObject object);
+    void route(Supplier<ManagedObject> objectSupplier);
     
     // -- DECORATORS
     
@@ -61,6 +58,8 @@ public interface UiContext {
     
     PrototypingDecorator<Button, Node> getPrototypingDecoratorForButton();
     PrototypingDecorator<Node, Node> getPrototypingDecoratorForFormField();
+
+    
     
     
 }

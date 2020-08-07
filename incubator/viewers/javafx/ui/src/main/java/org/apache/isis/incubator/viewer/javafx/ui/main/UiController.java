@@ -18,8 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
-import java.util.function.Supplier;
-
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
@@ -89,14 +87,6 @@ public class UiController {
         renderHomepage();
     }
     
-    public void renderObject(Supplier<ManagedObject> objectSupplier) {
-        isisInteractionFactory.runAnonymous(()->{
-            val object = objectSupplier.get();
-            log.info("about to render object {}", object);
-            uiContext.route(object);
-        });
-    }
-    
     private void buildMenu() {
         val header = headerUiModelProvider.getHeader();
         
@@ -129,7 +119,7 @@ public class UiController {
     
     private void renderHomepage() {
         log.info("about to render homepage");
-        renderObject(metaModelContext::getHomePageAdapter);
+        uiContext.route(metaModelContext::getHomePageAdapter);
     }
     
     private Node uiComponentForActionResult(ManagedObject actionResult) {

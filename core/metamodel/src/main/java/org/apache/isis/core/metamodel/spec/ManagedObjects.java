@@ -297,7 +297,7 @@ public final class ManagedObjects {
         if (_NullSafe.isEmpty(objects)) {
             return Optional.empty();
         }
-        val firstElement = objects.getSingletonOrFail();
+        val firstElement = objects.getFirstOrFail();
         val firstElementSpec = firstElement.getSpecification();
         
         if(objects.getCardinality().isOne()) {
