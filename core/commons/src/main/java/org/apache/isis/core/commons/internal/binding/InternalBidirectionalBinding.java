@@ -42,11 +42,11 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
         return binding;
     }
 
-    public static <T> void unbind(Bindable<T> left, Bindable<T> rigth) {
-        checkParameters(left, rigth);
-        val binding = new UntypedBidirectionalBinding(left, rigth);
+    public static <T> void unbind(Bindable<T> left, Bindable<T> right) {
+        checkParameters(left, right);
+        val binding = new UntypedBidirectionalBinding(left, right);
         left.removeListener(binding);
-        rigth.removeListener(binding);
+        right.removeListener(binding);
     }
 
     public static void unbind(Object left, Object right) {
@@ -143,49 +143,53 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
         @Override
         public void changed(final Observable<? extends T> observable, final T oldValue, final T newValue) {
-            if (!updating) {
-                final Bindable<T> left = leftRef.get();
-                final Bindable<T> right = rightRef.get();
-                if ((left == null) || (right == null)) {
-                    if (left != null) {
-                        left.removeListener(this);
-                    }
-                    if (right != null) {
-                        right.removeListener(this);
-                    }
-                } else {
-                    try {
-                        updating = true;
-                        if (left == observable) {
-                            right.setValue(newValue);
-                        } else {
-                            left.setValue(newValue);
-                        }
-                    } catch (RuntimeException e) {
-                        try {
-                            if (left == observable) {
-                                left.setValue(oldValue);
-                            } else {
-                                right.setValue(oldValue);
-                            }
-                        } catch (Exception e2) {
-                            e2.addSuppressed(e);
-                            unbind(left, right);
-                            throw _Exceptions.unrecoverableFormatted(
-                                    "Bidirectional binding failed with an attempt to restore the "
-                                    + "Observable to the previous value. "
-                                    + "Removing the bidirectional binding from bindables %s and %s",
-                                    ""+left,
-                                    ""+right, 
-                                    e2);
-                        }
-                        throw _Exceptions.unrecoverable(
-                                "Bidirectional binding failed, setting to the previous value", e);
-                    } finally {
-                        updating = false;
-                    }
-                }
+            if (updating) {
+                return;
             }
+            val left = getLeft();
+            val right = getRight();
+            
+            if ((left == null) || (right == null)) {
+                if (left != null) {
+                    left.removeListener(this);
+                }
+                if (right != null) {
+                    right.removeListener(this);
+                }
+                return;
+            }
+            
+            try {
+                updating = true;
+                if (left == observable) {
+                    right.setValue(newValue);
+                } else {
+                    left.setValue(newValue);
+                }
+            } catch (RuntimeException e) {
+                try {
+                    if (left == observable) {
+                        left.setValue(oldValue);
+                    } else {
+                        right.setValue(oldValue);
+                    }
+                } catch (Exception e2) {
+                    e2.addSuppressed(e);
+                    unbind(left, right);
+                    throw _Exceptions.unrecoverableFormatted(
+                            "Bidirectional binding failed with an attempt to restore the "
+                            + "Observable to the previous value. "
+                            + "Removing the bidirectional binding from bindables %s and %s",
+                            ""+left,
+                            ""+right, 
+                            e2);
+                }
+                throw _Exceptions.unrecoverable(
+                        "Bidirectional binding failed, setting to the previous value", e);
+            } finally {
+                updating = false;
+            }
+            
         }
     }
 
