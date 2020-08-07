@@ -154,9 +154,9 @@ public class TableViewFx extends VBox {
         firstColumn.setCellValueFactory(cellDataFeatures -> {
             val objectIcon = uiContext.getJavaFxViewerConfig().getObjectFallbackIcon();
             val uiObjectRefLink = _fx.bottonForImage(objectIcon, 24, 24);
-            val targetObject = cellDataFeatures.getValue();
-            
-            uiObjectRefLink.setOnAction(e->{uiContext.route(targetObject);});
+            uiObjectRefLink.setOnAction(e->{
+                uiContext.route(cellDataFeatures::getValue);
+            });
             return _fx.newObjectReadonly(uiObjectRefLink);
         });
         
