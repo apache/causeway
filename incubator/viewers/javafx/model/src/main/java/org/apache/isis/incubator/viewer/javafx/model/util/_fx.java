@@ -20,6 +20,8 @@ package org.apache.isis.incubator.viewer.javafx.model.util;
 
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -119,10 +121,11 @@ public final class _fx {
         return component;
     }
 
-    public static FlowPane newFlowPane(Pane container) {
+    public static FlowPane newFlowPane(@Nullable Pane container) {
         val component = new FlowPane();
-        container.getChildren().add(component);
-        //component.prefWrapLengthProperty().bind(container.widthProperty());
+        if(container!=null) {
+            container.getChildren().add(component);
+        }
         _fx.padding(component, 4, 8);
         _fx.hideUntilPopulated(component);
         return component;
@@ -232,33 +235,19 @@ public final class _fx {
         region.setPadding(new Insets(vPadding, hPadding, vPadding, hPadding));
     }
 
-    //    public static GridPane formLayout(GridPane component) {
-    //        component.setAlignment(Pos.CENTER);
-    //        component.setHgap(10);
-    //        component.setVgap(10);
-    //        component.setPadding(new Insets(25, 25, 25, 25));    
-    //        return component;
-    //    }
-
+    public static void toolbarLayoutPropertyAssociated(FlowPane component) {
+        component.setPadding(new Insets(0, 12, 0, 12));
+        component.setHgap(10);
+        component.setVgap(10);
+    }
+    
     public static void toolbarLayout(FlowPane component) {
         component.setPadding(new Insets(15, 12, 15, 12));
         component.setHgap(10);
         component.setVgap(10);
-        //component.setSpacing(10);
 
         _fx.borderDashed(component, Color.RED); // debug
         _fx.backround(component, Color.FLORALWHITE);
-
-        //        component.prefWidthProperty().bind(
-        //                container.widthProperty().multiply(0.98));
-        //        
-        //        component.maxWidthProperty().bind(
-        //                container.widthProperty().multiply(0.98));
-
-
-        //uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
-        //uiActionPanel.setAlignItems(Alignment.BASELINE);
-
     }
 
     public static void visistDepthFirst(Node component, Predicate<Node> onNode) {

@@ -20,20 +20,53 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.form;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 
 public class FormPane extends GridPane {
 
-    private final List<Node> fields = _Lists.newArrayList();
+    @RequiredArgsConstructor(staticName = "of")
+    private static final class FieldAssembly {
+        @Getter private final @NonNull FormPane parent;
+        @Getter private final @NonNull LabelPosition labelPosition;
+        @Getter private final @NonNull Node fieldComponent;
+        private FlowPane associatedActionBar;
+        public FlowPane getAssociatedActionBar() {
+            if(associatedActionBar==null) {
+                associatedActionBar = new FlowPane();
+                _fx.toolbarLayoutPropertyAssociated(associatedActionBar);
+                switch(labelPosition) {
+                case NONE:
+                case TOP:
+                case RIGHT:
+                    getParent().addRow(associatedActionBar);
+                    break;
+                case LEFT:
+                case DEFAULT:
+                default:
+                    getParent().addRow(null, associatedActionBar);
+                    break;
+                }
+            }
+            return associatedActionBar;
+        }
+    }
+    
+    private final List<FieldAssembly> fields = _Lists.newArrayList();
     private int rowCount = 0;
     
     public FormPane() {
@@ -47,7 +80,7 @@ public class FormPane extends GridPane {
 
     public FormPane addField(LabelPosition labelPosition, Node uiFormLabel, Node uiFormField) {
         
-        fields.add(uiFormField);
+        fields.add(FieldAssembly.of(this, labelPosition, uiFormField));
         
         switch(labelPosition) {
         case NONE:
@@ -69,6 +102,12 @@ public class FormPane extends GridPane {
         return this;
     }
 
+    public FormPane addActionLink(Node uiButton) {
+        val actionBarAssociatedWithField = _Lists.lastElementIfAny(fields).getAssociatedActionBar();
+        _fx.add(actionBarAssociatedWithField, uiButton);
+        return this;
+    }
+   
     
     // -- HELPER
     
@@ -81,11 +120,15 @@ public class FormPane extends GridPane {
         ++rowCount;
     }
     
-    private void addRow(@NonNull Node left, @NonNull Node right) {
-        grid().add(left, 0, rowCount);
+    private void addRow(@Nullable Node left, @NonNull Node right) {
+        if(left!=null) {
+            grid().add(left, 0, rowCount);
+        }
         grid().add(right, 1, rowCount);
         ++rowCount;
     }
+
+
 
     
     

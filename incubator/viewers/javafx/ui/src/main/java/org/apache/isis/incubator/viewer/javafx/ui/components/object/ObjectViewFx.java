@@ -31,6 +31,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
@@ -77,6 +78,7 @@ public class ObjectViewFx extends VBox {
             final ManagedObject managedObject) {
 
         log.info("binding object interaction to owner {}", managedObject.getSpecification().getIdentifier());
+        _Assert.assertTrue(uiContext.getIsisInteractionFactory().isInInteraction(), "requires an active interaction");
 
         val objectInteractor = ObjectBinding.bind(managedObject);
 
@@ -158,7 +160,6 @@ public class ObjectViewFx extends VBox {
                 // TODO Auto-generated method stub
             }
 
-            @SuppressWarnings("unused")
             @Override
             protected void onAction(Pane container, ActionLayoutData actionData) {
                 
@@ -170,12 +171,18 @@ public class ObjectViewFx extends VBox {
                     
                     interaction.checkUsability();
                     
-                    val uiButton = _fx.add(container, 
-                            uiComponentFactory.buttonFor(
+                    val uiButton = uiComponentFactory.buttonFor(
                                     UiComponentFactory.ButtonRequest.of( 
                                         managedAction, 
                                         DisablingUiModel.of(interaction), 
-                                        actionEventHandler)));
+                                        actionEventHandler));
+                    
+                    if(container instanceof FormPane) {
+                        ((FormPane)container).addActionLink(uiButton);
+                    } else {
+                        _fx.add(container, uiButton);    
+                    }
+                    
                     
                 });
             }
