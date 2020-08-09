@@ -16,43 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Action.domainEvent;
+package demoapp.dom.annotDomain.Action.associateWith;
+
+import java.util.List;
+import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Redirect;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 
 
 //tag::class[]
 @Action(
-    semantics = SemanticsOf.SAFE
-    , domainEvent =
-        ActionDomainEventVm_mixinUpdateText.DomainEvent.class           // <.>
-    , associateWith = "text", associateWithSequence = "2"
+    associateWith = "otherProperty"                                 // <.>
+    , associateWithSequence = "1"                                   // <.>
 )
 @ActionLayout(
     describedAs =
-        "@Action(domainEvent = ActionDomainEventVm_mixinUpdateText.DomainEvent.class)"
+        "@Action(" +
+            "associateWith = \"otherProperty\"" +
+            ", associateWithSequence = \"1\")"
 )
 @RequiredArgsConstructor
-public class ActionDomainEventVm_mixinUpdateText {
+public class ActionAssociateWithVm_updateOtherProperty {
 
-    public static class DomainEvent                                     // <.>
-            extends ActionDomainEvent<ActionDomainEventVm> {}
+    private final ActionAssociateWithVm actionAssociateWithVm;
 
-    private final ActionDomainEventVm actionDomainEventVm;
-
-    public ActionDomainEventVm act(final String text) {
-        actionDomainEventVm.setText(text);
-        return actionDomainEventVm;
+    public ActionAssociateWithVm act(String newValue) {
+        actionAssociateWithVm.setOtherProperty(newValue);
+        return actionAssociateWithVm;
     }
     public String default0Act() {
-        return actionDomainEventVm.getText();
+        return actionAssociateWithVm.getOtherProperty();
     }
 }
 //end::class[]

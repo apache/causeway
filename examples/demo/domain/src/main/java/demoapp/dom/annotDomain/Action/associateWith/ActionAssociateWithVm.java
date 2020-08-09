@@ -60,9 +60,8 @@ import demoapp.dom.types.Samples;
 @NoArgsConstructor
 //tag::class[]
 public class ActionAssociateWithVm implements HasAsciiDocDescription {
-    // ...
-//end::class[]
 
+//end::class[]
     public ActionAssociateWithVm(String text) {
         this.text = text;
     }
@@ -71,7 +70,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
         return "Action#associateWith";
     }
 
-//tag::text[]
+//tag::class[]
     @Property()
     @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = true)
@@ -82,27 +81,30 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @MemberOrder(name = "annotation", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
-    private String anotherProperty;
-//end::text[]
+    private String otherProperty;
 
-//tag:children[]
+    // ...
+//end::class[]
+
+//tag::children[]
     @Collection()
     @CollectionLayout()
     @Getter
     private List<ActionAssociateWithChildVm> children = new ArrayList<>();
-//end:children[]
+//end::children[]
 
-//tag:children-favorites[]
+//tag::children-favorites[]
     @Collection()
     @CollectionLayout()
     @Getter
     private List<ActionAssociateWithChildVm> favorites = new ArrayList<>();
-//end:children-favorites[]
+//end::children-favorites[]
 
 //tag::action-associateWith-property[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "text", associateWithSequence = "1"   // <.>
+            , associateWith = "text"                // <.>
+            , associateWithSequence = "1"           // <.>
     )
     @ActionLayout(
         describedAs =
@@ -124,8 +126,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\"" +
-                     ", associateWithSequence = \"1\")"
+            "@Action(associateWith = \"children\", associateWithSequence = \"1\")"
     )
     public ActionAssociateWithVm addChild(final String value) {
         val childVm = new ActionAssociateWithChildVm(value);
@@ -142,8 +143,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\"" +
-                    ", associateWithSequence = \"2\")"
+            "@Action(associateWith = \"children\", associateWithSequence = \"2\")"
     )
     public ActionAssociateWithVm removeChild(final ActionAssociateWithChildVm child) {
         getChildren().removeIf(x -> Objects.equals(x.getValue(), child.getValue()));

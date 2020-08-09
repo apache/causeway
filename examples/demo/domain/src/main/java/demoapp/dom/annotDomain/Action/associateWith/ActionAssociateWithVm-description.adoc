@@ -4,115 +4,73 @@ The `associateWith` semantic specifies an action has a relationship with another
 +
 This can of course be overridden using `@ActionLayout` or the layout file
 
-* For collections,
-
-If no `domainEvent` is specified on the action itself, then the domain event class can be specified at the class level using `@DomainObject#actionDomainEvent`.
-And if not specified at the class level, then an instance of `org.apache.isis.applib.events.domain.ActionDomainEvent.Default` is emitted as the fallback.
-
-[TIP]
-====
-The fallback domain event can be suppressed using the `isis.applib.annotation.action.domain-event.post-for-default` configuration property.
-====
-
-== Annotated Actions
-
-The demo defines two actions that are annotated using `domainEvent` semantic:
-
-* in the `ActionAssociateWithVm` is a regular action, "updateText":
+* For collections, the association is also used for layout purposes, rendering the action near to the collection.
 +
-[source,java]
-----
-include::ActionDomainEventVm.java[tags=class]
-----
-<.> the event class to emit; genericised by the target type
-<.> indicates that the framework should emit this type
+However, it is also used at a deeper level, because the action may have a collection parameter which is the same type as the collection elements.
+In the Wicket viewer, the collection is rendered with checkboxes; those selected objects are used as defaults for the action collection parameter.
 
-* The `ActionAssociateWithVm_mixinProperty` defines a mixin action, also annotated:
-+
-[source,java]
-----
-include::ActionDomainEventVm_mixinUpdateText.java[tags=class]
-----
 
-<.> the event class to emit; genericised by the target type
-+
-TIP: it's idiomatic to use a nested static class here.
+== Associated with Properties
 
-<.> indicates that the framework should emit this type
-
-== Subscriber
-
-The `ActionDomainEventControlService` is the subscriber:
+The `AssociateWithVm` defines two properties, `text` and `anotherProperty`:
 
 [source,java]
 ----
-include::subscribers/ActionDomainEventControlService.java[tags=class]
-----
-<.> holds which "strategy" should be used to modify the interactions with the text field
-<.> subscribes using the Spring event bus
-
-== Influencing the Interaction
-
-The mechanisms to influence the interactions are implemented as an enum.
-The `DO_NOTHING` enum, unsurprisingly, does nothing:
-
-[source,java]
-----
-include::subscribers/ActionDomainEventControlStrategy.java[tags=class]
+include::ActionAssociateWithVm.java[tags=class]
 ----
 
-There are seven further options:
+The regular `updateText` action is associated with the `text` property:
 
-* hide (two examples)
-+
 [source,java,indent=0]
 ----
-include::subscribers/ActionDomainEventControlStrategy.java[tags=hide]
+include::ActionAssociateWithVm.java[tags=action-associateWith-property]
 ----
+<.> indicates the property to associate with
+<.> if there are multiple actions associated with the property, indicates their order in the UI
 
-* disable (two examples)
-+
+Meanwhile the mixin `updateOtherProperty` is associated with the `otherProperty` property:
+
 [source,java,indent=0]
 ----
-include::subscribers/ActionDomainEventControlStrategy.java[tags=disable]
+include::ActionAssociateWithVm_updateOtherProperty.java[tags=class]
 ----
+<.> indicates the property to associate with
+<.> indicates their order in the UI
 
-* validate
-+
-[source,java,indent=0]
-----
-include::subscribers/ActionDomainEventControlStrategy.java[tags=validate]
-----
 
-* executing
-+
-[source,java,indent=0]
-----
-include::subscribers/ActionDomainEventControlStrategy.java[tags=executing]
-----
+== Collection
 
-* executed
-+
-[source,java,indent=0]
-----
-include::subscribers/ActionDomainEventControlStrategy.java[tags=executed]
-----
-
-=== Selecting the Strategy
-
-Selecting which strategy is in force is implemented using two mixins which work together:
-
-* the `controlUpdateText` mixin property just surfaces the selected strategy as a read-only value:
-+
 [source,java]
 ----
-include::subscribers/ActionDomainEventVm_controlUpdateText.java[tags=class]
+include::ActionAssociateWithVm.java[tags=children]
 ----
 
-* while the `controlUpdateTextInvocation` mixin action allows the strategy to be changed:
-+
+
 [source,java]
 ----
-include::subscribers/ActionDomainEventVm_controlUpdateTextInvocation.java[tags=class]
+include::child/ActionAssociateWithChildVm.java[tags=class]
+----
+
+[source,java]
+----
+include::ActionAssociateWithVm.java[tags=action-associateWith-collection]
+----
+
+
+== Mixin Actions
+
+[source,java]
+----
+include::child/ActionAssociateWithVm_makeFavorite.java[tags=class]
+----
+
+[source,java]
+----
+include::child/ActionAssociateWithVm_noLongerFavorite.java[tags=class]
+----
+
+[source,java]
+----
+include::child/ActionAssociateWithVm_noLongerFavorites.java[tags=class]
 ----
 

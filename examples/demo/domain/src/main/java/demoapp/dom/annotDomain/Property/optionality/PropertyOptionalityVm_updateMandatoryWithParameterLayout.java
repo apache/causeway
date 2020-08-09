@@ -50,7 +50,7 @@ public class PropertyOptionalityVm_updateMandatoryWithParameterLayout {
     }
 //end::annotation[]
     public String default0Act() {
-        return propertyOptionalityVm.getPropertyUsingAnnotation();
+        return propertyOptionalityVm.getMandatoryPropertyUsingAnnotation();
     }
 
 }

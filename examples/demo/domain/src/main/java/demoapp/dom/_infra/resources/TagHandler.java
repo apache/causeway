@@ -1,6 +1,7 @@
 package demoapp.dom._infra.resources;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 class TagHandler {
 
@@ -16,16 +17,26 @@ class TagHandler {
             return line;
         }
 
-        if (line.contains(String.format("//tag::%s[]", tagsValue))) {
+        if (matches(line, "tag")) {
             within = true;
             return null;
         }
 
-        if (line.contains(String.format("//end::%s[]", tagsValue))) {
+        if (matches(line, "end")) {
             within = false;
             return null;
         }
 
         return within ? line : null;
     }
+
+    private boolean matches(String line, String macro) {
+        final Pattern pattern = Pattern.compile("//\\s*" +
+                macro +
+                "::" +
+                tagsValue +
+                "\\[]\\s*");
+        return pattern.matcher(line).matches();
+    }
+
 }

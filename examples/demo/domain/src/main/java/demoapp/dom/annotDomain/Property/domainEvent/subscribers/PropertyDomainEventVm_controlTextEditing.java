@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,10 @@ import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
     semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "controlText", associateWithSequence = "1"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE)
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE
+        , redirectPolicy = Redirect.EVEN_IF_SAME                        // <.>
+)
 @RequiredArgsConstructor
 public class PropertyDomainEventVm_controlTextEditing {
 

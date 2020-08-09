@@ -41,7 +41,6 @@ include::ActionDomainEventVm_mixinUpdateText.java[tags=class]
 <.> the event class to emit; genericised by the target type
 +
 TIP: it's idiomatic to use a nested static class here.
-
 <.> indicates that the framework should emit this type
 
 == Subscriber

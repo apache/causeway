@@ -19,7 +19,7 @@ The fallback domain event can be suppressed using the `isis.applib.annotation.pr
 
 == Annotated Property
 
-In the demo, the `PropertyDomainEventVm` class defines an editable property, "text", annotated with `domainEvent`:
+In the demo, the `PropertyDomainEventVmMakingThisLongerAndLonger` class defines an editable property, "text", annotated with `domainEvent`:
 
 [source,java]
 ----
@@ -105,4 +105,6 @@ include::subscribers/PropertyDomainEventVm_controlText.java[tags=class]
 ----
 include::subscribers/PropertyDomainEventVm_controlTextEditing.java[tags=class]
 ----
+<.> forces the page to redraw.
+Necessary because the text property's state change
 
