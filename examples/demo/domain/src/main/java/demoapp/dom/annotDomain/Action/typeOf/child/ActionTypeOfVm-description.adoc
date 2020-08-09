@@ -1,0 +1,1 @@
+This child object exists just to act as the element of the collections of the `ActionTypeOfVm` demo object.

@@ -1,0 +1,36 @@
+The `typeOf` semantic indicates the element type for an action that returns a collection.
+
+Normally this can be inferred from the generic type, for example `Customer` within `List<Customer>`.
+This annotation offers an alternative syntax.
+
+CAUTION: this annotation may be deprecated in the future.
+
+// TODO: I have a suspicion that there is a genuine use case for this annotation ... but need to dig deeper.
+
+== Example
+
+The demo object defines a `children` collection:
+
+[source,java]
+----
+include::ActionTypeOfVm.java[tags=class-collections-children]
+----
+
+The `find` action returns a standalone collection for a subset of these child objects matching the specified value:
+
+[source,java,indent=0]
+----
+include::ActionTypeOfVm.java[tags=action]
+----
+<.> indicates the type of element in the returned list
+<.> action defines a raw list
+
+That said, the `findButWithNoAnnotation` action has identical behaviour, even without the `typeOf` semantic:
+
+[source,java,indent=0]
+----
+include::ActionTypeOfVm.java[tags=action-no-annotation]
+----
+<.> action defines a raw list
+
+

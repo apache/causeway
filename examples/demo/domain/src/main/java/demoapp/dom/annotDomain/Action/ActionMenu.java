@@ -36,6 +36,8 @@ import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.annotDomain.Action.associateWith.child.ActionAssociateWithChildVm;
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
+import demoapp.dom.annotDomain.Action.typeOf.ActionTypeOfVm;
+import demoapp.dom.annotDomain.Action.typeOf.child.ActionTypeOfChildVm;
 import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
@@ -64,6 +66,19 @@ public class ActionMenu {
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of actions")
     public ActionDomainEventVm domainEvent(){
         return new ActionDomainEventVm("change me");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-square", describedAs = "Semantic relationship between actions and other properties or collections")
+    public ActionTypeOfVm typeOf(){
+        val typeOfVm = new ActionTypeOfVm();
+        val children = typeOfVm.getChildren();
+
+        // add to either one collection or the other
+        samples.stream()
+                .map(ActionTypeOfChildVm::new)
+                .forEach(children::add);
+        return typeOfVm;
     }
 
 
