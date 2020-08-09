@@ -58,10 +58,14 @@ import demoapp.dom.types.Samples;
     objectType = "demo.ActionAssociateWithVm"
 )
 @NoArgsConstructor
-//tag::class[]
+//tag::class-properties[]
+//tag::class-collections-children[]
+//tag::class-collections-favorites[]
 public class ActionAssociateWithVm implements HasAsciiDocDescription {
 
-//end::class[]
+//end::class-properties[]
+//end::class-collections-children[]
+//end::class-collections-favorites[]
     public ActionAssociateWithVm(String text) {
         this.text = text;
     }
@@ -70,7 +74,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
         return "Action#associateWith";
     }
 
-//tag::class[]
+//tag::class-properties[]
     @Property()
     @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = true)
@@ -84,21 +88,25 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     private String otherProperty;
 
     // ...
-//end::class[]
+//end::class-properties[]
 
-//tag::children[]
+//tag::class-collections-children[]
     @Collection()
     @CollectionLayout()
     @Getter
     private List<ActionAssociateWithChildVm> children = new ArrayList<>();
-//end::children[]
 
-//tag::children-favorites[]
+    // ...
+//end::class-collections-children[]
+
+//tag::class-collections-favorites[]
     @Collection()
     @CollectionLayout()
     @Getter
     private List<ActionAssociateWithChildVm> favorites = new ArrayList<>();
-//end::children-favorites[]
+
+    // ...
+//end::class-collections-favorites[]
 
 //tag::action-associateWith-property[]
     @Action(
@@ -119,10 +127,11 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     }
 //end::action-associateWith-property[]
 
-//tag::action-associateWith-collection[]
+//tag::action-associateWith-children-1[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "children", associateWithSequence = "1"   // <.>
+            , associateWith = "children"        // <.>
+            , associateWithSequence = "1"       // <.>
     )
     @ActionLayout(
         describedAs =
@@ -134,12 +143,13 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
         return this;
     }
 
-//end::action-associateWith-collection[]
+//end::action-associateWith-children-1[]
 
-//tag::action-associateWith-collection[]
+//tag::action-associateWith-children-2[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "children", associateWithSequence = "2"   // <.>
+            , associateWith = "children"        // <.>
+            , associateWithSequence = "2"       // <.>
     )
     @ActionLayout(
         describedAs =
@@ -149,12 +159,14 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
         getChildren().removeIf(x -> Objects.equals(x.getValue(), child.getValue()));
         return this;
     }
-//end::action-associateWith-collection[]
+    // no choices or autoComplete required      // <.>
+//end::action-associateWith-children-2[]
 
-//tag::action-associateWith-collection[]
+//tag::action-associateWith-children-3[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "children", associateWithSequence = "3"   // <.>
+            , associateWith = "children"        // <.>
+            , associateWithSequence = "3"       // <.>
     )
     @ActionLayout(
         describedAs =
@@ -167,8 +179,13 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
         }
         return this;
     }
-//end::action-associateWith-collection[]
-//tag::class[]
+    // no choices or autoComplete required      // <.>
+//end::action-associateWith-children-3[]
+//tag::class-properties[]
+//tag::class-collections-children[]
+//tag::class-collections-favorites[]
 
 }
-//end::class[]
+//end::class-properties[]
+//end::class-collections-children[]
+//end::class-collections-favorites[]

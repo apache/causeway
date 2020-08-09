@@ -35,7 +35,7 @@ import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 //tag::class[]
 @Action(
     associateWith = "favorites"                                 // <.>
-    , associateWithSequence = "1"
+    , associateWithSequence = "1"                               // <.>
 )
 @ActionLayout(
     describedAs =

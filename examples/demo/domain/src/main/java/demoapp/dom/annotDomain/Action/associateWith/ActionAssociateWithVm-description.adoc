@@ -12,11 +12,11 @@ In the Wicket viewer, the collection is rendered with checkboxes; those selected
 
 == Associated with Properties
 
-The `AssociateWithVm` defines two properties, `text` and `anotherProperty`:
+The `AssociateWithVm` class defines two properties, `text` and `anotherProperty`:
 
 [source,java]
 ----
-include::ActionAssociateWithVm.java[tags=class]
+include::ActionAssociateWithVm.java[tags=class-properties]
 ----
 
 The regular `updateText` action is associated with the `text` property:
@@ -40,37 +40,94 @@ include::ActionAssociateWithVm_updateOtherProperty.java[tags=class]
 
 == Collection
 
-[source,java]
-----
-include::ActionAssociateWithVm.java[tags=children]
-----
-
+The `AssociateWithVm` class also defines the `children` collection:
 
 [source,java]
 ----
-include::child/ActionAssociateWithChildVm.java[tags=class]
+include::ActionAssociateWithVm.java[tags=class-collections-children]
 ----
 
-[source,java]
-----
-include::ActionAssociateWithVm.java[tags=action-associateWith-collection]
-----
+There are three actions associated with this collection:
 
+* the `addChild` action:
++
+[source,java,indent=0]
+----
+include::ActionAssociateWithVm.java[tags=action-associateWith-children-1]
+----
+<.> associates with the "children" collection
+<.> positioned first in the UI
+
+* the `removeChild` action.
++
+[source,java,indent=0]
+----
+include::ActionAssociateWithVm.java[tags=action-associateWith-children-2]
+----
+<.> associates with the "children" collection
+<.> positioned second in the UI
+<.> because this action is associated with a collection, no supporting `choices()` or `autoComplete(...)` is required to provide the parameter.
+Instead, the elements in the collection are automatically used.
+
++
+TIP: an explicit `choices()` or `autoComplete(...)` supporting method can be provided to override the default usage of the collection elements if required.
+
+* the `removeChildren` action, which allows multiple children to be removed:
++
+[source,java,indent=0]
+----
+include::ActionAssociateWithVm.java[tags=action-associateWith-children-3]
+----
+<.> associates with the "children" collection
+<.> positioned third in the UI
+<.> again, no supporting `choices()` or `autoComplete(...)` method is required.
+Instead, the elements of the collection are used as options.
+Also, each row in the collection is rendered with a checkbox, and those selected are used as the default for the parameter.
 
 == Mixin Actions
 
+The `AssociateWithVm` class also defines the `favorites` collection:
+
+[source,java]
+----
+include::ActionAssociateWithVm.java[tags=class-collections-favorites]
+----
+
+There are three mixin actions associated with this collection:
+
+* the `makeFavorite` action.
+This takes a element from the "children" collectio and also adds to the "favorites" collection:
++
 [source,java]
 ----
 include::child/ActionAssociateWithVm_makeFavorite.java[tags=class]
 ----
+<.> associates with the "favorites" collection
+<.> positioned first in the UI
+<.> choices are taken from the "children" collection
 
+* the `noLongerFavorite` action.
+This just removes a selected element from the "children" collection:
++
 [source,java]
 ----
 include::child/ActionAssociateWithVm_noLongerFavorite.java[tags=class]
 ----
+<.> associates with the "children" collection
+<.> positioned second in the UI
+<.> because this action is associated with a collection, no supporting `choices()` or `autoComplete(...)` is required to provide the parameter.
+Instead, the elements in the collection are automatically used.
 
+* the `noLongerFavorites` action.
+This is similar to the previous action, but for multiple favorite elements:
++
 [source,java]
 ----
 include::child/ActionAssociateWithVm_noLongerFavorites.java[tags=class]
 ----
+<.> associates with the "favorites" collection
+<.> positioned third in the UI
+<.> because this action is associated with a collection, no supporting `choices()` or `autoComplete(...)` is required to provide the parameter.
+Instead, the elements in the collection are automatically used.
+
 
