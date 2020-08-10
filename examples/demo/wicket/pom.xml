@@ -59,9 +59,9 @@
 	</build>
 
 	<dependencies>
-	
+
 		<!-- DEMO DOMAIN + WEB -->
-	
+
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
 			<artifactId>demo-web</artifactId>
@@ -77,12 +77,12 @@
 		</dependency>
 
 		<!-- EXTENSIONS -->
-	
+
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-markdown-ui-wkt</artifactId>
@@ -119,6 +119,14 @@
 					<plugin>
 						<groupId>org.springframework.boot</groupId>
 						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<requiresUnpack>
+								<dependency>
+									<groupId>org.asciidoctor</groupId>
+									<artifactId>asciidoctorj</artifactId>
+								</dependency>
+							</requiresUnpack>
+						</configuration>
 						<executions>
 							<execution>
 								<goals>
