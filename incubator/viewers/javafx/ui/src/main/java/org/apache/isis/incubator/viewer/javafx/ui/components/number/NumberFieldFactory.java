@@ -23,13 +23,11 @@ import javax.inject.Inject;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.metamodel.facets.value.doubles.DoubleFloatingPointValueFacet;
-import org.apache.isis.core.metamodel.facets.value.floats.FloatingPointValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.binding.DoubleOrFloatConverterForStringComponent;
+import org.apache.isis.viewer.common.model.binding.NumberConverterForStringComponent;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import javafx.scene.Node;
@@ -44,8 +42,7 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(ComponentRequest request) {
-        return request.hasFeatureTypeFacet(DoubleFloatingPointValueFacet.class)
-                || request.hasFeatureTypeFacet(FloatingPointValueFacet.class);
+        return request.hasFeatureTypeFacetAnyOf(NumberConverterForStringComponent.getSupportedFacets());
     }
 
     @Override
@@ -53,7 +50,7 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
 
         val uiComponent = new TextField();
         val valueSpec = request.getFeatureTypeSpec();
-        val converter = new DoubleOrFloatConverterForStringComponent(valueSpec);
+        val converter = new NumberConverterForStringComponent(valueSpec);
         
         if(request.getManagedFeature() instanceof ManagedParameter) {
 

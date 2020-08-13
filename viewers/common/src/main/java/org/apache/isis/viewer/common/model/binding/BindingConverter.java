@@ -20,6 +20,7 @@ package org.apache.isis.viewer.common.model.binding;
 
 import java.util.Optional;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -46,9 +47,8 @@ public interface BindingConverter<T> {
     }
     
     default Optional<? extends Facet> lookupFacetOneOf(
-            @SuppressWarnings("unchecked") final Class<? extends Facet> ... facetTypes) {
-        
-        return _NullSafe.stream(facetTypes)
+            @NonNull Can<Class<? extends Facet>> facetTypes) {
+        return facetTypes.stream()
         .map(getValueSpecification()::getFacet)
         .filter(_NullSafe::isPresent)
         .findFirst();
