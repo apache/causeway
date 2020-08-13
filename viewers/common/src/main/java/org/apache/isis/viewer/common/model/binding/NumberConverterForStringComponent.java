@@ -49,7 +49,7 @@ public final class NumberConverterForStringComponent implements BindingConverter
 
         this.valueFacet = lookupFacetOneOf(getSupportedFacets())
                 .map(ValueSemanticsProviderAndFacetAbstract.class::cast)
-                .orElseThrow(()->_Exceptions.noSuchElement("missing 'double' or 'float' value facet"));
+                .orElseThrow(()->_Exceptions.noSuchElement("missing 'number' value facet"));
     }
 
     @Override

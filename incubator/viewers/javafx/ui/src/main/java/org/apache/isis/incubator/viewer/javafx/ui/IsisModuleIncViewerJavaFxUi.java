@@ -27,6 +27,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.markup.MarkupFieldF
 import org.apache.isis.incubator.viewer.javafx.ui.components.number.NumberFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.components.objectref.ObjectReferenceFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory;
+import org.apache.isis.incubator.viewer.javafx.ui.components.temporal.TemporalFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.components.text.TextFieldFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton;
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField;
@@ -61,6 +62,7 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         MarkupFieldFactory.class,
         ObjectReferenceFieldFactory.class,
         NumberFieldFactory.class,
+        TemporalFieldFactory.class,
         FallbackFieldFactory.class,
         
         // Decorators
