@@ -23,22 +23,17 @@ import javax.inject.Inject;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.facets.value.doubles.DoubleFloatingPointValueFacet;
+import org.apache.isis.core.metamodel.facets.value.floats.FloatingPointValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.binding.BindingConverter;
+import org.apache.isis.viewer.common.model.binding.DoubleOrFloatConverterForStringComponent;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
-import javafx.util.converter.NumberStringConverter;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -49,7 +44,8 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(ComponentRequest request) {
-        return request.hasFeatureTypeFacet(DoubleFloatingPointValueFacet.class);
+        return request.hasFeatureTypeFacet(DoubleFloatingPointValueFacet.class)
+                || request.hasFeatureTypeFacet(FloatingPointValueFacet.class);
     }
 
     @Override
@@ -57,18 +53,14 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
 
         val uiComponent = new TextField();
         val valueSpec = request.getFeatureTypeSpec();
-        val converter = DoubleConverter.of(valueSpec);
-
-        val doubleProperty = new SimpleDoubleProperty();
-        val numberStringConverter = new NumberStringConverter(); //TODO use the facet instead
-        Bindings.bindBidirectional(uiComponent.textProperty(), doubleProperty, numberStringConverter);
+        val converter = new DoubleOrFloatConverterForStringComponent(valueSpec);
         
         if(request.getManagedFeature() instanceof ManagedParameter) {
 
             val managedParameter = (ManagedParameter)request.getManagedFeature();
 
-            BindingsFx.<Number>bindBidirectional(
-                    doubleProperty,
+            BindingsFx.bindBidirectional(
+                    uiComponent.textProperty(),
                     managedParameter.getValue(),
                     converter);
 
@@ -79,8 +71,8 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
             val managedProperty = (ManagedProperty)request.getManagedFeature();
 
             // readonly binding
-            BindingsFx.<Number>bind(
-                    doubleProperty,
+            BindingsFx.bind(
+                    uiComponent.textProperty(),
                     managedProperty.getValue(),
                     converter);
 
@@ -92,13 +84,7 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
     }
 
     // -- HELPER
-    
-    @RequiredArgsConstructor(staticName = "of")
-    private static final class DoubleConverter implements BindingConverter<Number> {
 
-        @Getter(onMethod_ = {@Override})
-        private final ObjectSpecification valueSpecification;
-    }
 
 
 }
