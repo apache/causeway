@@ -77,4 +77,14 @@ public final class NumberConverterForStringComponent implements BindingConverter
             ShortValueFacet.class,
             FloatingPointValueFacet.class);
 
+    @Override
+    public String toString(String value) {
+        return value; // identity
+    }
+
+    @Override
+    public String fromString(String stringifiedValue) {
+        return stringifiedValue; // identity
+    }
+
 }

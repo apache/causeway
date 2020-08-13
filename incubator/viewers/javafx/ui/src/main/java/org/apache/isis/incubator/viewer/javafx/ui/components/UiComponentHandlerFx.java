@@ -18,11 +18,32 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
+import org.apache.isis.viewer.common.model.binding.BindingConverter;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 
 import javafx.scene.Node;
+import javafx.util.StringConverter;
+import lombok.NonNull;
 
 public interface UiComponentHandlerFx 
 extends UiComponentFactory.Handler<Node> {
 
+    default <T> StringConverter<T> toStringConverter(
+            final @NonNull BindingConverter<T> bindingConverter) {
+
+        return new StringConverter<T>() {
+
+            @Override
+            public String toString(T value) {
+                return bindingConverter.toString(value);
+            }
+
+            @Override
+            public T fromString(String stringifiedValue) {
+                return bindingConverter.fromString(stringifiedValue);
+            }
+            
+        };
+    }
+    
 }

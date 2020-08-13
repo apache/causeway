@@ -53,6 +53,12 @@ public interface BindingConverter<T> {
         .filter(_NullSafe::isPresent)
         .findFirst();
     }
+
+    // -- STRING CONVERSION
+    
+    String toString(T value);
+
+    T fromString(String stringifiedValue);
     
 }
 

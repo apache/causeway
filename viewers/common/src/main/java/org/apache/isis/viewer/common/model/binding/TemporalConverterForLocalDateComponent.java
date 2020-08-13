@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -31,16 +32,18 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import lombok.Getter;
 import lombok.val;
 
-public final class TemporalConverter implements BindingConverter<LocalDate> {
+public class TemporalConverterForLocalDateComponent implements BindingConverter<LocalDate> {
 
     @Getter(onMethod_ = {@Override})
     private final ObjectSpecification valueSpecification;
-    private final TemporalValueFacet<?> valueFacet; 
 
-    public TemporalConverter(final ObjectSpecification valueSpecification) {
+    @Getter
+    private final ValueSemanticsProviderAndFacetAbstract<LocalDate> valueFacet; 
+
+    public TemporalConverterForLocalDateComponent(final ObjectSpecification valueSpecification) {
         this.valueSpecification = valueSpecification;
 
-        this.valueFacet = (TemporalValueFacet<?>) lookupFacetOneOf(getSupportedFacets())
+        this.valueFacet = (ValueSemanticsProviderAndFacetAbstract<LocalDate>) lookupFacetOneOf(getSupportedFacets())
                 .orElseThrow(()->_Exceptions.noSuchElement("missing 'temporal' value facet"));
     }
 
@@ -54,10 +57,29 @@ public final class TemporalConverter implements BindingConverter<LocalDate> {
         val localDate = (LocalDate) ManagedObjects.UnwrapUtil.single(object);
         return localDate;
     }
-    
+
     // for performance reasons in order of likelihood (just guessing)
     @Getter
     private final static Can<Class<? extends Facet>> supportedFacets = Can.of(
             TemporalValueFacet.class);
+
+    @Override
+    public String toString(LocalDate value) {
+        return valueFacet.parseableTitleOf(value);
+    }
+
+    @Override
+    public LocalDate fromString(String stringifiedValue) {
+        val value = valueFacet.parseTextEntry(null, stringifiedValue);
+        if(value==null) {
+            return null;
+        }
+        if(value instanceof LocalDate) {
+            return (LocalDate) value;
+        }
+        // TODO might require additional cases
+        throw _Exceptions.unmatchedCase(value.getClass());  
+    }
+
 
 }

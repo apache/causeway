@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.binding.TemporalConverter;
+import org.apache.isis.viewer.common.model.binding.TemporalConverterForLocalDateComponent;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import javafx.scene.Node;
@@ -42,7 +42,7 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(ComponentRequest request) {
-        return request.hasFeatureTypeFacetAnyOf(TemporalConverter.getSupportedFacets());
+        return request.hasFeatureTypeFacetAnyOf(TemporalConverterForLocalDateComponent.getSupportedFacets());
     }
 
     @Override
@@ -50,7 +50,10 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
 
         val uiComponent = new DatePicker();
         val valueSpec = request.getFeatureTypeSpec();
-        val converter = new TemporalConverter(valueSpec);
+        val converter = new TemporalConverterForLocalDateComponent(valueSpec);
+        
+        //FIXME format error ?
+        //uiComponent.setConverter(toStringConverter(converter));
         
         if(request.getManagedFeature() instanceof ManagedParameter) {
 
@@ -80,8 +83,10 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
         return uiComponent;
     }
 
+
+
     // -- HELPER
 
-
+    
 
 }

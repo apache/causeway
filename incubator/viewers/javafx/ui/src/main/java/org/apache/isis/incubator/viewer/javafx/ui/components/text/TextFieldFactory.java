@@ -90,6 +90,17 @@ public class TextFieldFactory implements UiComponentHandlerFx {
 
         @Getter(onMethod_ = {@Override})
         private final ObjectSpecification valueSpecification;
+        
+        @Override
+        public String toString(String value) {
+            return value; // identity
+        }
+
+        @Override
+        public String fromString(String stringifiedValue) {
+            return stringifiedValue; // identity
+        }
+        
     }
 
 
