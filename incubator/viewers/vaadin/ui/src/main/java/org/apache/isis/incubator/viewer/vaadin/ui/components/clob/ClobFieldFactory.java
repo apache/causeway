@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueFacet;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 

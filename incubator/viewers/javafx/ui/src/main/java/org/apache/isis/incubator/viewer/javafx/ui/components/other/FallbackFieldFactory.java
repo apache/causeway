@@ -22,7 +22,7 @@ import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 

@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.O
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BinderUtil;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 

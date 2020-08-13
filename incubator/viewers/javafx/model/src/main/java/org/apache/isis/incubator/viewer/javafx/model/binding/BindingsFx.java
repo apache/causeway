@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.binding.ChangeListener;
 import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.common.model.binding.BindingConverter;
 
 import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;

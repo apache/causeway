@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
 import lombok.Getter;

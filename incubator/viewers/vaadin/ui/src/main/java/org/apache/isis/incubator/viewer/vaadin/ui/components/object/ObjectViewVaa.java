@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 

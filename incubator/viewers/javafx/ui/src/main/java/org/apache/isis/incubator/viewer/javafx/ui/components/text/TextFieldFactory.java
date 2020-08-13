@@ -27,10 +27,10 @@ import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.incubator.viewer.javafx.model.binding.BindingConverter;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.common.model.binding.BindingConverter;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;

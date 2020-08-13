@@ -18,7 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 
 import javafx.scene.Node;
 

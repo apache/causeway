@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 
 import lombok.Getter;
 import lombok.val;

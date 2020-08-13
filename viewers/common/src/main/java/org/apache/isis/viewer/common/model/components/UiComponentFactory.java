@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.binding;
+package org.apache.isis.viewer.common.model.components;
 
 import java.util.Optional;
 import java.util.function.Consumer;

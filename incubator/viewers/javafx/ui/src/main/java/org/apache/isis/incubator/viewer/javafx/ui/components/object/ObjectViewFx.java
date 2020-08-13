@@ -44,7 +44,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryF
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormPane;
 import org.apache.isis.incubator.viewer.javafx.ui.components.panel.TitledPanel;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 

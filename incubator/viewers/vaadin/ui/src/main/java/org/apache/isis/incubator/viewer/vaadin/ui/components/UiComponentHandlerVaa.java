@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components;
 
 import com.vaadin.flow.component.Component;
 
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 
 public interface UiComponentHandlerVaa 
 extends UiComponentFactory.Handler<Component> {
