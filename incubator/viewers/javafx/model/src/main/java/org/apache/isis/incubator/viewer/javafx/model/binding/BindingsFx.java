@@ -37,7 +37,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class BindingsFx {
     
-    public static <L, R> void bind(
+    public static <L> void bind(
             final @NonNull Property<L> leftProperty, 
             final @NonNull Observable<ManagedObject> rightObservable, 
             final @NonNull BindingConverter<L> converter) {
@@ -48,7 +48,7 @@ public class BindingsFx {
         });
     }
 
-    public static <L, R> void bindBidirectional(
+    public static <L> void bindBidirectional(
             final @NonNull Property<L> leftProperty, 
             final @NonNull Bindable<ManagedObject> rightProperty, 
             final @NonNull BindingConverter<L> converter) {
