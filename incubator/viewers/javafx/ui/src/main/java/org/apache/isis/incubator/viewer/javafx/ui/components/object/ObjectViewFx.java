@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
@@ -44,17 +45,15 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableVi
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormPane;
 import org.apache.isis.incubator.viewer.javafx.ui.components.panel.TitledPanel;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
-import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ObjectViewFx extends VBox {
@@ -80,7 +79,7 @@ public class ObjectViewFx extends VBox {
         log.info("binding object interaction to owner {}", managedObject.getSpecification().getIdentifier());
         _Assert.assertTrue(uiContext.getIsisInteractionFactory().isInInteraction(), "requires an active interaction");
 
-        val objectInteractor = ObjectBinding.bind(managedObject);
+        val objectTitle = ManagedObjects.titleOf(managedObject);
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
         
@@ -88,7 +87,7 @@ public class ObjectViewFx extends VBox {
 
             @Override
             protected void onObjectTitle(Pane container, DomainObjectLayoutData domainObjectData) {
-                val label = _fx.h2(_fx.newLabel(container, objectInteractor.getTitle()));
+                val label = _fx.h2(_fx.newLabel(container, objectTitle));
                 label.maxWidthProperty().bind(
                         container.widthProperty());
             }
@@ -163,7 +162,7 @@ public class ObjectViewFx extends VBox {
             @Override
             protected void onAction(Pane container, ActionLayoutData actionData) {
                 
-                val owner = objectInteractor.getManagedObject();
+                val owner = managedObject;
                 val interaction = ActionInteraction.start(owner, actionData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility()
                 .getManagedAction()
@@ -190,7 +189,7 @@ public class ObjectViewFx extends VBox {
             @Override
             protected void onProperty(Pane container, PropertyLayoutData propertyData) {
                 
-                val owner = objectInteractor.getManagedObject();
+                val owner = managedObject;
                 
                 val formPane = (FormPane) container;
                 
@@ -224,7 +223,7 @@ public class ObjectViewFx extends VBox {
             @Override
             protected void onCollection(Pane container, CollectionLayoutData collectionData) {
                 
-                val owner = objectInteractor.getManagedObject();
+                val owner = managedObject;
                 
                 CollectionInteraction.start(owner, collectionData.getId(), Where.OBJECT_FORMS)
                 .checkVisibility()

@@ -47,11 +47,11 @@ import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
-import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
@@ -79,7 +79,7 @@ public class ObjectViewVaa extends VerticalLayout {
             final ManagedObject managedObject) {
 
 
-        val objectInteractor = ObjectBinding.bind(managedObject);
+        val objectTitle = ManagedObjects.titleOf(managedObject);
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
 
@@ -90,7 +90,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected void onObjectTitle(HasComponents container, DomainObjectLayoutData domainObjectData) {
-                val uiTitle = _vaa.add(container, new H1(objectInteractor.getTitle()));
+                val uiTitle = _vaa.add(container, new H1(objectTitle));
                 //                uiTitle.addThemeVariants(
                 //                        ButtonVariant.LUMO_LARGE,
                 //                        ButtonVariant.LUMO_TERTIARY_INLINE);
@@ -179,7 +179,7 @@ public class ObjectViewVaa extends VerticalLayout {
             @Override
             protected void onAction(HasComponents container, ActionLayoutData actionData) {
                 
-                val owner = objectInteractor.getManagedObject();
+                val owner = managedObject;
                 val interaction = ActionInteraction.start(owner, actionData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility()
                 .getManagedAction()
@@ -201,7 +201,7 @@ public class ObjectViewVaa extends VerticalLayout {
             @Override
             protected void onProperty(HasComponents container, PropertyLayoutData propertyData) {
                 
-                val owner = objectInteractor.getManagedObject();
+                val owner = managedObject;
                 
                 val interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility()
@@ -228,7 +228,7 @@ public class ObjectViewVaa extends VerticalLayout {
             @Override
             protected void onCollection(HasComponents container, CollectionLayoutData collectionData) {
                 
-                val owner = objectInteractor.getManagedObject();
+                val owner = managedObject;
                 
                 CollectionInteraction.start(owner, collectionData.getId(), Where.OBJECT_FORMS)
                 .checkVisibility()

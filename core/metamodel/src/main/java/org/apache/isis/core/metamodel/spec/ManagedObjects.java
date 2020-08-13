@@ -275,7 +275,7 @@ public final class ManagedObjects {
         return abbreviated(titleOf(adapter), maxLength, suffix);
     }
     
-    private static String titleOf(ManagedObject adapter) {
+    public static String titleOf(ManagedObject adapter) {
         return adapter!=null?adapter.titleString(null):"";
     }
 
