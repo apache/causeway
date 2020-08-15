@@ -21,6 +21,7 @@ package org.apache.isis.viewer.common.model.binding;
 import java.time.LocalDate;
 
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -43,8 +44,8 @@ public class TemporalConverterForLocalDateComponent implements BindingConverter<
     public TemporalConverterForLocalDateComponent(final ObjectSpecification valueSpecification) {
         this.valueSpecification = valueSpecification;
 
-        this.valueFacet = (ValueSemanticsProviderAndFacetAbstract<LocalDate>) lookupFacetOneOf(getSupportedFacets())
-                .orElseThrow(()->_Exceptions.noSuchElement("missing 'temporal' value facet"));
+        this.valueFacet = _Casts.uncheckedCast(lookupFacetOneOf(getSupportedFacets())
+                .orElseThrow(()->_Exceptions.noSuchElement("missing 'temporal' value facet")));
     }
 
     @Override

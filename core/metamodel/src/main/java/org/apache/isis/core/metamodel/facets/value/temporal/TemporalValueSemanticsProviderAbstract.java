@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.value.temporal;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
 import java.util.Locale;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -112,6 +114,15 @@ implements TemporalValueFacet<T> {
     
     protected void addNamedFormat(String name, String pattern) {
         namedFormatters.put(name, DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
+    }
+    
+    protected Optional<FormatStyle> lookupFormatStyle(String styleName) {
+        if(styleName==null) {
+            return Optional.empty();
+        }
+        return Stream.of(FormatStyle.values())
+        .filter(style->style.name().toLowerCase().equals(styleName))
+        .findFirst();
     }
     
     protected Optional<DateTimeFormatter> lookupNamedFormatter(String formatName) {

@@ -28,7 +28,13 @@ import lombok.NonNull;
 public interface UiComponentHandlerFx 
 extends UiComponentFactory.Handler<Node> {
 
-    default <T> StringConverter<T> toStringConverter(
+    /**
+     * Converts given {@code bindingConverter} to {@link StringConverter} from JavaFX Universe 
+     * @param <T>
+     * @param bindingConverter
+     * @return
+     */
+    default <T> StringConverter<T> toJavaFxStringConverter(
             final @NonNull BindingConverter<T> bindingConverter) {
 
         return new StringConverter<T>() {

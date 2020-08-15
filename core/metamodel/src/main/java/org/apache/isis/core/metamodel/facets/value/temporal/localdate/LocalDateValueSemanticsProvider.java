@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.facets.value.temporal.localdate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
@@ -45,9 +47,6 @@ extends TemporalValueSemanticsProviderAbstract<LocalDate> {
                 LocalDate::from,
                 TemporalAdjust::adjustLocalDate);
         
-        super.addNamedFormat("long", "L-");
-        super.addNamedFormat("medium", "M-");
-        super.addNamedFormat("short", "S-");
         super.addNamedFormat("iso", "yyyy-MM-dd");
         super.addNamedFormat("iso_encoding", "yyyy-MM-dd");
         super.updateParsers();
@@ -56,23 +55,29 @@ extends TemporalValueSemanticsProviderAbstract<LocalDate> {
 
         val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getLocalDate().getFormat();
 
-        val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
-
-        setTitleFormatter(formatter != null ? formatter : formatterFrom(configuredNameOrPattern));
+        // walk through 4 methods of generating a formatter, first one to return non empty wins
+        val formatter = Stream.<Optional<DateTimeFormatter>>of(
+                lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDate),
+                lookupNamedFormatter(configuredNameOrPattern),
+                formatterFromPattern(configuredNameOrPattern),
+                lookupFormatStyle("medium").map(DateTimeFormatter::ofLocalizedDate)
+                )
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .findFirst()
+        .get();
+        
+        setTitleFormatter(formatter);
+        
     }
 
-    private DateTimeFormatter formatterFrom(String configuredNameOrPattern) {
-        DateTimeFormatter result = null;
+    private Optional<DateTimeFormatter> formatterFromPattern(String pattern) {
         try {
-            result = DateTimeFormatter.ofPattern(configuredNameOrPattern, Locale.getDefault());
+            Optional.ofNullable(DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
         } catch (Exception e) {
             log.warn(e);
         }
-        if (result == null) {
-            result = lookupNamedFormatterElseFail("medium");
-        }
-        return result;
+        return Optional.empty();
     }
-
 
 }

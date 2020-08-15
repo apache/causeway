@@ -51,13 +51,14 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
         val uiComponent = new DatePicker();
         val valueSpec = request.getFeatureTypeSpec();
         val converter = new TemporalConverterForLocalDateComponent(valueSpec);
+        val feature = request.getManagedFeature();
         
         //FIXME format error ?
-        //uiComponent.setConverter(toStringConverter(converter));
+        uiComponent.setConverter(toJavaFxStringConverter(converter));
         
-        if(request.getManagedFeature() instanceof ManagedParameter) {
+        if(feature instanceof ManagedParameter) {
 
-            val managedParameter = (ManagedParameter)request.getManagedFeature();
+            val managedParameter = (ManagedParameter)feature;
 
             BindingsFx.bindBidirectional(
                     uiComponent.valueProperty(),
@@ -66,9 +67,9 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
 
             //TODO bind parameter validation feedback
 
-        } else if(request.getManagedFeature() instanceof ManagedProperty) {
+        } else if(feature instanceof ManagedProperty) {
 
-            val managedProperty = (ManagedProperty)request.getManagedFeature();
+            val managedProperty = (ManagedProperty)feature;
 
             // readonly binding
             BindingsFx.bind(
