@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.facets.value.temporal.offsetdatetime;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
@@ -29,10 +32,9 @@ import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 
-@Log4j2
+//@Log4j2
 public class OffsetDateTimeValueSemanticsProvider 
 extends TemporalValueSemanticsProviderAbstract<OffsetDateTime> {
 
@@ -49,9 +51,6 @@ extends TemporalValueSemanticsProviderAbstract<OffsetDateTime> {
         val basicDateTimeNoMillis = "yyyyMMdd'T'HHmmssZ";
         val basicDateTime = "yyyyMMdd'T'HHmmss.SSSZ";
         
-        super.addNamedFormat("long", "LL");
-        super.addNamedFormat("medium", "MM");
-        super.addNamedFormat("short", "SS");
         super.addNamedFormat("iso", basicDateTimeNoMillis);
         super.addNamedFormat("iso_encoding", basicDateTime);
         
@@ -61,24 +60,19 @@ extends TemporalValueSemanticsProviderAbstract<OffsetDateTime> {
 
         val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getOffsetDateTime().getFormat();
 
-        val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
-
-        DateTimeFormatter result = null;
-        if(formatter!=null) {
-            result = formatter;
-        } else {
-            try {
-                result = DateTimeFormatter.ofPattern(configuredNameOrPattern, Locale.getDefault());
-            } catch (Exception e) {
-                log.warn(e);
-            }
-            if (result == null) {
-                result = lookupNamedFormatterElseFail("medium");
-            }
-        }
-
-        setTitleFormatter(result);
+        // walk through 3 methods of generating a formatter, first one to return non empty wins
+        val formatter = Stream.<Optional<DateTimeFormatter>>of(
+                lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDateTime),
+                lookupNamedFormatter(configuredNameOrPattern),
+                formatterFromPattern(configuredNameOrPattern)
+                )
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .findFirst()
+        .orElseGet(()->DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));  // fallback
         
+        //TODO those FormatStyle based formatters potentially need additional zone information
+        setTitleFormatter(formatter);
         
     }
 
