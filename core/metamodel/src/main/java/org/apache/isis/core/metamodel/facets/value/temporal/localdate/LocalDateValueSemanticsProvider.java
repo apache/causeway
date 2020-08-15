@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.value.temporal.localdate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import java.time.format.FormatStyle;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -31,9 +31,8 @@ import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+//@Log4j2
 public class LocalDateValueSemanticsProvider
 extends TemporalValueSemanticsProviderAbstract<LocalDate> {
 
@@ -55,29 +54,19 @@ extends TemporalValueSemanticsProviderAbstract<LocalDate> {
 
         val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getLocalDate().getFormat();
 
-        // walk through 4 methods of generating a formatter, first one to return non empty wins
+        // walk through 3 methods of generating a formatter, first one to return non empty wins
         val formatter = Stream.<Optional<DateTimeFormatter>>of(
                 lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDate),
                 lookupNamedFormatter(configuredNameOrPattern),
-                formatterFromPattern(configuredNameOrPattern),
-                lookupFormatStyle("medium").map(DateTimeFormatter::ofLocalizedDate)
+                formatterFromPattern(configuredNameOrPattern)
                 )
         .filter(Optional::isPresent)
         .map(Optional::get)
         .findFirst()
-        .get();
+        .orElseGet(()->DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));  // fallback
         
         setTitleFormatter(formatter);
         
-    }
-
-    private Optional<DateTimeFormatter> formatterFromPattern(String pattern) {
-        try {
-            Optional.ofNullable(DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
-        } catch (Exception e) {
-            log.warn(e);
-        }
-        return Optional.empty();
     }
 
 }
