@@ -137,7 +137,7 @@ implements TemporalValueFacet<T> {
     
     protected Optional<DateTimeFormatter> formatterFromPattern(String pattern) {
         try {
-            Optional.of(DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
+            return Optional.of(DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
         } catch (Exception e) {
             log.warn(e);
         }
