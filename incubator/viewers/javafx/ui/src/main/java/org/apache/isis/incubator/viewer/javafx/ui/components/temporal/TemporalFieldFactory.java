@@ -23,6 +23,9 @@ import javax.inject.Inject;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
+import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.OffsetCharacteristic;
+import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
@@ -42,7 +45,12 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(ComponentRequest request) {
-        return request.hasFeatureTypeFacetAnyOf(TemporalConverterForLocalDateComponent.getSupportedFacets());
+        val temporalValueFacet = (TemporalValueFacet<?>) request
+                .getFeatureTypeSpec()
+                .getFacet(TemporalValueFacet.class);
+        return temporalValueFacet!=null
+                && temporalValueFacet.getTemporalCharacteristic()==TemporalCharacteristic.DATE_ONLY
+                && temporalValueFacet.getOffsetCharacteristic()==OffsetCharacteristic.LOCAL;
     }
 
     @Override
@@ -53,7 +61,6 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
         val converter = new TemporalConverterForLocalDateComponent(valueSpec);
         val feature = request.getManagedFeature();
         
-        //FIXME format error ?
         uiComponent.setConverter(toJavaFxStringConverter(converter));
         
         if(feature instanceof ManagedParameter) {

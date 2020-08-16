@@ -20,10 +20,8 @@ package org.apache.isis.viewer.common.model.binding;
 
 import java.time.LocalDate;
 
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -43,9 +41,7 @@ public class TemporalConverterForLocalDateComponent implements BindingConverter<
 
     public TemporalConverterForLocalDateComponent(final ObjectSpecification valueSpecification) {
         this.valueSpecification = valueSpecification;
-
-        this.valueFacet = _Casts.uncheckedCast(lookupFacetOneOf(getSupportedFacets())
-                .orElseThrow(()->_Exceptions.noSuchElement("missing 'temporal' value facet")));
+        this.valueFacet = _Casts.uncheckedCast(valueSpecification.getFacet(TemporalValueFacet.class));
     }
 
     @Override
@@ -59,10 +55,10 @@ public class TemporalConverterForLocalDateComponent implements BindingConverter<
         return localDate;
     }
 
-    // for performance reasons in order of likelihood (just guessing)
-    @Getter
-    private final static Can<Class<? extends Facet>> supportedFacets = Can.of(
-            TemporalValueFacet.class);
+//    // for performance reasons in order of likelihood (just guessing)
+//    @Getter
+//    private final static Can<Class<? extends Facet>> supportedFacets = Can.of(
+//            TemporalValueFacet.class);
 
     @Override
     public String toString(LocalDate value) {
