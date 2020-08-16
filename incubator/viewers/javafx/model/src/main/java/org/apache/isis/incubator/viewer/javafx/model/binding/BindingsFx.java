@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.binding.BindingConverter;
 
 import javafx.beans.property.Property;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import lombok.NonNull;
 import lombok.val;
@@ -36,6 +37,16 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BindingsFx {
+    
+    public static <T> void bind(
+            final @NonNull Property<T> leftProperty, 
+            final @NonNull Observable<T> rightObservable) {
+
+        leftProperty.setValue(rightObservable.getValue());
+        rightObservable.addListener((e,o,n)->{
+            leftProperty.setValue(n);
+        });
+    }
     
     public static <L> void bind(
             final @NonNull Property<L> leftProperty, 
@@ -56,6 +67,17 @@ public class BindingsFx {
         leftProperty.setValue(converter.unwrap(rightProperty.getValue()));
         leftProperty.addListener(binding);
         rightProperty.addListener(binding);
+    }
+    
+    // -- VALIDATION
+    
+    public static void bindValidationFeeback(
+            final @NonNull StringProperty textProperty,
+            final @NonNull Property<Boolean> visibilityProperty,
+            final @NonNull Observable<String> textObservable) {
+
+        bind(textProperty, textObservable);
+        visibilityProperty.bind(textProperty.isNotEmpty());
     }
     
     // -- INTERNAL

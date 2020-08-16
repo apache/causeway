@@ -22,10 +22,6 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
@@ -65,6 +61,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class _fx {
@@ -89,6 +88,21 @@ public final class _fx {
     public static Label newLabel(Pane container, String label) {
         val component = new Label(label);
         container.getChildren().add(component);
+        return component;
+    }
+    
+    public static Label newValidationFeedback(Pane container) {
+        val component = new Label();
+        container.getChildren().add(component);
+        visibilityLayoutFix(component);
+        component.setStyle("-fx-color: red");
+        component.visibleProperty().addListener((e, o, visible)->{
+            if(visible) {
+                borderDashed(container, Color.RED);
+            } else {
+                container.setBorder(null);
+            }
+        });
         return component;
     }
 
@@ -200,7 +214,19 @@ public final class _fx {
         tableView.getColumns().add(column);
         return column;
     }
+    
+    // -- VISIBILITY
 
+    /**
+     * Do not consider node for layout calculations, when not visible
+     * @param node
+     * @return
+     */
+    public static Node visibilityLayoutFix(Node node) {
+        node.managedProperty().bind(node.visibleProperty());
+        return node;
+    }
+    
     // -- ICONS
 
     public static Image imageFromClassPath(@NonNull Class<?> cls, String resourceName) {
@@ -258,19 +284,20 @@ public final class _fx {
         }
     }
 
-    private static boolean isEmptyOrHidden(Node component) {
-        if(component instanceof Pane) {
-            val children = ((Pane) component).getChildrenUnmodifiable();
-            if(children.isEmpty()) {
-                return true; // empty
-            }
-            //return true only if all children are empty or hidden    
-            val atLeastOneIsNonEmptyOrVisible = children.stream()
-                    .anyMatch(child->!isEmptyOrHidden(child));
-            return !atLeastOneIsNonEmptyOrVisible;
-        } 
-        return !component.isVisible();
-    }
+//XXX Superseded by visibilityLayoutFix(Node node)    
+//    private static boolean isEmptyOrHidden(Node component) {
+//        if(component instanceof Pane) {
+//            val children = ((Pane) component).getChildrenUnmodifiable();
+//            if(children.isEmpty()) {
+//                return true; // empty
+//            }
+//            //return true only if all children are empty or hidden    
+//            val atLeastOneIsNonEmptyOrVisible = children.stream()
+//                    .anyMatch(child->!isEmptyOrHidden(child));
+//            return !atLeastOneIsNonEmptyOrVisible;
+//        } 
+//        return !component.isVisible();
+//    }
 
 
     public static void hideUntilPopulated(Pane component) {

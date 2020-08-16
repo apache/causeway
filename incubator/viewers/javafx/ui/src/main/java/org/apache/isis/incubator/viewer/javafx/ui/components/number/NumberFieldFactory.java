@@ -26,12 +26,14 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
+import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.viewer.common.model.binding.NumberConverterForStringComponent;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -48,7 +50,9 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
     @Override
     public Node handle(ComponentRequest request) {
 
-        val uiComponent = new TextField();
+        val uiComponent = new VBox();
+        val uiField = _fx.add(uiComponent, new TextField());
+        val uiValidationFeedback = _fx.newValidationFeedback(uiComponent);
         val valueSpec = request.getFeatureTypeSpec();
         val converter = new NumberConverterForStringComponent(valueSpec);
         
@@ -57,11 +61,14 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
             val managedParameter = (ManagedParameter)request.getManagedFeature();
 
             BindingsFx.bindBidirectional(
-                    uiComponent.textProperty(),
+                    uiField.textProperty(),
                     managedParameter.getValue(),
                     converter);
-
-            //TODO bind parameter validation feedback
+            
+            BindingsFx.bindValidationFeeback(
+                    uiValidationFeedback.textProperty(),
+                    uiValidationFeedback.visibleProperty(),
+                    managedParameter.getValidationMessage());
 
         } else if(request.getManagedFeature() instanceof ManagedProperty) {
 
@@ -69,12 +76,15 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
 
             // readonly binding
             BindingsFx.bind(
-                    uiComponent.textProperty(),
+                    uiField.textProperty(),
                     managedProperty.getValue(),
                     converter);
 
             //TODO allow property editing
+            uiField.editableProperty().set(false);
+            
             //TODO bind property validation feedback
+
         }
 
         return uiComponent;
