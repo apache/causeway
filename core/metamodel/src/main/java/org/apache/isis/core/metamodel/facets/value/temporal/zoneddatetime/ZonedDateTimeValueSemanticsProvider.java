@@ -22,9 +22,8 @@ package org.apache.isis.core.metamodel.facets.value.temporal.zoneddatetime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Optional;
-import java.util.stream.Stream;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
@@ -59,14 +58,11 @@ extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
         val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getZonedDateTime().getFormat();
         
         // walk through 3 methods of generating a formatter, first one to return non empty wins
-        val formatter = Stream.<Optional<DateTimeFormatter>>of(
-                lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDateTime),
-                lookupNamedFormatter(configuredNameOrPattern),
-                formatterFromPattern(configuredNameOrPattern)
-                )
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .findFirst()
+        val formatter = formatterFirstOf(Can.of(
+                ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDateTime),
+                ()->lookupNamedFormatter(configuredNameOrPattern),
+                ()->formatterFromPattern(configuredNameOrPattern)
+                ))
         .orElseGet(()->DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));  // fallback
         
         //TODO those FormatStyle based formatters potentially need additional zone information

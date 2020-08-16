@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -139,7 +140,7 @@ implements TemporalValueFacet<T> {
         try {
             return Optional.of(DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
         } catch (Exception e) {
-            log.warn(e);
+            log.warn("cannot parse pattern '{}'", pattern, e);
         }
         return Optional.empty();
     }
@@ -149,6 +150,15 @@ implements TemporalValueFacet<T> {
                 .map(formatter->{
                     return $->formatter.parse($, query);
                 });
+    }
+    
+    protected Optional<DateTimeFormatter> formatterFirstOf(
+            final @NonNull Can<Supplier<Optional<DateTimeFormatter>>> formatterProviders) {
+        return formatterProviders.stream()
+        .map(Supplier::get)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .findFirst();
     }
     
     // -- TEMPORAL VALUE FACET

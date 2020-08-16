@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
@@ -60,14 +61,11 @@ extends TemporalValueSemanticsProviderAbstract<LocalTime> {
         val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getLocalTime().getFormat();
 
         // walk through 3 methods of generating a formatter, first one to return non empty wins
-        val formatter = Stream.<Optional<DateTimeFormatter>>of(
-                lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedTime),
-                lookupNamedFormatter(configuredNameOrPattern),
-                formatterFromPattern(configuredNameOrPattern)
-                )
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .findFirst()
+        val formatter = formatterFirstOf(Can.of(
+                ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedTime),
+                ()->lookupNamedFormatter(configuredNameOrPattern),
+                ()->formatterFromPattern(configuredNameOrPattern)
+                ))
         .orElseGet(()->DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));  // fallback
         
         setTitleFormatter(formatter);
