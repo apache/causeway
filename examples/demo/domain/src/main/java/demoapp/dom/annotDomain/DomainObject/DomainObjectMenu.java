@@ -20,18 +20,28 @@ package demoapp.dom.annotDomain.DomainObject;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.types.Samples;
+import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo;
+import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdoEntities;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DomainObjectMenu")
 @Log4j2
 public class DomainObjectMenu {
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-book", describedAs = "Object changed events as XML")
+    public DomainObjectPublishingJdo publishing(){
+        return domainObjectPublishingJdoEntities.first();
+    }
+
+    @Inject
+    DomainObjectPublishingJdoEntities domainObjectPublishingJdoEntities;
 
 }

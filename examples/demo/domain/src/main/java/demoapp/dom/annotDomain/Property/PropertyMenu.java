@@ -41,6 +41,8 @@ import demoapp.dom.annotDomain.Property.hidden.child.PropertyHiddenChildVm;
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
 import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
 import demoapp.dom.annotDomain.Property.optionality.PropertyOptionalityVm;
+import demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdo;
+import demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoEntities;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
 import demoapp.dom.types.Samples;
 
@@ -127,6 +129,12 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
+    public PropertyPublishingJdo publishing(){
+        return propertyPublishingJdoEntities.first();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-equals", describedAs = "Regular expressions, such as email")
     public PropertyRegexPatternVm regexPattern(){
         val vm = new PropertyRegexPatternVm();
@@ -154,5 +162,7 @@ public class PropertyMenu {
     Samples<Blob> blobSamples;
     @Inject
     Samples<Clob> clobSamples;
+    @Inject
+    PropertyPublishingJdoEntities propertyPublishingJdoEntities;
 
 }

@@ -1,6 +1,7 @@
 package demoapp.dom.types.javalang.strings.jdo;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 public class JavaLangStringJdoEntities {
 
     public Optional<JavaLangStringJdo> find(final String readOnlyProperty) {
-        return repositoryService.firstMatch(JavaLangStringJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+        return repositoryService.firstMatch(JavaLangStringJdo.class, x -> Objects.equals(x.getReadOnlyProperty(), readOnlyProperty));
     }
 
     public List<JavaLangStringJdo> all() {

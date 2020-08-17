@@ -1,0 +1,74 @@
+CAUTION: todo - to update.
+
+//The `editing` semantic specifies that a property's value can be changed through the UI:
+//
+//* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
+//
+//There is no corresponding semantic for parameters, parameters are implicitly editable.
+//
+//== Class Level
+//
+//Usually editing of properties is discouraged; it is usually better to modify state through an explicit action instead.
+//For that reason, editing of properties is disabled by default (though that can be changed globally if necessary using the `isis.applib.annotation.domain-object.editing` configuration property).
+//
+//Editing can also be specified at the class level.
+//This will override any configured defaults, but just for the properties of that class:
+//
+//[source,java,indent=0]
+//----
+//include::PropertyEditingVm.java[tags=class]
+//----
+//
+//The property-level semantic can, in turn, overrides the configured or class-level default.
+//
+//
+//== Annotated
+//
+//The `editing` semantic can be specified explicitly using an annotation:
+//
+//* for properties, using `@Property#editing()`:
+//+
+//[source,java,indent=0]
+//----
+//include::PropertyEditingVm.java[tags=annotation]
+//----
+//<.> explicitly specifies the maximum length that can be entered for the property
+//
+//The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
+//
+//== Meta-annotated
+//
+//The `editing` semantic can also be specified using a custom meta-annotation:
+//
+//* the meta-annotation is defined as:
+//+
+//[source,java]
+//----
+//include::EditingEnabledMetaAnnotation.java[tags=class]
+//----
+//<.> annotated for a property
+//<.> annotation can be applied to a property (either its getter or the field directly)
+//
+//* and can be applied to a property:
+//+
+//[source,java,indent=0]
+//----
+//include::PropertyEditingVm.java[tags=meta-annotated]
+//----
+//<.> semantic is inherited from the meta-annotation
+//
+//
+//
+//=== Meta-annotated Overridden
+//
+//The meta-annotation can itself be overridden:
+//
+//* in a property:
+//+
+//[source,java,indent=0]
+//----
+//include::PropertyEditingVm.java[tags=meta-annotated-overridden]
+//----
+//<.> semantic from meta-annotation ...
+//<.> \... is overridden by the `@Property` annotation
+//

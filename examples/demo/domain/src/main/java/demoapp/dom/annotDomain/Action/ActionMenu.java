@@ -36,8 +36,12 @@ import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.annotDomain.Action.associateWith.child.ActionAssociateWithChildVm;
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
+import demoapp.dom.annotDomain.Action.hidden.ActionHiddenVm;
+import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdo;
+import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdoEntities;
 import demoapp.dom.annotDomain.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.annotDomain.Action.typeOf.child.ActionTypeOfChildVm;
+import demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdo;
 import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
@@ -65,7 +69,19 @@ public class ActionMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of actions")
     public ActionDomainEventVm domainEvent(){
-        return new ActionDomainEventVm("change me");
+        return new ActionDomainEventVm("value");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions")
+    public ActionHiddenVm hidden(){
+        return new ActionHiddenVm("value");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
+    public ActionPublishingJdo publishing(){
+        return actionPublishingJdoEntities.first();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -81,6 +97,8 @@ public class ActionMenu {
         return typeOfVm;
     }
 
+    @Inject
+    ActionPublishingJdoEntities actionPublishingJdoEntities;
 
     @Inject
     NameSamples samples;

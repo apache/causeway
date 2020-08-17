@@ -15,10 +15,10 @@ as a replacement for
             <mb3:named>Basic Types</mb3:named>
             <mb3:section>
             	<mb3:named>Primitives</mb3:named>
-                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="bytes"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="shorts"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="ints"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="longs"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="bytes"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="floats"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="doubles"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="chars"/>
@@ -107,9 +107,14 @@ as a replacement for
         <mb3:menu>
             <mb3:named>Domain Annotations</mb3:named>
             <mb3:section>
+                <mb3:named>@DomainObject</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="publishing"/>
+            </mb3:section>
+            <mb3:section>
                 <mb3:named>@Action</mb3:named>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
             </mb3:section>
             <mb3:section>
@@ -121,6 +126,7 @@ as a replacement for
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="optionality"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="publishing"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="regexPattern"/>
             </mb3:section>
         </mb3:menu>
