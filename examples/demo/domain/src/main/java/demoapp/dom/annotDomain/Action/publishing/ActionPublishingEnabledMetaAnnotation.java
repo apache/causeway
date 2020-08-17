@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.DomainObject.publishing;
+package demoapp.dom.annotDomain.Action.publishing;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -6,18 +6,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@DomainObject(publishing = Publishing.ENABLED)      // <.>
+@Action(publishing = Publishing.ENABLED)        // <.>
 @Inherited
 @Target({
-        ElementType.TYPE                            // <.>
+        ElementType.TYPE, ElementType.METHOD    // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DomainObjectEnabledMetaAnnotation {
+public @interface ActionPublishingEnabledMetaAnnotation {
 
 }
 //end::class[]

@@ -10,13 +10,13 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@Property(publishing = Publishing.ENABLED)          // <.>
+@Property(publishing = Publishing.DISABLED)     // <.>
 @Inherited
 @Target({
-        ElementType.METHOD, ElementType.FIELD       // <.>
+        ElementType.TYPE, ElementType.METHOD    // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ActionEnabledMetaAnnotation {
+public @interface ActionPublishingDisabledMetaAnnotation {
 
 }
 //end::class[]

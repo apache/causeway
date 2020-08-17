@@ -16,22 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Action.publishing;
+package demoapp.dom.annotDomain.Property.publishing;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.xml.bind.annotation.XmlElement;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,67 +42,63 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.JDO_ENTITY
-        , objectType = "demo.ActionPublishingJdo"
-        , editing = Editing.DISABLED
+        , objectType = "demo.PropertyPublishingJdo"
+        , editing = Editing.ENABLED
 )
-public class ActionPublishingJdo implements HasAsciiDocDescription {
+public class PropertyPublishingJdo implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public ActionPublishingJdo(String initialValue) {
-        this.property = initialValue;
+    public PropertyPublishingJdo(String initialValue) {
+        this.propertyUsingAnnotation = initialValue;
+        this.propertyUsingMetaAnnotation = initialValue;
+        this.propertyUsingMetaAnnotationButOverridden = initialValue;
     }
 
     public String title() {
-        return "Action#publishing";
+        return "Property#publishing";
     }
-
-//tag::property[]
-    @Property()
-    @MemberOrder(name = "annotation", sequence = "1")
-    @Getter @Setter
-    private String property;
-//end::property[]
 
 //tag::annotation[]
-    @Action(
-        publishing = Publishing.ENABLED         // <.>
-        , semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "property"
-        , associateWithSequence = "1"
+    @Property(
+        publishing = Publishing.ENABLED             // <.>
     )
-    @ActionLayout(
-        describedAs = "@Action(publishing = ENABLED)"
+    @PropertyLayout(
+        describedAs =
+            "@Property(publishing = ENABLED)"
     )
-    public ActionPublishingJdo updatePropertyUsingAnnotation(final String value) {
-        setProperty(value);
-        return this;
-    }
-    public String default0UpdatePropertyUsingAnnotation() {
-        return getProperty();
-    }
-
+    @MemberOrder(name = "annotation", sequence = "1")
+    @Getter @Setter
+    private String propertyUsingAnnotation;
 //end::annotation[]
 
-//tag::meta-annotation[]
-    @ActionPublishingEnabledMetaAnnotation
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "property"
-        , associateWithSequence = "2"
+//tag::meta-annotated[]
+    @Property()
+    @PropertyPublishingEnabledMetaAnnotation                // <.>
+    @PropertyLayout(
+        describedAs = "@PublishingEnabledMetaAnnotation"
     )
-    @ActionLayout(
-            describedAs = "@PublishingEnabledMetaAnnotation"
-    )
-    public ActionPublishingJdo updatePropertyUsingMetaAnnotation(final String value) {
-        setProperty(value);
-        return this;
-    }
-    public String default0UpdatePropertyUsingMetaAnnotation() {
-        return getProperty();
-    }
-//end::meta-annotation[]
+    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @XmlElement(required = true)
+    @Getter @Setter
+    private String propertyUsingMetaAnnotation;
+//end::meta-annotated[]
 
+//tag::meta-annotated-overridden[]
+    @PropertyPublishingEnabledMetaAnnotation                // <.>
+    @Property(
+        publishing = Publishing.DISABLED            // <.>
+    )
+    @PropertyLayout(
+        describedAs =
+            "@PublishingEnabledMetaAnnotation " +
+            "@Property(publishing = DISABLED)"
+    )
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyUsingMetaAnnotationButOverridden;
+//end::meta-annotated-overridden[]
 
 //tag::class[]
 }

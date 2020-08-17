@@ -18,6 +18,9 @@
  */
 package demoapp.dom.annotDomain.DomainObject.publishing;
 
+import java.net.URI;
+
+import javax.inject.Inject;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -25,6 +28,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
@@ -33,7 +37,10 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.linking.DeepLinkService;
+import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -81,6 +88,9 @@ public class DomainObjectPublishingJdo implements HasAsciiDocDescription {
     public DomainObjectPublishingJdo updateProperty(final String value) {
         setProperty(value);
         return this;
+    }
+    public String default0UpdateProperty() {
+        return getProperty();
     }
 //end::action[]
 
