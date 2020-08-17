@@ -52,7 +52,7 @@ public class MarkupComponent extends WebComponent {
 
     // -- HELPER
 
-    protected static CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
+    protected CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
 
         if(modelObject==null) {
             return fallback;
@@ -67,15 +67,23 @@ public class MarkupComponent extends WebComponent {
 
             final Object value = adapter.getPojo();
 
-            if(!(value instanceof HasHtml))
-                return fallback;
+            val asHtml = asHtml(value);
+            if(asHtml != null) {
+                return asHtml;
+            }
 
-            return ((HasHtml)value).asHtml();
+            return fallback;
         }
 
         return modelObject.toString();
 
     }
 
+    protected String asHtml(Object value) {
+        if (value instanceof HasHtml) {
+            return ((HasHtml)value).asHtml();
+        }
+        return null;
+    }
 
 }

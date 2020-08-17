@@ -24,6 +24,8 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
+import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
@@ -99,7 +101,9 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
         // @Repository's
         ApplicationFeatureRepositoryDefault.class,
-        
+
+        IsisSchemaMetaModelRefiner.class,
+        IsisSchemaValueTypeProvider.class,
 
 })
 public class IsisModuleCoreMetamodel {

@@ -17,23 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
+package org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 
-import lombok.val;
-
-/**
- * @implNote Almost a copy of {@code Parented} and {@code Standalone} in 
- * {@link MarkupPanelFactories}, but specific to 
- * the {@link AsciiDoc} value-type which requires client-side java-script to be
- * executed to enable syntax highlighting
- */
-public class AsciiDocPanelFactoriesWkt {
+public class InteractionDtoPanelFactoriesWkt {
 
     // -- PARENTED
 
@@ -42,19 +34,13 @@ public class AsciiDocPanelFactoriesWkt {
         private static final long serialVersionUID = 1L;
 
         public Parented() {
-            super(AsciiDoc.class);
+            super(InteractionDto.class);
         }
 
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
-            return (id, model) -> {
-                val markupComponent = new AsciiDocComponentWkt(id, model);
-                markupComponent.setEnabled(false);
-                return markupComponent;    
-            };
-
+            return InteractionDtoComponentWkt::new;
         }
-
     }
 
     // -- STANDALONE
@@ -64,15 +50,13 @@ public class AsciiDocPanelFactoriesWkt {
         private static final long serialVersionUID = 1L;
 
         public Standalone() {
-            super(AsciiDoc.class);
+            super(InteractionDto.class);
         }
 
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
-            return AsciiDocComponentWkt::new;
+            return InteractionDtoComponentWkt::new;
         }
-
     }
-
 
 }
