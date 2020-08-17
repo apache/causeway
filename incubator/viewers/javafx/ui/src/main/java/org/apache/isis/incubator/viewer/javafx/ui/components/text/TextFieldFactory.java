@@ -18,6 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.text;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.springframework.core.annotation.Order;
@@ -99,6 +101,11 @@ public class TextFieldFactory implements UiComponentHandlerFx {
         @Override
         public String fromString(String stringifiedValue) {
             return stringifiedValue; // identity
+        }
+
+        @Override
+        public Optional<String> tryParse(String stringifiedValue) {
+            return Optional.empty(); // always ok 
         }
         
     }

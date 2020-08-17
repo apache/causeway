@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.common.model.binding;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -55,11 +56,6 @@ public class TemporalConverterForLocalDateComponent implements BindingConverter<
         return localDate;
     }
 
-//    // for performance reasons in order of likelihood (just guessing)
-//    @Getter
-//    private final static Can<Class<? extends Facet>> supportedFacets = Can.of(
-//            TemporalValueFacet.class);
-
     @Override
     public String toString(LocalDate value) {
         return valueFacet.parseableTitleOf(value);
@@ -76,6 +72,12 @@ public class TemporalConverterForLocalDateComponent implements BindingConverter<
         }
         // TODO might require additional cases
         throw _Exceptions.unmatchedCase(value.getClass());  
+    }
+
+    @Override
+    public Optional<String> tryParse(String stringifiedValue) {
+        return valueFacet.tryParseTextEntry(null, stringifiedValue)
+                .map(Exception::getMessage); // TODO should be passed through the ExceptionRecognizer
     }
 
 

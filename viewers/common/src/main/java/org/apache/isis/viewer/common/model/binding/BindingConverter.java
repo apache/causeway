@@ -60,6 +60,12 @@ public interface BindingConverter<T> {
 
     T fromString(String stringifiedValue);
     
+    /**
+     * @param stringifiedValue
+     * @return optionally an error message, based on whether fails to parse {@code stringifiedValue} 
+     */
+    Optional<String> tryParse(String stringifiedValue);
+    
 }
 
 

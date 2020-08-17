@@ -21,12 +21,14 @@ package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
 import java.text.Format;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -147,7 +149,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         if (entry == null) {
             throw new IllegalArgumentException();
         }
-        if (entry.trim().equals("")) {
+        if (entry.trim().isEmpty()) {
             if (mustHaveEntry()) {
                 throw new InvalidEntryException("An entry is required");
             } else {
@@ -155,6 +157,15 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
             }
         }
         return doParse(context, entry);
+    }
+    
+    public Optional<Exception> tryParseTextEntry(final Object context, final String entry) {
+        try {
+            parseTextEntry(context, entry);
+        } catch (Exception e) {
+            return Optional.of(e);
+        }
+        return Optional.empty();
     }
 
     /**
@@ -288,5 +299,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         attributeMap.put("equalByContent", this.equalByContent);
         attributeMap.put("defaultValue", this.defaultValue);
     }
+
+
 
 }

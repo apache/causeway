@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.common.model.binding;
 
+import java.util.Optional;
+
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -54,6 +56,12 @@ public final class NumberConverterForStringComponent implements BindingConverter
 
     @Override
     public ManagedObject wrap(String stringifiedNumber) {
+        
+        if(tryParse(stringifiedNumber).isPresent()) {
+            // return an intermediate placeholder
+            return ManagedObject.empty(getValueSpecification());
+        }
+        
         val number = valueFacet.parseTextEntry(null, stringifiedNumber);
         return ManagedObject.of(getValueSpecification(), number);
     }
@@ -85,6 +93,12 @@ public final class NumberConverterForStringComponent implements BindingConverter
     @Override
     public String fromString(String stringifiedValue) {
         return stringifiedValue; // identity
+    }
+
+    @Override
+    public Optional<String> tryParse(String stringifiedValue) {
+        return valueFacet.tryParseTextEntry(null, stringifiedValue)
+                .map(Exception::getMessage); // TODO should be passed through the ExceptionRecognizer
     }
 
 }

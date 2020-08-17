@@ -68,7 +68,7 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
         try {
             return Integer.valueOf(format.parse(entry).intValue());
         } catch (final ParseException e) {
-            throw new TextEntryParseException("Not an whole number " + entry, e);
+            throw new TextEntryParseException("Not a whole number " + entry, e);
         }
     }
 

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
@@ -33,13 +34,16 @@ import org.apache.isis.viewer.common.model.components.UiComponentFactory.Compone
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
 public class NumberFieldFactory implements UiComponentHandlerFx {
 
     @Override
@@ -55,6 +59,19 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
         val uiValidationFeedback = _fx.newValidationFeedback(uiComponent);
         val valueSpec = request.getFeatureTypeSpec();
         val converter = new NumberConverterForStringComponent(valueSpec);
+        
+        // ensure user can only type text that is also parse-able by the value facet (parser)
+        // however, not every phase of text entering produces parse-able text
+        uiField.setTextFormatter(new TextFormatter<String>(change->{
+            val input = change.getText();
+            
+            val parsingError = converter.tryParse(_Strings.suffix(input, "0"));
+            if (parsingError.isPresent()) {
+                log.warn("Failed to parse UI input '{}': {}", input, parsingError.get());
+                return null; // veto change
+            }
+            return change; // allow change 
+        }));
         
         if(request.getManagedFeature() instanceof ManagedParameter) {
 
