@@ -163,6 +163,15 @@ public class BindingsFx {
         
         // -- HELPER
         
+        /**
+         * @param oldPojo
+         * @param newPojo
+         * @param oldValue
+         * @param newValue
+         * @apiNote not pretty, but to not having to duplicate this logic: 
+         * either uses both pojos and ignores both managed objects (propagate changes left to right) 
+         * or vice versa. 
+         */
         private void changed(T oldPojo, T newPojo, ManagedObject oldValue, ManagedObject newValue) {
             if (updating) {
                 return;
@@ -175,17 +184,17 @@ public class BindingsFx {
             
             try {
                 updating = true;
-                if(newValue!=null) {
-                    left.setValue(converter.unwrap(newValue));
-                } else {
-                    right.setValue(converter.wrap(newPojo));
+                if(newValue!=null) { // direction
+                    left.setValue(converter.unwrap(newValue)); // propagate changes right to left
+                } else { 
+                    right.setValue(converter.wrap(newPojo)); // propagate changes left to right
                 }
             } catch (RuntimeException e) {
                 try {
-                    if(newValue!=null) {
-                        left.setValue(converter.unwrap(oldValue));
-                    } else {
-                        right.setValue(converter.wrap(oldPojo));
+                    if(newValue!=null) { // direction
+                        left.setValue(converter.unwrap(oldValue)); // propagate changes right to left
+                    } else { 
+                        right.setValue(converter.wrap(oldPojo)); // propagate changes left to right
                     }
                 } catch (Exception e2) {
                     e2.addSuppressed(e);
