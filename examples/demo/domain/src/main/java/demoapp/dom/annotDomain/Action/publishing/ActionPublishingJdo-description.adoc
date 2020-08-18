@@ -1,74 +1,117 @@
-CAUTION: todo - to update.
+The `publishing` semantic specifies that the invocation of an object action should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI].
+This is performed _after_ the action has been invoked.
 
-//The `editing` semantic specifies that a property's value can be changed through the UI:
-//
-//* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
-//
-//There is no corresponding semantic for parameters, parameters are implicitly editable.
-//
-//== Class Level
-//
-//Usually editing of properties is discouraged; it is usually better to modify state through an explicit action instead.
-//For that reason, editing of properties is disabled by default (though that can be changed globally if necessary using the `isis.applib.annotation.domain-object.editing` configuration property).
-//
-//Editing can also be specified at the class level.
-//This will override any configured defaults, but just for the properties of that class:
-//
-//[source,java,indent=0]
-//----
-//include::PropertyEditingVm.java[tags=class]
-//----
-//
-//The property-level semantic can, in turn, overrides the configured or class-level default.
-//
-//
-//== Annotated
-//
-//The `editing` semantic can be specified explicitly using an annotation:
-//
-//* for properties, using `@Property#editing()`:
-//+
-//[source,java,indent=0]
-//----
-//include::PropertyEditingVm.java[tags=annotation]
-//----
-//<.> explicitly specifies the maximum length that can be entered for the property
-//
-//The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
-//
-//== Meta-annotated
-//
-//The `editing` semantic can also be specified using a custom meta-annotation:
-//
-//* the meta-annotation is defined as:
-//+
-//[source,java]
-//----
-//include::EditingEnabledMetaAnnotation.java[tags=class]
-//----
-//<.> annotated for a property
-//<.> annotation can be applied to a property (either its getter or the field directly)
-//
-//* and can be applied to a property:
-//+
-//[source,java,indent=0]
-//----
-//include::PropertyEditingVm.java[tags=meta-annotated]
-//----
-//<.> semantic is inherited from the meta-annotation
-//
-//
-//
-//=== Meta-annotated Overridden
-//
-//The meta-annotation can itself be overridden:
-//
-//* in a property:
-//+
-//[source,java,indent=0]
-//----
-//include::PropertyEditingVm.java[tags=meta-annotated-overridden]
-//----
-//<.> semantic from meta-annotation ...
-//<.> \... is overridden by the `@Property` annotation
-//
+The publishing from the framework to the SPI is in-memory.
+A typical SPI implementation would then publish over the network, or perhaps store in a database as per the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern].
+
+TIP: The framework provides an link:https://isis.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the outbox pattern.
+
+The semantic can be specified using either the `@Action` annotation, or through a meta-annotation.
+
+== Annotated
+
+The `publisher` semantic can be specified explicitly using an annotation through `@Action#publishing()`:
+
+* it can be applied to an action:
++
+[source,java,indent=0]
+----
+include::ActionPublishingJdo.java[tags=annotation]
+----
+<.> explicitly specifies that invoking the action should be published.
+
+* or to a mixin:
++
+[source,java,indent=0]
+----
+include::ActionPublishingJdo_mixinUpdateProperty.java[tags=class]
+----
+<.> explicitly specifies that invoking the mixin action should be published.
+
+
+== Meta-annotated
+
+The `publishing` semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java,indent=0]
+----
+include::ActionPublishingEnabledMetaAnnotation.java[tags=class]
+----
+<.> annotated for an action
+<.> annotation can be applied to an action method or to a mixin
+
+* and can be applied to an action:
++
+[source,java,indent=0]
+----
+include::ActionPublishingJdo.java[tags=meta-annotation]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or to a mixin:
++
+[source,java,indent=0]
+----
+include::ActionPublishingJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+----
+<.> semantic is inherited from the meta-annotation
+
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* for an action:
++
+[source,java,indent=0]
+----
+include::ActionPublishingJdo.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Action` annotation
+
+* or on a mixin:
++
+[source,java,indent=0]
+----
+include::ActionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Action` annotation
+
+
+== PublisherService
+
+The demo provides a simple implementation of `PublisherService` that just stores the DTOs in memory:
+
+[source,java]
+----
+include::spiimpl/PublisherServiceSpiForActions.java[tags=class]
+----
+<.> serializes to `InteractionDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/ixn.html[Apache Isis schema].
+
+The demo implementation also provides a way to query these executions:
+
+[source,java,indent=0]
+----
+include::spiimpl/PublisherServiceSpiForActions.java[tags=demo]
+----
+
+Supporting mixins surface this list as contributions on the object:
+
+* `interactionExecutions` collection:
++
+[source,java,indent=0]
+----
+include::spiimpl/ActionPublishingJdo_interactionExecutions.java[tags=class]
+----
+
+* `clearInteractionExecutions` action:
++
+[source,java,indent=0]
+----
+include::spiimpl/ActionPublishingJdo_clearInteractionExecutions.java[tags=class]
+----
+

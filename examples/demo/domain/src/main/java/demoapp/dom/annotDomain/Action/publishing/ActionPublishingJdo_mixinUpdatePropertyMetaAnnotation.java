@@ -6,36 +6,33 @@ import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
-@ActionPublishingDisabledMetaAnnotation     // <.>
+@ActionPublishingEnabledMetaAnnotation     // <.>
 @Action(
-    publishing = Publishing.ENABLED         // <.>
-    , semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyMetaAnnotatedOverridden"
+    semantics = SemanticsOf.IDEMPOTENT
+    , associateWith = "propertyMetaAnnotated"
     , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Mixin Update Property"
-    , describedAs =
-        "@ActionPublishingDisabledMetaAnnotation " +
-        "@Action(publishing = ENABLED)"
+    , describedAs = "@ActionPublishingEnabledMetaAnnotation"
 )
-public class ActionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden {
+public class ActionPublishingJdo_mixinUpdatePropertyMetaAnnotation {
     // ...
 //end::class[]
 
     private final ActionPublishingJdo actionPublishingJdo;
 
-    public ActionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden(ActionPublishingJdo actionPublishingJdo) {
+    public ActionPublishingJdo_mixinUpdatePropertyMetaAnnotation(ActionPublishingJdo actionPublishingJdo) {
         this.actionPublishingJdo = actionPublishingJdo;
     }
 
 //tag::class[]
     public ActionPublishingJdo act(final String value) {
-        actionPublishingJdo.setPropertyMetaAnnotatedOverridden(value);
+        actionPublishingJdo.setPropertyMetaAnnotated(value);
         return actionPublishingJdo;
     }
     public String default0Act() {
-        return actionPublishingJdo.getPropertyMetaAnnotatedOverridden();
+        return actionPublishingJdo.getPropertyMetaAnnotated();
     }
 }
 //end::class[]

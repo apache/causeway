@@ -73,8 +73,8 @@ public class PropertyPublishingJdo implements HasAsciiDocDescription {
 //end::annotation[]
 
 //tag::meta-annotated[]
-    @Property()
     @PropertyPublishingEnabledMetaAnnotation                // <.>
+    @Property()
     @PropertyLayout(
         describedAs = "@PublishingEnabledMetaAnnotation"
     )
@@ -85,14 +85,14 @@ public class PropertyPublishingJdo implements HasAsciiDocDescription {
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @PropertyPublishingEnabledMetaAnnotation                // <.>
+    @PropertyPublishingDisabledMetaAnnotation   // <.>
     @Property(
-        publishing = Publishing.DISABLED            // <.>
+        publishing = Publishing.ENABLED         // <.>
     )
     @PropertyLayout(
         describedAs =
-            "@PublishingEnabledMetaAnnotation " +
-            "@Property(publishing = DISABLED)"
+            "@PublishingDisabledMetaAnnotation " +
+            "@Property(publishing = ENABLED)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)

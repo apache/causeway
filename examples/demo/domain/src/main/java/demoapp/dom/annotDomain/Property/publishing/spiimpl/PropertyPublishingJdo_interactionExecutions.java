@@ -1,5 +1,6 @@
 package demoapp.dom.annotDomain.Property.publishing.spiimpl;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,10 +9,15 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
+import lombok.val;
+
 import demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdo;
 
+//tag::class[]
 @Collection
 public class PropertyPublishingJdo_interactionExecutions {
+    // ...
+//end::class[]
 
     private final PropertyPublishingJdo propertyPublishingJdo;
 
@@ -19,12 +25,16 @@ public class PropertyPublishingJdo_interactionExecutions {
         this.propertyPublishingJdo = propertyPublishingJdo;
     }
 
+//tag::class[]
     public List<InteractionDto> coll() {
-        return publisherServiceSpiForProperties
+        val list = new LinkedList<InteractionDto>();
+        publisherServiceSpiForProperties
                 .streamInteractionDtos()
-                .collect(Collectors.toList());
+                .forEach(list::push);   // reverse order
+        return list;
     }
 
     @Inject
-    private PublisherServiceSpiForProperties publisherServiceSpiForProperties;
+    PublisherServiceSpiForProperties publisherServiceSpiForProperties;
 }
+//end::class[]

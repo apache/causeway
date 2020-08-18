@@ -10,9 +10,11 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
+import lombok.val;
+
+//tag::class[]
 @Service
 public class PublisherServiceSpiForProperties implements PublisherService {
 
@@ -20,17 +22,14 @@ public class PublisherServiceSpiForProperties implements PublisherService {
 
     @Override
     public void publish(Interaction.Execution<?, ?> execution) {
-
-        final InteractionDto dto =
-                InteractionDtoUtils.newInteractionDto(execution, InteractionDtoUtils.Strategy.DEEP);
-
+        val dto = InteractionDtoUtils.newInteractionDto(            // <.>
+                    execution, InteractionDtoUtils.Strategy.DEEP);
         executions.add(dto);
     }
+    // ...
+//end::class[]
 
-    @Override
-    public void publish(PublishedObjects publishedObjects) {
-    }
-
+//tag::demo[]
     public Stream<InteractionDto> streamInteractionDtos() {
         return executions.stream();
     }
@@ -38,5 +37,12 @@ public class PublisherServiceSpiForProperties implements PublisherService {
     public void clear() {
         executions.clear();
     }
+//end::demo[]
 
+    @Override
+    public void publish(PublishedObjects publishedObjects) {
+    }
+
+//tag::class[]
 }
+//end::class[]

@@ -52,6 +52,8 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
 
     public ActionPublishingJdo(String initialValue) {
         this.property = initialValue;
+        this.propertyMetaAnnotated = initialValue;
+        this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
     public String title() {
@@ -63,6 +65,16 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
     @MemberOrder(name = "annotation", sequence = "1")
     @Getter @Setter
     private String property;
+
+    @Property()
+    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @Getter @Setter
+    private String propertyMetaAnnotated;
+
+    @Property()
+    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+    @Getter @Setter
+    private String propertyMetaAnnotatedOverridden;
 //end::property[]
 
 //tag::annotation[]
@@ -73,7 +85,8 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
         , associateWithSequence = "1"
     )
     @ActionLayout(
-        describedAs = "@Action(publishing = ENABLED)"
+        named = "Update Property"
+        , describedAs = "@Action(publishing = ENABLED)"
     )
     public ActionPublishingJdo updatePropertyUsingAnnotation(final String value) {
         setProperty(value);
@@ -86,23 +99,46 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
 //end::annotation[]
 
 //tag::meta-annotation[]
-    @ActionPublishingEnabledMetaAnnotation
+    @ActionPublishingEnabledMetaAnnotation      // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "property"
-        , associateWithSequence = "2"
+        , associateWith = "propertyMetaAnnotated"
+        , associateWithSequence = "1"
     )
     @ActionLayout(
-            describedAs = "@PublishingEnabledMetaAnnotation"
+        named = "Update Property"
+        , describedAs = "@PublishingEnabledMetaAnnotation"
     )
     public ActionPublishingJdo updatePropertyUsingMetaAnnotation(final String value) {
-        setProperty(value);
+        setPropertyMetaAnnotated(value);
         return this;
     }
     public String default0UpdatePropertyUsingMetaAnnotation() {
-        return getProperty();
+        return getPropertyMetaAnnotated();
     }
 //end::meta-annotation[]
+
+//tag::meta-annotation-overridden[]
+    @ActionPublishingDisabledMetaAnnotation     // <.>
+    @Action(
+        publishing = Publishing.ENABLED         // <.>
+        , semantics = SemanticsOf.IDEMPOTENT
+        , associateWith = "propertyMetaAnnotatedOverridden"
+        , associateWithSequence = "1"
+    )
+    @ActionLayout(
+        named = "Update Property"
+        , describedAs =
+            "@PublishingEnabledMetaAnnotation @Action(publishing = ENABLED)"
+    )
+    public ActionPublishingJdo updatePropertyUsingMetaAnnotationButOverridden(final String value) {
+        setPropertyMetaAnnotatedOverridden(value);
+        return this;
+    }
+    public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
+        return getPropertyMetaAnnotatedOverridden();
+    }
+//end::meta-annotation-overridden[]
 
 
 //tag::class[]

@@ -1,20 +1,20 @@
 package demoapp.dom.annotDomain.Action.publishing.spiimpl;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdo;
 
+//tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "interactionExecutions"
 )
 public class ActionPublishingJdo_clearInteractionExecutions {
+    // ...
+//end::class[]
 
     private final ActionPublishingJdo actionPublishingJdo;
 
@@ -22,11 +22,13 @@ public class ActionPublishingJdo_clearInteractionExecutions {
         this.actionPublishingJdo = actionPublishingJdo;
     }
 
-    public List<InteractionDto> act() {
+//tag::class[]
+    public ActionPublishingJdo act() {
         publisherServiceSpiForActions.clear();
-        return (List<InteractionDto>) actionPublishingJdo;
+        return actionPublishingJdo;
     }
 
     @Inject
-    private PublisherServiceSpiForActions publisherServiceSpiForActions;
+    PublisherServiceSpiForActions publisherServiceSpiForActions;
 }
+//end::class[]

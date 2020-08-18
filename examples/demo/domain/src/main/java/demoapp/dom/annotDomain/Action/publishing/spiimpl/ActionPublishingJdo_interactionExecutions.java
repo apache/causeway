@@ -1,17 +1,22 @@
 package demoapp.dom.annotDomain.Action.publishing.spiimpl;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
+import lombok.val;
+
 import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdo;
 
+//tag::class[]
 @Collection
 public class ActionPublishingJdo_interactionExecutions {
+    // ...
+//end::class[]
 
     private final ActionPublishingJdo actionPublishingJdo;
 
@@ -19,12 +24,16 @@ public class ActionPublishingJdo_interactionExecutions {
         this.actionPublishingJdo = actionPublishingJdo;
     }
 
+//tag::class[]
     public List<InteractionDto> coll() {
-        return publisherServiceSpiForActions
+        val list = new LinkedList<InteractionDto>();
+        publisherServiceSpiForActions
                 .streamInteractionDtos()
-                .collect(Collectors.toList());
+                .forEach(list::push);   // reverse order
+        return list;
     }
 
     @Inject
     private PublisherServiceSpiForActions publisherServiceSpiForActions;
 }
+//end::class[]

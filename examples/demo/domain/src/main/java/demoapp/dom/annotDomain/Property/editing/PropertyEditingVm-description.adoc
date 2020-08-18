@@ -30,7 +30,7 @@ The `editing` semantic can be specified explicitly using an annotation:
 ----
 include::PropertyEditingVm.java[tags=annotation]
 ----
-<.> explicitly specifies the maximum length that can be entered for the property
+<.> explicitly specifies that the property is editable
 
 The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
 

@@ -6,13 +6,15 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo;
-import demoapp.dom.annotDomain.Property.publishing.spiimpl.PublisherServiceSpiForProperties;
 
+//tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "publishedObjects"
 )
 public class DomainObjectPublishingJdo_clearPublishedObjects {
+    // ...
+//end::class[]
 
     private final DomainObjectPublishingJdo domainObjectPublishingJdo;
 
@@ -20,11 +22,13 @@ public class DomainObjectPublishingJdo_clearPublishedObjects {
         this.domainObjectPublishingJdo = domainObjectPublishingJdo;
     }
 
+    //tag::class[]
     public DomainObjectPublishingJdo act() {
         publisherServiceSpiForDomainObject.clear();
         return domainObjectPublishingJdo;
     }
 
     @Inject
-    private PublisherServiceSpiForDomainObject publisherServiceSpiForDomainObject;
+    PublisherServiceSpiForDomainObject publisherServiceSpiForDomainObject;
 }
+//end::class[]

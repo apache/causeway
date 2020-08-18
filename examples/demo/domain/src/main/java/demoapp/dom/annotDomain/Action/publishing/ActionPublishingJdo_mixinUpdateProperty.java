@@ -7,13 +7,14 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
 @Action(
-    publishing = Publishing.ENABLED
+    publishing = Publishing.ENABLED         // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "property"
-    , associateWithSequence = "3"
+    , associateWithSequence = "2"
 )
 @ActionLayout(
-    describedAs = "@Action(publishing = ENABLED)"
+    named = "Mixin Update Property"
+    , describedAs = "@Action(publishing = ENABLED)"
 )
 public class ActionPublishingJdo_mixinUpdateProperty {
     // ...

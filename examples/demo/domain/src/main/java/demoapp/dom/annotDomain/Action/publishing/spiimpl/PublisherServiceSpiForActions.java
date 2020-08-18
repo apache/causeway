@@ -12,6 +12,9 @@ import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
+import lombok.val;
+
+//tag::class[]
 @Service
 public class PublisherServiceSpiForActions implements PublisherService {
 
@@ -19,17 +22,14 @@ public class PublisherServiceSpiForActions implements PublisherService {
 
     @Override
     public void publish(Interaction.Execution<?, ?> execution) {
-
-        final InteractionDto dto =
-                InteractionDtoUtils.newInteractionDto(execution, InteractionDtoUtils.Strategy.DEEP);
-
+        val dto = InteractionDtoUtils.newInteractionDto(            // <.>
+                    execution, InteractionDtoUtils.Strategy.DEEP);
         executions.add(dto);
     }
+    // ...
+//end::class[]
 
-    @Override
-    public void publish(PublishedObjects publishedObjects) {
-    }
-
+//tag::demo[]
     public Stream<InteractionDto> streamInteractionDtos() {
         return executions.stream();
     }
@@ -37,5 +37,12 @@ public class PublisherServiceSpiForActions implements PublisherService {
     public void clear() {
         executions.clear();
     }
+//end::demo[]
 
+    @Override
+    public void publish(PublishedObjects publishedObjects) {
+    }
+
+//tag::class[]
 }
+//end::class[]
