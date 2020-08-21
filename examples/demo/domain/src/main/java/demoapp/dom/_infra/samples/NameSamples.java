@@ -18,11 +18,17 @@
  */
 package demoapp.dom._infra.samples;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
+
+import lombok.val;
 
 import demoapp.dom.types.Samples;
 
@@ -38,4 +44,10 @@ public class NameSamples implements Samples<String> {
         );
     }
 
+    public String random() {
+        val names = new ArrayList<String>();
+        stream().forEach(names::add);
+        Collections.shuffle(names);
+        return names.stream().findFirst().orElse(null);
+    }
 }

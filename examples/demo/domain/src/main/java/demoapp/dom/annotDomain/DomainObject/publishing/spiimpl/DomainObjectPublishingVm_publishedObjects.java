@@ -10,17 +10,18 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.val;
 
-import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo;
+import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingVm;
 
 //tag::class[]
 @Collection
-public class DomainObjectPublishingJdo_publishedObjects {
+public class DomainObjectPublishingVm_publishedObjects {
     // ...
 //end::class[]
 
-    private final DomainObjectPublishingJdo domainObjectPublishingJdo;
-    public DomainObjectPublishingJdo_publishedObjects(DomainObjectPublishingJdo domainObjectPublishingJdo) {
-        this.domainObjectPublishingJdo = domainObjectPublishingJdo;
+    private final DomainObjectPublishingVm domainObjectPublishingVm;
+
+    public DomainObjectPublishingVm_publishedObjects(DomainObjectPublishingVm domainObjectPublishingVm) {
+        this.domainObjectPublishingVm = domainObjectPublishingVm;
     }
 
 //tag::class[]

@@ -18,39 +18,40 @@
  */
 package demoapp.dom.annotDomain.DomainObject.publishing;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.annotLayout.PropertyLayout.cssClass.CssClassRedMetaAnnotation;
 
 //tag::class[]
-public interface DomainObjectPublishingJdo extends HasAsciiDocDescription {
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.DomainObjectPublishingVm"
+)
+public class DomainObjectPublishingVm implements HasAsciiDocDescription {
 
-    @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "property", sequence = "1")
-    String getProperty();
-    void setProperty(String value);
+    public String title() {
+        return "DomainObject#publishing";
+    }
 
-    @Property(editing = Editing.DISABLED)
-    @MemberOrder(name = "action", sequence = "1")
-    String getPropertyUpdatedByAction();
-    void setPropertyUpdatedByAction(String value);
 
 }
 //end::class[]

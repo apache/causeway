@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -40,17 +41,35 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
-public interface DomainObjectPublishingJdo extends HasAsciiDocDescription {
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject(
+        nature=Nature.JDO_ENTITY
+        , objectType = "demo.DomainObjectPublishingEnabledJdo"
+        , publishing = Publishing.ENABLED          // <.>
+        , bounding = Bounding.BOUNDED
+)
+@DomainObjectLayout(
+        describedAs =
+                "@DomainObject(publishing=ENABLED)"
+)
+public class DomainObjectPublishingEnabledJdo implements DomainObjectPublishingJdo {
+    // ...
+//end::class[]
 
-    @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "property", sequence = "1")
-    String getProperty();
-    void setProperty(String value);
+    public DomainObjectPublishingEnabledJdo(String initialValue) {
+        this.property = initialValue;
+        this.propertyUpdatedByAction = initialValue;
+    }
 
-    @Property(editing = Editing.DISABLED)
-    @MemberOrder(name = "action", sequence = "1")
-    String getPropertyUpdatedByAction();
-    void setPropertyUpdatedByAction(String value);
+//tag::class[]
+    @Title(sequence = "1.0")
+    @Getter @Setter
+    private String property;
+
+    @Getter @Setter
+    @Title(sequence = "2.0", prepend = " / ")
+    private String propertyUpdatedByAction;
 
 }
 //end::class[]

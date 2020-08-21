@@ -28,8 +28,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo;
-import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingEnabledJdo;
+import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingEnabledJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DomainObjectMenu")
 @Log4j2
@@ -37,11 +38,8 @@ public class DomainObjectMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Object changed events as XML")
-    public DomainObjectPublishingJdo publishing(){
-        return domainObjectPublishingJdoEntities.first();
+    public DomainObjectPublishingVm publishing(){
+        return new DomainObjectPublishingVm();
     }
-
-    @Inject
-    DomainObjectPublishingJdoEntities domainObjectPublishingJdoEntities;
 
 }

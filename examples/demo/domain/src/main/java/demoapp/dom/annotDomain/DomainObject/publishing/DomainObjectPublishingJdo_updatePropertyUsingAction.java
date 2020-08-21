@@ -18,39 +18,34 @@
  */
 package demoapp.dom.annotDomain.DomainObject.publishing;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Bounding;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
-public interface DomainObjectPublishingJdo extends HasAsciiDocDescription {
+@Action(
+    semantics = SemanticsOf.IDEMPOTENT
+    , associateWith = "propertyUpdatedByAction"
+)
+public class DomainObjectPublishingJdo_updatePropertyUsingAction implements HasAsciiDocDescription {
+    // ...
+//end::class[]
+    private final DomainObjectPublishingJdo domainObjectPublishingJdo;
 
-    @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "property", sequence = "1")
-    String getProperty();
-    void setProperty(String value);
+    public DomainObjectPublishingJdo_updatePropertyUsingAction(DomainObjectPublishingJdo domainObjectPublishingJdo) {
+        this.domainObjectPublishingJdo = domainObjectPublishingJdo;
+    }
 
-    @Property(editing = Editing.DISABLED)
-    @MemberOrder(name = "action", sequence = "1")
-    String getPropertyUpdatedByAction();
-    void setPropertyUpdatedByAction(String value);
+//tag::class[]
+    public DomainObjectPublishingJdo_updatePropertyUsingAction updateProperty(final String value) {
+        domainObjectPublishingJdo.setPropertyUpdatedByAction(value);
+        return this;
+    }
+    public String default0UpdateProperty() {
+        return domainObjectPublishingJdo.getPropertyUpdatedByAction();
+    }
 
 }
 //end::class[]

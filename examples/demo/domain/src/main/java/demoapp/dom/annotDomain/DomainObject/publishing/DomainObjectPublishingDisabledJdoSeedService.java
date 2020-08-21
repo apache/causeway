@@ -11,18 +11,18 @@ import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class DomainObjectPublishingJdoSeedService extends SeedServiceAbstract {
+public class DomainObjectPublishingDisabledJdoSeedService extends SeedServiceAbstract {
 
-    public DomainObjectPublishingJdoSeedService() {
-        super(PropertyPublishingJdoEntityFixture::new);
+    public DomainObjectPublishingDisabledJdoSeedService() {
+        super(PropertyPublishingNotJdoEntityFixture::new);
     }
 
-    static class PropertyPublishingJdoEntityFixture extends FixtureScript {
+    static class PropertyPublishingNotJdoEntityFixture extends FixtureScript {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
-                    .map(DomainObjectPublishingJdo::new)
+                    .map(DomainObjectPublishingDisabledJdo::new)
                     .forEach(domainObject -> {
                         repositoryService.persist(domainObject);
                         executionContext.addResult(this, domainObject);
