@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession;
 
 import lombok.Getter;
 import lombok.val;
@@ -203,30 +202,5 @@ final public class ObjectAdapterContext {
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
         lifecycleEventMixin.postLifecycleEventIfRequired(adapter, lifecycleEventFacetClass);
     }
-
-    // ------------------------------------------------------------------------------------------------
-
-    /**
-     * @param newRootOid - allow a different persistent root oid to be provided.
-     * @param session 
-     */
-    public void asPersistent(final ObjectAdapter rootAdapter, PersistenceSession session) {
-
-        final RootOid persistentOid = createPersistentOrViewModelOid(rootAdapter.getPojo());
-
-        Objects.requireNonNull(persistentOid);
-        _Assert.assertFalse(rootAdapter.isParented(), "expected to not be parented");
-        
-        final ObjectSpecId hintRootOidObjectSpecId = persistentOid.getObjectSpecId();
-        final ObjectSpecId adapterObjectSpecId = rootAdapter.getSpecification().getSpecId();
-        if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {
-            throw _Exceptions.unrecoverable("hintRootOid's objectType must be same as that of adapter " +
-                    "(was: '" + hintRootOidObjectSpecId + "'; adapter's is " + adapterObjectSpecId + "'");
-        }
-    }
-
-
-
-
 
 }

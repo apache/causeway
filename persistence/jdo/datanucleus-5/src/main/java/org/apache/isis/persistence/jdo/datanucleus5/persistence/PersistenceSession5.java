@@ -740,44 +740,27 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * to determine which callback to fire.
      */
     @Override
-    public void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(final Persistable pojo) {
+    public void enlistCreatedAndInvokeIsisPersistedCallback(final Persistable pojo) {
+
         val adapter = adapterFor(pojo);
-        
-        if (EntityUtil.isAttached(adapter)) {
-            // updating;
-            // the callback and transaction.enlist are done in the preDirty callback
-            // (can't be done here, as the enlist requires to capture the 'before' values)
-            CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
 
-        } else {
-            // persisting
+        final boolean wasAlreadyEnlisted = changedObjectsServiceProvider.get().isEnlisted(adapter);
+        changedObjectsServiceProvider.get().enlistCreated(adapter);
 
-            objectAdapterContext.asPersistent(adapter, this);
-
+        if(!wasAlreadyEnlisted) {
             CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
             objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
-
-            changedObjectsServiceProvider.get().enlistCreated(adapter);
         }
-        
+
     }
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
 
-        // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
-        // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
-        // mapped.
-
-        // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
-        // DN would not be calling this callback if the pojo was not persistent.
-
         final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
         if (adapter == null) {
             throw new RuntimeException(
-                    "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
-                            + pojo + "]");
+                    String.format("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo));
         }
 
         final boolean wasAlreadyEnlisted = changedObjectsServiceProvider.get().isEnlisted(adapter);
@@ -792,6 +775,21 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
         }
 
+    }
+
+    @Override
+    public void invokeIsisUpdatedCallback(Persistable pojo) {
+
+        final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
+        if (adapter == null) {
+            throw new RuntimeException(
+                    String.format("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo));
+        }
+
+        // the callback and transaction.enlist are done in the preStore callback
+        // (can't be done here, as the enlist requires to capture the 'before' values)
+        CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
+        objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
     }
 
     /**

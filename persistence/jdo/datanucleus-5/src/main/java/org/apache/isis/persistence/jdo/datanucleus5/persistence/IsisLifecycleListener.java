@@ -47,10 +47,14 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         void ensureRootObject(Persistable pojo);
         ObjectAdapter initializeEntity(Persistable pojo);
 
-        void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(Persistable pojo);
         void invokeIsisPersistingCallback(Persistable pojo);
+        void enlistCreatedAndInvokeIsisPersistedCallback(Persistable pojo);
+
         void enlistUpdatingAndInvokeIsisUpdatingCallback(Persistable pojo);
+        void invokeIsisUpdatedCallback(Persistable pojo);
+
         void enlistDeletingAndInvokeIsisRemovingCallbackFacet(Persistable pojo);
+
     }
 
     private final PersistenceSessionLifecycleManagement persistenceSession;
@@ -90,19 +94,25 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void preStore(InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
-        persistenceSession.invokeIsisPersistingCallback(pojo);
+        if(pojo.dnGetStateManager().isNew(pojo)) {
+            persistenceSession.invokeIsisPersistingCallback(pojo);
+        } else {
+            persistenceSession.enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
+        }
     }
 
     @Override
     public void postStore(InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
-        persistenceSession.enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(pojo);
+        if(pojo.dnGetStateManager().isNew(pojo)) {
+            persistenceSession.enlistCreatedAndInvokeIsisPersistedCallback(pojo);
+        } else {
+            persistenceSession.invokeIsisUpdatedCallback(pojo);
+        }
     }
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
-        final Persistable pojo = Utils.persistenceCapableFor(event);
-        persistenceSession.enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
     }
 
     @Override
