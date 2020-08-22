@@ -23,6 +23,7 @@ isis:
     annotation:
       action:
         explicit: true
+        publishing: none
       action-layout:
         css-class-fa:
           patterns:
@@ -38,6 +39,9 @@ isis:
             delete.*:btn-danger
       domain-object:
         editing: false
+        publishing: none
+      property:
+        publishing: none
       property-layout:
         label-position: LEFT
       parameter-layout:

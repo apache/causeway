@@ -92,3 +92,19 @@ include::spiimpl/PropertyPublishingJdo_interactionExecutions.java[tags=class]
 include::spiimpl/PropertyPublishingJdo_clearInteractionExecutions.java[tags=class]
 ----
 
+
+
+== Configuration
+
+By default, publishing of property edits is disabled.
+This can be configured globally:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  applib:
+    annotation:
+      property:
+        publishing: none
+----

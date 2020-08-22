@@ -1,100 +1,86 @@
-The `publishing` semantic for a domain object means that all registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI] will be notified of the identity and nature of change (created/updated/deleted) of the domain object.
+The `publishing` semantic for a domain object means that all registered implementation(s) of the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI] will be notified of the identity and nature of the change (created/updated/deleted) to the domain object.
 This is done _after_ the interaction in which the object(s) was changed has completed.
 
 This notification is done only once per interaction, so will include _all_ domain objects that were changed.
 The event object can be converted to type xref:https://isis.apache.org/refguide/2.0.0-M3/schema/chg.html[ChangesDto].
 
-NOTE: This is only supported for domain entities, not view models.
-
-Common use cases are to replicate data to another system, or for gathering metrics (which objects are changed the most?).
+Common use cases are to replicate data to another system, or for gathering metrics ("which objects change the most?").
 A typical SPI implementation could publish the event over the network, or perhaps store in a database.
 (Note that the framework provides an link:https://isis.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern]).
 
-The semantic can be specified using either the `@Property` annotation, or through a meta-annotation.
+The semantic can be specified using either the `@DomainObject` annotation, or through a meta-annotation.
 
-NOTE: The demo shows publishing of entities, as this is much more common use case than publishing a view model.
+NOTE: Publishing of domain objects is only supported for domain entities, not view models.
 
-CAUTION: TODO
 
-//== Annotated
-//
-//The `publisher` semantic can be specified explicitly using an annotation through `@Property#publishing()`:
-//
-//[source,java,indent=0]
-//----
-//include::PropertyPublishingJdo.java[tags=annotation]
-//----
-//<.> explicitly specifies that modifying the property should be published.
-//
-//The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
-//
-//== Meta-annotated
-//
-//The `publishing` semantic can also be specified using a custom meta-annotation:
-//
-//* the meta-annotation is defined as:
-//+
-//[source,java]
-//----
-//include::PropertyPublishingEnabledMetaAnnotation.java[tags=class]
-//----
-//<.> annotated for a property
-//<.> annotation can be applied to a property (either its getter or the field directly)
-//
-//* and can be applied to a property:
-//+
-//[source,java,indent=0]
-//----
-//include::PropertyPublishingJdo.java[tags=meta-annotated]
-//----
-//<.> semantic is inherited from the meta-annotation
-//
-//
-//
-//=== Meta-annotated Overridden
-//
-//The meta-annotation can itself be overridden:
-//
-//* in a property:
-//+
-//[source,java,indent=0]
-//----
-//include::PropertyPublishingJdo.java[tags=meta-annotated-overridden]
-//----
-//<.> semantic from meta-annotation ...
-//<.> \... is overridden by the `@Property` annotation
-//
-//
-//== PublisherService
-//
-//The demo provides a simple implementation of `PublisherService` that just stores the DTOs in memory:
-//
-//[source,java]
-//----
-//include::spiimpl/PublisherServiceSpiForProperties.java[tags=class]
-//----
-//<.> serializes to `InteractionDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/ixn.html[Apache Isis schema].
-//
-//The demo implementation also provides a way to query these executions:
-//
-//[source,java,indent=0]
-//----
-//include::spiimpl/PublisherServiceSpiForProperties.java[tags=demo]
-//----
-//
-//Supporting mixins surface this list as contributions on the object:
-//
-//* `interactionExecutions` collection:
-//+
-//[source,java,indent=0]
-//----
-//include::spiimpl/PropertyPublishingJdo_interactionExecutions.java[tags=class]
-//----
-//
-//* `clearInteractionExecutions` action:
-//+
-//[source,java,indent=0]
-//----
-//include::spiimpl/PropertyPublishingJdo_clearInteractionExecutions.java[tags=class]
-//----
-//
+== Explanation of the Demo
+
+The demo provides a view model which can be used to create, update or delete four variations of a domain entity:
+
+* annotated using `@DomainObject(publishing=...)` for both enabled and disabled
+* meta-annotated as enabled
+* meta-annotated as disabled, but then overridden
+
+These can be updated using the view model's `create`, `update all` and `delete` actions, generating publishing events.
+
+TIP: Click through to the entity objects to see examples of the annotations applied.
+
+== PublisherService
+
+The demo also has a simple implementation of `PublisherService` that just stores the DTOs in memory:
+
+[source,java]
+----
+include::spiimpl/PublisherServiceSpiForDomainObject.java[tags=class]
+----
+<.> serializes to `ChangesDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/chg.html[Apache Isis schema].
+
+The demo implementation also provides a way to query these executions:
+
+[source,java,indent=0]
+----
+include::spiimpl/PublisherServiceSpiForDomainObject.java[tags=demo]
+----
+
+Supporting mixins surface this list as contributions on the object:
+
+* `publishedObjects` collection:
++
+[source,java,indent=0]
+----
+include::spiimpl/DomainObjectPublishingVm_publishedObjects.java[tags=class]
+----
+
+* `clearPublishedObjects` action:
++
+[source,java,indent=0]
+----
+include::spiimpl/DomainObjectPublishingVm_clearPublishedObjects.java[tags=class]
+----
+
+
+For the three (of the four in total) domain entities where publishing is enabled, this collection should be appended to when the `create`, `update all` or `delete` actions are invoked.
+
+[NOTE]
+====
+Because the `Publisher` is notified after the interaction has completed, it's necessary to refresh the page to see the collection of changes being updated.
+
+This can be done simply by clicking on the view model's title.
+====
+
+
+== Configuration
+
+By default, publishing of domain objects is disabled.
+This can be configured globally:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  applib:
+    annotation:
+      domain-object:
+        publishing: none
+----
+

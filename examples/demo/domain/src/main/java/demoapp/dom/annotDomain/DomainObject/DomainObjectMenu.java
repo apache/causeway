@@ -18,8 +18,6 @@
  */
 package demoapp.dom.annotDomain.DomainObject;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -28,8 +26,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingEnabledJdo;
-import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingEnabledJdoEntities;
 import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DomainObjectMenu")

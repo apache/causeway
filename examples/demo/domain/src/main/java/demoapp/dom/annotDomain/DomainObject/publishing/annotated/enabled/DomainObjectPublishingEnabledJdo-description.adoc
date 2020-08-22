@@ -1,0 +1,8 @@
+The `publishing` semantic can be specified explicitly using an annotation through `@DomainObject#publishing()`:
+
+[source,java,indent=0]
+----
+include::DomainObjectPublishingEnabledJdo.java[tags=class]
+----
+<.> explicitly specifies that modifying the domain object should be published.
+

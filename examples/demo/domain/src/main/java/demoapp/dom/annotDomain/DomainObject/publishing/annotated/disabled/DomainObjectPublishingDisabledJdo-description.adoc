@@ -1,0 +1,7 @@
+If publishing has been enabled by default, then it can of course also be disabled:
+
+[source,java,indent=0]
+----
+include::DomainObjectPublishingDisabledJdo.java[tags=class]
+----
+<.> explicitly specifies that modifying the domain object should _not_ be published.

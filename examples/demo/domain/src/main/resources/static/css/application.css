@@ -211,6 +211,11 @@ div.sectionbody > div.ulist > ul {
     margin-left: -23px;
 }
 
+div.sectionbody > div.listingblock > div.title {
+    font-style: italic;
+    color: #c7254e;
+}
+
 header.navbar-fixed-top {
     position: sticky;
 }
@@ -249,3 +254,4 @@ table.tableblock.grid-all th.tableblock {
 table.tableblock.grid-all td.tableblock {
     padding: 5px;
 }
+

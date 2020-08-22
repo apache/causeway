@@ -8,9 +8,7 @@
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
-			<cpt:action id="create"/>
-			<cpt:action id="updateAll"/>
-			<cpt:action id="delete"/>
+			<cpt:action id="rebuildMetamodel"/>
 		</bs3:col>
 		<bs3:col span="2">
 			<cpt:fieldSet name="" id="sources" />
@@ -21,11 +19,8 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:collection id="publishingEnabledAnnotatedEntities"/>
-					<cpt:collection id="publishingDisabledAnnotatedEntities"/>
-					<cpt:collection id="publishingEnabledMetaAnnotatedEntities"/>
-					<cpt:collection id="publishingEnabledMetaAnnotOverriddenEntities"/>
-					<cpt:collection id="publishedObjects"/>
+					<cpt:fieldSet name="Property edits" id="property"/>
+					<cpt:fieldSet name="Action invocations" id="action"/>
 				</bs3:col>
 			</bs3:row>
 			<bs3:row>
@@ -36,9 +31,9 @@
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >
-				<cpt:action id="rebuildMetamodel" position="PANEL"/>
 				<cpt:action id="clearHints" position="PANEL" />
 				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
 				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="downloadJdoMetadata"  position="PANEL_DROPDOWN"/>

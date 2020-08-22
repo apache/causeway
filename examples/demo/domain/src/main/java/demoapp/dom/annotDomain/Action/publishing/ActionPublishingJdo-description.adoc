@@ -116,3 +116,23 @@ include::spiimpl/ActionPublishingJdo_interactionExecutions.java[tags=class]
 include::spiimpl/ActionPublishingJdo_clearInteractionExecutions.java[tags=class]
 ----
 
+
+== Configuration
+
+By default, publishing of action invocations is disabled.
+This can be configured globally:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  applib:
+    annotation:
+      action:
+        publishing: none
+----
+
+In addition to globally enabling or disabling action publishing, it is also possible to specify `ignore_safe`.
+
+This enables publishing for all actions except those that have safe (that is, query-only) semantics.
+In other words actions are published except for those that don't change (aren't declared as changing) the state of the system.

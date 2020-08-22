@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.DomainObject.publishing;
+package demoapp.dom.annotDomain.DomainObject.publishing.annotated.disabled;
 
 import java.util.List;
 import java.util.Objects;
@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
+
+import demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled.DomainObjectPublishingEnabledJdo;
 
 @Service
 public class DomainObjectPublishingDisabledJdoEntities {
@@ -23,6 +25,10 @@ public class DomainObjectPublishingDisabledJdoEntities {
 
     public DomainObjectPublishingDisabledJdo first() {
         return all().stream().findFirst().get();
+    }
+
+    public DomainObjectPublishingDisabledJdo create(String newValue) {
+        return repositoryService.persistAndFlush(new DomainObjectPublishingDisabledJdo(newValue));
     }
 
     public void remove(DomainObjectPublishingDisabledJdo disabledJdo) {

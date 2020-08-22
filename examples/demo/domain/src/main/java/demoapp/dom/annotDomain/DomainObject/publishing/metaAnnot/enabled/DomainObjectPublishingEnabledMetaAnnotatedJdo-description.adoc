@@ -1,0 +1,18 @@
+The `publishing` semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::../DomainObjectPublishingEnabledMetaAnnotation.java[tags=class]
+----
+<.> annotated for a domain object
+<.> annotation can be applied to the type or a further meta-annotation type only
+
+* and can be applied to a domain object:
++
+[source,java,indent=0]
+----
+include::DomainObjectPublishingEnabledMetaAnnotatedJdo.java[tags=class]
+----
+<.> semantic is inherited from the meta-annotation

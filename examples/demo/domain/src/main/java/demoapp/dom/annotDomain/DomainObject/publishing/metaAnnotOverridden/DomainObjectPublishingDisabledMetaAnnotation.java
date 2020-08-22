@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.DomainObject.publishing;
+package demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -11,13 +11,13 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@DomainObject(publishing = Publishing.ENABLED)      // <.>
+@DomainObject(publishing = Publishing.DISABLED)         // <.>
 @Inherited
 @Target({
-        ElementType.TYPE                            // <.>
+        ElementType.TYPE, ElementType.ANNOTATION_TYPE   // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DomainObjectPublishingEnabledMetaAnnotation {
+public @interface DomainObjectPublishingDisabledMetaAnnotation {
 
 }
 //end::class[]

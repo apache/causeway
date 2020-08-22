@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.DomainObject.publishing;
+package demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -39,30 +39,30 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        nature=Nature.JDO_ENTITY
-        , objectType = "demo.DomainObjectPublishingDisabledJdo"
-        , publishing = Publishing.DISABLED          // <.>
-        , bounding = Bounding.BOUNDED
+    nature=Nature.JDO_ENTITY
+    , objectType = "demo.DomainObjectPublishingEnabledJdo"
+    , publishing = Publishing.ENABLED                           // <.>
+    , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(
-        describedAs =
-                "@DomainObject(publishing=DISABLED)"
+    describedAs = "@DomainObject(publishing=ENABLED)"
 )
-public class DomainObjectPublishingDisabledJdo implements DomainObjectPublishingJdo {
+public class DomainObjectPublishingEnabledJdo
+                implements DomainObjectPublishingJdo {
     // ...
 //end::class[]
 
-    public DomainObjectPublishingDisabledJdo(String initialValue) {
+    public DomainObjectPublishingEnabledJdo(String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }
 
-//tag::class[]
     @Title(sequence = "1.0")
     @Getter @Setter
     private String property;
@@ -71,5 +71,6 @@ public class DomainObjectPublishingDisabledJdo implements DomainObjectPublishing
     @Title(sequence = "2.0", prepend = " / ")
     private String propertyUpdatedByAction;
 
+//tag::class[]
 }
 //end::class[]

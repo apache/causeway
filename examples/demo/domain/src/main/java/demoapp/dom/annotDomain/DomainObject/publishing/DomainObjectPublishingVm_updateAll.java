@@ -9,9 +9,13 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.repository.RepositoryService;
 
 import lombok.val;
+
+import demoapp.dom.annotDomain.DomainObject.publishing.annotated.disabled.DomainObjectPublishingDisabledJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled.DomainObjectPublishingEnabledJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.enabled.DomainObjectPublishingEnabledMetaAnnotatedJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.enabled.DomainObjectPublishingEnabledMetaAnnotOverriddenJdoEntities;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
@@ -26,12 +30,39 @@ public class DomainObjectPublishingVm_updateAll {
     }
 
     @MemberOrder(sequence = "2.0")
-    public DomainObjectPublishingVm act() {
+    public DomainObjectPublishingVm act(
+            boolean publishingEnabled
+            , boolean publishingDisabled
+            , boolean publishingEnabledMetaAnnotated
+            , boolean publishingEnabledMetaAnnotOverridden
+    ) {
 
-        renumber((List)publishingEnabledJdoEntities.all());
-        renumber((List)publishingDisabledJdoEntities.all());
+        if(publishingEnabled) {
+            renumber((List)publishingEnabledJdoEntities.all());
+        }
+        if(publishingDisabled) {
+            renumber((List)publishingDisabledJdoEntities.all());
+        }
+        if(publishingEnabledMetaAnnotated) {
+            renumber((List)publishingEnabledMetaAnnotatedJdoEntities.all());
+        }
+        if(publishingEnabledMetaAnnotOverridden) {
+            renumber((List)publishingEnabledMetaAnnotOverriddenJdoEntities.all());
+        }
 
         return domainObjectPublishingVm;
+    }
+    public boolean default0Act() {
+        return true;
+    }
+    public boolean default1Act() {
+        return true;
+    }
+    public boolean default2Act() {
+        return true;
+    }
+    public boolean default3Act() {
+        return true;
     }
 
     private static void renumber(List<DomainObjectPublishingJdo> all) {
@@ -40,9 +71,15 @@ public class DomainObjectPublishingVm_updateAll {
     }
 
     @Inject
+    DomainObjectPublishingEnabledJdoEntities publishingEnabledJdoEntities;
+
+    @Inject
     DomainObjectPublishingDisabledJdoEntities publishingDisabledJdoEntities;
 
     @Inject
-    DomainObjectPublishingEnabledJdoEntities publishingEnabledJdoEntities;
+    DomainObjectPublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
+
+    @Inject
+    DomainObjectPublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
 }
 //end::class[]

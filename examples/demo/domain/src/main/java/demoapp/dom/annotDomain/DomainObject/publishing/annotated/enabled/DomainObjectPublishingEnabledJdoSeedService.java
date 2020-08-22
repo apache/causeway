@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.DomainObject.publishing;
+package demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled;
 
 import javax.inject.Inject;
 
@@ -11,18 +11,18 @@ import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class DomainObjectPublishingDisabledJdoSeedService extends SeedServiceAbstract {
+public class DomainObjectPublishingEnabledJdoSeedService extends SeedServiceAbstract {
 
-    public DomainObjectPublishingDisabledJdoSeedService() {
-        super(PropertyPublishingNotJdoEntityFixture::new);
+    public DomainObjectPublishingEnabledJdoSeedService() {
+        super(PropertyPublishingJdoEntityFixture::new);
     }
 
-    static class PropertyPublishingNotJdoEntityFixture extends FixtureScript {
+    static class PropertyPublishingJdoEntityFixture extends FixtureScript {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
-                    .map(DomainObjectPublishingDisabledJdo::new)
+                    .map(DomainObjectPublishingEnabledJdo::new)
                     .forEach(domainObject -> {
                         repositoryService.persist(domainObject);
                         executionContext.addResult(this, domainObject);

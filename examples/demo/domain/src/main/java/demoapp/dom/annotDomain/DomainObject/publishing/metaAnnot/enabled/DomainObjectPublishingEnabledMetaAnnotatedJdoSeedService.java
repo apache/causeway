@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.DomainObject.publishing;
+package demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.enabled;
 
 import javax.inject.Inject;
 
@@ -11,9 +11,9 @@ import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class DomainObjectPublishingEnabledJdoSeedService extends SeedServiceAbstract {
+public class DomainObjectPublishingEnabledMetaAnnotatedJdoSeedService extends SeedServiceAbstract {
 
-    public DomainObjectPublishingEnabledJdoSeedService() {
+    public DomainObjectPublishingEnabledMetaAnnotatedJdoSeedService() {
         super(PropertyPublishingJdoEntityFixture::new);
     }
 
@@ -22,7 +22,7 @@ public class DomainObjectPublishingEnabledJdoSeedService extends SeedServiceAbst
         @Override
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
-                    .map(DomainObjectPublishingEnabledJdo::new)
+                    .map(DomainObjectPublishingEnabledMetaAnnotatedJdo::new)
                     .forEach(domainObject -> {
                         repositoryService.persist(domainObject);
                         executionContext.addResult(this, domainObject);

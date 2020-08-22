@@ -20,7 +20,9 @@ public class PublisherServiceSpiForDomainObject implements PublisherService {
     private final List<ChangesDto> publishedObjects = new ArrayList<>();
 
     @Override
-    public void publish(PublishedObjects publishedObjects) {
+    public void publish(
+            PublishedObjects publishedObjects       // <.>
+    ) {
         val dto = publishedObjects.getDto();
         this.publishedObjects.add(dto);
     }

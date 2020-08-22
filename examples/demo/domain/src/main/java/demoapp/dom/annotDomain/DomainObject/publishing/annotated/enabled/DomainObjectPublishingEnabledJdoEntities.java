@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.DomainObject.publishing;
+package demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,9 +25,8 @@ public class DomainObjectPublishingEnabledJdoEntities {
         return all().stream().findFirst().get();
     }
 
-    public DomainObjectPublishingEnabledJdo cloneAndPersist(DomainObjectPublishingEnabledJdo original) {
-        return repositoryService.persistAndFlush(
-                new DomainObjectPublishingEnabledJdo(original.getProperty()));
+    public DomainObjectPublishingEnabledJdo create(String newValue) {
+        return repositoryService.persistAndFlush(new DomainObjectPublishingEnabledJdo(newValue));
     }
 
     public void remove(DomainObjectPublishingEnabledJdo enabledJdo) {

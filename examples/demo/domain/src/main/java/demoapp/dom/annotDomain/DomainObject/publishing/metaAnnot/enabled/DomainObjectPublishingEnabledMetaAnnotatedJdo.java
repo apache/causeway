@@ -16,53 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.DomainObject.publishing;
+package demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.enabled;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo;
+import demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.DomainObjectPublishingEnabledMetaAnnotation;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObjectPublishingEnabledMetaAnnotation                    // <.>
 @DomainObject(
-        nature=Nature.JDO_ENTITY
-        , objectType = "demo.DomainObjectPublishingEnabledJdo"
-        , publishing = Publishing.ENABLED          // <.>
-        , bounding = Bounding.BOUNDED
+    nature=Nature.JDO_ENTITY
+    , objectType = "demo.DomainObjectPublishingEnabledMetaAnnotatedJdo"
+    , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(
-        describedAs =
-                "@DomainObject(publishing=ENABLED)"
+    describedAs = "@DomainObjectPublishingEnabledMetaAnnotation"
 )
-public class DomainObjectPublishingEnabledJdo implements DomainObjectPublishingJdo {
+public class DomainObjectPublishingEnabledMetaAnnotatedJdo
+                implements DomainObjectPublishingJdo {
     // ...
 //end::class[]
 
-    public DomainObjectPublishingEnabledJdo(String initialValue) {
+    public DomainObjectPublishingEnabledMetaAnnotatedJdo(String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }
 
-//tag::class[]
     @Title(sequence = "1.0")
     @Getter @Setter
     private String property;
@@ -71,5 +66,6 @@ public class DomainObjectPublishingEnabledJdo implements DomainObjectPublishingJ
     @Title(sequence = "2.0", prepend = " / ")
     private String propertyUpdatedByAction;
 
+//tag::class[]
 }
 //end::class[]
