@@ -35,6 +35,8 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.annotDomain.Action.associateWith.child.ActionAssociateWithChildVm;
+import demoapp.dom.annotDomain.Action.command.ActionCommandJdo;
+import demoapp.dom.annotDomain.Action.command.ActionCommandJdoEntities;
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.annotDomain.Action.hidden.ActionHiddenVm;
 import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdo;
@@ -67,6 +69,13 @@ public class ActionMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
+    public ActionCommandJdo command(){
+        return actionCommandJdoEntities.first();
+    }
+
+
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of actions")
     public ActionDomainEventVm domainEvent(){
         return new ActionDomainEventVm("value");
@@ -79,7 +88,7 @@ public class ActionMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
+    @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
     public ActionPublishingJdo publishing(){
         return actionPublishingJdoEntities.first();
     }
@@ -99,6 +108,9 @@ public class ActionMenu {
 
     @Inject
     ActionPublishingJdoEntities actionPublishingJdoEntities;
+
+    @Inject
+    ActionCommandJdoEntities actionCommandJdoEntities;
 
     @Inject
     NameSamples samples;

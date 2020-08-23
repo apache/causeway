@@ -113,6 +113,7 @@ as a replacement for
             <mb3:section>
                 <mb3:named>@Action</mb3:named>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="command"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="publishing"/>

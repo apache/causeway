@@ -23,11 +23,13 @@
 					<cpt:fieldSet name="Contributed" id="contributed"/>
 					<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
 					<cpt:fieldSet name="Meta-annotated Overridden" id="meta-annotated-overridden"/>
+					<cpt:fieldSet name="Background" id="background"/>
 				</bs3:col>
 			</bs3:row>
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:collection id="interactionExecutions"/>
+					<cpt:collection id="foregroundCommands"/>
+					<cpt:collection id="backgroundCommands"/>
 				</bs3:col>
 			</bs3:row>
 			<bs3:row>

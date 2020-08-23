@@ -76,7 +76,7 @@ public class PropertyPublishingJdo implements HasAsciiDocDescription {
     @PropertyPublishingEnabledMetaAnnotation                // <.>
     @Property()
     @PropertyLayout(
-        describedAs = "@PublishingEnabledMetaAnnotation"
+        describedAs = "@PropertyPublishingEnabledMetaAnnotation"
     )
     @MemberOrder(name = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
@@ -91,7 +91,7 @@ public class PropertyPublishingJdo implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@PublishingDisabledMetaAnnotation " +
+            "@PropertyPublishingDisabledMetaAnnotation " +
             "@Property(publishing = ENABLED)"
     )
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")

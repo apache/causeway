@@ -1,0 +1,140 @@
+CAUTION: TODO - to document
+
+//The `publishing` semantic specifies that the invocation of an object action should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI].
+//This is performed _after_ the action has been invoked.
+//
+//The publishing from the framework to the SPI is in-memory.
+//A typical SPI implementation would then publish over the network, or perhaps store in a database.
+//(Note that the framework provides an link:https://isis.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern]).
+//
+//The semantic can be specified using either the `@Action` annotation, or through a meta-annotation.
+//
+//NOTE: The demo shows publishing of entities, as this is much more common use case than publishing a view model.
+//
+//== Annotated
+//
+//The `publisher` semantic can be specified explicitly using an annotation through `@Action#publishing()`:
+//
+//* it can be applied to an action:
+//+
+//[source,java,indent=0]
+//----
+//include::ActionPublishingJdo.java[tags=annotation]
+//----
+//<.> explicitly specifies that invoking the action should be published.
+//
+//* or to a mixin:
+//+
+//[source,java,indent=0]
+//----
+//include::ActionPublishingJdo_mixinUpdateProperty.java[tags=class]
+//----
+//<.> explicitly specifies that invoking the mixin action should be published.
+//
+//
+//== Meta-annotated
+//
+//The `publishing` semantic can also be specified using a custom meta-annotation:
+//
+//* the meta-annotation is defined as:
+//+
+//[source,java,indent=0]
+//----
+//include::ActionPublishingEnabledMetaAnnotation.java[tags=class]
+//----
+//<.> annotated for an action
+//<.> annotation can be applied to an action method or to a mixin
+//
+//* and can be applied to an action:
+//+
+//[source,java,indent=0]
+//----
+//include::ActionPublishingJdo.java[tags=meta-annotation]
+//----
+//<.> semantic is inherited from the meta-annotation
+//
+//* or to a mixin:
+//+
+//[source,java,indent=0]
+//----
+//include::ActionPublishingJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+//----
+//<.> semantic is inherited from the meta-annotation
+//
+//
+//=== Meta-annotated Overridden
+//
+//The meta-annotation can itself be overridden:
+//
+//* for an action:
+//+
+//[source,java,indent=0]
+//----
+//include::ActionPublishingJdo.java[tags=meta-annotation-overridden]
+//----
+//<.> semantic from meta-annotation ...
+//<.> \... is overridden by the `@Action` annotation
+//
+//* or on a mixin:
+//+
+//[source,java,indent=0]
+//----
+//include::ActionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
+//----
+//<.> semantic from meta-annotation ...
+//<.> \... is overridden by the `@Action` annotation
+//
+//
+//== PublisherService
+//
+//The demo provides a simple implementation of `PublisherService` that just stores the DTOs in memory:
+//
+//[source,java]
+//----
+//include::spiimpl/PublisherServiceSpiForActions.java[tags=class]
+//----
+//<.> serializes to `InteractionDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/ixn.html[Apache Isis schema].
+//
+//The demo implementation also provides a way to query these executions:
+//
+//[source,java,indent=0]
+//----
+//include::spiimpl/PublisherServiceSpiForActions.java[tags=demo]
+//----
+//
+//Supporting mixins surface this list as contributions on the object:
+//
+//* `interactionExecutions` collection:
+//+
+//[source,java,indent=0]
+//----
+//include::spiimpl/ActionPublishingJdo_interactionExecutions.java[tags=class]
+//----
+//
+//* `clearInteractionExecutions` action:
+//+
+//[source,java,indent=0]
+//----
+//include::spiimpl/ActionPublishingJdo_clearInteractionExecutions.java[tags=class]
+//----
+//
+//
+//== Configuration
+//
+//By default, publishing of action invocations is disabled.
+//This can be configured globally:
+//
+//[source,yaml]
+//.application.yml
+//----
+//isis:
+//  applib:
+//    annotation:
+//      action:
+//        publishing: none
+//----
+//
+//In addition to globally enabling or disabling action publishing, it is also possible to specify `ignore_safe`.
+//
+//This enables publishing for all actions except those that have safe (that is, query-only) semantics.
+//In other words actions are published except for those that don't change (aren't declared as changing) the state of the system.

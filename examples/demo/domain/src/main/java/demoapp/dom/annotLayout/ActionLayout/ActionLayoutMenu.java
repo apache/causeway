@@ -37,7 +37,7 @@ public class ActionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-terminal", describedAs = "Location and style of action's prompt dialog")
+    @ActionLayout(cssClassFa="fa-question-circle", describedAs = "Location and style of action's prompt dialog")
     public demoapp.dom.annotLayout.ActionLayout.promptStyle.ActionLayoutPromptStyleVm promptStyle(){
         return new demoapp.dom.annotLayout.ActionLayout.promptStyle.ActionLayoutPromptStyleVm();
     }

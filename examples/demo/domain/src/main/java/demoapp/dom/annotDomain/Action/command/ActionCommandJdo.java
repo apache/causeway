@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Action.publishing;
+package demoapp.dom.annotDomain.Action.command;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -25,6 +25,9 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CommandExecuteIn;
+import org.apache.isis.applib.annotation.CommandPersistence;
+import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -43,21 +46,22 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.JDO_ENTITY
-        , objectType = "demo.ActionPublishingJdo"
+        , objectType = "demo.ActionCommandJdo"
         , editing = Editing.DISABLED
 )
-public class ActionPublishingJdo implements HasAsciiDocDescription {
+public class ActionCommandJdo implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public ActionPublishingJdo(String initialValue) {
+    public ActionCommandJdo(String initialValue) {
         this.property = initialValue;
         this.propertyMetaAnnotated = initialValue;
         this.propertyMetaAnnotatedOverridden = initialValue;
+        this.propertyUpdateInBackground = initialValue;
     }
 
     public String title() {
-        return "Action#publishing";
+        return "Action#command";
     }
 
 //tag::property[]
@@ -75,31 +79,35 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
     @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotatedOverridden;
+
+    @Property()
+    @MemberOrder(name = "background", sequence = "1")
+    @Getter @Setter
+    private String propertyUpdateInBackground;
 //end::property[]
 
 //tag::annotation[]
     @Action(
-        publishing = Publishing.ENABLED         // <.>
+        command = CommandReification.ENABLED         // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
         , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
-        , describedAs = "@Action(publishing = ENABLED)"
+        , describedAs = "@Action(command = ENABLED)"
     )
-    public ActionPublishingJdo updatePropertyUsingAnnotation(final String value) {
+    public ActionCommandJdo updatePropertyUsingAnnotation(final String value) {
         setProperty(value);
         return this;
     }
     public String default0UpdatePropertyUsingAnnotation() {
         return getProperty();
     }
-
 //end::annotation[]
 
 //tag::meta-annotation[]
-    @ActionPublishingEnabledMetaAnnotation      // <.>
+    @ActionCommandEnabledMetaAnnotation      // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotated"
@@ -107,9 +115,9 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
     )
     @ActionLayout(
         named = "Update Property"
-        , describedAs = "@ActionPublishingEnabledMetaAnnotation"
+        , describedAs = "@ActionCommandEnabledMetaAnnotation"
     )
-    public ActionPublishingJdo updatePropertyUsingMetaAnnotation(final String value) {
+    public ActionCommandJdo updatePropertyUsingMetaAnnotation(final String value) {
         setPropertyMetaAnnotated(value);
         return this;
     }
@@ -119,9 +127,9 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
 //end::meta-annotation[]
 
 //tag::meta-annotation-overridden[]
-    @ActionPublishingDisabledMetaAnnotation     // <.>
+    @ActionCommandDisabledMetaAnnotation        // <.>
     @Action(
-        publishing = Publishing.ENABLED         // <.>
+        command = CommandReification.ENABLED    // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotatedOverridden"
         , associateWithSequence = "1"
@@ -129,10 +137,9 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
     @ActionLayout(
         named = "Update Property"
         , describedAs =
-            "@ActionPublishingDisabledMetaAnnotation " +
-            "@Action(publishing = ENABLED)"
+            "@ActionCommandDisabledMetaAnnotation @Action(publishing = ENABLED)"
     )
-    public ActionPublishingJdo updatePropertyUsingMetaAnnotationButOverridden(final String value) {
+    public ActionCommandJdo updatePropertyUsingMetaAnnotationButOverridden(final String value) {
         setPropertyMetaAnnotatedOverridden(value);
         return this;
     }
@@ -140,6 +147,28 @@ public class ActionPublishingJdo implements HasAsciiDocDescription {
         return getPropertyMetaAnnotatedOverridden();
     }
 //end::meta-annotation-overridden[]
+
+//tag::background[]
+    @Action(
+        command = CommandReification.ENABLED                // <.>
+        , commandExecuteIn = CommandExecuteIn.BACKGROUND    // <.>
+        , semantics = SemanticsOf.IDEMPOTENT
+        , associateWith = "propertyUpdateInBackground"
+        , associateWithSequence = "1"
+    )
+    @ActionLayout(
+        describedAs =
+            "@Action(command = ENABLED, commandExecuteIn = BACKGROUND)"
+    )
+    public ActionCommandJdo updatePropertyInBackground(final String value) {
+        setPropertyUpdateInBackground(value);
+        return this;
+    }
+    public String default0UpdatePropertyInBackground() {
+        return getPropertyUpdateInBackground();
+    }
+//end::background[]
+
 
 //tag::class[]
 }
