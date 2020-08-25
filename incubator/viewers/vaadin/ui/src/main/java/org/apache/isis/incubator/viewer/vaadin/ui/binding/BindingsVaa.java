@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.NonNull;
@@ -75,12 +76,19 @@ public final class BindingsVaa {
      */
     public static <V> void bindValueBidirectional(
             final @NonNull HasValue<?, V> uiField, 
-            final @NonNull Bindable<ManagedObject> value) {
+            final @NonNull Bindable<ManagedObject> value, 
+            final @NonNull ObjectSpecification valueSpec) {
 
-        uiField.setReadOnly(true);
-        value.addListener((e, oldValue, newValue)->{
-            uiField.setValue(_Casts.uncheckedCast(newValue.getPojo()));
-        });
+        uiField.setReadOnly(false);
+        val binder = new Binder<Bindable<ManagedObject>>();
+
+        //TODO does not account for changes originating from backend side
+        //need to check whether true bi-dir binding is possible with Vaadin
+        binder.forField(uiField)
+        .bind(
+                bindable->_Casts.<V>uncheckedCast(bindable.getValue().getPojo()), 
+                (bindable, newValuePojo)->bindable.setValue(ManagedObject.of(valueSpec, newValuePojo)) 
+                );
     }
     
     /**
@@ -89,9 +97,8 @@ public final class BindingsVaa {
      * @param uiField
      * @param validationFeedbackMessage
      */
-    public static <F extends HasValidation> 
-    void bindValidationFeedback(
-            final @NonNull F uiField, 
+    public static void bindValidationFeedback(
+            final @NonNull HasValidation uiField, 
             final @NonNull Observable<String> validationFeedbackMessage) {
 
         validationFeedbackMessage.addListener((e, oldValue, newValue)->{
@@ -101,8 +108,10 @@ public final class BindingsVaa {
     }
     
 
-    public static <F extends HasValue<?, ?> & HasValidation>
+    public static <V, F extends HasValue<?, V> & HasValidation>
     void bindFeature(F uiField, ManagedFeature managedFeature) {
+        
+        val valueSpec = managedFeature.getSpecification();
 
         if(managedFeature instanceof ManagedParameter) {
 
@@ -111,7 +120,7 @@ public final class BindingsVaa {
             uiField.setReadOnly(isReadOnly);
 
             // r/w binding
-            bindValueBidirectional(uiField, managedParameter.getValue());
+            bindValueBidirectional(uiField, managedParameter.getValue(), valueSpec);
 
             // bind parameter validation feedback
             bindValidationFeedback(uiField, managedParameter.getValidationMessage());
@@ -140,7 +149,7 @@ public final class BindingsVaa {
 
     }
 
-
+    @Deprecated
     public static <P, M> Binder<ComponentRequest> requestBinder(
             final HasValue<?, P> uiField,
             final Class<M> modelValueType,
@@ -166,6 +175,7 @@ public final class BindingsVaa {
      * @param nullRepresentation 
      * @return
      */
+    @Deprecated
     public static <P> Binder<ComponentRequest> requestBinder(
             final HasValue<?, P> uiField,
             final Class<P> fieldValueType) {
@@ -191,6 +201,7 @@ public final class BindingsVaa {
      * @param converter
      * @return
      */
+    @Deprecated
     public static <P, M> Binder<ComponentRequest> requestBinderWithConverter(
             final HasValue<?, P> uiField,
             final Class<M> modelValueType,
@@ -219,7 +230,7 @@ public final class BindingsVaa {
 
             return validationMessage==null
                     ? Result.ok(newValue)
-                            : Result.error(validationMessage);
+                    : Result.error(validationMessage);
         }
 
         @Override
