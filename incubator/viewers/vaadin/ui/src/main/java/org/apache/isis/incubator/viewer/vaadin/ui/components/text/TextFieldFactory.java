@@ -25,7 +25,7 @@ import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
-import org.apache.isis.incubator.viewer.vaadin.ui.binding.BinderUtil;
+import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
@@ -42,19 +42,13 @@ public class TextFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public Component handle(ComponentRequest request) {
-
+        
         val uiField = new TextField(request.getDisplayLabel());
         
-        val binder = BinderUtil.requestBinder(uiField, String.class, 
-                builder->builder.withNullRepresentation(""));
+        val managedFeature = request.getManagedFeature();
         
-        if(request.isReadOnly()) {
-            uiField.setReadOnly(true);
-            binder.readBean(request);
-        } else {
-            binder.setBean(request);
-        }
-        
+        BindingsVaa.bindFeature(uiField, managedFeature);
+                
         return uiField;
     }
     

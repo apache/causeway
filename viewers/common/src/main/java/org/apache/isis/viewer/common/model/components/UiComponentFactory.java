@@ -120,6 +120,11 @@ public interface UiComponentFactory<B, C> {
                     .anyMatch(_NullSafe::isPresent);
         }
         
+        //TODO are there ever parameters that might render readonly?
+        public boolean isReadOnly() {
+            return ((ManagedProperty)managedFeature).checkUsability().isPresent();
+        }
+        
         @Deprecated
         public <T> Optional<T> getFeatureValue(@Nullable Class<T> type) {
             val managedProperty = (ManagedProperty)managedFeature;
@@ -129,10 +134,6 @@ public interface UiComponentFactory<B, C> {
                     .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                     .map(ManagedObject::getPojo)
                     .map(type::cast);
-        }
-
-        public boolean isReadOnly() {
-            return ((ManagedProperty)managedFeature).checkUsability().isPresent();
         }
 
         @Deprecated

@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.OffsetCharacteristic;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
-import org.apache.isis.incubator.viewer.vaadin.ui.binding.BinderUtil;
+import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
@@ -64,9 +64,9 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
             
             final Binder<ComponentRequest> binder;
             if(request.isFeatureTypeEqualTo(LocalDate.class)) {
-                binder = BinderUtil.DateBinder.JAVA_TIME_LOCAL_DATE.bind(uiField);
+                binder = BindingsVaa.DateBinder.JAVA_TIME_LOCAL_DATE.bind(uiField);
             } else if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
-                binder = BinderUtil.DateBinder.JAVA_SQL_DATE.bind(uiField);
+                binder = BindingsVaa.DateBinder.JAVA_SQL_DATE.bind(uiField);
             } else {
                 throw _Exceptions.unmatchedCase(request.getFeatureType());
             }

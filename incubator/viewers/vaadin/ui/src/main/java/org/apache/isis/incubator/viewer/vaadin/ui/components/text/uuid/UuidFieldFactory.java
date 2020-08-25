@@ -29,7 +29,7 @@ import com.vaadin.flow.data.converter.Converter;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.incubator.viewer.vaadin.ui.binding.BinderUtil;
+import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
@@ -49,7 +49,7 @@ public class UuidFieldFactory implements UiComponentHandlerVaa {
 
         val uiField = new TextField(request.getDisplayLabel());
         
-        val binder = BinderUtil.requestBinderWithConverter(uiField, UUID.class, new StringToUuidConverter());
+        val binder = BindingsVaa.requestBinderWithConverter(uiField, UUID.class, new StringToUuidConverter());
         binder.setBean(request);
         
         return uiField;
