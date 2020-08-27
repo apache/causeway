@@ -19,11 +19,11 @@
 package org.apache.isis.incubator.viewer.javafx.model.action;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 
 public class ActionUiModelFactoryFx {
 
-    public ActionUiModelFx newActionUiModel(UiContext uiContext, ManagedAction managedAction) {
+    public ActionUiModelFx newActionUiModel(UiContextFx uiContext, ManagedAction managedAction) {
         return ActionUiModelFx.of(uiContext, managedAction);
     }
     

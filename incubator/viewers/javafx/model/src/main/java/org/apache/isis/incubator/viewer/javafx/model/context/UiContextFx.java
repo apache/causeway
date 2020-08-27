@@ -35,7 +35,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuItem;
 
-public interface UiContext {
+public interface UiContextFx {
 
     JavaFxViewerConfig getJavaFxViewerConfig();
     

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -42,7 +42,7 @@ import demoapp.dom.DemoModule;
 )
 public abstract class DemoFxTestAbstract extends IsisIntegrationTestAbstract {
     
-    @Inject protected UiContext uiContext;
+    @Inject protected UiContextFx uiContext;
     
     @BeforeAll
     static void beforeAll() {

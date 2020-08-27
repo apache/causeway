@@ -18,6 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.action;
 
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.vaadin.flow.component.Component;
@@ -34,6 +35,8 @@ import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 
 import lombok.NonNull;
@@ -48,15 +51,17 @@ public class ActionDialog extends Dialog {
     
     public static ActionDialog forManagedAction(
             @NonNull final UiComponentFactoryVaa uiComponentFactory, 
-            @NonNull final ManagedAction managedAction) {
+            @NonNull final ManagedAction managedAction, 
+            @NonNull final Predicate<Can<ManagedObject>> submitCallback) {
         
-        val actionDialog = new ActionDialog(uiComponentFactory, managedAction);
+        val actionDialog = new ActionDialog(uiComponentFactory, managedAction, submitCallback);
         return actionDialog;
     }
 
     protected ActionDialog(
             final UiComponentFactoryVaa uiComponentFactory,
-            final ManagedAction managedAction) {
+            final ManagedAction managedAction,
+            final Predicate<Can<ManagedObject>> submitCallback) {
         
         setDraggable(true);
         setModal(false);
@@ -76,7 +81,7 @@ public class ActionDialog extends Dialog {
 
         // Footer
         
-        val footer = footer(managedAction); 
+        val footer = footer(managedAction, actionForm.getPendingArgs(), submitCallback); 
         
         // Header
         
@@ -117,7 +122,10 @@ public class ActionDialog extends Dialog {
         return header;
     }
     
-    private Component footer(ManagedAction managedAction) {
+    private Component footer(
+            ManagedAction managedAction, 
+            ParameterNegotiationModel pendingArgs,
+            Predicate<Can<ManagedObject>> submitCallback) {
         
         val okButton = new Button("Ok");
         val cancelButton = new Button("Cancel");
@@ -128,7 +136,14 @@ public class ActionDialog extends Dialog {
         cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         
         // Button Events
-        okButton.addClickListener(event -> close()); //TODO should invoke the action and route to the result page
+        okButton.addClickListener(event -> {
+            //invoke the action and route to the result page
+            if(submitCallback.test(pendingArgs.getParamValues())) {
+                close();
+            } else {
+                //TODO handle validation feedback (vetos)
+            }
+        }); 
         cancelButton.addClickListener(event -> close());
         
         return footer;

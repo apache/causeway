@@ -42,12 +42,14 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
@@ -57,16 +59,19 @@ import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class ObjectViewVaa extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    public static ObjectViewVaa from(
+    public static ObjectViewVaa fromObject(
+            @NonNull final UiContextVaa uiContext,
             @NonNull final UiComponentFactoryVaa uiComponentFactory,
             @NonNull final Consumer<ManagedAction> actionEventHandler,
             @NonNull final ManagedObject managedObject) {
-        return new ObjectViewVaa(uiComponentFactory, actionEventHandler, managedObject);
+        return new ObjectViewVaa(uiContext, uiComponentFactory, actionEventHandler, managedObject);
     }
     
     /**
@@ -74,11 +79,14 @@ public class ObjectViewVaa extends VerticalLayout {
      * @param managedObject - domain object
      */
     protected ObjectViewVaa(
+            final UiContextVaa uiContext,
             final UiComponentFactoryVaa uiComponentFactory,
             final Consumer<ManagedAction> actionEventHandler,
             final ManagedObject managedObject) {
 
-
+        log.info("binding object interaction to owner {}", managedObject.getSpecification().getIdentifier());
+        _Assert.assertTrue(uiContext.getIsisInteractionFactory().isInInteraction(), "requires an active interaction");
+        
         val objectTitle = ManagedObjects.titleOf(managedObject);
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
@@ -243,7 +251,10 @@ public class ObjectViewVaa extends VerticalLayout {
                     }
                     
                     val uiCollection = _vaa.add(container, 
-                            TableViewVaa.forManagedCollection(managedCollection));
+                            TableViewVaa.forManagedCollection(
+                                    uiContext,
+                                    managedCollection,
+                                    Where.PARENTED_TABLES));
                     
                 });
                 

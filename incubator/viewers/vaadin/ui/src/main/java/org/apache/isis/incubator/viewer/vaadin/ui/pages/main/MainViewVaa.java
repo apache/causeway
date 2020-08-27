@@ -33,10 +33,14 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectViewVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
@@ -61,9 +65,13 @@ implements BeforeEnterObserver {
     private static final long serialVersionUID = 1L;
     
     private final transient IsisAppCommonContext commonContext;
-    private final transient IsisInteractionFactory isisInteractionFactory;
-    private final transient UiActionHandler uiActionHandler;
+    private final transient MetaModelContext metaModelContext;
+    private final transient UiContextVaa uiContext;
+    private final transient UiActionHandlerVaa uiActionHandler;
+    private final transient UiComponentFactoryVaa uiComponentFactory;
     private final transient HeaderUiModelProvider headerUiModelProvider;
+    
+    
     private Div pageContent = new Div();
     
     /**
@@ -72,14 +80,20 @@ implements BeforeEnterObserver {
     @Inject
     public MainViewVaa(
             final MetaModelContext metaModelContext,
-            final IsisInteractionFactory isisInteractionFactory,
-            final UiActionHandler uiActionHandler,
-            final HeaderUiModelProvider headerUiModelProvider) {
+            final UiActionHandlerVaa uiActionHandler,
+            final HeaderUiModelProvider headerUiModelProvider,
+            final UiContextVaa uiContext,
+            final UiComponentFactoryVaa uiComponentFactory) {
 
+        this.metaModelContext = metaModelContext;
         this.commonContext = IsisAppCommonContext.of(metaModelContext);
         this.uiActionHandler = uiActionHandler;
-        this.isisInteractionFactory = isisInteractionFactory;
         this.headerUiModelProvider = headerUiModelProvider;
+        this.uiContext = uiContext;
+        this.uiComponentFactory = uiComponentFactory;
+        
+        uiContext.setNewPageHandler(this::replaceContent);
+        uiContext.setPageFactory(this::uiComponentForActionResult);
     }
     
     @Override
@@ -93,17 +107,13 @@ implements BeforeEnterObserver {
         val menuBarContainer = MainView_createHeader.createHeader(
                 commonContext, 
                 headerUiModelProvider.getHeader(), 
-                this::onActionLinkClicked,
+                uiActionHandler::handleActionLinkClicked,
                 this::renderHomepage);
         
         addToNavbar(menuBarContainer);
         setContent(pageContent = new Div());
         setDrawerOpened(false);
         renderHomepage();
-    }
-
-    private void onActionLinkClicked(ManagedAction managedAction) {
-        uiActionHandler.handleActionLinkClicked(managedAction, this::replaceContent);
     }
     
     private void replaceContent(Component component) {
@@ -113,11 +123,20 @@ implements BeforeEnterObserver {
 
     private void renderHomepage() {
         log.info("about to render homepage");
-        isisInteractionFactory.runAnonymous(()->{
-            val homepageViewmodel = commonContext.getHomePageAdapter();
-            uiActionHandler.handleActionResult(homepageViewmodel, this::replaceContent);
-        });
+        uiContext.route(metaModelContext::getHomePageAdapter);
     }
 
+    private Component uiComponentForActionResult(ManagedObject actionResult) {
+        if (actionResult.getSpecification().isParentedOrFreeCollection()) {
+            return TableViewVaa.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
+        } else {
+            return ObjectViewVaa.fromObject(
+                    uiContext,
+                    uiComponentFactory, 
+                    uiActionHandler::handleActionLinkClicked, 
+                    actionResult);
+        }
+    }
+    
     
 }

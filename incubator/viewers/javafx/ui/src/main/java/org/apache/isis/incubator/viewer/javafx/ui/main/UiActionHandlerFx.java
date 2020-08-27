@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
@@ -43,9 +43,9 @@ import javafx.scene.layout.GridPane;
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class UiActionHandler {
+public class UiActionHandlerFx {
 
-    private final UiContext uiContext;
+    private final UiContextFx uiContext;
     private final IsisInteractionFactory isisInteractionFactory;
     private final UiComponentFactoryFx uiComponentFactory;
 
@@ -58,12 +58,9 @@ public class UiActionHandler {
         if(paramCount==0) {
             invoke(managedAction, Can.empty());     
         } else {
-            // TODO get an ActionPrompt, then on invocation show the result in the content view
-            
-            //Dialogs.message("Warn", "ActionPrompt not supported yet!", null);
+            // get an ActionPrompt, then on invocation show the result in the content view
             
             val pendingArgs = managedAction.startParameterNegotiation();
-            
             
             Dialog<ParameterNegotiationModel> dialog = new Dialog<>();
             dialog.setTitle("<Title>");
@@ -99,7 +96,7 @@ public class UiActionHandler {
             
             dialog.showAndWait().ifPresent(params->{
                 log.info("param negotiation done");
-                invoke(managedAction, params.getParamValues());
+                invoke(managedAction, params.getParamValues()); //TODO handle vetoes
             });
             
         } 

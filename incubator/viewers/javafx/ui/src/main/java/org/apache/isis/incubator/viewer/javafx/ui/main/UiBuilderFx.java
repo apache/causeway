@@ -44,7 +44,7 @@ import javafx.stage.Stage;
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class UiBuilder {
+public class UiBuilderFx {
     
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;

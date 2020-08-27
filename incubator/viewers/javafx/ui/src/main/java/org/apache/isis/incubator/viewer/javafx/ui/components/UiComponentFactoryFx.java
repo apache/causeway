@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
@@ -46,7 +46,7 @@ import javafx.scene.control.Label;
 public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
     private final boolean isPrototyping;
-    private final UiContext uiContext;
+    private final UiContextFx uiContext;
     private final ChainOfResponsibility<ComponentRequest, Node> chainOfHandlers;
     
     /** handlers in order of precedence (debug info)*/
@@ -56,7 +56,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
     @Inject
     private UiComponentFactoryFx(
             IsisSystemEnvironment isisSystemEnvironment,
-            UiContext uiContext,
+            UiContextFx uiContext,
             List<UiComponentHandlerFx> handlers) {
         
         this.isPrototyping = isisSystemEnvironment.isPrototyping();

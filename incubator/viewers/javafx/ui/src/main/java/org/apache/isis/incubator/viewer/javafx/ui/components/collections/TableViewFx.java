@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
 import lombok.AccessLevel;
@@ -66,7 +66,7 @@ public class TableViewFx extends VBox {
      * @param where 
      */
     public static TableViewFx fromCollection(
-            final @NonNull UiContext uiContext, 
+            final @NonNull UiContextFx uiContext, 
             final @NonNull ManagedObject collection, 
             final @NonNull Where where) {
 
@@ -88,7 +88,7 @@ public class TableViewFx extends VBox {
      * @param collectionData 
      */
     public static TableViewFx forManagedCollection(
-            final @NonNull UiContext uiContext, 
+            final @NonNull UiContextFx uiContext, 
             final @NonNull ManagedCollection managedCollection, 
             final @NonNull Where where) {
 
@@ -113,9 +113,10 @@ public class TableViewFx extends VBox {
      * 
      * @param elementSpec - as is common to all given {@code objects} aka elements 
      * @param objects - (wrapped) domain objects to be rendered by this table
+     * @param where
      */
     private TableViewFx(
-            @NonNull final UiContext uiContext,
+            @NonNull final UiContextFx uiContext,
             @NonNull final ObjectSpecification elementSpec, 
             @Nullable final Can<ManagedObject> objects,
             @NonNull final Where where) {
@@ -143,7 +144,7 @@ public class TableViewFx extends VBox {
             }
 
             columnProperties.forEach(property->{
-                table.putElement(id, property.getId(), stringifyPropertyValue(uiContext, property, object));
+                table.putElement(id, property.getId(), stringifyPropertyValue(property, object));
             });
 
         });
@@ -186,10 +187,7 @@ public class TableViewFx extends VBox {
 
     }
 
-
-
     private String stringifyPropertyValue(
-            UiContext uiContext,
             ObjectAssociation property, 
             ManagedObject targetObject) {
 
@@ -197,7 +195,7 @@ public class TableViewFx extends VBox {
             val propertyValue = property.get(targetObject);
             return propertyValue == null 
                     ? NULL_LITERAL
-                            : propertyValue.titleString();
+                    : propertyValue.titleString();
         } catch (Exception e) {
             return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
         }

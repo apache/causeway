@@ -37,10 +37,10 @@ import org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefa
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton;
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField;
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandler;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiContextDefault;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
+import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandlerFx;
+import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilderFx;
+import org.apache.isis.incubator.viewer.javafx.ui.main.UiContextFxDefault;
+import org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 /**
@@ -54,8 +54,8 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         IsisModuleIncViewerJavaFxModel.class,
         
         // @Components's
-        UiBuilder.class,
-        UiController.class,
+        UiBuilderFx.class,
+        MainViewFx.class,
         
         // Component Factories 
         TextFieldFactory.class,
@@ -79,9 +79,9 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         
         // @Service's
         UiComponentFactoryFx.class,
-        UiActionHandler.class,
+        UiActionHandlerFx.class,
         
-        UiContextDefault.class,
+        UiContextFxDefault.class,
 
         // @Mixin's
 })

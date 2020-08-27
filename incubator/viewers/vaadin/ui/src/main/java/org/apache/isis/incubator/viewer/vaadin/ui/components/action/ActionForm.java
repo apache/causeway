@@ -19,19 +19,22 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components.action;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.textfield.TextField;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
+import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
 public class ActionForm extends FormLayout {
 
     private static final long serialVersionUID = 1L;
-    
-    private final transient ManagedAction managedAction;
+
+    @Getter
+    private final ParameterNegotiationModel pendingArgs;
     
     public static ActionForm forManagedAction(
             @NonNull final UiComponentFactoryVaa uiComponentFactory,
@@ -45,25 +48,19 @@ public class ActionForm extends FormLayout {
             final UiComponentFactoryVaa uiComponentFactory,
             final ManagedAction managedAction) {
         
-        this.managedAction = managedAction;
+        pendingArgs = managedAction.startParameterNegotiation();
         
-        managedAction.getAction().getParameters()
-        .forEach(param->{
-        
-            val paramField = new TextField();
-            paramField.setLabel(param.getName());
-            paramField.setPlaceholder("under construction");
+        pendingArgs.getParamModels().forEach(paramModel->{
             
-            super.add(paramField);
+            //val paramNr = paramModel.getParamNr(); // zero based
             
+            val request = ComponentRequest.of(paramModel);
             
-//            val uiParameter = uiComponentFactory
-//                    .componentFor(UiComponentFactory.Request.of(Where.ANYWHERE, param));
+            //val labelAndPosition = uiComponentFactory.labelFor(request);
+            val uiField = uiComponentFactory.parameterFor(request);
+            super.add(uiField);
             
         });
-        
-        
-        
         
     }
     
