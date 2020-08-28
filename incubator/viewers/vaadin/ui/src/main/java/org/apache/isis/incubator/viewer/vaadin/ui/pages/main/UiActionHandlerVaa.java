@@ -58,7 +58,7 @@ public class UiActionHandlerVaa {
                     uiComponentFactory, 
                     managedAction,
                     params->{
-                        log.info("param negotiation done {}", params);
+                        log.info("param negotiation done");
                         invoke(managedAction, params);
                         return true; //TODO handle vetoes
                     });

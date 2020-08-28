@@ -19,6 +19,7 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.binding;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.function.Function;
 
 import com.vaadin.flow.component.HasValidation;
@@ -50,10 +51,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
 
 @UtilityClass
-@Log4j2
 public final class BindingsVaa {
 
     /**
@@ -67,37 +66,23 @@ public final class BindingsVaa {
             final @NonNull Observable<ManagedObject> value) {
 
         uiField.setReadOnly(true);
+        val binder = new Binder<Observable<ManagedObject>>();
+        val internalBinding = InternalUnidirBinding.<V>of();
+
+        binder.forField(uiField)
+        .bind(
+                internalBinding, 
+                null
+                );
+        
+        binder.setBean(value);
+        
+        //TODO supposed to account for changes originating from backend side
+        //need to check whether this is possible with Vaadin
         value.addListener((e, oldValue, newValue)->{
             uiField.setValue(_Casts.uncheckedCast(newValue.getPojo()));
         });
-    }
-
-    @RequiredArgsConstructor(staticName = "of")
-    private static class InternalBidirBinding<V> 
-    implements 
-        ValueProvider<Bindable<ManagedObject>, V>, 
-        Setter<Bindable<ManagedObject>, V> 
-    {
-
-        private static final long serialVersionUID = 1L;
-        private final @NonNull ObjectSpecification valueSpec;
-
-        //GETTER
-        @Override
-        public V apply(Bindable<ManagedObject> source) {
-            val newFieldValue = _Casts.<V>uncheckedCast(source.getValue().getPojo());
-            log.debug("InternalBidirBinding <<< {}", newFieldValue);
-            return newFieldValue;
-        }
-
-        //SETTER
-        @Override
-        public void accept(Bindable<ManagedObject> target, V fieldValue) {
-            log.debug("InternalBidirBinding {} >>>", fieldValue);
-            target.setValue(ManagedObject.of(valueSpec, fieldValue));
-        }
-
-
+        
     }
 
     /**
@@ -115,8 +100,6 @@ public final class BindingsVaa {
         val binder = new Binder<Bindable<ManagedObject>>();
         val internalBinding = InternalBidirBinding.<V>of(valueSpec);
 
-        //TODO does not account for changes originating from backend side
-        //need to check whether true bi-dir binding is possible with Vaadin
         binder.forField(uiField)
         .bind(
                 internalBinding::apply, 
@@ -124,6 +107,13 @@ public final class BindingsVaa {
                 );
         
         binder.setBean(value);
+        
+        //TODO supposed to account for changes originating from backend side
+        //need to check whether this is possible with Vaadin
+        value.addListener((e, oldValue, newValue)->{
+            uiField.setValue(_Casts.uncheckedCast(newValue.getPojo()));
+        });
+
     }
 
     /**
@@ -151,7 +141,7 @@ public final class BindingsVaa {
         if(managedFeature instanceof ManagedParameter) {
 
             val managedParameter = (ManagedParameter)managedFeature;
-            val isReadOnly = false;
+            val isReadOnly = false; // TODO also handle case when parameters are readonly 
             uiField.setReadOnly(isReadOnly);
 
             // r/w binding
@@ -265,7 +255,7 @@ public final class BindingsVaa {
 
             return validationMessage==null
                     ? Result.ok(newValue)
-                            : Result.error(validationMessage);
+                    : Result.error(validationMessage);
         }
 
         @Override
@@ -311,11 +301,51 @@ public final class BindingsVaa {
 
     }
 
+    // -- HELPER
+
+    @RequiredArgsConstructor(staticName = "of")
+    private static class InternalUnidirBinding<V> 
+    implements ValueProvider<Observable<ManagedObject>, V> {
+
+        private static final long serialVersionUID = 1L;
+
+        //GETTER
+        @Override
+        public V apply(@NonNull Observable<ManagedObject> source) {
+            val newFieldValue = source.getValue() == null 
+                    ? null
+                    : _Casts.<V>uncheckedCast(source.getValue().getPojo());
+            return newFieldValue;
+        }
+
+    }
+    
+    @RequiredArgsConstructor(staticName = "of")
+    private static class InternalBidirBinding<V> 
+    implements 
+        ValueProvider<Bindable<ManagedObject>, V>, 
+        Setter<Bindable<ManagedObject>, V> 
+    {
+
+        private static final long serialVersionUID = 1L;
+        private final @NonNull ObjectSpecification valueSpec;
+
+        //GETTER
+        @Override
+        public V apply(@NonNull Bindable<ManagedObject> source) {
+            val newFieldValue = _Casts.<V>uncheckedCast(source.getValue().getPojo());
+            return newFieldValue;
+        }
+
+        //SETTER
+        @Override
+        public void accept(@NonNull Bindable<ManagedObject> target, V fieldValue) {
+            target.setValue(ManagedObject.of(valueSpec, fieldValue));
+        }
 
 
-
-
-
+    }
+    
 
 
 }
