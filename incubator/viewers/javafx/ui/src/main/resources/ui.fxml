@@ -11,7 +11,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.apache.isis.incubator.viewer.javafx.ui.main.UiController">
+<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx">
   <children>
     <HBox fx:id="topPane" VBox.vgrow="NEVER">
       <children>
