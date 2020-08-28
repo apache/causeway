@@ -26,10 +26,12 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Binder.BindingBuilder;
 import com.vaadin.flow.data.binder.Result;
+import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
+import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.isis.core.commons.binding.Bindable;
 import org.apache.isis.core.commons.binding.Observable;
@@ -48,8 +50,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 @UtilityClass
+@Log4j2
 public final class BindingsVaa {
 
     /**
@@ -67,7 +71,35 @@ public final class BindingsVaa {
             uiField.setValue(_Casts.uncheckedCast(newValue.getPojo()));
         });
     }
-    
+
+    @RequiredArgsConstructor(staticName = "of")
+    private static class InternalBidirBinding<V> 
+    implements 
+        ValueProvider<Bindable<ManagedObject>, V>, 
+        Setter<Bindable<ManagedObject>, V> 
+    {
+
+        private static final long serialVersionUID = 1L;
+        private final @NonNull ObjectSpecification valueSpec;
+
+        //GETTER
+        @Override
+        public V apply(Bindable<ManagedObject> source) {
+            val newFieldValue = _Casts.<V>uncheckedCast(source.getValue().getPojo());
+            log.debug("InternalBidirBinding <<< {}", newFieldValue);
+            return newFieldValue;
+        }
+
+        //SETTER
+        @Override
+        public void accept(Bindable<ManagedObject> target, V fieldValue) {
+            log.debug("InternalBidirBinding {} >>>", fieldValue);
+            target.setValue(ManagedObject.of(valueSpec, fieldValue));
+        }
+
+
+    }
+
     /**
      * Binds the uiField's (rendered) value to a {@link Bindable}. 
      * @param <V>
@@ -81,16 +113,19 @@ public final class BindingsVaa {
 
         uiField.setReadOnly(false);
         val binder = new Binder<Bindable<ManagedObject>>();
+        val internalBinding = InternalBidirBinding.<V>of(valueSpec);
 
         //TODO does not account for changes originating from backend side
         //need to check whether true bi-dir binding is possible with Vaadin
         binder.forField(uiField)
         .bind(
-                bindable->_Casts.<V>uncheckedCast(bindable.getValue().getPojo()), 
-                (bindable, newValuePojo)->bindable.setValue(ManagedObject.of(valueSpec, newValuePojo)) 
+                internalBinding::apply, 
+                internalBinding::accept
                 );
+        
+        binder.setBean(value);
     }
-    
+
     /**
      * Binds the uiField's (rendered) validation feedback to an {@link Observable}. 
      * @param <F>
@@ -106,11 +141,11 @@ public final class BindingsVaa {
             uiField.setInvalid(_Strings.isNotEmpty(newValue));
         });
     }
-    
+
 
     public static <V, F extends HasValue<?, V> & HasValidation>
     void bindFeature(F uiField, ManagedFeature managedFeature) {
-        
+
         val valueSpec = managedFeature.getSpecification();
 
         if(managedFeature instanceof ManagedParameter) {
@@ -230,7 +265,7 @@ public final class BindingsVaa {
 
             return validationMessage==null
                     ? Result.ok(newValue)
-                    : Result.error(validationMessage);
+                            : Result.error(validationMessage);
         }
 
         @Override
