@@ -18,20 +18,16 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.binding;
 
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
+import javax.annotation.Nullable;
 
 import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Binder.BindingBuilder;
-import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.Setter;
-import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
-import com.vaadin.flow.data.converter.DateToSqlDateConverter;
-import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.isis.core.commons.binding.Bindable;
@@ -39,13 +35,11 @@ import org.apache.isis.core.commons.binding.Observable;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -54,71 +48,175 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class BindingsVaa {
+    
+    // -- UNIDIRECTIONAL 
 
     /**
      * Binds the uiField's (rendered) value to an {@link Observable}. 
-     * @param <V>
+     * @param <V> field/model/presentation value type
      * @param uiField
-     * @param value
+     * @param value - observable (backend) 
+     * @param customizer - to customize the binding builder (ignored if null)
      */
     public static <V> void bindValue(
             final @NonNull HasValue<?, V> uiField, 
-            final @NonNull Observable<ManagedObject> value) {
+            final @NonNull Observable<ManagedObject> value,
+            @Nullable UnaryOperator<BindingBuilder<Observable<ManagedObject>, V>> customizer) {
+            
 
         uiField.setReadOnly(true);
         val binder = new Binder<Observable<ManagedObject>>();
         val internalBinding = InternalUnidirBinding.<V>of();
 
-        binder.forField(uiField)
+        if(customizer==null) {
+            customizer = UnaryOperator.identity();
+        }
+
+        customizer.apply(binder.forField(uiField))
         .bind(
                 internalBinding, 
-                null
-                );
+                null);
         
         binder.setBean(value);
         
         //TODO supposed to account for changes originating from backend side
         //need to check whether this is possible with Vaadin
         value.addListener((e, oldValue, newValue)->{
-            uiField.setValue(_Casts.uncheckedCast(newValue.getPojo()));
+            uiField.setValue(_Casts.<V>uncheckedCast(newValue.getPojo()));
         });
         
     }
+    
+    /**
+     * Binds the uiField's (rendered) value to an {@link Observable}. 
+     * @param <P> field/presentation value type
+     * @param <M> model value type
+     * @param uiField
+     * @param value - observable (backend) 
+     * @param converter - converts between model and presentation 
+     * @param customizer - to customize the binding builder (ignored if null)
+     */
+    public static <P, M> void bindValue(
+            final @NonNull HasValue<?, P> uiField, 
+            final @NonNull Observable<ManagedObject> value,
+            final @NonNull Converter<P, M> converter,
+            @Nullable UnaryOperator<BindingBuilder<Observable<ManagedObject>, M>> customizer) {
+
+        uiField.setReadOnly(true);
+        val binder = new Binder<Observable<ManagedObject>>();
+        val internalBinding = InternalUnidirBinding.<M>of();
+
+        if(customizer==null) {
+            customizer = UnaryOperator.identity();
+        }
+
+        customizer.apply(
+                binder.forField(uiField)
+                .withConverter(converter))
+        .bind(
+                internalBinding, 
+                null);
+        
+        binder.setBean(value);
+        
+        //TODO supposed to account for changes originating from backend side
+        //need to check whether this is possible with Vaadin
+        value.addListener((e, oldValue, newValue)->{
+            val newModelValue = _Casts.<M>uncheckedCast(newValue.getPojo());
+            P newFieldValue = converter.convertToPresentation(newModelValue, null);
+            uiField.setValue(newFieldValue);
+        });
+        
+    }
+    
+    // -- BIDIRECTIONAL
 
     /**
      * Binds the uiField's (rendered) value to a {@link Bindable}. 
-     * @param <V>
+     * @param <V> field/model value type
      * @param uiField
      * @param value
+     * @param valueSpec
+     * @param customizer - to customize the binding builder (ignored if null)
      */
     public static <V> void bindValueBidirectional(
             final @NonNull HasValue<?, V> uiField, 
             final @NonNull Bindable<ManagedObject> value, 
-            final @NonNull ObjectSpecification valueSpec) {
+            final @NonNull ObjectSpecification valueSpec,
+            @Nullable UnaryOperator<BindingBuilder<Bindable<ManagedObject>, V>> customizer) {
 
         uiField.setReadOnly(false);
         val binder = new Binder<Bindable<ManagedObject>>();
         val internalBinding = InternalBidirBinding.<V>of(valueSpec);
+        
+        if(customizer==null) {
+            customizer = UnaryOperator.identity();
+        }
 
-        binder.forField(uiField)
+        customizer.apply(binder.forField(uiField))
         .bind(
                 internalBinding::apply, 
-                internalBinding::accept
-                );
+                internalBinding::accept);
         
         binder.setBean(value);
         
         //TODO supposed to account for changes originating from backend side
-        //need to check whether this is possible with Vaadin
+        // not sure whether this works
         value.addListener((e, oldValue, newValue)->{
             uiField.setValue(_Casts.uncheckedCast(newValue.getPojo()));
         });
 
     }
+    
+    /**
+     * Binds the uiField's (rendered) value to a {@link Bindable}. 
+     * @param <P> field/presentation value type
+     * @param <M> model value type
+     * @param uiField
+     * @param value
+     * @param valueSpec
+     * @param converter - converts between model and presentation 
+     * @param nullRepresentation - the model value to use instead of null
+     * @param customizer - to customize the binding builder (ignored if null)
+     */
+    public static <P, M> void bindValueBidirectional(
+            final @NonNull HasValue<?, P> uiField, 
+            final @NonNull Bindable<ManagedObject> value, 
+            final @NonNull ObjectSpecification valueSpec,
+            final @NonNull Converter<P, M> converter, 
+            @Nullable UnaryOperator<BindingBuilder<Bindable<ManagedObject>, M>> customizer) {
+
+        uiField.setReadOnly(false);
+        val binder = new Binder<Bindable<ManagedObject>>();
+        val internalBinding = InternalBidirBinding.<M>of(valueSpec);
+
+        if(customizer==null) {
+            customizer = UnaryOperator.identity();
+        }
+        
+        customizer.apply(
+                binder.forField(uiField)
+                .withConverter(converter))
+        .bind(
+                internalBinding::apply, 
+                internalBinding::accept);
+        
+        binder.setBean(value);
+        
+        //TODO supposed to account for changes originating from backend side
+        // not sure whether this works
+        value.addListener((e, oldValue, newValue)->{
+            val newModelValue = _Casts.<M>uncheckedCast(newValue.getPojo());
+            P newFieldValue = converter.convertToPresentation(newModelValue, null);
+            uiField.setValue(newFieldValue);
+        });
+
+    }
+    
+    // -- VALIDATION
 
     /**
      * Binds the uiField's (rendered) validation feedback to an {@link Observable}. 
-     * @param <F>
      * @param uiField
      * @param validationFeedbackMessage
      */
@@ -126,26 +224,73 @@ public final class BindingsVaa {
             final @NonNull HasValidation uiField, 
             final @NonNull Observable<String> validationFeedbackMessage) {
 
+        //TODO supposed to account for changes originating from backend side
+        // not sure whether this works
         validationFeedbackMessage.addListener((e, oldValue, newValue)->{
             uiField.setErrorMessage(newValue);
             uiField.setInvalid(_Strings.isNotEmpty(newValue));
         });
+        
+        val initialValue = validationFeedbackMessage.getValue(); 
+        uiField.setErrorMessage(initialValue);
+        uiField.setInvalid(_Strings.isNotEmpty(initialValue));
+        
     }
+    
+    // -- FEATURE (PARAMETER OR PROPERTY)
 
+    public static <P, F extends HasValue<?, P> & HasValidation>
+    void bindFeature(
+            final @NonNull F uiField, 
+            final @NonNull ManagedFeature managedFeature) {
+        bindFeatureWithConverter(uiField, managedFeature, null, null);
+    }
+    
 
-    public static <V, F extends HasValue<?, V> & HasValidation>
-    void bindFeature(F uiField, ManagedFeature managedFeature) {
+    /**
+     * @param <P> field/presentation value type
+     * @param <M> model value type
+     * @param uiField
+     * @param managedFeature
+     * @param converter - ignored if {@code null}, converts between model and presentation 
+     * @param nullRepresentation - (TODO remove) ignored if converter is {@code null} 
+     */
+    public static <M, P, F extends HasValue<?, P> & HasValidation>
+    void bindFeatureWithConverter(
+            final @NonNull F uiField, 
+            final @NonNull ManagedFeature managedFeature,
+            final @Nullable Converter<P, M> converter, 
+            final @Nullable M nullRepresentation) { // TODO remove, yet poorly designed
 
         val valueSpec = managedFeature.getSpecification();
 
         if(managedFeature instanceof ManagedParameter) {
 
             val managedParameter = (ManagedParameter)managedFeature;
-            val isReadOnly = false; // TODO also handle case when parameters are readonly 
-            uiField.setReadOnly(isReadOnly);
+            
+            //TODO need a more advanced mechanism here:
+            // whether readonly or r/w depends (dynamically) on the state of the 
+            // Parameter Negotiation Model
+            val isReadOnly = managedParameter
+                    .checkUsability(managedParameter.getNegotiationModel().getParamValues())
+                    .isPresent();
 
-            // r/w binding
-            bindValueBidirectional(uiField, managedParameter.getValue(), valueSpec);
+            if(isReadOnly) {
+                // readonly binding
+                if(converter!=null) {
+                    bindValue(uiField, managedParameter.getValue(), converter, bb->bb.withNullRepresentation(nullRepresentation));
+                } else {
+                    bindValue(uiField, managedParameter.getValue(), null);
+                }
+
+            } else {
+                // r/w binding
+                if(converter!=null) {
+                    bindValueBidirectional(uiField, managedParameter.getValue(), valueSpec, converter, bb->bb.withNullRepresentation(nullRepresentation));
+                } else {
+                    bindValueBidirectional(uiField, managedParameter.getValue(), valueSpec, null);
+                }
+            }
 
             // bind parameter validation feedback
             bindValidationFeedback(uiField, managedParameter.getValidationMessage());
@@ -154,150 +299,27 @@ public final class BindingsVaa {
 
             val managedProperty = (ManagedProperty)managedFeature;
             val isReadOnly = managedProperty.checkUsability().isPresent();
-            uiField.setReadOnly(isReadOnly);
 
             if(isReadOnly) {
                 // readonly binding
-                bindValue(uiField, managedProperty.getValue());
-
+                if(converter!=null) {
+                    bindValue(uiField, managedProperty.getValue(), converter, bb->bb.withNullRepresentation(nullRepresentation));
+                } else {
+                    bindValue(uiField, managedProperty.getValue(), null);
+                }
             } else {
-
                 //TODO allow property (inline) editing
-                //using readonly as fallback for now
-                uiField.setReadOnly(true);
-                bindValue(uiField, managedProperty.getValue());
+                //render readonly for now (could use fallback dialog as an intermediate step)
+                if(converter!=null) {
+                    bindValue(uiField, managedProperty.getValue(), converter, bb->bb.withNullRepresentation(nullRepresentation));
+                } else {
+                    bindValue(uiField, managedProperty.getValue(), null);
+                }
             }
 
         } else {
             throw _Exceptions.unexpectedCodeReach();
         }
-
-    }
-
-    @Deprecated
-    public static <P, M> Binder<ComponentRequest> requestBinder(
-            final HasValue<?, P> uiField,
-            final Class<M> modelValueType,
-            final Function<BindingBuilder<ComponentRequest, P>, BindingBuilder<ComponentRequest, M>> chain) {
-
-        val binder = new Binder<ComponentRequest>();
-        val propagator = new Propagator<M>(modelValueType);
-
-        chain.apply(binder.forField(uiField))
-        .withConverter(propagator)
-        .bind(
-                propagator::init, 
-                propagator::propagate 
-                );
-        return binder;
-    }
-
-    /**
-     * 
-     * @param <P> presentation type (field value type)
-     * @param uiField
-     * @param fieldValueType
-     * @param nullRepresentation 
-     * @return
-     */
-    @Deprecated
-    public static <P> Binder<ComponentRequest> requestBinder(
-            final HasValue<?, P> uiField,
-            final Class<P> fieldValueType) {
-
-        val binder = new Binder<ComponentRequest>();
-        val propagator = new Propagator<P>(fieldValueType);
-
-        binder.forField(uiField)
-        .withConverter(propagator)
-        .bind(
-                propagator::init, 
-                propagator::propagate 
-                );
-        return binder;
-    }
-
-    /**
-     * 
-     * @param <P> presentation type (field value type)
-     * @param <M> model value type
-     * @param uiField
-     * @param modelValueType
-     * @param converter
-     * @return
-     */
-    @Deprecated
-    public static <P, M> Binder<ComponentRequest> requestBinderWithConverter(
-            final HasValue<?, P> uiField,
-            final Class<M> modelValueType,
-            final Converter<P, M> converter) {
-
-        return requestBinder(uiField, modelValueType, 
-                binder->binder.withConverter(converter));
-    }
-
-    @RequiredArgsConstructor
-    private static class Propagator<P> implements Converter<P, P> {
-
-        private static final long serialVersionUID = 1L;
-
-        private final Class<P> pojoType;
-        private ComponentRequest request;
-
-        @Override
-        public Result<P> convertToModel(P newValue, ValueContext context) {
-
-            // propagate new value down the domain model, and handle validation feedback
-
-            val validationMessage = request.setFeatureValue(newValue)
-                    .map(InteractionVeto::getReason)
-                    .orElse(null);
-
-            return validationMessage==null
-                    ? Result.ok(newValue)
-                    : Result.error(validationMessage);
-        }
-
-        @Override
-        public P convertToPresentation(P value, ValueContext context) {
-            return value; // identity function
-        }
-
-        public P init(ComponentRequest request) {
-            this.request = request;
-            return request.getFeatureValue(pojoType).orElse(null);
-        }
-
-        public P propagate(ComponentRequest request, P newValue) {
-            return newValue; // identity function
-        }
-
-    }
-
-
-    // -- SHORTCUTS
-
-    public static enum DateBinder {
-
-        JAVA_TIME_LOCAL_DATE{
-
-            @Override
-            public Binder<ComponentRequest> bind(HasValue<?, LocalDate> uiField) {
-                return BindingsVaa.requestBinder(uiField, LocalDate.class);
-            }
-
-        },
-        JAVA_SQL_DATE{
-
-            @Override
-            public Binder<ComponentRequest> bind(HasValue<?, LocalDate> uiField) {
-                return BindingsVaa.requestBinderWithConverter(uiField, java.sql.Date.class, 
-                        new LocalDateToDateConverter().chain(new DateToSqlDateConverter()));
-            }
-
-        };
-
-        public abstract Binder<ComponentRequest> bind(final HasValue<?, LocalDate> uiField);
 
     }
 

@@ -21,7 +21,8 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.temporal;
 import java.time.LocalDate;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.converter.DateToSqlDateConverter;
+import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
 import org.springframework.core.annotation.Order;
 
@@ -61,21 +62,22 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         case DATE_ONLY:{
 
             val uiField = new DateField(request.getDisplayLabel());
+            val managedFeature = request.getManagedFeature();
             
-            final Binder<ComponentRequest> binder;
             if(request.isFeatureTypeEqualTo(LocalDate.class)) {
-                binder = BindingsVaa.DateBinder.JAVA_TIME_LOCAL_DATE.bind(uiField);
+                BindingsVaa.bindFeature(uiField, managedFeature);
+                
             } else if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
-                binder = BindingsVaa.DateBinder.JAVA_SQL_DATE.bind(uiField);
+                
+                val converter = new LocalDateToDateConverter().chain(new DateToSqlDateConverter());
+                
+                BindingsVaa.bindFeatureWithConverter(uiField, managedFeature, converter, null);
+                
             } else {
                 throw _Exceptions.unmatchedCase(request.getFeatureType());
             }
             
-            binder.setBean(request);
             return uiField;
-            
-            //val uiField = DateField.bind(request);
-            
 
             }    
         case TIME_ONLY:{

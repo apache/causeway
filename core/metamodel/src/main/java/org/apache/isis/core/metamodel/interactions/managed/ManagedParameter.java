@@ -18,12 +18,48 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.Optional;
+
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+
+import lombok.NonNull;
+import lombok.val;
 
 public interface ManagedParameter extends ManagedValue, ManagedFeature {
 
     int getParamNr();
     ObjectActionParameter getMetaModel();
     ParameterNegotiationModel getNegotiationModel();
+    
+    /**
+     * @param params 
+     * @return non-empty if not usable/editable (meaning if read-only)
+     */
+    default Optional<InteractionVeto> checkUsability(final @NonNull Can<ManagedObject> params) {
+        
+        try {
+            val head = getNegotiationModel().getHead();
+            
+            val usabilityConsent = 
+                    getMetaModel()
+                    .isUsable(head, params, InteractionInitiatedBy.USER);
+            
+            return usabilityConsent.isVetoed()
+                    ? Optional.of(InteractionVeto.readonly(usabilityConsent))
+                    : Optional.empty();
+            
+        } catch (final Exception ex) {
+            
+            return Optional.of(InteractionVeto
+                    .readonly(
+                            new Veto(ex.getLocalizedMessage())));
+            
+        }
+        
+    }
     
 }

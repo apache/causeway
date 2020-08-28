@@ -141,7 +141,6 @@ public abstract class ManagedMember implements ManagedFeature {
 
     
     /**
-     * @param where
      * @return non-empty if hidden
      */
     public Optional<InteractionVeto> checkVisibility() {
@@ -164,7 +163,6 @@ public abstract class ManagedMember implements ManagedFeature {
     }
 
     /**
-     * @param where
      * @return non-empty if not usable/editable (meaning if read-only)
      */
     public Optional<InteractionVeto> checkUsability() {
@@ -186,7 +184,6 @@ public abstract class ManagedMember implements ManagedFeature {
                             new Veto(ex.getLocalizedMessage())));
             
         }
-        
         
     }
     

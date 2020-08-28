@@ -22,9 +22,7 @@ import java.util.UUID;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Result;
-import com.vaadin.flow.data.binder.ValueContext;
-import com.vaadin.flow.data.converter.Converter;
+import com.vaadin.flow.data.converter.StringToUuidConverter;
 
 import org.springframework.core.annotation.Order;
 
@@ -49,29 +47,15 @@ public class UuidFieldFactory implements UiComponentHandlerVaa {
 
         val uiField = new TextField(request.getDisplayLabel());
         
-        val binder = BindingsVaa.requestBinderWithConverter(uiField, UUID.class, new StringToUuidConverter());
-        binder.setBean(request);
+        val managedFeature = request.getManagedFeature();
         
+        BindingsVaa.bindFeatureWithConverter(
+                uiField, 
+                managedFeature, 
+                new StringToUuidConverter("Unable to convert String to UUID"),
+                UUID.nameUUIDFromBytes(new byte[16]));
+                
         return uiField;
-    }
-    
-    private static class StringToUuidConverter implements Converter<String, UUID> {
-
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Result<UUID> convertToModel(String value, ValueContext context) {
-            try {
-                return Result.ok(UUID.fromString(value));
-            } catch (IllegalArgumentException e) {
-                return Result.error(e.getMessage());    
-            }
-        }
-
-        @Override
-        public String convertToPresentation(UUID value, ValueContext context) {
-            return value.toString();
-        }
         
     }
     
