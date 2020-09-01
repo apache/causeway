@@ -30,6 +30,7 @@ sourceSets {
 dependencies {
     compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp')
     compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-jdk11')
+    compile project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-model')
     compile project(':isis-parent:isis:isis-security-shiro')
     compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer')
     compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-jaxrsresteasy4')
@@ -41,7 +42,6 @@ dependencies {
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-persistence-jdo')
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm')
     compile project(':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap:isis-extensions-shiro-realm-ldap-impl')
-    compile(Libs.springDataJpa)
     testCompile(Libs.jerseySpring5) {
         exclude(module: 'jersey-server')
     }

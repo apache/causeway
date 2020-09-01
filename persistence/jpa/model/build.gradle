@@ -3,6 +3,7 @@ description = 'Apache Isis Persistence - JPA (model)'
 dependencies {
     compile project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-applib')
     compile project(':isis-parent:isis:isis-core-runtime')
+    compile(Libs.springDataJpa)
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 }
 
