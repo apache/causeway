@@ -30,6 +30,7 @@ import javax.persistence.Id;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 
 import lombok.AccessLevel;
@@ -44,7 +45,8 @@ import lombok.ToString;
 //@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 //@Discriminator(strategy=DiscriminatorStrategy.VALUE_MAP, value="Product")
 @DomainObject(
-        objectType = "testdomain.jpa.Product"
+        objectType = "testdomain.jpa.Product",
+        nature = Nature.JPA_ENTITY //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
         )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED) 

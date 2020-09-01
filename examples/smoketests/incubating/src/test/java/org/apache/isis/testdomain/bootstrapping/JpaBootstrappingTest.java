@@ -43,6 +43,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -67,6 +69,7 @@ class JpaBootstrappingTest /*extends IsisIntegrationTestAbstract*/ {
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
     @Inject private RepositoryService repository;
     @Inject private IsisInteractionFactory isisInteractionFactory;
+    @Inject private SpecificationLoader specLoader;
     //@Inject private TransactionService transactionService;
 
     @BeforeAll
@@ -105,6 +108,14 @@ class JpaBootstrappingTest /*extends IsisIntegrationTestAbstract*/ {
     void platformTransactionManager_shouldBeAvailable() {
         assertTrue(platformTransactionManager.isPresent());
     }
+    
+    @Test @Order(0) 
+    void jpaEntities_shouldBeRecognisedAsSuch() {
+        val spec = specLoader.loadSpecification(JpaProduct.class);
+        assertTrue(spec.isEntity());
+        assertNotNull(spec.getFacet(EntityFacet.class));
+    }
+    
     
     @Test @Order(1) @Rollback(false) 
     void sampleInventoryShouldBeSetUp() {

@@ -95,7 +95,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
-@lombok.ToString(of = {"correspondingClass", "fullName", "managedObjectSort"})
+@lombok.ToString(of = {"correspondingClass", "fullName", "beanSort"})
 @Log4j2 
 public abstract class ObjectSpecificationAbstract 
 extends FacetHolderImpl 
@@ -206,12 +206,14 @@ implements ObjectSpecification {
     public ObjectSpecificationAbstract(
             final Class<?> introspectedClass,
             final String shortName,
+            final BeanSort beanSort,
             final FacetProcessor facetProcessor,
             final PostProcessor postProcessor) {
 
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
+        this.beanSort = beanSort;
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
@@ -876,19 +878,17 @@ implements ObjectSpecification {
         return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
 
-    private BeanSort managedObjectSort;
+    //@Setter(AccessLevel.PROTECTED)
+    @Getter
+    private final BeanSort beanSort;
 
-    @Override
-    public BeanSort getBeanSort() {
-        if(managedObjectSort==null) {
-            setManagedObjectSort(sortOf(this));
-        }
-        return managedObjectSort;
-    }
-
-    protected void setManagedObjectSort(BeanSort managedObjectSort) {
-        this.managedObjectSort = managedObjectSort;
-    }
+//    @Override
+//    public BeanSort getBeanSort() {
+//        if(beanSort==null) {
+//            setBeanSort(sortOf(this));
+//        }
+//        return beanSort;
+//    }
 
 
     // -- convenience isXxx (looked up from facets)

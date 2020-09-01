@@ -27,6 +27,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.mixins.timestamp.Timestampable;
 
@@ -35,7 +36,8 @@ import lombok.Setter;
 
 @Entity
 @DomainObject(
-        objectType = "testdomain.jpa.ProductComment")
+        objectType = "testdomain.jpa.ProductComment",
+        nature = Nature.JPA_ENTITY) //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
 public class JpaProductComment implements Timestampable {
 
     @Id

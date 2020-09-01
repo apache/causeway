@@ -38,6 +38,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._Blackhole;
@@ -75,6 +76,7 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -237,9 +239,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         .forEach(entry->{
 
             val type = entry.getKey();
-            val sort = entry.getValue(); 
-
-            val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
+            val sort = entry.getValue();
+            
+            val spec = primeSpecification(type, sort);
             if(spec==null) {
                 typeRegistry.veto(type);
                 return;
@@ -286,7 +288,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             setMetamodelFullyIntrospected(true);
         }
     }
-    
+
     @Override
     public ValidationFailures getValidationResult() {
         return validationResult.get();
@@ -363,9 +365,44 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return true;
     }
 
+    
+    //TODO[ISIS-2332] when the cache is cleared, sort information get's lost
+    //instead better integrate the isis bean type registry with the spec loading
+    @Nullable
+    private ObjectSpecification primeSpecification(
+            final @Nullable Class<?> type,
+            final @NonNull BeanSort sort) {
+        
+        if(type==null) {
+            return null;
+        }
+
+        val substitute = classSubstitutorRegistry.getSubstitution(type);
+        if (substitute.isNeverIntrospect()) {
+            return null; // never inspect
+        }
+        
+        val substitutedType = substitute.apply(type);
+        
+        val typeName = substitutedType.getName();
+        
+        final ObjectSpecification cachedSpec;
+        
+        // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
+        synchronized (cache) {
+            cachedSpec = cache.computeIfAbsent(typeName, __->createSpecification(substitutedType, sort));
+        }
+
+        cachedSpec.introspectUpTo(IntrospectionState.NOT_INTROSPECTED);
+
+        return cachedSpec;
+        
+    }
+    
+    
     @Override @Nullable
     public ObjectSpecification loadSpecification(
-            @Nullable final Class<?> type, 
+            final @Nullable Class<?> type,
             final IntrospectionState upTo) {
 
         if(type==null) {
@@ -387,7 +424,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
         synchronized (cache) {
-            cachedSpec = cache.computeIfAbsent(typeName, __->createSpecification(substitutedType));
+            cachedSpec = cache.computeIfAbsent(typeName, __->createSpecification(substitutedType, BeanSort.UNKNOWN));
         }
 
         cachedSpec.introspectUpTo(upTo);
@@ -507,7 +544,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecification createSpecification(final Class<?> cls) {
+    private ObjectSpecification createSpecification(final Class<?> cls, final BeanSort beanSort) {
 
         guardAgainstMetamodelLockedAfterFullIntrospection(cls);
 
@@ -518,6 +555,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val managedBeanNameIfAny = typeRegistry.getManagedBeanNameForType(cls);
         val objectSpec = new ObjectSpecificationDefault(
                         cls,
+                        beanSort,
                         metaModelContext,
                         facetProcessor,
                         managedBeanNameIfAny.orElse(null),
@@ -548,7 +586,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         .forEach(spec -> {
             try {
                 spec.introspectUpTo(upTo);
-            } catch (Throwable ex) {
+            } catch (Throwable ex) {    
                 log.error(ex);
                 throw ex;
             }

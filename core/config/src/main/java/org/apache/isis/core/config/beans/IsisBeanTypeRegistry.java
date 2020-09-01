@@ -273,6 +273,7 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             case MIXIN:
                 return BeanClassification.selfManaged(BeanSort.MIXIN);
             case JDO_ENTITY:
+            case JPA_ENTITY:
                 return BeanClassification.selfManaged(BeanSort.ENTITY);
             case EXTERNAL_ENTITY:
             case INMEMORY_ENTITY:

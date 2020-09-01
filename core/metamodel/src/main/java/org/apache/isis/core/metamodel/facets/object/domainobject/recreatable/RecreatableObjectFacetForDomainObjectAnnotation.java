@@ -43,6 +43,7 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
                     case NOT_SPECIFIED:
                     case BEAN:
                     case JDO_ENTITY:
+                    case JPA_ENTITY:
                     case MIXIN:
                         // not a recreatable object, so no facet
                         return null;

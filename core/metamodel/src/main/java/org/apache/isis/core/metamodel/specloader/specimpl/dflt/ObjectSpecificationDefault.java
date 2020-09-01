@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -100,13 +101,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
+            final BeanSort beanSort,
             final MetaModelContext metaModelContext,
             final FacetProcessor facetProcessor,
             final String nameIfIsManagedBean,
             final PostProcessor postProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         
-        super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
+        super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
 
         setMetaModelContext(metaModelContext);
 
