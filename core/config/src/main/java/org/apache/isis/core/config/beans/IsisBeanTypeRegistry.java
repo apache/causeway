@@ -104,9 +104,9 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         return defensiveCopy;
     }
 
-    public BeanSort lookupBeanSortByIntrospectableType(Class<?> type) {
+    public Optional<BeanSort> lookupBeanSortByIntrospectableType(Class<?> type) {
         synchronized (introspectableTypes) {
-            return introspectableTypes.getOrDefault(type, BeanSort.UNKNOWN);
+            return Optional.ofNullable(introspectableTypes.get(type));
         }
     }
     

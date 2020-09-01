@@ -414,8 +414,14 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final @Nullable Class<?> type,
             final IntrospectionState upTo) {
 
+        val typeRegistry = getIsisBeanTypeRegistry();
+        
         return loadSpecification(
-                type, __->getIsisBeanTypeRegistry().lookupBeanSortByIntrospectableType(type), upTo);
+                type, 
+                __->typeRegistry
+                .lookupBeanSortByIntrospectableType(type)
+                .orElseGet(()->typeRegistry.quickClassify(type).getBeanSort()), 
+                upTo);
     }
 
     @Override
@@ -503,7 +509,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(isMetamodelFullyIntrospected() 
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
-            val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
+            val typeRegistry = getIsisBeanTypeRegistry();
             val category = typeRegistry.quickClassify(cls);
             val sort = category.getBeanSort();
 
