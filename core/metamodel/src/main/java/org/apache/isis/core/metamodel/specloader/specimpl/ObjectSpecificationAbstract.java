@@ -56,10 +56,8 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
@@ -69,8 +67,6 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -963,32 +959,5 @@ implements ObjectSpecification {
                 .lookupServiceElseFail(IsisBeanTypeRegistryHolder.class)
                 .getIsisBeanTypeRegistry();
     }
-
-    //TODO just make 'sort' a field of ObjectSpecification 
-    protected BeanSort sortOf(ObjectSpecification spec) {
-
-        if(isManagedBean()) { // <-- not a facet, because we get this information earlier (during class scanning)
-            return BeanSort.MANAGED_BEAN_CONTRIBUTING;
-        }
-        if(containsFacet(ValueFacet.class)) {
-            return BeanSort.VALUE;
-        }
-        if(containsFacet(ViewModelFacet.class)) {
-            return BeanSort.VIEW_MODEL;
-        }
-        if(containsFacet(MixinFacet.class)) {
-            return BeanSort.MIXIN;
-        }
-        if(containsFacet(CollectionFacet.class)) {
-            return BeanSort.COLLECTION;
-        }
-        if(containsFacet(EntityFacet.class)) {
-            return BeanSort.ENTITY;
-        }
-
-        return BeanSort.UNKNOWN;
-    }
-
-
 
 }

@@ -82,7 +82,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
 
     @Override
     public void close() {
-
         managedBeanNamesByType.clear();
         introspectableTypes.clear();
         allCategorySets.forEach(Set::clear);
@@ -103,6 +102,12 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         }
 
         return defensiveCopy;
+    }
+
+    public BeanSort lookupBeanSortByIntrospectableType(Class<?> type) {
+        synchronized (introspectableTypes) {
+            return introspectableTypes.getOrDefault(type, BeanSort.UNKNOWN);
+        }
     }
     
     public void veto(Class<?> type) {
@@ -318,6 +323,8 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         }
         return null;
     }
+
+    
 
 
 }

@@ -25,6 +25,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -209,7 +210,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         facetProcessor.init();
         postProcessor.init();
 
-        val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
+        val typeRegistry = getIsisBeanTypeRegistry();
 
         val knownSpecs = _Lists.<ObjectSpecification>newArrayList();
 
@@ -365,44 +366,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return true;
     }
 
-    
-    //TODO[ISIS-2332] when the cache is cleared, sort information get's lost
-    //instead better integrate the isis bean type registry with the spec loading
     @Nullable
-    private ObjectSpecification primeSpecification(
+    private ObjectSpecification loadSpecification(
             final @Nullable Class<?> type,
-            final @NonNull BeanSort sort) {
-        
-        if(type==null) {
-            return null;
-        }
-
-        val substitute = classSubstitutorRegistry.getSubstitution(type);
-        if (substitute.isNeverIntrospect()) {
-            return null; // never inspect
-        }
-        
-        val substitutedType = substitute.apply(type);
-        
-        val typeName = substitutedType.getName();
-        
-        final ObjectSpecification cachedSpec;
-        
-        // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
-        synchronized (cache) {
-            cachedSpec = cache.computeIfAbsent(typeName, __->createSpecification(substitutedType, sort));
-        }
-
-        cachedSpec.introspectUpTo(IntrospectionState.NOT_INTROSPECTED);
-
-        return cachedSpec;
-        
-    }
-    
-    
-    @Override @Nullable
-    public ObjectSpecification loadSpecification(
-            final @Nullable Class<?> type,
+            final Function<Class<?>, BeanSort> beanClassifier,
             final IntrospectionState upTo) {
 
         if(type==null) {
@@ -424,12 +391,31 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
         synchronized (cache) {
-            cachedSpec = cache.computeIfAbsent(typeName, __->createSpecification(substitutedType, BeanSort.UNKNOWN));
+            cachedSpec = cache.computeIfAbsent(typeName, __->
+                createSpecification(substitutedType, beanClassifier.apply(type)));
         }
 
         cachedSpec.introspectUpTo(upTo);
 
         return cachedSpec;
+    }
+
+    @Nullable
+    private ObjectSpecification primeSpecification(
+            final @Nullable Class<?> type,
+            final @NonNull BeanSort sort) {
+        return loadSpecification(type, __->sort, IntrospectionState.NOT_INTROSPECTED);
+        
+    }
+
+    
+    @Override @Nullable
+    public ObjectSpecification loadSpecification(
+            final @Nullable Class<?> type,
+            final IntrospectionState upTo) {
+
+        return loadSpecification(
+                type, __->getIsisBeanTypeRegistry().lookupBeanSortByIntrospectableType(type), upTo);
     }
 
     @Override
@@ -509,6 +495,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     // -- HELPER
     
+    private IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
+        return isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
+    }
+    
     private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {
         if(isMetamodelFullyIntrospected() 
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
@@ -550,7 +540,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         // ... and create the specs
 
-        val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
+        val typeRegistry = getIsisBeanTypeRegistry();
 
         val managedBeanNameIfAny = typeRegistry.getManagedBeanNameForType(cls);
         val objectSpec = new ObjectSpecificationDefault(
