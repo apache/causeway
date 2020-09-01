@@ -62,13 +62,10 @@ import lombok.val;
 public class JdoProgrammingModelPlugin implements MetaModelRefiner {
     
     @Inject private IsisConfiguration config;
-    private ProgrammingModel pm;
 
     @Override
     public void refineProgrammingModel(ProgrammingModel pm) {
         
-        this.pm = pm;
-
         val step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
         
         // come what may, we have to ignore the PersistenceCapable supertype.
@@ -102,16 +99,16 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
         // -- validators
         
-        addValidatorToEnsureIdentityType();
-        addValidatorToCheckForUnsupportedAnnotations();
+        addValidatorToEnsureIdentityType(pm);
+        addValidatorToCheckForUnsupportedAnnotations(pm);
         
         if(config.getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
-            addValidatorToEnsureUniqueObjectIds();
+            addValidatorToEnsureUniqueObjectIds(pm);
         }
 
     }
 
-    private void addValidatorToEnsureIdentityType() {
+    private void addValidatorToEnsureIdentityType(ProgrammingModel pm) {
 
         pm.addValidator((objSpec, validation) -> {
 
@@ -146,7 +143,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
     }
 
-    private void addValidatorToCheckForUnsupportedAnnotations() {
+    private void addValidatorToCheckForUnsupportedAnnotations(ProgrammingModel pm) {
 
         pm.addValidator((objSpec, validation) -> {
             if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class) && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {
@@ -161,7 +158,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
     }
 
-    private void addValidatorToEnsureUniqueObjectIds() {
+    private void addValidatorToEnsureUniqueObjectIds(ProgrammingModel pm) {
 
         final ListMultimap<ObjectSpecId, ObjectSpecification> collidingSpecsById = 
                 _Multimaps.newConcurrentListMultimap();

@@ -39,6 +39,7 @@ public interface ProgrammingModel {
         DEPRECATED, 
         INCUBATING,
         JDO,
+        JPA,
     }
     
     /**

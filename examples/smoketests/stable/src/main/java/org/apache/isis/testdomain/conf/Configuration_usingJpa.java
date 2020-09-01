@@ -28,6 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.persistence.jpa.IsisModuleJpa;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jpa.JpaTestDomainModule;
 
@@ -39,7 +40,7 @@ import org.apache.isis.testdomain.jpa.JpaTestDomainModule;
 @Import({
     IsisModuleCoreRuntimeServices.class
     ,IsisModuleSecurityBypass.class
-    //,IsisModuleJdoDataNucleus5.class,
+    ,IsisModuleJpa.class,
     //,IsisModuleTestingFixturesApplib.class
 })
 @ComponentScan(
