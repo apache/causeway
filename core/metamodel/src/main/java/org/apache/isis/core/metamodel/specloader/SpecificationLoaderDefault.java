@@ -419,8 +419,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return loadSpecification(
                 type, 
                 __->typeRegistry
-                .lookupBeanSortByIntrospectableType(type)
-                .orElseGet(()->typeRegistry.quickClassify(type).getBeanSort()), 
+                    .lookupBeanSortByIntrospectableType(type)
+                    .orElseGet(()->typeRegistry.quickClassify(type).getBeanSort()), 
                 upTo);
     }
 

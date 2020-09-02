@@ -293,7 +293,9 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             return BeanClassification.delegated(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING);
         }
         
-        if(Collection.class.isAssignableFrom(type)) {
+        if(Collection.class.isAssignableFrom(type)
+                || Can.class.isAssignableFrom(type)
+                || type.isArray()) {
             return BeanClassification.selfManaged(BeanSort.COLLECTION);
         }
 
