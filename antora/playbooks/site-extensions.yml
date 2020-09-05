@@ -38,7 +38,7 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: extensions/core/model-annotation/src/main/adoc # extensions
+      start_path: extensions/core/model-annotation/adoc # extensions
       branches: HEAD
     - url: .
       start_path: extensions/core/command-log/adoc # extensions
