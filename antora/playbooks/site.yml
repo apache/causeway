@@ -321,8 +321,12 @@ asciidoc:
     experimental: ""
     idprefix: ""
     idseparator: "-"
-    kroki-fetch-diagram: false
-#    plantuml-server-url: "http://www.plantuml.com/plantuml"
+    # kroki
+    # for more options see https://github.com/Mogztter/asciidoctor-kroki
+    kroki-default-format: svg # (default)
+    kroki-default-options: interactive # only available for SVG
+    kroki-fetch-diagram: true
+    kroki-server-url: https://kroki.io # (default)
     page-isisrel: "2.0.0-M4"
 
 output:
