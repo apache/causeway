@@ -62,14 +62,15 @@ ui:
 
 asciidoc:
   extensions:
-    - asciidoctor-plantuml
+    - asciidoctor-kroki # requires: npm i ... @asciidoctor/core@2.2.0 asciidoctor-kroki
+#    - asciidoctor-plantuml # requires: npm i ... asciidoctor-plantuml@1.5.0
     - ./antora/lib/lorem
     - ./antora/lib/jira-issue
   attributes:
     experimental: ""
     idprefix: ""
     idseparator: "-"
-    plantuml-server-url: "http://www.plantuml.com/plantuml"
+#    plantuml-server-url: "http://www.plantuml.com/plantuml"
     page-isisrel: "2.0.0-M4"
 
 output:
