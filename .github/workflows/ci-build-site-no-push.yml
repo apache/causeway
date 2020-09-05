@@ -64,8 +64,7 @@ jobs:
       # we install the 'node' modules into the project root under 'node_modules', 
       # because we have no privileges to install them globally with -g option
       run: npm i @antora/cli@2.3.3 @antora/site-generator-default@2.3.3  @asciidoctor/core@2.2.0 asciidoctor-kroki
-      #asciidoctor-plantuml@1.5.0
-      
+
     - name: Print Antora Version
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
