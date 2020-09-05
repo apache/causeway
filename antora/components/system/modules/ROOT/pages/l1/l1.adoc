@@ -1,0 +1,15 @@
+[plantuml%interactive, l1, svg, format="svg", opts="inline", id="l1", width="800px"]
+----
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(personAlias, "Label", "Optional Description")
+Container(containerAlias, "Label", "Technology", "Optional Description")
+System(systemAlias, "Label", "Optional Description")
+note right
+[[l2.svg]] [[l2.adoc]]
+end note
+
+Rel(personAlias, containerAlias, "Label", "Optional Technology")
+@enduml
+----

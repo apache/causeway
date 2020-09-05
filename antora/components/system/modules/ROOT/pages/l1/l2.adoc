@@ -1,0 +1,12 @@
+[plantuml%interactive, l2, svg, format="svg", id="l2", width="800px"]
+----
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+System(systemAlias, "Label", "L2")
+note right
+[[l1.svg]] [[l1.adoc]]
+end note
+
+@enduml
+----

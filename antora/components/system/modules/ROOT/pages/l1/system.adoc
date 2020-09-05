@@ -1,0 +1,14 @@
+= System
+
+WARNING: this is work-in-progress.
+
+[plantuml%interactive, level-1-system, svg]
+----
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+Person(personAlias, "Label", "Optional Description")
+Container(containerAlias, "Label", "Technology", "Optional Description")
+System(systemAlias, "Label", "Optional Description")
+Rel(personAlias, containerAlias, "Label", "Optional Technology")
+@enduml
+----
