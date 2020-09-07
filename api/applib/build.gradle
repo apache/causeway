@@ -1,6 +1,5 @@
 description = 'Apache Isis Core - AppLib'
 apply plugin: 'war'
-apply plugin: 'io.freefair.lombok'
 
 dependencies {
     compile project(':isis-parent:isis-schema')

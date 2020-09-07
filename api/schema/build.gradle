@@ -3,7 +3,6 @@ plugins {
 }
 description = 'Apache Isis Core - Schemas'
 apply plugin: 'java-library'
-apply plugin: 'io.freefair.lombok'
 
 def episodesDir = "${project.buildDir}/generated-sources/xjc/META-INF"
 def javaVersion = JavaVersion.current()

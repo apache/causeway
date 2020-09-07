@@ -1,7 +1,6 @@
 group = 'org.apache.isis.valuetypes'
 description = 'Apache Isis Val - Asciidoctor (ui wicket)'
 apply plugin: 'war'
-apply plugin: 'io.freefair.lombok'
 
 dependencies {
     compile project(':isis-parent:isis-applib')
