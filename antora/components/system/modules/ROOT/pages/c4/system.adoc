@@ -1,15 +1,25 @@
-[plantuml%interactive, l1, svg, id="l1", width="800px"]
+ifdef::env-idea[:kroki-default-options: inline]
+
+
+= System
+
+WARNING: this is work-in-progress.
+
+[c4plantuml, level-1-system, svg, opts="{kroki-default-options}"]
 ----
 @startuml
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
-
 Person(personAlias, "Label", "Optional Description")
 Container(containerAlias, "Label", "Technology", "Optional Description")
 System(systemAlias, "Label", "Optional Description")
-note right
-[[../l1/l2]]
-end note
-
 Rel(personAlias, containerAlias, "Label", "Optional Technology")
 @enduml
+----
+
+[plantuml,demo,svg,opts="{kroki-default-options}"]
+----
+class Demo
+note right
+[[https://www.google.com]]
+end note
 ----

@@ -5,3 +5,7 @@
 :experimental:
 :idprefix:
 :idseparator: -
+// antora only builds interactive diagrams when mode is [interactive] (as defined in the playbook)
+// the asciidoctor-intellij-plugin will only preview interactive links if mode is [inline]
+// see discussion here https://github.com/asciidoctor/asciidoctor-intellij-plugin/issues/548
+:kroki-default-options: inline

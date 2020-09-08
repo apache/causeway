@@ -1,0 +1,9 @@
+[plantuml,demo,svg,opts="{kroki-default-options}"]
+----
+class Demo1
+note right
+[[../c4/l2 link to 2]]
+end note
+----
+
+

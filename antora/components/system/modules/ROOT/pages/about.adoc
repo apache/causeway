@@ -17,19 +17,19 @@ This table summarises all c4 Diagrams.
 | System
 | Maven Core Modules
 |
-* xref:system:ROOT:l1/system.adoc[System Overview]
+* xref:system:ROOT:c4/system.adoc[System Overview]
 
 | 2
 | System
 | Testing Links (Interactive)
 |
-* xref:system:ROOT:l1/l1.adoc[L1]
+* xref:system:ROOT:c4/l1.adoc[L1]
 
 | 2
 | System
 | Testing Links (Interactive)
 |
-* xref:system:ROOT:l1/l2.adoc[L2]
+* xref:system:ROOT:c4/l2.adoc[L2]
 
 |===
 

@@ -3,7 +3,7 @@
 
 * Level 1
 
-** xref:system:ROOT:l1/system.adoc[System Diagram]
+** xref:system:ROOT:c4/system.adoc[System Diagram]
 
 
 
