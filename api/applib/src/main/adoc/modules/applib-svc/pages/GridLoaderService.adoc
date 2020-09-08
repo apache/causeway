@@ -18,7 +18,7 @@ include::refguide:applib-svc:example$services/grid/GridLoaderService.java[tags="
 <.> whether dynamic reloading of layouts is enabled.  The default implementation enables reloading for prototyping, disables in production
 <.> support metamodel invalidation/rebuilding of spec, eg as called by this xref:applib-classes:about.adoc#rebuildMetamodel[Object mixin] action.
 <.> whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
-<.> returns a new instance of a xref:applib-classes:classes/layout.adoc#component[`Grid`] for the specified domain class, eg as loaded from a `layout.xml` file.
+<.> returns a new instance of a xref:applib-classes:layout.adoc#component[`Grid`] for the specified domain class, eg as loaded from a `layout.xml` file.
 If none exists, will return null (and the calling xref:refguide:applib-svc:GridService.adoc[`GridService`] will use xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`] to obtain a default grid for the domain class).
 <.> Load a specific layout alternative, eg if specified through a `layout()` supporting method of the domain object itself.
 

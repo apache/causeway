@@ -161,12 +161,12 @@ But, if the action/property is to be executed in the foreground, then the intera
 * the (request-scoped) xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
 In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] extensively each successive call results in a new child execution.
 
-* before and after each action invocation/property edit, a xref:applib-classes:classes/domainevent.adoc[domain event] is may be broadcast to all subscribers.
+* before and after each action invocation/property edit, a xref:applib-classes:events/domainevent.adoc[domain event] is may be broadcast to all subscribers.
 Whether this occurs depends on whether the action/property has been annotated (using xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] or xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent()`]).
 +
 (Note that subscribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
-* As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:core:runtime-services:ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service.
+* As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] domain service.
 Metrics as to which objects are merely loaded into memory are also captured using the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)

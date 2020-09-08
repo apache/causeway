@@ -12,7 +12,7 @@ ____
 enables people like you and me to express our lives and experiences in the form of stories, streams or CQNZs, sharing the most exciting, thrilling and contemplative moments using photographs as the core element of interaction with others.
 ____
 
-image::powered-by/cqnz/cqnz-advert.png[width="900px",link="{imagesdir}/powered-by/cqnz/cqnz-advert.png"]
+image::what-is-apache-isis/powered-by/cqnz/cqnz-advert.png[width="900px",link="{imagesdir}/what-is-apache-isis/powered-by/cqnz/cqnz-advert.png"]
 
 == Underlying Technology
 

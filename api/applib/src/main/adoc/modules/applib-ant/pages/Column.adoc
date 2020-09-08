@@ -19,6 +19,7 @@ Therefore ensure that the annotation is placed there.
 
 This section identifies which attributes of `@Column` are recognized and used by Apache Isis.
 
+[#nullability]
 == Nullability
 
 The `allowsNull` attribute is used to specify if a property is mandatory or is optional.
@@ -117,7 +118,7 @@ public class PartyRelationship {
 
 === Mapping ``Blob``s and ``Clob``s
 
-Isis provides custom value types for xref:applib-classes:classes/value-types.adoc#Blob[`Blob`]s and xref:applib-classes:classes/value-types.adoc#Clob[`Clob`]s.
+Isis provides custom value types for xref:applib-classes:value-types.adoc#Blob[`Blob`]s and xref:applib-classes:value-types.adoc#Clob[`Clob`]s.
 These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.
 Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
 

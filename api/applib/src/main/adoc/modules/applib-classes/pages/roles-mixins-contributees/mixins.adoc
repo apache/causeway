@@ -4,7 +4,7 @@
 :page-partial:
 
 
-This section defines a number of role interfaces that definea contract for some framework-defined mixins.
+This section defines a number of role interfaces that define a contract for some framework-defined mixins.
 
 [TIP]
 ====

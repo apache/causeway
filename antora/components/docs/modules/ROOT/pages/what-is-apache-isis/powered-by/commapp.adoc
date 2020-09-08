@@ -1,14 +1,14 @@
 = CommApp
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-partial:r
+:page-partial:
 
 // TODO: V2: need to update these, they are getting stale.
 
 CommApp is an application whose domain is that of managing businesses themselves, specifically the commercial aspects of a business.
 You can get a feel for it from this screenshot:
 
-image::powered-by/commapp/screenshot-1.png[width="900px",link="{imagesdir}/powered-by/commapp/screenshot-1.png"]
+image::what-is-apache-isis/powered-by/commapp/screenshot-1.png[width="900px",link="{imagesdir}/what-is-apache-isis/powered-by/commapp/screenshot-1.png"]
 
 which shows how the app integrates a number of the (non-ASF) link:https://platform.incode.org[Incode Platform^] components (excel, fullcalendar2, gmap3 and wickedcharts).
 

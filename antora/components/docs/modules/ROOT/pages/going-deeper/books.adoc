@@ -16,7 +16,7 @@ If the idea of naked objects is of interest, then there are a couple of books on
 Richard Pawson and Robert Matthews, Wiley 2002
 
 
-image::books/nakedobjects-book.jpg[width="159px",link="{imagesdir}/books/nakedobjects-book.jpg"]
+image::going-deeper/books/nakedobjects-book.jpg[width="159px",link="{imagesdir}/books/nakedobjects-book.jpg"]
 
 
 This book describes the original ideas of Naked Objects.
@@ -38,7 +38,7 @@ The book is freely available online http://www.nakedobjects.org/book/[here]. Or,
 
 Dan Haywood, Pragmatic Bookshelf 2009
 
-image::books/dhnako.jpg[width="167px",link="{imagesdir}/books/dhnako.jpg"]
+image::going-deeper/books/dhnako.jpg[width="167px",link="{imagesdir}/books/dhnako.jpg"]
 
 This more recent book draws the parallel between domain-driven design and Naked Objects (4.0).
 In the spirit of the Pragmatic Bookshelf, it's a practical, hands-on sort of book, building up a case study as it goes and encouraging you to build your own app as you go.

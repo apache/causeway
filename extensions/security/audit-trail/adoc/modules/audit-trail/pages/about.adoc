@@ -15,12 +15,12 @@ The module also provides:
 * `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.
 None of its actions are visible in the user interface (they are all `@Programmatic`).
 
-* `AuditingServiceContributions` which contributes collections to the xref:refguide:applib-cm:classes/mixins.adoc#HasUniqueId[ `HasUniqueId`] interface.
+* `AuditingServiceContributions` which contributes collections to the xref:refguide:applib-cm:roles-mixins-contributees/contributee.adoc#HasUniqueId[`HasUniqueId`] interface.
 This will therefore display all audit entries that occurred in a given request/transaction, in other words whenever a command, a published event or another audit entry is displayed.
 
 These services can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
-If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:userguide:btb:about.adoc#vetoing-visibility[vetoing subscriber].
+If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:userguide:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
 
 == Usage
 
