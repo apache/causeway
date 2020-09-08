@@ -1,6 +1,3 @@
-ifdef::env-idea[:kroki-default-options: inline]
-
-
 = System
 
 WARNING: this is work-in-progress.
