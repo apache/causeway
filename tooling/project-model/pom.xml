@@ -19,7 +19,7 @@
 		<artifactId>isis-tooling</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>isis-tooling-project-model</artifactId>
 
 	<name>Apache Isis Tooling - Project Model</name>
@@ -31,6 +31,22 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.tooling</groupId>
+			<artifactId>isis-tooling-commons</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.gradle</groupId>
+			<artifactId>gradle-tooling-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-model-builder</artifactId>
+		</dependency>
+
 	</dependencies>
 
 </project>
