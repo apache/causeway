@@ -532,7 +532,7 @@ You will probably want to create a new JIRA ticket for these updates (or if mino
 
 Check (via link:http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.apache%22%20a%3A%22apache%22[search.maven.org]) whether there is a newer version of the Apache parent `org.apache:apache`.
 
-If there are, merge in these changes to the `core-parent` POM.
+If there are, merge in these changes to the `isis-parent` POM.
 
 === Update plugin versions
 

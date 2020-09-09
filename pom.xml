@@ -24,7 +24,7 @@
 	<name>Apache Isis (Aggregator)</name>
 	<description>
         Convenience aggregator POM that references all modules.
-        The parent POM of the core framework is core-parent/pom.xml
+        The parent POM of the core framework is isis-parent/pom.xml
     </description>
 
 	<scm>
@@ -36,7 +36,7 @@
 
 	<modules>
 		<module>antora</module>
-		<module>core-parent</module>
+		<module>isis-parent</module>
 
 		<module>examples/demo</module>
 		<module>examples/smoketests</module>

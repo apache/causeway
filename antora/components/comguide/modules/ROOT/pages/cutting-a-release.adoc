@@ -10,7 +10,7 @@ The release process consists of:
 * Members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-Apache Isis itself is released in one go, everything is ultimately a child of `core-parent/pom.xml` (relative to the link:https://github.com/apache/isis[source code root]).
+Apache Isis itself is released in one go, everything is ultimately a child of `isis-parent/pom.xml` (relative to the link:https://github.com/apache/isis[source code root]).
 This section details the process for formally releasing this module.
 
 The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release-successful.adoc[post-release] activities and set up for the next development iteration.
@@ -56,11 +56,11 @@ grep SNAPSHOT $(/bin/find . -name pom.xml | grep -v target  sort)
 
 The only mention of `SNAPSHOT` should be in the `revision` property of the root `core-prent/pom.xml` file.
 
-Finally, switch to the `core-parent` directory:
+Finally, switch to the `isis-parent` directory:
 
 [source,bash,subs="attributes+"]
 ----
-cd core-parent
+cd isis-parent
 ----
 
 === License headers
@@ -123,7 +123,7 @@ mvn license:download-licenses
 groovy ../scripts/checkmissinglicenses.groovy
 ----
 
-WARNING: this groovy script assumes it is being run from the `core-parent` directory.
+WARNING: this groovy script assumes it is being run from the `isis-parent` directory.
 
 The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.
 The script then searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
@@ -206,12 +206,12 @@ git branch $ISISBRANCH
 git worktree add ../isis-release $ISISBRANCH
 ----
 
-* Switch to the `core-parent` directory in the new worktree:
+* Switch to the `isis-parent` directory in the new worktree:
 +
 [source,bash,subs="attributes+"]
 ----
 cd ../isis-release
-cd core-parent
+cd isis-parent
 ----
 
 === Bump `revision` property to `$ISISREL`
@@ -261,7 +261,7 @@ Since the `<version>` has already been updated, we just use `mvn deploy` to uplo
 We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
 
 The build creates a zip of the directory, so before executing the release we remove any other files.
-Still in the `core-parent` directory:
+Still in the `isis-parent` directory:
 
 [source,bash]
 ----
@@ -353,7 +353,7 @@ Previously we bumped to the next development snapshot.
 However, this approach doesn't play well with CI/CD when Apache Isis is mounted as a git submodule, so instead we always use `2.0.0-SNAPSHOT` for all development work.
 ====
 
-Therefore (still in the `core-parent` directory):
+Therefore (still in the `isis-parent` directory):
 
 [source,bash,subs="attributes+"]
 ----
