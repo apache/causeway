@@ -78,7 +78,7 @@ We could surface the set of invoices for a customer using a `Customer_invoices` 
 [plantuml]
 .`invoices` module contributes to `customers`
 ----
-include::docs:resources:partial$plantuml-stereotypes.adoc[]
+include::docs:resources:partial$plantuml-stereotypes.puml[]
 
 package invoice {
     class Customer_invoices <<mixin>>
@@ -102,7 +102,7 @@ We can therefore attach documents to a `Customer` by having `Customer` implement
 [plantuml]
 .`customers` depends upon contributions of `documents`
 ----
-include::docs:resources:partial$plantuml-stereotypes.adoc[]
+include::docs:resources:partial$plantuml-stereotypes.puml[]
 
 package documents {
     interface DocumentHolder <<role>>

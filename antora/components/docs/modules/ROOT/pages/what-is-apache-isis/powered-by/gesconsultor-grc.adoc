@@ -38,11 +38,11 @@ viewer.  More on this below.
 Allows a company to model its _Business_, __IT Asset__s and their dependencies.  The custom viewer in this case exposes a
 classical form-like interface:
 
-image::powered-by/gesconsultor-grc/fig-1-custom-viewer.png[width="800px",link="{imagesdir}/powered-by/gesconsultor-grc/fig-1-custom-viewer.png"]
+image::what-is-apache-isis/powered-by/gesconsultor-grc/fig-1-custom-viewer.png[width="800px",link="{imagesdir}/what-is-apache-isis/powered-by/gesconsultor-grc/fig-1-custom-viewer.png"]
 
 Alternatively, a custom drag-n-drop visual interface can be used:
 
-image::powered-by/gesconsultor-grc/fig-2-custom-drag-n-drop-interface.png[width="800px",link="{imagesdir}/powered-by/gesconsultor-grc/fig-2-custom-drag-n-drop-interface.png"]
+image::what-is-apache-isis/powered-by/gesconsultor-grc/fig-2-custom-drag-n-drop-interface.png[width="800px",link="{imagesdir}/what-is-apache-isis/powered-by/gesconsultor-grc/fig-2-custom-drag-n-drop-interface.png"]
 
 This is implemented with the Dojo javascript library, interfacing to Apache Isis-managed domain objects.
 
@@ -53,7 +53,7 @@ This is implemented with the Dojo javascript library, interfacing to Apache Isis
 Allows a company to manage __Risk Scenario__s through a _Risk Register_, and execute a full ISO 31000 compliant _Risk Assessment_.
 A custom UI visualizes these risks as a heatmap:
 
-image::powered-by/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png[width="800px",link="{imagesdir}/powered-by/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png"]
+image::what-is-apache-isis/powered-by/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png[width="800px",link="{imagesdir}/what-is-apache-isis/powered-by/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png"]
 
 
 === Project Management
@@ -61,7 +61,7 @@ image::powered-by/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png[
 Allows users to visually manage their projects and tasks through a KanBan-like interface.
 Again, the viewer provides drag-n-drop capabilities:
 
-image::powered-by/gesconsultor-grc/fig-4-managing-projects.png[width="400px",link="{imagesdir}/powered-by/gesconsultor-grc/fig-4-managing-projects.png"]
+image::what-is-apache-isis/powered-by/gesconsultor-grc/fig-4-managing-projects.png[width="400px",link="{imagesdir}/what-is-apache-isis/powered-by/gesconsultor-grc/fig-4-managing-projects.png"]
 
 
 === Dashboard and Indicators

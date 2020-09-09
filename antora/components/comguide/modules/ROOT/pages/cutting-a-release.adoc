@@ -8,12 +8,12 @@ The release process consists of:
 
 * the release manager cutting the release (documented below)
 * Members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
-* the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful[unsuccessful] vote.
+* the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
 Apache Isis itself is released in one go, everything is ultimately a child of `core-parent/pom.xml` (relative to the link:https://github.com/apache/isis[source code root]).
 This section details the process for formally releasing this module.
 
-The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release[post-release] activities and set up for the next development iteration.
+The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release-successful.adoc[post-release] activities and set up for the next development iteration.
 
 If you've not performed a release before, then note that there are some configuration xref:comguide:ROOT:release-process-prereqs.adoc[prerequisites] that must be configured first.
 In particular, you'll need signed public/private keys, and the ASF Nexus staging repo inlocal `~/.m2/settings.xml` file.

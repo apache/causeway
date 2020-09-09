@@ -1,9 +1,9 @@
 
 
 
-** xref:security:ROOT:about.adoc[Secman]
-*** xref:security:ROOT:api.adoc[API]
-*** xref:security:ROOT:model.adoc[Model]
-*** xref:security:ROOT:jbcrypt-encryption.adoc[JBCrypt Encryption]
-*** xref:security:ROOT:jdo-persistence.adoc[JDO Persistence]
-*** xref:security:ROOT:shiro-realm.adoc[Realm (for Shiro)]
+** xref:security:secman:about.adoc[Secman]
+*** xref:security:secman:api.adoc[API]
+*** xref:security:secman:model.adoc[Model]
+*** xref:security:secman:jbcrypt-encryption.adoc[JBCrypt Encryption]
+*** xref:security:secman:jdo-persistence.adoc[JDO Persistence]
+*** xref:security:secman:shiro-realm.adoc[Realm (for Shiro)]

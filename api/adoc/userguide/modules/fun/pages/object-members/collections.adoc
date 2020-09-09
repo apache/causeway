@@ -41,7 +41,7 @@ Bidirectional one-to-many collections are one of the most common types of associ
 [plantuml]
 .Parent has many Children, each Child has one Parent.
 ----
-include::docs:resources:partial$plantuml-stereotypes.adoc[]
+include::docs:resources:partial$plantuml-stereotypes.puml[]
 
 class ParentObject
 class ChildObject

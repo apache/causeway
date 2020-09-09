@@ -43,8 +43,8 @@ The reason that this property cannot be modified.
 
 <.> xref:refguide:applib-ant:Property.adoc#fileAccept[`fileAccept()`]
 +
-Hints the file type (media type or file extension) to be uploaded to a xref:applib-classes:classes/value-types.adoc#Blob[`Blob`]
- or xref:applib-classes:classes/value-types.adoc#Clob[`Clob`]. +
+Hints the file type (media type or file extension) to be uploaded to a xref:applib-classes:value-types.adoc#Blob[`Blob`]
+ or xref:applib-classes:value-types.adoc#Clob[`Clob`]. +
 +
 Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 

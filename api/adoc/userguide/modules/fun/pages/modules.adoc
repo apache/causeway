@@ -42,7 +42,7 @@ We can see this for example in the `testing` module of the Excel library (artifa
 [plantuml]
 .Testing submodule depends upon Applib submodule
 ----
-include::docs:resources:partial$plantuml-stereotypes.adoc[]
+include::docs:resources:partial$plantuml-stereotypes.puml[]
 
 package excel-applib {
 }

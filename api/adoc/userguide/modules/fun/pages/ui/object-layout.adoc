@@ -14,7 +14,7 @@ File-based layouts offer a number of benefits:
 
 * UI hints can be provided for xref:userguide:fun:mixins.adoc[mixin] contributions that are synthesised at runtime.
 
-It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:refguide:applib-svc:LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:refguide:applib-cm:classes/mixins.adoc#Object[mixin action] contributed to every domain object.
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:refguide:applib-svc:LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Object[mixin action] contributed to every domain object.
 
 There are some downsides, though:
 
@@ -24,7 +24,7 @@ There are some downsides, though:
 
 * there is no notion of inheritance, so a `.layout.xml` is required for all concrete classes and also for any abstract classes (if used as a collection type).
 
-The `Xxx.layout.xml` file is just the serialized form of a xref:refguide:applib-cm:classes/layout.adoc[`Grid`] layout class defined within Apache Isis' applib.
+The `Xxx.layout.xml` file is just the serialized form of a xref:refguide:applib-cm:layout.adoc[`Grid`] layout class defined within Apache Isis' applib.
 These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
 
 == Grids vs Components
@@ -36,7 +36,7 @@ The layout file distinguishes between two types of element:
 
 * those that define common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
 
-More information about these classes can be found in xref:refguide:applib-cm:classes/layout.adoc[the reference guide].
+More information about these classes can be found in xref:refguide:applib-cm:layout.adoc[the reference guide].
 More information on Bootstrap 3's grid system can be found link:http://getbootstrap.com/css/#grid[here].
 
 == By Example
@@ -269,5 +269,5 @@ You can then remove the `@MemberOrder` and `@Action#associateWith` annotations f
 * if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
 The grid regions will be empty in this version, and the framework will use the `@MemberOrder` and `@Action#associateWith` annotations to bind object members to those regions.
 
-If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-cm:classes/mixins.adoc#downloadlayoutxml[mixin action] (contributed to every domain object).
+If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#downloadlayoutxml[mixin action] (contributed to every domain object).
 

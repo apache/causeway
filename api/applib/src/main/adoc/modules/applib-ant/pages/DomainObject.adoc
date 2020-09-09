@@ -87,7 +87,7 @@ The event type to be posted whenever an instance has just been loaded from the d
 +
 The event type to be posted whenever an instance is about to be deleted
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#updatedlifecycleevent[`updatedLifecycleEvent()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#updatedLifecycleEvent[`updatedLifecycleEvent()`]
 +
 The event type to be posted whenever an instance has just been updated
 

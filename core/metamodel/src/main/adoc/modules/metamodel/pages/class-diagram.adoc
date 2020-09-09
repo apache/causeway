@@ -10,7 +10,7 @@ The diagram below shows a simplified version of Apache Isis' internal metamodel.
 
 [plantuml]
 ----
-include::docs:resources:partial$plantuml-stereotypes.adoc[]
+include::docs:resources:partial$plantuml-stereotypes.puml[]
 
 package metamodel {
 

@@ -4,5 +4,5 @@
 * xref:contributing.adoc[Contributing]
 * xref:building-apache-isis.adoc[Building Apache Isis]
 * xref:building-docs-and-website.adoc[Building Docs and Website]
-* xref:asciidoc-syntax.adoc[Asciidoc Syntax]
+* xref:documentation:asciidoc-syntax.adoc[Asciidoc Syntax]
 * xref:agilej.adoc[AgileJ]
