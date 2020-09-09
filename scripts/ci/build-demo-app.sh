@@ -69,7 +69,7 @@ function revertRevision() {
 	fi
 }
 
-setRevision core-parent
+setRevision isis-parent
 
 #
 # now build the apps
@@ -103,6 +103,6 @@ do
 
 done
 
-revertRevision core-parent
+revertRevision isis-parent
 
 

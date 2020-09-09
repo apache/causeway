@@ -87,7 +87,7 @@ _build(){
 
     echo 'Building'
     # previously there were multiple directories, now just the one.
-    pushd isis*/core-parent
+    pushd isis*/isis-parent
     _execmustpass mvn clean install -Dskip.git -Preleased,-all
 	popd
 }

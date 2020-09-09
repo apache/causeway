@@ -38,7 +38,7 @@ sh $SCRIPT_DIR/_print-environment.sh "build-core"
 
 if [ ! -z "$REVISION" ]; then
 
-  cd $PROJECT_ROOT_PATH/core-parent
+  cd $PROJECT_ROOT_PATH/isis-parent
   echo ""
   echo ""
   echo ">>> mvn versions:set -DnewVersion=$REVISION ..."
@@ -62,7 +62,7 @@ if [ ! -z "$REVISION" ]; then
   sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
 fi
 
-cd $PROJECT_ROOT_PATH/core-parent
+cd $PROJECT_ROOT_PATH/isis-parent
 echo ""
 echo ""
 echo ">>> mvn $MVN_STAGES $MVN_ADDITIONAL_OPTS"
@@ -94,7 +94,7 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 
 if [ ! -z "$REVISION" ]; then
-  cd $PROJECT_ROOT_PATH/core-parent
+  cd $PROJECT_ROOT_PATH/isis-parent
   echo ""
   echo ""
   echo ">>> mvn versions:revert ..."
