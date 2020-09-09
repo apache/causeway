@@ -88,11 +88,11 @@ public class MavenModelFactory {
         return artifactKey;
     }
     
-    private static String getGroupId(Model model) {
+    public static String getGroupId(Model model) {
         return Optional.ofNullable(model.getGroupId()).orElseGet(()->model.getParent().getGroupId());
     }
     
-    private static String getVersion(Model model) {
+    public static String getVersion(Model model) {
         return Optional.ofNullable(model.getVersion()).orElseGet(()->model.getParent().getVersion());
     }
     

@@ -31,7 +31,9 @@ import org.apache.isis.tooling.projectmodel.maven.MavenModelFactory;
 import org.apache.isis.tooling.projectmodel.maven.SimpleModelResolver;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class ProjectNodeFactory {
 
     public static ProjectNode maven(File projRootFolder) {
@@ -70,7 +72,7 @@ public class ProjectNodeFactory {
     private static ProjectNode toProjectNode(ProjectNode parent, Model mavenProj) {
         val projNode = ProjectNode.builder()
                 .parent(parent)
-                .artifactId(mavenProj.getArtifactId())
+                .artifactKey(artifactKeyOf(mavenProj))
                 .name(mavenProj.getName())
                 .build();
 
@@ -82,8 +84,14 @@ public class ProjectNodeFactory {
 
     }
     
+    private static ArtifactKey artifactKeyOf(Model mavenProj) {
+        val groupId = MavenModelFactory.getGroupId(mavenProj);
+        val artifactId = mavenProj.getArtifactId();
+        val version = MavenModelFactory.getVersion(mavenProj);
+        return ArtifactKey.of(groupId, artifactId, version);
+    }
+    
     private static Iterable<Model> childrenOf(Model mavenProj, SimpleModelResolver modelResolver) {
-        
         return Stream.<String>concat(
                 mavenProj.getProfiles().stream().flatMap(profile->profile.getModules().stream()),
                 mavenProj.getModules().stream())
@@ -106,7 +114,7 @@ public class ProjectNodeFactory {
     private static ProjectNode toProjectNode(ProjectNode parent, GradleProject gradleProj) {
         val projNode = ProjectNode.builder()
                 .parent(parent)
-                .artifactId(gradleProj.getProjectIdentifier().getProjectPath())
+                .artifactKey(artifactKeyOf(gradleProj))
                 .name(gradleProj.getName())
                 .build();
         if(parent!=null) {
@@ -115,6 +123,19 @@ public class ProjectNodeFactory {
         return projNode;
     }
 
-
+    private static ArtifactKey artifactKeyOf(GradleProject gradleProj) {
+        val pomFile = new File(gradleProj.getProjectDirectory().getAbsoluteFile(), "pom.xml");
+        if(pomFile.canRead()) {
+            val mavenModel = MavenModelFactory.readModel(pomFile);
+            if(mavenModel!=null) {
+                return artifactKeyOf(mavenModel);
+            }
+        }
+        log.warn("cannot find pom.xml for project {} at {}", gradleProj.getName(), pomFile.getAbsolutePath());
+        val groupId = "?";
+        val artifactId = gradleProj.getName();
+        val version = "?";
+        return ArtifactKey.of(groupId, artifactId, version);
+    }
 
 }

@@ -30,9 +30,9 @@ public class ProjectNode {
 
     @ToString.Exclude private final ProjectNode parent;
     @ToString.Exclude private final TreeSet<ProjectNode> children = new TreeSet<ProjectNode>(
-            (a,b)->a.getArtifactId().compareTo(b.getArtifactId()));
+            (a,b)->a.getName().compareTo(b.getName()));
     
-    private final String artifactId;
+    private final ArtifactKey artifactKey;
     private final String name;
     private final String description;
     
