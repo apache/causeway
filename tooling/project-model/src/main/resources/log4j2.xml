@@ -6,7 +6,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="org.apache.isis.tooling" level="info" additivity="true">
+        <Logger name="org.apache.isis.tooling" level="info" additivity="false">
             <appender-ref ref="console" />
         </Logger>
         <Root level="warn" additivity="false">

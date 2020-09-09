@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.projectmodel.maven;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,10 +52,13 @@ public class SimpleModelResolver implements ModelResolver {
     private final Map<String, Model> projectPomCatalog = new HashMap<>();
     private final Map<String, String> pathToArtifactMap = new HashMap<>();
     private final Map<String, Repository> repositories = new LinkedHashMap<>();
+    private final Set<String> directoriesToIgnore = new HashSet<>();
     
     @Getter private Model rootModel;
     
     public SimpleModelResolver(final File projectRoot) {
+        directoriesToIgnore.add("target");
+        directoriesToIgnore.add("target-ide");
         populateCatalogs(projectRoot);
     }
 
@@ -138,10 +142,17 @@ public class SimpleModelResolver implements ModelResolver {
         return this;
     }
     
-    public Model lookupCatalogForSubmoduleOf(Model mavenProj, String name) {
+    
+    public Model lookupCatalogForSubmoduleOf(Model mavenProj, String realtivePath) {
         
-        val localPath = new File(mavenProj.getPomFile().getParentFile(), name)
-                .getAbsolutePath();
+        final String localPath;
+        try {
+            localPath = new File(mavenProj.getPomFile().getParentFile(), realtivePath)
+                    .getCanonicalPath();
+        } catch (IOException e) {
+            log.error("cannot resolve local path {} relative to {}", realtivePath, mavenProj.getPomFile().getParent(), e);
+            return null;
+        }
         
         val artifactKey = pathToArtifactMap.get(localPath);
         if(artifactKey==null) {
@@ -161,7 +172,9 @@ public class SimpleModelResolver implements ModelResolver {
         val localRootPath = projectRoot.getAbsolutePath();
         
         _Files.searchFiles(projectRoot, 
-                file->!"target".equals(file.getName()), 
+                file->
+                    !file.getName().startsWith(".")
+                    && !directoriesToIgnore.contains(file.getName()), 
                 file->"pom.xml".equals(file.getName()))
         .stream()
         .forEach(pomFile->{
@@ -181,10 +194,7 @@ public class SimpleModelResolver implements ModelResolver {
                 pathToArtifactMap.put(localPath, artifactKey);
             }
         });
+        
     }
-
-
-
-
     
 }

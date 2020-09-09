@@ -21,6 +21,7 @@ package org.apache.isis.tooling.projectmodel;
 import java.io.File;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.maven.model.Model;
 import org.gradle.tooling.GradleConnector;
@@ -82,8 +83,11 @@ public class ProjectNodeFactory {
     }
     
     private static Iterable<Model> childrenOf(Model mavenProj, SimpleModelResolver modelResolver) {
-        return mavenProj.getModules()
-        .stream()
+        
+        return Stream.<String>concat(
+                mavenProj.getProfiles().stream().flatMap(profile->profile.getModules().stream()),
+                mavenProj.getModules().stream())
+        .distinct()
         .map(name->modelResolver.lookupCatalogForSubmoduleOf(mavenProj, name))
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
