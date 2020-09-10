@@ -207,7 +207,7 @@
 
 	<modules>
 		<module>commons</module>
-		<module>asciidoc-model</module>
+		<module>model4adoc</module>
 		<module>project-model</module>
 	</modules>
 

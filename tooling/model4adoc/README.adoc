@@ -1,6 +1,13 @@
-= Tooling - AsciiDoc Model
+= Tooling - Model for AsciiDoc
 
 Allows for programmatic generation of ascii-doc representing document models. 
+
+NOTE: The _AsciiDoc_ name is trademarked by the https://www.eclipse.org/[_Eclipse Foundation_].
+This project is *not* part of the specification effort for _AsciiDoc_ under the 
+_AsciiDoc Working Group_. See https://projects.eclipse.org/proposals/asciidoc-language[]
+and https://accounts.eclipse.org/mailing-list/asciidoc-wg[]. However, we are happy to 
+help with transfer of source code, if any project (under the umbrella of the 
+_AsciiDoc Working Group_) is willing to take over.   
 
 WARNING: This is work-in-progress, no official Maven artifacts are published yet at the time of writing.
 However, snapshots are available with our nightly-builds:
@@ -11,7 +18,8 @@ https://github.com/apache-isis-committers/isis-nightly[]
 [source,java]
 ----
 
-import static org.apache.isis.tooling.adocmodel.AsciiDocFactory.*;
+import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.*;
 
 ...
 
@@ -66,7 +74,7 @@ https://github.com/apache-isis-committers/isis-nightly#maven[]
 ----
 <dependency>
     <groupId>org.apache.isis.tooling</groupId>
-    <artifactId>isis-tooling-asciidoc-model</artifactId>
+    <artifactId>isis-tooling-model4asciidoc</artifactId>
     <version>2.0.0-???</version>
 </dependency>
 ----

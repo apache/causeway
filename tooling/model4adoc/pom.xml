@@ -20,11 +20,12 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-tooling-asciidoc-model</artifactId>
+	<artifactId>isis-tooling-model4adoc</artifactId>
 
-	<name>Apache Isis Tooling - AsciiDoc Model</name>
+	<name>Apache Isis Tooling - Model for AsciiDoc</name>
 	<description>
-        Library for programmatic AsciiDoc generation.
+        Library for programmatic AsciiDoc generation. 
+        (AsciiDoc is a trademark held by the Eclipse Foundation.)
     </description>
 
 	<properties>

@@ -32,9 +32,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.tooling._infra._Strings;
-import org.apache.isis.tooling.adocmodel.AsciiDocWriter;
+import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
-import static org.apache.isis.tooling.adocmodel.AsciiDocFactory.*;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.*;
 
 import lombok.val;
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel.ast;
+package org.apache.isis.tooling.model4adoc.ast;
 
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;

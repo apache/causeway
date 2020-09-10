@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel;
+package org.apache.isis.tooling.model4adoc;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -35,6 +35,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Writes an (AsciiDoc) Document Model to a given {@link Writer}.  
+ * @since Sep 10, 2020
+ * @apiNote The <i>AsciiDoc<i> name is trademarked by the <i>Eclipse Foundation</i>.
+ * <p>
+    This project is <b>not</b> part of the specification effort for <i>AsciiDoc<i> under the 
+    <i>AsciiDoc Working Group</i>. See https://projects.eclipse.org/proposals/asciidoc-language
+    and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
+    help with transfer of source code, if any project (under the umbrella of the 
+    <i>AsciiDoc Working Group</i>) is willing to take over.
+    </p>
+ */
 @Log4j2
 public class AsciiDocWriter {
 

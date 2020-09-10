@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel;
+package org.apache.isis.tooling.model4adoc;
 
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;
@@ -25,14 +25,26 @@ import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
-import org.apache.isis.tooling.adocmodel.ast.SimpleCell;
-import org.apache.isis.tooling.adocmodel.ast.SimpleColumn;
-import org.apache.isis.tooling.adocmodel.ast.SimpleDocument;
-import org.apache.isis.tooling.adocmodel.ast.SimpleRow;
-import org.apache.isis.tooling.adocmodel.ast.SimpleTable;
+import org.apache.isis.tooling.model4adoc.ast.SimpleCell;
+import org.apache.isis.tooling.model4adoc.ast.SimpleColumn;
+import org.apache.isis.tooling.model4adoc.ast.SimpleDocument;
+import org.apache.isis.tooling.model4adoc.ast.SimpleRow;
+import org.apache.isis.tooling.model4adoc.ast.SimpleTable;
 
 import lombok.val;
 
+/**
+ * Provides convenient factory methods to build a (AsciiDoc) Document Model.  
+ * @since Sep 10, 2020
+ * @apiNote The <i>AsciiDoc<i> name is trademarked by the <i>Eclipse Foundation</i>.
+ * <p>
+    This project is <b>not</b> part of the specification effort for <i>AsciiDoc<i> under the 
+    <i>AsciiDoc Working Group</i>. See https://projects.eclipse.org/proposals/asciidoc-language
+    and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
+    help with transfer of source code, if any project (under the umbrella of the 
+    <i>AsciiDoc Working Group</i>) is willing to take over.
+    </p>
+ */
 public class AsciiDocFactory {
 
     /**
