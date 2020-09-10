@@ -40,7 +40,6 @@
 
 		<module>examples/demo</module>
 		<module>examples/smoketests</module>
-		<module>tooling</module>
 	</modules>
 
 </project>

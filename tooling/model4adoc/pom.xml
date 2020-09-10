@@ -25,7 +25,13 @@
 	<name>Apache Isis Tooling - Model for AsciiDoc</name>
 	<description>
         Library for programmatic AsciiDoc generation. 
-        (AsciiDoc is a trademark held by the Eclipse Foundation.)
+        
+        The AsciiDoc name is trademarked by the Eclipse Foundation (https://www.eclipse.org/).
+		This project is *not* part of the specification effort for _AsciiDoc_ under the 
+		AsciiDoc Working Group. See https://projects.eclipse.org/proposals/asciidoc-language
+		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
+		help with transfer of source code, if any project (under the umbrella of the 
+		AsciiDoc Working Group) is willing to take over.  
     </description>
 
 	<properties>
