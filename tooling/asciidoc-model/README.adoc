@@ -1,0 +1,63 @@
+= Tooling - AsciiDoc Model
+
+Allows for programmatic generation of ascii-doc representing document models. 
+
+WARNING: This is work-in-progress, no official Maven artifacts are published yet at the time of writing.
+However, snapshots are available with our nightly-builds:
+https://github.com/apache-isis-committers/isis-nightly[]
+
+== Usage
+
+[source,java]
+----
+
+import static org.apache.isis.tooling.adocmodel.AsciiDocFactory.*;
+
+...
+
+Document doc = doc();
+Table table = table(doc);
+table.setTitle("Some table");
+table.setAttribute("cols", "3m,2a", true);
+table.setAttribute("header-option", "", true);
+
+headCell(table, 0, 0, "Col-1");
+headCell(table, 0, 1, "Col-2");
+
+cell(table, 0, 0, "1-1");
+cell(table, 0, 1, "1-2");
+
+String adoc = AsciiDocWriter.toString(doc); 
+
+System.out.println(adoc);
+----
+
+ascii-doc syntax generated:
+
+[source]
+----
+.Some table
+[cols="3m,2a", options="header"]
+|===
+|Col-1 |Col-2 
+
+|1-1
+|1-2
+|===
+----
+
+which renders as
+
+.Some table
+[cols="3m,2a", options="header"]
+|===
+|Col-1 |Col-2 
+
+|1-1
+|1-2
+|=== 
+
+
+
+
+ 

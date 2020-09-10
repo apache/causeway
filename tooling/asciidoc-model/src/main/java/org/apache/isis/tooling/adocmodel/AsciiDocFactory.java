@@ -80,6 +80,12 @@ public class AsciiDocFactory {
         cell.setSource(source);
         return cell;
     }
+    
+    public static Cell cell(Table table, Row row, String source) {
+        val colIndex = row.getCells().size();
+        val column = getOrCreateColumn(table, colIndex);
+        return cell(row, column, source);
+    }
 
     public static Cell cell(Table table, int rowIndex, int colIndex, String source) {
         val row = getOrCreateRow(table, rowIndex);
