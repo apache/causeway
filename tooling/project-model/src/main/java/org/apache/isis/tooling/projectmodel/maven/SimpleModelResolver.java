@@ -149,7 +149,7 @@ public class SimpleModelResolver implements ModelResolver {
         try {
             localPath = new File(mavenProj.getPomFile().getParentFile(), realtivePath)
                     .getCanonicalPath();
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("cannot resolve local path {} relative to {}", realtivePath, mavenProj.getPomFile().getParent(), e);
             return null;
         }
@@ -169,7 +169,7 @@ public class SimpleModelResolver implements ModelResolver {
     @SneakyThrows
     private void populateCatalogs(final File projectRoot) {
         
-        val localRootPath = projectRoot.getAbsolutePath();
+        val localRootPath = projectRoot.getCanonicalPath();
         
         _Files.searchFiles(projectRoot, 
                 file->
@@ -181,17 +181,23 @@ public class SimpleModelResolver implements ModelResolver {
             
             val model = MavenModelFactory.readModel(pomFile);
             
-            val localPath = pomFile.getParentFile().getAbsolutePath();
+            try {
             
-            if(localPath.equals(localRootPath)) {
-                rootModel = model;
-            }
-            
-            val artifactKey = MavenModelFactory.readArtifactKey(model);
-            if(artifactKey!=null) {
-                log.debug("found {} at {}", artifactKey, model.getPomFile().getAbsolutePath());
-                projectPomCatalog.put(artifactKey, model);    
-                pathToArtifactMap.put(localPath, artifactKey);
+                val localPath = pomFile.getParentFile().getCanonicalPath();
+                
+                if(localPath.equals(localRootPath)) {
+                    rootModel = model;
+                }
+                
+                val artifactKey = MavenModelFactory.readArtifactKey(model);
+                if(artifactKey!=null) {
+                    log.debug("found {} at {}", artifactKey, model.getPomFile().getAbsolutePath());
+                    projectPomCatalog.put(artifactKey, model);    
+                    pathToArtifactMap.put(localPath, artifactKey);
+                }
+                
+            } catch (Exception e) {
+                log.error("cannot resolve local path {}", pomFile.getParentFile().getAbsolutePath(), e);
             }
         });
         

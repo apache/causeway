@@ -30,6 +30,7 @@ import org.apache.maven.model.building.ModelBuildingRequest;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.resolution.ModelResolver;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
@@ -88,11 +89,11 @@ public class MavenModelFactory {
         return artifactKey;
     }
     
-    public static String getGroupId(Model model) {
+    public static String getGroupId(@NonNull Model model) {
         return Optional.ofNullable(model.getGroupId()).orElseGet(()->model.getParent().getGroupId());
     }
     
-    public static String getVersion(Model model) {
+    public static String getVersion(@NonNull Model model) {
         return Optional.ofNullable(model.getVersion()).orElseGet(()->model.getParent().getVersion());
     }
     

@@ -23,6 +23,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.maven.model.Model;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.model.GradleProject;
@@ -30,20 +32,21 @@ import org.gradle.tooling.model.GradleProject;
 import org.apache.isis.tooling.projectmodel.maven.MavenModelFactory;
 import org.apache.isis.tooling.projectmodel.maven.SimpleModelResolver;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ProjectNodeFactory {
 
-    public static ProjectNode maven(File projRootFolder) {
+    public static ProjectNode maven(final @NonNull File projRootFolder) {
         val modelResolver = new SimpleModelResolver(projRootFolder);
         val rootModel = modelResolver.getRootModel();
-        val interpolate = false; //XXX experimental
+        val interpolate = false; //XXX interpolation is experimental
         return visitMavenProject(null, rootModel, modelResolver, interpolate);
     }
 
-    public static ProjectNode gradle(File projRootFolder) {
+    public static ProjectNode gradle(final @NonNull File projRootFolder) {
         try(val projectConnection = GradleConnector.newConnector().forProjectDirectory(projRootFolder).connect()) {
             val rootProject = projectConnection.getModel(GradleProject.class);
             val rootNode = visitGradleProject(null, rootProject);
@@ -54,9 +57,9 @@ public class ProjectNodeFactory {
     // -- HELPER MAVEN
 
     private static ProjectNode visitMavenProject(
-            ProjectNode parent, 
-            Model mavenProj, 
-            SimpleModelResolver modelResolver,
+            final @Nullable ProjectNode parent, 
+            final @NonNull Model mavenProj, 
+            final @NonNull SimpleModelResolver modelResolver,
             boolean interpolate) {
         
         val interpolatedProj = interpolate 
@@ -69,7 +72,9 @@ public class ProjectNodeFactory {
         return projNode;
     }
     
-    private static ProjectNode toProjectNode(ProjectNode parent, Model mavenProj) {
+    private static ProjectNode toProjectNode(
+            final @Nullable ProjectNode parent, 
+            final @NonNull Model mavenProj) {
         val projNode = ProjectNode.builder()
                 .parent(parent)
                 .artifactKey(artifactKeyOf(mavenProj))
@@ -84,14 +89,17 @@ public class ProjectNodeFactory {
 
     }
     
-    private static ArtifactKey artifactKeyOf(Model mavenProj) {
+    private static ArtifactKey artifactKeyOf(final @NonNull Model mavenProj) {
         val groupId = MavenModelFactory.getGroupId(mavenProj);
         val artifactId = mavenProj.getArtifactId();
         val version = MavenModelFactory.getVersion(mavenProj);
         return ArtifactKey.of(groupId, artifactId, version);
     }
     
-    private static Iterable<Model> childrenOf(Model mavenProj, SimpleModelResolver modelResolver) {
+    private static Iterable<Model> childrenOf(
+            final @NonNull Model mavenProj, 
+            final @NonNull SimpleModelResolver modelResolver) {
+        
         return Stream.<String>concat(
                 mavenProj.getProfiles().stream().flatMap(profile->profile.getModules().stream()),
                 mavenProj.getModules().stream())
@@ -103,7 +111,10 @@ public class ProjectNodeFactory {
     
     // -- HELPER GRADLE
     
-    private static ProjectNode visitGradleProject(ProjectNode parent, GradleProject gradleProj) {
+    private static ProjectNode visitGradleProject(
+            final @Nullable ProjectNode parent, 
+            final @NonNull GradleProject gradleProj) {
+        
         val projNode = toProjectNode(parent, gradleProj);
         for(val child : gradleProj.getChildren()){
             visitGradleProject(projNode, child);
@@ -111,7 +122,10 @@ public class ProjectNodeFactory {
         return projNode;
     }
 
-    private static ProjectNode toProjectNode(ProjectNode parent, GradleProject gradleProj) {
+    private static ProjectNode toProjectNode(
+            final @Nullable ProjectNode parent, 
+            final @NonNull GradleProject gradleProj) {
+        
         val projNode = ProjectNode.builder()
                 .parent(parent)
                 .artifactKey(artifactKeyOf(gradleProj))
@@ -123,7 +137,7 @@ public class ProjectNodeFactory {
         return projNode;
     }
 
-    private static ArtifactKey artifactKeyOf(GradleProject gradleProj) {
+    private static ArtifactKey artifactKeyOf(final @NonNull GradleProject gradleProj) {
         val pomFile = new File(gradleProj.getProjectDirectory().getAbsoluteFile(), "pom.xml");
         if(pomFile.canRead()) {
             val mavenModel = MavenModelFactory.readModel(pomFile);
