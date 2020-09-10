@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Table;
 
@@ -78,20 +79,34 @@ public class AsciiDocWriter {
         
         formatWriter.ifNonEmpty("= %s\n\n", doc.getTitle());
         
-        for(val block : doc.getBlocks()) {
-            if(block instanceof Table) {
-                write((Table)block, formatWriter);
+        for(val node : doc.getBlocks()) {
+            if(node instanceof Table) {
+                write((Table)node, formatWriter);
+                continue;
+            }
+            if(node instanceof Block) {
+                write((Block)node, formatWriter);
                 continue;
             }
             //TODO handle other types of blocks as well
-            log.warn("unknown block type detected (possibly not implemented yet) {}", block.getClass().getName());
+            log.warn("unknown block type detected (possibly not implemented yet) {}", node.getClass().getName());
         }
         
     }
 
+    // -- PARAGRAPH
+    
+    private void write(Block block, FormatWriter writer) throws IOException {
+        for(val line : block.getLines()) {
+            writer.append(line);
+            writer.append("\n");    
+        }
+        writer.append("\n"); // must finally write an empty line 
+    }
+    
     // -- TABLE
 
-//  |===
+    //  |===
 //  |Name of Column 1 |Name of Column 2 |Name of Column 3 
 //
 //  |Cell in column 1, row 1

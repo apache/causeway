@@ -15,6 +15,25 @@ https://github.com/apache-isis-committers/isis-nightly[]
 
 == Usage
 
+Say we have a list of employees, which we want to express as ascii-doc table.
+
+[source,java]
+----
+public static class Employee {  
+    private int id;  
+    private String firstName;  
+    private String sirName;
+    ...
+}
+
+List<Employee> employees = List.of(
+        new Employee(1, "Alice", "Wonder"),
+        new Employee(2, "Bob", "Uncle")
+);
+----
+
+Lets generate a _Document_ model programmatically, then print it to _System.out_. 
+
 [source,java]
 ----
 
@@ -24,46 +43,76 @@ import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.*;
 ...
 
 Document doc = doc();
+doc.setTitle("Hello World");
+
+Block block = block(doc);
+block.getLines().add("A simple block corresponds to a normal paragraph.");
+
 Table table = table(doc);
-table.setTitle("Some table");
-table.setAttribute("cols", "3m,2a", true);
+table.setTitle("Employees");
+table.setAttribute("cols", "1m,3,3", true);
 table.setAttribute("header-option", "", true);
 
-headCell(table, 0, 0, "Col-1");
-headCell(table, 0, 1, "Col-2");
+Row headRow = headRow(table);
 
-cell(table, 0, 0, "1-1");
-cell(table, 0, 1, "1-2");
+cell(table, headRow, "ID");
+cell(table, headRow, "Firstname");
+cell(table, headRow, "Sirname");
 
-String adoc = AsciiDocWriter.toString(doc); 
+for(Employee employee : employees) {
+    
+    val row = row(table);
+    cell(table, row, "" + employee.getId());
+    cell(table, row, employee.getFirstName());
+    cell(table, row, employee.getSirName());
+}
 
-System.out.println(adoc);
+System.out.println(AsciiDocWriter.toString(doc));
+
 ----
 
 ascii-doc syntax generated:
 
 [source]
 ----
-.Some table
-[cols="3m,2a", options="header"]
-|===
-|Col-1 |Col-2 
+= Hello World
 
-|1-1
-|1-2
+A simple block corresponds to a normal paragraph.
+
+.Employees
+[cols="1m,3,3", options="header"]
+|===
+|ID |Firstname |Sirname 
+
+|1
+|Alice
+|Wonder
+
+|2
+|Bob
+|Uncle
 |===
 ----
 
 which renders as
 
-.Some table
-[cols="3m,2a", options="header"]
-|===
-|Col-1 |Col-2 
+==== Hello World
 
-|1-1
-|1-2
-|=== 
+A simple block corresponds to a normal paragraph.
+
+.Employees
+[cols="1m,3,3", options="header"]
+|===
+|ID |Firstname |Sirname 
+
+|1
+|Alice
+|Wonder
+
+|2
+|Bob
+|Uncle
+|===
 
 == Install
 

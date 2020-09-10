@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.model4adoc;
 
+import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;
 import org.asciidoctor.ast.Document;
@@ -25,6 +26,7 @@ import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
+import org.apache.isis.tooling.model4adoc.ast.SimpleBlock;
 import org.apache.isis.tooling.model4adoc.ast.SimpleCell;
 import org.apache.isis.tooling.model4adoc.ast.SimpleColumn;
 import org.apache.isis.tooling.model4adoc.ast.SimpleDocument;
@@ -53,7 +55,13 @@ public class AsciiDocFactory {
     public static Document doc() {
         return new SimpleDocument();     
     }
-
+    
+    public static Block block(StructuralNode parent) {
+        val block = new SimpleBlock();
+        parent.getBlocks().add(block);
+        return block;
+    }
+    
     public static Table table(StructuralNode parent) {
         val table = new SimpleTable();
         parent.getBlocks().add(table);
