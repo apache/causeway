@@ -61,7 +61,7 @@ cell(table, headRow, "Sirname");
 
 for(Employee employee : employees) {
     
-    val row = row(table);
+    Row row = row(table);
     cell(table, row, "" + employee.getId());
     cell(table, row, employee.getFirstName());
     cell(table, row, employee.getSirName());
