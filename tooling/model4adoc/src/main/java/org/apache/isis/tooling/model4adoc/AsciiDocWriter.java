@@ -76,7 +76,7 @@ public class AsciiDocWriter {
         
         val formatWriter = new FormatWriter(writer);
         
-        formatWriter.ifNonEmpty("= %s\n", doc.getTitle());
+        formatWriter.ifNonEmpty("= %s\n\n", doc.getTitle());
         
         for(val block : doc.getBlocks()) {
             if(block instanceof Table) {

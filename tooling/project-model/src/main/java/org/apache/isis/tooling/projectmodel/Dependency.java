@@ -18,32 +18,26 @@
  */
 package org.apache.isis.tooling.projectmodel;
 
-import java.util.TreeSet;
+import java.util.Comparator;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
-import lombok.val;
 
 @Data @Builder
-public class ProjectNode {
-
-    @ToString.Exclude private final ProjectNode parent;
-    @ToString.Exclude private final TreeSet<ProjectNode> children = new TreeSet<ProjectNode>(
-            (a,b)->a.getName().compareTo(b.getName()));
-    @ToString.Exclude private final TreeSet<Dependency> dependencies = new TreeSet<Dependency>();
+public class Dependency implements Comparable<Dependency> {
     
     private final ArtifactKey artifactKey;
-    private final String name;
-    private final String description;
     
-    public void depthFirst(ProjectVisitor projectVisitor) {
-        projectVisitor.accept(this);
-        for(val child : getChildren()){
-            child.depthFirst(projectVisitor);
-        }
-    }
+    // -- COMPARATOR
+    
+    private final static Comparator<Dependency> comparator = Comparator
+            .comparing(Dependency::getArtifactKey);
+    
 
+    @Override
+    public int compareTo(Dependency o) {
+        return comparator.compare(this, o);
+    }
    
-    
+
 }

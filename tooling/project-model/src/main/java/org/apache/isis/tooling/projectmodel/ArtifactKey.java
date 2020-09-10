@@ -27,23 +27,26 @@ import lombok.NonNull;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-public class ArtifactKey implements Comparator<ArtifactKey> {
+public class ArtifactKey implements Comparable<ArtifactKey> {
 
     @NonNull private final String groupId;
     @NonNull private final String artifactId;
+    @NonNull private final String type;
     @NonNull private final String version;
     
     private final AtomicReference<ComparableVersion> comparableVersion = new AtomicReference<ComparableVersion>();
     
     @Override
     public String toString() {
-        return String.format("%s:%s:%s", groupId, artifactId, version); 
+        return String.format("%s:%s:%s:%s", groupId, artifactId, type, version); 
     }
 
     // -- COMPARATOR
     
     private final static Comparator<ArtifactKey> comparator = Comparator
             .comparing(ArtifactKey::getGroupId)
+            .thenComparing(ArtifactKey::getArtifactId)
+            .thenComparing(ArtifactKey::getType)
             .thenComparing(ArtifactKey::getComparableVersion);
     
     private ComparableVersion getComparableVersion() {
@@ -52,10 +55,10 @@ public class ArtifactKey implements Comparator<ArtifactKey> {
         }
         return comparableVersion.get();
     }
-    
+
     @Override
-    public int compare(ArtifactKey o1, ArtifactKey o2) {
-        return comparator.compare(o1, o2);
+    public int compareTo(ArtifactKey o) {
+        return comparator.compare(this, o);
     }
     
 }

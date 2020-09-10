@@ -20,6 +20,7 @@ package org.apache.isis.tooling.projectmodel;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,6 +30,7 @@ import org.apache.maven.model.Model;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.model.GradleProject;
 
+import org.apache.isis.tooling._infra._Strings;
 import org.apache.isis.tooling.projectmodel.maven.MavenModelFactory;
 import org.apache.isis.tooling.projectmodel.maven.SimpleModelResolver;
 
@@ -78,22 +80,39 @@ public class ProjectNodeFactory {
         val projNode = ProjectNode.builder()
                 .parent(parent)
                 .artifactKey(artifactKeyOf(mavenProj))
-                .name(mavenProj.getName())
+                .name(_Strings.nullToEmpty(mavenProj.getName()))
+                .description(_Strings.nullToEmpty(mavenProj.getDescription()))
                 .build();
-
+        
+        mavenProj.getDependencies()
+        .stream()
+        .map(ProjectNodeFactory::toDependency)
+        .forEach(projNode.getDependencies()::add);
+        
         if(parent!=null) {
             parent.getChildren().add(projNode);
         }
 
         return projNode;
-
+    }
+    
+    private static Dependency toDependency(final @NonNull org.apache.maven.model.Dependency dependency) {
+        return Dependency.builder()
+                .artifactKey(ArtifactKey.of(
+                        dependency.getGroupId(), 
+                        dependency.getArtifactId(),
+                        dependency.getType(),
+                        Optional.ofNullable(dependency.getVersion()).orElse("<managed>") //TODO to resolve this requires interpolation
+                        ))
+                .build();
     }
     
     private static ArtifactKey artifactKeyOf(final @NonNull Model mavenProj) {
         val groupId = MavenModelFactory.getGroupId(mavenProj);
         val artifactId = mavenProj.getArtifactId();
+        val type = mavenProj.getPackaging();
         val version = MavenModelFactory.getVersion(mavenProj);
-        return ArtifactKey.of(groupId, artifactId, version);
+        return ArtifactKey.of(groupId, artifactId, type, version);
     }
     
     private static Iterable<Model> childrenOf(
@@ -129,7 +148,8 @@ public class ProjectNodeFactory {
         val projNode = ProjectNode.builder()
                 .parent(parent)
                 .artifactKey(artifactKeyOf(gradleProj))
-                .name(gradleProj.getName())
+                .name(_Strings.nullToEmpty(gradleProj.getName()))
+                .description(_Strings.nullToEmpty(gradleProj.getDescription()))
                 .build();
         if(parent!=null) {
             parent.getChildren().add(projNode);
@@ -148,8 +168,9 @@ public class ProjectNodeFactory {
         log.warn("cannot find pom.xml for project {} at {}", gradleProj.getName(), pomFile.getAbsolutePath());
         val groupId = "?";
         val artifactId = gradleProj.getName();
+        val type = "?";
         val version = "?";
-        return ArtifactKey.of(groupId, artifactId, version);
+        return ArtifactKey.of(groupId, artifactId, type, version);
     }
 
 }

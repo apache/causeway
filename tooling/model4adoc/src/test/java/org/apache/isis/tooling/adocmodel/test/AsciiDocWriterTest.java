@@ -57,7 +57,7 @@ class AsciiDocWriterTest {
         doc.setTitle("Hello World");
         
         String actualAdoc = AsciiDocWriter.toString(doc); 
-        String expectedAdoc = "= Hello World\n";
+        String expectedAdoc = "= Hello World\n\n";
         
         System.out.println(actualAdoc);
         

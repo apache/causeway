@@ -7,8 +7,39 @@ import java.util.Scanner;
 import javax.annotation.Nullable;
 
 public final class _Strings {
+    
+    /**
+     * @return whether {@code x} is of zero length or null.
+     */
+    public static boolean isNullOrEmpty(final @Nullable CharSequence x){
+        return x==null || x.length()==0;
+    }
+    
+    /**
+     * @param input
+     * @return null if the {@code input} is null or empty, the {@code input} otherwise 
+     */
+    public static @Nullable String emptyToNull(final @Nullable String input) {
+        if(isNullOrEmpty(input)) {
+            return null;
+        }
+        return input;
+    }
 
-    public static String read(final InputStream input) {
+    /**
+     * @param input
+     * @return the empty string if the {@code input} is null, the {@code input} otherwise 
+     */
+    public static String nullToEmpty(final @Nullable String input) {
+        if(input==null) {
+            return "";
+        }
+        return input;
+    }
+    
+    // -- RESOURCE LOADING
+
+    public static String read(final @Nullable InputStream input) {
         if(input==null) {
             return "";
         }
@@ -27,13 +58,6 @@ public final class _Strings {
         return readResource(location.getClass(), name);  
     }
     
-    /**
-     * Same as {@link #isEmpty(CharSequence)}
-     * @param x
-     * @return true only if string is of zero length or null.
-     */
-    public static boolean isNullOrEmpty(@Nullable final CharSequence x){
-        return x==null || x.length()==0;
-    }
+
     
 }
