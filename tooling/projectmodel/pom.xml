@@ -20,9 +20,9 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-tooling-project-model</artifactId>
+	<artifactId>isis-tooling-projectmodel</artifactId>
 
-	<name>Apache Isis Tooling - Project Model</name>
+	<name>Apache Isis Tooling - Project Model (Code mining)</name>
 	<description>
         Code mining library for Gradle/Maven project module tree introspection.
     </description>
