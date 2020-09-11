@@ -207,8 +207,9 @@
 
 	<modules>
 		<module>commons</module>
+		<module>javamodel</module>
 		<module>model4adoc</module>
-		<module>project-model</module>
+		<module>projectmodel</module>
 	</modules>
 
 	<profiles>
