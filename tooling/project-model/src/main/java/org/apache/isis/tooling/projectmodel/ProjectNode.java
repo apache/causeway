@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.projectmodel;
 
+import java.io.File;
 import java.util.TreeSet;
 
 import lombok.Builder;
@@ -36,6 +37,7 @@ public class ProjectNode {
     private final ArtifactKey artifactKey;
     private final String name;
     private final String description;
+    private final File projectDirectory;
     
     public void depthFirst(ProjectVisitor projectVisitor) {
         projectVisitor.accept(this);
@@ -43,7 +45,6 @@ public class ProjectNode {
             child.depthFirst(projectVisitor);
         }
     }
-
    
     
 }

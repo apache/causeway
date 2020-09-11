@@ -6,10 +6,14 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
+import lombok.NonNull;
 import lombok.val;
 
 public class _Files {
@@ -47,5 +51,24 @@ public class _Files {
             }
         }
     }
+    
+    public static Optional<String> canonicalPath(@Nullable File file) {
+        if(file==null) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(file.getCanonicalPath());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    public static String toRelativePath(@NonNull String commonPath, @NonNull String absolutePath) {
+        if(absolutePath.startsWith(commonPath)) {
+            return absolutePath.substring(commonPath.length());
+        }
+        return absolutePath;
+    }
+    
     
 }

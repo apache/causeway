@@ -82,6 +82,7 @@ public class ProjectNodeFactory {
                 .artifactKey(artifactKeyOf(mavenProj))
                 .name(_Strings.nullToEmpty(mavenProj.getName()))
                 .description(_Strings.nullToEmpty(mavenProj.getDescription()))
+                .projectDirectory(mavenProj.getProjectDirectory())
                 .build();
         
         mavenProj.getDependencies()
@@ -150,6 +151,7 @@ public class ProjectNodeFactory {
                 .artifactKey(artifactKeyOf(gradleProj))
                 .name(_Strings.nullToEmpty(gradleProj.getName()))
                 .description(_Strings.nullToEmpty(gradleProj.getDescription()))
+                .projectDirectory(gradleProj.getProjectDirectory())
                 .build();
         if(parent!=null) {
             parent.getChildren().add(projNode);
