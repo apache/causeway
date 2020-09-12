@@ -55,8 +55,11 @@ class ProjectTreeTest {
         
         val artifactKeys = new HashSet<String>();
         
-        ProjectVisitor projectVisitor = projModel -> {artifactKeys.add(projModel.getArtifactKey().toString());};
-        //ProjectVisitor projectVisitor = projModel -> {System.out.println(projModel.getArtifactKey());};
+        ProjectVisitor projectVisitor = projModel -> {
+            artifactKeys.add(projModel.getArtifactKey().toString());
+            System.out.println(projModel.getArtifactKey());
+        };
+
         projTree.depthFirst(projectVisitor);
         
         assertHasSomeArtifactKeys(artifactKeys);
@@ -70,7 +73,10 @@ class ProjectTreeTest {
         
         val artifactKeys = new HashSet<String>();
         
-        ProjectVisitor projectVisitor = projModel -> {artifactKeys.add(projModel.getArtifactKey().toString());};
+        ProjectVisitor projectVisitor = projModel -> {
+            artifactKeys.add(projModel.getArtifactKey().toString());
+            System.out.println(projModel.getArtifactKey());
+        };
         
         projTree.depthFirst(projectVisitor);
         
@@ -79,10 +85,10 @@ class ProjectTreeTest {
     
     private void assertHasSomeArtifactKeys(Set<String> artifactKeys) {
         assertTrue(artifactKeys.size()>50);
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-commons:2.0.0-SNAPSHOT"));
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-config:2.0.0-SNAPSHOT"));
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-metamodel:2.0.0-SNAPSHOT"));
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-runtime:2.0.0-SNAPSHOT"));
+        assertTrue(artifactKeys.contains("org.apache.isis.core:isis:pom:2.0.0-SNAPSHOT"));
+        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-config:jar:2.0.0-SNAPSHOT"));
+        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-metamodel:jar:2.0.0-SNAPSHOT"));
+        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-runtime:jar:2.0.0-SNAPSHOT"));
         
         for(val key : artifactKeys) {
             assertFalse(key.startsWith("?"), ()->"incomplete key " + key);
