@@ -35,7 +35,7 @@ content:
       start_path: core/codegen-bytebuddy/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/commons/src/main/adoc # core
+      start_path: commons/src/main/adoc # core
       branches: HEAD
     - url: .
       start_path: core/internaltestsupport/src/main/adoc # core
