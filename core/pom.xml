@@ -15,13 +15,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
+		<groupId>org.apache.isis</groupId>
 		<artifactId>isis-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../isis-parent/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis</artifactId>
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-core</artifactId>
 
 	<packaging>pom</packaging>
 
@@ -693,8 +694,8 @@
 			<!-- CHILD MODULES -->
 			<!-- for benefit of application developers, using scope=import, type=pom -->
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-commons</artifactId>
+				<groupId>org.apache.isis.commons</groupId>
+				<artifactId>isis-commons</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -1810,18 +1811,18 @@
 	
 		<module>../supplemental-model</module>
 
+		<module>../commons</module>
+
 		<module>../api/schema</module>
 		<module>../api/applib</module>
 
 		<module>codegen-bytebuddy</module>
-		<module>commons</module>
 		<module>config</module>
 		<module>internaltestsupport</module>
 		<module>metamodel</module>
 		<module>runtime</module>
 		<module>runtimeservices</module>
 		<module>webapp</module>
-
 
 		<module>security</module>
 		<module>../security/bypass</module>

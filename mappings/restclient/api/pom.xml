@@ -37,8 +37,8 @@
 			<artifactId>isis-applib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-commons</artifactId>
+			<groupId>org.apache.isis.commons</groupId>
+			<artifactId>isis-commons</artifactId>
 		</dependency>
 
 		<dependency>

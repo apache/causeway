@@ -3,7 +3,7 @@ description = 'Apache Isis App - Demo (Domain)'
 
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-core-commons')
+    compile project(':isis-parent:isis:isis-commons')
     compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib')

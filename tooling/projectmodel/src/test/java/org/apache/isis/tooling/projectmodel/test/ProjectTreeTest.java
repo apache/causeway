@@ -94,7 +94,7 @@ class ProjectTreeTest {
     
     private void assertHasSomeArtifactKeys(Set<String> artifactKeys) {
         assertTrue(artifactKeys.size()>50);
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis:pom"));
+        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core:pom"));
         assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-config:jar"));
         assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-metamodel:jar"));
         assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-runtime:jar"));

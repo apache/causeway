@@ -4,7 +4,7 @@ apply plugin: 'war'
 
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-core-commons')
+    compile project(':isis-parent:isis:isis-commons')
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc')
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
 

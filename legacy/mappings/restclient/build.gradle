@@ -4,7 +4,7 @@ apply plugin: 'war'
 dependencies {
     compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-applib')
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    providedCompile project(':isis-parent:isis:isis-core-commons')
+    providedCompile project(':isis-parent:isis:isis-commons')
 }
 
 task packageTests(type: Jar) {
