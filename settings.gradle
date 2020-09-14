@@ -2,7 +2,7 @@ rootProject.name = 'isis-all'
 include ':isis-parent:isis-schema'
 include ':isis-parent:isis-applib'
 include ':isis-parent:isis:isis-core-codegen-bytebuddy'
-include ':isis-parent:isis:isis-core-commons'
+include ':isis-parent:isis-commons'
 include ':isis-parent:isis:isis-core-config'
 include ':isis-parent:isis:isis-core-internaltestsupport'
 include ':isis-parent:isis:isis-core-metamodel'
@@ -30,7 +30,7 @@ include ':isis-parent:isis:isis-persistence-jdo'
 include ':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-applib'
 include ':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-model'
 include ':isis-parent:isis:isis-persistence-jpa'
-include ':isis-parent:isis-core'
+include ':isis-parent:isis'
 include ':isis-parent:isis:isis-extensions:isis-extensions-flyway:isis-extensions-flyway-impl'
 include ':isis-parent:isis:isis-extensions:isis-extensions-flyway'
 include ':isis-parent:isis:isis-extensions:isis-extensions-modelannotation'
@@ -135,7 +135,7 @@ include ':isis-app-starter-parent:smoketests'
 project(':isis-parent:isis-schema').projectDir = "$rootDir/api/schema" as File
 project(':isis-parent:isis-applib').projectDir = "$rootDir/api/applib" as File
 project(':isis-parent:isis:isis-core-codegen-bytebuddy').projectDir = "$rootDir/core/codegen-bytebuddy" as File
-project(':isis-parent:isis:isis-commons').projectDir = "$rootDir/commons" as File
+project(':isis-parent:isis-commons').projectDir = "$rootDir/commons" as File
 project(':isis-parent:isis:isis-core-config').projectDir = "$rootDir/core/config" as File
 project(':isis-parent:isis:isis-core-internaltestsupport').projectDir = "$rootDir/core/internaltestsupport" as File
 project(':isis-parent:isis:isis-core-metamodel').projectDir = "$rootDir/core/metamodel" as File
@@ -163,7 +163,7 @@ project(':isis-parent:isis:isis-persistence-jdo').projectDir = "$rootDir/persist
 project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-applib').projectDir = "$rootDir/persistence/jpa/applib" as File
 project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-model').projectDir = "$rootDir/persistence/jpa/model" as File
 project(':isis-parent:isis:isis-persistence-jpa').projectDir = "$rootDir/persistence/jpa" as File
-project(':isis-parent:isis-core').projectDir = "$rootDir/core" as File
+project(':isis-parent:isis').projectDir = "$rootDir/core" as File
 project(':isis-parent:isis:isis-extensions:isis-extensions-flyway:isis-extensions-flyway-impl').projectDir = "$rootDir/extensions/core/flyway/impl" as File
 project(':isis-parent:isis:isis-extensions:isis-extensions-flyway').projectDir = "$rootDir/extensions/core/flyway" as File
 project(':isis-parent:isis:isis-extensions:isis-extensions-modelannotation').projectDir = "$rootDir/extensions/core/model-annotation" as File

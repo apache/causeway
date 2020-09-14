@@ -2,7 +2,7 @@ group = 'org.apache.isis.persistence'
 description = 'Apache Isis Persistence - JDO (applib)'
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-commons')
+    compile project(':isis-parent:isis-commons')
     compile(Libs.javaxJdo)
     compile(Libs.datanucleusRdbms)
 }

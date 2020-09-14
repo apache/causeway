@@ -3,7 +3,7 @@ apply plugin: 'war'
 dependencies {
     compile (Libs.byteBuddy)
     compile (Libs.objenesis)
-    compile project(':isis-parent:isis:isis-commons')
+    compile project(':isis-parent:isis-commons')
     testCompile(Libs.jmockJunit4) {
         exclude(module: 'junit-dep')
         exclude(module: 'byte-buddy')

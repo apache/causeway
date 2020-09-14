@@ -3,7 +3,7 @@ description = 'Apache Isis App - Demo (Wicket)'
 
 dependencies {
     compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-commons')
+    compile project(':isis-parent:isis-commons')
     compile project(':isis-app-starter-parent:demo-parent:demo-domain')
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib')
     compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-ui')

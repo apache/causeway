@@ -34,7 +34,7 @@ dependencies {
         exclude(module: 'slf4j-api')
         exclude(module: 'commons-lang3')
     }
-    compile project(':isis-parent:isis:isis-commons')
+    compile project(':isis-parent:isis-commons')
 
     testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
 
