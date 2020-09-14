@@ -39,10 +39,8 @@ fi
 
 sh $SCRIPT_DIR/_print-environment.sh "build-demo-app"
 
-export FLAVOR=$1
 export ISIS_VERSION=$REVISION
 echo ""
-echo "\$Docker Image Flavor: ${FLAVOR}"
 echo "\$Isis Version: ${ISIS_VERSION}"
 echo ""
 
@@ -85,7 +83,7 @@ do
       -Dskip.arch \
       -DskipTests
 
-  for variant in wicket
+  for variant in wicket vaadin
   do
 
 	chdir examples/$app/$variant
@@ -93,7 +91,6 @@ do
 	mvn --batch-mode \
 	    compile jib:build \
 	    -Djib.httpTimeout=60000 \
-	    -Dflavor=$FLAVOR \
 	    -Dskip.git \
 	    -Dskip.arch \
 	    -DskipTests
