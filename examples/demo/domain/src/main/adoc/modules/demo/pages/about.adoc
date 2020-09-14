@@ -5,7 +5,7 @@
 The Demo app provides an introduction to some of core features and components available in Apache Isis, allowing you to learn the very basics with a minimum of hassle.
 It's also a useful reference to help you develop your own Apache Isis applications.
 
-It is packaged up as a Docker image (link:https://hub.docker.com/r/apacheisis/demo-springboot/tags/[apacheisis/demo-springboot]) on Docker Hub.
+It is packaged up as a Docker image (link:https://hub.docker.com/r/apacheisis/demo-wicket/tags/[apacheisis/demo-wicket]) on Docker Hub.
 
 
 image::https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-light.png[link="https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-light.png"]
@@ -22,15 +22,15 @@ Head over to https://www.docker.com/community-edition[Docker] to install the com
 +
 [source,bash]
 ----
-docker pull apacheisis/demo-springboot:latest
+docker pull apacheisis/demo-wicket:latest
 ----
 
 * Running the Docker Image
 +
 [source,bash]
 ----
-docker pull apacheisis/demo-springboot:latest
-docker run -d -p8080:8080 apacheisis/demo-springboot:latest
+docker pull apacheisis/demo-wicket:latest
+docker run -d -p8080:8080 apacheisis/demo-wicket:latest
 ----
 +
 The Demo app can then be accessed at http://localhost:8080/wicket/[].
@@ -51,13 +51,13 @@ The way in which the app is run by Docker be customised in a couple of ways:
 * Prototyping mode
 +
 ----
-docker run -d -p8080:8080 -ePROTOTYPING=true apacheisis/demo-springboot:latest
+docker run -d -p8080:8080 -ePROTOTYPING=true apacheisis/demo-wicket:latest
 ----
 
 * Attached console
 +
 ----
-docker run -it -p8080:8080 apacheisis/demo-springboot:latest
+docker run -it -p8080:8080 apacheisis/demo-wicket:latest
 ----
 +
 Use CTRL-C to stop and detach
@@ -67,7 +67,7 @@ TIP: on Windows, you might need to prefix with `winpty`.
 * Specify a different context Path
 +
 ----
-docker run -d -p8080:8080 -eContextPath=/myPath apacheisis/demo-springboot:latest
+docker run -d -p8080:8080 -eContextPath=/myPath apacheisis/demo-wicket:latest
 ----
 +
 then access at http://localhost:8080/myPath/wicket/[].
