@@ -111,7 +111,7 @@
 	</dependencies>
 
 	<modules>
-		<module>mappings/microprofile</module>
+<!-- 		<module>mappings/microprofile</module> -->
 		<module>viewers/vaadin</module>
 		<module>viewers/javafx</module>
 	</modules>
