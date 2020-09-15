@@ -61,11 +61,10 @@ public class TitleServiceDefault implements TitleService {
         
         val pojo = unwrapped(domainObject);
         val objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, pojo);
-        val destroyed = EntityUtil.isDestroyed(objectAdapter);
-        if(!destroyed) {
-            return objectAdapter.getSpecification().getTitle(null, objectAdapter);
-        } else {
+        if(EntityUtil.isDestroyed(objectAdapter)) {
             return "[DELETED]";
+        } else {
+            return objectAdapter.getSpecification().getTitle(null, objectAdapter);
         }
     }
 

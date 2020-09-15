@@ -29,9 +29,6 @@
 
 	<properties>
 		<sonar.skip>true</sonar.skip>
-
-		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
-
 	</properties>
 
 	<build>
@@ -144,10 +141,8 @@
 				</property>
 			</activation>
 			<properties>
-				<package-as-war>false</package-as-war>
 			</properties>
 			<dependencies>
-				<!-- add flavor specific here -->
 			</dependencies>
 			<build>
 				<plugins>
