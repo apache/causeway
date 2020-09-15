@@ -91,9 +91,9 @@
 	</build>
 
 	<dependencies>
-	
+
 		<!-- DEMO DOMAIN + WEB -->
-	
+
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
 			<artifactId>demo-web</artifactId>
@@ -123,9 +123,9 @@
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-ui-vaa</artifactId>
 		</dependency>
-		
+
 		<!-- EXTENSIONS WKT -->
-		
+
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
@@ -186,7 +186,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<profile>
 			<id>deploy-to-docker-io</id>
 			<activation>
@@ -195,7 +195,7 @@
 				</property>
 			</activation>
 			<properties>
-				<package-as-war>false</package-as-war>
+				<vaadin.productionMode>true</vaadin.productionMode>
 			</properties>
 			<dependencies>
 				<!-- add flavor specific here -->
@@ -232,8 +232,9 @@
 					</plugin>
 				</plugins>
 			</build>
+			
 		</profile>
-		
+
 
 	</profiles>
 
