@@ -33,7 +33,6 @@ import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifest;
-import demoapp.web._infra.utils.ThereCanBeOnlyOne;
 
 /**
  * Bootstrap the application.
@@ -42,7 +41,7 @@ import demoapp.web._infra.utils.ThereCanBeOnlyOne;
 @Import({
     DemoAppManifest.class,
     
-    ThereCanBeOnlyOne.class, // shutdown demo instance if any already running (specific to the demo only)
+    //ThereCanBeOnlyOne.class, // shutdown demo instance if any already running (specific to the demo only)
     
     // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer

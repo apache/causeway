@@ -42,7 +42,7 @@ import demoapp.web._infra.utils.ThereCanBeOnlyOne;
 @Import({
     DemoAppManifest.class,
 
-    ThereCanBeOnlyOne.class, // shutdown demo instance if any already running (specific to the demo only)
+    //ThereCanBeOnlyOne.class, // shutdown demo instance if any already running (specific to the demo only)
     
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,
