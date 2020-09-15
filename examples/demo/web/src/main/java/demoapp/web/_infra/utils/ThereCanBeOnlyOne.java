@@ -30,15 +30,18 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.boot.web.servlet.context.ServletWebServerInitializedEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
 import lombok.val;
 
 @Component
-public class ThereCanBeOnlyOne implements ApplicationListener<EmbeddedServletContainerInitializedEvent> {
+public class ThereCanBeOnlyOne implements ApplicationListener<ServletWebServerInitializedEvent > {
 
     @Override
-    public void onApplicationEvent(final EmbeddedServletContainerInitializedEvent event) {
-        final int port = event.getEmbeddedServletContainer().getPort();
+    public void onApplicationEvent(final ServletWebServerInitializedEvent  event) {
+        final int port = event.getWebServer().getPort();
         
         try {
             invokeRemoteShutdown(port);
