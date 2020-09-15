@@ -25,12 +25,19 @@
 	<artifactId>isis-regressiontests</artifactId>
 
 	<name>Apache Isis - Regression Tests</name>
+	<description>
+        Collection of JUnit tests covering core functionalities of the framework.
+        (Targeted for JVM 11+)
+    </description>
+    
 	<packaging>pom</packaging>
 
 	<properties>
 		<skip.regressionTests>false</skip.regressionTests>
 		<skipTests>${skip.regressionTests}</skipTests>
-		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
+		
+		<java.version>11</java.version>
+		
 	</properties>
 
 	<build>
@@ -53,13 +60,17 @@
 		<plugins>
 		
 			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<release>${java.version}</release>
+				</configuration>
+			</plugin>
+		
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<forkMode>always</forkMode>
-					<excludes>
-						<exclude>**/Unstable*</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 		

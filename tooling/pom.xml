@@ -24,10 +24,11 @@
 	<groupId>org.apache.isis.tooling</groupId>
 	<artifactId>isis-tooling</artifactId>
 
-	<name>Apache Isis Tooling</name>
+	<name>Apache Isis - Tooling</name>
 	<description>
         Libraries and tools not depending on the _Apache Isis Core_ ecosystem, 
         eg. code mining, automated documentation.
+        (Targeted for JVM 11+)
     </description>
 
 	<packaging>pom</packaging>
@@ -84,7 +85,7 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<release>11</release>
+					<release>${java.version}</release>
 				</configuration>
 			</plugin>
 		</plugins>
