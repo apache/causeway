@@ -130,7 +130,7 @@ include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse:isis-valuetypes-s
 include ':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse'
 include ':isis-parent:isis:isis-valuetypes'
 include ':isis-app-starter-parent:demo-parent'
-include ':isis-app-starter-parent:smoketests'
+include ':isis-app-starter-parent:regressiontests'
 
 project(':isis-parent:isis-schema').projectDir = "$rootDir/api/schema" as File
 project(':isis-parent:isis-applib').projectDir = "$rootDir/api/applib" as File
@@ -264,4 +264,4 @@ project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse').projectDir = "$
 project(':isis-parent:isis:isis-valuetypes').projectDir = "$rootDir/valuetypes" as File
 project(':isis-app-starter-parent').projectDir = "$rootDir/starters" as File
 project(':isis-app-starter-parent:demo-parent').projectDir = "$rootDir/examples/demo" as File
-project(':isis-app-starter-parent:smoketests').projectDir = "$rootDir/examples/smoketests/stable" as File
+project(':isis-app-starter-parent:regressiontests').projectDir = "$rootDir/regressiontests/stable" as File

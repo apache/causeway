@@ -8,12 +8,12 @@ They include guides for day-to-day operations, as well as notes on the design/im
 
 == Contributors & Committers
 
-**  xref:conguide:ROOT:about.adoc[Contributors' Guide]
+*  xref:conguide:ROOT:about.adoc[Contributors' Guide]
 *  xref:comguide:ROOT:about.adoc[Committers' Guide]
 
 
 == Design & Implementation
 
 *  xref:core:ROOT:about.adoc[Design Docs]
-*  xref:smoketests:ROOT:about.adoc[SmokeTest App]
+*  xref:regressiontests:ROOT:about.adoc[Regression Tests]
 

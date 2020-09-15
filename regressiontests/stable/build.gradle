@@ -3,8 +3,8 @@ plugins {
   id "org.rm3l.datanucleus-gradle-plugin" version "1.5.0"
 }
 
-group = 'org.apache.isis.app'
-description = 'Apache Isis App - Smoketests'
+group = 'org.apache.isis.regressiontests'
+description = 'Apache Isis - Regression Tests'
 
 compileJava {
     options.compilerArgs << '-parameters'

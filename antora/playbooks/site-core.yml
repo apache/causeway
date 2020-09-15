@@ -58,7 +58,7 @@ content:
       start_path: examples/demo/domain/src/main/adoc # docs
       branches: HEAD
     - url: .
-      start_path: examples/smoketests/adoc # core
+      start_path: regressiontests/adoc # core
       branches: HEAD
 
 # mavendeps

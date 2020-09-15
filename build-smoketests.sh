@@ -1,3 +1,3 @@
 #!/bin/bash
 export BATCH_MODE_FLAG=off
-sh scripts/ci/build-smoketests.sh $*
+sh scripts/ci/build-regressiontests.sh $*

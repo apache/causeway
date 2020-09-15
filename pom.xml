@@ -39,7 +39,7 @@
 		<module>isis-parent</module>
 
 		<module>examples/demo</module>
-		<module>examples/smoketests</module>
+		<module>regressiontests</module>
 	</modules>
 
 </project>

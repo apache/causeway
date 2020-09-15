@@ -15,15 +15,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.app</groupId>
-		<artifactId>smoketests</artifactId>
+		<groupId>org.apache.isis.regressiontests</groupId>
+		<artifactId>isis-regressiontests</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>smoketests-stable</artifactId>
+	<artifactId>isis-regressiontests-stable</artifactId>
 
-	<name>Apache Isis App - Smoketests (stable)</name>
+	<name>Apache Isis - Regression Tests (stable)</name>
 
 	<dependencies>
 		<dependency>

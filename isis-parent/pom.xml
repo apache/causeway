@@ -959,14 +959,14 @@ under the License.
 		</profile>
 
 		<profile>
-			<id>smoketests-module</id>
+			<id>regressiontests-module</id>
 			<activation>
 				<property>
-					<name>smoketests-module</name>
+					<name>regressiontests-module</name>
 				</property>
 			</activation>
 			<modules>
-				<module>../examples/smoketests</module>
+				<module>../regressiontests</module>
 			</modules>
 		</profile>
 
