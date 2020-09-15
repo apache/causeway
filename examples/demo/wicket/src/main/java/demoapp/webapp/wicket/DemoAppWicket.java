@@ -42,6 +42,8 @@ import demoapp.web._infra.utils.ThereCanBeOnlyOne;
 @Import({
     DemoAppManifest.class,
 
+    ThereCanBeOnlyOne.class, // shutdown demo instance if any already running (specific to the demo only)
+    
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,
 
@@ -70,8 +72,6 @@ public class DemoAppWicket extends SpringBootServletInitializer {
         //IsisPresets.prototyping();
         //DebugLoggingPreset.PERSISTENCE.apply();
         //DebugLoggingPreset.ISIS_SESSION.apply();
-        
-        ThereCanBeOnlyOne.remoteShutdownOthersIfAny();
         
         SpringApplication.run(new Class[] { DemoAppWicket.class }, args);
     }

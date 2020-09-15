@@ -33,19 +33,26 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import lombok.val;
 
-public class ThereCanBeOnlyOne {
+@Component
+public class ThereCanBeOnlyOne implements ApplicationListener<EmbeddedServletContainerInitializedEvent> {
 
-    public static void remoteShutdownOthersIfAny() {
+    @Override
+    public void onApplicationEvent(final EmbeddedServletContainerInitializedEvent event) {
+        final int port = event.getEmbeddedServletContainer().getPort();
+        
         try {
-            invokeRemoteShutdown();
+            invokeRemoteShutdown(port);
         } catch (Exception e) {
             // ignore them all
         }
+        
     }
     
-    private static void invokeRemoteShutdown() throws IOException {
+    // -- HELPER
+    
+    private static void invokeRemoteShutdown(int port) throws IOException {
         
-        val targetHost = new HttpHost("localhost", 8080, "http");
+        val targetHost = new HttpHost("localhost", port, "http");
         val credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(
                 new AuthScope(targetHost.getHostName(), targetHost.getPort()),
@@ -73,3 +80,5 @@ public class ThereCanBeOnlyOne {
     }
     
 }
+
+

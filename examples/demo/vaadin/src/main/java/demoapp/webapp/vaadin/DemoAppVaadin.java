@@ -42,6 +42,8 @@ import demoapp.web._infra.utils.ThereCanBeOnlyOne;
 @Import({
     DemoAppManifest.class,
     
+    ThereCanBeOnlyOne.class, // shutdown demo instance if any already running (specific to the demo only)
+    
     // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
     IsisModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
@@ -66,8 +68,6 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
 //        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
 //        IsisPresets.logging(IsisServletForVaadin.class, "debug");
         IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
-        
-        ThereCanBeOnlyOne.remoteShutdownOthersIfAny();
         
         SpringApplication.run(new Class[] { DemoAppVaadin.class }, args);
     }
