@@ -22,12 +22,13 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.apache.isis.tooling._infra._Files;
+import org.apache.isis.core.commons.internal.base._Files;
+
+import lombok.experimental.UtilityClass;
 
 import guru.nidi.codeassert.config.AnalyzerConfig;
 import guru.nidi.codeassert.config.Language;
 import guru.nidi.codeassert.config.ProjectLayout.Maven;
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class AnalyzerConfigFactory {

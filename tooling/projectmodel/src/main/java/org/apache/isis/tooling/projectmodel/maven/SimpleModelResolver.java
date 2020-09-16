@@ -19,7 +19,6 @@
 package org.apache.isis.tooling.projectmodel.maven;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +37,7 @@ import org.apache.maven.model.resolution.InvalidRepositoryException;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.model.resolution.UnresolvableModelException;
 
-import org.apache.isis.tooling._infra._Files;
+import org.apache.isis.core.commons.internal.base._Files;
 
 import lombok.Getter;
 import lombok.SneakyThrows;

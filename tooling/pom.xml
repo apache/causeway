@@ -97,8 +97,8 @@
 			<!-- INTERNAL -->
 		
 			<dependency>
-				<groupId>org.apache.isis.tooling</groupId>
-				<artifactId>isis-tooling-commons</artifactId>
+				<groupId>org.apache.isis.commons</groupId>
+				<artifactId>isis-commons</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		
@@ -206,7 +206,6 @@
 	</dependencies>
 
 	<modules>
-		<module>commons</module>
 		<module>javamodel</module>
 		<module>model4adoc</module>
 		<module>projectmodel</module>

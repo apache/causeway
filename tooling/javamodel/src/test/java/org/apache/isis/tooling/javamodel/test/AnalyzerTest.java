@@ -18,9 +18,6 @@
  */
 package org.apache.isis.tooling.javamodel.test;
 
-import static guru.nidi.codeassert.config.Language.JAVA;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,11 +26,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.tooling._infra._Files;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.core.commons.internal.base._Files;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 
-import guru.nidi.codeassert.config.Language;
 import lombok.val;
+
+import guru.nidi.codeassert.config.Language;
+
+import static guru.nidi.codeassert.config.Language.JAVA;
 
 class AnalyzerTest {
 

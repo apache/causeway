@@ -40,8 +40,8 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.tooling</groupId>
-			<artifactId>isis-tooling-commons</artifactId>
+			<groupId>org.apache.isis.commons</groupId>
+			<artifactId>isis-commons</artifactId>
 		</dependency>
 
 		<dependency>

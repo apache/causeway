@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.tooling._infra._Strings;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.*;
@@ -67,7 +66,7 @@ class AsciiDocWriterTest {
     @Test
     void testSimpleTable() throws IOException {
         
-        val adocRef = _Strings.readResource(this, "simple-table.adoc");
+        val adocRef = Util.readResource(this, "simple-table.adoc");
         
         val table = table(doc);
         table.setTitle("Table");
@@ -95,7 +94,7 @@ class AsciiDocWriterTest {
     @Test
     void testAttributedTable() throws IOException {
         
-        val adocRef = _Strings.readResource(this, "attributed-table.adoc");
+        val adocRef = Util.readResource(this, "attributed-table.adoc");
         
         val table = table(doc);
         table.setTitle("Some table");
@@ -119,7 +118,7 @@ class AsciiDocWriterTest {
     @Test @Disabled
     void testSimpleTableModel() throws IOException {
     
-        val adocRef = _Strings.readResource(this, "simple-table.adoc");
+        val adocRef = Util.readResource(this, "simple-table.adoc");
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
         
@@ -136,7 +135,7 @@ class AsciiDocWriterTest {
     @Test
     void testAttributedTableModel() throws IOException {
     
-        val adocRef = _Strings.readResource(this, "attributed-table.adoc");
+        val adocRef = Util.readResource(this, "attributed-table.adoc");
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
         

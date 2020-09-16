@@ -30,7 +30,7 @@ import org.apache.maven.model.Model;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.model.GradleProject;
 
-import org.apache.isis.tooling._infra._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.tooling.projectmodel.maven.MavenModelFactory;
 import org.apache.isis.tooling.projectmodel.maven.SimpleModelResolver;
 

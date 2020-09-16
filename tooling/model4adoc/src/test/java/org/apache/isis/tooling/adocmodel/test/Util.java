@@ -1,4 +1,4 @@
-package org.apache.isis.tooling._infra;
+package org.apache.isis.tooling.adocmodel.test;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -6,36 +6,7 @@ import java.util.Scanner;
 
 import javax.annotation.Nullable;
 
-public final class _Strings {
-    
-    /**
-     * @return whether {@code x} is of zero length or null.
-     */
-    public static boolean isNullOrEmpty(final @Nullable CharSequence x){
-        return x==null || x.length()==0;
-    }
-    
-    /**
-     * @param input
-     * @return null if the {@code input} is null or empty, the {@code input} otherwise 
-     */
-    public static @Nullable String emptyToNull(final @Nullable String input) {
-        if(isNullOrEmpty(input)) {
-            return null;
-        }
-        return input;
-    }
-
-    /**
-     * @param input
-     * @return the empty string if the {@code input} is null, the {@code input} otherwise 
-     */
-    public static String nullToEmpty(final @Nullable String input) {
-        if(input==null) {
-            return "";
-        }
-        return input;
-    }
+final class Util {
     
     // -- RESOURCE LOADING
 
