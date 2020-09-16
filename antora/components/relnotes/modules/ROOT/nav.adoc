@@ -3,6 +3,7 @@
 
 * 2020
 
+** xref:relnotes:ROOT:2020/2.0.0-M4/relnotes.adoc[2.0.0-M4]
 ** xref:relnotes:ROOT:2020/2.0.0-M3/relnotes.adoc[2.0.0-M3]
 
 * 2019

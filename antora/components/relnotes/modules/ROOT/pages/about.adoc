@@ -16,6 +16,14 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | Bugs
 | Detail
 
+| 2.0.0-M4
+| not released yet (upcoming)
+| Forth milestone release for Apache Isis 2.0.0
+| ?
+| ?
+| ?
+|
+* xref:relnotes:ROOT:2020/2.0.0-M4/relnotes.adoc[Release Notes]
 
 | 2.0.0-M3
 | 27-03-2020
