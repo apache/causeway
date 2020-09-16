@@ -16,7 +16,7 @@
 #  under the License.
 
 name: system
-title: "System Diagram"
+title: "System Overview"
 version: latest
 start_page: ROOT:about.adoc
 nav:

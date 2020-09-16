@@ -82,6 +82,8 @@ _Other_
 [discrete]
 == Components
 
+* xref:system:ROOT:about.adoc[System Overview]
+
 _Viewers_
 
 * xref:vw:ROOT:about.adoc[Wicket UI]
