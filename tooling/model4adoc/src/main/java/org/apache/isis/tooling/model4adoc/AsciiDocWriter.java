@@ -141,6 +141,7 @@ public class AsciiDocWriter {
         }
         
         writer.append("|===\n");
+        writer.append("\n"); // must finally write an empty line 
     }
     
     private static Map<String, String> formatedAttrMap(Table table) {

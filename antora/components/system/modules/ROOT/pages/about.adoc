@@ -7,10 +7,2361 @@
 
 These tables summarize all Maven artifacts available with Apache Isis.
 
-== Default Modules
+== Base
 
-include::partial$modules-default.adoc[]
+.Projects/Modules (Base)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
 
-== Demo Modules
+|org.apache.isis
+|isis-all
+|pom
+|
+|Apache Isis (Aggregator)
+|Convenience aggregator POM that references all modules.
+        The parent POM of the core framework is isis-parent/pom.xml
 
-include::partial$modules-demo.adoc[]
+
+
+|org.apache.isis
+|antora
+|pom
+|\antora
+|Apache Isis Antora
+|
+
+|org.apache.isis
+|isis-parent
+|pom
+|\isis-parent
+|Apache Isis
+|Parent for the core framework + extensions, starter parent pom for starter apps.
+
+
+
+|org.apache.isis
+|supplemental-model
+|jar
+|\supplemental-model
+|Apache Isis Supplemental - Legal Info
+|For example, the templates used by many Apache distributions assemble a listing of project dependencies 
+  	according to their organization name (and URL), along with the URL each project's website. When dependency 
+  	POMs are missing this information, the dependency notice file that the Remote Resources Plugin renders can 
+  	be invalid.
+	To compensate for incomplete dependency POMs, we use the supplemental models support.
+
+
+|===
+
+== Commons
+
+.Projects/Modules (Commons)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.commons
+|isis-commons
+|jar
+|\commons
+|Apache Isis Commons
+|Isis library, defining utilities (potentially) required by the entire Apache Isis ecosystem.
+
+_Components_
+
+* org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment
+
+_Dependencies_
+
+* com.fasterxml.jackson.core:jackson-databind:jar:<managed>
+* com.google.code.findbugs:annotations:jar:<managed>
+* javax:javaee-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-engine:jar:<managed>
+* org.junit.vintage:junit-vintage-engine:jar:<managed>
+* org.slf4j:slf4j-api:jar:<managed>
+* org.springframework:spring-context:jar:<managed>
+* org.springframework:spring-tx:jar:<managed>
+* org.springframework.boot:spring-boot-starter:jar:<managed>
+* org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
+
+
+|===
+
+== Core
+
+.Projects/Modules (Core)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.core
+|isis-core
+|pom
+|\core
+|Apache Isis Core
+|Core framework, providing metamodel, runtime and core APIs.
+
+_Dependencies_
+
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-applib
+|jar
+|\api\applib
+|Apache Isis Core - AppLib
+|Isis application library, defining annotations and utilities for the
+        default (Java) programming model.
+
+_Components_
+
+* org.apache.isis.applib.annotation.DomainObject
+* org.apache.isis.applib.annotation.DomainService
+* org.apache.isis.applib.annotation.Mixin
+* org.apache.isis.applib.annotation.ViewModel
+* org.apache.isis.applib.services.audit.AuditerServiceLogging
+* org.apache.isis.applib.services.clock.ClockService
+* org.apache.isis.applib.services.command.CommandContext
+* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto
+* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto$CopyOverFromCommand
+* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandsDto
+* org.apache.isis.applib.services.iactn.InteractionContext
+* org.apache.isis.applib.services.jaxb.JaxbServiceDefault
+* org.apache.isis.applib.services.publish.PublisherServiceLogging
+* org.apache.isis.applib.services.session.SessionLoggingServiceLogging
+* org.apache.isis.applib.services.wrapper.control.AsyncControlService
+
+_Dependencies_
+
+* com.google.code.findbugs:annotations:jar:<managed>
+* javax:javaee-api:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-schema:jar:<managed>
+* org.assertj:assertj-core:jar:<managed>
+* org.jmock:jmock:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-codegen-bytebuddy
+|jar
+|\core\codegen-bytebuddy
+|Apache Isis Core - Code Gen (ByteBuddy)
+|Code generation using ByteBuddy.
+
+_Components_
+
+* org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy
+
+_Dependencies_
+
+* net.bytebuddy:byte-buddy:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.jmock:jmock-junit4:jar:<managed>
+* org.objenesis:objenesis:jar:${objenesis.version}
+
+
+
+|org.apache.isis.core
+|isis-core-config
+|jar
+|\core\config
+|Apache Isis Core - Configuration
+|Isis configuration library for framework internal use.
+
+_Components_
+
+* org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring
+* org.apache.isis.core.config.converters.PatternsConverter
+* org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator
+* org.apache.isis.core.config.viewer.wicket.WebAppContextPath
+
+_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.hibernate.validator:hibernate-validator:jar:<managed>
+* org.springframework.boot:spring-boot-configuration-processor:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-internaltestsupport
+|jar
+|\core\internaltestsupport
+|Apache Isis Core - Unit Test Support
+|Support for writing unit tests in either JUnit 4 or JUnit 5; should be added as a dependency with scope=test only
+
+_Dependencies_
+
+* net.bytebuddy:byte-buddy:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-core-codegen-bytebuddy:jar:<managed>
+* org.assertj:assertj-core:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+* org.hamcrest:hamcrest-library:jar:<managed>
+* org.jmock:jmock:jar:<managed>
+* org.jmock:jmock-junit4:jar:<managed>
+* org.junit.jupiter:junit-jupiter-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-engine:jar:<managed>
+* org.junit.vintage:junit-vintage-engine:jar:<managed>
+* org.mockito:mockito-core:jar:<managed>
+* org.picocontainer:picocontainer:jar:<managed>
+* org.slf4j:slf4j-api:jar:${slf4j-api.version}
+* org.springframework:spring-test:jar:<managed>
+* org.springframework.boot:spring-boot-starter-test:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-metamodel
+|jar
+|\core\metamodel
+|Apache Isis Core - MetaModel
+|_Components_
+
+* org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner
+* org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider
+* org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault
+* org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault
+* org.apache.isis.core.metamodel.services.ServiceInjectorDefault
+* org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory
+* org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault
+* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault
+* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections
+* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForDomainObjects
+* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry
+* org.apache.isis.core.metamodel.services.events.MetamodelEventService
+* org.apache.isis.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException
+* org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault
+* org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb
+* org.apache.isis.core.metamodel.services.grid.GridServiceDefault
+* org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3
+* org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault
+* org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault
+* org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault
+* org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceDefault
+* org.apache.isis.core.metamodel.services.title.TitleServiceDefault
+* org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault
+* org.apache.isis.core.metamodel.specloader.ProgrammingModelServiceDefault
+* org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault
+* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault
+* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin
+* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections
+* org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry
+
+_Dependencies_
+
+* io.swagger:swagger-core:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-config:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-security:jar:<managed>
+* org.hibernate.validator:hibernate-validator:jar:<managed>
+* org.jmock:jmock:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-runtime
+|jar
+|\core\runtime
+|Apache Isis Core - Runtime
+|_Components_
+
+* org.apache.isis.core.runtime.events.RuntimeEventService
+* org.apache.isis.core.runtime.events.persistence.TimestampService
+* org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService
+* org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-runtimeservices
+|jar
+|\core\runtimeservices
+|Apache Isis Core - Runtime Services
+|Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.
+
+_Components_
+
+* org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault
+* org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault
+* org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault
+* org.apache.isis.core.runtimeservices.command.CommandServiceDefault
+* org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
+* org.apache.isis.core.runtimeservices.email.EmailServiceDefault
+* org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring
+* org.apache.isis.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault
+* org.apache.isis.core.runtimeservices.factory.FactoryServiceDefault
+* org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault
+* org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo
+* org.apache.isis.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault
+* org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault
+* org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3
+* org.apache.isis.core.runtimeservices.message.MessageServiceDefault
+* org.apache.isis.core.runtimeservices.publish.PublisherDispatchServiceDefault
+* org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault
+* org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault
+* org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault
+* org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault
+* org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault
+* org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault
+* org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression
+* org.apache.isis.core.runtimeservices.user.UserServiceDefault
+* org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi
+* org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault
+* org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault
+* org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault
+* org.apache.isis.core.runtimeservices.xactn.TransactionServiceSpring
+* org.apache.isis.core.runtimeservices.xml.XmlServiceDefault
+* org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-codegen-bytebuddy:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.hsqldb:hsqldb:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-security
+|jar
+|\core\security
+|Apache Isis Core - Security
+|_Components_
+
+* org.apache.isis.core.security.authentication.manager.AuthenticationManager
+* org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault
+* org.apache.isis.core.security.authorization.manager.AuthorizationManager
+
+_Dependencies_
+
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-config:jar:<managed>
+* org.hamcrest:hamcrest-library:jar:<managed>
+* org.jmock:jmock-junit4:jar:<managed>
+* org.junit.jupiter:junit-jupiter-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-engine:jar:<managed>
+* org.junit.vintage:junit-vintage-engine:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-webapp
+|jar
+|\core\webapp
+|Apache Isis Core - WebApp
+|Bundles all the web specific classes a srequired by viewers.
+        Introduced to keep the 'runtime' package concise.
+
+_Components_
+
+* org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService
+* org.apache.isis.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger
+* org.apache.isis.core.webapp.modules.templresources.WebModuleTemplateResources
+* org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.springframework:spring-web:jar:<managed>
+* org.springframework.boot:spring-boot:jar:<managed>
+* org.springframework.boot:spring-boot-actuator:jar:<managed>
+* org.springframework.boot:spring-boot-starter-thymeleaf:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-schema
+|jar
+|\api\schema
+|Apache Isis Core - Schemas
+|Apache Isis schemas, for conversion into canonical DTOs (for use in integration scenarios).
+
+_Dependencies_
+
+* joda-time:joda-time:jar:<managed>
+* org.springframework:spring-context:jar:<managed>
+
+
+|===
+
+== App
+
+.Projects/Modules (App)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.app
+|isis-app-starter-parent
+|pom
+|\starters
+|Apache Isis Starter Parent
+|Parent pom providing dependency and plugin management for Apache Isis applications
+		built with Maven.  Builds on top of spring-boot-starter-parent.
+
+
+|===
+
+== Mavendeps
+
+.Projects/Modules (Mavendeps)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.mavendeps
+|isis-mavendeps
+|pom
+|\mavendeps
+|Apache Isis Maven Deps
+|Collection of Apache Isis Maven Dependency Bundles.
+
+
+
+|org.apache.isis.mavendeps
+|isis-mavendeps-integspecs
+|pom
+|\mavendeps\integspecs
+|Apache Isis Maven Deps - BDD Integ Spec
+|Defines a module that can be used as a single dependency for BDD (Cucumber) specs as integration tests.
+
+_Dependencies_
+
+* org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-specsupport-applib:jar:<managed>
+
+
+
+|org.apache.isis.mavendeps
+|isis-mavendeps-integtests
+|pom
+|\mavendeps\integtests
+|Apache Isis Maven Deps - Integration Testing
+|Defines a module that can be used as a single dependency for integration tests.
+
+_Dependencies_
+
+* org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
+
+
+
+|org.apache.isis.mavendeps
+|isis-mavendeps-jdk11
+|pom
+|\mavendeps\jdk11
+|Apache Isis Maven Deps - JDK11
+|Defines a module to bring in dependencies that were part of JDK 8 but
+        had been removed with JDK 11+. These dependencies are activated when the 
+        consuming project is built with JDK 11 or higher.
+
+
+
+|org.apache.isis.mavendeps
+|isis-mavendeps-unittests
+|pom
+|\mavendeps\unittests
+|Apache Isis Maven Deps - Testing
+|Defines a module that can be used as a single dependency for a set of common testing libraries.
+
+_Dependencies_
+
+* org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
+
+
+
+|org.apache.isis.mavendeps
+|isis-mavendeps-webapp
+|pom
+|\mavendeps\webapp
+|Apache Isis Maven Deps - Webapp
+|Defines a module that can be used as a single dependency for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security)
+
+_Dependencies_
+
+* commons-logging:commons-logging:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
+* org.apache.isis.core:isis-core-security:jar:<managed>
+* org.apache.isis.core:isis-schema:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jpa-model:jar:<managed>
+* org.apache.isis.security:isis-security-bypass:jar:<managed>
+* org.apache.isis.security:isis-security-keycloak:jar:<managed>
+* org.apache.isis.security:isis-security-shiro:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-jaxrsresteasy4:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-viewer:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-viewer:jar:<managed>
+* org.springframework.boot:spring-boot-starter-tomcat:jar:<managed>
+* org.springframework.boot:spring-boot-starter-web:jar:<managed>
+
+
+|===
+
+== Mappings
+
+.Projects/Modules (Mappings)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.mappings
+|isis-mappings
+|pom
+|\mappings
+|Apache Isis Mappings
+|Libraries and tools to map one bounded context (usually an Apache Isis application) to some other BC (usually
+		_not_ an Apache Isis application).
+
+_Dependencies_
+
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.mappings
+|isis-mappings-jaxrsclient
+|pom
+|\mappings\jaxrsclient
+|Apache Isis Map - JaxRS Client (parent)
+|Integrates JaxRS Client Library
+
+
+
+|org.apache.isis.mappings
+|isis-mappings-jaxrsclient-api
+|jar
+|\mappings\jaxrsclient\api
+|Apache Isis Map - JaxRS Client (api)
+|_Dependencies_
+
+* org.springframework:spring-context:jar:<managed>
+
+
+
+|org.apache.isis.mappings
+|isis-mappings-restclient
+|pom
+|\mappings\restclient
+|Apache Isis Ext - REST Client (parent)
+|A client for the Restful Objects Viewer
+
+
+
+|org.apache.isis.mappings
+|isis-mappings-restclient-api
+|jar
+|\mappings\restclient\api
+|Apache Isis Ext - REST Client
+|A client for the Restful Objects Viewer
+
+_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.springframework:spring-context:jar:<managed>
+
+
+|===
+
+== Persistence
+
+.Projects/Modules (Persistence)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.persistence
+|isis-persistence-jdo
+|pom
+|\persistence\jdo
+|Apache Isis Persistence - JDO
+|Supplementary applib for JDO persistence
+
+
+
+|org.apache.isis.persistence
+|isis-persistence-jdo-applib
+|jar
+|\persistence\jdo\applib
+|Apache Isis Persistence - JDO (applib)
+|Supplementary applib for JDO persistence
+
+_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.datanucleus:datanucleus-rdbms:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+
+
+
+|org.apache.isis.persistence
+|isis-persistence-jdo-datanucleus5
+|jar
+|\persistence\jdo\datanucleus-5
+|Apache Isis Persistence - JDO (datanucleus 5)
+|JDO plugin using datanucleus.
+
+_Components_
+
+* org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings
+* org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService
+* org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDODataStoreException
+* org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
+* org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDOObjectNotFoundException
+* org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
+* org.apache.isis.persistence.jdo.datanucleus5.jdosupport.IsisJdoSupportDN5
+* org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingModelPlugin
+* org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault
+* org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo
+* org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
+* org.datanucleus:datanucleus-api-jdo:jar:<managed>
+* org.datanucleus:datanucleus-core:jar:<managed>
+* org.datanucleus:datanucleus-jdo-query:jar:<managed>
+* org.datanucleus:datanucleus-jodatime:jar:<managed>
+* org.datanucleus:datanucleus-rdbms:jar:<managed>
+
+
+
+|org.apache.isis.persistence
+|isis-persistence-jpa
+|pom
+|\persistence\jpa
+|Apache Isis Persistence - JPA
+|Apache Isis JPA integration
+
+
+
+|org.apache.isis.persistence
+|isis-persistence-jpa-applib
+|jar
+|\persistence\jpa\applib
+|Apache Isis Persistence - JPA (applib)
+|Supplementary applib for JPA persistence
+
+_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+
+
+
+|org.apache.isis.persistence
+|isis-persistence-jpa-model
+|jar
+|\persistence\jpa\model
+|Apache Isis Persistence - JPA (model)
+|JPA integration (metamodel)
+
+_Components_
+
+* org.apache.isis.persistence.jpa.metamodel.JpaProgrammingModelPlugin
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jpa-applib:jar:<managed>
+* org.springframework.data:spring-data-jpa:jar:<managed>
+
+
+|===
+
+== Security
+
+.Projects/Modules (Security)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.security
+|isis-security-bypass
+|jar
+|\security\bypass
+|Apache Isis Security - Bypass
+|_Components_
+
+* org.apache.isis.security.bypass.authentication.AuthenticatorBypass
+* org.apache.isis.security.bypass.authorization.AuthorizorBypass
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
+
+
+
+|org.apache.isis.security
+|isis-security-keycloak
+|jar
+|\security\keycloak
+|Apache Isis Security - Keycloak
+|Authentication and Authorization using Keycloak
+
+_Components_
+
+* org.apache.isis.security.keycloak.authentication.AuthenticatorKeycloak
+* org.apache.isis.security.keycloak.authorization.AuthorizorKeycloak
+* org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+
+
+
+|org.apache.isis.security
+|isis-security-shiro
+|jar
+|\security\shiro
+|Apache Isis Security - Shiro
+|Authentication and Authorization using Apache Shiro.
+
+_Components_
+
+* org.apache.isis.security.shiro.authentication.AuthenticatorShiro
+* org.apache.isis.security.shiro.authorization.AuthorizorShiro
+* org.apache.isis.security.shiro.webmodule.WebModuleShiro
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+* org.apache.shiro:shiro-core:jar:<managed>
+* org.apache.shiro:shiro-web:jar:<managed>
+
+
+|===
+
+== Valuetypes
+
+.Projects/Modules (Valuetypes)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.valuetypes
+|isis-valuetypes
+|pom
+|\valuetypes
+|Apache Isis Value types
+|Value types for use within Apache Isis applications.
+
+_Dependencies_
+
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-asciidoc
+|pom
+|\valuetypes\asciidoc
+|Apache Isis Val - Asciidoctor (parent)
+|Asciidoc value type.
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-asciidoc-applib
+|jar
+|\valuetypes\asciidoc\applib
+|Apache Isis Val - Asciidoctor (applib)
+|_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.asciidoctor:asciidoctorj-api:jar:${asciidoctorj.version}
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-asciidoc-metamodel
+|jar
+|\valuetypes\asciidoc\metamodel
+|Apache Isis Val - Asciidoctor (MetaModel)
+|_Components_
+
+* org.apache.isis.valuetypes.asciidoc.metamodel.AsciiDocMetaModelRefiner
+* org.apache.isis.valuetypes.asciidoc.metamodel.AsciiDocValueTypeProvider
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-asciidoc-persistence
+|pom
+|\valuetypes\asciidoc\persistence
+|Apache Isis Val - Asciidoctor (Persistence)
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-asciidoc-persistence-jdo-dn5
+|jar
+|\valuetypes\asciidoc\persistence\jdo-dn5
+|Apache Isis Val - Asciidoctor (persistence jdo DN5)
+|_Dependencies_
+
+* org.datanucleus:datanucleus-core:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-asciidoc-ui
+|pom
+|\valuetypes\asciidoc\ui
+|Apache Isis Val - Asciidoctor (ui)
+|_Dependencies_
+
+* com.github.jnr:jnr-constants:jar:0.9.11
+* com.github.jnr:jnr-enxio:jar:0.20
+* com.github.jnr:jnr-posix:jar:3.0.49
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
+* org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version}
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-asciidoc-ui-vaa
+|jar
+|\valuetypes\asciidoc\ui\vaadin
+|Apache Isis Val - Asciidoctor (ui vaadin)
+|_Components_
+
+* org.apache.isis.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa
+
+_Dependencies_
+
+* org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version}
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-asciidoc-ui-wkt
+|jar
+|\valuetypes\asciidoc\ui\wicket
+|Apache Isis Val - Asciidoctor (ui wicket)
+|_Components_
+
+* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Parented
+* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Standalone
+
+_Dependencies_
+
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-markdown
+|pom
+|\valuetypes\markdown
+|Apache Isis Val - Markdown (parent)
+|Markdown value type.
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-markdown-applib
+|jar
+|\valuetypes\markdown\applib
+|Apache Isis Val - Markdown (applib)
+|_Dependencies_
+
+* com.vladsch.flexmark:flexmark-all:jar:${flexmark.version}
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-markdown-metamodel
+|jar
+|\valuetypes\markdown\metamodel
+|Apache Isis Val - Markdown (MetaModel)
+|_Components_
+
+* org.apache.isis.valuetypes.markdown.metamodel.MarkdownMetaModelRefiner
+* org.apache.isis.valuetypes.markdown.metamodel.MarkdownValueTypeProvider
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-markdown-persistence
+|pom
+|\valuetypes\markdown\persistence
+|Apache Isis Val - Markdown (Persistence)
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-markdown-persistence-jdo-dn5
+|jar
+|\valuetypes\markdown\persistence\jdo-dn5
+|Apache Isis Val - Markdown (persistence jdo DN5)
+|_Dependencies_
+
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
+* org.datanucleus:datanucleus-core:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-markdown-ui
+|pom
+|\valuetypes\markdown\ui
+|Apache Isis Val - Markdown (ui)
+|_Dependencies_
+
+* com.vladsch.flexmark:flexmark-all:jar:${flexmark.version}
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
+* org.jsoup:jsoup:jar:1.12.1
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-markdown-ui-wkt
+|jar
+|\valuetypes\markdown\ui\wicket
+|Apache Isis Val - Markdown (ui wicket)
+|_Dependencies_
+
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-sse
+|pom
+|\valuetypes\sse
+|Apache Isis Val - Server Sent Events (parent)
+|Dynamically updating HTML markup
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-sse-applib
+|jar
+|\valuetypes\sse\applib
+|Apache Isis Val - Server Sent Events
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-sse-metamodel
+|jar
+|\valuetypes\sse\metamodel
+|Apache Isis Val - Server Sent Events (metamodel)
+|_Components_
+
+* org.apache.isis.valuetypes.sse.metamodel.facets.SseAnnotationFacetFactory$Register
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-sse-ui
+|pom
+|\valuetypes\sse\ui
+|Apache Isis Val - SSE (ui)
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed>
+
+
+
+|org.apache.isis.valuetypes
+|isis-valuetypes-sse-ui-wkt
+|jar
+|\valuetypes\sse\ui\wicket
+|Apache Isis Val - Server Sent Events (ui wicket)
+|_Components_
+
+* org.apache.isis.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactoriesForWicket$Parented
+* org.apache.isis.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactoriesForWicket$Standalone
+* org.apache.isis.valuetypes.sse.ui.wkt.services.SseServiceDefault
+* org.apache.isis.valuetypes.sse.ui.wkt.webmodule.WebModuleServerSentEvents
+
+_Dependencies_
+
+* org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+
+
+|===
+
+== Viewer
+
+.Projects/Modules (Viewer)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.viewer
+|isis-viewer-common
+|jar
+|\viewers\common
+|Apache Isis Viewer - Common Model
+|_Components_
+
+* org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider
+* org.apache.isis.viewer.common.model.header.HeaderUiModelProvider
+* org.apache.isis.viewer.common.model.menu.MenuUiModelProvider
+* org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.webjars:font-awesome:jar:5.13.0
+
+
+
+|org.apache.isis.viewer
+|isis-viewer-restfulobjects
+|pom
+|\viewers\restfulobjects
+|Apache Isis Viewer - RO
+|
+
+|org.apache.isis.viewer
+|isis-viewer-restfulobjects-applib
+|jar
+|\viewers\restfulobjects\applib
+|Apache Isis Viewer - RO (AppLib)
+|_Dependencies_
+
+* com.fasterxml.jackson.core:jackson-databind:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+
+
+
+|org.apache.isis.viewer
+|isis-viewer-restfulobjects-jaxrsresteasy4
+|jar
+|\viewers\restfulobjects\jaxrs-resteasy-4
+|Apache Isis Viewer - RO (JAX-RS Resteasy v4)
+|JAX-RS plugin using jboss resteasy.
+
+_Components_
+
+* org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.conneg.RestfulObjectsJaxbWriterForXml
+* org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.webmodule.WebModuleJaxrsResteasy4
+
+_Dependencies_
+
+* com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-rendering:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-testing:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-viewer:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+* org.jboss.resteasy:resteasy-spring-boot-starter:jar:<managed>
+
+
+
+|org.apache.isis.viewer
+|isis-viewer-restfulobjects-rendering
+|jar
+|\viewers\restfulobjects\rendering
+|Apache Isis Viewer - RO (Rendering)
+|_Components_
+
+* org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder
+* org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator
+* org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest
+* org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$RequestFilter
+* org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$ResponseFilter
+* org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0
+* org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1
+* org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType
+* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault
+* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault
+* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator
+* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault
+* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-applib:jar:<managed>
+
+
+
+|org.apache.isis.viewer
+|isis-viewer-restfulobjects-testing
+|jar
+|\viewers\restfulobjects\testing
+|Apache Isis Viewer - RO (Testing)
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-viewer:jar:<managed>
+
+
+
+|org.apache.isis.viewer
+|isis-viewer-restfulobjects-viewer
+|jar
+|\viewers\restfulobjects\viewer
+|Apache Isis Viewer - RO (Viewer)
+|_Components_
+
+* org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound
+* org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication
+* org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRuntimeException
+* org.apache.isis.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside
+* org.apache.isis.viewer.restfulobjects.viewer.resources.DomainServiceResourceServerside
+* org.apache.isis.viewer.restfulobjects.viewer.resources.DomainTypeResourceServerside
+* org.apache.isis.viewer.restfulobjects.viewer.resources.HomePageResourceServerside
+* org.apache.isis.viewer.restfulobjects.viewer.resources.ImageResourceServerside
+* org.apache.isis.viewer.restfulobjects.viewer.resources.MenuBarsResourceServerside
+* org.apache.isis.viewer.restfulobjects.viewer.resources.SwaggerSpecResource
+* org.apache.isis.viewer.restfulobjects.viewer.resources.UserResourceServerside
+* org.apache.isis.viewer.restfulobjects.viewer.resources.VersionResourceServerside
+
+_Dependencies_
+
+* com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-common:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-rendering:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+
+
+
+|org.apache.isis.viewer
+|isis-viewer-wicket
+|pom
+|\viewers\wicket
+|Apache Isis Viewer - Wicket
+|
+
+|org.apache.isis.viewer
+|isis-viewer-wicket-model
+|jar
+|\viewers\wicket\model
+|Apache Isis Viewer - Wicket (Model)
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-common:jar:<managed>
+* org.apache.wicket:wicket-core:jar:<managed>
+* org.apache.wicket:wicket-extensions:jar:<managed>
+
+
+
+|org.apache.isis.viewer
+|isis-viewer-wicket-ui
+|jar
+|\viewers\wicket\ui
+|Apache Isis Viewer - Wicket (UI Components)
+|_Components_
+
+* org.apache.isis.viewer.wicket.ui.app.logout.LogoutHandlerWkt
+* org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
+* de.agilecoders.wicket:wicket-bootstrap-extensions:jar:<managed>
+* de.agilecoders.wicket:wicket-bootstrap-themes:jar:<managed>
+* de.agilecoders.wicket.webjars:wicket-webjars:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-model:jar:<managed>
+* org.apache.wicket:wicket-auth-roles:jar:<managed>
+* org.apache.wicket:wicket-core:jar:<managed>
+* org.apache.wicket:wicket-devutils:jar:<managed>
+* org.apache.wicket:wicket-extensions:jar:<managed>
+* org.apache.wicket:wicket-spring:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+* org.slf4j:slf4j-api:jar:${slf4j-api.version}
+* org.webjars:jquery-ui:jar:<managed>
+* org.webjars:select2:jar:<managed>
+* org.webjars.bower:summernote:jar:<managed>
+* org.wicketstuff:wicketstuff-select2:jar:<managed>
+
+
+
+|org.apache.isis.viewer
+|isis-viewer-wicket-viewer
+|jar
+|\viewers\wicket\viewer
+|Apache Isis Viewer - Wicket (Viewer)
+|_Components_
+
+* org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault
+* org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault
+* org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault
+* org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault
+* org.apache.isis.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault
+* org.apache.isis.viewer.wicket.viewer.services.BookmarkUiServiceWicket
+* org.apache.isis.viewer.wicket.viewer.services.DeepLinkServiceWicket
+* org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession
+* org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath
+* org.apache.isis.viewer.wicket.viewer.services.LocaleProviderWicket
+* org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket
+* org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault
+* org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoServiceWicket
+* org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket
+
+_Dependencies_
+
+* commons-io:commons-io:jar:<managed>
+* de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
+* net.ftlines.wicket-source:wicket-source:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+* org.apache.wicket:wicket-auth-roles:jar:<managed>
+* org.apache.wicket:wicket-spring:jar:<managed>
+* org.jmock:jmock-junit4:jar:<managed>
+* org.springframework:spring-web:jar:<managed>
+
+
+|===
+
+== Testing
+
+.Projects/Modules (Testing)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.testing
+|isis-testing
+|pom
+|\testing
+|Apache Isis Testing
+|A library of utilities, mini-frameworks and tools for prototyping and testing Apache Isis applications.
+
+
+
+|org.apache.isis.testing
+|isis-testing-fakedata
+|pom
+|\testing\fakedata
+|Apache Isis Tst - FakeData (parent)
+|A module providing a domain service to generate fake random data
+        for use in unit tests or integration tests.
+
+
+
+|org.apache.isis.testing
+|isis-testing-fakedata-applib
+|jar
+|\testing\fakedata\applib
+|Apache Isis Tst - FakeData (applib)
+|_Components_
+
+* org.apache.isis.testing.fakedata.applib.services.FakeDataService
+
+_Dependencies_
+
+* com.github.javafaker:javafaker:jar:<managed>
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.testing
+|isis-testing-fakedata-fixtures
+|jar
+|\testing\fakedata\fixtures
+|Apache Isis Tst - FakeData (fixtures)
+|_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
+* org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.testing
+|isis-testing-fakedata-integtests
+|jar
+|\testing\fakedata\integtests
+|Apache Isis Tst - FakeData (integ tests)
+|_Dependencies_
+
+* org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed>
+* org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-fakedata-fixtures:jar:<managed>
+
+
+
+|org.apache.isis.testing
+|isis-testing-fixtures
+|pom
+|\testing\fixtures
+|Apache Isis Tst - Fixtures (parent)
+|Library to initialize the system under test, either for integration testing or for prototyping.
+
+
+
+|org.apache.isis.testing
+|isis-testing-fixtures-applib
+|jar
+|\testing\fixtures\applib
+|Apache Isis Tst - Fixtures (applib)
+|_Components_
+
+* org.apache.isis.testing.fixtures.applib.fixturescripts.ExecutionParametersService
+* org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService
+* org.apache.isis.testing.fixtures.applib.queryresultscache.QueryResultsCacheControlDefault
+* org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService
+
+_Dependencies_
+
+* joda-time:joda-time:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
+* org.apache.isis.subdomains:isis-subdomains-spring-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+
+
+
+|org.apache.isis.testing
+|isis-testing-h2console
+|pom
+|\testing\h2console
+|Apache Isis Tst - H2 Console (parent)
+|Menu and configuration to open up H2 Console
+
+
+
+|org.apache.isis.testing
+|isis-testing-h2console-ui
+|jar
+|\testing\h2console\ui
+|Apache Isis Tst - H2 Console (ui)
+|_Components_
+
+* org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console
+
+_Dependencies_
+
+* com.h2database:h2:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+
+
+
+|org.apache.isis.testing
+|isis-testing-hsqldbmgr
+|pom
+|\testing\hsqldbmgr
+|Apache Isis Tst - HSQLDB Manager (parent)
+|Menu and configuration to open up HSQLDB Manager
+
+
+
+|org.apache.isis.testing
+|isis-testing-hsqldbmgr-ui
+|jar
+|\testing\hsqldbmgr\ui
+|Apache Isis Tst - HSQLDB Manager
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+* org.hsqldb:hsqldb:jar:<managed>
+
+
+
+|org.apache.isis.testing
+|isis-testing-integtestsupport
+|pom
+|\testing\integtestsupport
+|Apache Isis Tst - Integ Test Support (parent)
+|Support for writing integ tests in JUnit 5; should be added as a dependency with scope=test only
+
+
+
+|org.apache.isis.testing
+|isis-testing-integtestsupport-applib
+|jar
+|\testing\integtestsupport\applib
+|Apache Isis Tst - Integ Test Support (applib)
+|_Components_
+
+* org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract$CommandSupport
+
+_Dependencies_
+
+* com.approvaltests:approvaltests:jar:<managed>
+* com.h2database:h2:jar:<managed>
+* org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
+* org.apache.isis.security:isis-security-bypass:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+* org.hamcrest:hamcrest-library:jar:<managed>
+* org.hsqldb:hsqldb:jar:<managed>
+* org.slf4j:slf4j-api:jar:${slf4j-api.version}
+* org.springframework:spring-test:jar:<managed>
+* org.springframework.boot:spring-boot-starter-test:jar:<managed>
+
+
+
+|org.apache.isis.testing
+|isis-testing-specsupport
+|pom
+|\testing\specsupport
+|Apache Isis Tst - Spec/Cucumber (parent)
+|Allows Cucumber to be used to write BDD-style specifications, generally as an alternative to integration tests.
+
+
+
+|org.apache.isis.testing
+|isis-testing-specsupport-applib
+|jar
+|\testing\specsupport\applib
+|Apache Isis Tst - Spec/Cucumber (applib)
+|_Dependencies_
+
+* io.cucumber:cucumber-java:jar:<managed>
+* io.cucumber:cucumber-junit:jar:<managed>
+* io.cucumber:cucumber-junit-platform-engine:jar:<managed>
+* io.cucumber:cucumber-spring:jar:<managed>
+* org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
+* org.junit.jupiter:junit-jupiter-api:jar:<managed>
+* org.junit.platform:junit-platform-console:jar:<managed>
+
+
+
+|org.apache.isis.testing
+|isis-testing-unittestsupport
+|pom
+|\testing\unittestsupport
+|Apache Isis Tst - Unit Test Support (parent)
+|A module providing test utilities for unit testing of domain modules
+
+
+
+|org.apache.isis.testing
+|isis-testing-unittestsupport-applib
+|jar
+|\testing\unittestsupport\applib
+|Apache Isis Tst - Unit Test Support (applib)
+|_Dependencies_
+
+* com.approvaltests:approvaltests:jar:<managed>
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-codegen-bytebuddy:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+* org.jmock:jmock:jar:<managed>
+* org.jmock:jmock-junit4:jar:<managed>
+* org.picocontainer:picocontainer:jar:<managed>
+* org.slf4j:slf4j-api:jar:${slf4j-api.version}
+* org.springframework:spring-test:jar:<managed>
+* org.springframework.boot:spring-boot-starter-test:jar:<managed>
+
+
+|===
+
+== Extensions
+
+.Projects/Modules (Extensions)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.extensions
+|isis-extensions
+|pom
+|\extensions
+|Apache Isis Extensions
+|Extensions to the Apache Isis framework itself.
+		These are _not_ intended to be called by the domain logic of an Apache Isis application (see instead org.apache.isis.platform).
+
+_Dependencies_
+
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-cors
+|pom
+|\extensions\vro\cors
+|Apache Isis Ext - CORS (parent)
+|Implementation of CORS Filter (using ebay filter)
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-cors-impl
+|jar
+|\extensions\vro\cors\impl
+|Apache Isis Ext - CORS (impl)
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+* org.springframework:spring-web:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-exceldownload
+|pom
+|\extensions\vw\exceldownload
+|Apache Isis Ext - Wicket Viewer - Excel Download (parent)
+|A component for Apache Isis' Wicket viewer, providing an alternative representation of collections to be downloaded as an Excel spreadsheet.
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-exceldownload-ui
+|jar
+|\extensions\vw\exceldownload\ui
+|Apache Isis Ext - Wicket Viewer - Excel Download (ui)
+|_Components_
+
+* org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory
+
+_Dependencies_
+
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+* org.apache.poi:poi-ooxml:jar:<managed>
+* org.apache.poi:poi-ooxml-schemas:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-flyway
+|pom
+|\extensions\core\flyway
+|Apache Isis Ext - Flyway
+|Integrates Flyway when using any (relational) persistence store
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-flyway-impl
+|jar
+|\extensions\core\flyway\impl
+|Apache Isis Ext - Flyway Impl
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-config:jar:<managed>
+* org.flywaydb:flyway-core:jar:<managed>
+* org.springframework:spring-context:jar:<managed>
+* org.springframework:spring-jdbc:jar:<managed>
+* org.springframework.boot:spring-boot-autoconfigure:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-fullcalendar
+|pom
+|\extensions\vw\fullcalendar
+|Apache Isis Ext - Wicket Viewer - fullcalendar (parent)
+|A component for Apache Isis' Wicket viewer, displaying collections of objects that have a date on a fullcalendar.io (javascript widget).
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-fullcalendar-applib
+|jar
+|\extensions\vw\fullcalendar\applib
+|Apache Isis Ext - Wicket Viewer - fullcalendar (applib)
+|_Dependencies_
+
+* de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-fullcalendar-ui
+|jar
+|\extensions\vw\fullcalendar\ui
+|Apache Isis Ext - Wicket Viewer - fullcalendar (ui)
+|_Dependencies_
+
+* net.ftlines.wicket-fullcalendar:wicket-fullcalendar-core:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-modelannotation
+|jar
+|\extensions\core\model-annotation
+|Apache Isis Ext - @Model
+|Allows supporting methods to be annotated as @Model, to make explicit the bounds of the metamodel.
+
+_Components_
+
+* org.apache.isis.extensions.modelannotation.metamodel.services.IncubatorMetaModelPlugin
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-pdfjs
+|pom
+|\extensions\vw\pdfjs
+|Apache Isis Ext - Wicket Viewer - pdf.js (parent)
+|A component for Apache Isis' Wicket viewer, allowing BLOBs containing PDFs to be rendered in a panel using pdf.js.
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-pdfjs-applib
+|jar
+|\extensions\vw\pdfjs\applib
+|Apache Isis Ext - Wicket Viewer - pdf.js (applib)
+|_Dependencies_
+
+* de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-pdfjs-metamodel
+|jar
+|\extensions\vw\pdfjs\metamodel
+|Apache Isis Ext - Wicket Viewer - pdf.js (metamodel)
+|_Components_
+
+* org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotationFactory$Register
+
+_Dependencies_
+
+* de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-pdfjs-ui
+|jar
+|\extensions\vw\pdfjs\ui
+|Apache Isis Ext - Wicket Viewer - pdf.js (ui)
+|_Components_
+
+* org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components.PdfJsViewerPanelComponentFactory
+
+_Dependencies_
+
+* org.apache.isis.extensions:isis-extensions-pdfjs-metamodel:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-secman
+|pom
+|\extensions\security\secman
+|Apache Isis Ext - Sec Man
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.core:isis-core-security:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-secman-api
+|jar
+|\extensions\security\secman\api
+|Apache Isis Ext - Sec Man API
+|
+
+|org.apache.isis.extensions
+|isis-extensions-secman-encryption-jbcrypt
+|jar
+|\extensions\security\secman\encryption-jbcrypt
+|Apache Isis Ext - Sec Man Encryption (Using jbcrypt)
+|_Components_
+
+* org.apache.isis.extensions.secman.encryption.jbcrypt.services.PasswordEncryptionServiceUsingJBcrypt
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
+* org.mindrot:jbcrypt:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-secman-model
+|jar
+|\extensions\security\secman\model
+|Apache Isis Ext - Sec Man Model
+|_Components_
+
+* org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacetFactory$Register
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-api:jar:2.0.0-SNAPSHOT
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-secman-persistence-jdo
+|jar
+|\extensions\security\secman\persistence-jdo
+|Apache Isis Ext - Sec Man Persistence (Using JDO)
+|_Components_
+
+* org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository
+* org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository
+* org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancyRepository
+* org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository
+* org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-api:jar:2.0.0-SNAPSHOT
+* org.apache.isis.extensions:isis-extensions-secman-model:jar:2.0.0-SNAPSHOT
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
+* org.apache.isis.testing:isis-testing-fixtures-applib:jar:2.0.0-SNAPSHOT
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-secman-shiro-realm
+|jar
+|\extensions\security\secman\shiro-realm
+|Apache Isis Ext - Sec Man Realm (Using Shiro)
+|_Components_
+
+* org.apache.isis.extensions.secman.shiro.services.SecurityRealmServiceUsingShiro
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-api:jar:2.0.0-SNAPSHOT
+* org.apache.isis.security:isis-security-shiro:jar:<managed>
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-shiro-realm-ldap
+|pom
+|\extensions\security\shiro-realm-ldap
+|Apache Isis Ext - Security - Shiro LDAP Realm (parent)
+|Implementation of Shiro Realm using LDAP.
+
+
+
+|org.apache.isis.extensions
+|isis-extensions-shiro-realm-ldap-impl
+|jar
+|\extensions\security\shiro-realm-ldap\impl
+|Apache Isis Ext - Security - Shiro LDAP Realm (impl)
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.security:isis-security-shiro:jar:<managed>
+
+
+|===
+
+== Subdomains
+
+.Projects/Modules (Subdomains)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.subdomains
+|isis-subdomains
+|pom
+|\subdomains
+|Apache Isis Subdomains
+|A library of domain services and of supporting subdomains (often technical in nature), to be called from the
+		core domain of an Apache Isis applications.
+
+_Dependencies_
+
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-base
+|pom
+|\subdomains\base
+|Apache Isis Sub - Base (parent)
+|A module providing Base utilities for other subdomain modules
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-base-applib
+|jar
+|\subdomains\base\applib
+|Apache Isis Sub - Base (applib)
+|_Components_
+
+* org.apache.isis.subdomains.base.applib.services.calendar.CalendarService
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* org.apache.commons:commons-lang3:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+* org.reflections:reflections:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-docx
+|pom
+|\subdomains\docx
+|Apache Isis Sub - Docx (parent)
+|Uses the Apache POI library for mail merge functions of .docx Word documents
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-docx-applib
+|jar
+|\subdomains\docx\applib
+|Apache Isis Sub - Docx (applib)
+|_Dependencies_
+
+* org.apache.isis.core:isis-applib:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-excel
+|pom
+|\subdomains\excel
+|Apache Isis Sub - Excel (parent)
+|A domain service for Apache Isis', allowing collections
+        of (view model) objects to be exported/imported to/from an
+        Excel spreadsheet.  Also support for excel-based fixtures.
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-excel-applib
+|jar
+|\subdomains\excel\applib
+|Apache Isis Sub - Excel (applib)
+|_Components_
+
+* org.apache.isis.subdomains.excel.applib.dom.ExcelService
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.apache.poi:poi-ooxml:jar:<managed>
+* org.apache.poi:poi-ooxml-schemas:jar:<managed>
+* org.datanucleus:datanucleus-core:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-excel-fixtures
+|jar
+|\subdomains\excel\fixture
+|Apache Isis Sub - Excel (Fixtures)
+|_Dependencies_
+
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
+* org.apache.isis.subdomains:isis-subdomains-excel-applib:jar:<managed>
+* org.apache.isis.subdomains:isis-subdomains-excel-testing:jar:<managed>
+* org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-excel-integtests
+|jar
+|\subdomains\excel\integtests
+|Apache Isis Sub - Excel (Integ Tests)
+|_Dependencies_
+
+* org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
+* org.apache.isis.subdomains:isis-subdomains-excel-fixtures:jar:<managed>
+* org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
+* org.hsqldb:hsqldb:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-excel-testing
+|jar
+|\subdomains\excel\testing
+|Apache Isis Sub - Excel (testing support)
+|_Dependencies_
+
+* org.apache.isis.subdomains:isis-subdomains-excel-applib:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-freemarker
+|pom
+|\subdomains\freemarker
+|Apache Isis Sub - Freemarker (parent)
+|Integrates Freemarker Library
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-freemarker-applib
+|jar
+|\subdomains\freemarker\applib
+|Apache Isis Sub - Freemarker (applib)
+|_Dependencies_
+
+* org.apache.isis.core:isis-applib:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-ognl
+|pom
+|\subdomains\ognl
+|Apache Isis Sub - Ognl (parent)
+|Integrates Ognl Library
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-ognl-applib
+|jar
+|\subdomains\ognl\applib
+|Apache Isis Sub - Ognl (applib)
+|_Dependencies_
+
+* org.apache.isis.core:isis-applib:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-pdfbox
+|pom
+|\subdomains\pdfbox
+|Apache Isis Sub - PDF Box (parent)
+|Integrates PDF Box Library
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-pdfbox-applib
+|jar
+|\subdomains\pdfbox\applib
+|Apache Isis Sub - PDF Box (applib)
+|Integrates PDF Box Library
+
+_Dependencies_
+
+* org.apache.isis.core:isis-applib:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-spring
+|pom
+|\subdomains\spring
+|Apache Isis Sub - Spring (parent)
+|Utility services for interacting with the Spring application context (that hosts the Apache Isis application itself)
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-spring-applib
+|jar
+|\subdomains\spring\applib
+|Apache Isis Sub - Spring (applib)
+|_Components_
+
+* org.apache.isis.subdomains.spring.applib.service.SpringBeansService
+
+_Dependencies_
+
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-xdocreport
+|pom
+|\subdomains\xdocreport
+|Apache Isis Sub - XdocReport (parent)
+|Integrates XDoc Report Library
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-xdocreport-applib
+|jar
+|\subdomains\xdocreport\applib
+|Apache Isis Sub - XdocReport (applib)
+|_Components_
+
+* org.apache.isis.subdomains.xdocreport.applib.service.XDocReportService
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* fr.opensagres.xdocreport:fr.opensagres.xdocreport.converter.docx.xwpf:jar:<managed>
+* fr.opensagres.xdocreport:fr.opensagres.xdocreport.document.docx:jar:<managed>
+* fr.opensagres.xdocreport:fr.opensagres.xdocreport.template.freemarker:jar:<managed>
+* fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.core:jar:<managed>
+* fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.pdf:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-zip
+|pom
+|\subdomains\zip
+|Apache Isis Sub - Zip (parent)
+|A domain service for Apache Isis', for zipping utilities.
+
+
+
+|org.apache.isis.subdomains
+|isis-subdomains-zip-applib
+|jar
+|\subdomains\zip\applib
+|Apache Isis Sub - Zip (applib)
+|_Components_
+
+* org.apache.isis.extensions.zip.dom.impl.ZipService
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+|===
+
+== Tooling
+
+.Projects/Modules (Tooling)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.tooling
+|isis-tooling
+|pom
+|\tooling
+|Apache Isis - Tooling
+|Libraries and tools not depending on the _Apache Isis Core_ ecosystem, 
+        eg. code mining, automated documentation.
+        (Targeted for JVM 11+)
+
+_Dependencies_
+
+* com.google.code.findbugs:annotations:jar:2.0.1
+* org.junit.jupiter:junit-jupiter-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-engine:jar:<managed>
+* org.junit.vintage:junit-vintage-engine:jar:<managed>
+* org.mapstruct:mapstruct-processor:jar:1.3.1.Final
+* org.projectlombok:lombok:jar:<managed>
+* org.slf4j:slf4j-api:jar:<managed>
+* org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
+
+
+
+|org.apache.isis.tooling
+|isis-tooling-javamodel
+|jar
+|\tooling\javamodel
+|Apache Isis Tooling - Java Model (Code Mining)
+|Code mining library for Java bytecode introspection.
+
+_Dependencies_
+
+* guru.nidi:code-assert:jar:${code-assert.version}
+* org.apache.isis.commons:isis-commons:jar:<managed>
+
+
+
+|org.apache.isis.tooling
+|isis-tooling-model4adoc
+|jar
+|\tooling\model4adoc
+|Apache Isis Tooling - Model for AsciiDoc
+|Library for programmatic AsciiDoc generation. 
+        
+        The AsciiDoc name is trademarked by the Eclipse Foundation (https://www.eclipse.org/).
+		This project is *not* part of the specification effort for _AsciiDoc_ under the 
+		AsciiDoc Working Group. See https://projects.eclipse.org/proposals/asciidoc-language
+		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
+		help with transfer of source code, if any project (under the umbrella of the 
+		AsciiDoc Working Group) is willing to take over.
+
+_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.asciidoctor:asciidoctorj:jar:<managed>
+
+
+
+|org.apache.isis.tooling
+|isis-tooling-projectmodel
+|jar
+|\tooling\projectmodel
+|Apache Isis Tooling - Project Model (Code mining)
+|Code mining library for Gradle/Maven project module tree introspection.
+
+_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.maven:maven-model-builder:jar:<managed>
+* org.gradle:gradle-tooling-api:jar:<managed>
+
+
+|===
+
+== Examples
+
+.Projects/Modules (Examples)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+|===
+
+== Incubator
+
+.Projects/Modules (Incubator)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.incubator
+|isis-incubator
+|pom
+|\incubator
+|Apache Isis Incubator
+|Collection of Apache Isis extensions, subdomains or BC mappings, currently incubating.
+
+_Dependencies_
+
+* org.projectlombok:lombok:jar:<managed>
+
+
+|===
+
+== Legacy
+
+.Projects/Modules (Legacy)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.legacy
+|isis-legacy
+|pom
+|\legacy
+|Apache Isis Legacy
+|Collection of deprecated Apache Isis functionality, for removal.
+
+_Dependencies_
+
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.legacy
+|isis-legacy-applib
+|jar
+|\legacy\extensions\core\applib
+|Apache Isis Legacy - Applib
+|To ease migration from Apache Isis versions 1.16+ to 2.0.0.
+
+_Components_
+
+* org.apache.isis.legacy.applib.DomainObjectContainer
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+
+
+
+|org.apache.isis.legacy
+|isis-legacy-commons
+|jar
+|\legacy\extensions\core\commons
+|Apache Isis Legacy - Commons
+|To ease migration from Apache Isis versions 1.16+ to 2.0.0.
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+
+
+
+|org.apache.isis.legacy
+|isis-legacy-metamodel
+|jar
+|\legacy\extensions\core\metamodel
+|Apache Isis Legacy - Metamodel
+|To ease migration from Apache Isis versions 1.16+ to 2.0.0.
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+* org.apache.isis.legacy:isis-legacy-applib:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+
+
+
+|org.apache.isis.legacy
+|isis-legacy-restclient
+|jar
+|\legacy\mappings\restclient
+|Apache Isis Legacy - REST Client
+|As defined in Isis v1.x RO Applib.
+
+_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-applib:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.legacy
+|isis-legacy-runtime
+|jar
+|\legacy\extensions\core\runtime
+|Apache Isis Legacy - Runtime
+|To ease migration from Apache Isis versions 1.16+ to 2.0.0.
+
+_Dependencies_
+
+* com.google.guava:guava:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.legacy:isis-legacy-applib:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+
+
+|===
+
+
+

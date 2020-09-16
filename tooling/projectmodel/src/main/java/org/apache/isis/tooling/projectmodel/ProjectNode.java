@@ -23,6 +23,7 @@ import java.util.TreeSet;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
@@ -30,10 +31,15 @@ import lombok.val;
 @Data @Builder
 public class ProjectNode implements Comparable<ProjectNode> {
 
-    @ToString.Exclude private final ProjectNode parent;
-    @ToString.Exclude private final TreeSet<ProjectNode> children = new TreeSet<ProjectNode>(
+    @EqualsAndHashCode.Exclude @ToString.Exclude 
+    private final ProjectNode parent;
+    
+    @EqualsAndHashCode.Exclude @ToString.Exclude 
+    private final TreeSet<ProjectNode> children = new TreeSet<ProjectNode>(
             (a,b)->a.getName().compareTo(b.getName()));
-    @ToString.Exclude private final TreeSet<Dependency> dependencies = new TreeSet<Dependency>();
+    
+    @EqualsAndHashCode.Exclude @ToString.Exclude 
+    private final TreeSet<Dependency> dependencies = new TreeSet<Dependency>();
     
     private final ArtifactKey artifactKey;
     private final String name;
