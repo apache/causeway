@@ -23,11 +23,12 @@ import java.util.TreeSet;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
 
 @Data @Builder
-public class ProjectNode {
+public class ProjectNode implements Comparable<ProjectNode> {
 
     @ToString.Exclude private final ProjectNode parent;
     @ToString.Exclude private final TreeSet<ProjectNode> children = new TreeSet<ProjectNode>(
@@ -39,12 +40,47 @@ public class ProjectNode {
     private final String description;
     private final File projectDirectory;
     
-    public void depthFirst(ProjectVisitor projectVisitor) {
+    public void depthFirst(final @NonNull ProjectVisitor projectVisitor) {
         projectVisitor.accept(this);
         for(val child : getChildren()){
             child.depthFirst(projectVisitor);
         }
     }
+
+    public boolean contains(final @NonNull ProjectNode other) {
+        for(val child : getChildren()){
+            if(child.containsOrEquals(other)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean containsOrEquals(final @NonNull ProjectNode other) {
+        if(this.getArtifactKey().equals(other.getArtifactKey())) {
+            return true;
+        }
+        for(val child : getChildren()){
+            if(child.containsOrEquals(other)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // -- COMPARATOR
+    
+    @Override
+    public int compareTo(ProjectNode other) {
+        if(this.contains(other)) {
+            return -1;
+        }
+        if(other.contains(this)) {
+            return 1;
+        }
+        return this.getArtifactKey().compareTo(other.getArtifactKey());
+    }
+    
    
     
 }
