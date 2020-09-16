@@ -34,6 +34,8 @@ import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import lombok.val;
 
 import guru.nidi.codeassert.config.Language;
+import guru.nidi.codeassert.model.CodeClass;
+import guru.nidi.codeassert.model.Model;
 
 import static guru.nidi.codeassert.config.Language.JAVA;
 
@@ -65,10 +67,41 @@ class AnalyzerTest {
                 .map(sourceFile->_Files.toRelativePath(commonPath, sourceFile))
                 .map(s->s.replace("\\", "/"))
                 .map(s->s.replace("/src/main/java/org/apache/isis/", "o.a.i/"))
-                .peek(System.out::println)
+                //.peek(System.out::println) //debug
                 .collect(Collectors.toSet());
         
         assertHasSomeSourceFiles(sources);
+    }
+    
+    @Test
+    void testAnnotationGathering() {
+
+        val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
+        
+        val model = Model.from(analyzerConfig.getClasses()).read();
+        
+        Set<String> components = model.getClasses()
+            .stream()
+            .filter(codeClass->codeClass
+                    .getAnnotations()
+                    .stream()
+                    .map(CodeClass::getName)
+                    .anyMatch(name->name.startsWith("org.springframework.stereotype.")))
+            .map(CodeClass::getName)
+            .map(s->s.replace("org.apache.isis.", "o.a.i."))
+            //.peek(System.out::println) //debug
+            .collect(Collectors.toSet());
+        
+        assertHasSomeComponents(components);
+    }
+    
+    // -- HELPER
+    
+    private void assertHasSomeComponents(Set<String> components) {
+        assertTrue(components.contains("o.a.i.core.runtime.persistence.transaction.AuditerDispatchService"));
+        assertTrue(components.contains("o.a.i.core.runtime.persistence.transaction.ChangedObjectsService"));
+        assertTrue(components.contains("o.a.i.core.runtime.events.persistence.TimestampService"));
+        assertTrue(components.contains("o.a.i.core.runtime.events.RuntimeEventService"));
     }
     
     private void assertHasSomeSourceFiles(Set<String> sources) {
