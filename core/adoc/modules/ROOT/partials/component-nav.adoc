@@ -6,5 +6,5 @@ include::core:metamodel:partial$module-nav.adoc[]
 include::core:runtime:partial$module-nav.adoc[]
 include::core:runtime-services:partial$module-nav.adoc[]
 include::core:webapp:partial$module-nav.adoc[]
-include::core:smoketests:partial$module-nav.adoc[]
+include::core:regressiontests:partial$module-nav.adoc[]
 
