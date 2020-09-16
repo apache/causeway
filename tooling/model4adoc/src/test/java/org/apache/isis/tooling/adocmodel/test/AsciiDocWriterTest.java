@@ -85,7 +85,7 @@ class AsciiDocWriterTest {
         
         String actualAdoc = AsciiDocWriter.toString(doc); 
         
-        System.out.println(actualAdoc);
+        //System.out.println(actualAdoc); debug
         
         assertEquals(adocRef, actualAdoc);
         

@@ -1530,6 +1530,64 @@ _Dependencies_
 
 |===
 
+== Regression Tests
+
+.Projects/Modules (Regression Tests)
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.regressiontests
+|isis-regressiontests
+|pom
+|\regressiontests
+|Apache Isis - Regression Tests
+|Collection of JUnit tests covering core functionalities of the framework.
+        (Targeted for JVM 11+)
+
+_Dependencies_
+
+* org.apache.directory.server:apacheds-test-framework:jar:2.0.0.AM25
+* org.apache.isis.extensions:isis-extensions-modelannotation:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-model:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-shiro-realm-ldap-impl:jar:<managed>
+* org.apache.isis.mappings:isis-mappings-restclient-api:jar:<managed>
+* org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed>
+* org.apache.isis.mavendeps:isis-mavendeps-jdk11:pom:<managed>
+* org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed>
+* org.apache.isis.security:isis-security-shiro:jar:<managed>
+* org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-common:jar:<managed>
+* org.eclipse.persistence:org.eclipse.persistence.moxy:jar:2.7.5
+* org.glassfish:javax.json:jar:1.1.4
+* org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.regressiontests
+|isis-regressiontests-stable
+|jar
+|\regressiontests\stable
+|Apache Isis - Regression Tests (stable)
+|_Components_
+
+* org.apache.isis.testdomain.auditing.AuditerServiceForTesting
+* org.apache.isis.testdomain.conf.Configuration_headless$HeadlessCommandSupport
+* org.apache.isis.testdomain.publishing.PublisherServiceForTesting
+* org.apache.isis.testdomain.util.kv.KVStoreForTesting
+* org.apache.isis.testdomain.util.rest.RestEndpointService
+
+_Dependencies_
+
+* org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
+
+
+|===
+
 == Extensions
 
 .Projects/Modules (Extensions)
@@ -2223,6 +2281,288 @@ _Dependencies_
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
 |Group |Artifact |Type |Folder |Name |Description 
+
+|org.apache.isis.examples.apps
+|demo-parent
+|pom
+|\examples\demo
+|Demo - Parent
+|_Dependencies_
+
+* com.h2database:h2:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-exceldownload-ui:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-modelannotation:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-model:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed>
+* org.apache.isis.mavendeps:isis-mavendeps-jdk11:pom:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo-dn5:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo-dn5:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.examples.apps
+|demo-domain
+|jar
+|\examples\demo\domain
+|Demo - Domain
+|_Components_
+
+* demoapp.dom._infra.DefaultTitleProvider
+* demoapp.dom._infra.LibraryPreloadingService
+* demoapp.dom._infra.fixtures.DemoFixtureScriptSpecificationProvider
+* demoapp.dom._infra.resources.AsciiDocConverterService
+* demoapp.dom._infra.resources.AsciiDocReaderService
+* demoapp.dom._infra.resources.MarkdownReaderService
+* demoapp.dom._infra.resources.MarkupReaderService
+* demoapp.dom._infra.resources.MarkupVariableResolverService
+* demoapp.dom._infra.resources.ResourceReaderService
+* demoapp.dom._infra.samples.NameSamples
+* demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory
+* demoapp.dom.annotDomain.Action.command.ActionCommandJdoEntities
+* demoapp.dom.annotDomain.Action.command.ActionCommandJdoSeedService
+* demoapp.dom.annotDomain.Action.command.spiimpl.CommandServiceSpiForActions
+* demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdoEntities
+* demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdoSeedService
+* demoapp.dom.annotDomain.Action.publishing.spiimpl.PublisherServiceSpiForActions
+* demoapp.dom.annotDomain.DomainObject.publishing.annotated.disabled.DomainObjectPublishingDisabledJdoEntities
+* demoapp.dom.annotDomain.DomainObject.publishing.annotated.disabled.DomainObjectPublishingDisabledJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled.DomainObjectPublishingEnabledJdoEntities
+* demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled.DomainObjectPublishingEnabledJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.enabled.DomainObjectPublishingEnabledMetaAnnotatedJdoEntities
+* demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.enabled.DomainObjectPublishingEnabledMetaAnnotatedJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.enabled.DomainObjectPublishingEnabledMetaAnnotOverriddenJdoEntities
+* demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.enabled.DomainObjectPublishingEnabledMetaAnnotOverriddenJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.publishing.spiimpl.PublisherServiceSpiForDomainObject
+* demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoEntities
+* demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoSeedService
+* demoapp.dom.annotDomain.Property.publishing.spiimpl.PublisherServiceSpiForProperties
+* demoapp.dom.annotLayout.PropertyLayout.navigable.FileTreeNodeService
+* demoapp.dom.annotLayout.PropertyLayout.repainting.PdfJsViewerAdvisorFallback
+* demoapp.dom.error.service.DemoErrorReportingService
+* demoapp.dom.events.DemoEventSubscriber
+* demoapp.dom.events.EventLogRepository
+* demoapp.dom.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo
+* demoapp.dom.extensions.secman.apptenancy.entities.TenantedJdoEntities
+* demoapp.dom.extensions.secman.apptenancy.entities.seed.TenantedJdoSeedService
+* demoapp.dom.jee.DemoRequestScopedBean
+* demoapp.dom.jee.JeeDemoService
+* demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities
+* demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoSeedService
+* demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples
+* demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities
+* demoapp.dom.types.isis.clobs.jdo.IsisClobJdoSeedService
+* demoapp.dom.types.isis.clobs.samples.IsisClobsSamples
+* demoapp.dom.types.isis.images.jdo.IsisImageJdoEntities
+* demoapp.dom.types.isis.images.jdo.IsisImageJdoSeedService
+* demoapp.dom.types.isis.images.samples.IsisImagesSamples
+* demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities
+* demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoSeedService
+* demoapp.dom.types.isis.localresourcepaths.samples.IsisLocalResourcePathsSamples
+* demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoEntities
+* demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoSeedService
+* demoapp.dom.types.isis.markups.samples.IsisMarkupSamples
+* demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities
+* demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoSeedService
+* demoapp.dom.types.isis.passwords.samples.IsisPasswordsSamples
+* demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoEntities
+* demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoSeedService
+* demoapp.dom.types.isisext.asciidocs.samples.IsisAsciiDocSamples
+* demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities
+* demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoSeedService
+* demoapp.dom.types.isisext.markdowns.samples.IsisMarkdownSamples
+* demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoEntities
+* demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoSeedService
+* demoapp.dom.types.javaawt.images.samples.JavaAwtImageService
+* demoapp.dom.types.javaawt.images.samples.JavaAwtImagesSamples
+* demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities
+* demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoSeedService
+* demoapp.dom.types.javalang.booleans.samples.WrapperBooleanSamples
+* demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoEntities
+* demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoSeedService
+* demoapp.dom.types.javalang.bytes.samples.WrapperByteSamples
+* demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities
+* demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoSeedService
+* demoapp.dom.types.javalang.characters.samples.WrapperCharacterSamples
+* demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities
+* demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoSeedService
+* demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples
+* demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities
+* demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoSeedService
+* demoapp.dom.types.javalang.floats.samples.WrapperFloatSamples
+* demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoEntities
+* demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoSeedService
+* demoapp.dom.types.javalang.integers.samples.WrapperIntegerSamples
+* demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoEntities
+* demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoSeedService
+* demoapp.dom.types.javalang.longs.samples.WrapperLongSamples
+* demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoEntities
+* demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoSeedService
+* demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples
+* demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities
+* demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoSeedService
+* demoapp.dom.types.javalang.strings.samples.JavaLangStringSamples
+* demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities
+* demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoSeedService
+* demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples
+* demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities
+* demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoSeedService
+* demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples
+* demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities
+* demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoSeedService
+* demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples
+* demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities
+* demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoSeedService
+* demoapp.dom.types.javasql.javasqldate.samples.JavaSqlDateSamples
+* demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoEntities
+* demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoSeedService
+* demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples
+* demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities
+* demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoSeedService
+* demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples
+* demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities
+* demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoSeedService
+* demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples
+* demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities
+* demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoSeedService
+* demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples
+* demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities
+* demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoSeedService
+* demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples
+* demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities
+* demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoSeedService
+* demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples
+* demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities
+* demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoSeedService
+* demoapp.dom.types.javautil.javautildate.samples.JavaUtilDateSamples
+* demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities
+* demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoSeedService
+* demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples
+* demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities
+* demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoSeedService
+* demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples
+* demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities
+* demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoSeedService
+* demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples
+* demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities
+* demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoSeedService
+* demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples
+* demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities
+* demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoSeedService
+* demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities
+* demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoSeedService
+* demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities
+* demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoSeedService
+* demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoEntities
+* demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoSeedService
+* demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities
+* demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoSeedService
+* demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoEntities
+* demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoSeedService
+* demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoEntities
+* demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoSeedService
+* demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities
+* demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoSeedService
+* demoapp.dom.types.tuple.NumberConstantRepository
+* demoapp.dom.viewmodels.jaxbrefentity.ChildJdoEntities
+* demoapp.dom.viewmodels.jaxbrefentity.seed.ChildJdoSeedService
+
+_Dependencies_
+
+* com.h2database:h2:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-exceldownload-ui:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-modelannotation:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-model:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed>
+* org.apache.isis.testing:isis-testing-h2console-ui:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
+* org.assertj:assertj-core:jar:3.16.1
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.examples.apps
+|demo-javafx
+|jar
+|\examples\demo\javafx
+|Demo - JavaFX
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
+* org.apache.isis.core:isis-core-security:jar:<managed>
+* org.apache.isis.examples.apps:demo-domain:jar:${project.version}
+* org.apache.isis.incubator.viewer:isis-viewer-javafx-viewer:jar:${project.version}
+* org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed>
+* org.apache.isis.mavendeps:isis-mavendeps-jdk11:pom:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
+* org.apache.isis.security:isis-security-bypass:jar:<managed>
+* org.apache.isis.security:isis-security-shiro:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui:pom:${project.version}
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-ui:pom:${project.version}
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.examples.apps
+|demo-vaadin
+|jar
+|\examples\demo\vaadin
+|Demo - Vaadin
+|_Dependencies_
+
+* org.apache.isis.examples.apps:demo-web:jar:${project.version}
+* org.apache.isis.incubator.viewer:isis-viewer-vaadin-viewer:jar:${project.version}
+* org.apache.isis.mavendeps:isis-mavendeps-jdk11:pom:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-vaa:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt:jar:<managed>
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.examples.apps
+|demo-web
+|jar
+|\examples\demo\web
+|Demo - Web
+|_Components_
+
+* demoapp.web._infra.utils.ThereCanBeOnlyOne
+
+_Dependencies_
+
+* org.apache.isis.examples.apps:demo-domain:jar:${project.version}
+* org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed>
+* org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed>
+
+
+
+|org.apache.isis.examples.apps
+|demo-wicket
+|jar
+|\examples\demo\wicket
+|Demo - Wicket
+|_Dependencies_
+
+* org.apache.isis.examples.apps:demo-web:jar:${project.version}
+* org.apache.isis.extensions:isis-extensions-pdfjs-ui:jar:<managed>
+* org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt:jar:<managed>
+* org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt:jar:<managed>
+
+
 |===
 
 == Incubator
@@ -2242,6 +2582,150 @@ _Dependencies_
 _Dependencies_
 
 * org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis.incubator.clients
+|isis-client-kroviz
+|jar
+|\incubator\clients\kroviz
+|Apache Isis Inc - Client kroViz
+|Initial sketches
+
+
+
+|org.apache.isis.incubator.viewer
+|isis-viewer-javafx
+|pom
+|\incubator\viewers\javafx
+|Apache Isis Inc - Viewer JavaFX
+|Initial sketches
+
+
+
+|org.apache.isis.incubator.viewer
+|isis-viewer-javafx-model
+|jar
+|\incubator\viewers\javafx\model
+|Apache Isis Inc - Viewer JavaFX (Model)
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-common:jar:<managed>
+* org.openjfx:javafx-base:jar:<managed>
+* org.openjfx:javafx-controls:jar:<managed>
+* org.openjfx:javafx-fxml:jar:<managed>
+* org.openjfx:javafx-swing:jar:<managed>
+* org.openjfx:javafx-web:jar:<managed>
+
+
+
+|org.apache.isis.incubator.viewer
+|isis-viewer-javafx-ui
+|jar
+|\incubator\viewers\javafx\ui
+|Apache Isis Inc - Viewer JavaFX (UI Components)
+|_Components_
+
+* org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx
+* org.apache.isis.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory
+* org.apache.isis.incubator.viewer.javafx.ui.components.number.NumberFieldFactory
+* org.apache.isis.incubator.viewer.javafx.ui.components.objectref.ObjectReferenceFieldFactory
+* org.apache.isis.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory
+* org.apache.isis.incubator.viewer.javafx.ui.components.temporal.TemporalFieldFactory
+* org.apache.isis.incubator.viewer.javafx.ui.components.text.TextFieldFactory
+* org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton
+* org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField
+* org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForLabeled
+* org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForMenuItem
+* org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefault
+* org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton
+* org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField
+* org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider
+* org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx
+* org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandlerFx
+* org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilderFx
+* org.apache.isis.incubator.viewer.javafx.ui.main.UiContextFxDefault
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
+* org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed>
+
+
+
+|org.apache.isis.incubator.viewer
+|isis-viewer-javafx-viewer
+|jar
+|\incubator\viewers\javafx\viewer
+|Apache Isis Inc - Viewer JavaFX (Viewer)
+|_Dependencies_
+
+* org.apache.isis.incubator.viewer:isis-viewer-javafx-ui:jar:<managed>
+
+
+
+|org.apache.isis.incubator.viewer
+|isis-viewer-vaadin
+|pom
+|\incubator\viewers\vaadin
+|Apache Isis Inc - Viewer Vaadin
+|Initial sketches
+
+
+
+|org.apache.isis.incubator.viewer
+|isis-viewer-vaadin-model
+|jar
+|\incubator\viewers\vaadin\model
+|Apache Isis Inc - Viewer Vaadin (Model)
+|_Dependencies_
+
+* com.vaadin:vaadin:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-webapp:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-common:jar:<managed>
+
+
+
+|org.apache.isis.incubator.viewer
+|isis-viewer-vaadin-ui
+|jar
+|\incubator\viewers\vaadin\ui
+|Apache Isis Inc - Viewer Vaadin (UI Components)
+|_Components_
+
+* org.apache.isis.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa
+* org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler
+* org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa
+* org.apache.isis.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory
+* org.apache.isis.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory
+* org.apache.isis.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory
+* org.apache.isis.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory
+* org.apache.isis.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory
+* org.apache.isis.incubator.viewer.vaadin.ui.components.text.TextFieldFactory
+* org.apache.isis.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory
+* org.apache.isis.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa
+* org.apache.isis.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault
+
+_Dependencies_
+
+* com.vaadin:vaadin:jar:<managed>
+* com.vaadin:vaadin-spring:jar:<managed>
+* commons-fileupload:commons-fileupload:jar:1.4
+* org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
+* org.apache.isis.incubator.viewer:isis-viewer-vaadin-model:jar:<managed>
+
+
+
+|org.apache.isis.incubator.viewer
+|isis-viewer-vaadin-viewer
+|jar
+|\incubator\viewers\vaadin\viewer
+|Apache Isis Inc - Viewer Vaadin (Viewer)
+|_Dependencies_
+
+* org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:<managed>
 
 
 |===
@@ -2362,6 +2846,3 @@ _Dependencies_
 
 
 |===
-
-
-
