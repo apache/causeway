@@ -1,0 +1,385 @@
+.Project/Module Overview
+[cols="2m,2m,1m,1m,2,5a", options="header"]
+|===
+|Group |Artifact |Type |Folder |Name |Description
+
+|org.apache.isis
+|isis-all
+|pom
+|
+|Apache Isis (Aggregator)
+|Convenience aggregator POM that references all modules.
+The parent POM of the core framework is isis-parent/pom.xml
+
+
+
+|org.apache.isis
+|antora
+|pom
+|\antora
+|Apache Isis Antora
+|
+
+|org.apache.isis
+|isis-parent
+|pom
+|\isis-parent
+|Apache Isis
+|Parent for the core framework + extensions, starter parent pom for starter apps.
+
+
+
+|org.apache.isis.app
+|isis-app-starter-parent
+|pom
+|\starters
+|Apache Isis Starter Parent
+|Parent pom providing dependency and plugin management for Apache Isis applications
+built with Maven.  Builds on top of spring-boot-starter-parent.
+
+
+
+|org.apache.isis.core
+|isis-core
+|pom
+|\core
+|Apache Isis Core
+|Core framework, providing metamodel, runtime and core APIs.
+
+_Dependencies_
+
+* org.projectlombok:lombok:jar:<managed>
+
+
+
+|org.apache.isis
+|supplemental-model
+|jar
+|\supplemental-model
+|Apache Isis Supplemental - Legal Info
+|For example, the templates used by many Apache distributions assemble a listing of project dependencies
+according to their organization name (and URL), along with the URL each project's website. When dependency
+POMs are missing this information, the dependency notice file that the Remote Resources Plugin renders can
+be invalid.
+To compensate for incomplete dependency POMs, we use the supplemental models support.
+
+
+
+|org.apache.isis.commons
+|isis-commons
+|jar
+|\commons
+|Apache Isis Commons
+|Isis library, defining utilities (potentially) required by the entire Apache Isis ecosystem.
+
+_Components_
+
+* org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment
+
+_Dependencies_
+
+* com.fasterxml.jackson.core:jackson-databind:jar:<managed>
+* com.google.code.findbugs:annotations:jar:<managed>
+* javax:javaee-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-engine:jar:<managed>
+* org.junit.vintage:junit-vintage-engine:jar:<managed>
+* org.slf4j:slf4j-api:jar:<managed>
+* org.springframework:spring-context:jar:<managed>
+* org.springframework:spring-tx:jar:<managed>
+* org.springframework.boot:spring-boot-starter:jar:<managed>
+* org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-applib
+|jar
+|\api\applib
+|Apache Isis Core - AppLib
+|Isis application library, defining annotations and utilities for the
+default (Java) programming model.
+
+_Components_
+
+* org.apache.isis.applib.annotation.DomainObject
+* org.apache.isis.applib.annotation.DomainService
+* org.apache.isis.applib.annotation.Mixin
+* org.apache.isis.applib.annotation.ViewModel
+* org.apache.isis.applib.services.audit.AuditerServiceLogging
+* org.apache.isis.applib.services.clock.ClockService
+* org.apache.isis.applib.services.command.CommandContext
+* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto
+* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto$CopyOverFromCommand
+* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandsDto
+* org.apache.isis.applib.services.iactn.InteractionContext
+* org.apache.isis.applib.services.jaxb.JaxbServiceDefault
+* org.apache.isis.applib.services.publish.PublisherServiceLogging
+* org.apache.isis.applib.services.session.SessionLoggingServiceLogging
+* org.apache.isis.applib.services.wrapper.control.AsyncControlService
+
+_Dependencies_
+
+* com.google.code.findbugs:annotations:jar:<managed>
+* javax:javaee-api:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-schema:jar:<managed>
+* org.assertj:assertj-core:jar:<managed>
+* org.jmock:jmock:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-codegen-bytebuddy
+|jar
+|\core\codegen-bytebuddy
+|Apache Isis Core - Code Gen (ByteBuddy)
+|Code generation using ByteBuddy.
+
+_Components_
+
+* org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy
+
+_Dependencies_
+
+* net.bytebuddy:byte-buddy:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.jmock:jmock-junit4:jar:<managed>
+* org.objenesis:objenesis:jar:${objenesis.version}
+
+
+
+|org.apache.isis.core
+|isis-core-config
+|jar
+|\core\config
+|Apache Isis Core - Configuration
+|Isis configuration library for framework internal use.
+
+_Components_
+
+* org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring
+* org.apache.isis.core.config.converters.PatternsConverter
+* org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator
+* org.apache.isis.core.config.viewer.wicket.WebAppContextPath
+
+_Dependencies_
+
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.hibernate.validator:hibernate-validator:jar:<managed>
+* org.springframework.boot:spring-boot-configuration-processor:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-internaltestsupport
+|jar
+|\core\internaltestsupport
+|Apache Isis Core - Unit Test Support
+|Support for writing unit tests in either JUnit 4 or JUnit 5; should be added as a dependency with scope=test only
+
+_Dependencies_
+
+* net.bytebuddy:byte-buddy:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.core:isis-core-codegen-bytebuddy:jar:<managed>
+* org.assertj:assertj-core:jar:<managed>
+* org.datanucleus:javax.jdo:jar:<managed>
+* org.hamcrest:hamcrest-library:jar:<managed>
+* org.jmock:jmock:jar:<managed>
+* org.jmock:jmock-junit4:jar:<managed>
+* org.junit.jupiter:junit-jupiter-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-engine:jar:<managed>
+* org.junit.vintage:junit-vintage-engine:jar:<managed>
+* org.mockito:mockito-core:jar:<managed>
+* org.picocontainer:picocontainer:jar:<managed>
+* org.slf4j:slf4j-api:jar:${slf4j-api.version}
+* org.springframework:spring-test:jar:<managed>
+* org.springframework.boot:spring-boot-starter-test:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-metamodel
+|jar
+|\core\metamodel
+|Apache Isis Core - MetaModel
+|_Components_
+
+* org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner
+* org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider
+* org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault
+* org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault
+* org.apache.isis.core.metamodel.services.ServiceInjectorDefault
+* org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory
+* org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault
+* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault
+* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections
+* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForDomainObjects
+* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry
+* org.apache.isis.core.metamodel.services.events.MetamodelEventService
+* org.apache.isis.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException
+* org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault
+* org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb
+* org.apache.isis.core.metamodel.services.grid.GridServiceDefault
+* org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3
+* org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault
+* org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault
+* org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault
+* org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceDefault
+* org.apache.isis.core.metamodel.services.title.TitleServiceDefault
+* org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault
+* org.apache.isis.core.metamodel.specloader.ProgrammingModelServiceDefault
+* org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault
+* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault
+* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin
+* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections
+* org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry
+
+_Dependencies_
+
+* io.swagger:swagger-core:jar:<managed>
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-config:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-security:jar:<managed>
+* org.hibernate.validator:hibernate-validator:jar:<managed>
+* org.jmock:jmock:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-runtime
+|jar
+|\core\runtime
+|Apache Isis Core - Runtime
+|_Components_
+
+* org.apache.isis.core.runtime.events.RuntimeEventService
+* org.apache.isis.core.runtime.events.persistence.TimestampService
+* org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService
+* org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-runtimeservices
+|jar
+|\core\runtimeservices
+|Apache Isis Core - Runtime Services
+|Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.
+
+_Components_
+
+* org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault
+* org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault
+* org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault
+* org.apache.isis.core.runtimeservices.command.CommandServiceDefault
+* org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
+* org.apache.isis.core.runtimeservices.email.EmailServiceDefault
+* org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring
+* org.apache.isis.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault
+* org.apache.isis.core.runtimeservices.factory.FactoryServiceDefault
+* org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault
+* org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo
+* org.apache.isis.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault
+* org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault
+* org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3
+* org.apache.isis.core.runtimeservices.message.MessageServiceDefault
+* org.apache.isis.core.runtimeservices.publish.PublisherDispatchServiceDefault
+* org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault
+* org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault
+* org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault
+* org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault
+* org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault
+* org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault
+* org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression
+* org.apache.isis.core.runtimeservices.user.UserServiceDefault
+* org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi
+* org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault
+* org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault
+* org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault
+* org.apache.isis.core.runtimeservices.xactn.TransactionServiceSpring
+* org.apache.isis.core.runtimeservices.xml.XmlServiceDefault
+* org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-codegen-bytebuddy:jar:<managed>
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.hsqldb:hsqldb:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-security
+|jar
+|\core\security
+|Apache Isis Core - Security
+|_Components_
+
+* org.apache.isis.core.security.authentication.manager.AuthenticationManager
+* org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault
+* org.apache.isis.core.security.authorization.manager.AuthorizationManager
+
+_Dependencies_
+
+* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.core:isis-core-config:jar:<managed>
+* org.hamcrest:hamcrest-library:jar:<managed>
+* org.jmock:jmock-junit4:jar:<managed>
+* org.junit.jupiter:junit-jupiter-api:jar:<managed>
+* org.junit.jupiter:junit-jupiter-engine:jar:<managed>
+* org.junit.vintage:junit-vintage-engine:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-core-webapp
+|jar
+|\core\webapp
+|Apache Isis Core - WebApp
+|Bundles all the web specific classes a srequired by viewers.
+Introduced to keep the 'runtime' package concise.
+
+_Components_
+
+* org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService
+* org.apache.isis.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger
+* org.apache.isis.core.webapp.modules.templresources.WebModuleTemplateResources
+* org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.springframework:spring-web:jar:<managed>
+* org.springframework.boot:spring-boot:jar:<managed>
+* org.springframework.boot:spring-boot-actuator:jar:<managed>
+* org.springframework.boot:spring-boot-starter-thymeleaf:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-schema
+|jar
+|\api\schema
+|Apache Isis Core - Schemas
+|Apache Isis schemas, for conversion into canonical DTOs (for use in integration scenarios).
+
+_Dependencies_
+
+* joda-time:joda-time:jar:<managed>
+* org.springframework:spring-context:jar:<managed>
+
+
+|===
