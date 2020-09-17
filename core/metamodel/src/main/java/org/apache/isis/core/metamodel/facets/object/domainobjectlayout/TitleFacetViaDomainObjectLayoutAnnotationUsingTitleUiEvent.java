@@ -38,6 +38,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
+import lombok.val;
+
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends TitleFacetAbstract {
 
     public static Facet create(
@@ -46,24 +48,26 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
+        val isPostForDefault = configuration
+                .getApplib()
+                .getAnnotation()
+                .getDomainObjectLayout()
+                .getTitleUiEvent()
+                .isPostForDefault();
+        
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::titleUiEvent)
                 .filter(titleUiEvent -> EventUtil.eventTypeIsPostable(
                         titleUiEvent,
                         TitleUiEvent.Noop.class,
                         TitleUiEvent.Default.class,
-                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getTitleUiEvent().isPostForDefault()))
+                        isPostForDefault))
                 .map(titleUiEventClass -> {
-                    final String translationContext;
-                    if(facetHolder instanceof ObjectSpecification) {
-                        final ObjectSpecification facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
-                        translationContext = facetHolderAsSpec.getCorrespondingClass().getCanonicalName();    
-                    } else {
-                        translationContext = null;
-                    }
-
                     return new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
-                            titleUiEventClass, translationContext, metamodelEventService, facetHolder);
+                            titleUiEventClass, 
+                            translationContextFor(facetHolder), 
+                            metamodelEventService, 
+                            facetHolder);
                 })
                 .orElse(null);
     }
@@ -91,6 +95,13 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         if(owningAdapter == null) {
             return null;
         }
+        
+        val underlyingTitleFacet = underlyingTitleFacet();
+        if(underlyingTitleFacet != null) {
+            // underlyingTitleFacet always takes precedence
+            return underlyingTitleFacet.title(owningAdapter);
+        }
+        
 
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
@@ -100,19 +111,33 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         if(translatedTitle != null) {
             return translatedTitle.translate(translationService, translationContext);
         }
-        final String title = titleUiEvent.getTitle();
-
-        if(title == null) {
-            // ie no subscribers out there...
-            final Facet underlyingFacet = getUnderlyingFacet();
-            if(underlyingFacet instanceof TitleFacet) {
-                final TitleFacet underlyingTitleFacet = (TitleFacet) underlyingFacet;
-                return underlyingTitleFacet.title(owningAdapter);
-            }
+        return titleUiEvent.getTitle();
+    }
+    
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("titleUiEventClass", titleUiEventClass);
+    }
+    
+    // -- HELPER
+    
+    private TitleFacet underlyingTitleFacet() {
+        val underlyingFacet = getUnderlyingFacet();
+        if(underlyingFacet instanceof TitleFacet) {
+            return (TitleFacet) underlyingFacet;
         }
-        return title;
+        return null;
     }
 
+    private static String translationContextFor(final FacetHolder facetHolder) {
+        if(facetHolder instanceof ObjectSpecification) {
+            val facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
+            return facetHolderAsSpec.getCorrespondingClass().getCanonicalName();    
+        } 
+        return null;
+    }
+    
     private TitleUiEvent<Object> newTitleUiEvent(final ManagedObject owningAdapter) {
         final Object domainObject = owningAdapter.getPojo();
         return newTitleUiEvent(domainObject);
@@ -128,8 +153,5 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("titleUiEventClass", titleUiEventClass);
-    }
+
 }
