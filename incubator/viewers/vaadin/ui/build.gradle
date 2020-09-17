@@ -1,8 +1,8 @@
 group = 'org.apache.isis.incubator.viewer'
 description = 'Apache Isis Inc - Viewer Vaadin (UI Components)'
 dependencies {
-    compile project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-model')
-    compile project(':isis-parent:isis:isis-core-runtimeservices')
+    compile project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-model')
+    compile project(':org.apache.isis.core:isis-core-runtimeservices')
     compile(Libs.vaadin)
     compile(Libs.vaadinSpring) {
         exclude(module: 'commons-fileupload')

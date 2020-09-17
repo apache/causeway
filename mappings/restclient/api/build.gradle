@@ -1,8 +1,8 @@
 group = 'org.apache.isis.mappings'
 description = 'Apache Isis Ext - REST Client'
 dependencies {
-    compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis-commons')
+    compile project(':org.apache.isis.core:isis-applib')
+    compile project(':org.apache.isis.commons:isis-commons')
     compile (Libs.springContext)
 }
 

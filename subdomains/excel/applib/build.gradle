@@ -1,14 +1,14 @@
 group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - Excel (applib)'
 dependencies {
-    compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-core-runtime')
-    compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
+    compile project(':org.apache.isis.core:isis-applib')
+    compile project(':org.apache.isis.core:isis-core-runtime')
+    compile project(':org.apache.isis.testing:isis-testing-fixtures-applib')
     compile(Libs.guava)
     compile(Libs.datanucleusCore)
     compile(Libs.poiOoxml)
     compile(Libs.poiOoxmlSchemas)
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 }
 
 task packageTests(type: Jar) {

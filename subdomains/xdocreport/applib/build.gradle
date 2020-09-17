@@ -1,13 +1,13 @@
 group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - XdocReport (applib)'
 dependencies {
-    compile project(':isis-parent:isis-applib')
+    compile project(':org.apache.isis.core:isis-applib')
     compile(Libs.xdocreportDocx)
     compile(Libs.xdocreportFreemarker)
     compile(Libs.xdocreportXwpf)
     compile(Libs.xdocreportPdf)
     compile(Libs.xdocreportCore)
-    testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
+    testCompile project(':org.apache.isis.testing:isis-testing-unittestsupport-applib')
     testCompile(Libs.guava)
 }
 

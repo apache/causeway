@@ -24,9 +24,9 @@ sourceSets {
 }
 
 dependencies {
-    compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-core-config')
-    compile project(':isis-parent:isis:isis-core-security')
+    compile project(':org.apache.isis.core:isis-applib')
+    compile project(':org.apache.isis.core:isis-core-config')
+    compile project(':org.apache.isis.core:isis-core-security')
     compile(Libs.swaggerCore) {
         exclude(module: 'guava')
         exclude(module: 'validation-api')
@@ -34,9 +34,9 @@ dependencies {
         exclude(module: 'slf4j-api')
         exclude(module: 'commons-lang3')
     }
-    compile project(':isis-parent:isis-commons')
+    compile project(':org.apache.isis.commons:isis-commons')
 
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 
     testCompile(Libs.junitJupiterApi)
     testCompile(Libs.junitJupiterEngine)

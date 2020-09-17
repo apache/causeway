@@ -1,7 +1,7 @@
 description = 'Apache Isis Core - Security'
 dependencies {
-    compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-core-config')
+    compile project(':org.apache.isis.core:isis-applib')
+    compile project(':org.apache.isis.core:isis-core-config')
     compile(Libs.springBootStarterLog4j2) {
         exclude(module: 'slf4j-api')
     }

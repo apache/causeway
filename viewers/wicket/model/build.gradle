@@ -8,10 +8,10 @@ dependencies {
     compile(Libs.wicketExtensions) {
         exclude(module: 'slf4j-api')
     }
-    compile project(':isis-parent:isis:isis-core-webapp')
-    compile project(':isis-parent:isis:isis-viewer-common')
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
+    compile project(':org.apache.isis.core:isis-core-webapp')
+    compile project(':org.apache.isis.viewer:isis-viewer-common')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.testing:isis-testing-unittestsupport-applib')
     testCompile(Libs.guava)
 }
 

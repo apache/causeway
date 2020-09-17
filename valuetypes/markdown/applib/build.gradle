@@ -1,7 +1,7 @@
 group = 'org.apache.isis.valuetypes'
 description = 'Apache Isis Val - Markdown (applib)'
 dependencies {
-    compile project(':isis-parent:isis-applib')
+    compile project(':org.apache.isis.core:isis-applib')
     compileOnly(Libs.flexmarkAll)
 }
 

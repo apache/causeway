@@ -1,9 +1,9 @@
 group = 'org.apache.isis.valuetypes'
 description = 'Apache Isis Val - Markdown (ui)'
 dependencies {
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib')
-    compile project(':isis-parent:isis:isis-core-metamodel')
-    compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-applib')
+    compile project(':org.apache.isis.core:isis-core-metamodel')
+    compile project(':org.apache.isis.viewer:isis-viewer-wicket-ui')
     compile(Libs.flexmarkAll) {
         exclude(module: 'jsoup')
     }

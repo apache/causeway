@@ -1,7 +1,7 @@
 group = 'org.apache.isis.security'
 description = 'Apache Isis Security - Bypass'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-runtimeservices')
+    compile project(':org.apache.isis.core:isis-core-runtimeservices')
 }
 
 task packageTests(type: Jar) {

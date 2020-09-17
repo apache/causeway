@@ -1,11 +1,11 @@
 group = 'org.apache.isis.incubator.viewer'
 description = 'Apache Isis Inc - Viewer Vaadin (Model)'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-webapp')
-    compile project(':isis-parent:isis:isis-viewer-common')
+    compile project(':org.apache.isis.core:isis-core-webapp')
+    compile project(':org.apache.isis.viewer:isis-viewer-common')
     compile(Libs.vaadin)
     compile(Libs.cookieconsent)
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 }
 
 task packageTests(type: Jar) {

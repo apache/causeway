@@ -3,8 +3,8 @@ description = 'Apache Isis Ext - Sec Man Encryption (Using jbcrypt)'
 apply plugin: 'war'
 dependencies {
     compile(Libs.jbcrypt)
-    providedCompile project(':isis-parent:isis:isis-core-runtime')
-    providedCompile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-api')
+    providedCompile project(':org.apache.isis.core:isis-core-runtime')
+    providedCompile project(':org.apache.isis.extensions:isis-extensions-secman-api')
 }
 
 task packageTests(type: Jar) {

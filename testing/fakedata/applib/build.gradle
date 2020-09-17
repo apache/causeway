@@ -7,12 +7,12 @@ sourceSets.main.resources {
 }
 
 dependencies {
-    compile project(':isis-parent:isis-applib')
+    compile project(':org.apache.isis.core:isis-applib')
     compile(Libs.javafaker) {
         exclude(module: 'snakeyaml')
     }
     compile(Libs.guava)
-    testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
+    testCompile project(':org.apache.isis.testing:isis-testing-unittestsupport-applib')
 }
 
 task packageTests(type: Jar) {

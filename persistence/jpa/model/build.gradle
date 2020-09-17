@@ -1,10 +1,10 @@
 group = 'org.apache.isis.persistence'
 description = 'Apache Isis Persistence - JPA (model)'
 dependencies {
-    compile project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-applib')
-    compile project(':isis-parent:isis:isis-core-runtime')
+    compile project(':org.apache.isis.persistence:isis-persistence-jpa-applib')
+    compile project(':org.apache.isis.core:isis-core-runtime')
     compile(Libs.springDataJpa)
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 }
 
 task packageTests(type: Jar) {

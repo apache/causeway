@@ -1,7 +1,7 @@
 group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - PDF Box (applib)'
 dependencies {
-    compile project(':isis-parent:isis-applib')
+    compile project(':org.apache.isis.core:isis-applib')
 }
 
 task packageTests(type: Jar) {

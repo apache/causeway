@@ -6,10 +6,10 @@ sourceSets.test.resources {
 }
 
 dependencies {
-    compile project(':isis-parent:isis:isis-core-runtime')
-    compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
+    compile project(':org.apache.isis.core:isis-core-runtime')
+    compile project(':org.apache.isis.core:isis-core-codegen-bytebuddy')
     compile(Libs.hsqldb)
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 }
 
 task packageTests(type: Jar) {

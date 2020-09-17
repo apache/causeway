@@ -1,7 +1,7 @@
 group = 'org.apache.isis.viewer'
 description = 'Apache Isis Viewer - Wicket (UI Components)'
 dependencies {
-    compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-model')
+    compile project(':org.apache.isis.viewer:isis-viewer-wicket-model')
     compile(Libs.wicketCore) {
         exclude(module: 'slf4j-api')
         exclude(module: 'commons-io')
@@ -64,7 +64,7 @@ dependencies {
         exclude(module: 'wicket-core')
     }
     compile(Libs.guava)
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
     testCompile(Libs.jmockJunit4) {
         exclude(module: 'asm')
         exclude(module: 'junit-dep')

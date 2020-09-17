@@ -28,26 +28,26 @@ sourceSets {
 }
 
 dependencies {
-    compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp')
-    compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-jdk11')
-    compile project(':isis-parent:isis:isis-persistence-jpa:isis-persistence-jpa-model')
-    compile project(':isis-parent:isis:isis-security-shiro')
-    compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer')
-    compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-jaxrsresteasy4')
-    compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
-    compile project(':isis-parent:isis:isis-mappings:isis-mappings-restclient-api')
-    compile project(':isis-parent:isis:isis-extensions:isis-extensions-modelannotation')
-    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-model')
-    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-encryption-jbcrypt')
-    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-persistence-jdo')
-    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-shiro-realm')
-    compile project(':isis-parent:isis:isis-extensions:isis-extensions-shiro-realm-ldap:isis-extensions-shiro-realm-ldap-impl')
+    compile project(':org.apache.isis.mavendeps:isis-mavendeps-webapp')
+    compile project(':org.apache.isis.mavendeps:isis-mavendeps-jdk11')
+    compile project(':org.apache.isis.persistence:isis-persistence-jpa-model')
+    compile project(':org.apache.isis.security:isis-security-shiro')
+    compile project(':org.apache.isis.viewer:isis-viewer-restfulobjects-viewer')
+    compile project(':org.apache.isis.viewer:isis-viewer-restfulobjects-jaxrsresteasy4')
+    compile project(':org.apache.isis.testing:isis-testing-fixtures-applib')
+    compile project(':org.apache.isis.mappings:isis-mappings-restclient-api')
+    compile project(':org.apache.isis.extensions:isis-extensions-modelannotation')
+    compile project(':org.apache.isis.extensions:isis-extensions-secman-model')
+    compile project(':org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt')
+    compile project(':org.apache.isis.extensions:isis-extensions-secman-persistence-jdo')
+    compile project(':org.apache.isis.extensions:isis-extensions-secman-shiro-realm')
+    compile project(':org.apache.isis.extensions:isis-extensions-shiro-realm-ldap-impl')
     testCompile(Libs.jerseySpring5) {
         exclude(module: 'jersey-server')
     }
     testCompile(Libs.javaxJson)
     testCompile(Libs.moxy)
-    testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
+    testCompile project(':org.apache.isis.mavendeps:isis-mavendeps-integtests')
     testCompile(Libs.apachedsTestFramework)
 }
 

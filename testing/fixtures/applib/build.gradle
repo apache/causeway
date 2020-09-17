@@ -3,11 +3,11 @@ description = 'Apache Isis Tst - Fixtures (applib)'
 apply plugin: 'war'
 dependencies {
     compile compile(Libs.jodaTime)
-    compile project(':isis-parent:isis:isis-subdomains:isis-subdomains-spring:isis-subdomains-spring-applib')
-    providedCompile project(':isis-parent:isis:isis-testing:isis-testing-integtestsupport:isis-testing-integtestsupport-applib')
+    compile project(':org.apache.isis.subdomains:isis-subdomains-spring-applib')
+    providedCompile project(':org.apache.isis.testing:isis-testing-integtestsupport-applib')
     compileOnly(Libs.javaxJdo)
-    providedCompile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib')
-    providedCompile project(':isis-parent:isis:isis-core-runtime')
+    providedCompile project(':org.apache.isis.persistence:isis-persistence-jdo-applib')
+    providedCompile project(':org.apache.isis.core:isis-core-runtime')
 }
 
 task packageTests(type: Jar) {

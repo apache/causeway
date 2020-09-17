@@ -1,10 +1,10 @@
 group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - Excel (Integ Tests)'
 dependencies {
-    testCompile project(':isis-parent:isis:isis-subdomains:isis-subdomains-excel-fixtures')
-    testCompile project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-applib')
-    testCompile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-integtests')
-    testCompile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-datanucleus5')
+    testCompile project(':org.apache.isis.subdomains:isis-subdomains-excel-fixtures')
+    testCompile project(':org.apache.isis.testing:isis-testing-fakedata-applib')
+    testCompile project(':org.apache.isis.mavendeps:isis-mavendeps-integtests')
+    testCompile project(':org.apache.isis.persistence:isis-persistence-jdo-datanucleus5')
     testCompile(Libs.hsqldb)
 }
 

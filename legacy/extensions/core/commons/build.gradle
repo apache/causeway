@@ -3,11 +3,11 @@ description = 'Apache Isis Legacy - Commons'
 apply plugin: 'war'
 dependencies {
     compile(Libs.guava)
-    compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-core-runtime')
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    compile project(':org.apache.isis.core:isis-applib')
+    compile project(':org.apache.isis.core:isis-core-runtime')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
     compileOnly(Libs.javaxJdo)
-    providedCompile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-applib')
+    providedCompile project(':org.apache.isis.persistence:isis-persistence-jdo-applib')
 }
 
 task packageTests(type: Jar) {

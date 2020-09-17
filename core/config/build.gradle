@@ -19,11 +19,11 @@ sourceSets {
 }
 
 dependencies {
-    compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis-commons')
+    compile project(':org.apache.isis.core:isis-applib')
+    compile project(':org.apache.isis.commons:isis-commons')
     compile (Libs.hibernateValidator)
     compile (Libs.springBootConfigurationProcessor)
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 }
 
 task packageTests(type: Jar) {

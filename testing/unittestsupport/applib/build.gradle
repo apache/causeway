@@ -1,7 +1,7 @@
 group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - Unit Test Support (applib)'
 dependencies {
-    compile project(':isis-parent:isis-applib')
+    compile project(':org.apache.isis.core:isis-applib')
     compile(Libs.springBootStarterTest) {
         exclude(module: 'asm')
         exclude(module: 'spring-test')
@@ -19,16 +19,16 @@ dependencies {
         exclude(module: 'byte-buddy')
     }
     compile(Libs.approvaltests)
-    compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
+    compile project(':org.apache.isis.core:isis-core-codegen-bytebuddy')
     compile(Libs.picocontainer)
     compile(Libs.guava)
     compile(Libs.slf4jApi)
 
     compile(Libs.javaxJdo)
 
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
-    testCompile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
-    testCompile project(':isis-parent:isis-applib')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib')
+    testCompile project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib')
+    testCompile project(':org.apache.isis.core:isis-applib')
 
     // These dependencies are required in order to build on jdk11
     compile(Libs.jaxwsApi)

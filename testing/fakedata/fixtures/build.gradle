@@ -1,10 +1,10 @@
 group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - FakeData (fixtures)'
 dependencies {
-    compile project(':isis-parent:isis:isis-testing:isis-testing-fakedata:isis-testing-fakedata-applib')
-    compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis:isis-testing:isis-testing-fixtures:isis-testing-fixtures-applib')
-    compile project(':isis-parent:isis:isis-persistence-jdo:isis-persistence-jdo-datanucleus5')
+    compile project(':org.apache.isis.testing:isis-testing-fakedata-applib')
+    compile project(':org.apache.isis.core:isis-applib')
+    compile project(':org.apache.isis.testing:isis-testing-fixtures-applib')
+    compile project(':org.apache.isis.persistence:isis-persistence-jdo-datanucleus5')
     compile(Libs.guava)
 }
 

@@ -1,7 +1,7 @@
 group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - H2 Console (ui)'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-webapp')
+    compile project(':org.apache.isis.core:isis-core-webapp')
     compile (Libs.h2)
 }
 

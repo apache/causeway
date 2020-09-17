@@ -1,13 +1,13 @@
 group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - Base (applib)'
 dependencies {
-    compile project(':isis-parent:isis-applib')
+    compile project(':org.apache.isis.core:isis-applib')
     compile(Libs.guava)
     compile(Libs.commonsLang3)
     testCompile(Libs.reflections)
-    testCompile project(':isis-parent:isis:isis-core-metamodel')
+    testCompile project(':org.apache.isis.core:isis-core-metamodel')
     testCompile(Libs.javaxJdo)
-    testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
+    testCompile project(':org.apache.isis.testing:isis-testing-unittestsupport-applib')
 }
 
 task packageTests(type: Jar) {

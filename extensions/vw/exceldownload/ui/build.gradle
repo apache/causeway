@@ -6,7 +6,7 @@ dependencies {
         exclude(module: 'commons-collections4')
     }
     compile(Libs.poiOoxmlSchemas)
-    providedCompile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui')
+    providedCompile project(':org.apache.isis.viewer:isis-viewer-wicket-ui')
 }
 
 task packageTests(type: Jar) {

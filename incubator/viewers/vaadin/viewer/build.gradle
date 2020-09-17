@@ -1,7 +1,7 @@
 group = 'org.apache.isis.incubator.viewer'
 description = 'Apache Isis Inc - Viewer Vaadin (Viewer)'
 dependencies {
-    compile project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-ui')
+    compile project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui')
 }
 
 task packageTests(type: Jar) {

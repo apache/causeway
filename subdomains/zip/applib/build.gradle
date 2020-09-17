@@ -1,7 +1,7 @@
 group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - Zip (applib)'
 dependencies {
-    compile project(':isis-parent:isis-applib')
+    compile project(':org.apache.isis.core:isis-applib')
     compile(Libs.guava)
 }
 

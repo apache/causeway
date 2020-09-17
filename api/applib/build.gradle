@@ -2,8 +2,8 @@ description = 'Apache Isis Core - AppLib'
 apply plugin: 'war'
 
 dependencies {
-    compile project(':isis-parent:isis-schema')
-    compile project(':isis-parent:isis-commons')
+    compile project(':org.apache.isis.core:isis-schema')
+    compile project(':org.apache.isis.commons:isis-commons')
 
     compile(Libs.javaeeApi)
     compile(Libs.findbugsAnnotations)
@@ -15,7 +15,7 @@ dependencies {
     }
     compile(Libs.slf4jApi)
 
-	testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+	testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 
     testCompile(Libs.junitJupiterApi)
     testCompile(Libs.junitJupiterEngine)

@@ -2,8 +2,8 @@ group = 'org.apache.isis.extensions'
 description = 'Apache Isis Ext - Sec Man Model'
 apply plugin: 'war'
 dependencies {
-    compile project(':isis-parent:isis:isis-extensions:isis-extensions-secman:isis-extensions-secman-api')
-    providedCompile project(':isis-parent:isis:isis-core-runtime')
+    compile project(':org.apache.isis.extensions:isis-extensions-secman-api')
+    providedCompile project(':org.apache.isis.core:isis-core-runtime')
 }
 
 task packageTests(type: Jar) {

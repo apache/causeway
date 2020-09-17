@@ -1,7 +1,7 @@
 group = 'org.apache.isis.testing'
 description = 'Apache Isis Tst - Spec/Cucumber (applib)'
 dependencies {
-    compile project(':isis-parent:isis:isis-testing:isis-testing-integtestsupport:isis-testing-integtestsupport-applib')
+    compile project(':org.apache.isis.testing:isis-testing-integtestsupport-applib')
     compile(Libs.cucumberJava)
     compile(Libs.cucumberSpring)
     compile(Libs.cucumberJunit)

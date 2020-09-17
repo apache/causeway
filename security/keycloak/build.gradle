@@ -1,9 +1,9 @@
 group = 'org.apache.isis.security'
 description = 'Apache Isis Security - Keycloak'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-runtimeservices')
-    compile project(':isis-parent:isis:isis-core-webapp')
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    compile project(':org.apache.isis.core:isis-core-runtimeservices')
+    compile project(':org.apache.isis.core:isis-core-webapp')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 }
 
 task packageTests(type: Jar) {

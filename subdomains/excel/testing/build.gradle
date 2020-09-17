@@ -1,7 +1,7 @@
 group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - Excel (testing support)'
 dependencies {
-    compile project(':isis-parent:isis:isis-subdomains:isis-subdomains-excel:isis-subdomains-excel-applib')
+    compile project(':org.apache.isis.subdomains:isis-subdomains-excel-applib')
 }
 
 task packageTests(type: Jar) {

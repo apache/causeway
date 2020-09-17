@@ -2,8 +2,8 @@ group = 'org.apache.isis.subdomains'
 description = 'Apache Isis Sub - Spring (applib)'
 apply plugin: 'war'
 dependencies {
-    compile project(':isis-parent:isis-applib')
-    providedCompile project(':isis-parent:isis:isis-core-runtime')
+    compile project(':org.apache.isis.core:isis-applib')
+    providedCompile project(':org.apache.isis.core:isis-core-runtime')
 }
 
 task packageTests(type: Jar) {

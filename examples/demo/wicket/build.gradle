@@ -2,19 +2,19 @@ group = 'org.apache.isis.examples.apps'
 description = 'Apache Isis App - Demo (Wicket)'
 
 dependencies {
-    compile project(':isis-parent:isis-applib')
-    compile project(':isis-parent:isis-commons')
-    compile project(':isis-app-starter-parent:demo-parent:demo-domain')
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-applib')
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-markdown:isis-valuetypes-markdown-ui')
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
+    compile project(':org.apache.isis.core:isis-applib')
+    compile project(':org.apache.isis.commons:isis-commons')
+    compile project(':org.apache.isis.examples.apps:demo-domain')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-applib')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib')
     compile(Libs.springBootStarterLog4j2) {
         exclude(module: 'slf4j-api')
     }
-    compile project(':isis-parent:isis:isis-mavendeps:isis-mavendeps-webapp')
-    compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-viewer')
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui:isis-valuetypes-asciidoc-ui-wkt')
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-ui')
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc')
+    compile project(':org.apache.isis.mavendeps:isis-mavendeps-webapp')
+    compile project(':org.apache.isis.viewer:isis-viewer-wicket-viewer')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc')
 }
 

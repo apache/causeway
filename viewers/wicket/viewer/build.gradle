@@ -1,7 +1,7 @@
 group = 'org.apache.isis.viewer'
 description = 'Apache Isis Viewer - Wicket (Viewer)'
 dependencies {
-    compile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui')
+    compile project(':org.apache.isis.viewer:isis-viewer-wicket-ui')
     compile(Libs.wicketSpring) {
         exclude(module: 'asm')
         exclude(module: 'slf4j-api')
@@ -24,7 +24,7 @@ dependencies {
     }
     compile(Libs.springWeb)
     compile(Libs.commonsIo)
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
     testCompile(Libs.jmockJunit4) {
         exclude(module: 'asm')
         exclude(module: 'junit-dep')

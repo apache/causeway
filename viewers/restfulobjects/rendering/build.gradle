@@ -1,9 +1,9 @@
 group = 'org.apache.isis.viewer'
 description = 'Apache Isis Viewer - RO (Rendering)'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-runtime')
-    compile project(':isis-parent:isis::isis-viewer-restfulobjects:isis-viewer-restfulobjects-applib')
-    testCompile project(':isis-parent:isis::isis-core-internaltestsupport')
+    compile project(':org.apache.isis.core:isis-core-runtime')
+    compile project(':org.apache.isis.viewer:isis-viewer-restfulobjects-applib')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 }
 
 task packageTests(type: Jar) {

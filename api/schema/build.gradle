@@ -16,7 +16,7 @@ sourceSets {
 }
 
 dependencies {
-    compile project(':isis-parent:isis-commons')
+    compile project(':org.apache.isis.commons:isis-commons')
 
     compile(Libs.springContext)
     compile(Libs.jodaTime)

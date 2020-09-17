@@ -3,9 +3,9 @@ apply plugin: 'war'
 
 dependencies {
 
-    compile project(':isis-parent:isis:isis-core-runtime')
-    compile project(':isis-parent:isis::isis-viewer-restfulobjects:isis-viewer-restfulobjects-viewer')
-    compile project(':isis-parent:isis::isis-core-internaltestsupport')
+    compile project(':org.apache.isis.core:isis-core-runtime')
+    compile project(':org.apache.isis.viewer:isis-viewer-restfulobjects-viewer')
+    compile project(':org.apache.isis.core:isis-core-internaltestsupport')
     
 }
 

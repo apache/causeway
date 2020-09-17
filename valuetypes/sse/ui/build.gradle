@@ -2,10 +2,10 @@ group = 'org.apache.isis.valuetypes'
 description = 'Apache Isis Val - Server Sent Events (ui)'
 apply plugin: 'war'
 dependencies {
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse:isis-valuetypes-sse-metamodel')
-    compile project(':isis-parent:isis:isis-core-metamodel')
-    providedCompile project(':isis-parent:isis:isis-core-webapp')
-    providedCompile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel')
+    compile project(':org.apache.isis.core:isis-core-metamodel')
+    providedCompile project(':org.apache.isis.core:isis-core-webapp')
+    providedCompile project(':org.apache.isis.viewer:isis-viewer-wicket-ui')
 }
 
 task packageTests(type: Jar) {

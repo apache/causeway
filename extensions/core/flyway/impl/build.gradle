@@ -1,7 +1,7 @@
 group = 'org.apache.isis.extensions'
 description = 'Apache Isis Ext - Flyway Impl'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-config')
+    compile project(':org.apache.isis.core:isis-core-config')
     compile(Libs.flywayCore)
     compile(Libs.springContext)
     compile(Libs.springBootAutoconfigure)

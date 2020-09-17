@@ -1,8 +1,8 @@
 group = 'org.apache.isis.valuetypes'
 description = 'Apache Isis Val - Server Sent Events (metamodel)'
 dependencies {
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse-applib')
-    compile project(':isis-parent:isis:isis-core-metamodel')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-sse-applib')
+    compile project(':org.apache.isis.core:isis-core-metamodel')
 }
 
 task packageTests(type: Jar) {

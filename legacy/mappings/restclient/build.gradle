@@ -2,9 +2,9 @@ group = 'org.apache.isis.legacy'
 description = 'Apache Isis Legacy - REST Client'
 apply plugin: 'war'
 dependencies {
-    compile project(':isis-parent:isis:isis-viewer-restfulobjects:isis-viewer-restfulobjects-applib')
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
-    providedCompile project(':isis-parent:isis-commons')
+    compile project(':org.apache.isis.viewer:isis-viewer-restfulobjects-applib')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
+    providedCompile project(':org.apache.isis.commons:isis-commons')
 }
 
 task packageTests(type: Jar) {

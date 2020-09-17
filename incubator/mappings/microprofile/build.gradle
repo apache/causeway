@@ -1,7 +1,7 @@
 group = 'org.apache.isis.incubator'
 description = 'Apache Isis Inc - MicroProfile Support'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-metamodel')
+    compile project(':org.apache.isis.core:isis-core-metamodel')
     compile(Libs.springBootStarterWeb) {
         exclude(module: 'spring-boot-starter-tomcat')
         exclude(module: 'spring-boot-starter-logging')

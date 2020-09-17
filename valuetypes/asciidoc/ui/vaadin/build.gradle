@@ -2,8 +2,8 @@ group = 'org.apache.isis.valuetypes'
 description = 'Apache Isis Val - Asciidoctor (ui vaadin)'
 apply plugin: 'war'
 dependencies {
-    providedCompile project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-ui')
-    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-asciidoc:isis-valuetypes-asciidoc-applib')
+    providedCompile project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui')
+    compile project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib')
 }
 
 task packageTests(type: Jar) {

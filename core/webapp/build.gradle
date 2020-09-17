@@ -1,13 +1,13 @@
 description = 'Apache Isis Core - WebApp'
 dependencies {
-    compile project(':isis-parent:isis:isis-core-runtime')
+    compile project(':org.apache.isis.core:isis-core-runtime')
     compile(Libs.springWeb)
     compile(Libs.springBootActuator)
     compile(Libs.springBootStarterThymeleaf) {
         exclude(module: 'spring-boot-starter')
     }
     compile(Libs.springBoot)
-    testCompile project(':isis-parent:isis:isis-core-internaltestsupport')
+    testCompile project(':org.apache.isis.core:isis-core-internaltestsupport')
 }
 
 task packageTests(type: Jar) {

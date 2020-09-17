@@ -2,7 +2,7 @@ description = 'Apache Isis Core - Unit Test Support'
 apply plugin: 'war'
 
 dependencies {
-    compile project(':isis-parent:isis-commons')
+    compile project(':org.apache.isis.commons:isis-commons')
     compile(Libs.junitJupiterApi)
     compile(Libs.junitJupiterEngine)
     compile(Libs.junitVintageEngine)
@@ -12,7 +12,7 @@ dependencies {
         exclude(module: 'byte-buddy')
         exclude(module: 'byte-buddy-agent')
     }
-    compile project(':isis-parent:isis:isis-core-codegen-bytebuddy')
+    compile project(':org.apache.isis.core:isis-core-codegen-bytebuddy')
     compile(Libs.hamcrestLibrary)
     compile(Libs.slf4jApi)
     compile(Libs.springBootStarterTest) {
