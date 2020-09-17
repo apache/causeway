@@ -24,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.reflection._Reflect;
+
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -39,9 +42,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import org.apache.isis.core.commons.internal.context._Context;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
 
 import lombok.val;
 

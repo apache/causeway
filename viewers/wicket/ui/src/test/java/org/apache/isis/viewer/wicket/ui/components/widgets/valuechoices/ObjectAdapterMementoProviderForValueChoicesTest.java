@@ -30,7 +30,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

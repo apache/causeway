@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
-import org.apache.isis.core.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.resources._Resources;
 
 /**
  * A service that sends email notifications when specific events occur

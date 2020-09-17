@@ -32,19 +32,19 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.val;

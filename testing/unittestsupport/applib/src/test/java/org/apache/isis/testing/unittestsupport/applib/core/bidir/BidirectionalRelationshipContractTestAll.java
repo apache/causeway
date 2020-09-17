@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.core.bidir;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public class BidirectionalRelationshipContractTestAll extends BidirectionalRelationshipContractTestAbstract {
 

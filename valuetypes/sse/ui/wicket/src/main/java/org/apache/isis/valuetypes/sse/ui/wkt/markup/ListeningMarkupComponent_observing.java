@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.core.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
-import static org.apache.isis.core.commons.internal.base._Strings.isNullOrEmpty;
+import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
 
 import lombok.extern.log4j.Log4j2;
 

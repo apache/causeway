@@ -25,7 +25,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.legacy.restclient.lib.ClientExecutor;
 import org.apache.isis.legacy.restclient.lib.ClientRequestConfigurer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;

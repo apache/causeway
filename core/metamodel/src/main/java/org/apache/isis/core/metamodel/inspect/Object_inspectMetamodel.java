@@ -31,7 +31,7 @@ import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.inspect.model.MMNodeFactory;
 import org.apache.isis.core.metamodel.inspect.model.MMTreeAdapter;
 

@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.ExceptionHandlerAbstract;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.commons.internal.base._Blackhole;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;

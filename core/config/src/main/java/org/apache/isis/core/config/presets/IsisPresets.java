@@ -20,7 +20,7 @@ package org.apache.isis.core.config.presets;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 

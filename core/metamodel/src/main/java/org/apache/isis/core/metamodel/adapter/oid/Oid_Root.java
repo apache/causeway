@@ -22,11 +22,11 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
+import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v2.OidDto;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 

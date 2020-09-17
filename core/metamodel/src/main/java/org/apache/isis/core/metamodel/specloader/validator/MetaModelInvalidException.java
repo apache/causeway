@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.specloader.validator;
 
 import java.util.Optional;
 
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 public class MetaModelInvalidException extends IllegalStateException {
 

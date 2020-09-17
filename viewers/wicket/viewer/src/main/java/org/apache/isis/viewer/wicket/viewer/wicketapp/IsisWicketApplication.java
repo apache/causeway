@@ -64,9 +64,9 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.ApplicationSettings;
 
-import org.apache.isis.core.commons.internal.concurrent._ConcurrentContext;
-import org.apache.isis.core.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
+import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -94,7 +94,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapte
 import org.apache.isis.viewer.wicket.viewer.integration.IsisResourceSettings;
 import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.val;

@@ -24,8 +24,8 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 

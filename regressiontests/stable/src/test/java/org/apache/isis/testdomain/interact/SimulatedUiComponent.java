@@ -18,8 +18,8 @@
  */
 package org.apache.isis.testdomain.interact;
 
-import org.apache.isis.core.commons.binding.Bindable;
-import org.apache.isis.core.commons.internal.binding._Bindables;
+import org.apache.isis.commons.binding.Bindable;
+import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

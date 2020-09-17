@@ -25,8 +25,8 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.extern.log4j.Log4j2;
 

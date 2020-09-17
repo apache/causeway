@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.dom.reflect;
 
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.val;
 

@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 
-import static org.apache.isis.core.commons.internal.base._With.requiresNotEmpty;
+import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
 import lombok.AccessLevel;
 import lombok.NonNull;

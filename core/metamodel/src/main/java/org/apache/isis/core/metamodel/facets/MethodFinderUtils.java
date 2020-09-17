@@ -31,14 +31,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.reflection._MethodCache;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramSignatureMatch;
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramSignatureMatch;
 
 import lombok.NonNull;
 import lombok.Value;

@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 // tag::refguide[]
 @Value

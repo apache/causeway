@@ -22,8 +22,8 @@ import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.val;
 

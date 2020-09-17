@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.core.comparable;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.compareNullsFirst;
+import static org.apache.isis.commons.internal.base._NullSafe.compareNullsFirst;
 
 public class CategorizedDomainObject implements Comparable<CategorizedDomainObject> {
 

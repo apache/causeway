@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.typicallen;
 
-import org.apache.isis.core.commons.internal.primitives._Ints;
-import org.apache.isis.core.commons.internal.primitives._Ints.Bound;
+import org.apache.isis.commons.internal.primitives._Ints;
+import org.apache.isis.commons.internal.primitives._Ints.Bound;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 
 import lombok.val;

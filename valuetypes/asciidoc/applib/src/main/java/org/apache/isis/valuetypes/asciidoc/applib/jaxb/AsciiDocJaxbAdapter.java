@@ -5,7 +5,7 @@ import java.util.Base64;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 public final class AsciiDocJaxbAdapter extends XmlAdapter<String, AsciiDoc> {

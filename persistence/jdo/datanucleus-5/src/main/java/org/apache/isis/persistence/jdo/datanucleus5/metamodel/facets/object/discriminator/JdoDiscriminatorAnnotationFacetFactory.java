@@ -22,7 +22,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.dis
 import javax.inject.Inject;
 import javax.jdo.annotations.Discriminator;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

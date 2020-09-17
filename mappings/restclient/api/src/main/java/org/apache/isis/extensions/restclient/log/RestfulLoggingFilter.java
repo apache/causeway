@@ -31,8 +31,8 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 
-import org.apache.isis.core.commons.internal.base._Bytes;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

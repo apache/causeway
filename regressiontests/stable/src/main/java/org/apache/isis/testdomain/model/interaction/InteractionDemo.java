@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;

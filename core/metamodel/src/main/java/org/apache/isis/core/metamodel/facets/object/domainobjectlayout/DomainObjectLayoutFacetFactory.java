@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
-import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;

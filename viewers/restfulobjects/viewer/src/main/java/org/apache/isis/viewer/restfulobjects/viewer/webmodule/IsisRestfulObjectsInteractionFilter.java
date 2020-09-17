@@ -42,9 +42,9 @@ import javax.transaction.TransactionalException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -53,7 +53,7 @@ import org.apache.isis.core.webapp.modules.templresources.TemplateResourceCachin
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyDefault;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 

@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.apache.isis.core.commons.handler.ChainOfResponsibility;
+import org.apache.isis.commons.handler.ChainOfResponsibility;
 
 import lombok.NonNull;
 import lombok.Value;

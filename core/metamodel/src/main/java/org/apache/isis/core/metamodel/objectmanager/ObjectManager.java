@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.objectmanager;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;

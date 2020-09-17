@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.mandatory;
 
 import java.util.Map;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

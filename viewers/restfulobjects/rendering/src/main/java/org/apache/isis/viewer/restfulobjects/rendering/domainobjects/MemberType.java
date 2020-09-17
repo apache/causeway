@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Map;
 
 import org.apache.isis.applib.util.Enums;
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;

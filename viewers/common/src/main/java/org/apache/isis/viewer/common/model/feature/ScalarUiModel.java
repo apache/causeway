@@ -2,7 +2,7 @@ package org.apache.isis.viewer.common.model.feature;
 
 import java.math.BigDecimal;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;

@@ -32,8 +32,8 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.core.commons.internal.debug._Probe;
-import org.apache.isis.core.commons.internal.debug._Probe.EntryPoint;
+import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;

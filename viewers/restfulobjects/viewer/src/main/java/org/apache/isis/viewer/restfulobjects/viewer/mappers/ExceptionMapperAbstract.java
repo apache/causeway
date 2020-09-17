@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
@@ -39,7 +39,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.mappers.entity.ExceptionDeta
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.entity.ExceptionPojo;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public abstract class ExceptionMapperAbstract<T extends Throwable> implements ExceptionMapper<T> {
 

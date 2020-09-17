@@ -18,8 +18,6 @@
  */
 package org.apache.isis.valuetypes.sse.ui.wkt.webmodule;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
-
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ForkJoinPool;
@@ -33,11 +31,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
 import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

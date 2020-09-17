@@ -22,8 +22,8 @@ import java.nio.charset.StandardCharsets;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.apache.isis.core.commons.internal.base._Bytes;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 
 public final class PrimitiveJaxbAdapters {
 

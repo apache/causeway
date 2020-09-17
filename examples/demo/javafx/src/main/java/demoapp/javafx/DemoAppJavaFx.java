@@ -22,7 +22,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;

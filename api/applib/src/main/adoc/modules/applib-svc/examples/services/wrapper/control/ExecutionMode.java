@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.wrapper.control;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

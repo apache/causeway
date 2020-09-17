@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.config.beans;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.context._Plugin;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry.BeanClassification;
 
 /**

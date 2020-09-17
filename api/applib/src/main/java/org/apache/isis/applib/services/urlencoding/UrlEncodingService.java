@@ -21,8 +21,8 @@ package org.apache.isis.applib.services.urlencoding;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.memento._Mementos.EncoderDecoder;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
 
 // tag::refguide[]
 public interface UrlEncodingService extends EncoderDecoder {

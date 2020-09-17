@@ -31,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.events.ui.TitleUiEvent;
-import org.apache.isis.core.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.val;
 

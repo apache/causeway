@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.disable.method;
 
 import java.util.EnumSet;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;

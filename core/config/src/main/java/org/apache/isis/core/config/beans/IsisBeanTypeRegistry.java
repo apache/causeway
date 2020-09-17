@@ -36,13 +36,13 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
-import static org.apache.isis.core.commons.internal.reflection._Annotations.findNearestAnnotation;
+import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

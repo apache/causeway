@@ -27,12 +27,12 @@ import java.util.stream.Stream;
 
 import javax.annotation.Priority;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.commons.internal.base._Reduction;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Reduction;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.val;
 

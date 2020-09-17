@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.facets;
 
 import org.apache.isis.applib.annotation.Facets;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;

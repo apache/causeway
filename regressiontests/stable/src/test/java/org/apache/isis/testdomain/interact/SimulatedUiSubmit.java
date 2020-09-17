@@ -20,7 +20,7 @@ package org.apache.isis.testdomain.interact;
 
 import java.util.function.Supplier;
 
-import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;

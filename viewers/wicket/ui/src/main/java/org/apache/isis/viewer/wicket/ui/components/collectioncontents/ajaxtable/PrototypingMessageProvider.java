@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import java.util.Locale;
 
-import org.apache.isis.core.commons.internal.base._Timing;
+import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 

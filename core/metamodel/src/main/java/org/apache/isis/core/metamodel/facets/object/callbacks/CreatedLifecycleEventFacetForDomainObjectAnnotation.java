@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
-import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 

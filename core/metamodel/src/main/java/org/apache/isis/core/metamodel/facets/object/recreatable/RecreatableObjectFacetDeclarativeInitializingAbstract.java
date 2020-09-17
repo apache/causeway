@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.core.commons.internal.memento._Mementos;
-import org.apache.isis.core.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.commons.internal.memento._Mementos;
+import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;

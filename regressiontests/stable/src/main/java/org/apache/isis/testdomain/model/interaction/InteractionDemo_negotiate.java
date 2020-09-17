@@ -21,8 +21,8 @@ package org.apache.isis.testdomain.model.interaction;
 import java.util.stream.IntStream;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
 

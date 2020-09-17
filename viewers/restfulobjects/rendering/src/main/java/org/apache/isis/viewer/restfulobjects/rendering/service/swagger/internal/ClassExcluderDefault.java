@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 public class ClassExcluderDefault extends ClassExcluderAbstract {
 
     public ClassExcluderDefault() {
-        ignorePackage("org.apache.isis.core.commons.internal");
+        ignorePackage("org.apache.isis.commons.internal");
     }
 
 }

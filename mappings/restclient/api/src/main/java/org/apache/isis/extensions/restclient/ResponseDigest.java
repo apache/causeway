@@ -37,10 +37,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.resources._Json;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Json;
 
 import lombok.NonNull;
 import lombok.val;

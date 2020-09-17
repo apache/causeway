@@ -39,7 +39,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authorization.standard.Authorizor;

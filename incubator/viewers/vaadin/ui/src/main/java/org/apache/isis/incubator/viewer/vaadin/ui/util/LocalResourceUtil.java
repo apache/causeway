@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 import com.vaadin.flow.component.UI;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Value;
 import lombok.experimental.UtilityClass;

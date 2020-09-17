@@ -34,15 +34,15 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.collections._Multimaps;
-import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.collections._Streams;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Streams;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -83,7 +83,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

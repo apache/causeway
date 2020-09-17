@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;

@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.WildcardPermission;
 
-import org.apache.isis.core.commons.internal.collections._Multimaps;
-import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 
 import lombok.val;
 

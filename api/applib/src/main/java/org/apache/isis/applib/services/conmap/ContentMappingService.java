@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 // tag::refguide[]
 public interface ContentMappingService {

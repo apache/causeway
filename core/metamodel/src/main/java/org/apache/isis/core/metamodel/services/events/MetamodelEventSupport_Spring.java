@@ -32,7 +32,7 @@ import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
-import org.apache.isis.core.commons.internal.ioc.spring._Spring;
+import org.apache.isis.commons.internal.ioc.spring._Spring;
 
 @Configuration
 @Named("isisMetaModel.MetamodelEventSupport_Spring")

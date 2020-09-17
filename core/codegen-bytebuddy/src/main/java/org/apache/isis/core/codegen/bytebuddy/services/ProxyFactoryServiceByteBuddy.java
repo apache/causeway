@@ -28,13 +28,13 @@ import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.context._Context;
-import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactory;
-import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
-import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryServiceAbstract;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryServiceAbstract;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;

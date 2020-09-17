@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;

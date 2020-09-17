@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.que
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;

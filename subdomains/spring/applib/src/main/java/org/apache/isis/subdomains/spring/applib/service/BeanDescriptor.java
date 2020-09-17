@@ -33,7 +33,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.StringUtils;
 
-import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 import lombok.Getter;
 import lombok.ToString;

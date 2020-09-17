@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.RuntimeContext;

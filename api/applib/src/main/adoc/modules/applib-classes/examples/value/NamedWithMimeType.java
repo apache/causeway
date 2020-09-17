@@ -24,7 +24,7 @@ import java.io.Serializable;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 
 import lombok.Getter;
 

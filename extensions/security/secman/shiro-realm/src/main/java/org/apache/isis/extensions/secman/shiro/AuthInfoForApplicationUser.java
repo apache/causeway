@@ -26,7 +26,7 @@ import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
-import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 
 import lombok.AccessLevel;

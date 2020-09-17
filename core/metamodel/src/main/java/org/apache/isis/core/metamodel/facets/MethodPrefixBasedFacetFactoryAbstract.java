@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.function.IntFunction;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

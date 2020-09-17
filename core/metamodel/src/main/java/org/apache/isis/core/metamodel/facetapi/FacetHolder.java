@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.functions._Predicates;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.NonNull;

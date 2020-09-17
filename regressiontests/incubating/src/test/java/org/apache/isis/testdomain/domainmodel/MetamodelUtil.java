@@ -21,7 +21,7 @@ package org.apache.isis.testdomain.domainmodel;
 import java.util.Collection;
 import java.util.Set;
 
-import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 

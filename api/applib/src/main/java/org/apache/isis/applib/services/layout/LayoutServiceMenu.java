@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 @Named("isisApplib.LayoutServiceMenu")
 @DomainService(objectType = "isisApplib.LayoutServiceMenu")

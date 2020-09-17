@@ -27,7 +27,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 /**
  * package private mixin for IsisWicketApplication;

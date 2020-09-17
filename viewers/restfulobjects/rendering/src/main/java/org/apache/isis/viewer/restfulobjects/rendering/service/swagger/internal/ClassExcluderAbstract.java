@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal
 
 import java.util.Set;
 
-import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 

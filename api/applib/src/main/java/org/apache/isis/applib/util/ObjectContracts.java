@@ -22,8 +22,8 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 import lombok.extern.log4j.Log4j2;
 

@@ -30,8 +30,8 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.commons.internal.base._Oneshot;
-import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.commons.internal.base._Oneshot;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.webapp.modules.WebModule;

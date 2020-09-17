@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.exceptions.persistence;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
 
 /**
  * TODO: v2 - review - doesn't seem to be used?

@@ -23,9 +23,9 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.assertions._Assert;
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;

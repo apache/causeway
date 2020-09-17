@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
-import org.apache.isis.core.commons.internal.resources._Json;
+import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
 public enum SerializationStrategy {

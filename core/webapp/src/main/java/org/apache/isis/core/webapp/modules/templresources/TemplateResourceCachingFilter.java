@@ -36,7 +36,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.core.commons.internal.exceptions._Exceptions.FluentException;
+import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 
 import lombok.val;
 

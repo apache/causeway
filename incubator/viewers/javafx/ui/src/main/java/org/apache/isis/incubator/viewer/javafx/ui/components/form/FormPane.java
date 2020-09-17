@@ -23,7 +23,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
 import lombok.Getter;

@@ -21,8 +21,8 @@ package org.apache.isis.core.security.authentication;
 
 import java.util.Optional;
 
-import org.apache.isis.core.commons.internal.debug._Probe;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * @since 2.0

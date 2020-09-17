@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 public enum ActionType {
     USER,

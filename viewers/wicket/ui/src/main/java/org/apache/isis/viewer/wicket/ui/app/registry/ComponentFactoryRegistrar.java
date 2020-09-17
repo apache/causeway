@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 

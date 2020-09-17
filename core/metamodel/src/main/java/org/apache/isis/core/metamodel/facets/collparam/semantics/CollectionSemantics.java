@@ -24,7 +24,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 
 public enum CollectionSemantics {
 

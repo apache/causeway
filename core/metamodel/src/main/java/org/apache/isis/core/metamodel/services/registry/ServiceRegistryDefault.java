@@ -34,13 +34,13 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.core.commons.internal.ioc.spring._Spring;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 
 import lombok.val;

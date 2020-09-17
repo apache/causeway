@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 
 public class ResourceUtil {
 

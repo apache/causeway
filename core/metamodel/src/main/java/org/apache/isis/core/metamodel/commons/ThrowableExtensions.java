@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.core.commons.exceptions.IsisApplicationException;
+import org.apache.isis.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 

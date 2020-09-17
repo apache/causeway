@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.objectmanager.identify;
 
-import org.apache.isis.core.commons.handler.ChainOfResponsibility;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.handler.ChainOfResponsibility;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 

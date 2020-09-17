@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.commons.internal.base._Blackhole;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;

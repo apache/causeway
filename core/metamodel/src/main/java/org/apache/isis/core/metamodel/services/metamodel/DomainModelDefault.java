@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 @XmlRootElement(name="domain")
 @XmlAccessorType(XmlAccessType.PROPERTY)

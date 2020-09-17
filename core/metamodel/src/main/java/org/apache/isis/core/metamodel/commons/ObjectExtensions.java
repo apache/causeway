@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.commons.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
 
 /**
  * Helpers to co-erce non-generic values into type-safe generics without

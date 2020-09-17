@@ -30,7 +30,7 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.isis.applib.util.JaxbUtil;
-import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.schema.common.v2.DifferenceDto;
 import org.apache.isis.schema.common.v2.PeriodDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;

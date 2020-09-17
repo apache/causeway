@@ -28,7 +28,7 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 
-import org.apache.isis.core.commons.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.testing.unittestsupport.applib.core.utils.IndentPrinter;
 
 /**

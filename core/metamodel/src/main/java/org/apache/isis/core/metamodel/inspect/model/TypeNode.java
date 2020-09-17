@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.internal.collections._Streams;
+import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 
 import lombok.Getter;

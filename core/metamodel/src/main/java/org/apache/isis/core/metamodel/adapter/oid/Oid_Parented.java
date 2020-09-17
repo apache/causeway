@@ -24,7 +24,7 @@ import java.util.Objects;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.core.metamodel.adapter.oid.Oid.marshaller;
 import static org.apache.isis.core.metamodel.adapter.oid.Oid.unmarshaller;
 

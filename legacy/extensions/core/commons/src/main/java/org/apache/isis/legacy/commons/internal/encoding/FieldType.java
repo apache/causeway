@@ -31,7 +31,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 
 import lombok.extern.log4j.Log4j2;
 

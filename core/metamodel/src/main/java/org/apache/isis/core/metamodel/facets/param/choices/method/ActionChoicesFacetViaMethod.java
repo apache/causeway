@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.collections.CanVector;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;

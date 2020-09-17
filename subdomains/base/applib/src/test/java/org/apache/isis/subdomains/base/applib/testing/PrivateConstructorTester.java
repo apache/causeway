@@ -20,7 +20,7 @@ package org.apache.isis.subdomains.base.applib.testing;
 
 import java.lang.reflect.Constructor;
 
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 public final class PrivateConstructorTester {
 

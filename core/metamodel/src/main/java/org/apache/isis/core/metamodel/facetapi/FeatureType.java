@@ -23,7 +23,7 @@ import java.beans.Introspector;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 

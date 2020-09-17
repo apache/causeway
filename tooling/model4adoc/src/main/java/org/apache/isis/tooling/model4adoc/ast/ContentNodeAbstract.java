@@ -26,7 +26,7 @@ import java.util.Map;
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Document;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.Setter;

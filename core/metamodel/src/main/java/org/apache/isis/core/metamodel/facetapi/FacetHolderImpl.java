@@ -23,14 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.internal.collections._Maps.AliasMap;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps.AliasMap;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
 import lombok.Setter;

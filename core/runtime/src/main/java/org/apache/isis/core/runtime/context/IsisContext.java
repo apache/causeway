@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.context;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 
 import lombok.experimental.UtilityClass;

@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

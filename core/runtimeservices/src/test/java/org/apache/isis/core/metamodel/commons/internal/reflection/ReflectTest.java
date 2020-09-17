@@ -31,14 +31,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.reflection._Reflect.InterfacePolicy;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 
-import static org.apache.isis.core.commons.internal.reflection._Reflect.getAnnotation;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.streamAllMethods;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.streamTypeHierarchy;
+import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamTypeHierarchy;
 
 import lombok.val;
 

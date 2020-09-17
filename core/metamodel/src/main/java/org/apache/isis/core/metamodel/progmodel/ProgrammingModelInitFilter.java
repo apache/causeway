@@ -23,11 +23,11 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.internal.functions._Predicates;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.isEmpty;
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
 import lombok.val;
 

@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.graph.Edge;
 import org.apache.isis.applib.graph.SimpleEdge;
 import org.apache.isis.applib.graph.Vertex;
-import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 /**
  * Fundamental building block of Tree structures. 

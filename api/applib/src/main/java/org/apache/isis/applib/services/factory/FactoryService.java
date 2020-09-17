@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
 
 // tag::refguide[]
 public interface FactoryService {

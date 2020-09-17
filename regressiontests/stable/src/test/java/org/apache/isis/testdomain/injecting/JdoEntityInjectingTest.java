@@ -33,9 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.commons.internal.assertions._Assert;
-import org.apache.isis.core.commons.internal.primitives._Longs.Bound;
-import org.apache.isis.core.commons.internal.primitives._Longs.Range;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.primitives._Longs.Bound;
+import org.apache.isis.commons.internal.primitives._Longs.Range;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;

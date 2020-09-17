@@ -18,7 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.panel;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
 import lombok.Getter;

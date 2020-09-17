@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -52,8 +52,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.isPublic;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.isPublic;
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.val;
 

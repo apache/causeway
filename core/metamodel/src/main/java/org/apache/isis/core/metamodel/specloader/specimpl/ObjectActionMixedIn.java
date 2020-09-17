@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.collections.CanVector;
-import org.apache.isis.core.commons.internal.assertions._Assert;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.CanVector;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;

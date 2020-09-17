@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 import javax.annotation.meta.When;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -143,7 +143,7 @@ public interface ObjectMember extends ObjectFeature {
      *
      * <p>
      *     For the former case, is thrown by
-     *     {@link ObjectAction#executeWithRuleChecking(ManagedObject, ManagedObject[], org.apache.isis.core.commons.authentication.AuthenticationSession, org.apache.isis.applib.annotation.Where)}
+     *     {@link ObjectAction#executeWithRuleChecking(ManagedObject, ManagedObject[], org.apache.isis.commons.authentication.AuthenticationSession, org.apache.isis.applib.annotation.Where)}
      *     when the action being executed is not visible or not usable for the specified session.  One reason this
      *     might occur if there was an attempt to construct a URL (eg a bookmarked action) and invoke in an unauthenticated session.
      * </p>

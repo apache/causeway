@@ -24,10 +24,10 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.handler.ChainOfResponsibility;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.functions._Predicates;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.handler.ChainOfResponsibility;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;

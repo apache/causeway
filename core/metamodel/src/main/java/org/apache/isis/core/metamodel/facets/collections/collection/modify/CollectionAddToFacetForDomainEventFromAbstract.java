@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public abstract class CollectionAddToFacetForDomainEventFromAbstract
 extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>

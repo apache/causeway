@@ -25,8 +25,8 @@ import javax.inject.Provider;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;

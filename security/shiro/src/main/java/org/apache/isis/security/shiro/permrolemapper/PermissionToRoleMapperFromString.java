@@ -19,7 +19,7 @@ package org.apache.isis.security.shiro.permrolemapper;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public class PermissionToRoleMapperFromString implements PermissionToRoleMapper {
 

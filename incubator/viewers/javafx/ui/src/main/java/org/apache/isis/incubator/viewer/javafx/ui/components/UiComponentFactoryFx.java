@@ -26,9 +26,9 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.commons.handler.ChainOfResponsibility;
-import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.handler.ChainOfResponsibility;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;

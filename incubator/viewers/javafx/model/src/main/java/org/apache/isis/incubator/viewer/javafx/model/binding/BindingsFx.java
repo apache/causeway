@@ -21,10 +21,10 @@ package org.apache.isis.incubator.viewer.javafx.model.binding;
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
-import org.apache.isis.core.commons.binding.Bindable;
-import org.apache.isis.core.commons.binding.ChangeListener;
-import org.apache.isis.core.commons.binding.Observable;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.binding.Bindable;
+import org.apache.isis.commons.binding.ChangeListener;
+import org.apache.isis.commons.binding.Observable;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.binding.BindingConverter;
 

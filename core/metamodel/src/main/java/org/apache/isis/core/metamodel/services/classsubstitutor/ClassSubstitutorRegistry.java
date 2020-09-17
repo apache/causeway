@@ -30,8 +30,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.internal.functions._Predicates;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 
 import lombok.val;

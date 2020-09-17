@@ -29,7 +29,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.val;
 

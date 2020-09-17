@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction;
 
 import lombok.AccessLevel;

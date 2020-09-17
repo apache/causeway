@@ -21,8 +21,8 @@ package org.apache.isis.viewer.common.model.binding;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.commons.internal.collections._Collections;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract

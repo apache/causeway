@@ -24,10 +24,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

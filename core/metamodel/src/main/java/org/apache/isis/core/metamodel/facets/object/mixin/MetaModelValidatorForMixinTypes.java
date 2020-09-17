@@ -19,11 +19,11 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.val;

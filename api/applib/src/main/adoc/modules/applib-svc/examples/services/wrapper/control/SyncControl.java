@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.wrapper.control;
 
 import java.util.EnumSet;
 
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 /**
  */

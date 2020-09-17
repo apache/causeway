@@ -27,8 +27,8 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils.MethodAndPpmConstructor;
 
 import lombok.Builder;

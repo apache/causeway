@@ -22,6 +22,11 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.reflection._Reflect;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
@@ -39,11 +44,6 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
-
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.context._Context;
-import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
 
 import junit.framework.AssertionFailedError;
 import lombok.RequiredArgsConstructor;

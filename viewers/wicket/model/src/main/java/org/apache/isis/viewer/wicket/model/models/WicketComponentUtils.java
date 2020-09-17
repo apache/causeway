@@ -23,7 +23,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.renderStrategy.DeepChildFirstVisitor;
 import org.apache.wicket.util.visit.IVisit;
 
-import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Casts;
 
 public class WicketComponentUtils {
 

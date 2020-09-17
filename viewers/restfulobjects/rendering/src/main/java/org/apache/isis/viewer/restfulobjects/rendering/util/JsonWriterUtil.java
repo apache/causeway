@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 import lombok.val;

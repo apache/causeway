@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.config.beans;
 
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

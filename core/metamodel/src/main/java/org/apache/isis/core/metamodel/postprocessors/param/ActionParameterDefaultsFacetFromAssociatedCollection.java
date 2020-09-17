@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.postprocessors.param;
 import java.util.function.Function;
 
 import org.apache.isis.applib.ApplicationException;
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;

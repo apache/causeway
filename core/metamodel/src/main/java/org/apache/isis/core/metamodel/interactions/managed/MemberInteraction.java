@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Either;
 
 import lombok.NonNull;
 import lombok.val;

@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault.Factory;
 
 /**

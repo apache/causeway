@@ -23,8 +23,8 @@ import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.AccessLevel;
 import lombok.Getter;

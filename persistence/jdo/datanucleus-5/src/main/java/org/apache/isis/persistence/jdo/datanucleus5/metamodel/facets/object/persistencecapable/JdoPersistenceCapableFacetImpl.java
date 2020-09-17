@@ -27,8 +27,8 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

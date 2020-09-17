@@ -25,8 +25,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.SneakyThrows;
 import lombok.val;

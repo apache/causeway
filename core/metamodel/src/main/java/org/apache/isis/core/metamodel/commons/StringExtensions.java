@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.isis.applib.util.Enums;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Resources;
 
 public final class StringExtensions {
 

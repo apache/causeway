@@ -24,7 +24,7 @@ import java.util.function.IntFunction;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 public final class MethodLiteralConstants {

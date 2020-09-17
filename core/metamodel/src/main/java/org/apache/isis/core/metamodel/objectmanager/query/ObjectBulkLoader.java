@@ -20,10 +20,10 @@
 package org.apache.isis.core.metamodel.objectmanager.query;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.handler.ChainOfResponsibility;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.handler.ChainOfResponsibility;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils.MethodAndPpmConstructor;
 
 /**

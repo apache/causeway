@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.core.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.Smoketest;

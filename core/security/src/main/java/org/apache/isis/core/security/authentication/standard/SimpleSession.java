@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
 import lombok.Setter;

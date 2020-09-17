@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import javax.activation.MimeType;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 

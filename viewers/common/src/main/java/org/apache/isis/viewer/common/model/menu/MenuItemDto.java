@@ -20,7 +20,7 @@ package org.apache.isis.viewer.common.model.menu;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 

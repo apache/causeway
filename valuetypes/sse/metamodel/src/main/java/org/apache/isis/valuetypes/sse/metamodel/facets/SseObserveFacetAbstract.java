@@ -19,8 +19,8 @@
 
 package org.apache.isis.valuetypes.sse.metamodel.facets;
 
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;

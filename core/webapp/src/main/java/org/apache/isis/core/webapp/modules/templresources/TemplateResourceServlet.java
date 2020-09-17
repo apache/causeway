@@ -31,16 +31,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.isis.core.commons.internal.base._Bytes;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.metamodel.commons.InputStreamExtensions;
 import org.apache.isis.core.metamodel.commons.ResourceUtil;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
-import static org.apache.isis.core.commons.internal.base._Strings.pair;
-import static org.apache.isis.core.commons.internal.base._With.ifPresentElseGet;
+import static org.apache.isis.commons.internal.base._Strings.pair;
+import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

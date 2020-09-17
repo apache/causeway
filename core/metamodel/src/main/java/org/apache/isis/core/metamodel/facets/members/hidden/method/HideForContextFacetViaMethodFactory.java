@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.hidden.method;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

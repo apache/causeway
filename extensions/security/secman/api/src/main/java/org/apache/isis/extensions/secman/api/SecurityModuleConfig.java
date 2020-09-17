@@ -21,7 +21,7 @@ package org.apache.isis.extensions.secman.api;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 import lombok.Builder;
 import lombok.Getter;

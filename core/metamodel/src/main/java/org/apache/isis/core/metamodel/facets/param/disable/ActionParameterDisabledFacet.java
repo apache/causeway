@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.disable;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

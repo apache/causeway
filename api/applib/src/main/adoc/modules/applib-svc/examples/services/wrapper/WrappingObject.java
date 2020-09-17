@@ -22,7 +22,7 @@ package org.apache.isis.applib.services.wrapper;
 import java.util.EnumSet;
 
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 /**
  * Implemented by all objects that have been viewed as per

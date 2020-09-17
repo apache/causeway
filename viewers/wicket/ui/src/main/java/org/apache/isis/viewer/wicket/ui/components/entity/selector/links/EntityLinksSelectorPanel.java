@@ -36,8 +36,8 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.primitives._Ints;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;

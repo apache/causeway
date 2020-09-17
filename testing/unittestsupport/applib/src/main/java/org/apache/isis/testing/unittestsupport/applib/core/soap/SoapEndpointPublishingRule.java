@@ -26,7 +26,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 
 /**

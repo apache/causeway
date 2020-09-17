@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.query;
 
-import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 
 import lombok.Getter;
 

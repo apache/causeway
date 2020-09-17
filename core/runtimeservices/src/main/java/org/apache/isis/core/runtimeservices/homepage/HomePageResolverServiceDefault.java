@@ -29,9 +29,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.core.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
+import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.val;
 

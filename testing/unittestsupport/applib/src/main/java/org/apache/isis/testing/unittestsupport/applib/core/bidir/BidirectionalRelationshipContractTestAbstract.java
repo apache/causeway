@@ -42,11 +42,11 @@ import org.apache.isis.testing.unittestsupport.applib.core.utils.CollectUtils;
 import org.apache.isis.testing.unittestsupport.applib.core.utils.ReflectUtils;
 import org.apache.isis.testing.unittestsupport.applib.core.utils.StringUtils;
 
-import static org.apache.isis.core.commons.internal.collections._Collections.toHashSet;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.streamAllFields;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.streamAllMethods;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.withMethodParametersCount;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.withName;
+import static org.apache.isis.commons.internal.collections._Collections.toHashSet;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamAllFields;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
+import static org.apache.isis.commons.internal.reflection._Reflect.withMethodParametersCount;
+import static org.apache.isis.commons.internal.reflection._Reflect.withName;
 import static org.apache.isis.testing.unittestsupport.applib.core.utils.ReflectUtils.withParametersAssignableFrom;
 
 /**

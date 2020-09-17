@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
 public interface ObjectAssociationContainer {

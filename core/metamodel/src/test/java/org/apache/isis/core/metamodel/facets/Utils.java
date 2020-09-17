@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.commons.internal._Constants;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 class Utils {

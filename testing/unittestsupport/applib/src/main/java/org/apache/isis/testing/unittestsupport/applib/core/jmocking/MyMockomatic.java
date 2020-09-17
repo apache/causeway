@@ -27,7 +27,7 @@ import org.jmock.States;
 import org.jmock.auto.Auto;
 import org.jmock.auto.Mock;
 
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 class MyMockomatic {
     private final JUnitRuleMockery2 context;

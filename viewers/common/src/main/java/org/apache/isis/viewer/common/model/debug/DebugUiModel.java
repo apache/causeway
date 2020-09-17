@@ -20,7 +20,7 @@ package org.apache.isis.viewer.common.model.debug;
 
 import java.util.Map;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import lombok.Value;
 

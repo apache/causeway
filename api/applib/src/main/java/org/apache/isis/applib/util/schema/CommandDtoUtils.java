@@ -31,7 +31,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.applib.util.JaxbUtil;
-import org.apache.isis.core.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MapDto;

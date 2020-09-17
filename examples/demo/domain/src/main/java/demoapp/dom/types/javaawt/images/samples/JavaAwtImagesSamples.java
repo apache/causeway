@@ -25,8 +25,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.commons.internal.base._Bytes;
-import org.apache.isis.core.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.SneakyThrows;
 import lombok.val;

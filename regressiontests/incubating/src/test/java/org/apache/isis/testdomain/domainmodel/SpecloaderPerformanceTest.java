@@ -32,10 +32,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.base._Timing;
-import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Timing;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 // tag::refguide[]
 public enum ApplicationMemberType {

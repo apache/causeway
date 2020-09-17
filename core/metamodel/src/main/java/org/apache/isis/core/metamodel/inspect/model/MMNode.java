@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 
 import lombok.Setter;

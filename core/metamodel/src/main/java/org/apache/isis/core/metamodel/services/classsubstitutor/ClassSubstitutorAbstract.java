@@ -23,9 +23,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.internal.base._Blackhole;
-import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.commons.internal.base._Blackhole;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 
 import lombok.NonNull;

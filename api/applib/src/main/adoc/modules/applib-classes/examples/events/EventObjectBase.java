@@ -20,9 +20,9 @@ package org.apache.isis.applib.events;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * @since 2.0

@@ -43,9 +43,9 @@ import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
 

@@ -35,12 +35,12 @@ import org.springframework.core.MethodParameter;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.collections._Arrays;
-import org.apache.isis.core.commons.internal.collections._Collections;
-import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;

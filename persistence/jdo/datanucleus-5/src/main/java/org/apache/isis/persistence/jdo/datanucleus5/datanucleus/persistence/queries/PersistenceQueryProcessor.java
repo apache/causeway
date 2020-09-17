@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries;
 
-import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQuery;
 

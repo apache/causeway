@@ -33,7 +33,7 @@ import lombok.val;
 //
 //import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 //import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
-//import org.apache.isis.core.commons.collections.Can;
+//import org.apache.isis.commons.collections.Can;
 //
 //import lombok.val;
 import lombok.extern.log4j.Log4j2;

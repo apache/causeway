@@ -20,9 +20,9 @@ package org.apache.isis.testdomain.interact;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.isis.core.commons.binding.Bindable;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.binding._Bindables;
+import org.apache.isis.commons.binding.Bindable;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

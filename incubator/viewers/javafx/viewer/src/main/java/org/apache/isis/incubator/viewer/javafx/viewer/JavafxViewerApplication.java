@@ -23,7 +23,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
-import org.apache.isis.core.commons.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
 import javafx.application.Application;

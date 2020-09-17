@@ -25,8 +25,8 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.commons.collections.Cardinality;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.commons.collections.Cardinality;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 

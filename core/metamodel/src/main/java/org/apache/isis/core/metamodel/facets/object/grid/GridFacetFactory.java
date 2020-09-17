@@ -17,7 +17,7 @@
 package org.apache.isis.core.metamodel.facets.object.grid;
 
 import org.apache.isis.applib.services.grid.GridService;
-import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 

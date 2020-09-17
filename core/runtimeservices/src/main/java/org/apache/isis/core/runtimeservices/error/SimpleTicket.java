@@ -23,9 +23,9 @@ import java.util.function.UnaryOperator;
 
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.isEmpty;
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.

@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.core.commons.internal.base._Bytes;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.hash._Hashes;
-import org.apache.isis.core.commons.internal.hash._Hashes.Algorithm;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.hash._Hashes;
+import org.apache.isis.commons.internal.hash._Hashes.Algorithm;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

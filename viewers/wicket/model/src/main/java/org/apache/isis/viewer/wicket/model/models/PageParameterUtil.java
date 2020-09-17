@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.primitives._Ints;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;

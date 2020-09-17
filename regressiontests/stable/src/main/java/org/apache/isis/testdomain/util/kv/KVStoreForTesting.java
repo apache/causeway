@@ -28,8 +28,8 @@ import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.commons.concurrent.AwaitableLatch;
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.commons.concurrent.AwaitableLatch;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import lombok.NonNull;
 import lombok.Value;

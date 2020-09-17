@@ -28,14 +28,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.collections._Arrays;
-import org.apache.isis.core.commons.internal.collections._Collections;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.isEmpty;
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
 import lombok.val;
 

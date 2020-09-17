@@ -27,12 +27,12 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.commons.internal.base._Reduction;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.resources._Resources;
+import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Reduction;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.val;
 

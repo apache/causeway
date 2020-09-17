@@ -50,8 +50,8 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.internal.codec._DocumentFactories;
+import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.codec._DocumentFactories;
 
 import lombok.extern.log4j.Log4j2;
 

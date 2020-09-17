@@ -24,10 +24,10 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.core.commons.internal.exceptions._Exceptions.containsAnyOfTheseMessages;
-import static org.apache.isis.core.commons.internal.exceptions._Exceptions.getCausalChain;
+import static org.apache.isis.commons.internal.exceptions._Exceptions.containsAnyOfTheseMessages;
+import static org.apache.isis.commons.internal.exceptions._Exceptions.getCausalChain;
 
 import lombok.val;
 

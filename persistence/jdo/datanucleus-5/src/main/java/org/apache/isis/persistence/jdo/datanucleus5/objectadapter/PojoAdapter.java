@@ -22,8 +22,8 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.val;
