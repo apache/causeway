@@ -73,6 +73,7 @@ public final class ManagedObjects {
     
     // -- CATEGORISATION
 
+    /** is null or has neither an ObjectSpecification and a value (pojo) */
     public static boolean isNullOrUnspecifiedOrEmpty(@Nullable ManagedObject adapter) {
         if(adapter==null || adapter==ManagedObject.unspecified()) {
             return true;

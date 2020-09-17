@@ -25,10 +25,12 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -117,9 +119,22 @@ public interface ManagedObject {
         
         ManagedObjects.assertPojoNotManaged(pojo);
         specification.assertPojoCompatible(pojo);
-        val adapter = new SimpleManagedObject(specification, pojo);
+        
+        //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
+        //actual type in use (during runtime) might be a sub-class of the above
+        {
+            if(pojo==null 
+                    || pojo.getClass().equals(specification.getCorrespondingClass())
+                    ) {
+                return SimpleManagedObject.of(specification, pojo);
+            }
+        }
+        
+        //_Probe.errOut("upgrading spec %s on type %s", specification, pojo.getClass());
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
-        return adapter;
+        
+        val specLoader = specification.getMetaModelContext().getSpecificationLoader();
+        return ManagedObject.of(specLoader::loadSpecification, pojo);
     }
     
     /**
@@ -172,7 +187,7 @@ public interface ManagedObject {
     // -- SIMPLE
 
     @Value 
-    @RequiredArgsConstructor(staticName="of") 
+    @RequiredArgsConstructor(staticName="of", access = AccessLevel.PRIVATE) 
     @EqualsAndHashCode(of = "pojo")
     @ToString(of = {"specification", "pojo"}) //ISIS-2317 make sure toString() is without side-effects
     static final class SimpleManagedObject implements ManagedObject {
