@@ -25,7 +25,6 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -122,12 +121,12 @@ public interface ManagedObject {
         
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
         //actual type in use (during runtime) might be a sub-class of the above
-        {
-            if(pojo==null 
-                    || pojo.getClass().equals(specification.getCorrespondingClass())
-                    ) {
-                return SimpleManagedObject.of(specification, pojo);
-            }
+        if(pojo==null 
+                || pojo.getClass().equals(specification.getCorrespondingClass())
+                ) {
+            // if actual type matches spec's, we assume, that we don't need to reload, 
+            // so this is a shortcut for performance reasons  
+            return SimpleManagedObject.of(specification, pojo);
         }
         
         //_Probe.errOut("upgrading spec %s on type %s", specification, pojo.getClass());
