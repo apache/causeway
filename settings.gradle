@@ -6,10 +6,10 @@ rootProject.name = 'isis'
 include ':org.apache.isis:isis-parent'
 include ':org.apache.isis.regressiontests:isis-regressiontests'
 include ':org.apache.isis.regressiontests:isis-regressiontests-stable'
-include ':org.apache.isis.tooling:isis-tooling'
-include ':org.apache.isis.tooling:isis-tooling-javamodel'
-include ':org.apache.isis.tooling:isis-tooling-model4adoc'
-include ':org.apache.isis.tooling:isis-tooling-projectmodel'
+//include ':org.apache.isis.tooling:isis-tooling'
+//include ':org.apache.isis.tooling:isis-tooling-javamodel'
+//include ':org.apache.isis.tooling:isis-tooling-model4adoc'
+//include ':org.apache.isis.tooling:isis-tooling-projectmodel'
 include ':org.apache.isis.core:isis-core'
 include ':org.apache.isis.commons:isis-commons'
 include ':org.apache.isis.core:isis-applib'
@@ -68,14 +68,14 @@ include ':org.apache.isis.extensions:isis-extensions-pdfjs-metamodel'
 include ':org.apache.isis.extensions:isis-extensions-pdfjs-ui'
 //include ':org.apache.isis.incubator.clients:isis-client-kroviz'
 include ':org.apache.isis.incubator:isis-incubator'
-include ':org.apache.isis.incubator.viewer:isis-viewer-javafx'
-include ':org.apache.isis.incubator.viewer:isis-viewer-javafx-model'
-include ':org.apache.isis.incubator.viewer:isis-viewer-javafx-ui'
-include ':org.apache.isis.incubator.viewer:isis-viewer-javafx-viewer'
-include ':org.apache.isis.incubator.viewer:isis-viewer-vaadin'
-include ':org.apache.isis.incubator.viewer:isis-viewer-vaadin-model'
-include ':org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui'
-include ':org.apache.isis.incubator.viewer:isis-viewer-vaadin-viewer'
+//include ':org.apache.isis.incubator.viewer:isis-viewer-javafx'
+//include ':org.apache.isis.incubator.viewer:isis-viewer-javafx-model'
+//include ':org.apache.isis.incubator.viewer:isis-viewer-javafx-ui'
+//include ':org.apache.isis.incubator.viewer:isis-viewer-javafx-viewer'
+//include ':org.apache.isis.incubator.viewer:isis-viewer-vaadin'
+//include ':org.apache.isis.incubator.viewer:isis-viewer-vaadin-model'
+//include ':org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui'
+//include ':org.apache.isis.incubator.viewer:isis-viewer-vaadin-viewer'
 include ':org.apache.isis.legacy:isis-legacy'
 include ':org.apache.isis.legacy:isis-legacy-applib'
 include ':org.apache.isis.legacy:isis-legacy-commons'
@@ -135,40 +135,40 @@ include ':org.apache.isis.testing:isis-testing-unittestsupport'
 include ':org.apache.isis.testing:isis-testing-unittestsupport-applib'
 include ':org.apache.isis.valuetypes:isis-valuetypes'
 include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc'
-include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel'
-include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence'
-include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo-dn5'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo-dn5'
 include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib'
-include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui'
-include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-vaa'
-include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-vaa'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt'
 include ':org.apache.isis.valuetypes:isis-valuetypes-markdown'
-include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel'
-include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence'
-include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo-dn5'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo-dn5'
 include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-applib'
-include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui'
-include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt'
 include ':org.apache.isis.valuetypes:isis-valuetypes-sse'
-include ':org.apache.isis.valuetypes:isis-valuetypes-sse-ui'
-include ':org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-sse-ui'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt'
 include ':org.apache.isis.valuetypes:isis-valuetypes-sse-applib'
-include ':org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel'
-include ':org.apache.isis.examples.apps:demo-parent'
-include ':org.apache.isis.examples.apps:demo-domain'
-include ':org.apache.isis.examples.apps:demo-javafx'
-include ':org.apache.isis.examples.apps:demo-vaadin'
-include ':org.apache.isis.examples.apps:demo-web'
-include ':org.apache.isis.examples.apps:demo-wicket'
-include ':org.apache.isis:antora'
+//include ':org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel'
+//include ':org.apache.isis.examples.apps:demo-parent'
+//include ':org.apache.isis.examples.apps:demo-domain'
+//include ':org.apache.isis.examples.apps:demo-javafx'
+//include ':org.apache.isis.examples.apps:demo-vaadin'
+//include ':org.apache.isis.examples.apps:demo-web'
+//include ':org.apache.isis.examples.apps:demo-wicket'
+//include ':org.apache.isis:antora'
 
 project(':org.apache.isis:isis-parent').projectDir = "$rootDir/isis-parent" as File
 project(':org.apache.isis.regressiontests:isis-regressiontests').projectDir = "$rootDir/regressiontests" as File
 project(':org.apache.isis.regressiontests:isis-regressiontests-stable').projectDir = "$rootDir/regressiontests/stable" as File
-project(':org.apache.isis.tooling:isis-tooling').projectDir = "$rootDir/tooling" as File
-project(':org.apache.isis.tooling:isis-tooling-javamodel').projectDir = "$rootDir/tooling/javamodel" as File
-project(':org.apache.isis.tooling:isis-tooling-model4adoc').projectDir = "$rootDir/tooling/model4adoc" as File
-project(':org.apache.isis.tooling:isis-tooling-projectmodel').projectDir = "$rootDir/tooling/projectmodel" as File
+//project(':org.apache.isis.tooling:isis-tooling').projectDir = "$rootDir/tooling" as File
+//project(':org.apache.isis.tooling:isis-tooling-javamodel').projectDir = "$rootDir/tooling/javamodel" as File
+//project(':org.apache.isis.tooling:isis-tooling-model4adoc').projectDir = "$rootDir/tooling/model4adoc" as File
+//project(':org.apache.isis.tooling:isis-tooling-projectmodel').projectDir = "$rootDir/tooling/projectmodel" as File
 project(':org.apache.isis.core:isis-core').projectDir = "$rootDir/core" as File
 project(':org.apache.isis.commons:isis-commons').projectDir = "$rootDir/commons" as File
 project(':org.apache.isis.core:isis-applib').projectDir = "$rootDir/api/applib" as File
@@ -227,14 +227,14 @@ project(':org.apache.isis.extensions:isis-extensions-pdfjs-metamodel').projectDi
 project(':org.apache.isis.extensions:isis-extensions-pdfjs-ui').projectDir = "$rootDir/extensions/vw/pdfjs/ui" as File
 //project(':org.apache.isis.incubator.clients:isis-client-kroviz').projectDir = "$rootDir/incubator/clients/kroviz" as File
 project(':org.apache.isis.incubator:isis-incubator').projectDir = "$rootDir/incubator" as File
-project(':org.apache.isis.incubator.viewer:isis-viewer-javafx').projectDir = "$rootDir/incubator/viewers/javafx" as File
-project(':org.apache.isis.incubator.viewer:isis-viewer-javafx-model').projectDir = "$rootDir/incubator/viewers/javafx/model" as File
-project(':org.apache.isis.incubator.viewer:isis-viewer-javafx-ui').projectDir = "$rootDir/incubator/viewers/javafx/ui" as File
-project(':org.apache.isis.incubator.viewer:isis-viewer-javafx-viewer').projectDir = "$rootDir/incubator/viewers/javafx/viewer" as File
-project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin').projectDir = "$rootDir/incubator/viewers/vaadin" as File
-project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-model').projectDir = "$rootDir/incubator/viewers/vaadin/model" as File
-project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui').projectDir = "$rootDir/incubator/viewers/vaadin/ui" as File
-project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-viewer').projectDir = "$rootDir/incubator/viewers/vaadin/viewer" as File
+//project(':org.apache.isis.incubator.viewer:isis-viewer-javafx').projectDir = "$rootDir/incubator/viewers/javafx" as File
+//project(':org.apache.isis.incubator.viewer:isis-viewer-javafx-model').projectDir = "$rootDir/incubator/viewers/javafx/model" as File
+//project(':org.apache.isis.incubator.viewer:isis-viewer-javafx-ui').projectDir = "$rootDir/incubator/viewers/javafx/ui" as File
+//project(':org.apache.isis.incubator.viewer:isis-viewer-javafx-viewer').projectDir = "$rootDir/incubator/viewers/javafx/viewer" as File
+//project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin').projectDir = "$rootDir/incubator/viewers/vaadin" as File
+//project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-model').projectDir = "$rootDir/incubator/viewers/vaadin/model" as File
+//project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui').projectDir = "$rootDir/incubator/viewers/vaadin/ui" as File
+//project(':org.apache.isis.incubator.viewer:isis-viewer-vaadin-viewer').projectDir = "$rootDir/incubator/viewers/vaadin/viewer" as File
 project(':org.apache.isis.legacy:isis-legacy').projectDir = "$rootDir/legacy" as File
 project(':org.apache.isis.legacy:isis-legacy-applib').projectDir = "$rootDir/legacy/extensions/core/applib" as File
 project(':org.apache.isis.legacy:isis-legacy-commons').projectDir = "$rootDir/legacy/extensions/core/commons" as File
@@ -294,30 +294,30 @@ project(':org.apache.isis.testing:isis-testing-unittestsupport').projectDir = "$
 project(':org.apache.isis.testing:isis-testing-unittestsupport-applib').projectDir = "$rootDir/testing/unittestsupport/applib" as File
 project(':org.apache.isis.valuetypes:isis-valuetypes').projectDir = "$rootDir/valuetypes" as File
 project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc').projectDir = "$rootDir/valuetypes/asciidoc" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel').projectDir = "$rootDir/valuetypes/asciidoc/metamodel" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence').projectDir = "$rootDir/valuetypes/asciidoc/persistence" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo-dn5').projectDir = "$rootDir/valuetypes/asciidoc/persistence/jdo-dn5" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel').projectDir = "$rootDir/valuetypes/asciidoc/metamodel" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence').projectDir = "$rootDir/valuetypes/asciidoc/persistence" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo-dn5').projectDir = "$rootDir/valuetypes/asciidoc/persistence/jdo-dn5" as File
 project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib').projectDir = "$rootDir/valuetypes/asciidoc/applib" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui').projectDir = "$rootDir/valuetypes/asciidoc/ui" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-vaa').projectDir = "$rootDir/valuetypes/asciidoc/ui/vaadin" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt').projectDir = "$rootDir/valuetypes/asciidoc/ui/wicket" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui').projectDir = "$rootDir/valuetypes/asciidoc/ui" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-vaa').projectDir = "$rootDir/valuetypes/asciidoc/ui/vaadin" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt').projectDir = "$rootDir/valuetypes/asciidoc/ui/wicket" as File
 project(':org.apache.isis.valuetypes:isis-valuetypes-markdown').projectDir = "$rootDir/valuetypes/markdown" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel').projectDir = "$rootDir/valuetypes/markdown/metamodel" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence').projectDir = "$rootDir/valuetypes/markdown/persistence" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo-dn5').projectDir = "$rootDir/valuetypes/markdown/persistence/jdo-dn5" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel').projectDir = "$rootDir/valuetypes/markdown/metamodel" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence').projectDir = "$rootDir/valuetypes/markdown/persistence" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo-dn5').projectDir = "$rootDir/valuetypes/markdown/persistence/jdo-dn5" as File
 project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-applib').projectDir = "$rootDir/valuetypes/markdown/applib" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui').projectDir = "$rootDir/valuetypes/markdown/ui" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt').projectDir = "$rootDir/valuetypes/markdown/ui/wicket" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui').projectDir = "$rootDir/valuetypes/markdown/ui" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt').projectDir = "$rootDir/valuetypes/markdown/ui/wicket" as File
 project(':org.apache.isis.valuetypes:isis-valuetypes-sse').projectDir = "$rootDir/valuetypes/sse" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-sse-ui').projectDir = "$rootDir/valuetypes/sse/ui" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt').projectDir = "$rootDir/valuetypes/sse/ui/wicket" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-sse-ui').projectDir = "$rootDir/valuetypes/sse/ui" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt').projectDir = "$rootDir/valuetypes/sse/ui/wicket" as File
 project(':org.apache.isis.valuetypes:isis-valuetypes-sse-applib').projectDir = "$rootDir/valuetypes/sse/applib" as File
-project(':org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel').projectDir = "$rootDir/valuetypes/sse/metamodel" as File
-project(':org.apache.isis.examples.apps:demo-parent').projectDir = "$rootDir/examples/demo" as File
-project(':org.apache.isis.examples.apps:demo-domain').projectDir = "$rootDir/examples/demo/domain" as File
-project(':org.apache.isis.examples.apps:demo-javafx').projectDir = "$rootDir/examples/demo/javafx" as File
-project(':org.apache.isis.examples.apps:demo-vaadin').projectDir = "$rootDir/examples/demo/vaadin" as File
-project(':org.apache.isis.examples.apps:demo-web').projectDir = "$rootDir/examples/demo/web" as File
-project(':org.apache.isis.examples.apps:demo-wicket').projectDir = "$rootDir/examples/demo/wicket" as File
-project(':org.apache.isis:antora').projectDir = "$rootDir/antora" as File
+//project(':org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel').projectDir = "$rootDir/valuetypes/sse/metamodel" as File
+//project(':org.apache.isis.examples.apps:demo-parent').projectDir = "$rootDir/examples/demo" as File
+//project(':org.apache.isis.examples.apps:demo-domain').projectDir = "$rootDir/examples/demo/domain" as File
+//project(':org.apache.isis.examples.apps:demo-javafx').projectDir = "$rootDir/examples/demo/javafx" as File
+//project(':org.apache.isis.examples.apps:demo-vaadin').projectDir = "$rootDir/examples/demo/vaadin" as File
+//project(':org.apache.isis.examples.apps:demo-web').projectDir = "$rootDir/examples/demo/web" as File
+//project(':org.apache.isis.examples.apps:demo-wicket').projectDir = "$rootDir/examples/demo/wicket" as File
+//project(':org.apache.isis:antora').projectDir = "$rootDir/antora" as File
 
