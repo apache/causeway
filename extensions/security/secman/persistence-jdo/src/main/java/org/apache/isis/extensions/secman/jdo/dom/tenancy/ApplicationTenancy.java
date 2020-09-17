@@ -93,7 +93,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
     @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
-    @Title
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED

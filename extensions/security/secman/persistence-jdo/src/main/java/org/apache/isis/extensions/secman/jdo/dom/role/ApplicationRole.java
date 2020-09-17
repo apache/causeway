@@ -93,15 +93,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Inject private ApplicationFeatureRepository applicationFeatureRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     
-    // -- identification
-    /**
-     * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
-     * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
-     */
-    public String title() {
-        return getName();
-    }
-
     // -- name (property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}

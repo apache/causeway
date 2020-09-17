@@ -18,9 +18,15 @@
  */
 package org.apache.isis.extensions.secman.api.permission;
 
+import java.util.Optional;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+
+import lombok.val;
 
 public interface ApplicationPermission {
     
@@ -39,6 +45,44 @@ public interface ApplicationPermission {
     
     // -- MODEL
     
+    /**
+     * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
+     * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+     */
+    default String title() {
+        val buf = new StringBuilder();
+        buf.append(getRole().getName()).append(":")  // admin:
+        .append(" ").append(getRule().toString()) // Allow|Veto
+        .append(" ").append(getMode().toString()) // Viewing|Changing
+        .append(" of ");
+
+        createFeatureId()
+        .ifPresent(featureId->{
+            
+            switch (featureId.getType()) {
+            case PACKAGE:
+                buf.append(getFeatureFqn());              // com.mycompany
+                break;
+            case CLASS:
+                // abbreviate if required because otherwise title overflows on action prompt.
+                if(getFeatureFqn().length() < 30) {
+                    buf.append(getFeatureFqn());          // com.mycompany.Bar
+                } else {
+                    buf.append(featureId.getClassName()); // Bar
+                }
+                break;
+            case MEMBER:
+                buf.append(featureId.getClassName())
+                .append("#")
+                .append(featureId.getMemberName());   // com.mycompany.Bar#foo
+                break;
+            }
+            
+        });
+        
+        return buf.toString();
+    }
+    
     ApplicationFeatureType getFeatureType();
 
     String getFeatureFqn();
@@ -51,6 +95,14 @@ public interface ApplicationPermission {
     
     ApplicationRole getRole();
     void setRole(ApplicationRole applicationRole);
+    
+    // -- HELPER
+    
+    @Programmatic
+    default Optional<ApplicationFeatureId> createFeatureId() {
+        return Optional.of(getFeatureType())
+                .map(featureType -> ApplicationFeatureId.newFeature(featureType, getFeatureFqn()));
+    }
     
 
 }

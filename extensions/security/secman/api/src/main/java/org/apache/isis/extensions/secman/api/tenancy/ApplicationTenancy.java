@@ -42,6 +42,10 @@ public interface ApplicationTenancy {
     
     // -- MODEL
     
+    default String title() {
+        return getName();
+    }
+    
     public String getPath();
 
     public String getName();
