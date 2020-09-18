@@ -21,14 +21,14 @@ package org.apache.isis.commons.internal.factory;
 
 import org.apache.isis.commons.exceptions.IsisException;
 
-public class InstanceCreationClassException extends IsisException {
+public class _InstanceCreationException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public InstanceCreationClassException(final String s) {
+    public _InstanceCreationException(final String s) {
         super(s);
     }
 
-    public InstanceCreationClassException(final String msg, final Throwable cause) {
+    public _InstanceCreationException(final String msg, final Throwable cause) {
         super(msg, cause);
     }
 }

@@ -44,7 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -266,7 +266,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
         if (authLookupStrategyClassName == null) {
             authLookupStrategyClassName = AUTHENTICATION_SESSION_STRATEGY_DEFAULT;
         }
-        return (AuthenticationSessionStrategy) InstanceUtil.createInstance(authLookupStrategyClassName);
+        return (AuthenticationSessionStrategy) _InstanceUtil.createInstance(authLookupStrategyClassName);
     }
 
     private void lookupWhenNoSession(final FilterConfig config) {

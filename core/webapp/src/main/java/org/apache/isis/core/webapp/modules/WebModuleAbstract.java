@@ -29,7 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 
 public abstract class WebModuleAbstract implements WebModule {
 
@@ -83,7 +83,7 @@ public abstract class WebModuleAbstract implements WebModule {
             final Class<? extends ServletContextListener> listenerCls) throws ServletException {
         
         final ServletContextListener listener = 
-                InstanceUtil.createInstance(listenerCls, ServletContextListener.class);
+                _InstanceUtil.createInstance(listenerCls, ServletContextListener.class);
         serviceInjector.injectServicesInto(listener);
         return listener;
     }

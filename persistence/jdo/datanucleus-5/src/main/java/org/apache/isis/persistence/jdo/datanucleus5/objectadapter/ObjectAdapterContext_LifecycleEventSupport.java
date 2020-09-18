@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.RuntimeContext;
@@ -51,7 +51,7 @@ class ObjectAdapterContext_LifecycleEventSupport {
         val lifecycleEventFacet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
         if(lifecycleEventFacet != null) {
             final Class<? extends AbstractLifecycleEvent<?>> eventType = lifecycleEventFacet.getEventType();
-            val instance = (AbstractLifecycleEvent) InstanceUtil.createInstance(eventType);
+            val instance = (AbstractLifecycleEvent) _InstanceUtil.createInstance(eventType);
             val pojo = adapter.getPojo();
             postEvent(instance, pojo);
         }

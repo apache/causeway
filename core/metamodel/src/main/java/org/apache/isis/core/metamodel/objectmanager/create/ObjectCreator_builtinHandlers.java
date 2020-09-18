@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
@@ -144,7 +144,7 @@ final class ObjectCreator_builtinHandlers {
             }
             
             val eventType = lifecycleEventFacet.getEventType();
-            val instance = InstanceUtil.createInstance(eventType);
+            val instance = _InstanceUtil.createInstance(eventType);
             val pojo = adapter.getPojo();
             postEvent(_Casts.uncheckedCast(instance), pojo);
             

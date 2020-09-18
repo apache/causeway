@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
@@ -40,7 +40,7 @@ public class RemoveJdoEnhancementTypesFacetFactory extends FacetFactoryAbstract 
 
         final String typeToIgnoreIfOnClasspath = "javax.jdo.spi.PersistenceCapable";
         try {
-            Class<?> typeToIgnore = InstanceUtil.loadClass(typeToIgnoreIfOnClasspath);
+            Class<?> typeToIgnore = _InstanceUtil.loadClass(typeToIgnoreIfOnClasspath);
             addMethodsToBeIgnored(typeToIgnore);
         } catch(Exception ex) {
             // ignore

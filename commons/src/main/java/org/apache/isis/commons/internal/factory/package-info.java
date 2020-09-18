@@ -18,7 +18,7 @@
  */
 
 /**
- * Provides a {@link org.apache.isis.commons.internal.factory.InstanceUtil utility}
+ * Provides a {@link org.apache.isis.commons.internal.factory._InstanceUtil utility}
  * class for instantiating classes, ensuring that
  * they are assignable from a specified interface (if supplied).
  *

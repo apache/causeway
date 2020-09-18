@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.val;
@@ -46,7 +46,7 @@ public interface IsisWicketThemeSupport {
 
         try {
 
-            val themeSupport = (IsisWicketThemeSupport) InstanceUtil.createInstance(themeSupportClassName);
+            val themeSupport = (IsisWicketThemeSupport) _InstanceUtil.createInstance(themeSupportClassName);
             return themeSupport;
 
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public interface IsisWicketThemeSupport {
                     IsisWicketThemeSupportDefault.class.getName());
         }
 
-        return (IsisWicketThemeSupport) InstanceUtil.createInstance(IsisWicketThemeSupportDefault.class);
+        return (IsisWicketThemeSupport) _InstanceUtil.createInstance(IsisWicketThemeSupportDefault.class);
     }
 
 

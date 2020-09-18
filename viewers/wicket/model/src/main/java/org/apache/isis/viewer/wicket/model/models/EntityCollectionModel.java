@@ -34,7 +34,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -216,7 +216,7 @@ implements LinksProvider, UiHintContainer {
                 final Class<? extends Comparator<?>> sortedBy = colModel.sortedBy;
                 if(sortedBy != null) {
                     @SuppressWarnings("unchecked")
-                    final Comparator<Object> comparator = (Comparator<Object>) InstanceUtil.createInstance(sortedBy);
+                    final Comparator<Object> comparator = (Comparator<Object>) _InstanceUtil.createInstance(sortedBy);
                     colModel.getCommonContext().injectServicesInto(comparator);
                     Collections.sort(objectList, comparator);
                 }

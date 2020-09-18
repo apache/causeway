@@ -37,7 +37,7 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -212,7 +212,7 @@ public class DataNucleusApplicationComponents5 {
     private MetaDataListener createMetaDataListener() {
         final String classMetadataListenerClassName = configuration.getPersistence().getJdoDatanucleus().getClassMetadataLoadedListener();
         return classMetadataListenerClassName != null
-                ? InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
+                ? _InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
                         : null;
     }
 

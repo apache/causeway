@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -91,7 +91,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     protected Class<?> loadClass(final String cls) {
         final Class<?> domainType;
         try {
-            domainType = InstanceUtil.loadClass(cls);
+            domainType = _InstanceUtil.loadClass(cls);
         }catch (final Exception ex) {
             throw RestfulObjectsApplicationException.createWithCause(RestfulResponse.HttpStatusCode.BAD_REQUEST, ex);
         }

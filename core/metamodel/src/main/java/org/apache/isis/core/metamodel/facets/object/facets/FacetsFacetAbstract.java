@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -72,7 +72,7 @@ public abstract class FacetsFacetAbstract extends FacetAbstract implements Facet
         }
         Class<?> classCandidate = null;
         try {
-            classCandidate = InstanceUtil.loadClass(classCandidateName);
+            classCandidate = _InstanceUtil.loadClass(classCandidateName);
             return facetFactoryOrNull(classCandidate);
         } catch (final IsisException ex) {
             return null;
