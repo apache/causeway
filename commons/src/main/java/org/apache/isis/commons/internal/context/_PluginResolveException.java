@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.plugins;
+package org.apache.isis.commons.internal.context;
 
-public class PluginResolveException extends RuntimeException {
+public class _PluginResolveException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public PluginResolveException(final String msg) {
+    public _PluginResolveException(final String msg) {
         super(msg);
     }
 
-    public PluginResolveException(final Throwable cause) {
+    public _PluginResolveException(final Throwable cause) {
         super(cause);
     }
 
-    public PluginResolveException(final String msg, final Throwable cause) {
+    public _PluginResolveException(final String msg, final Throwable cause) {
         super(msg, cause);
     }
 

@@ -35,7 +35,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.plugins.PluginResolveException;
 
 /**
  * <h1>- internal use only -</h1>
@@ -124,11 +123,11 @@ public final class _Plugin {
 
     // -- CONVENIENT EXCEPTION FACTORIES
 
-    public static <T> PluginResolveException ambiguityNonRecoverable(
+    public static <T> _PluginResolveException ambiguityNonRecoverable(
             Class<T> pluginInterfaceClass,
             Set<? extends T> ambiguousPlugins) {
 
-        return new PluginResolveException(
+        return new _PluginResolveException(
                 String.format("Ambiguous plugins implementing %s found on class path.\n{%s}",
                         pluginInterfaceClass.getName(),
 
@@ -140,9 +139,9 @@ public final class _Plugin {
                         ));
     }
 
-    public static PluginResolveException absenceNonRecoverable(Class<?> pluginInterfaceClass) {
+    public static _PluginResolveException absenceNonRecoverable(Class<?> pluginInterfaceClass) {
 
-        return new PluginResolveException(
+        return new _PluginResolveException(
                 String.format("No plugin implementing %s found on class path.",
                         pluginInterfaceClass.getName() ));
     }
@@ -174,7 +173,7 @@ public final class _Plugin {
             }
 
         } catch (Exception e) {
-            throw new PluginResolveException(
+            throw new _PluginResolveException(
                     String.format("Failed to load plugin '%s' implementing '%s' from path '%s'.",
                             pluginFullyQualifiedClassName,
                             pluginInterfaceClass.getName(),
