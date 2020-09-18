@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForDomainObjects;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
-import org.apache.isis.core.metamodel.services.events.MetamodelEventSupport_Spring;
 import org.apache.isis.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException;
 import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault;
 import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
@@ -67,7 +66,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         // @Configuration's
         MetaModelContexts.class,
         IsisModuleCoreMetamodelInspection.class,
-        MetamodelEventSupport_Spring.class,
 
         // @Component's
         ProgrammingModelInitFilterDefault.class,

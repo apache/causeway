@@ -38,10 +38,9 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc._Spring;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.val;
 
