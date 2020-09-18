@@ -33,7 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.*;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.cell;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.headCell;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
 import lombok.val;
 
@@ -58,7 +61,7 @@ class AsciiDocWriterTest {
         String actualAdoc = AsciiDocWriter.toString(doc); 
         String expectedAdoc = "= Hello World\n\n";
         
-        System.out.println(actualAdoc);
+        // System.out.println(actualAdoc); // debug
         
         assertEquals(expectedAdoc, actualAdoc);
     }
@@ -109,7 +112,7 @@ class AsciiDocWriterTest {
         
         String actualAdoc = AsciiDocWriter.toString(doc); 
         
-        System.out.println(actualAdoc);
+        //System.out.println(actualAdoc); // debug
         
         assertEquals(adocRef, actualAdoc);
         
@@ -141,9 +144,9 @@ class AsciiDocWriterTest {
         
         String actualAdoc = AsciiDocWriter.toString(refDoc);
         
-        debug(refDoc);
+        //debug(refDoc);
         
-        System.out.println(actualAdoc);
+        //System.out.println(actualAdoc); // debug
         
         assertEquals(adocRef, actualAdoc);
     }
