@@ -51,7 +51,7 @@ import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -139,7 +139,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
         // PRODUCTION
         
-        val proxyFactoryService = (ProxyFactoryService) new ProxyFactoryServiceByteBuddy();
+        val proxyFactoryService = (_ProxyFactoryService) new ProxyFactoryServiceByteBuddy();
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
@@ -276,7 +276,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
         employeeWO = wrapperFactory.wrap(employeeDO);
     }
 
-    protected WrapperFactoryDefault createWrapperFactory(ProxyFactoryService proxyFactoryService) {
+    protected WrapperFactoryDefault createWrapperFactory(_ProxyFactoryService proxyFactoryService) {
         val wrapperFactory = new WrapperFactoryDefault();
         wrapperFactory.proxyFactoryService = proxyFactoryService;
         wrapperFactory.init();

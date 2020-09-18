@@ -24,8 +24,8 @@ import java.lang.reflect.Proxy;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.commons.internal.proxy._ProxyFactory;
+import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
 
 import lombok.NonNull;
@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProxyCreator {
 
-    @NonNull private final ProxyFactoryService proxyFactoryService;
+    @NonNull private final _ProxyFactoryService proxyFactoryService;
 
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
 
@@ -45,7 +45,7 @@ public class ProxyCreator {
         if (base.isInterface()) {
             return (T) Proxy.newProxyInstance(base.getClassLoader(), _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}) , handler);
         } else {
-            final ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
+            final _ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
             return proxyFactory.createInstance(handler, false);
         }
     }

@@ -76,7 +76,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -127,7 +127,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private IsisInteractionFactory isisInteractionFactory;
     @Inject private TransactionService transactionService;
     @Inject private CommandExecutorService commandExecutorService;
-    @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
+    @Inject protected _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
     @Inject private AsyncControlService asyncControlService;
     @Inject private BookmarkService bookmarkService;

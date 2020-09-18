@@ -32,9 +32,8 @@ import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryServiceAbstract;
+import org.apache.isis.commons.internal.proxy._ProxyFactory;
+import org.apache.isis.commons.internal.proxy._ProxyFactoryServiceAbstract;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
@@ -43,12 +42,12 @@ import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 
 @Service
-public class ProxyFactoryServiceByteBuddy extends ProxyFactoryServiceAbstract {
+public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
     private final ClassLoadingStrategyAdvisor strategyAdvisor = new ClassLoadingStrategyAdvisor();
 
     @Override
-    public <T> ProxyFactory<T> factory(
+    public <T> _ProxyFactory<T> factory(
             Class<T> base,
             Class<?>[] interfaces,
             Class<?>[] constructorArgTypes) {
@@ -62,7 +61,7 @@ public class ProxyFactoryServiceByteBuddy extends ProxyFactoryServiceAbstract {
         .load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base))
         .getLoaded();
 
-        return new ProxyFactory<T>() {
+        return new _ProxyFactory<T>() {
 
             @Override
             public T createInstance(InvocationHandler handler, boolean initialize) {

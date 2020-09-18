@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.plugins.codegen;
+package org.apache.isis.commons.internal.proxy;
 
 import java.lang.reflect.InvocationHandler;
 
@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationHandler;
  * @since 2.0
  * @param <T> type of proxy objects this factory creates
  */
-public interface ProxyFactory<T> {
+public interface _ProxyFactory<T> {
 
     // -- INTERFACE
 
@@ -65,7 +65,7 @@ public interface ProxyFactory<T> {
             this.constructorArgTypes = constructorArgTypes;
             return this;
         }
-        public ProxyFactory<T> build(ProxyFactoryService proxyFactoryService) {
+        public _ProxyFactory<T> build(_ProxyFactoryService proxyFactoryService) {
             return proxyFactoryService.factory(base, interfaces, constructorArgTypes);
         }
     }

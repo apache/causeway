@@ -16,25 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.plugins.codegen;
+package org.apache.isis.commons.internal.proxy;
 
 import javax.annotation.Nullable;
-
-import org.apache.isis.commons.internal.collections._Arrays;
 
 /**
  * Replaces the former ProxyFactoryPlugin
  * @since 2.0
  */
-public interface ProxyFactoryService {
+public interface _ProxyFactoryService {
 
-    <T> ProxyFactory<T> factory(
+    <T> _ProxyFactory<T> factory(
             Class<T> base,
             @Nullable Class<?>[] interfaces,
             @Nullable Class<?>[] constructorArgTypes);
 
 
-    <T> ProxyFactory<T> factory(Class<T> toProxyClass, Class<?> additionalClass);
+    <T> _ProxyFactory<T> factory(Class<T> toProxyClass, Class<?> additionalClass);
 
     /**
      * Marker interface for entities/services that have been enhanced with

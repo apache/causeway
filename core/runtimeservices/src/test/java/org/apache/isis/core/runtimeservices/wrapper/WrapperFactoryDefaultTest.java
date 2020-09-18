@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.RequiredArgsConstructor;
@@ -67,7 +67,7 @@ public class WrapperFactoryDefaultTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    @Mock private ProxyFactoryService mockProxyFactoryService;
+    @Mock private _ProxyFactoryService mockProxyFactoryService;
     private WrapperFactoryDefault wrapperFactory;
 
     private DomainObject createProxyCalledWithDomainObject;

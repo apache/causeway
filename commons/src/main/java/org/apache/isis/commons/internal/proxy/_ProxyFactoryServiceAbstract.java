@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.plugins.codegen;
+package org.apache.isis.commons.internal.proxy;
 
 import java.util.Collections;
 import java.util.Map;
@@ -31,14 +31,14 @@ import lombok.NonNull;
  * Replaces the former ProxyFactoryPlugin
  * @since 2.0
  */
-public abstract class ProxyFactoryServiceAbstract implements ProxyFactoryService {
+public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryService {
 
     @NonNull
-    private final Map<Class<?>, ProxyFactory<?>> proxyFactoryByClass = Collections.synchronizedMap(new WeakHashMap<>());
+    private final Map<Class<?>, _ProxyFactory<?>> proxyFactoryByClass = Collections.synchronizedMap(new WeakHashMap<>());
 
     @Override
-    public <T> ProxyFactory<T> factory(Class<T> toProxyClass, Class<?> additionalClass) {
-        ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(toProxyClass));
+    public <T> _ProxyFactory<T> factory(Class<T> toProxyClass, Class<?> additionalClass) {
+        _ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(toProxyClass));
         if(proxyFactory == null) {
             proxyFactory = createFactory(toProxyClass, additionalClass);
             proxyFactoryByClass.put(toProxyClass, proxyFactory);
@@ -47,7 +47,7 @@ public abstract class ProxyFactoryServiceAbstract implements ProxyFactoryService
 
     }
 
-    private <T> ProxyFactory<T> createFactory(
+    private <T> _ProxyFactory<T> createFactory(
             final Class<T> toProxyClass,
             final Class<?> additionalClass) {
 
@@ -55,7 +55,7 @@ public abstract class ProxyFactoryServiceAbstract implements ProxyFactoryService
                 toProxyClass.getInterfaces(),
                 ProxyEnhanced.class, additionalClass);
 
-        final ProxyFactory<T> proxyFactory = ProxyFactory.builder(toProxyClass)
+        final _ProxyFactory<T> proxyFactory = _ProxyFactory.builder(toProxyClass)
                 .interfaces(interfaces)
                 .build(this);
 
