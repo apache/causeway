@@ -16,18 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.ioc.spring;
+package org.apache.isis.commons.internal.ioc;
 
 import org.springframework.beans.factory.ObjectProvider;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import lombok.Value;
 import lombok.val;
 
 @Value(staticConstructor="of")
-final class BeanAdapterSpring implements ManagedBeanAdapter {
+final class _ManagedBeanAdapter_Spring implements _ManagedBeanAdapter {
 
     private final String id;
     private final Class<?> beanClass;
@@ -46,7 +45,5 @@ final class BeanAdapterSpring implements ManagedBeanAdapter {
                 .map(Object::getClass)
                 .anyMatch(requiredType::isAssignableFrom);
     }
-
-
-
+    
 }

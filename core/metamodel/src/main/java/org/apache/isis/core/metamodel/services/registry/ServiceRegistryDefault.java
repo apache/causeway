@@ -39,8 +39,8 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.isis.commons.internal.ioc._Spring;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 
 import lombok.val;
@@ -57,7 +57,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
     
     @Override
-    public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
+    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
         return Optional.ofNullable(managedBeansById.get().get(id));
     }
 
@@ -67,25 +67,25 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     }
 
     @Override
-    public Stream<ManagedBeanAdapter> streamRegisteredBeans() {
+    public Stream<_ManagedBeanAdapter> streamRegisteredBeans() {
         return managedBeansById.get().values().stream();
     }
     
     @Override
     public <T> Can<T> select(Class<T> type, Annotation[] qualifiers) {
         return isisSystemEnvironment.getIocContainer()
-                .select(type, _Spring.filterQualifiers(qualifiers));
+                .select(type, qualifiers);
     }
     
     // -- HELPER
 
-    private final _Lazy<Map<String, ManagedBeanAdapter>> managedBeansById = 
+    private final _Lazy<Map<String, _ManagedBeanAdapter>> managedBeansById = 
             _Lazy.threadSafe(this::enumerateManagedBeans);
 
-    private Map<String, ManagedBeanAdapter> enumerateManagedBeans() {
+    private Map<String, _ManagedBeanAdapter> enumerateManagedBeans() {
         
         val beanTypeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-        val managedBeanAdapterByName = _Maps.<String, ManagedBeanAdapter>newHashMap();
+        val managedBeanAdapterByName = _Maps.<String, _ManagedBeanAdapter>newHashMap();
 
         isisSystemEnvironment.getIocContainer().streamAllBeans()
         .filter(_NullSafe::isPresent)

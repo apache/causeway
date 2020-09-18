@@ -16,42 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.ioc.spring;
+package org.apache.isis.commons.internal.ioc;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+import javax.inject.Qualifier;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.ResolvableType;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.IocContainer;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * 
+ * Spring specific implementation of _IocContainer (package private)
  * @since 2.0
  *
  */
 @RequiredArgsConstructor(staticName = "of")
-public class IocContainerSpring implements IocContainer {
+final class _IocContainer_Spring implements _IocContainer {
     
     @NonNull private final ApplicationContext springContext;
 
     @Override
-    public <T> Optional<T> get(Class<T> requiredType) {
+    public <T> Optional<T> get(final @NonNull Class<T> requiredType) {
         val provider = springContext.getBeanProvider(requiredType);
         try {
             return Optional.ofNullable(provider.getIfUnique());
@@ -61,7 +62,7 @@ public class IocContainerSpring implements IocContainer {
     }
     
     @Override
-    public Stream<ManagedBeanAdapter> streamAllBeans() {
+    public Stream<_ManagedBeanAdapter> streamAllBeans() {
 
         val context = springContext;
 
@@ -76,12 +77,10 @@ public class IocContainerSpring implements IocContainer {
                     val resolvableType = ResolvableType.forClass(type);
                     val bean = context.getBeanProvider(resolvableType);
 
-                    val beanAdapter = BeanAdapterSpring.of(id, type, bean);
+                    val beanAdapter = _ManagedBeanAdapter_Spring.of(id, type, bean);
 
                     return beanAdapter;
                 });
-
-
     }
 
     @Override
@@ -92,23 +91,20 @@ public class IocContainerSpring implements IocContainer {
     }
 
     @Override
-    public <T> Can<T> select(final Class<T> requiredType) {
-        _With.requires(requiredType, "requiredType");
-
+    public <T> Can<T> select(final @NonNull Class<T> requiredType) {
         val allMatchingBeans = springContext.getBeanProvider(requiredType)
                 .orderedStream()
                 .collect(Can.toCan());
-        
         return allMatchingBeans;
     }
 
     @Override
     public <T> Can<T> select(
-            final Class<T> requiredType, 
-            @Nullable Set<Annotation> qualifiersRequired) {
+            final @NonNull Class<T> requiredType, 
+            final @Nullable Annotation[] qualifiers) {
 
-        _With.requires(requiredType, "requiredType");
-
+        val qualifiersRequired = filterQualifiers(qualifiers);
+        
         if(_NullSafe.isEmpty(qualifiersRequired)) {
             
             val allMatchingBeans = springContext.getBeanProvider(requiredType)
@@ -128,6 +124,40 @@ public class IocContainerSpring implements IocContainer {
         
         return allMatchingBeans;
         
+    }
+    
+    // -- QUALIFIER PROCESSING
+
+    /**
+     * Filters the input array into a collection, such that only annotations are retained, 
+     * that are valid qualifiers for CDI.
+     * @param annotations
+     * @return non-null
+     */
+    private static Set<Annotation> filterQualifiers(@Nullable final Annotation[] annotations) {
+        if(_NullSafe.isEmpty(annotations)) {
+            return Collections.emptySet();
+        }
+        return _NullSafe.stream(annotations)
+                .filter(_IocContainer_Spring::isGenericQualifier)
+                .collect(Collectors.toSet());
+    }
+    
+    /**
+     * @param annotation
+     * @return whether or not the annotation is a valid qualifier for Spring
+     */
+    private static boolean isGenericQualifier(Annotation annotation) {
+        if(annotation==null) {
+            return false;
+        }
+        if(annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0) {
+            return true;
+        }
+        if(annotation.annotationType().equals(Primary.class)) {
+            return true;
+        }
+        return false;
     }
 
 }

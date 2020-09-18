@@ -30,9 +30,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.IocContainer;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.commons.internal.ioc._IocContainer;
+import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.Builder;
@@ -48,15 +47,14 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     @NonNull private final MetaModelContext metaModelContext;
     
-    @Getter @Setter private IocContainer iocContainer;
-    private final Set<ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
+    @Getter @Setter private _IocContainer iocContainer;
+    private final Set<_ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
 
     @Override
     public <T> Can<T> select(Class<T> type, Annotation[] qualifiers) {
 
         if(iocContainer!=null) {
-            return iocContainer
-                    .select(type, _Spring.filterQualifiers(qualifiers));
+            return iocContainer.select(type, qualifiers);
         }
 
 // ignore        
@@ -84,12 +82,12 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     }
 
     @Override
-    public Stream<ManagedBeanAdapter> streamRegisteredBeans() {
+    public Stream<_ManagedBeanAdapter> streamRegisteredBeans() {
         return registeredBeans().stream();
     }
 
     @Override
-    public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
+    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
         throw _Exceptions.notImplemented();
     }
 
@@ -101,7 +99,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     // -- HELPER
 
-    private Set<ManagedBeanAdapter> registeredBeans() {
+    private Set<_ManagedBeanAdapter> registeredBeans() {
         synchronized(registeredBeans) {
             if(registeredBeans.isEmpty()) {
 
@@ -125,7 +123,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     }
 
     @Value @Builder
-    private static class PojoBeanAdapter implements ManagedBeanAdapter {
+    private static class PojoBeanAdapter implements _ManagedBeanAdapter {
 
         String id;
         Can<?> instance;
@@ -138,7 +136,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     }
 
-    private ManagedBeanAdapter toBeanAdapter(Object singleton) {
+    private _ManagedBeanAdapter toBeanAdapter(Object singleton) {
 
         return PojoBeanAdapter.builder()
                 .id(singleton.getClass().getName())

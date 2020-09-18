@@ -35,8 +35,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.ioc.IocContainer;
-import org.apache.isis.commons.internal.ioc.spring.IocContainerSpring;
+import org.apache.isis.commons.internal.ioc._IocContainer;
 
 import lombok.Getter;
 import lombok.val;
@@ -62,14 +61,14 @@ public class IsisSystemEnvironment {
     
     @Inject private ApplicationContext springContext;
     
-    @Getter private IocContainer iocContainer;
+    @Getter private _IocContainer iocContainer;
 
     // -- LIFE-CYCLE
     
     @PostConstruct
     public void postConstruct() {
         
-        this.iocContainer = IocContainerSpring.of(springContext);
+        this.iocContainer = _IocContainer.spring(springContext);
         
         log.info("postConstruct (hashCode = {})", this.hashCode());
         
@@ -118,7 +117,7 @@ public class IsisSystemEnvironment {
     
     // -- SHORTCUTS
     
-    public IocContainer ioc() {
+    public _IocContainer ioc() {
         return getIocContainer();
     }
     

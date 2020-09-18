@@ -21,11 +21,12 @@ package org.apache.isis.commons.internal.ioc;
 import java.lang.annotation.Annotation;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+
+import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
@@ -35,13 +36,18 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import lombok.val;
 
 /**
- * 
- * @since 2.0
+ * <h1>- internal use only -</h1>
+ * <p>
+ * Framework internal IoC Container support.
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * These may be changed or removed without notice!
  *
+ * @since 2.0
  */
-public interface IocContainer {
+public interface _IocContainer {
 
-    Stream<ManagedBeanAdapter> streamAllBeans();
+    Stream<_ManagedBeanAdapter> streamAllBeans();
 
     Optional<?> lookupById(final String id);
 
@@ -57,7 +63,13 @@ public interface IocContainer {
     
     <T> Can<T> select(Class<T> requiredType);
     
-    <T> Can<T> select(Class<T> requiredType, Set<Annotation> qualifiersRequired);
+    /**
+     * @param <T>
+     * @param requiredType
+     * @param qualifiersRequired - if contains annotations, that are not qualifiers, these are just ignored
+     * @return
+     */
+    <T> Can<T> select(Class<T> requiredType, Annotation[] qualifiersRequired);
 
     /**
      * @return IoC managed singleton wrapped in an Optional
@@ -94,6 +106,14 @@ public interface IocContainer {
         }
 
     }
+
+    // -- FACTORIES
+    
+    static _IocContainer spring(ApplicationContext springContext) {
+        return _IocContainer_Spring.of(springContext);
+    }
+
+    
 
 
 

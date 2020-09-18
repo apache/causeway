@@ -31,7 +31,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.val;
@@ -76,7 +76,7 @@ public interface ServiceRegistry {
      * Streams all registered bean adapters implementing the requested type.
      */
     // tag::refguide[]
-    default Stream<ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
+    default Stream<_ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
         // end::refguide[]
 
         return streamRegisteredBeans()
@@ -91,7 +91,7 @@ public interface ServiceRegistry {
      * Returns all bean adapters that have been registered.
      */
     // tag::refguide[]
-    Stream<ManagedBeanAdapter> streamRegisteredBeans();
+    Stream<_ManagedBeanAdapter> streamRegisteredBeans();
 
     // end::refguide[]
     /**
@@ -100,7 +100,7 @@ public interface ServiceRegistry {
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
     // tag::refguide[]
-    Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id);
+    Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id);
 
     // end::refguide[]
     /**
@@ -109,7 +109,7 @@ public interface ServiceRegistry {
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
     // tag::refguide[]
-    default ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id) {
+    default _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
                         "Failed to lookup BeanAdapter by id '" + id + "'"));

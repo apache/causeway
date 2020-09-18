@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -94,7 +94,7 @@ final class ObjectLoader_builtinHandlers {
             
             val servicePojo = metaModelContext.getServiceRegistry()
                 .lookupRegisteredBeanById(beanName)
-                .map(ManagedBeanAdapter::getInstance)
+                .map(_ManagedBeanAdapter::getInstance)
                 .flatMap(Can::getFirst)
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "loader: %s loading beanName %s", 

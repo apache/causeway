@@ -35,8 +35,8 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.IocContainer;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.commons.internal.ioc._IocContainer;
+import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
@@ -52,8 +52,8 @@ import lombok.val;
 
 class MetaModelContext_usingIoc implements MetaModelContext {
 
-    private final IocContainer iocContainer;
-    public MetaModelContext_usingIoc(IocContainer iocContainer) {
+    private final _IocContainer iocContainer;
+    public MetaModelContext_usingIoc(_IocContainer iocContainer) {
         this.iocContainer = iocContainer;
     }
 
@@ -162,7 +162,7 @@ class MetaModelContext_usingIoc implements MetaModelContext {
                 .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }
     
-    private ManagedObject toManagedObject(ManagedBeanAdapter managedBeanAdapter) {
+    private ManagedObject toManagedObject(_ManagedBeanAdapter managedBeanAdapter) {
         
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(

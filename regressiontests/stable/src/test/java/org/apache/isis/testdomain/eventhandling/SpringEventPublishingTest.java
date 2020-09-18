@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.commons.internal.ioc._Spring;
 
 import lombok.Getter;
 import lombok.Value;
