@@ -18,21 +18,15 @@
  */
 package org.apache.isis.core.internaltestsupport.jmocking;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static org.junit.Assert.fail;
-
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.reflection._Reflect;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.function.Consumer;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -45,8 +39,14 @@ import org.junit.runners.model.Statement;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
-import junit.framework.AssertionFailedError;
+import static org.junit.Assert.fail;
+
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.reflection._Reflect;
+
 import lombok.RequiredArgsConstructor;
+
+import junit.framework.AssertionFailedError;
 
 
 /**
@@ -78,8 +78,8 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      */
     public static JUnitRuleMockery2 createFor(final Mode mode) {
         
-        _Context.computeIfAbsent(IsisSystemEnvironment.class, IsisSystemEnvironment::new)
-        .setUnitTesting(true);
+//        _Context.computeIfAbsent(IsisSystemEnvironment.class, IsisSystemEnvironment::new)
+//        .setUnitTesting(true);
         
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {

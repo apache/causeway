@@ -42,8 +42,6 @@ import org.picocontainer.PicoBuilder;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.RequiredArgsConstructor;
@@ -79,9 +77,6 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Factory method.
      */
     public static JUnitRuleMockery2 createFor(final Mode mode) {
-        
-        _Context.computeIfAbsent(IsisSystemEnvironment.class, IsisSystemEnvironment::new)
-        .setUnitTesting(true);
         
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {

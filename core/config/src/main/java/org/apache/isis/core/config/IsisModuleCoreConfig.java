@@ -27,16 +27,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.commons.IsisModuleCoreCommons;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.converters.PatternsConverter;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
 @Configuration
 @Import({
-    // modules
-    IsisModuleCoreCommons.class,
 
     // @Component's
     PatternsConverter.class,
@@ -44,6 +42,7 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
     PatternOptionalStringConstraintValidator.class,
 
     // @Service's
+    IsisSystemEnvironment.class,
     WebAppContextPath.class,
 })
 @EnableConfigurationProperties({

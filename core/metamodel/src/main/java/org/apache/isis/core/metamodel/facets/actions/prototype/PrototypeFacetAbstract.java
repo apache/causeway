@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.prototype;
 
 import java.util.Map;
 
-import org.apache.isis.commons.internal.environment.DeploymentType;
+import org.apache.isis.core.config.environment.DeploymentType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

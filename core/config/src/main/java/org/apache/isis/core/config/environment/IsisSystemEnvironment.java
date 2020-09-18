@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.environment;
+package org.apache.isis.core.config.environment;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

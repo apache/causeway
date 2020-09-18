@@ -16,17 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons;
+package org.apache.isis.core.config.environment;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+/**
+ * 
+ * @since 2.0
+ *
+ */
+public enum DeploymentType {
+    PRODUCTION,
+    PROTOTYPING
+    ;
 
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+    public boolean isPrototyping() {
+        return this == PROTOTYPING;
+    }
 
-@Configuration
-@Import({
-    // @Service's
-    IsisSystemEnvironment.class
-})
-public class IsisModuleCoreCommons {
+    public boolean isProduction() {
+        return this == PRODUCTION;
+    }
+
 }
