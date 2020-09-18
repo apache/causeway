@@ -18,13 +18,13 @@
  */
 
 ext {
-    cucumberVersion = "5.1.2"
+    cucumberVersion = "6.7.2"
     jacksonVersion = "2.11.1"
     jaxApiVersion = "2.3.1"
     jmockVersion = "2.11.0"
-    junitVersion = "5.6.2"
+    junitVersion = "5.7.0"
     lombokVersion = "1.18.12"
-    poiVersion = "4.1.1"
+    poiVersion = "4.1.2"
     shiroVersion = "1.4.1"
     springBootVersion = "2.3.4.RELEASE"
     springVersion = "5.2.9.RELEASE"
@@ -39,16 +39,16 @@ ext {
             byteBuddy                       : "net.bytebuddy:byte-buddy:1.10.10",
             commonsEmail                    : "org.apache.commons:commons-email:1.5",
             commonsFileupload               : "commons-fileupload:commons-fileupload:1.4",
-            commonsIo                       : "commons-io:commons-io:2.6",
-            commonsLang3                    : "org.apache.commons:commons-lang3:3.9",
+            commonsIo                       : "commons-io:commons-io:2.8.0",
+            commonsLang3                    : "org.apache.commons:commons-lang3:3.11",
             cookieconsent                   : "org.webjars.bowergithub.osano:cookieconsent:3.1.0",
             cucumberJava                    : "io.cucumber:cucumber-java:$cucumberVersion",
             cucumberSpring                  : "io.cucumber:cucumber-spring:$cucumberVersion",
             cucumberJunit                   : "io.cucumber:cucumber-junit:$cucumberVersion",
-            datanucleusCore                 : "org.datanucleus:datanucleus-core:5.2.2",
-            datanucleusApiJdo               : "org.datanucleus:datanucleus-api-jdo:5.2.2",
+            datanucleusCore                 : "org.datanucleus:datanucleus-core:5.2.4",
+            datanucleusApiJdo               : "org.datanucleus:datanucleus-api-jdo:5.2.4",
             datanucleusJdoQuery             : "org.datanucleus:datanucleus-jdo-query:5.0.9",
-            datanucleusRdbms                : "org.datanucleus:datanucleus-rdbms:5.2.1",
+            datanucleusRdbms                : "org.datanucleus:datanucleus-rdbms:5.2.4",
             datanucleusJodatime             : "org.datanucleus:datanucleus-jodatime:5.2.0-release",
             findbugsAnnotations             : "com.google.code.findbugs:annotations:2.0.1",
             flexmarkAll                     : "com.vladsch.flexmark:flexmark-all:0.34.32",
@@ -89,7 +89,7 @@ ext {
             poiOoxml                        : "org.apache.poi:poi-ooxml:$poiVersion",
             poiOoxmlSchemas                 : "org.apache.poi:poi-ooxml-schemas:$poiVersion",
             reflections                     : "org.reflections:reflections:0.9.11",
-            resteasySpringBootStarter       : "org.jboss.resteasy:resteasy-spring-boot-starter:4.4.0.Final",
+            resteasySpringBootStarter       : "org.jboss.resteasy:resteasy-spring-boot-starter:4.6.2.Final",
             select2                         : "org.webjars:select2:4.0.10",
             shiroCore                       : "org.apache.shiro:shiro-core:$shiroVersion",
             shiroWeb                        : "org.apache.shiro:shiro-web:$shiroVersion",

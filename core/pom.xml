@@ -85,12 +85,12 @@
 		<camel.version>2.24.2</camel.version>
 
 		<commons-email.version>1.5</commons-email.version>
-		<commons-httpclient.version>3.1</commons-httpclient.version>
-		<commons-io.version>2.6</commons-io.version>
-		<commons-lang3.version>3.9</commons-lang3.version>
+		<commons-httpclient.version>4.5.12</commons-httpclient.version>
+		<commons-io.version>2.8.0</commons-io.version>
+		<commons-lang3.version>3.11</commons-lang3.version>
 		<commons-logging.version>1.2</commons-logging.version>
 
-		<cucumber.version>5.1.2</cucumber.version>
+		<cucumber.version>6.7.0</cucumber.version>
 
 		<cxf-rt-rs-client.version>3.3.4</cxf-rt-rs-client.version>
 
@@ -98,12 +98,12 @@
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
 
 		<datanucleus-api-jdo.version>5.2.4</datanucleus-api-jdo.version>
-		<datanucleus-core.version>5.2.3</datanucleus-core.version>
+		<datanucleus-core.version>5.2.4</datanucleus-core.version>
 		<datanucleus-jdo-api.version>3.2.0-m13</datanucleus-jdo-api.version>
 		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
 		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
-		<datanucleus-rdbms.version>5.2.3</datanucleus-rdbms.version>
+		<datanucleus-rdbms.version>5.2.4</datanucleus-rdbms.version>
 
 		<docx4j.version>3.2.1</docx4j.version>
 
@@ -139,7 +139,7 @@
 		<jquery-ui.version>1.12.1</jquery-ui.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
-		<junit-platform.version>1.6.0</junit-platform.version>
+		<junit-platform.version>1.7.0</junit-platform.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
@@ -155,18 +155,18 @@
 
 		<pdfbox.version>2.0.15</pdfbox.version>
 		<picocontainer.version>2.15</picocontainer.version>
-		<poi.version>4.1.1</poi.version>
+		<poi.version>4.1.2</poi.version>
 
 		<quartz-scheduler.version>2.2.1</quartz-scheduler.version>
 
-		<resteasy4-spring-boot-starter.version>4.4.0.Final</resteasy4-spring-boot-starter.version>
+		<resteasy4-spring-boot-starter.version>4.6.2.Final</resteasy4-spring-boot-starter.version>
 
 		<reflections.version>0.9.11</reflections.version>
 
 		<select2.version>4.0.10</select2.version>
 		<shiro.version>1.4.1</shiro.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
-		<slf4j-api.version>1.7.26</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
+		<slf4j-api.version>1.7.30</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
 		<spring-framework.version>5.2.9.RELEASE</spring-framework.version>
 		<spring-boot.version>2.3.4.RELEASE</spring-boot.version> <!--  has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
