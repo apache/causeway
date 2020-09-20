@@ -262,7 +262,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ssh</artifactId>
-				<version>2.4</version>
+				<version>3.4.0</version>
 			</extension>
 			<!-- ftp support for deployments. -->
 			<extension>
