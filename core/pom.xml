@@ -118,7 +118,7 @@
 		<htmlparser.version>2.1</htmlparser.version>
 
 		<jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
-		<javaee.version>8.0</javaee.version>
+		<javaee.version>8.0.1</javaee.version>
 		<javafaker.version>1.0.1</javafaker.version>
 		<javassist.version>3.19.0-GA</javassist.version>
 		<javax-servlet.version>3.1.0</javax-servlet.version>
