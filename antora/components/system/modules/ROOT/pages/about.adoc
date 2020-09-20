@@ -68,10 +68,6 @@ These tables summarize all Maven artifacts available with Apache Isis.
 |Apache Isis Commons
 |Isis library, defining utilities (potentially) required by the entire Apache Isis ecosystem.
 
-_Components_
-
-* org.apache.isis.commons.internal.environment.IsisSystemEnvironment
-
 _Dependencies_
 
 * com.fasterxml.jackson.core:jackson-databind:jar:<managed>
@@ -125,15 +121,15 @@ _Components_
 * org.apache.isis.applib.annotation.ViewModel
 * org.apache.isis.applib.services.audit.AuditerServiceLogging
 * org.apache.isis.applib.services.clock.ClockService
-* org.apache.isis.applib.services.command.CommandContext
-* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto
-* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto$CopyOverFromCommand
-* org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandsDto
+* org.apache.isis.applib.services.command.CommandService
+* org.apache.isis.applib.services.command.spi.CommandServiceListener$Null
+* org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto
+* org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto
+* org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity
 * org.apache.isis.applib.services.iactn.InteractionContext
 * org.apache.isis.applib.services.jaxb.JaxbServiceDefault
 * org.apache.isis.applib.services.publish.PublisherServiceLogging
 * org.apache.isis.applib.services.session.SessionLoggingServiceLogging
-* org.apache.isis.applib.services.wrapper.control.AsyncControlService
 
 _Dependencies_
 
@@ -178,6 +174,7 @@ _Components_
 
 * org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring
 * org.apache.isis.core.config.converters.PatternsConverter
+* org.apache.isis.core.config.environment.IsisSystemEnvironment
 * org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator
 * org.apache.isis.core.config.viewer.wicket.WebAppContextPath
 
@@ -299,7 +296,6 @@ _Components_
 * org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault
 * org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault
 * org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault
-* org.apache.isis.core.runtimeservices.command.CommandServiceDefault
 * org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
 * org.apache.isis.core.runtimeservices.email.EmailServiceDefault
 * org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring
@@ -1473,7 +1469,7 @@ _Dependencies_
 |Apache Isis Tst - Integ Test Support (applib)
 |_Components_
 
-* org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract$CommandSupport
+* org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract$InteractionSupport
 
 _Dependencies_
 
@@ -1591,7 +1587,15 @@ _Dependencies_
 |jar
 |\regressiontests\stable
 |Apache Isis - Regression Tests (stable)
-|_Dependencies_
+|_Components_
+
+* org.apache.isis.testdomain.auditing.AuditerServiceForTesting
+* org.apache.isis.testdomain.conf.Configuration_headless$HeadlessCommandSupport
+* org.apache.isis.testdomain.publishing.PublisherServiceForTesting
+* org.apache.isis.testdomain.util.kv.KVStoreForTesting
+* org.apache.isis.testdomain.util.rest.RestEndpointService
+
+_Dependencies_
 
 * org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
 
@@ -1633,7 +1637,15 @@ _Dependencies_
 |jar
 |\extensions\core\command-log\impl
 |Apache Isis Ext - Command Log Implementation
-|_Dependencies_
+|_Components_
+
+* org.apache.isis.extensions.commandlog.impl.CommandServiceListenerForJdo
+* org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo$TableColumnOrderDefault
+* org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo$TitleProvider
+* org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository
+* org.apache.isis.extensions.commandlog.impl.ui.CommandServiceMenu
+
+_Dependencies_
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-config:jar:<managed>
@@ -1659,6 +1671,10 @@ _Dependencies_
 |Apache Isis Ext - Command Replay for Primary
 |A module for obtaining commands from a primary
 
+_Components_
+
+* org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand
+
 _Dependencies_
 
 * org.apache.isis.core:isis-core-config:jar:<managed>
@@ -1678,6 +1694,16 @@ _Dependencies_
 |Apache Isis Ext - Command Replay for Secondary
 |A module providing a Quartz Job to run on a secondary system,
 		for obtaining commands from a primary and saving them so that they are replayed.
+
+_Components_
+
+* org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException
+* org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult
+* org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService
+* org.apache.isis.extensions.commandreplay.secondary.clock.TickingClockService
+* org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig
+* org.apache.isis.extensions.commandreplay.secondary.executor.CommandExecutorServiceWithTime
+* org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher
 
 _Dependencies_
 
@@ -2418,7 +2444,169 @@ _Dependencies_
 |jar
 |\examples\demo\domain
 |Demo - Domain
-|_Dependencies_
+|_Components_
+
+* demoapp.dom._infra.DefaultTitleProvider
+* demoapp.dom._infra.LibraryPreloadingService
+* demoapp.dom._infra.fixtures.DemoFixtureScriptSpecificationProvider
+* demoapp.dom._infra.resources.AsciiDocConverterService
+* demoapp.dom._infra.resources.AsciiDocReaderService
+* demoapp.dom._infra.resources.MarkdownReaderService
+* demoapp.dom._infra.resources.MarkupReaderService
+* demoapp.dom._infra.resources.MarkupVariableResolverService
+* demoapp.dom._infra.resources.ResourceReaderService
+* demoapp.dom._infra.samples.NameSamples
+* demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory
+* demoapp.dom.annotDomain.Action.command.ActionCommandJdoEntities
+* demoapp.dom.annotDomain.Action.command.ActionCommandJdoSeedService
+* demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdoEntities
+* demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.publishing.annotated.disabled.DomainObjectPublishingDisabledJdoEntities
+* demoapp.dom.annotDomain.DomainObject.publishing.annotated.disabled.DomainObjectPublishingDisabledJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled.DomainObjectPublishingEnabledJdoEntities
+* demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled.DomainObjectPublishingEnabledJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.enabled.DomainObjectPublishingEnabledMetaAnnotatedJdoEntities
+* demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.enabled.DomainObjectPublishingEnabledMetaAnnotatedJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.enabled.DomainObjectPublishingEnabledMetaAnnotOverriddenJdoEntities
+* demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.enabled.DomainObjectPublishingEnabledMetaAnnotOverriddenJdoSeedService
+* demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoEntities
+* demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoSeedService
+* demoapp.dom.annotDomain._changes.PublisherServiceToCaptureChangesInMemory
+* demoapp.dom.annotDomain._commands.ExposePersistedCommands$TableColumnOrderDefault
+* demoapp.dom.annotDomain._interactions.PublisherServiceToCaptureInteractionsInMemory
+* demoapp.dom.annotLayout.PropertyLayout.navigable.FileTreeNodeService
+* demoapp.dom.annotLayout.PropertyLayout.repainting.PdfJsViewerAdvisorFallback
+* demoapp.dom.error.service.DemoErrorReportingService
+* demoapp.dom.events.DemoEventSubscriber
+* demoapp.dom.events.EventLogRepository
+* demoapp.dom.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo
+* demoapp.dom.extensions.secman.apptenancy.entities.TenantedJdoEntities
+* demoapp.dom.extensions.secman.apptenancy.entities.seed.TenantedJdoSeedService
+* demoapp.dom.jee.DemoRequestScopedBean
+* demoapp.dom.jee.JeeDemoService
+* demoapp.dom.services.wrapperFactory.WrapperFactoryJdoEntities
+* demoapp.dom.services.wrapperFactory.WrapperFactoryJdoSeedService
+* demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities
+* demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoSeedService
+* demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples
+* demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities
+* demoapp.dom.types.isis.clobs.jdo.IsisClobJdoSeedService
+* demoapp.dom.types.isis.clobs.samples.IsisClobsSamples
+* demoapp.dom.types.isis.images.jdo.IsisImageJdoEntities
+* demoapp.dom.types.isis.images.jdo.IsisImageJdoSeedService
+* demoapp.dom.types.isis.images.samples.IsisImagesSamples
+* demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities
+* demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoSeedService
+* demoapp.dom.types.isis.localresourcepaths.samples.IsisLocalResourcePathsSamples
+* demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoEntities
+* demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoSeedService
+* demoapp.dom.types.isis.markups.samples.IsisMarkupSamples
+* demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities
+* demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoSeedService
+* demoapp.dom.types.isis.passwords.samples.IsisPasswordsSamples
+* demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoEntities
+* demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoSeedService
+* demoapp.dom.types.isisext.asciidocs.samples.IsisAsciiDocSamples
+* demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities
+* demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoSeedService
+* demoapp.dom.types.isisext.markdowns.samples.IsisMarkdownSamples
+* demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoEntities
+* demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoSeedService
+* demoapp.dom.types.javaawt.images.samples.JavaAwtImageService
+* demoapp.dom.types.javaawt.images.samples.JavaAwtImagesSamples
+* demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities
+* demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoSeedService
+* demoapp.dom.types.javalang.booleans.samples.WrapperBooleanSamples
+* demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoEntities
+* demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoSeedService
+* demoapp.dom.types.javalang.bytes.samples.WrapperByteSamples
+* demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities
+* demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoSeedService
+* demoapp.dom.types.javalang.characters.samples.WrapperCharacterSamples
+* demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities
+* demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoSeedService
+* demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples
+* demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities
+* demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoSeedService
+* demoapp.dom.types.javalang.floats.samples.WrapperFloatSamples
+* demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoEntities
+* demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoSeedService
+* demoapp.dom.types.javalang.integers.samples.WrapperIntegerSamples
+* demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoEntities
+* demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoSeedService
+* demoapp.dom.types.javalang.longs.samples.WrapperLongSamples
+* demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoEntities
+* demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoSeedService
+* demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples
+* demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities
+* demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoSeedService
+* demoapp.dom.types.javalang.strings.samples.JavaLangStringSamples
+* demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities
+* demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoSeedService
+* demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples
+* demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities
+* demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoSeedService
+* demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples
+* demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities
+* demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoSeedService
+* demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples
+* demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities
+* demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoSeedService
+* demoapp.dom.types.javasql.javasqldate.samples.JavaSqlDateSamples
+* demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoEntities
+* demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoSeedService
+* demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples
+* demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities
+* demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoSeedService
+* demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples
+* demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities
+* demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoSeedService
+* demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples
+* demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities
+* demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoSeedService
+* demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples
+* demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities
+* demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoSeedService
+* demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples
+* demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities
+* demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoSeedService
+* demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples
+* demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities
+* demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoSeedService
+* demoapp.dom.types.javautil.javautildate.samples.JavaUtilDateSamples
+* demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities
+* demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoSeedService
+* demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples
+* demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities
+* demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoSeedService
+* demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples
+* demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities
+* demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoSeedService
+* demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples
+* demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities
+* demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoSeedService
+* demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples
+* demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities
+* demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoSeedService
+* demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities
+* demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoSeedService
+* demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities
+* demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoSeedService
+* demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoEntities
+* demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoSeedService
+* demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities
+* demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoSeedService
+* demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoEntities
+* demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoSeedService
+* demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoEntities
+* demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoSeedService
+* demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities
+* demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoSeedService
+* demoapp.dom.types.tuple.NumberConstantRepository
+* demoapp.dom.viewmodels.jaxbrefentity.ChildJdoEntities
+* demoapp.dom.viewmodels.jaxbrefentity.seed.ChildJdoSeedService
+
+_Dependencies_
 
 * com.h2database:h2:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-command-log-impl:jar:<managed>
@@ -2483,7 +2671,11 @@ _Dependencies_
 |jar
 |\examples\demo\web
 |Demo - Web
-|_Dependencies_
+|_Components_
+
+* demoapp.web._infra.utils.ThereCanBeOnlyOne
+
+_Dependencies_
 
 * org.apache.isis.examples.apps:demo-domain:jar:${project.version}
 * org.apache.isis.extensions:isis-extensions-command-replay-primary:jar:<managed>
