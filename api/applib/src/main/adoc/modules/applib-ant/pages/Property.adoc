@@ -15,20 +15,11 @@ include::refguide:applib-ant:example$annotation/Property.java[tags="refguide"]
 ----
 <.> xref:refguide:applib-ant:Property.adoc#command[`command()`]
 +
-Whether the property edit should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service.
-
-<.> `commandPersistence()`
-+
-Whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured).
-
-<.> `commandExecuteIn()`
-+
-Whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+Whether the property edit should be reified into a `Command`, typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension  (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
 
 <.> `commandDtoProcessor()`
 +
-If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies the implementation of a `CommandDtoProcessor` that can refine this XML.
+If the xref:extensions:command-replay:about.adoc[Command Replay] extension is being used (for regression testing), provides a mechanism to process the `CommandDto` before being replicated from primary to secondary system
 
 <.> xref:refguide:applib-ant:Property.adoc#domainEvent[`domainEvent()`]
 +

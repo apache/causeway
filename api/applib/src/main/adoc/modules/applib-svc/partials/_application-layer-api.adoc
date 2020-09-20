@@ -23,12 +23,6 @@ Domain service APIs for the application layer allow the domain objects to contro
 //NOTE: TODO: v2: this has been replaced by `WrapperFactory#async(...)`
 
 
-|xref:refguide:applib-svc:CommandContext.adoc[CommandContext]
-|Request-scoped access to capture the users's __intention__ to invoke an action or to edit a property.
-|
-* API is also the implementation (concrete class).
-
-
 |xref:refguide:applib-svc:CommandExecutorService.adoc[CommandExecutorService]
 |Executes the specified `Command`.
 |

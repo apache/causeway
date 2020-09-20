@@ -151,15 +151,11 @@ image::reference-services/commands-and-events.png[width="960px",link="{imagesdir
 
 To explain:
 
-* the (request-scoped) xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] captures the user's intention to invoke an action or edit a property; this is held by the `Command` object.
-
-* if a xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured, then this will be used to create the `Command` object implementation, generally so that it can then also be persisted.
-+
-If the action or property is annotated to be invoked in the background (using xref:refguide:applib-ant:Action.adoc#command[`@Action#command...()`] or xref:refguide:applib-ant:Property.adoc#command[`@Property#command...()`]) then no further work is done.
-But, if the action/property is to be executed in the foreground, then the interaction continues.
-
 * the (request-scoped) xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
++
 In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] extensively each successive call results in a new child execution.
+
+* the `Interaction` also holds a reference to the `Command`, which represents the top-level intention to invoke the action / edit the property.
 
 * before and after each action invocation/property edit, a xref:applib-classes:events/domainevent.adoc[domain event] is may be broadcast to all subscribers.
 Whether this occurs depends on whether the action/property has been annotated (using xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] or xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent()`]).
@@ -184,6 +180,12 @@ Note that it's possible for there to be more than one transaction per top-level 
 ====
 
 * Also at the end of each transaction, details of all changed properties are passed to any registered xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s) by way of the (internal) xref:core:runtime-services:AuditerDispatchService.adoc[`AuditerDispatchService`] domain service.
+
+* At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`].
+This captures whether the command succeeded or failed.
++
+The xref:extensions:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:extensions:command-replay:about.adoc[Command Replay] extension.
+
 
 Implementations of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).

@@ -20,19 +20,11 @@ associates an action with another property or collection of the action.
 the ordering of multiple actions associated with another property/collection.
 
 <.> xref:refguide:applib-ant:Action.adoc#command[`command()`]
-whether the action invocation should be reified into a `Command` object using the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service:
-
-<.> `commandExecuteIn()`
-+
-Whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
-
-<.> `commandPersistence()`
-+
-Whether the reified `Command` (obtainable from the `InteractionContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured).
+whether the action invocation should be reified into a `Command`, typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension  (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
 
 <.> `commandDtoProcessor()`
 +
-If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
+If the xref:extensions:command-replay:about.adoc[Command Replay] extension is being used (for regression testing), provides a mechanism to process the `CommandDto` before being replicated from primary to secondary system
 
 <.> xref:refguide:applib-ant:Action.adoc#domainEvent[`domainEvent()`]
 +

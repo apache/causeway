@@ -3,8 +3,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
-
 
 The `InteractionContext` is a request-scoped domain service that is used to obtain the current
 `Interaction`.
@@ -29,6 +27,8 @@ The public API of the service consists of several related classes:
 
 * `InteractionContext` domain service itself:
 * `Interaction` class, obtainable from the `InteractionContext`
++
+The `Interaction` can be used to obtain the `Command` object representing the top-level invocation action/property edit.
 * `Execution` class, obtainable from the `Interaction`.
 
 The `Execution` class itself is abstract; there are two subclasses, `ActionInvocation` and `PropertyEdit`.
@@ -56,7 +56,6 @@ include::refguide:applib-svc:example$services/iactn/Interaction.java[tags="refgu
 <.> The unique identifier of this interaction.
 <.> Returns a (list of) execution}s in the order that they were pushed.
 Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
-This will be the same value as held in `Command` (obtainable from xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`]).
 <.> The current execution.
 <.> The member `Execution` (action invocation or property edit) that preceded the current one.
 <.> Generates numbers in a named sequence.
@@ -75,50 +74,42 @@ It has the following public API:
 [source,java]
 ----
 public abstract class Execution {
-    public Interaction getInteraction();            // <1>
-    public InteractionType getInteractionType();    // <2>
-    public String getMemberIdentifier();            // <3>
-    public Object getTarget();                      // <4>
+    public Interaction getInteraction();            // <.>
+    public InteractionType getInteractionType();    // <.>
+    public String getMemberIdentifier();            // <.>
+    public Object getTarget();                      // <.>
 
-    public String getTargetClass();                 // <5>
+    public String getTargetClass();                 // <.>
     public String getTargetMember();
 
-    public Execution getParent();                   // <6>
+    public Execution getParent();                   // <.>
     public List<Execution> getChildren();
 
-    public AbstractDomainEvent getEvent();          // <7>
+    public AbstractDomainEvent getEvent();          // <.>
 
-    public Timestamp getStartedAt();                // <8>
+    public Timestamp getStartedAt();                // <.>
     public Timestamp getCompletedAt();
 
-    public Object getReturned();                    // <9>
+    public Object getReturned();                    // <.>
     public Exception getThrew();
 
-    public T getDto();                              // <10>
+    public T getDto();                              // <.>
 }
 ----
-<1> The owning `Interaction`.
-<2> Whether this is an action invocation or a property edit.
-<3> A string uniquely identifying the action or property (similar to Javadoc syntax).
-<4> The object on which the action is being invoked or property edited.
+
+<.> The owning `Interaction`.
+<.> Whether this is an action invocation or a property edit.
+<.> A string uniquely identifying the action or property (similar to Javadoc syntax).
+<.> The object on which the action is being invoked or property edited.
 In the case of a mixin this will be the mixin object itself (rather than the mixed-in object).
-<5> A human-friendly description of the class of the target object, and of the name of the action invoked/property edited on the target object.
-<6> The parent action/property that invoked this action/property edit (if any), and any actions/property edits made in turn via the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`].
-<7> The domain event fired via the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] representing the execution of this action invocation/property edit.
-<8> The date/time at which this execution started/completed.
-<9> The object returned by the action invocation/property edit, or the exception thrown.
+<.> A human-friendly description of the class of the target object, and of the name of the action invoked/property edited on the target object.
+<.> The parent action/property that invoked this action/property edit (if any), and any actions/property edits made in turn via the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`].
+<.> The domain event fired via the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] representing the execution of this action invocation/property edit.
+<.> The date/time at which this execution started/completed.
+<.> The object returned by the action invocation/property edit, or the exception thrown.
 For `void` methods and for actions returning collections, the value will be `null`.
-<10> A DTO (instance of the xref:refguide:schema:ixn.adoc["ixn" schema]) being a serializable representation of this action invocation/property edit.
+<.> A DTO (instance of the xref:refguide:schema:ixn.adoc["ixn" schema]) being a serializable representation of this action invocation/property edit.
 
-[NOTE]
-====
-
-Unlike the similar xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] domain service (discussed xref:refguide:applib-svc:InteractionContext.adoc#Related-Classes[below]) there is no domain service to different implementations of `Interaction` to be used.
-That said, the framework simply instantiates the `Interaction` using the
-xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
-If a different implementation of `Interaction` was required, then a custom implementation of
-xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] could always be supplied.
-====
 
 There are two concrete subclasses of `Execution`.
 
@@ -154,15 +145,4 @@ Typically domain objects will have little need to interact with the `Interaction
 The services are used within the framework however, primarily to support the
 xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] SPI, and to emit domain events over the
 xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
-
-//== Related Classes
-//
-// TODO: CommandContext removed, instead just InteractionContext
-//
-//This service is very similar in nature to xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`], in that the `Interaction` object accessed through it is very similar to the `Command` object obtained from the `CommandContext`.
-//The principle distinction is that while `Command` represents the __intention__ to invoke an action or edit a property, the `Interaction` (and contained ``Execution``s) represents the actual execution.
-
-//Most of the time a `Command` will be followed directly by its corresponding `Interaction`.
-//However, if the `Command` is annotated to run in the background (using xref:refguide:applib-ant:Action.adoc#command[`@Action#commandExecuteIn()`], or is explicitly created through the xref:refguide:applib-svc:BackgroundService.adoc[`BackgroundService`], then the actual interaction/execution is deferred until some other mechanism invokes the command (eg as described xref:userguide:btb:about.adoc#BackgroundCommandExecution[here]).
-
 

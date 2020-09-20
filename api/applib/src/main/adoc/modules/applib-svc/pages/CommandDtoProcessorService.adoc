@@ -23,7 +23,7 @@ The API defined by `CommandDtoProcessorService` is:
 
 [source,java]
 ----
-include::refguide:applib-svc:example$services/conmap/command/spi/CommandDtoProcessorService.java[tags="refguide"]
+include::refguide:applib-svc:example$services/commanddto/processor/spi/CommandDtoProcessorService.java[tags="refguide"]
 ----
 
 
@@ -40,7 +40,7 @@ The main use case is to allow certain actions to be ignored.
 
 [source,java]
 ----
-include::refguide:applib-svc:example$services/command/CommandDtoProcessor.java[tags="refguide"]
+include::refguide:applib-svc:example$services/commanddto/processor/CommandDtoProcessor.java[tags="refguide"]
 ----
 <.> Returning `null` means that the command's DTO is effectively ignored.
 

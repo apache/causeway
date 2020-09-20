@@ -12,7 +12,6 @@ The class has a number of responsibilities (in addition to those it inherits):
 * capture the target object being interacted with
 * capture the arguments for each of the action's parameters
 * provide selected metadata about the action parameters from the metamodel (names, types)
-* link back to the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service's `Command` object
 
 The class itself is instantiated automatically by the framework whenever interacting with a rendered object's action.
 
@@ -30,9 +29,6 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public static class Noop extends ActionDomainEvent<Object> { }      // <.>
     public static class Doop extends ActionDomainEvent<Object> { }      // <.>
 
-    @Deprecated
-    public Command getCommand();                                        // <.>
-
     public SemanticsOf getSemantics();
 
     public List<String> getParameterNames();
@@ -43,12 +39,11 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setReturnValue();                                       // <.>
 }
 ----
-<1> The `Default` nested static class is the default for the xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`]
+<.> The `Default` nested static class is the default for the xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`]
 annotation attribute.
 Whether this raises an event or not depends upon the `isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property.
-<2> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).
-<3> Similarly, the `Doop` class is provided as a convenience to indicate that an event _should_ be raised (irrespective of the configuration property setting).
-<4> Deprecated, use xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] or (better)  xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`]instead.
-<5> The arguments being used to invoke the action; populated during validate phase and subsequent phases.
-<6> The value returned by the action; populated only in the executed phase.
-<7> Allows the subscriber to effectively change the value returned by the action; may only be called in the executed phase.
+<.> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).
+<.> Similarly, the `Doop` class is provided as a convenience to indicate that an event _should_ be raised (irrespective of the configuration property setting).
+<.> The arguments being used to invoke the action; populated during validate phase and subsequent phases.
+<.> The value returned by the action; populated only in the executed phase.
+<.> Allows the subscriber to effectively change the value returned by the action; may only be called in the executed phase.

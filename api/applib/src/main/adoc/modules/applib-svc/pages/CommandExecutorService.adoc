@@ -35,8 +35,8 @@ public interface CommandExecutorService {
 Behind the scenes this uses the xref:refguide:applib-svc:SudoService.adoc[`SudoService`].
 <.> provided `Command` must implement `CommandDto`.
 
-When the `Command` is executed, it will also be returned by xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`].
-Any associated objects that implement `HasUniqueId` (audit entries and the like) will therefore have the correct transactionId and will correctly be associated with the `Command` being executed.
+When the `Command` is executed, it can also be accessed from the `Interaction` obtained by  xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`].
+Any associated objects that implement `HasUniqueId` (audit entries and the like) will therefore have the correct uniqueId and will correctly be associated with the `Command` being executed.
 
 == Implementation
 
