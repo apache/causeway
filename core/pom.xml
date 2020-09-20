@@ -80,9 +80,9 @@
 
 		<approvaltests.version>4.0.2</approvaltests.version>
 
-		<assertj-guava.version>3.1.0</assertj-guava.version>
+		<assertj-guava.version>3.4.0</assertj-guava.version>
 
-		<camel.version>2.24.2</camel.version>
+		<camel.version>3.5.0</camel.version>
 
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
@@ -107,8 +107,8 @@
 
 		<docx4j.version>3.2.1</docx4j.version>
 
-		<easymock.version>2.5.2</easymock.version>
-		<error_prone_annotations.version>2.3.2</error_prone_annotations.version>
+		<easymock.version>4.2</easymock.version>
+		<error_prone_annotations.version>2.4.0</error_prone_annotations.version>
 
 		<findbugs-annotations.version>2.0.1</findbugs-annotations.version>
 
@@ -118,7 +118,7 @@
 		<htmlparser.version>2.1</htmlparser.version>
 
 		<jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
-		<javaee.version>8.0</javaee.version>
+		<javaee.version>8.0.1</javaee.version>
 		<javafaker.version>1.0.1</javafaker.version>
 		<javassist.version>3.19.0-GA</javassist.version>
 		<javax-servlet.version>3.1.0</javax-servlet.version>
@@ -157,14 +157,14 @@
 		<picocontainer.version>2.15</picocontainer.version>
 		<poi.version>4.1.2</poi.version>
 
-		<quartz-scheduler.version>2.2.1</quartz-scheduler.version>
+		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
 		<resteasy4-spring-boot-starter.version>4.6.2.Final</resteasy4-spring-boot-starter.version>
 
 		<reflections.version>0.9.11</reflections.version>
 
 		<select2.version>4.0.10</select2.version>
-		<shiro.version>1.4.1</shiro.version>
+		<shiro.version>1.6.0</shiro.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
 		<spring-framework.version>5.2.9.RELEASE</spring-framework.version>
@@ -172,7 +172,7 @@
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.0</swagger-core.version>
 
-		<togglz.version>2.1.0.Final</togglz.version>
+		<togglz.version>2.8.0</togglz.version>
 
 		<vaadin.version>14.3.1</vaadin.version>
 
@@ -262,7 +262,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ssh</artifactId>
-				<version>2.4</version>
+				<version>3.4.0</version>
 			</extension>
 			<!-- ftp support for deployments. -->
 			<extension>
