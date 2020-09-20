@@ -20,15 +20,8 @@
 package org.apache.isis.core.runtime.iactn;
 
 import java.util.concurrent.Callable;
-import java.util.function.Supplier;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-
-import lombok.SneakyThrows;
 
 /**
  * The factory of {@link IsisInteraction}s, also holding a reference to the
@@ -102,14 +95,12 @@ public interface IsisInteractionFactory {
      * @param <R>
      * @param callable
      */
-    @SneakyThrows
     public <R> R callAnonymous(Callable<R> callable);
     
     /**
      * Variant of {@link #callAnonymous(Callable)} that takes a runnable.
      * @param runnable
      */
-    @SneakyThrows
     public void runAnonymous(ThrowingRunnable runnable);
 
     /**

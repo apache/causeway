@@ -53,7 +53,7 @@ import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import static org.apache.isis.applib.services.wrapper.control.AsyncControl.control;
+import static org.apache.isis.applib.services.wrapper.control.AsyncControl.*;
 
 import lombok.val;
 
@@ -135,7 +135,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own background task
-        AsyncControl<Void> control = control().withSkipRules();
+        AsyncControl<Void> control = returningVoid().withSkipRules();
         wrapper.asyncWrap(book, control.with(new ExceptionHandlerAbstract() {
             @Override
             public Object handle(Exception ex) throws Exception {
@@ -164,9 +164,9 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
 
-            wrapper.asyncWrap(book, control()).setName("Book #2");
+            wrapper.asyncWrap(book, returningVoid()).setName("Book #2");
 
-            control().getFuture().get(1000, TimeUnit.SECONDS);
+            returningVoid().getFuture().get(1000, TimeUnit.SECONDS);
             
         });
         

@@ -55,7 +55,7 @@ import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import static org.apache.isis.applib.services.wrapper.control.AsyncControl.control;
+import static org.apache.isis.applib.services.wrapper.control.AsyncControl.*;
 
 import lombok.Getter;
 import lombok.val;
@@ -121,7 +121,7 @@ class WrapperAsyncTest extends IsisIntegrationTestAbstract {
         assertEquals(99d, product.getPrice(), 1E-6);
 
         // when
-        val control = control(JdoProduct.class);
+        val control = returning(JdoProduct.class);
         wrapper.asyncWrap(inventoryManager, control)
                 .updateProductPrice(product, 123d);
 
