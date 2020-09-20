@@ -1,7 +1,0 @@
-
-
-
-* xref:incubator:model:about.adoc[@Model]
-
-
-

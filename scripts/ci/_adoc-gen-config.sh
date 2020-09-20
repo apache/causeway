@@ -64,7 +64,7 @@ else
       -o $PROJECT_ROOT_PATH/core/config/src/main/adoc/modules/config/pages/sections
 
     if [ ! -z "${DOS2UNIX_CMD}" ]; then
-      for FILE in $PROJECT_ROOT_PATH/core/config/src/main/adoc/modules/config/examples/generated/*
+      for FILE in $PROJECT_ROOT_PATH/core/config/src/main/adoc/modules/config/pages/sections/*
       do
         ${DOS2UNIX_CMD} $FILE
       done

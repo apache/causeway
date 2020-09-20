@@ -152,6 +152,14 @@ public final class CommandDtoUtils {
         setUserData(dto, key, bookmark.toString());
     }
 
+    public static void clearUserData(
+            final CommandDto dto, final String key) {
+        if(dto == null || key == null) {
+            return;
+        }
+        userDataFor(dto).getEntry().removeIf(x -> x.getKey().equals(key));
+    }
+
     private static MapDto userDataFor(final CommandDto commandDto) {
         MapDto userData = commandDto.getUserData();
         if(userData == null) {

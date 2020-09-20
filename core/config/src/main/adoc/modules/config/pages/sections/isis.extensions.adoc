@@ -12,73 +12,71 @@ include::../section-hooks/isis.extensions~pre.adoc[]
 |Default
 |Description
 |
-[[isis.extensions.command-replay.primary.base-url]]
+[[isis.extensions.command-replay.analyser.exception.enabled]]
 isis.extensions.command-replay. +
-primary.base-url
+analyser.exception.enabled
 
-| 
+|  true
 | null
 
 
 |
-[[isis.extensions.command-replay.primary.base-url-end-user]]
+[[isis.extensions.command-replay.analyser.result.enabled]]
 isis.extensions.command-replay. +
-primary.base-url-end-user
+analyser.result.enabled
 
-| 
+|  true
 | null
 
 
 |
-[[isis.extensions.command-replay.primary.batch-size]]
+[[isis.extensions.command-replay.batch-size]]
 isis.extensions.command-replay. +
-primary.batch-size
+batch-size
 
 |  10
 | null
 
 
 |
-[[isis.extensions.command-replay.primary.password]]
+[[isis.extensions.command-replay.primary-access.base-url-restful]]
 isis.extensions.command-replay. +
-primary.password
+primary-access.base-url-restful
 
 | 
 | null
 
 
 |
-[[isis.extensions.command-replay.primary.user]]
+[[isis.extensions.command-replay.primary-access.base-url-wicket]]
 isis.extensions.command-replay. +
-primary.user
+primary-access.base-url-wicket
 
 | 
 | null
 
 
 |
-[[isis.extensions.command-replay.secondary.analyser.exception.enabled]]
+[[isis.extensions.command-replay.primary-access.password]]
 isis.extensions.command-replay. +
-secondary.analyser.exception. +
-enabled
+primary-access.password
 
-|  true
+| 
 | null
 
 
 |
-[[isis.extensions.command-replay.secondary.analyser.result.enabled]]
+[[isis.extensions.command-replay.primary-access.user]]
 isis.extensions.command-replay. +
-secondary.analyser.result.enabled
+primary-access.user
 
-|  true
+| 
 | null
 
 
 |
-[[isis.extensions.command-replay.secondary.quartz-replicate-and-replay-job.repeat-interval]]
+[[isis.extensions.command-replay.quartz-replicate-and-replay-job.repeat-interval]]
 isis.extensions.command-replay. +
-secondary. +
 quartz-replicate-and-replay-job. +
 repeat-interval
 
@@ -87,9 +85,8 @@ repeat-interval
 
 
 |
-[[isis.extensions.command-replay.secondary.quartz-replicate-and-replay-job.start-delay]]
+[[isis.extensions.command-replay.quartz-replicate-and-replay-job.start-delay]]
 isis.extensions.command-replay. +
-secondary. +
 quartz-replicate-and-replay-job. +
 start-delay
 
@@ -98,9 +95,9 @@ start-delay
 
 
 |
-[[isis.extensions.command-replay.secondary.quartz-session.roles]]
+[[isis.extensions.command-replay.quartz-session.roles]]
 isis.extensions.command-replay. +
-secondary.quartz-session.roles
+quartz-session.roles
 
 |  isisModuleExtCommandReplaySecondar +
 yRole
@@ -108,9 +105,9 @@ yRole
 
 
 |
-[[isis.extensions.command-replay.secondary.quartz-session.user]]
+[[isis.extensions.command-replay.quartz-session.user]]
 isis.extensions.command-replay. +
-secondary.quartz-session.user
+quartz-session.user
 
 |  isisModuleExtCommandReplaySecondar +
 yUser

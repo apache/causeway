@@ -18,7 +18,17 @@
  */
 package org.apache.isis.applib.services.command.spi;
 
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * SPI
@@ -36,5 +46,22 @@ public interface CommandServiceListener {
      */
     // tag::refguide[]
     void onComplete(final Command command);           // <.>
+
+    /**
+     * At least one implementation is required to satisfy injection point into
+     * {@link org.apache.isis.applib.services.command.CommandService}.
+     */
+    @Service
+    @Named("isisApplib.CommandServiceListenerNull")
+    @Order(OrderPrecedence.LATE)
+    @Qualifier("Null")
+    @Log4j2
+    public static class Null implements CommandServiceListener {
+
+        @Override
+        public void onComplete(Command command) {
+
+        }
+    }
 }
 // end::refguide[]
