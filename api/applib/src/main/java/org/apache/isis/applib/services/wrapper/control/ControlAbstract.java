@@ -38,17 +38,15 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
     }
 
     /**
-     * Set by framework.
+     * Set by framework; simply used for logging purposes.
      */
-    @Setter(AccessLevel.PACKAGE)
-    @Getter(AccessLevel.PACKAGE)
+    @Getter(AccessLevel.PACKAGE) @Setter
     private Method method;
 
     /**
-     * Set by framework.
+     * Set by framework; simply used for logging purposes.
      */
-    @Setter(AccessLevel.PACKAGE)
-    @Getter(AccessLevel.PACKAGE)
+    @Getter(AccessLevel.PACKAGE) @Setter
     private Bookmark bookmark;
 
     // tag::refguide[]

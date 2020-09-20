@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -145,16 +146,22 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
+    @DELETE
+    @Path("/{serviceId}")
     @Override
     public Response deleteServiceNotAllowed(@PathParam("serviceId") String serviceId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting a service resource is not allowed.");
     }
 
+    @PUT
+    @Path("/{serviceId}")
     @Override
     public Response putServiceNotAllowed(@PathParam("serviceId") String serviceId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to a service resource is not allowed.");
     }
 
+    @POST
+    @Path("/{serviceId}")
     @Override
     public Response postServiceNotAllowed(@PathParam("serviceId") String serviceId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to a service resource is not allowed.");
@@ -183,16 +190,22 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         return domainResourceHelper.actionPrompt(actionId);
     }
 
+    @DELETE
+    @Path("/{serviceId}/actions/{actionId}")
     @Override
     public Response deleteActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting action prompt resource is not allowed.");
     }
 
+    @PUT
+    @Path("/{serviceId}/actions/{actionId}")
     @Override
     public Response putActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to an action prompt resource is not allowed.");
     }
 
+    @POST
+    @Path("/{serviceId}/actions/{actionId}")
     @Override
     public Response postActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to an action prompt resource is not allowed.");
@@ -220,8 +233,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 urlUnencodedQueryString);
 
-        setCommandExecutor(Command.Executor.USER);
-
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
@@ -248,8 +259,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
-        setCommandExecutor(Command.Executor.USER);
-
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
@@ -272,8 +281,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
-        setCommandExecutor(Command.Executor.USER);
-
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
@@ -282,6 +289,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         return domainResourceHelper.invokeAction(actionId, arguments);
     }
 
+    @DELETE
+    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Override
     public Response deleteInvokeActionNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting an action invocation resource is not allowed.");

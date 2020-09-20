@@ -32,7 +32,7 @@ public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCall
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
         isisInteractionFactory(extensionContext)
-        .ifPresent(isisInteractionFactory->isisInteractionFactory.openSession(new InitialisationSession()));
+        .ifPresent(isisInteractionFactory->isisInteractionFactory.openInteraction(new InitialisationSession()));
     }
     
     @Override

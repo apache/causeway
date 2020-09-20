@@ -23,8 +23,6 @@ import java.util.function.Supplier;
 
 import javax.enterprise.inject.Vetoed;
 
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -48,39 +46,30 @@ class IsisTransactionManagerJdo {
     private final IsisPersistenceSessionJdo persistenceSession;
 
     private final ServiceRegistry serviceRegistry;
-    private final Supplier<CommandContext> commandContextProvider;
     private final Supplier<InteractionContext> interactionContextProvider;
 
     IsisTransactionManagerJdo(ServiceRegistry serviceRegistry, IsisPersistenceSessionJdo persistenceSession) {
 
         this.serviceRegistry = serviceRegistry;
         this.persistenceSession = persistenceSession;
-        this.commandContextProvider = ()->serviceRegistry.lookupServiceElseFail(CommandContext.class);
         this.interactionContextProvider = ()->serviceRegistry.lookupServiceElseFail(InteractionContext.class);
     }
 
     public IsisTransactionJdo beginTransaction() {
-        return beginTransaction(/*existingCommandIfAny*/null);
-    }
 
-    /**
-     * @param existingCommandIfAny - specifically, a previously persisted background 
-     * {@link Command}, now being executed by a background execution service.
-     */
-    private IsisTransactionJdo beginTransaction(Command existingCommandIfAny) {
-        val txInProgress = isTransactionInProgress();
+        val txInProgress = IsisTransactionAspectSupport.isTransactionInProgress();
         if (txInProgress) {
 
             val txObject = IsisTransactionAspectSupport
                     .currentTransactionObject()
                     .orElseThrow(()->_Exceptions.unrecoverable("no current IsisTransactionObject available"));
-            
+
             txObject.incTransactionNestingLevel();
             val nestingLevel = txObject.getTransactionNestingLevel();
 
             if (log.isDebugEnabled()) {
-                log.debug("startTransaction: nesting-level {}->{}", 
-                        nestingLevel - 1, 
+                log.debug("startTransaction: nesting-level {}->{}",
+                        nestingLevel - 1,
                         nestingLevel);
             }
 
@@ -88,20 +77,9 @@ class IsisTransactionManagerJdo {
 
         } else {
 
-            // previously we called __isis_startRequest here on all RequestScopedServices.  This is now
-            // done earlier, in PersistenceSession#open(). If we introduce support for @TransactionScoped
-            // services, then this would be the place to initialize them.
-
-            // allow the command to be overridden (if running as a background command with a parent command supplied)
-
             val interaction = interactionContextProvider.get().getInteraction();
-            val commandContext = commandContextProvider.get();
 
-            if (existingCommandIfAny != null) {
-                commandContext.setCommand(existingCommandIfAny);
-                interaction.setUniqueId(existingCommandIfAny.getUniqueId());
-            }
-            val command = commandContext.getCommand();
+            val command = interaction.getCommand();
             val transactionId = command.getUniqueId();
 
             val currentTransaction = new IsisTransactionJdo(serviceRegistry, transactionId,
@@ -114,8 +92,7 @@ class IsisTransactionManagerJdo {
             }
 
             return currentTransaction;
-
-        } 
+        }
 
     }
 
@@ -350,10 +327,6 @@ class IsisTransactionManagerJdo {
                 .map(IsisTransactionObject::getCurrentTransaction)
                 .map(IsisTransactionJdo.class::cast)
                 .orElse(null);
-    }
-
-    private boolean isTransactionInProgress() {
-        return IsisTransactionAspectSupport.isTransactionInProgress();
     }
 
 

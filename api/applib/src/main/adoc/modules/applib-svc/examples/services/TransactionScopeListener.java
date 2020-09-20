@@ -19,11 +19,14 @@
 
 package org.apache.isis.applib.services;
 
+import org.apache.isis.applib.annotation.IsisInteractionScope;
+
 /**
- * Domain services that need to be aware of transaction boundaries can implement this interface.
+ * Domain services that need to be aware of transaction boundaries can
+ * implement this interface.
  * 
- * @apiNote Implementing services most likely need to be scoped in a way that binds the scope to 
- * the current thread (eg. {@link IsisInteractionScope}) 
+ * @apiNote Implementing services most likely need to be scoped in a way that
+ * binds the scope to the current thread (eg. {@link IsisInteractionScope})
  *  
  * @since 2.0 (renamed from WithTransactionScope)
  */

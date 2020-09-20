@@ -36,10 +36,12 @@ public class ValueTypeDefinition {
     public static ValueTypeDefinition from(final Map.Entry<Class<?>, ValueType> entry) {
         return new ValueTypeDefinition(entry.getKey(), entry.getValue());
     }
+
+    Class<?> clazz;
+    ValueType valueType;
+
     private ValueTypeDefinition(Class<?> clazz, ValueType valueType) {
         this.clazz = clazz;
         this.valueType = valueType;
     }
-    private final Class<?> clazz;
-    private final ValueType valueType;
 }

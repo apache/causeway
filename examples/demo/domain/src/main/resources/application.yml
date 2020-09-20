@@ -127,10 +127,18 @@ server:
 spring:
   banner:
     location: banner.txt
-    
+
+  quartz:
+    job-store-type: memory
+
 vaadin:
   compatibilityMode: false
   whitelisted-packages: com.vaadin
   urlMapping: "/vaadin/*"
   servlet:
       productionMode: true
+
+management:
+  endpoint:
+    health:
+      enabled: true

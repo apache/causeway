@@ -22,9 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.events.EventObjectBase;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
@@ -108,7 +106,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
         /**
          * When the {@link org.apache.isis.applib.services.command.Command} is made available on the
-         * {@link org.apache.isis.applib.events.domain.ActionDomainEvent} via {@link CommandContext#getCommand()}.
+         * {@link org.apache.isis.applib.events.domain.ActionDomainEvent} via {@link org.apache.isis.applib.services.iactn.Interaction#getCommand()}.
          */
         public boolean isExecutingOrLater() {
             return isExecuting() || isExecuted();

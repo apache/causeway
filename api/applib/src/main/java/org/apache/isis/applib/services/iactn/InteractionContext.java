@@ -18,8 +18,10 @@
  */
 package org.apache.isis.applib.services.iactn;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -28,8 +30,15 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.TransactionScopeListener;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.metrics.MetricsService;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Interaction}.
@@ -41,14 +50,18 @@ import lombok.Getter;
 // tag::refguide[]
 @Service
 @Named("isisApplib.InteractionContext")
-@Order(OrderPrecedence.MIDPOINT)
+@Order(OrderPrecedence.EARLY - 10) // before ChangedObjectService
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
-//@Log4j2
-public class InteractionContext {
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
+public class InteractionContext implements TransactionScopeListener, DisposableBean {
 
     // end::refguide[]
+
+    private final MetricsService metricsService;
+
     /**
      * The currently active {@link Interaction} for this thread.
      */
@@ -65,5 +78,19 @@ public class InteractionContext {
     }
 
     // tag::refguide[]
+
+    @Override
+    public void onTransactionEnded() {
+        val command = getInteraction().getCommand();
+        command.updater().setSystemStateChanged(
+                command.isSystemStateChanged() ||
+                        metricsService.numberObjectsDirtied() > 0);
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        setInteraction(null);
+    }
+
 }
 // end::refguide[]

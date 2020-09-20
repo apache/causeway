@@ -64,7 +64,25 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-modelannotation</artifactId>
+				<artifactId>isis-extensions-command-log-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-quartz-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-command-replay-primary</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-command-replay-secondary</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -77,6 +95,12 @@
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-flyway-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-modelannotation</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -169,8 +193,12 @@
 	</dependencies>
 
 	<modules>
+		<module>core/command-log</module>
+		<module>core/command-replay</module>
 		<module>core/flyway</module>
 		<module>core/model-annotation</module>
+		<module>core/quartz</module>
+
 		<module>security/secman</module>
 		<module>security/shiro-realm-ldap</module>
 

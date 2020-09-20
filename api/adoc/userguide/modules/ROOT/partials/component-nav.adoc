@@ -4,5 +4,6 @@ include::userguide:btb:partial$module-nav.adoc[]
 * Extensions
 
 include::userguide:flyway:partial$module-nav.adoc[]
+include::userguide:quartz:partial$module-nav.adoc[]
 
 

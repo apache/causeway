@@ -19,10 +19,12 @@
 package demoapp.dom.homepage;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
@@ -31,8 +33,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @DomainObject(
-        nature=Nature.VIEW_MODEL
-        , objectType = "demo.Homepage"
+    nature=Nature.VIEW_MODEL,
+    objectType = "demo.Homepage"
 )
 @HomePage                                                       // <.>
 public class DemoHomePage
@@ -46,10 +48,7 @@ public class DemoHomePage
         return asciiDocReaderService.readFor(this, "welcome");
     }
 
-    @Inject
-    UserService userService;                                    // <.>
-
-    @Inject
-    AsciiDocReaderService asciiDocReaderService;
+    @Inject UserService userService;                            // <.>
+    @Inject AsciiDocReaderService asciiDocReaderService;
 }
 //end::class[]

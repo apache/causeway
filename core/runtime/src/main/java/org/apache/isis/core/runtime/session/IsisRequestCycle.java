@@ -43,7 +43,7 @@ public class IsisRequestCycle {
 
     public void onBeginRequest(AuthenticationSession authenticationSession) {
 
-        isisInteractionFactory.openSession(authenticationSession);
+        isisInteractionFactory.openInteraction(authenticationSession);
 
         txStatus = transactionTemplate.getTransactionManager().getTransaction(null);
 

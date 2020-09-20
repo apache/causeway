@@ -27,6 +27,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
@@ -38,10 +39,12 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 @Import({
     IsisModuleCoreRuntimeServices.class,
     IsisModuleJdoDataNucleus5.class,
-    
+
     IsisModuleTestingFixturesApplib.class,
 
     IsisModuleExtModelAnnotation.class, // @Model support
+
+    IsisModuleExtCommandLogImpl.class,
 
 })
 @PropertySources({
@@ -60,8 +63,7 @@ public class DemoModule {
     public SecurityModuleConfig securityModuleConfigBean() {
         return SecurityModuleConfig.builder()
                 .adminUserName("sven")
-                .adminAdditionalPackagePermission("demoapp.dom")
-                .adminAdditionalPackagePermission("demoapp.utils")
+                .adminAdditionalPackagePermission("demoapp")
                 .adminAdditionalPackagePermission("org.apache.isis")
                 .build();
     }

@@ -55,7 +55,7 @@ public class DemoEventSubscriber {
         
         val eventLogWriter = factoryService.get(EventLogWriter.class); // <-- get a new writer
         
-        wrapper.asyncWrap(eventLogWriter, AsyncControl.control()).storeEvent(event);
+        wrapper.asyncWrap(eventLogWriter, AsyncControl.returningVoid()).storeEvent(event);
 
     }
 

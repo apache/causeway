@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import javax.annotation.Nonnull;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Value;
 
@@ -33,8 +35,11 @@ import lombok.NonNull;
  */
 // tag::refguide[]
 // end::refguide[]
-@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
+@Value(semanticsProviderName =
+        "org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
+@XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class LocalResourcePath implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @NonNull private final String path;
 
@@ -65,7 +70,7 @@ public final class LocalResourcePath implements Serializable {
         if(obj==null) {
             return false;
         }
-        return (obj instanceof LocalResourcePath) ?	isEqualTo((LocalResourcePath)obj) : false;
+        return (obj instanceof LocalResourcePath) && isEqualTo((LocalResourcePath) obj);
     }
     
     @Override
@@ -90,9 +95,20 @@ public final class LocalResourcePath implements Serializable {
             // used for syntax testing
             new java.net.URI("http://localhost/"+path);
         } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("the given local path has an invalid syntax: '"+path+"'", e);
+            throw new IllegalArgumentException(String.format("the given local path has an invalid syntax: '%s'", path), e);
         }
-
     }
 
+
+    public static class JaxbToStringAdapter extends XmlAdapter<String, LocalResourcePath> {
+        @Override
+        public LocalResourcePath unmarshal(String path) {
+            return path != null ? new LocalResourcePath(path) : null;
+        }
+
+        @Override
+        public String marshal(LocalResourcePath localResourcePath) {
+            return localResourcePath != null ? localResourcePath.getPath() : null;
+        }
+    }
 }

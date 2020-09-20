@@ -2,13 +2,14 @@ package demoapp.dom.annotDomain.Action.command;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
-@ActionCommandDisabledMetaAnnotation     // <.>
+@ActionCommandDisabledMetaAnnotation        // <.>
 @Action(
-    publishing = Publishing.ENABLED         // <.>
+    command = CommandReification.ENABLED    // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyMetaAnnotatedOverridden"
     , associateWithSequence = "2"
@@ -16,8 +17,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs =
-        "@ActionPublishingDisabledMetaAnnotation " +
-        "@Action(publishing = ENABLED)"
+        "@ActionCommandDisabledMetaAnnotation " +
+        "@Action(command = ENABLED)"
 )
 public class ActionCommandJdo_mixinUpdatePropertyMetaAnnotationOverridden {
     // ...

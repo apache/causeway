@@ -23,7 +23,11 @@ import java.math.BigDecimal;
 
 import org.apache.isis.applib.annotation.Value;
 
+/**
+ * @deprecated
+ */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.money.MoneyValueSemanticsProvider")
+@Deprecated
 public class Money extends Magnitude<Money> {
 
     private static final long serialVersionUID = 1L;

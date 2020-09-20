@@ -26,13 +26,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
 import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault;
-import org.apache.isis.core.runtimeservices.command.CommandServiceDefault;
 import org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault;
 import org.apache.isis.core.runtimeservices.email.EmailServiceDefault;
 import org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring;
@@ -71,7 +69,6 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         BookmarkServiceDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
-        CommandServiceDefault.class,
         ConfigurationViewServiceDefault.class,
         EmailNotificationServiceDefault.class,
         EmailServiceDefault.class,

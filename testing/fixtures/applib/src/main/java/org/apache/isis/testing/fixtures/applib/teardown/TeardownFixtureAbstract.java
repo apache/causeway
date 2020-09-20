@@ -40,46 +40,33 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
         preDeleteFrom(cls);
 
         final String value = discriminatorValueOf(cls);
-
         if(value == null) {
-
-            doDeleteFrom(cls);
-
+            final TypeMetadata metadata = isisJdoSupport.getJdoPersistenceManager()
+                            .getPersistenceManagerFactory().getMetadata(cls.getName());
+            if(metadata == null) {
+                // fall-back
+                deleteFrom(cls.getSimpleName());
+            } else {
+                final String schema = metadata.getSchema();
+                String table = metadata.getTable();
+                if(_Strings.isNullOrEmpty(table)) {
+                    table = cls.getSimpleName();
+                }
+                if(_Strings.isNullOrEmpty(schema)) {
+                    deleteFrom(table);
+                } else {
+                    deleteFrom(schema, table);
+                }
+            }
         } else {
-
             final String column = discriminatorColumnOf(cls);
-
             final String schema = schemaOf(cls);
             final String table = tableOf(cls);
 
-            if (_Strings.isNullOrEmpty(schema)) {
-                deleteFromWhere(table, column, value);
-            } else {
-                deleteFromWhere(schema, table, column, value);
-            }
+            deleteFromWhere(schema, table, column, value);
         }
 
         postDeleteFrom(cls);
-    }
-
-    private void doDeleteFrom(Class<?> cls) {
-        final TypeMetadata metadata = isisJdoSupport.getJdoPersistenceManager()
-                        .getPersistenceManagerFactory().getMetadata(cls.getName());
-        if(metadata == null) {
-            // fall-back
-            deleteFrom(cls.getSimpleName());
-        } else {
-            final String schema = metadata.getSchema();
-            String table = metadata.getTable();
-            if(_Strings.isNullOrEmpty(table)) {
-                table = cls.getSimpleName();
-            }
-            if(_Strings.isNullOrEmpty(schema)) {
-                deleteFrom(table);
-            } else {
-                deleteFrom(schema, table);
-            }
-        }
     }
 
     protected void preDeleteFrom(final Class<?> cls) {}
@@ -88,13 +75,35 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
 
 
     protected Integer deleteFrom(final String schema, final String table) {
-        return isisJdoSupport.executeUpdate(String.format("DELETE FROM \"%s\".\"%s\"", schema, table));
+        if (_Strings.isNullOrEmpty(schema)) {
+            return deleteFrom(table);
+        } else {
+            return isisJdoSupport.executeUpdate(String.format("DELETE FROM \"%s\".\"%s\"", schema, table));
+        }
     }
 
-    protected void deleteFrom(final String table) {
-        isisJdoSupport.executeUpdate(String.format("DELETE FROM \"%s\"", table));
+    protected Integer deleteFrom(final String table) {
+        return isisJdoSupport.executeUpdate(String.format("DELETE FROM \"%s\"", table));
     }
 
+
+    protected Integer deleteFromWhere(String schema, String table, String column, String value) {
+        if (_Strings.isNullOrEmpty(schema)) {
+            return deleteFromWhere(table, column, value);
+        } else {
+            final String sql = String.format(
+                    "DELETE FROM \"%s\".\"%s\" WHERE \"%s\"='%s'",
+                    schema, table, column, value);
+            return this.isisJdoSupport.executeUpdate(sql);
+        }
+    }
+
+    protected Integer deleteFromWhere(String table, String column, String value) {
+        final String sql = String.format(
+                "DELETE FROM \"%s\" WHERE \"%s\"='%s'",
+                table, column, value);
+        return this.isisJdoSupport.executeUpdate(sql);
+    }
 
 
     private String schemaOf(final Class<?> cls) {
@@ -165,20 +174,6 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
 
     private PersistenceManagerFactory getPersistenceManagerFactory() {
         return isisJdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
-    }
-
-    protected Integer deleteFromWhere(String schema, String table, String column, String value) {
-        final String sql = String.format(
-                "DELETE FROM \"%s\".\"%s\" WHERE \"%s\"='%s'",
-                schema, table, column, value);
-        return this.isisJdoSupport.executeUpdate(sql);
-    }
-
-    protected void deleteFromWhere(String table, String column, String value) {
-        final String sql = String.format(
-                "DELETE FROM \"%s\" WHERE \"%s\"='%s'",
-                table, column, value);
-        this.isisJdoSupport.executeUpdate(sql);
     }
 
     @Inject private IsisJdoSupport isisJdoSupport;

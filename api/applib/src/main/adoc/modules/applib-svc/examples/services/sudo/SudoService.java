@@ -20,9 +20,8 @@
 package org.apache.isis.applib.services.sudo;
 
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.user.UserService;
 
 /**
@@ -65,7 +64,7 @@ public interface SudoService {
     // tag::refguide[]
     <T> T sudo(                                             // <.>
             String username,
-            final Callable<T> callable);
+            final Supplier<T> supplier);
 
     // end::refguide[]
     /**
@@ -83,7 +82,7 @@ public interface SudoService {
     // tag::refguide[]
     <T> T sudo(                                             // <.>
             String username, List<String> roles,
-            final Callable<T> callable);
+            final Supplier<T> supplier);
 
     // end::refguide[]
 
@@ -96,7 +95,7 @@ public interface SudoService {
         // end::refguide-1[]
         /**
          * Any implementation of the {@link SudoService} should call this method on all implementations of the
-         * {@link Spi} service whenever {@link SudoService#sudo(String, List, Callable)} (or its overloads)
+         * {@link Spi} service whenever {@link SudoService#sudo(String, List, Supplier)} (or its overloads)
          * is called.
          *
          * <p>

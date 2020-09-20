@@ -32,8 +32,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -53,7 +52,6 @@ import org.apache.isis.schema.cmd.v2.ParamsDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidsDto;
-import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.val;
 
@@ -64,8 +62,9 @@ import lombok.val;
 @Qualifier("Default")
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
-    @Inject private javax.inject.Provider<CommandContext> commandContextProvider;
-    @Inject private BookmarkService bookmarkService;
+    @Inject BookmarkService bookmarkService;
+    @Inject ClockService clockService;
+    @Inject UserService userService;
 
     @Override
     public CommandDto asCommandDto(
@@ -102,12 +101,14 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     }
 
     private CommandDto asCommandDto(final List<ManagedObject> targetAdapters) {
-        final CommandDto dto = new CommandDto();
-        dto.setMajorVersion("1");
+
+        val dto = new CommandDto();
+        dto.setMajorVersion("2");
         dto.setMinorVersion("0");
 
-        String transactionId = determineTransactionId().toString();
-        dto.setTransactionId(transactionId);
+        dto.setTransactionId(UUID.randomUUID().toString());
+        dto.setUser(userService.getUser().getName());
+        dto.setTimestamp(clockService.nowAsXMLGregorianCalendar());
 
         for (val targetAdapter : targetAdapters) {
             final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
@@ -117,27 +118,14 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         return dto;
     }
 
-    protected UUID determineTransactionId() {
-        Command command = commandContextProvider.get().getCommand();
-        if (command != null && command.getUniqueId() != null) {
-            return command.getUniqueId();
-        } else {
-            return UUID.randomUUID();
-        }
-    }
-
     @Override
     public void addActionArgs(
             final ObjectAction objectAction,
             final ActionDto actionDto,
             final Can<ManagedObject> argAdapters) {
-        
-        final String actionId = CommandUtil.memberIdentifierFor(objectAction);
-        final ObjectSpecification onType = objectAction.getOnType();
-        final String objectType = onType.getSpecId().asString();
-        final String localId = objectAction.getIdentifier().toNameIdentityString();
-        actionDto.setLogicalMemberIdentifier(objectType + "#" + localId);
-        actionDto.setMemberIdentifier(actionId);
+
+        actionDto.setLogicalMemberIdentifier(CommandUtil.logicalMemberIdentifierFor(objectAction));
+        actionDto.setMemberIdentifier(CommandUtil.memberIdentifierFor(objectAction));
 
         val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
@@ -161,17 +149,13 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final PropertyDto propertyDto,
             final ManagedObject valueAdapter) {
 
-        final String actionIdentifier = CommandUtil.memberIdentifierFor(property);
-        final ObjectSpecification onType = property.getOnType();
-        final String objectType = onType.getSpecId().asString();
-        final String localId = property.getIdentifier().toNameIdentityString();
-        propertyDto.setLogicalMemberIdentifier(objectType + "#" + localId);
-        propertyDto.setMemberIdentifier(actionIdentifier);
+        propertyDto.setLogicalMemberIdentifier(CommandUtil.logicalMemberIdentifierFor(property));
+        propertyDto.setMemberIdentifier(CommandUtil.memberIdentifierFor(property));
 
-        final ObjectSpecification valueSpec = property.getSpecification();
-        final Class<?> valueType = valueSpec.getCorrespondingClass();
+        val valueSpec = property.getSpecification();
+        val valueType = valueSpec.getCorrespondingClass();
 
-        final ValueWithTypeDto newValue = CommonDtoUtils.newValueWithTypeDto(
+        val newValue = CommonDtoUtils.newValueWithTypeDto(
                 valueType, UnwrapUtil.single(valueAdapter), bookmarkService);
         propertyDto.setNewValue(newValue);
     }

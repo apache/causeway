@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.springframework.lang.NonNull;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
@@ -60,14 +62,14 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     private final Map<ManagedObject, PublishingChangeKind> changesByAdapter;
 
     public PublishedObjectsDefault(
-            final UUID transactionUuid,
-            final int sequence,
-            final String userName,
-            final Timestamp completedAt,
-            final int numberLoaded,
-            final int numberObjectPropertiesModified,
-            final Map<ManagedObject, PublishingChangeKind> changesByAdapter) {
-        
+            @lombok.NonNull final UUID transactionUuid,
+            @lombok.NonNull final int sequence,
+            @lombok.NonNull final String userName,
+            @lombok.NonNull final Timestamp completedAt,
+            @lombok.NonNull final int numberLoaded,
+            @lombok.NonNull final int numberObjectPropertiesModified,
+            @lombok.NonNull final Map<ManagedObject, PublishingChangeKind> changesByAdapter) {
+
         this.transactionUuid = transactionUuid;
         this.sequence = sequence;
         this.userName = userName;
@@ -203,7 +205,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     protected ChangesDto newChangesDto(final ObjectsDto objectsDto) {
         final ChangesDto changesDto = new ChangesDto();
 
-        changesDto.setMajorVersion("1");
+        changesDto.setMajorVersion("2");
         changesDto.setMinorVersion("0");
 
         changesDto.setTransactionId(transactionUuid.toString());

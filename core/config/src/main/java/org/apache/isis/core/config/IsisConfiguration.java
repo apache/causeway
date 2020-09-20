@@ -39,6 +39,8 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import javax.activation.DataSource;
+import javax.annotation.RegEx;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.Constraint;
@@ -58,7 +60,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.audit.AuditerService;
-import org.apache.isis.applib.services.command.CommandWithDto;
+import org.apache.isis.applib.services.command.CommandService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.PublishedObjects;
@@ -503,8 +505,14 @@ public class IsisConfiguration {
                      *         If set to any other subtype, then an event <i>is</i> sent.
                      *     </li>
                      * </ul>
+                     *
+                     * <p>
+                     *     The default is <tt>false</tt>, because otherwise the mere presence of <tt>@DomainObjectLayout</tt>
+                     *     (perhaps for some attribute other than this one) will cause any imperative <code>cssClass()</code>
+                     *     method to be ignored.
+                     * </p>
                      */
-                    private boolean postForDefault = true;
+                    private boolean postForDefault = false;
                 }
 
                 private final IconUiEvent iconUiEvent = new IconUiEvent();
@@ -538,8 +546,14 @@ public class IsisConfiguration {
                      *         If set to any other subtype, then an event <i>is</i> sent.
                      *     </li>
                      * </ul>
+                     *
+                     * <p>
+                     *     The default is <tt>false</tt>, because otherwise the mere presence of <tt>@DomainObjectLayout</tt>
+                     *     (perhaps for some attribute other than this one) will cause any imperative <code>iconName()</code>
+                     *     method to be ignored.
+                     * </p>
                      */
-                    private boolean postForDefault = true;
+                    private boolean postForDefault = false;
                 }
 
                 private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
@@ -578,8 +592,14 @@ public class IsisConfiguration {
                      *         If set to any other subtype, then an event <i>is</i> sent.
                      *     </li>
                      * </ul>
+                     *
+                     * <p>
+                     *     The default is <tt>false</tt>, because otherwise the mere presence of <tt>@DomainObjectLayout</tt>
+                     *     (perhaps for some attribute other than this one) will cause any imperative <code>layout()</code>
+                     *     method to be ignored.
+                     * </p>
                      */
-                    private boolean postForDefault = true;
+                    private boolean postForDefault = false;
                 }
 
                 private final TitleUiEvent titleUiEvent = new TitleUiEvent();
@@ -613,8 +633,14 @@ public class IsisConfiguration {
                      *         If set to any other subtype, then an event <i>is</i> sent.
                      *     </li>
                      * </ul>
+                     *
+                     * <p>
+                     *     The default is <tt>false</tt>, because otherwise the mere presence of <tt>@DomainObjectLayout</tt>
+                     *     (perhaps for some attribute other than this one) will cause any imperative <code>title()</code>
+                     *     method to be ignored.
+                     * </p>
                      */
-                    private boolean postForDefault = true;
+                    private boolean postForDefault = false;
                 }
             }
 
@@ -625,16 +651,9 @@ public class IsisConfiguration {
                 /**
                  * The default for whether action invocations should be reified as a
                  * {@link org.apache.isis.applib.services.command.Command} using the
-                 * {@link org.apache.isis.applib.services.command.spi.CommandService}, possibly so that the actual
-                 * execution of the action can be deferred until later (background execution) or replayed against a
-                 * copy of the system.
-                 *
-                 * <p>
-                 *     In particular, the {@link CommandWithDto} implementation
-                 *     of {@link org.apache.isis.applib.services.command.Command} represents the action invocation
-                 *     memento (obtained using {@link CommandWithDto#asDto()}) as a
-                 *     {@link org.apache.isis.schema.cmd.v2.CommandDto}.
-                 * </p>
+                 * {@link CommandService},
+                 * either for auditing or for replayed against a secondary
+                 * system, eg for regression testing.
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
@@ -812,20 +831,13 @@ public class IsisConfiguration {
                 /**
                  * The default for whether property edits should be reified as a
                  * {@link org.apache.isis.applib.services.command.Command} using the
-                 * {@link org.apache.isis.applib.services.command.spi.CommandService}, possibly so that the actual
-                 * execution of the property edit can be deferred until later (background execution) or replayed
-                 * against a copy of the system.
-                 *
-                 * <p>
-                 *     In particular, the {@link CommandWithDto} implementation
-                 *     of {@link org.apache.isis.applib.services.command.Command} represents the action invocation
-                 *     memento (obtained using {@link CommandWithDto#asDto()}) as a
-                 *     {@link org.apache.isis.schema.cmd.v2.CommandDto}.
-                 * </p>
+                 * {@link CommandService},
+                 * for example for auditing, or to be replayed against a
+                 * secondary system, for regression testing.
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Action#command()}.
+                 *  {@link org.apache.isis.applib.annotation.Property#command()}.
                  * </p>
                  */
                 private CommandPropertiesConfiguration command = CommandPropertiesConfiguration.NONE;
@@ -1463,7 +1475,7 @@ public class IsisConfiguration {
                 /**
                  * If an email fails to send, whether to propagate the exception (meaning that potentially the end-user
                  * might see the exception), or whether instead to just indicate failure through the return value of
-                 * the method ({@link org.apache.isis.applib.services.email.EmailService#send(List, List, List, String, String, DataSource...))
+                 * the method ({@link org.apache.isis.applib.services.email.EmailService#send(List, List, List, String, String, DataSource...)}
                  * that's being called.
                  */
                 private boolean throwExceptionOnFail = true;
@@ -2034,7 +2046,7 @@ public class IsisConfiguration {
             /**
              * The base path at which the Wicket viewer is mounted.
              */
-            @javax.validation.constraints.Pattern(regexp="^[/].*[/]$") @NotNull @NotEmpty
+            @javax.validation.constraints.Pattern(regexp="^[/](.*[/]|)$") @NotNull @NotEmpty
             private String basePath = "/wicket/";
 
             /**
@@ -3034,7 +3046,70 @@ public class IsisConfiguration {
              */
             private List<String> exposedHeaders = listOf("Authorization");
         }
+
+        private final Quartz quartz = new Quartz();
+        @Data
+        public static class Quartz {
+        }
+
+        private final CommandReplay commandReplay = new CommandReplay();
+        @Data
+        public static class CommandReplay {
+
+            private final PrimaryAccess primaryAccess = new PrimaryAccess();
+            @Data
+            public static class PrimaryAccess {
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlRestful;
+                private Optional<String> user;
+                private Optional<String> password;
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlWicket;
+            }
+
+            private Integer batchSize = 10;
+
+            private final QuartzSession quartzSession = new QuartzSession();
+            @Data
+            public static class QuartzSession {
+                /**
+                 * The user that runs the replay session secondary.
+                 */
+                private String user = "isisModuleExtCommandReplaySecondaryUser";
+                private List<String> roles = listOf("isisModuleExtCommandReplaySecondaryRole");
+            }
+
+            private final QuartzReplicateAndReplayJob quartzReplicateAndReplayJob = new QuartzReplicateAndReplayJob();
+            @Data
+            public static class QuartzReplicateAndReplayJob {
+                /**
+                 * Number of milliseconds before starting the job.
+                 */
+                private long startDelay = 15000;
+                /**
+                 * Number of milliseconds before running again.
+                 */
+                private long repeatInterval = 10000;
+            }
+
+            private final Analyser analyser = new Analyser();
+            @Data
+            public static class Analyser {
+                private final Result result = new Result();
+                @Data
+                public static class Result {
+                    private boolean enabled = true;
+                }
+                private final Exception exception = new Exception();
+                @Data
+                public static class Exception {
+                    private boolean enabled = true;
+                }
+
+            }
+        }
         
+
     }
 
     private static List<String> listOf(final String ...values) {

@@ -30,7 +30,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.util.JaxbUtil;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -61,6 +64,10 @@ public final class CommandDtoUtils {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static CommandDto clone(final CommandDto commandDto) {
+        return fromXml(toXml(commandDto));
     }
 
     public static CommandDto fromXml(final String xml) {
@@ -130,11 +137,27 @@ public final class CommandDtoUtils {
 
     public static void setUserData(
             final CommandDto dto, final String key, final String value) {
-        if(dto == null || key == null) {
+        if(dto == null || key == null || _Strings.isNullOrEmpty(value)) {
             return;
         }
         final MapDto userData = userDataFor(dto);
         CommonDtoUtils.putMapKeyValue(userData, key, value);
+    }
+
+    public static void setUserData(
+            final CommandDto dto, final String key, final Bookmark bookmark) {
+        if(dto == null || key == null || bookmark == null) {
+            return;
+        }
+        setUserData(dto, key, bookmark.toString());
+    }
+
+    public static void clearUserData(
+            final CommandDto dto, final String key) {
+        if(dto == null || key == null) {
+            return;
+        }
+        userDataFor(dto).getEntry().removeIf(x -> x.getKey().equals(key));
     }
 
     private static MapDto userDataFor(final CommandDto commandDto) {

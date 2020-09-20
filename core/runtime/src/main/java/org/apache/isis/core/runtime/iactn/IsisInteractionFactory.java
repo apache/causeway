@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.iactn;
 
 import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -30,8 +31,8 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import lombok.SneakyThrows;
 
 /**
- * Is the factory of {@link IsisInteraction}s, also holding a reference to the current session using
- * a thread-local.
+ * The factory of {@link IsisInteraction}s, also holding a reference to the
+ * current session using a thread-local.
  *
  * <p>
  *     The class can in considered as analogous to (and is in many ways a wrapper for) a JDO
@@ -39,8 +40,7 @@ import lombok.SneakyThrows;
  * </p>
  *
  * <p>
- *     The class is only instantiated once; it is also registered with {@link ServiceInjector}, meaning that
- *     it can be {@link Inject}'d into other domain services.
+ *     The implementation is a singleton service.
  * </p>
  */
 public interface IsisInteractionFactory {
@@ -50,7 +50,20 @@ public interface IsisInteractionFactory {
         void run() throws Exception;
     }
 
-    public IsisInteraction openSession(AuthenticationSession authenticationSession);
+    /**
+     * Creates a new {@link IsisInteraction}, which represents the span of
+     * activities user interacting with the application.
+     *
+     * <p>
+     *     If there is already an {@link IsisInteraction} available (as held
+     *     in a thread-local stack), then the interactions are stacked.
+     *     These are closed using {@link #closeSessionStack()}.
+     * </p>
+     *
+     * @param authenticationSession
+     * @return
+     */
+    public IsisInteraction openInteraction(AuthenticationSession authenticationSession);
 
     /**
      * @return whether the calling thread is within the context of an open IsisInteraction
@@ -90,25 +103,14 @@ public interface IsisInteractionFactory {
      * @param callable
      */
     @SneakyThrows
-    public default <R> R callAnonymous(Callable<R> callable) {
-        if(isInInteraction()) {
-            return callable.call(); // reuse existing session
-        }
-        return callAuthenticated(new InitialisationSession(), callable);
-    }
+    public <R> R callAnonymous(Callable<R> callable);
     
     /**
      * Variant of {@link #callAnonymous(Callable)} that takes a runnable.
      * @param runnable
      */
     @SneakyThrows
-    public default void runAnonymous(ThrowingRunnable runnable) {
-        if(isInInteraction()) {
-            runnable.run(); // reuse existing session
-            return;
-        }
-        runAuthenticated(new InitialisationSession(), runnable);
-    }
+    public void runAnonymous(ThrowingRunnable runnable);
 
     /**
      * closes all open IsisInteractions as stacked on the current thread

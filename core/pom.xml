@@ -92,7 +92,7 @@
 
 		<cucumber.version>6.7.0</cucumber.version>
 
-		<cxf-rt-rs-client.version>3.3.4</cxf-rt-rs-client.version>
+		<cxf-rt-rs-client.version>3.4.0</cxf-rt-rs-client.version>
 
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
@@ -1365,6 +1365,12 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-spring-boot-starter</artifactId>
 				<version>${resteasy4-spring-boot-starter.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-quartz</artifactId>
+				<version>${spring-boot.version}</version>
 			</dependency>
 
 			<dependency>

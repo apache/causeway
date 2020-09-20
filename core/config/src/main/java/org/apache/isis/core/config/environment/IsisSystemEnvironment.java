@@ -34,6 +34,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc._IocContainer;
 
@@ -148,7 +149,7 @@ public class IsisSystemEnvironment {
     }
 
     public boolean isUnitTesting() {
-        return "true".equalsIgnoreCase(System.getProperty("UNITTESTING"));
+        return "true".equalsIgnoreCase(getProperty("UNITTESTING"));
     }
 
     public boolean isPrototyping() {
@@ -167,23 +168,22 @@ public class IsisSystemEnvironment {
         // system environment priming (lowest prio)
 
         anyVoteForPrototyping|=
-                "true".equalsIgnoreCase(System.getenv("PROTOTYPING"));
+                isSet(getEnv("PROTOTYPING"));
 
         // system property priming (medium prio)
 
         anyVoteForPrototyping|=
-                "true".equalsIgnoreCase(System.getProperty("PROTOTYPING"));
+                isSet(getProperty("PROTOTYPING"));
 
         anyVoteForPrototyping|=
-                "PROTOTYPING".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
+                "PROTOTYPING".equalsIgnoreCase(getProperty("isis.deploymentType"));
 
         // system property override (highest prio)
 
-        anyVoteForProduction|=
-                "false".equalsIgnoreCase(System.getProperty("PROTOTYPING"));
+        anyVoteForProduction|= isNotSet(getProperty("PROTOTYPING"));
 
         anyVoteForProduction|=
-                "PRODUCTION".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
+                "PRODUCTION".equalsIgnoreCase(getProperty("isis.deploymentType"));
 
         final boolean isPrototyping = anyVoteForPrototyping && !anyVoteForProduction;
 
@@ -194,6 +194,26 @@ public class IsisSystemEnvironment {
 
         return deploymentType;
 
+    }
+
+    private static String getEnv(String envVar) {
+        return trim(System.getenv(envVar));
+    }
+
+    private static String getProperty(String key) {
+        return trim(System.getProperty(key));
+    }
+
+    private static String trim(String value) {
+        return _Strings.isNullOrEmpty(value) ? null : value.trim();
+    }
+
+    private static boolean isSet(String value) {
+        return "true".equalsIgnoreCase(value);
+    }
+
+    private static boolean isNotSet(String value) {
+        return "false".equalsIgnoreCase(value);
     }
 
 }

@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW)
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.TabMenu")
 public class TabMenu {
 
     @Inject private FactoryService factoryService;

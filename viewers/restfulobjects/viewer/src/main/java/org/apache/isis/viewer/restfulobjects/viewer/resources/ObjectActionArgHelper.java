@@ -57,9 +57,13 @@ public class ObjectActionArgHelper {
             val paramMeta = parameters.getElseFail(i);
             val paramSpec = paramMeta.getSpecification();
             try {
-                val argAdapter = new JsonParserHelper(resourceContext, paramSpec)
-                        .objectAdapterFor(argRepr);
-                argAdapters.add(_Either.left(argAdapter));
+                if(paramMeta.isOptional() && argRepr == null) {
+                    argAdapters.add(_Either.leftNullable(ManagedObject.empty(paramSpec)));
+                } else {
+                    val argAdapter = new JsonParserHelper(resourceContext, paramSpec)
+                            .objectAdapterFor(argRepr);
+                    argAdapters.add(_Either.left(argAdapter));
+                }
             } catch (Exception e) {
                 
                 val veto = InteractionVeto.actionParamInvalid(

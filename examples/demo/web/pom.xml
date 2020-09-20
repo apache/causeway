@@ -57,6 +57,16 @@
 			<artifactId>isis-extensions-cors-impl</artifactId>
 		</dependency>
 
+		<!-- Extensions -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-command-replay-primary</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-command-replay-secondary</artifactId>
+		</dependency>
+
 	</dependencies>
 
 </project>

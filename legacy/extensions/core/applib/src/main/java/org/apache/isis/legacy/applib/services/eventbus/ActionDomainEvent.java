@@ -24,10 +24,13 @@ import java.util.List;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
+/**
+ * @deprecated
+ */
 @Deprecated
 public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
@@ -74,7 +77,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     private Command command;
 
     /**
-     * @deprecated - use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
+     * @deprecated - use {@link Interaction#getCommand()} to obtain the current {@link Command}.
      */
     @Deprecated
     public Command getCommand() {
@@ -84,7 +87,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     /**
      * Not API - set by the framework.
      *
-     * @deprecated - the corresponding {@link #getCommand()} should not be called, instead use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
+     * @deprecated - the corresponding {@link #getCommand()} should not be called, instead use {@link Interaction#getCommand()} to obtain the current {@link Command}.
      */
     @Deprecated
     public void setCommand(Command command) {

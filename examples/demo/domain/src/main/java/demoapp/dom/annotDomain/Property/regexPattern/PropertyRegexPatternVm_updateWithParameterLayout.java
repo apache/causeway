@@ -28,7 +28,7 @@ public class PropertyRegexPatternVm_updateWithParameterLayout {
             )
             @ParameterLayout(
                 describedAs =
-                    "@Parameter(regexPattern = \"^[^@+]@[^\\.+]\\.com$\")"
+                    "@Parameter(regexPattern = \"^\\w+@\\w+[.]com$\")"
             )
             final String emailAddressParameterUsingAnnotation) {
         propertyRegexPatternVm.setEmailAddressPropertyUsingAnnotation(emailAddressParameterUsingAnnotation);

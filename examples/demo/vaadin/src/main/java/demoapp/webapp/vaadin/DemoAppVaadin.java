@@ -41,8 +41,6 @@ import demoapp.web.DemoAppManifest;
 @Import({
     DemoAppManifest.class,
     
-    //ThereCanBeOnlyOne.class, // shutdown demo instance if any already running (specific to the demo only)
-    
     // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
     IsisModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)

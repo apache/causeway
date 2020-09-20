@@ -51,7 +51,7 @@ import demoapp.dom.types.javalang.longs.vm.WrapperLongVm;
 public class WrapperLongs implements HasAsciiDocDescription {
 
     public String title() {
-        return "Longdata type";
+        return "Long (wrapper) data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)

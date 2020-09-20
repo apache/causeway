@@ -28,7 +28,10 @@ import org.apache.isis.applib.annotation.Value;
  * <p>
  * Where there is no basic colors (RGB all equal 0) then you get black; where
  * each color is at maximum (RGB all equal 255) you get white.
+ *
+ * @deprecated
  */
+@Deprecated
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.color.ColorValueSemanticsProvider")
 public class Color extends Magnitude<Color> {
 

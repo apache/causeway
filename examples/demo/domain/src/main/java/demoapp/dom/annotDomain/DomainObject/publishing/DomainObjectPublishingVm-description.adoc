@@ -1,4 +1,4 @@
-The `publishing` semantic for a domain object means that all registered implementation(s) of the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI] will be notified of the identity and nature of the change (created/updated/deleted) to the domain object.
+The `_publishing` semantic for a domain object means that all registered implementation(s) of the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI] will be notified of the identity and nature of the change (created/updated/deleted) to the domain object.
 This is done _after_ the interaction in which the object(s) was changed has completed.
 
 This notification is done only once per interaction, so will include _all_ domain objects that were changed.

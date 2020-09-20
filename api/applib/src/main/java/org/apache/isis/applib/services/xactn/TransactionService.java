@@ -85,23 +85,8 @@ public interface TransactionService {
      */
     // tag::refguide[]
     <T> T executeWithinTransaction(Supplier<T> task);       // <.>
-
     // end::refguide[]
 
-//   the executeWithinNewTransaction at time of writing is incorrect (doesn't create a new xactn).
-//   not sure there's any need for these additional methods?
-//
-//    /**
-//     * Runs given {@code task} within its own (new) transactional boundary.
-//     * @param task
-//     */
-//    void executeWithinNewTransaction(Runnable task);        // <.>
-//
-//    /**
-//     * Runs given {@code task} within its own (new) transactional boundary.
-//     * @param task
-//     */
-//    <T> T executeWithinNewTransaction(Supplier<T> task);    // <.>
 
     // tag::refguide[]
 }

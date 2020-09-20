@@ -149,10 +149,7 @@ public class MarkupPanelFactories {
 
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
-            return (id, model) -> {
-                val markupComponent = new MarkupComponent(id, model);
-                return markupComponent;    
-            };
+            return MarkupComponent::new;
         }
     }
 

@@ -380,7 +380,7 @@ This is discussed further xref:about.adoc#wrapper-factory[below].
 for more control over transactions
 
 
-The class also defines (as a nested static class) the `CommandSupport` as a domain service.
+The class also defines (as a nested static class) the `InteractionSupport` as a domain service.
 If ``@Import``ed into the integration test's "app manifest", this ensures that any ``Command``s that are raised as the result of interactions through the wrapper factory are setup correctly.
 
 

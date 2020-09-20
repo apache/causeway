@@ -4,6 +4,8 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import lombok.RequiredArgsConstructor;
+
 //tag::class[]
 @ActionCommandEnabledMetaAnnotation     // <.>
 @Action(
@@ -15,17 +17,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
     named = "Mixin Update Property"
     , describedAs = "@ActionPublishingEnabledMetaAnnotation"
 )
+@RequiredArgsConstructor
 public class ActionCommandJdo_mixinUpdatePropertyMetaAnnotation {
-    // ...
-//end::class[]
 
     private final ActionCommandJdo actionCommandJdo;
 
-    public ActionCommandJdo_mixinUpdatePropertyMetaAnnotation(ActionCommandJdo actionCommandJdo) {
-        this.actionCommandJdo = actionCommandJdo;
-    }
-
-//tag::class[]
     public ActionCommandJdo act(final String value) {
         actionCommandJdo.setPropertyMetaAnnotated(value);
         return actionCommandJdo;

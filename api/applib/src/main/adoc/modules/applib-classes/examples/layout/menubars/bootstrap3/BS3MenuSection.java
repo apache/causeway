@@ -36,6 +36,7 @@ import org.apache.isis.applib.layout.menubars.MenuSection;
 @XmlType(
         name = "section"
         , propOrder = {
+                "named",
                 "serviceActions"
         }
         )
@@ -46,7 +47,18 @@ public class BS3MenuSection implements MenuSection, Serializable, ServiceActionL
     public BS3MenuSection() {
     }
 
+    private String named;
 
+    @Override
+    @XmlElement(required = false)
+    public String getNamed() {
+        return named;
+    }
+
+    public void setNamed(String named) {
+        this.named = named;
+    }
+    
     private List<ServiceActionLayoutData> serviceActions = new ArrayList<>();
 
     // no wrapper

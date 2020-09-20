@@ -76,8 +76,8 @@ public class ScratchpadDefault implements Scratchpad {
     /**
      * Clear any user data.
      */
-    public void clear() {
+    @Override
+    public void destroy() throws Exception {
         userData.clear();
     }
-
 }

@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
-import demoapp.dom.annotDomain.DomainObject.publishing.annotated.enabled.DomainObjectPublishingEnabledJdo;
-
 @Service
 public class DomainObjectPublishingEnabledMetaAnnotatedJdoEntities {
 
@@ -23,8 +21,8 @@ public class DomainObjectPublishingEnabledMetaAnnotatedJdoEntities {
         return repositoryService.allInstances(DomainObjectPublishingEnabledMetaAnnotatedJdo.class);
     }
 
-    public DomainObjectPublishingEnabledMetaAnnotatedJdo first() {
-        return all().stream().findFirst().get();
+    public Optional<DomainObjectPublishingEnabledMetaAnnotatedJdo> first() {
+        return all().stream().findFirst();
     }
 
     public DomainObjectPublishingEnabledMetaAnnotatedJdo create(String newValue) {

@@ -50,7 +50,6 @@ import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -83,8 +82,17 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Interaction implements HasUniqueId {
 
-    @Getter @Setter
-    private UUID uniqueId;                          // <.>
+    public Interaction(final Command command) {
+        this.command = command;
+    }
+
+    @Getter
+    private Command command;                        // <.>
+
+    @Override
+    public UUID getUniqueId() {                     // <.>
+        return command.getUniqueId();
+    }
 
     // end::refguide[]
     private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
@@ -159,16 +167,31 @@ public class Interaction implements HasUniqueId {
      * Use the provided {@link MemberExecutor} to invoke an action, with the provided
      * {@link ActionInvocation} capturing the details of said action.
      * </p>
+     *
+     * <p>
+     *     Because this both pushes an {@link Interaction.Execution} to
+     *     represent the action invocation and then pops it, that completed
+     *     execution is accessible at {@link Interaction#getPriorExecution()}.
+     * </p>
      */
     public Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
             final ActionInvocation actionInvocation,
             final ClockService clockService,
-            final MetricsService metricsService) {
+            final MetricsService metricsService,
+            final Command command) {
 
+        pushAndStart(actionInvocation, clockService, metricsService, command);
+        try {
+            return executeInternal(memberExecutor, actionInvocation);
+        } finally {
+            popAndComplete(clockService, metricsService);
+        }
+    }
+
+    private void pushAndStart(ActionInvocation actionInvocation, ClockService clockService, MetricsService metricsService, Command command) {
         push(actionInvocation);
-
-        return executeInternal(memberExecutor, actionInvocation, clockService, metricsService);
+        start(actionInvocation, clockService, metricsService, command);
     }
 
     /**
@@ -178,51 +201,50 @@ public class Interaction implements HasUniqueId {
      * Use the provided {@link MemberExecutor} to edit a property, with the provided
      * {@link PropertyEdit} capturing the details of said property edit.
      * </p>
+     *
+     * <p>
+     *     Because this both pushes an {@link Interaction.Execution} to
+     *     represent the property edit and then pops it, that completed
+     *     execution is accessible at {@link Interaction#getPriorExecution()}.
+     * </p>
      */
     public Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
             final PropertyEdit propertyEdit,
             final ClockService clockService,
-            final MetricsService metricsService) {
+            final MetricsService metricsService,
+            final Command command) {
 
         push(propertyEdit);
-
-        return executeInternal(memberExecutor, propertyEdit, clockService, metricsService);
+        start(propertyEdit, clockService, metricsService, command);
+        try {
+            return executeInternal(memberExecutor, propertyEdit);
+        } finally {
+            popAndComplete(clockService, metricsService);
+        }
     }
 
-    private <T extends Execution<?,?>> Object executeInternal(
-            final MemberExecutor<T> memberExecutor,
-            final T execution,
-            final ClockService clockService,
-            final MetricsService metricsService) {
-
-        // as a convenience, since in all cases we want the command to start when the first 
-        // interaction executes, we populate the command here.
+    private <T extends Execution<?,?>> Object executeInternal(MemberExecutor<T> memberExecutor, T execution) {
 
         try {
-            try {
-                Object result = memberExecutor.execute(execution);
-                execution.setReturned(result);
-                return result;
-            } catch (Exception ex) {
+            Object result = memberExecutor.execute(execution);
+            execution.setReturned(result);
+            return result;
+        } catch (Exception ex) {
 
-                //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
-                // we rather print all of them, no matter whether recognized or not later on
-                // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
-                // WrapperFactory utilizing async calls
-                log.error("failed to execute an interaction", ex);
+            //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
+            // we rather print all of them, no matter whether recognized or not later on
+            // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
+            // WrapperFactory utilizing async calls
+            log.error("failed to execute an interaction", ex);
 
-                // just because an exception has thrown, does not mean it is that significant;
-                // it could be that it is recognized by an ExceptionRecognizer and is not severe
-                // eg. unique index violation in the DB
-                getCurrentExecution().setThrew(ex);
+            // just because an exception has thrown, does not mean it is that significant;
+            // it could be that it is recognized by an ExceptionRecognizer and is not severe
+            // eg. unique index violation in the DB
+            getCurrentExecution().setThrew(ex);
 
-                // propagate (as in previous design); caller will need to trap and decide
-                throw ex;
-            }
-        } finally {
-            final Timestamp completedAt = clockService.nowAsJavaSqlTimestamp();
-            pop(completedAt, metricsService);
+            // propagate (as in previous design); caller will need to trap and decide
+            throw ex;
         }
     }
 
@@ -253,6 +275,20 @@ public class Interaction implements HasUniqueId {
         return execution;
     }
 
+    private void start(
+            final Interaction.Execution<?,?> execution,
+            final ClockService clockService,
+            final MetricsService metricsService,
+            final Command command) {
+        // set the startedAt (and update command if this is the top-most member execution)
+        // (this isn't done within Interaction#execute(...) because it requires the DTO
+        // to have been set on the current execution).
+        val startedAt = execution.start(clockService, metricsService);
+        if(command.getStartedAt() == null) {
+            command.updater().setStartedAt(startedAt);
+        }
+    }
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
@@ -261,13 +297,16 @@ public class Interaction implements HasUniqueId {
      * from the stack of events held by the command.
      * </p>
      */
-    private Execution<?,?> pop(
-            final Timestamp completedAt,
+    private Execution<?,?> popAndComplete(
+            final ClockService clockService,
             final MetricsService metricsService) {
+
         if(currentExecution == null) {
             throw new IllegalStateException("No current execution to pop");
         }
         final Execution<?,?> popped = currentExecution;
+
+        final Timestamp completedAt = clockService.nowAsJavaSqlTimestamp();
         popped.setCompletedAt(completedAt, metricsService);
 
         moveCurrentTo(currentExecution.getParent());
@@ -386,8 +425,18 @@ public class Interaction implements HasUniqueId {
         // tag::refguide-2[]
         @Getter
         private final String targetMember;
-
         // end::refguide-2[]
+
+
+        /**
+         * Captures metrics before the Execution Dto is present.
+         */
+        private int numberObjectsLoadedBefore;
+        /**
+         * Captures metrics before the Execution Dto is present.
+         */
+        private int numberObjectsDirtiedBefore;
+
         protected Execution(
                 final Interaction interaction,
                 final InteractionType interactionType,
@@ -575,15 +624,8 @@ public class Interaction implements HasUniqueId {
                         final int numberObjectsDirtied) {
 
                     execution.startedAt = timestamp;
-
-                    final MetricsDto metricsDto = metricsFor(execution);
-
-                    final PeriodDto periodDto = timingsFor(metricsDto);
-                    periodDto.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(timestamp));
-
-                    final ObjectCountsDto objectCountsDto = objectCountsFor(metricsDto);
-                    numberObjectsLoadedFor(objectCountsDto).setBefore(numberObjectsLoaded);
-                    numberObjectsDirtiedFor(objectCountsDto).setBefore(numberObjectsDirtied);
+                    execution.numberObjectsLoadedBefore = numberObjectsLoaded;
+                    execution.numberObjectsDirtiedBefore = numberObjectsLoaded;
                 }
 
                 // tag::refguide-2a[]
@@ -603,9 +645,13 @@ public class Interaction implements HasUniqueId {
                     final MetricsDto metricsDto = metricsFor(execution);
 
                     final PeriodDto periodDto = timingsFor(metricsDto);
-                    periodDto.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(timestamp));
+                    periodDto.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(execution.startedAt));
+                    periodDto.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(execution.completedAt));
 
                     final ObjectCountsDto objectCountsDto = objectCountsFor(metricsDto);
+                    numberObjectsLoadedFor(objectCountsDto).setBefore(execution.numberObjectsLoadedBefore);
+                    numberObjectsDirtiedFor(objectCountsDto).setBefore(execution.numberObjectsDirtiedBefore);
+
                     numberObjectsLoadedFor(objectCountsDto).setAfter(numberObjectsLoaded);
                     numberObjectsDirtiedFor(objectCountsDto).setAfter(numberObjectsDirtied);
                 }

@@ -41,7 +41,7 @@ public class ToString<T> {
         return new ToString<>(name, getter, false);
     }
 
-    public static <T> ToString<T> toStringOmmitIfAbsent(String name, Function<? super T, ?> getter) {
+    public static <T> ToString<T> toStringOmitIfAbsent(String name, Function<? super T, ?> getter) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
         return new ToString<>(name, getter, true);
@@ -49,10 +49,10 @@ public class ToString<T> {
 
     private final List<String> names = _Lists.newArrayList();
     private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
-    private final BitSet ommitIfAbsent = new BitSet();
+    private final BitSet omitIfAbsent = new BitSet();
 
-    private ToString(String name, Function<? super T, ?> getter, boolean ommitIfAbsent) {
-        addBit(ommitIfAbsent);
+    private ToString(String name, Function<? super T, ?> getter, boolean omitIfAbsent) {
+        addBit(omitIfAbsent);
         names.add(name);
         getters.add(getter);
     }
@@ -66,7 +66,7 @@ public class ToString<T> {
         return this;
     }
 
-    public ToString<T> thenToStringOmmitIfAbsent(String name, Function<? super T, ?> getter){
+    public ToString<T> thenToStringOmitIfAbsent(String name, Function<? super T, ?> getter){
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
         addBit(true);
@@ -95,13 +95,12 @@ public class ToString<T> {
 
         return String.format("%s{%s}",
 
-                //ommitIfAbsent.toString(),
                 target.getClass().getSimpleName(),
 
                 getters.stream()
                 .peek(__->index[0]++)
                 .map(getter->getter.apply(target))
-                .filter(value->value!=null || !ommitIfAbsent.get(index[0]))
+                .filter(value->value!=null || !omitIfAbsent.get(index[0]))
                 .map(valueToStringFunction)
                 .map(valueLiteral->names.get(index[0])+"="+valueLiteral)
                 .collect(Collectors.joining(", "))
@@ -114,9 +113,9 @@ public class ToString<T> {
     private void addBit(boolean bit) {
         final int index = names.size();
         if(bit) {
-            ommitIfAbsent.set(index);
+            omitIfAbsent.set(index);
         } else {
-            ommitIfAbsent.clear(index);
+            omitIfAbsent.clear(index);
         }
     }
 

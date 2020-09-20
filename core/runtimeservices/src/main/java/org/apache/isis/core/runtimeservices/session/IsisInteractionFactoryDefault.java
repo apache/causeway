@@ -28,6 +28,7 @@ import java.util.concurrent.Callable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -37,6 +38,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
@@ -54,6 +58,7 @@ import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeCloseListener;
+import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
@@ -87,13 +92,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisInteractionFactoryDefault implements IsisInteractionFactory, IsisInteractionTracker {
 
-    @Inject private AuthenticationManager authenticationManager;
-    @Inject private RuntimeEventService runtimeEventService;
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private MetaModelContext metaModelContext;
-    @Inject private IsisConfiguration configuration;
-    @Inject private ServiceInjector serviceInjector;
-    //@Inject private FactoryService factoryService;
+    @Inject AuthenticationManager authenticationManager;
+    @Inject RuntimeEventService runtimeEventService;
+    @Inject SpecificationLoader specificationLoader;
+    @Inject MetaModelContext metaModelContext;
+    @Inject IsisConfiguration configuration;
+    @Inject ServiceInjector serviceInjector;
+    @Inject Provider<InteractionContext> interactionContextProvider;
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
@@ -151,13 +156,16 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     private final ThreadLocal<Stack<IsisInteraction>> isisInteractionStack = ThreadLocal.withInitial(Stack::new);
     
     @Override
-    public IsisInteraction openSession(@NonNull final AuthenticationSession authenticationSession) {
+    public IsisInteraction openInteraction(@NonNull final AuthenticationSession authenticationSession) {
 
         val authSessionToUse = getAuthenticationSessionOverride()
                 .orElse(authenticationSession);
         val newIsisInteraction = new IsisInteraction(metaModelContext, authSessionToUse);
         
         isisInteractionStack.get().push(newIsisInteraction);
+
+        initializeApplibCommandAndInteraction();
+
         postOpen(isisInteractionStack.get().size(), newIsisInteraction);
         
         log.debug("new IsisInteraction created (conversation-id={}, total-sessions-on-stack={}, {})", 
@@ -166,7 +174,14 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
                 _Probe.currentThreadId());
         
         return newIsisInteraction;
-        
+    }
+
+    private void initializeApplibCommandAndInteraction() {
+
+        val command = new Command();
+        val interaction = new Interaction(command);
+
+        interactionContextProvider.get().setInteraction(interaction);
     }
 
     @Override
@@ -175,7 +190,8 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
                 conversationId.get(), 
                 isisInteractionStack.get().size(),
                 _Probe.currentThreadId());
-        closeSessionStackDownToStackSize(0);
+
+        closeInteractionStackDownToStackSize(0);
     }
     
     @Override
@@ -211,14 +227,38 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
             @NonNull final Callable<R> callable) {
         
         final int stackSizeWhenEntering = isisInteractionStack.get().size();
-        openSession(authenticationSession);
+        openInteraction(authenticationSession);
         
         try {
+            serviceInjector.injectServicesInto(callable);
             return callable.call();
         } finally {
-            closeSessionStackDownToStackSize(stackSizeWhenEntering);
+            closeInteractionStackDownToStackSize(stackSizeWhenEntering);
         }
 
+    }
+
+    @SneakyThrows
+    public <R> R callAnonymous(Callable<R> callable) {
+        if(isInInteraction()) {
+            serviceInjector.injectServicesInto(callable);
+            return callable.call(); // reuse existing session
+        }
+        return callAuthenticated(new InitialisationSession(), callable);
+    }
+
+    /**
+     * Variant of {@link #callAnonymous(Callable)} that takes a runnable.
+     * @param runnable
+     */
+    @SneakyThrows
+    public void runAnonymous(ThrowingRunnable runnable) {
+        if(isInInteraction()) {
+            serviceInjector.injectServicesInto(runnable);
+            runnable.run(); // reuse existing session
+            return;
+        }
+        runAuthenticated(new InitialisationSession(), runnable);
     }
 
     private final ThreadLocal<UUID> conversationId = ThreadLocal.withInitial(()->null);
@@ -248,7 +288,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         isisInteraction.close(); // do this last
     }
     
-    private void closeSessionStackDownToStackSize(int downToStackSize) {
+    private void closeInteractionStackDownToStackSize(int downToStackSize) {
         
         log.debug("about to close IsisInteraction stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,

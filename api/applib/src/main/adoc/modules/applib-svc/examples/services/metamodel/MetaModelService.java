@@ -26,7 +26,7 @@ import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.S
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
@@ -79,7 +79,7 @@ public interface MetaModelService {
     BeanSort sortOf(Bookmark bookmark, Mode mode);      // <.>
 
     CommandDtoProcessor commandDtoProcessorFor(         // <.>
-                            String memberIdentifier);
+                            String logicalMemberIdentifier);
 
     // end::refguide[]
     // tag::refguide-1[]
@@ -92,7 +92,7 @@ public interface MetaModelService {
         STRICT,
         // end::refguide-1[]
         /**
-         * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then return {@link Sort#UNKNOWN}.
+         * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then return {@link BeanSort#UNKNOWN}.
          */
         // tag::refguide-1[]
         RELAXED

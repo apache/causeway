@@ -37,7 +37,17 @@ import lombok.NonNull;
 import lombok.Setter;
 
 /**
- * Holds the current set of components for a specific execution context (such as on a thread).
+ * Holds the current set of components for a specific execution context
+ * (such as on a thread).
+ *
+ * <p>
+ *     Not to be confused with the applib's
+ *     {@link org.apache.isis.applib.services.iactn.Interaction} object, which
+ *     captures the details of an action invocation or property edit (along
+ *     with any nested calls to other actions through wrapper factory) for
+ *     the purpose of publishing using
+ *     {@link org.apache.isis.applib.services.publish.PublisherService}.
+ * </p>
  *
  * @see IsisInteractionFactory
  */

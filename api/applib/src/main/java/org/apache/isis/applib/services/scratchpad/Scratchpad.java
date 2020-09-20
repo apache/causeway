@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -46,7 +47,8 @@ import lombok.extern.log4j.Log4j2;
  * available for use; no further configuration is required.
  */
 // tag::refguide[]
-public interface Scratchpad {
+public interface Scratchpad
+        extends DisposableBean {
 
     // end::refguide[]
     /**
@@ -62,12 +64,6 @@ public interface Scratchpad {
     // tag::refguide[]
     public void put(Object key, Object value);
 
-    // end::refguide[]
-    /**
-     * Clear any user data.
-     */
-    // tag::refguide[]
-    public void clear();
 
 }
 // end::refguide[]

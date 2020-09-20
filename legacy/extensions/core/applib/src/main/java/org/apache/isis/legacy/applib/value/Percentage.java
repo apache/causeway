@@ -21,7 +21,11 @@ package org.apache.isis.legacy.applib.value;
 
 import org.apache.isis.applib.annotation.Value;
 
+/**
+ * @deprecated
+ */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.percentage.PercentageValueSemanticsProvider")
+@Deprecated
 public class Percentage extends Magnitude<Percentage> {
 
     private static final long serialVersionUID = 1L;

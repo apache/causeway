@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
@@ -56,6 +57,31 @@ public class CommandUtil {
 
     public static String memberIdentifierFor(final ObjectMember objectMember) {
         return objectMember.getIdentifier().toClassAndNameIdentityString();
+    }
+
+    public static String logicalMemberIdentifierFor(final ObjectMember objectMember) {
+        if(objectMember instanceof ObjectAction) {
+            return logicalMemberIdentifierFor((ObjectAction)objectMember);
+        }
+        if(objectMember instanceof OneToOneAssociation) {
+            return logicalMemberIdentifierFor((OneToOneAssociation)objectMember);
+        }
+        throw new IllegalArgumentException(objectMember.getClass() + " is not supported");
+    }
+
+    public static String logicalMemberIdentifierFor(final ObjectAction objectAction) {
+        return logicalMemberIdentifierFor(objectAction.getOnType(), objectAction);
+    }
+
+    public static String logicalMemberIdentifierFor(final OneToOneAssociation otoa) {
+        return logicalMemberIdentifierFor(otoa.getOnType(), otoa);
+    }
+
+    private static String logicalMemberIdentifierFor(
+            final ObjectSpecification onType, final ObjectMember objectMember) {
+        final String objectType = onType.getSpecId().asString();
+        final String localId = objectMember.getIdentifier().toNameIdentityString();
+        return objectType + "#" + localId;
     }
 
     public static String argDescriptionFor(final ManagedObject valueAdapter) {

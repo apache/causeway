@@ -28,10 +28,10 @@
     <extension point="org.datanucleus.store.rdbms.java_mapping">
         <mapping
             java-type="org.apache.isis.applib.value.Blob"
-            mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.IsisBlobMapping"/>
+            mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.applib.IsisBlobMapping"/>
         <mapping
             java-type="org.apache.isis.applib.value.Clob"
-            mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.IsisClobMapping"/>
+            mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.applib.IsisClobMapping"/>
         
         <!-- TODO[2249] deprecated
         <mapping
@@ -50,14 +50,14 @@
                 jdbc-type="BLOB"
                 sql-type="BLOB"
                 default="true"
-                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
+                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuemappings.applib.ByteArrayBlobRdbmsMapping">
         </mapping>
         <mapping
                 java-type="[Ljava.lang.Byte;"
                 jdbc-type="BLOB"
                 sql-type="BLOB"
                 default="true"
-                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
+                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuemappings.applib.ByteArrayBlobRdbmsMapping">
         </mapping>
     </extension>
 
@@ -85,6 +85,41 @@
                 converter-name="isis.localresourcepath-string" />
     </extension>
 
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.isis.applib.services.bookmark.Bookmark"
+                dfg="true"
+                converter-name="isis.bookmark-string" />
+    </extension>
+
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.isis.schema.chg.v2.ChangesDto"
+                dfg="true"
+                converter-name="isis.changesdtov2-string" />
+    </extension>
+
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.isis.schema.common.v2.OidDto"
+                dfg="true"
+                converter-name="isis.oiddtov2-string" />
+    </extension>
+
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.isis.schema.cmd.v2.CommandDto"
+                dfg="true"
+                converter-name="isis.commanddtov2-string" />
+    </extension>
+
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.isis.schema.ixn.v2.InteractionDto"
+                dfg="true"
+                converter-name="isis.interactiondtov2-string" />
+    </extension>
+
     <!--
     http://www.datanucleus.org/extensions/type_converter.html
     -->
@@ -93,30 +128,63 @@
                 name="isis.password-string"
                 member-type="org.apache.isis.applib.value.Password"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.IsisPasswordConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsisPasswordConverter"/>
     </extension>
 
-    <!--
-    http://www.datanucleus.org/extensions/type_converter.html
-    -->
     <extension point="org.datanucleus.type_converter">
         <type-converter
                 name="isis.markup-string"
                 member-type="org.apache.isis.applib.value.Markup"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.IsisMarkupConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsisMarkupConverter"/>
     </extension>
 
-
-    <!--
-    http://www.datanucleus.org/extensions/type_converter.html
-    -->
     <extension point="org.datanucleus.type_converter">
         <type-converter
                 name="isis.localresourcepath-string"
                 member-type="org.apache.isis.applib.value.LocalResourcePath"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.IsisLocalResourcePathConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsisLocalResourcePathConverter"/>
+    </extension>
+
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="isis.bookmark-string"
+                member-type="org.apache.isis.applib.services.bookmark.Bookmark"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsisBookmarkConverter"/>
+    </extension>
+
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="isis.changesdtov2-string"
+                member-type="org.apache.isis.schema.chg.v2.ChangesDto"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.schema.v2.IsisChangesDtoConverter"/>
+    </extension>
+
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="isis.oiddtov2-string"
+                member-type="org.apache.isis.schema.common.v2.OidDto"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.schema.v2.IsisOidDtoConverter"/>
+    </extension>
+
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="isis.commanddtov2-string"
+                member-type="org.apache.isis.schema.cmd.v2.CommandDto"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.schema.v2.IsisCommandDtoConverter"/>
+    </extension>
+
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="isis.interactiondtov2-string"
+                member-type="org.apache.isis.schema.ixn.v2.InteractionDto"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.schema.v2.IsisInteractionDtoConverter"/>
     </extension>
 
 </plugin>

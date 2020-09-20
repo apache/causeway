@@ -22,10 +22,9 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandPersistence;
+import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
@@ -34,28 +33,24 @@ import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Mixin(method="act")
+@Action(
+        domainEvent = Object_clearHints.ActionDomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT,
+        command = CommandReification.DISABLED
+)
+@ActionLayout(
+        contributed = Contributed.AS_ACTION,
+        cssClassFa = "far fa-circle",
+        position = ActionLayout.Position.PANEL_DROPDOWN
+)
 @RequiredArgsConstructor
 public class Object_clearHints {
 
-    @Inject private HintStore hintStore;
-    @Inject private BookmarkService bookmarkService;
-    
-    private final Object holder;
-
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT,
-            commandPersistence = CommandPersistence.NOT_PERSISTED
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION,
-            cssClassFa = "far fa-circle",
-            position = ActionLayout.Position.PANEL_DROPDOWN
-            )
+    private final Object holder;
+
     @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
     public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
@@ -77,5 +72,8 @@ public class Object_clearHints {
                 ? (HintStoreUsingWicketSession) hintStore
                         : null;
     }
+
+    @Inject HintStore hintStore;
+    @Inject BookmarkService bookmarkService;
 
 }

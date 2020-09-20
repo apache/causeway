@@ -29,6 +29,10 @@ package org.apache.isis.applib.services;
 // tag::refguide[]
 public interface HasUsername {
 
+    /**
+     * The user that created this object.
+     * @return
+     */
     String getUsername();
 
 }

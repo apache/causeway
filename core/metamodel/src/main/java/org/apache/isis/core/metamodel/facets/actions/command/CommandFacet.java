@@ -19,11 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.command;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandExecuteIn;
-import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -35,21 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * action method using <tt>@Command</tt>.
  */
 public interface CommandFacet extends Facet {
-
-    public CommandPersistence persistence();
-
-    public CommandExecuteIn executeIn();
-
-    /**
-     * Indicates that the action to which this {@link Facet} is
-     * attached should <i>not</i> be treated as an action.
-     *
-     * <p>
-     * Exists to allow implementations that configure all actions to be treated as
-     * commands, but which can then be disabled for selected actions (eg using
-     * {@link Action#command()}).
-     */
-    public boolean isDisabled();
 
     public CommandDtoProcessor getProcessor();
 }

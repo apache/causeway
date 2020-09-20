@@ -17,11 +17,4 @@
  *  under the License.
  */
 
-/**
- * The {@link org.apache.isis.applib.services.command.CommandContext} service is a request-scoped service that reifies
- * the invocation of an action on a domain object into an object itself. This reified information is encapsulated
- * within the {@link org.apache.isis.applib.services.command.Command} object.
- *
- *
- */
 package org.apache.isis.applib.services.command;

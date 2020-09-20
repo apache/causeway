@@ -9,20 +9,16 @@ The interfaces listed in this chapter act as contributees; they allow domain ser
 [[HasUniqueId]]
 == `HasUniqueId`
 
-The `HasUniqueId` interface is a mix-in for any domain objects that reference a transaction id, such as auditing entries or commands, or for xref:refguide:applib-svc:InteractionContext.adoc[`Interaction`]s persisted as published events.
-
-[NOTE]
-====
-This identifier actually is for the request/interaction in which the object was created, so is actually now mis-named.
-====
+The `HasUniqueId` interface is a mix-in for any domain objects that are uniquely identified, in particular to represent a system-level request or interaction.
+The canonical usage is where the unique identifier is actually a transaction id, as implemented by auditing entries or commands, or for xref:refguide:applib-svc:InteractionContext.adoc[`Interaction`]s persisted as published events.
 
 The interface is defined is:
 
 [source,java]
 ----
 public interface HasUniqueId {
-    public UUID getTransactionId();                             // <.>
-    public void setTransactionId(final UUID transactionId);
+    public UUID getUniqueId();                             // <.>
+    public void setUniqueId(final UUID uniqueId);
 }
 ----
 <.> unique identifier (a GUID) of this request/interaction.

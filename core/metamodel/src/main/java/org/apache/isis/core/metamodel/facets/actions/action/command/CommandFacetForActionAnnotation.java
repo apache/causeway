@@ -21,10 +21,8 @@ package org.apache.isis.core.metamodel.facets.actions.action.command;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandExecuteIn;
-import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
@@ -48,14 +46,11 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                 .map(action -> {
 
                     CommandReification command = action.command();
-                    CommandPersistence persistence = action.commandPersistence();
-                    final CommandExecuteIn executeIn = action.commandExecuteIn();
                     final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
                     final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
                     if(processor != null) {
                         command = CommandReification.ENABLED;
-                        persistence = CommandPersistence.PERSISTED;
                     }
 
                     switch (command) {
@@ -71,13 +66,13 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                             // else fall through
                         default:
                             return (CommandFacet)new CommandFacetForActionAnnotationAsConfigured(
-                                    persistence, executeIn, Enablement.ENABLED, holder, servicesInjector);
+                                    holder, servicesInjector);
                         }
                     case DISABLED:
                         return null;
                     case ENABLED:
                         return new CommandFacetForActionAnnotation(
-                                persistence, executeIn, Enablement.ENABLED, processor, holder, servicesInjector);
+                                processor, holder, servicesInjector);
                     default:
                     }
                     throw new IllegalStateException("command '" + command + "' not recognised");
@@ -110,13 +105,10 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
     }
 
     CommandFacetForActionAnnotation(
-            final CommandPersistence persistence,
-            final CommandExecuteIn executeIn,
-            final Enablement enablement,
             final CommandDtoProcessor processor,
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
-        super(persistence, executeIn, enablement, processor, holder, servicesInjector);
+        super(processor, holder, servicesInjector);
     }
 
 

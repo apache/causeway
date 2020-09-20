@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtimeservices.xactn;
 
+import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -43,6 +44,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
 
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -127,6 +129,18 @@ public class TransactionServiceSpring implements TransactionService {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 task.run();
+            }
+        });
+    }
+
+    private <T> T executeWithinNewTransaction(Callable<T> callable) {
+
+        return transactionTemplate.execute(new TransactionCallback<T>() {
+            // the code in this method executes in a transactional context
+            @SneakyThrows
+            @Override
+            public T doInTransaction(TransactionStatus status) {
+                return callable.call();
             }
         });
     }

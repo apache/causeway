@@ -111,7 +111,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
         
         val authSession = AuthSessionStoreUtil.get().orElse(null);
         if(authSession!=null) {
-            isisInteractionFactory.openSession(authSession);
+            isisInteractionFactory.openInteraction(authSession);
             return; // access granted
         }
         // otherwise redirect to login page

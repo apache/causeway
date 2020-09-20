@@ -16,7 +16,7 @@ include::../section-hooks/isis.value-types~pre.adoc[]
 isis.value-types.primitives. +
 integer.format
 
-|
+| 
 | null
 
 
@@ -25,7 +25,7 @@ integer.format
 isis.value-types.java-lang.byte. +
 format
 
-|
+| 
 | Configures the number format understood by ``ByteValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -34,7 +34,7 @@ format
 isis.value-types.java-lang.double. +
 format
 
-|
+| 
 | Configures the number format understood by ``DoubleValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -43,7 +43,7 @@ format
 isis.value-types.java-lang.float. +
 format
 
-|
+| 
 | Configures the number format understood by ``FloatValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -52,7 +52,7 @@ format
 isis.value-types.java-lang.long. +
 format
 
-|
+| 
 | Configures the number format understood by ``LongValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -61,7 +61,7 @@ format
 isis.value-types.java-lang.short. +
 format
 
-|
+| 
 | Configures the number format understood by ``ShortValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -70,7 +70,7 @@ format
 isis.value-types.java-math. +
 big-decimal.format
 
-|
+| 
 | Configures the number format understood by ``BigDecimalValueSemanticsProvider``. @deprecated
 
 
@@ -79,7 +79,7 @@ big-decimal.format
 isis.value-types.java-math. +
 big-integer.format
 
-|
+| 
 | Configures the number format understood by ``BigIntegerValueSemanticsProvider``. @deprecated
 
 
@@ -205,7 +205,7 @@ format
 isis.value-types.primitives.int. +
 format
 
-|
+| 
 | Configures the number format understood by ``IntValueSemanticsProviderAbstract``. @deprecated
 
 

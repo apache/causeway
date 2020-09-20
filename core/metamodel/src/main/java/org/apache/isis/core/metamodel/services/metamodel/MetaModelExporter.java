@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;

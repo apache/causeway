@@ -20,7 +20,7 @@
 package org.apache.isis.core.runtimeservices.sudo;
 
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -53,12 +53,10 @@ public class SudoServiceDefault implements SudoService {
     }
 
     @Override
-    public <T> T sudo(final String username, final Callable<T> callable) {
+    public <T> T sudo(final String username, final Supplier<T> supplier) {
         try {
             runAs(username, null);
-            return callable.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            return supplier.get();
         } finally {
             releaseRunAs();
         }
@@ -75,12 +73,10 @@ public class SudoServiceDefault implements SudoService {
     }
 
     @Override
-    public <T> T sudo(final String username, final List<String> roles, final Callable<T> callable) {
+    public <T> T sudo(final String username, final List<String> roles, final Supplier<T> supplier) {
         try {
             runAs(username, roles);
-            return callable.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            return supplier.get();
         } finally {
             releaseRunAs();
         }

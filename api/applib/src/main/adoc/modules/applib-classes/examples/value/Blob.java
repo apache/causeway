@@ -25,13 +25,21 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 
 // tag::refguide[]
 // end::refguide[]
+@Value(semanticsProviderName =
+        "org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider")
+@XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class Blob implements NamedWithMimeType {
 
     /**
@@ -149,4 +157,44 @@ public final class Blob implements NamedWithMimeType {
         return getName() + " [" + getMimeType().getBaseType() + "]: " + getBytes().length + " bytes";
     }
 
+    /**
+     * (thread-safe)
+     * @implNote see also BlobValueSemanticsProvider
+     */
+    public static final class JaxbToStringAdapter extends XmlAdapter<String, Blob> {
+
+        private final PrimitiveJaxbAdapters.BytesAdapter bytesAdapter = new PrimitiveJaxbAdapters.BytesAdapter(); // thread-safe
+
+        @Override
+        public Blob unmarshal(String data) throws Exception {
+            if(data==null) {
+                return null;
+            }
+            final int colonIdx = data.indexOf(':');
+            final String name  = data.substring(0, colonIdx);
+            final int colon2Idx  = data.indexOf(":", colonIdx+1);
+            final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
+            final String payload = data.substring(colon2Idx+1);
+            final byte[] bytes = bytesAdapter.unmarshal(payload);
+            try {
+                return new Blob(name, new MimeType(mimeTypeBase), bytes);
+            } catch (MimeTypeParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public String marshal(Blob blob) throws Exception {
+            if(blob==null) {
+                return null;
+            }
+            String s = blob.getName() +
+                    ':' +
+                    blob.getMimeType().getBaseType() +
+                    ':' +
+                    bytesAdapter.marshal(blob.getBytes());
+            return s;
+        }
+
+    }
 }

@@ -454,8 +454,8 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     private static final ToString<ApplicationFeatureId> toString =
             ObjectContracts.toString("type", ApplicationFeatureId::getType)
             .thenToString("packageName", ApplicationFeatureId::getPackageName)
-            .thenToStringOmmitIfAbsent("className", ApplicationFeatureId::getClassName)
-            .thenToStringOmmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
+            .thenToStringOmitIfAbsent("className", ApplicationFeatureId::getClassName)
+            .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
 
 
     @Override

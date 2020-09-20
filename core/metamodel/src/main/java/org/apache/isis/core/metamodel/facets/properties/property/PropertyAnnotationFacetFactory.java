@@ -248,7 +248,7 @@ implements MetaModelRefiner {
 
         // check for @Property(command=...)
         val commandFacet = CommandFacetForPropertyAnnotation
-                .create(propertyIfAny, getConfiguration(), facetHolder, getServiceInjector());
+                .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector());
 
         super.addFacet(commandFacet);
     }

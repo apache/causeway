@@ -21,6 +21,8 @@ package org.apache.isis.applib.services.queryresultscache;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
+import org.springframework.beans.factory.DisposableBean;
+
 import org.apache.isis.applib.services.MethodReferences;
 
 import lombok.Data;
@@ -38,7 +40,7 @@ import lombok.Getter;
  * available for use; no further configuration is required.
  */
 // tag::refguide[]
-public interface QueryResultsCache {
+public interface QueryResultsCache extends DisposableBean {
 
     <T> T execute(                                      // <.>
             Callable<T> callable,

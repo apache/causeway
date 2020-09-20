@@ -32,7 +32,7 @@ import lombok.val;
 @Service
 public class LogoutHandlerWkt implements LogoutHandler {
 
-    @Inject private IsisInteractionTracker isisInteractionTracker;
+    @Inject IsisInteractionTracker isisInteractionTracker;
 
     @Override
     public void logout() {
@@ -45,9 +45,7 @@ public class LogoutHandlerWkt implements LogoutHandler {
         if(isisInteractionTracker.isInInteraction()) {
             isisInteractionTracker.currentInteraction()
             .ifPresent(interaction->
-                interaction.setOnClose(()->{
-                    currentWktSession.invalidateNow();
-                }));
+                interaction.setOnClose(currentWktSession::invalidateNow));
             
         } else {
             currentWktSession.invalidateNow();

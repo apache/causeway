@@ -21,6 +21,10 @@ package org.apache.isis.legacy.applib.value;
 
 import java.io.Serializable;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public abstract class Magnitude<T extends Magnitude<T>> implements Serializable {
     private static final long serialVersionUID = 1L;
 

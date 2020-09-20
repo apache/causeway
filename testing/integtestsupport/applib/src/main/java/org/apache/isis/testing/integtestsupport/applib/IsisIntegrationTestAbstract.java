@@ -26,12 +26,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -43,7 +41,6 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAf
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Convenient base class to extend for integration tests. 
@@ -54,41 +51,21 @@ import lombok.val;
 public abstract class IsisIntegrationTestAbstract {
 
     /**
-     * If included as a service, then ensures that any {@link Command}s created (eg as a result of
-     * {@link Action#command()} set to {@link CommandReification#ENABLED}) will be appear to be created as
-     * user initiatied.
-     *
-     * <p>
-     *     Most integration tests won't be concerned with such details, but tests that verify the interaction with the
-     *     {@link org.apache.isis.applib.services.command.spi.CommandService} implementations may require this
-     *     behaviour.
-     * </p>
+     * Hook to interact with
+     * {@link org.apache.isis.applib.services.iactn.Interaction}s and
+     * therefore also {@link Command}s (currently unused).
      */
     @Service
     @Order(OrderPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
-    public static class CommandSupport {
+    public static class InteractionSupport {
 
-        private final Provider<CommandContext> commandContextProvider;
+        private final Provider<InteractionContext> interactionContextProvider;
 
         @EventListener
         public void on(final TransactionAfterBeginEvent event) {
-            setupCommand();
         }
-        
-        private void setupCommand() {
-            val commandContext = commandContextProvider.get();
-            val command = commandContext.getCommand();
-            if(command == null) {
-                return;
-            }
-            final Command.Executor executor = command.getExecutor();
-            if(executor != Command.Executor.OTHER) {
-                return;
-            }
-            command.internal().setExecutor(Command.Executor.USER);
-        }
-        
+
     }
 
     /**

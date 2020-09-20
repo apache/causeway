@@ -33,7 +33,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 @Component
-@Named("isisMetaModel.isisSchema.ValueTypeProvider")
+@Named("isisMetaModel.isisSchemaValueTypeProvider")
 public class IsisSchemaValueTypeProvider implements ValueTypeProvider {
     @Override
     public Collection<ValueTypeDefinition> definitions() {

@@ -26,6 +26,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
+import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.cors.impl.IsisModuleExtCorsImpl;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
@@ -42,14 +44,21 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.DemoModule;
 import demoapp.dom._infra.fixtures.DemoFixtureScript;
+import demoapp.web.replay.DemoReplayController;
+import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
 
 /**
  * Makes the integral parts of the 'demo' web application.
  */
 @Configuration
 @Import({
+    // @Configuration's
     DemoModule.class, // shared demo core module
-    
+
+    // commands
+    IsisModuleExtCommandReplayPrimary.class,
+    IsisModuleExtCommandReplaySecondary.class,
+
     // SECURITY
     IsisModuleSecurityShiro.class,
 
@@ -68,6 +77,10 @@ import demoapp.dom._infra.fixtures.DemoFixtureScript;
     
     IsisModuleTestingH2ConsoleUi.class,
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
+
+    // services
+    DemoReplayController.class,
+    PrototypeActionsVisibilityAdvisor.class,
 
     // fixtures
     DemoFixtureScript.class,

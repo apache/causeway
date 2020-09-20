@@ -28,6 +28,7 @@
     </description>
 
 	<properties>
+		<skipTests>true</skipTests>
 	</properties>
 
 	<dependencies>

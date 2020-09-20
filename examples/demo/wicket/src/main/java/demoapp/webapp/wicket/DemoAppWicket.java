@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.quartz.IsisModuleExtQuartzImpl;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
@@ -42,8 +43,6 @@ import demoapp.web._infra.utils.ThereCanBeOnlyOne;
 @Import({
     DemoAppManifest.class,
 
-    //ThereCanBeOnlyOne.class, // shutdown demo instance if any already running (specific to the demo only)
-    
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,
 
@@ -55,7 +54,7 @@ import demoapp.web._infra.utils.ThereCanBeOnlyOne;
     IsisModuleExtPdfjsUi.class,
 
     // Persistence (JDO/DN5)
-    IsisModuleValAsciidocPersistenceJdoDn5.class,   //
+    IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
 
 })
@@ -72,7 +71,7 @@ public class DemoAppWicket extends SpringBootServletInitializer {
         //IsisPresets.prototyping();
         //DebugLoggingPreset.PERSISTENCE.apply();
         //DebugLoggingPreset.ISIS_SESSION.apply();
-        
+
         SpringApplication.run(new Class[] { DemoAppWicket.class }, args);
     }
 

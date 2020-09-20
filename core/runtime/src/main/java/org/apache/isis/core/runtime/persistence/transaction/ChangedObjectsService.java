@@ -51,7 +51,6 @@ import lombok.val;
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@IsisInteractionScope
 //@Log4j2
 public class ChangedObjectsService implements TransactionScopeListener {
 

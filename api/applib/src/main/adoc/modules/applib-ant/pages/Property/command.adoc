@@ -4,6 +4,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+CAUTION: TODO - v2 to update, has been simplified.
 
 Every property edit (and action invocation for that matter) is automatically reified into a concrete `Command` object.
 The `@Property(command=..., commandXxx=...)` attributes provide hints for the persistence of that `Command` object, and the subsequent processing of that persisted command.
@@ -16,8 +17,6 @@ The annotation works with (and is influenced by the behaviour of) a number of do
 
 * xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`]
 * xref:refguide:applib-svc:CommandService.adoc[`CommandService`]
-//* xref:refguide:applib-svc:BackgroundService.adoc[`BackgroundService`] and
-//* xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`]
 
 
 Each property edit is automatically reified by the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service into a `Command` object, capturing details of the target object, the property, the proposed new value for the property, the user, a timestamp and so on.
@@ -25,197 +24,6 @@ Each property edit is automatically reified by the xref:refguide:applib-svc:Comm
 If an appropriate `CommandService` is configured (for example using xref:extensions:command-log:about.adoc[Command Log] extension module), then the `Command` itself is persisted.
 
 By default, actions are invoked in directly in the thread of the invocation.
-//If there is an implementation of `BackgroundCommandService` (as the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
-
-//[NOTE]
-//====
-//If background ``Command``s are used, then an external scheduler, using xref:userguide:btb:about.adoc#BackgroundCommandExecution[headless access], must also be configured.
-//====
-
-== `command()` and `commandPersistence()`
-
-The `command()` and `commandPersistence() attributes work together to determine whether a command will actually be persisted.
-There inter-relationship is somewhat complex, so is probably best explained by way of examples:
-
-[cols="1a,1a,1a,1a,2a", options="header"]
-|===
-
-| `command()`
-|`isis.services.
-command.properties` config property
-| `command
-Persistence()`
-| action dirties objects?
-| is command persisted?
-
-| `ENABLED`
-| (any)
-| `PERSISTED`
-| (either)
-| yes
-
-| `ENABLED`
-| (any)
-| `IF_HINTED`
-| no
-| no
-
-| `ENABLED`
-| (any)
-| `IF_HINTED`
-| yes
-| yes
-
-| `ENABLED`
-| (any)
-| `NOT_PERSISTED`
-| (any)
-| no
-
-| `AS_CONFIGURED`
-| `all`
-| `PERSISTED`
-| no
-| yes
-
-| `AS_CONFIGURED`
-| `all`
-| `IF_HINTED`
-| no
-| no
-
-| `AS_CONFIGURED`
-| `all`
-| `IF_HINTED`
-| yes
-| yes
-
-| `AS_CONFIGURED`
-| `all`
-| `NOT_PERSISTED`
-| (any)
-| no
-
-| `AS_CONFIGURED`
-| `none`
-| `PERSISTED`
-| no
-| no (!)
-
-| `AS_CONFIGURED`
-| `none`
-| `PERSISTED`
-| yes
-| yes
-
-| `AS_CONFIGURED`
-| `none`
-| `IF_HINTED`
-| no
-| no
-
-| `AS_CONFIGURED`
-| `none`
-| `IF_HINTED`
-| yes
-| yes
-
-| `AS_CONFIGURED`
-| `none`
-| `NOT_PERSISTED`
-| no
-| no
-
-| `AS_CONFIGURED`
-| `none`
-| `NOT_PERSISTED`
-| yes
-| yes (!)
-
-| `DISABLED`
-| (any)
-| `PERSISTED`
-| no
-| no (!)
-
-| `DISABLED`
-| (any)
-| `PERSISTED`
-| yes
-| yes
-
-| `DISABLED`
-| (any)
-| `IF_HINTED`
-| no
-| no
-
-| `DISABLED`
-| (any)
-| `IF_HINTED`
-| yes
-| yes
-
-| `DISABLED`
-| (any)
-| `NOT_PERSISTED`
-| no
-| no
-
-| `DISABLED`
-| (any)
-| `NOT_PERSISTED`
-| yes
-| yes (!)
-
-|===
-
-For example:
-
-[source,java]
-----
-public class Order {
-    @Property(
-        command=CommandReification.ENABLED,
-        commandPersistence=CommandPersistence.PERSISTED
-    )
-    public Product getProduct() { /* ... */ }
-    public void setProduct(Product p) { /* ... */ }
-}
-----
-
-As can be seen, whether a command is actually persisted does not always follow the value of the `commandPersistence` attribute.
-This is because the `command` attribute actually determines whether any command metadata for the action is captured within the framework's internal metamodel.
-If `command` is `DISABLED` or does not otherwise apply due to the action's declared semantics, then the framework decides to persist a command based solely on whether the action dirtied any objects (as if `commandPersistence()` was set to `IF_HINTED`).
-
-
-
-== `commandExecuteIn()`
-
-For persisted commands, the `commandExecuteIn` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
-
-WARNING: TODO: v2 - background execution has temporarily been removed, will be reinstated for v2.0.
-
-//Background execution means that the command is not executed immediately, but is available for a configured xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.
-//See xref:userguide:btb:about.adoc#BackgroundCommandExecution[here] for further information on this topic.
-
-//For example:
-//
-//[source,java]
-//----
-//public class Order {
-//    @Property(
-//        command=CommandReification.ENABLED,
-//        commandExecuteIn=CommandExecuteIn.BACKGROUND
-//    )
-//    public Product getProduct() { /* ... */ }
-//    public void setProduct(Product p) { /* ... */ }
-//}
-//----
-//
-//will result in the `Command` being persisted but its execution deferred to a background execution mechanism.
-//The returned object from this property edit is the persisted `Command` itself.
-
 
 
 

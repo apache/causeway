@@ -51,28 +51,28 @@ public class DomainObjectPublishingVm_delete {
         return domainObjectPublishingVm;
     }
     public DomainObjectPublishingEnabledJdo default0Act() {
-        return publishingEnabledJdoEntities.first();
+        return publishingEnabledJdoEntities.first().get();
     }
     public DomainObjectPublishingDisabledJdo default1Act() {
-        return publishingDisabledJdoEntities.first();
+        return publishingDisabledJdoEntities.first().get();
     }
     public DomainObjectPublishingEnabledMetaAnnotatedJdo default2Act() {
-        return publishingEnabledMetaAnnotatedJdoEntities.first();
+        return publishingEnabledMetaAnnotatedJdoEntities.first().get();
     }
     public DomainObjectPublishingEnabledMetaAnnotOverriddenJdo default3Act() {
-        return publishingEnabledMetaAnnotOverriddenJdoEntities.first();
+        return publishingEnabledMetaAnnotOverriddenJdoEntities.first().get();
+    }
+    public String disableAct() {
+        if(!publishingEnabledJdoEntities.first().isPresent()) { return "No EnabledJdo to delete"; }
+        if(!publishingDisabledJdoEntities.first().isPresent()) { return "No DisabledJdo to delete"; }
+        if(!publishingEnabledMetaAnnotatedJdoEntities.first().isPresent()) { return "No MetaAnnotated to delete"; }
+        if(!publishingEnabledMetaAnnotOverriddenJdoEntities.first().isPresent()) { return "No MetaAnnotated But Overridden to delete"; }
+        return null;
     }
 
-    @Inject
-    DomainObjectPublishingEnabledJdoEntities publishingEnabledJdoEntities;
-
-    @Inject
-    DomainObjectPublishingDisabledJdoEntities publishingDisabledJdoEntities;
-
-    @Inject
-    DomainObjectPublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
-
-    @Inject
-    DomainObjectPublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
+    @Inject DomainObjectPublishingEnabledJdoEntities publishingEnabledJdoEntities;
+    @Inject DomainObjectPublishingDisabledJdoEntities publishingDisabledJdoEntities;
+    @Inject DomainObjectPublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
+    @Inject DomainObjectPublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
 }
 //end::class[]

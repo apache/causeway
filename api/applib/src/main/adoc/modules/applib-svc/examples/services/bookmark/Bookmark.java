@@ -73,6 +73,7 @@ public class Bookmark implements Serializable {
 
     /**
      * Round-trip with {@link #toString()} representation.
+     * @return
      */
     // tag::refguide[]
     public static Optional<Bookmark> parse(@Nullable String str) {

@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -268,6 +269,19 @@ public final class _Exceptions {
         return _NullSafe.stream(ex.getStackTrace())
                 .map(StackTraceElement::toString)
                 .limit(maxLines);
+    }
+
+    public static final String asStacktrace(@Nullable Throwable ex, int maxLines, String delimiter) {
+        return _Exceptions.streamStacktraceLines(ex, maxLines)
+                .collect(Collectors.joining(delimiter));
+    }
+
+    public static final String asStacktrace(@Nullable Throwable ex, int maxLines) {
+        return asStacktrace(ex, maxLines, "\n");
+    }
+
+    public static final String asStacktrace(@Nullable Throwable ex) {
+        return asStacktrace(ex, 1000);
     }
 
     /**

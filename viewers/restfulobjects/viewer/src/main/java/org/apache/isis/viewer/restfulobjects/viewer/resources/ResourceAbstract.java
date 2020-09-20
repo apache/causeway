@@ -33,8 +33,6 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -123,13 +121,6 @@ public abstract class ResourceAbstract {
         
         return resourceContext(
                 resourceDescriptor, "/restful", /*urlUnencodedQueryString*/ null, requestParams);
-    }
-
-    // --
-    
-    protected void setCommandExecutor(Command.Executor executor) {
-        metaModelContext.getServiceRegistry()
-        .lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
     }
 
     // -- ISIS INTEGRATION

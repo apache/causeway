@@ -158,20 +158,33 @@ public interface ExceptionRecognizer {
         public String toMessage(@Nullable TranslationService translationService) {
             // end::refguide-2[]
 
-            val categoryLiteral = translationService!=null
-                    ? translationService.translate(
-                    ExceptionRecognizer.Category.class.getName(), getCategory().getFriendlyName())
-                    : getCategory().getFriendlyName();
-
-            val reasonLiteral = translationService!=null
-                    ? translationService.translate(
-                    ExceptionRecognizer.Recognition.class.getName(), getReason())
-                    : getReason();
+            val categoryLiteral = translate(getCategory().getFriendlyName(), translationService);
+            val reasonLiteral = translate(getReason(), translationService);
 
             return String.format("[%s]: %s", categoryLiteral, reasonLiteral);
             // tag::refguide-2[]
             // ...
         }
+        
+        public String toMessageNoCategory(@Nullable TranslationService translationService) {
+            // end::refguide-2[]
+
+            val reasonLiteral = translate(getReason(), translationService);
+            return String.format("%s", reasonLiteral);
+            // tag::refguide-2[]
+            // ...
+        }
+        
+        private static String translate(
+                @Nullable String x, 
+                @Nullable TranslationService translationService) {
+            if(x==null || translationService==null) {
+                return x;
+            }
+            return translationService.translate(
+                    ExceptionRecognizer.Recognition.class.getName(), x);
+        }
+        
     }
     // end::refguide-2[]
 

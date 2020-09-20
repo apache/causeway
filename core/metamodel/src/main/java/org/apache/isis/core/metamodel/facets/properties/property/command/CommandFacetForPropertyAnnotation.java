@@ -20,11 +20,9 @@ package org.apache.isis.core.metamodel.facets.properties.property.command;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.CommandExecuteIn;
-import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
@@ -32,6 +30,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
+
+import lombok.val;
 
 public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
@@ -46,33 +47,30 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
         return propertyIfAny
                 .filter(property -> property.command() != CommandReification.NOT_SPECIFIED)
                 .map(property -> {
-                    CommandReification command = property.command();
-                    final CommandPersistence commandPersistence = property.commandPersistence();
-                    final CommandExecuteIn commandExecuteIn = property.commandExecuteIn();
+                    CommandReification commandReification = property.command();
 
                     final Class<? extends CommandDtoProcessor> processorClass =
-                            property != null ? property.commandDtoProcessor() : null;
-                            final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+                            property.commandDtoProcessor();
+                    final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
-                            if(processor != null) {
-                                command = CommandReification.ENABLED;
-                            }
-                            switch (command) {
-                            case AS_CONFIGURED:
-                                switch (setting) {
-                                case NONE:
-                                    return null;
-                                default:
-                                    return (CommandFacet)new CommandFacetForPropertyAnnotationAsConfigured(commandPersistence,
-                                            commandExecuteIn, Enablement.ENABLED, holder, servicesInjector);
-                                }
-                            case DISABLED:
-                                return null;
-                            case ENABLED:
-                                return new CommandFacetForPropertyAnnotation(commandPersistence, commandExecuteIn, Enablement.ENABLED, holder, processor, servicesInjector);
-                            default:
-                            }
-                            throw new IllegalStateException("command '" + command + "' not recognised");
+                    if(processor != null) {
+                        commandReification = CommandReification.ENABLED;
+                    }
+                    switch (commandReification) {
+                    case AS_CONFIGURED:
+                        switch (setting) {
+                        case NONE:
+                            return null;
+                        default:
+                            return (CommandFacet)new CommandFacetForPropertyAnnotationAsConfigured(holder, servicesInjector);
+                        }
+                    case DISABLED:
+                        return null;
+                    case ENABLED:
+                        return new CommandFacetForPropertyAnnotation(holder, processor, servicesInjector);
+                    default:
+                    }
+                    throw new IllegalStateException("command '" + commandReification + "' not recognised");
                 })
                 .orElseGet(() -> {
                     switch (setting) {
@@ -86,13 +84,10 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
 
     CommandFacetForPropertyAnnotation(
-            final CommandPersistence persistence,
-            final CommandExecuteIn executeIn,
-            final Enablement enablement,
             final FacetHolder holder,
             final CommandDtoProcessor processor,
             final ServiceInjector servicesInjector) {
-        super(persistence, executeIn, enablement, processor, holder, servicesInjector);
+        super(processor, holder, servicesInjector);
     }
 
 

@@ -18,19 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.property.command;
 
-import org.apache.isis.applib.annotation.CommandExecuteIn;
-import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class CommandFacetForPropertyAnnotationAsConfigured extends CommandFacetForPropertyAnnotation {
 
     CommandFacetForPropertyAnnotationAsConfigured(
-            final CommandPersistence persistence,
-            final CommandExecuteIn executeIn,
-            final Enablement enablement,
             final FacetHolder holder, final ServiceInjector servicesInjector) {
-        super(persistence, executeIn, enablement, holder, null, servicesInjector);
+        super(holder, null, servicesInjector);
     }
 
 

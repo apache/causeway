@@ -39,14 +39,18 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
-    public static AsyncControl<Void> control() {                        // <.>
-        return new AsyncControl<>();
+    public static AsyncControl<Void> returningVoid() {                        // <.>
+        return new AsyncControl<>(Void.class);
     }
-    public static <X> AsyncControl<X> control(final Class<X> clazz) {   // <.>
-        return new AsyncControl<>();
+    public static <X> AsyncControl<X> returning(final Class<X> cls) {     // <.>
+        return new AsyncControl<X>(cls);
     }
 
-    private AsyncControl() {
+    @Getter
+    private final Class<R> returnType;                                  // <.>
+
+    private AsyncControl(final Class<R> returnType) {
+        this.returnType = returnType;
         with(exception -> {                                             // <.>
             log.error(logMessage(), exception);
             return null;
@@ -107,9 +111,8 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
      * Contains the result of the invocation.  However, if an entity is returned, then the object is automatically
      * detached because the persistence session within which it was obtained will have been closed already.
      */
-    @Setter(AccessLevel.PACKAGE)
     // tag::refguide[]
-    @Getter
+    @Getter @Setter
     private Future<R> future;                                           // <.>
 
     // end::refguide[]
@@ -127,6 +130,7 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         }
         return buf.toString();
     }
+
     // tag::refguide[]
     // ...
 }

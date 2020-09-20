@@ -45,9 +45,7 @@ import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.datanucleus.identity.DatastoreIdImpl;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
@@ -75,8 +73,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
@@ -169,20 +167,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             .addInstanceLifecycleListener((InstanceLifecycleListener)metricsService, (Class[]) null);
         }
 
-        final Command command = commandService.create();
-        final Interaction interaction = new Interaction();
-
-        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
-        final String userName = userService.getUser().getName();
-
-        command.internal().setTimestamp(timestamp);
-        command.internal().setUser(userName);
-
-        interaction.setUniqueId(command.getUniqueId());
-
-        commandContextProvider.get().setCommand(command);
-        interactionContextProvider.get().setInteraction(interaction);
-        
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
 
         this.state = State.OPEN;
@@ -194,8 +178,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * Closes the subcomponents.
      *
      * <p>
-     * Automatically {@link IsisTransactionManagerJdo#commitTransaction() ends
-     * (commits)} the current (Isis) {@link IsisTransactionJdo}. This in turn commits the underlying
+     * Automatically {@link IsisTransactionManagerJdo#commitTransaction(IsisTransactionObject)
+     * ends (commits)} the current (Isis) {@link IsisTransactionJdo}. This in turn commits the underlying
      * JDO transaction.
      *
      * <p>
@@ -210,29 +194,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         completeCommandFromInteractionAndClearDomainEvents();
-
-        //TODO[2125] should no longer be required		
-        //		try {
-        //			val currentTransaction = transactionManager.getCurrentTransaction();
-        //			transactionManager.flushTransaction(currentTransaction);
-        //			if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
-        //				if(currentTransaction.getState().canCommit()) {
-        //					transactionManager.commitTransaction(currentTransaction);
-        //				} else if(currentTransaction.getState().canAbort()) {
-        //					transactionManager.abortTransaction(currentTransaction);
-        //				}
-        //			}
-        //		} catch(final Throwable ex) {
-        //			// ignore
-        //			log.error("close: failed to end transaction; continuing to avoid memory leakage");
-        //		}
-
-        // tell the proxy of all request-scoped services to invoke @PreDestroy
-        // (if any) on all underlying services stored on their thread-locals...
-        //preDestroyOnRequestScopedServices();
-
-        // ... and then remove those underlying services from the thread-local
-        //endRequestOnRequestScopeServices();
 
         persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
         
@@ -249,48 +210,28 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         this.state = State.CLOSED;
     }
 
-//    private void endRequestOnRequestScopeServices() {
-//        serviceRegistry.select(RequestScopedService.class)
-//        .forEach(RequestScopedService::__isis_endRequest);
-//    }
-//
-//    private void preDestroyOnRequestScopedServices() {
-//        serviceRegistry.select(RequestScopedService.class)
-//        .forEach(RequestScopedService::__isis_preDestroy);
-//    }
-
     private void completeCommandFromInteractionAndClearDomainEvents() {
 
-        final Command command = commandContextProvider.get().getCommand();
-        final Interaction interaction = interactionContextProvider.get().getInteraction();
-
+        val interaction = interactionContextProvider.get().getInteraction();
+        val command = interaction.getCommand();
 
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {
             // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
 
-            final Timestamp completedAt;
-            final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
-            if (priorExecution != null) {
-                // copy over from the most recent (which will be the top-level) interaction
-                completedAt = priorExecution.getCompletedAt();
-            } else {
-                // this could arise as the result of calling SessionManagementService#nextSession within an action
-                // the best we can do is to use the current time
+            val priorInteractionExecution = interaction.getPriorExecution();
+            final Timestamp completedAt =
+                    priorInteractionExecution != null
+                    ?
+                        // copy over from the most recent (which will be the top-level) interaction
+                        priorInteractionExecution.getCompletedAt()
+                    :
+                        // this could arise as the result of calling SessionManagementService#nextSession within an action
+                        // the best we can do is to use the current time
 
-                // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
-                completedAt = clockService.nowAsJavaSqlTimestamp();
-            }
+                        // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
+                         clockService.nowAsJavaSqlTimestamp();
 
-            command.internal().setCompletedAt(completedAt);
-        }
-
-        // ensureCommandsPersistedIfDirtyXactn
-
-        // ensure that any changed objects means that the command should be persisted
-        if(command.getMemberIdentifier() != null) {
-            if(metricsServiceProvider.get().numberObjectsDirtied() > 0) {
-                command.internal().setPersistHint(true);
-            }
+            command.updater().setCompletedAt(completedAt);
         }
 
         commandService.complete(command);

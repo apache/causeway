@@ -35,7 +35,7 @@ under the License.
 	
 		<!-- silence Wicket -->
 		<Logger name="org.apache.wicket.page.PartialPageUpdate" level="error" />
-	
+
 		<Logger name="org.apache.catalina.startup.DigesterFactory" level="error" />
 		<Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
 		<Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
@@ -52,7 +52,12 @@ under the License.
 		<logger name="DataNucleus.Transaction" level="info"/>
 		<logger name="DataNucleus.Datastore.Schema" level="info"/>
 		<logger name="DataNucleus.Datastore.Native" level="info"/>
-		
+
+
+		<!-- debugging -->
+		<Logger name="org.apache.isis.applib.services.command.CommandServiceDefault" level="warn" />
+		<Logger name="org.apache.isis.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands" level="debug" />
+
 		<Root level="info">
 			<AppenderRef ref="Console" />
 		</Root>

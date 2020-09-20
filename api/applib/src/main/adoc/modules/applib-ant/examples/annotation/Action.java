@@ -26,11 +26,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.command.CommandDtoProcessor;
-import org.apache.isis.applib.services.command.CommandWithDto;
-import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto;
-import org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.command.CommandService;
+import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
+import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
@@ -96,29 +95,6 @@ public @interface Action {
     // tag::refguide[]
     CommandReification command()                                    // <.>
             default CommandReification.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
-     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
-     */
-    // tag::refguide[]
-    CommandPersistence commandPersistence()                         // <.>
-            default CommandPersistence.PERSISTED;
-
-    // end::refguide[]
-    /**
-     * How the command/action should be executed.
-     *
-     * <p>
-     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted,
-     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property
-     * will be set to this value.
-     * </p>
-     */
-    // tag::refguide[]
-    CommandExecuteIn commandExecuteIn()                             // <.>
-            default CommandExecuteIn.FOREGROUND;
 
     // end::refguide[]
     /**

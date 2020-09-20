@@ -44,7 +44,13 @@ content:
       start_path: extensions/core/command-log/adoc # extensions
       branches: HEAD
     - url: .
+      start_path: extensions/core/command-replay/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/flyway/adoc # userguide
+      branches: HEAD
+    - url: .
+      start_path: extensions/core/model-annotation/adoc # extensions
       branches: HEAD
 
     - url: .

@@ -36,6 +36,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.annotDomain._interactions.ExposeCapturedInteractions;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -45,7 +46,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
         , objectType = "demo.PropertyPublishingJdo"
         , editing = Editing.ENABLED
 )
-public class PropertyPublishingJdo implements HasAsciiDocDescription {
+public class PropertyPublishingJdo
+        implements HasAsciiDocDescription, ExposeCapturedInteractions {
     // ...
 //end::class[]
 

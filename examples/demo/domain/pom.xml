@@ -22,10 +22,7 @@
 	</parent>
 	
 	<artifactId>demo-domain</artifactId>
-
 	<name>Demo - Domain</name>
-
-	<packaging>jar</packaging>
 
 	<properties>
 	</properties>
@@ -45,7 +42,6 @@
 				</includes>
 			</resource>
 		</resources>
-
 	</build>
 
 	<dependencies>
@@ -88,11 +84,6 @@
 		
 		<!-- OTHER DEPENDENCIES -->
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.hsqldb</groupId> -->
-<!-- 			<artifactId>hsqldb</artifactId> -->
-<!-- 		</dependency> -->
-
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -115,6 +106,12 @@
             <artifactId>isis-valuetypes-markdown-applib</artifactId>
         </dependency>
 
-    </dependencies>
+		<!-- Extensions -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-command-log-impl</artifactId>
+		</dependency>
+
+	</dependencies>
 
 </project>

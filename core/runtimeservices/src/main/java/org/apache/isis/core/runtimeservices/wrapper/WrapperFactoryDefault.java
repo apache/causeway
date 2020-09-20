@@ -21,19 +21,20 @@ package org.apache.isis.core.runtimeservices.wrapper;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -43,14 +44,17 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
+import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
@@ -105,6 +109,7 @@ import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RE
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -120,17 +125,14 @@ import lombok.val;
 //@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
     
-    @Inject private FactoryService factoryService;
-    @Inject private MetaModelContext metaModelContext;
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private IsisInteractionTracker isisInteractionTracker;
-    @Inject private IsisInteractionFactory isisInteractionFactory;
-    @Inject private TransactionService transactionService;
-    @Inject private CommandExecutorService commandExecutorService;
-    @Inject protected _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
-    @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
-    @Inject private AsyncControlService asyncControlService;
-    @Inject private BookmarkService bookmarkService;
+    @Inject IsisInteractionTracker isisInteractionTracker;
+    @Inject FactoryService factoryService;
+    @Inject MetaModelContext metaModelContext;
+    @Inject SpecificationLoader specificationLoader;
+    @Inject Provider<InteractionContext> interactionContextProvider;
+    @Inject ServiceInjector serviceInjector;
+    @Inject _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
+    @Inject CommandDtoServiceInternal commandDtoServiceInternal;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -241,7 +243,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                     return method.invoke(domainObject, args);
                 }
 
-                if (asyncControlService.shouldCheckRules(asyncControl)) {
+                if (shouldCheckRules(asyncControl)) {
                     val doih = new DomainObjectInvocationHandler<>(
                             metaModelContext, domainObject, control().withNoExecute(), null);
                     doih.invoke(null, method, args);
@@ -255,6 +257,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 return submitAsync(memberAndTarget, args, asyncControl);
             }
         }, false);
+    }
+
+    private boolean shouldCheckRules(final AsyncControl<?> asyncControl) {
+        val executionModes = asyncControl.getExecutionModes();
+        val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        return !skipRules;
     }
 
     @Override
@@ -272,7 +280,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                     return method.invoke(mixin, args);
                 }
 
-                if (asyncControlService.shouldCheckRules(asyncControl)) {
+                if (shouldCheckRules(asyncControl)) {
                     val doih = new DomainObjectInvocationHandler<>(
                             metaModelContext, mixin, control().withNoExecute(), null);
                     doih.invoke(null, method, args);
@@ -297,9 +305,9 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final Object[] args,
             final AsyncControl<R> asyncControl) {
 
-        val executorService = asyncControl.getExecutorService();
         val isisInteraction = currentIsisInteraction();
         val asyncAuthSession = authSessionFrom(asyncControl, isisInteraction.getAuthenticationSession());
+        val command = interactionContextProvider.get().getInteraction().getCommand();
 
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
@@ -323,35 +331,17 @@ public class WrapperFactoryDefault implements WrapperFactory {
         }
         val oidDto = commandDto.getTargets().getOid().get(0);
 
-        asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
+        asyncControl.setMethod(method);
+        asyncControl.setBookmark(Bookmark.from(oidDto));
 
-        Future future = executorService.submit(() ->
-                isisInteractionFactory.callAuthenticated(asyncAuthSession, () ->
-                    transactionService.executeWithinTransaction(() -> {
-                        Bookmark bookmark = commandExecutorService.executeCommand(commandDto);
-                        if (bookmark != null) {
-                            Object entity = bookmarkService.lookup(bookmark);
-                            val metaModelService = WrapperFactoryDefault.this.getMetaModelService();
-                            if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
-                                entity = WrapperFactoryDefault.this.getRepositoryService().detach(entity);
-                            }
-                            return entity;
-                        }
-                        return null;
-                    })
-        ));
+        val executorService = asyncControl.getExecutorService();
+        val future = executorService.submit(
+                new ExecCommand(asyncAuthSession, commandDto, asyncControl.getReturnType(), command, serviceInjector)
+        );
 
-        asyncControlService.update(asyncControl, future);
+        asyncControl.setFuture(future);
 
         return null;
-    }
-
-    private RepositoryService getRepositoryService() {
-        return metaModelContext.getRepositoryService();
-    }
-
-    private MetaModelService getMetaModelService() {
-        return metaModelContext.getServiceRegistry().lookupServiceElseFail(MetaModelService.class);
     }
 
     private <T> MemberAndTarget forRegular(Method method, T domainObject) {
@@ -505,4 +495,42 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return currentIsisInteraction().getObjectManager();
     }
 
+    @RequiredArgsConstructor
+    private static class ExecCommand<R> implements Callable<R> {
+
+        private final AuthenticationSession authenticationSession;
+        private final CommandDto commandDto;
+        private final Class<R> returnType;
+        private final Command parentCommand;
+        private final ServiceInjector serviceInjector;
+
+        @Inject IsisInteractionFactory isisInteractionFactory;
+        @Inject TransactionService transactionService;
+        @Inject CommandExecutorService commandExecutorService;
+        @Inject Provider<InteractionContext> interactionContextProvider;
+        @Inject BookmarkService bookmarkService;
+        @Inject RepositoryService repositoryService;
+        @Inject MetaModelService metaModelService;
+
+        @Override
+        public R call() {
+            serviceInjector.injectServicesInto(this);
+
+            return isisInteractionFactory.callAuthenticated(authenticationSession, () -> {
+                val childCommand = interactionContextProvider.get().getInteraction().getCommand();
+                childCommand.updater().setParent(parentCommand);
+                return transactionService.executeWithinTransaction(() -> {
+                        val bookmark = commandExecutorService.executeCommand(commandDto, CommandOutcomeHandler.NULL);
+                        if (bookmark == null) {
+                            return null;
+                        }
+                        R entity = bookmarkService.lookup(bookmark, returnType);
+                        if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
+                            entity = repositoryService.detach(entity);
+                        }
+                        return entity;
+                    });
+            });
+        }
+    }
 }

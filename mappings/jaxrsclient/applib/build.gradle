@@ -1,0 +1,11 @@
+group = 'org.apache.isis.mappings'
+description = 'Apache Isis Map - JaxRS Client (applib)'
+dependencies {
+    compile (Libs.springContext)
+}
+
+task packageTests(type: Jar) {
+  from sourceSets.test.output
+  classifier = 'tests'
+}
+artifacts.archives packageTests

@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
-import org.apache.isis.applib.services.command.CommandWithDto;
+import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
@@ -49,7 +49,6 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -63,6 +62,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
@@ -78,6 +78,7 @@ import org.apache.isis.schema.common.v2.OidsDto;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -87,88 +88,102 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
+@RequiredArgsConstructor
 public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private static final Pattern ID_PARSER =
             Pattern.compile("(?<className>[^#]+)#?(?<localId>[^(]+)(?<args>[(][^)]*[)])?");
 
-    @Inject private BookmarkService bookmarkService;
-    @Inject private SudoService sudoService;
-    @Inject private ClockService clockService;
-    @Inject private TransactionService transactionService;
-    @Inject private IsisInteractionTracker isisInteractionTracker;
-    @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
-    
-    @Inject @Getter private IsisInteractionFactory isisInteractionFactory;
-    @Inject @Getter private SpecificationLoader specificationLoader;
-    
+    @Inject final BookmarkService bookmarkService;
+    @Inject final SudoService sudoService;
+    @Inject final ClockService clockService;
+    @Inject final TransactionService transactionService;
+    @Inject final IsisInteractionTracker isisInteractionTracker;
+    @Inject final Provider<InteractionContext> interactionContextProvider;
+
+    @Inject @Getter final IsisInteractionFactory isisInteractionFactory;
+    @Inject @Getter final SpecificationLoader specificationLoader;
+
     @Override
-    public void executeCommand(
-            final CommandExecutorService.SudoPolicy sudoPolicy,
-            final CommandWithDto commandWithDto) {
-
-        final Runnable commandRunnable = ()->executeCommand(commandWithDto);
-        final Runnable topLevelRunnable;
-
-        switch (sudoPolicy) {
-        case NO_SWITCH:
-            topLevelRunnable = commandRunnable;
-            break;
-        case SWITCH:
-            val user = commandWithDto.getUser();
-            topLevelRunnable = ()->sudoService.sudo(user, commandRunnable);
-            break;
-        default:
-            throw new IllegalStateException("Probable framework error, unrecognized sudoPolicy: " + sudoPolicy);
-        }
-
-        try {
-
-            transactionService.executeWithinTransaction(topLevelRunnable);
-
-            afterCommit(commandWithDto, /*exception*/null);
-
-        } catch (Exception e) {
-
-            val executeIn = commandWithDto.getExecuteIn();
-
-            log.warn("Exception when executing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), e);
-            afterCommit(commandWithDto, e);
-        }
-
+    public Bookmark executeCommand(final Command command) {
+        return executeCommand(SudoPolicy.NO_SWITCH, command);
     }
 
-    protected void executeCommand(final CommandWithDto commandWithDto) {
+    @Override
+    public Bookmark executeCommand(
+            final SudoPolicy sudoPolicy,
+            final Command command) {
 
-        // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
+        return doExecute(sudoPolicy, command.getCommandDto(), command.updater());
+    }
+
+    @Override
+    public Bookmark executeCommand(
+            final CommandDto dto,
+            final CommandOutcomeHandler outcomeHandler) {
+
+        return executeCommand(SudoPolicy.NO_SWITCH, dto, outcomeHandler);
+    }
+
+    @Override
+    public Bookmark executeCommand(
+            final SudoPolicy sudoPolicy,
+            final CommandDto dto,
+            final CommandOutcomeHandler outcomeHandler) {
+
+        return doExecute(sudoPolicy, dto, outcomeHandler);
+    }
+
+    private Bookmark doExecute(
+            final SudoPolicy sudoPolicy,
+            final CommandDto dto,
+            final CommandOutcomeHandler commandUpdater) {
+
         val interaction = interactionContextProvider.get().getInteraction();
-        val executeIn = commandWithDto.getExecuteIn();
+        val command = interaction.getCommand();
+        if(command.getCommandDto() != dto) {
+            command.updater().setCommandDto(dto, 0);
+        }
 
-        log.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getUniqueId());
+        copyStartedAtFromInteractionExecution(commandUpdater);
 
-        commandWithDto.internal().setExecutor(Command.Executor.BACKGROUND);
+        try {
+            val result = transactionService.executeWithinTransaction(
+                () -> sudoPolicy == SudoPolicy.SWITCH
+                    ? sudoService.sudo(
+                        dto.getUser(),
+                        () -> doExecuteCommand(dto))
+                    : doExecuteCommand(dto));
 
-        // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
-        // PropertySetterFacet, but this is run if the domain object was found.  If the domain object is
-        // thrown then we would have a command with only completedAt, which is inconsistent.
-        // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
-        // completedAt at the end)
+            return handleOutcomeAndSetCompletedAt(commandUpdater, result, null);
+
+        } catch (Exception ex) {
+
+            log.warn("Exception when executing : {}",
+                    dto.getMember().getLogicalMemberIdentifier(), ex);
+
+            return handleOutcomeAndSetCompletedAt(commandUpdater, null, ex);
+        }
+    }
+
+    private void copyStartedAtFromInteractionExecution(
+            final CommandOutcomeHandler commandOutcomeHandler) {
+
+        val interaction = interactionContextProvider.get().getInteraction();
         val currentExecution = interaction.getCurrentExecution();
 
         val startedAt = currentExecution != null
                 ? currentExecution.getStartedAt()
-                        : clockService.nowAsJavaSqlTimestamp();
+                : clockService.nowAsJavaSqlTimestamp();
 
-        commandWithDto.internal().setStartedAt(startedAt);
-
-        final CommandDto dto = commandWithDto.asDto();
-
-        Bookmark resultBookmark = executeCommand(dto);
-        commandWithDto.internal().setResult(resultBookmark);
+        commandOutcomeHandler.setStartedAt(startedAt);
     }
 
-    @Override
-    public Bookmark executeCommand(CommandDto dto) {
+    private Bookmark doExecuteCommand(final CommandDto dto) {
+
+        log.info("Executing: {} {} {}",
+                dto.getMember().getLogicalMemberIdentifier(),
+                dto.getTimestamp(), dto.getTransactionId());
 
         final MemberDto memberDto = dto.getMember();
         final String memberId = memberDto.getMemberIdentifier();
@@ -190,7 +205,14 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 // it will switch the targetAdapter to be the mixedInAdapter transparently
                 val argAdapters = argAdaptersFor(actionDto);
 
-                val resultAdapter = objectAction.execute(InteractionHead.simple(targetAdapter)
+                InteractionHead head;
+                if(objectAction instanceof ObjectActionMixedIn) {
+                    ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) objectAction;
+                    head = actionMixedIn.interactionHead(targetAdapter);
+                } else {
+                    head = InteractionHead.simple(targetAdapter);
+                }
+                val resultAdapter = objectAction.execute(head
                         , argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                 // flush any Isis PersistenceCommands pending
@@ -233,34 +255,39 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return null;
     }
 
-    protected void afterCommit(CommandWithDto commandWithDto, Exception exceptionIfAny) {
+    private Bookmark handleOutcomeAndSetCompletedAt(
+            final CommandOutcomeHandler outcomeHandler,
+            Bookmark resultIfAny, final Exception exceptionIfAny) {
 
+        //
+        // copy over the outcome
+        //
+        outcomeHandler.setResult(resultIfAny);
+        outcomeHandler.setException(exceptionIfAny);
+
+        //
+        // also, copy over the completedAt at to the command.
+        //
+        // NB: it's possible that there is no priorExecution, specifically if
+        // there was an exception when performing the action invocation/property
+        // edit.  We therefore need to guard that case.
+        //
         val interaction = interactionContextProvider.get().getInteraction();
 
-        // it's possible that there is no priorExecution, specifically if there was an exception
-        // when performing the action invocation/property edit.  We therefore need to guard that case.
         final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
-        if (commandWithDto.getStartedAt() == null) {
-            // if attempting to commit the xactn threw an error, we will (I think?) have lost this info, so need to
-            // capture
-            commandWithDto.internal().setStartedAt(
-                    priorExecution != null
-                    ? priorExecution.getStartedAt()
-                            : clockService.nowAsJavaSqlTimestamp());
+        if(priorExecution != null) {
+
+            if (outcomeHandler.getStartedAt() == null) {
+                // TODO: REVIEW - don't think this can happen ...
+                //  Interaction/Execution is an in-memory object.
+                outcomeHandler.setStartedAt(priorExecution.getStartedAt());
+            }
+            final Timestamp completedAt =
+                    priorExecution.getCompletedAt();
+            outcomeHandler.setCompletedAt(completedAt);
         }
 
-        final Timestamp completedAt =
-                priorExecution != null
-                ? priorExecution.getCompletedAt()
-                        : clockService.nowAsJavaSqlTimestamp();  // close enough...
-                commandWithDto.internal().setCompletedAt(completedAt);
-
-                if(exceptionIfAny != null) {
-                    commandWithDto.internal().setException(_Exceptions.
-                            streamStacktraceLines(exceptionIfAny, 500)
-                            .collect(Collectors.joining("\n")));
-                }
-
+        return resultIfAny;
     }
 
     // //////////////////////////////////////

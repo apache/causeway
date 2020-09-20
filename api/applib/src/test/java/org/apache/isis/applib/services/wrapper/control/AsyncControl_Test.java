@@ -19,7 +19,6 @@
 package org.apache.isis.applib.services.wrapper.control;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -34,7 +33,7 @@ public class AsyncControl_Test {
     public void defaults() throws Exception {
 
         // given
-        val control = AsyncControl.control();
+        val control = AsyncControl.returningVoid();
 
         // then
         Assertions.assertThat(control.getExecutionModes()).isEmpty();
@@ -43,7 +42,7 @@ public class AsyncControl_Test {
     @Test
     public void check_rules() throws Exception {
         // given
-        val control = AsyncControl.control();
+        val control = AsyncControl.returningVoid();
 
         // when
         control.withCheckRules();
@@ -56,7 +55,7 @@ public class AsyncControl_Test {
     public void skip_rules() throws Exception {
 
         // given
-        val control = AsyncControl.control();
+        val control = AsyncControl.returningVoid();
 
         // when
         control.withSkipRules();
@@ -69,7 +68,7 @@ public class AsyncControl_Test {
     public void user() throws Exception {
 
         // given
-        val control = AsyncControl.control();
+        val control = AsyncControl.returningVoid();
 
         // when
         control.withUser("fred");
@@ -82,7 +81,7 @@ public class AsyncControl_Test {
     public void roles() throws Exception {
 
         // given
-        val control = AsyncControl.control();
+        val control = AsyncControl.returningVoid();
 
         // when
         control.withRoles("role-1", "role-2");
@@ -101,7 +100,7 @@ public class AsyncControl_Test {
         }));
         ExceptionHandler exceptionHandler = ex -> null;
 
-        val control = AsyncControl.control(String.class)
+        val control = AsyncControl.returning(String.class)
                 .withSkipRules()
                 .withUser("fred")
                 .withRoles("role-1", "role-2")

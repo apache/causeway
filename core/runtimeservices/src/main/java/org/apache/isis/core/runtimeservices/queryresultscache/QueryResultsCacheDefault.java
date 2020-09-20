@@ -47,14 +47,13 @@ import org.apache.isis.applib.services.MethodReferences.Call5;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
- * Most commonly this allows otherwise &quot;naive&quot; - eg that makes a repository call many times within a loop - to
- * be performance tuned.  The benefit is that the algorithm of the business logic can remain easy to understand.
+ * This service (API and implementation) provides a mechanism by which
+ * idempotent query results can be cached for the duration of an interaction.
  *
- * <p>
- * This implementation has no UI and there is only one implementation (this class) in applib, it is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
+ * Most commonly this allows otherwise &quot;naive&quot; - eg that makes a
+ * repository call many times within a loop - to be performance tuned.  The
+ * benefit is that the algorithm of the business logic can remain easy to
+ * understand.
  */
 @Service
 @Named("isisRuntime.QueryResultsCacheDefault")
@@ -192,6 +191,11 @@ public class QueryResultsCacheDefault implements QueryResultsCache, TransactionS
         cache.clear();
     }
 
+    @Override
+    public void destroy() throws Exception {
+        cache.clear();
+    }
+
     // -- HELPER
 
     @Autowired(required = false)
@@ -201,31 +205,5 @@ public class QueryResultsCacheDefault implements QueryResultsCache, TransactionS
         return _NullSafe.stream(cacheControl)
                 .anyMatch(c->c.isIgnoreCache());
     }
-    
-    // -- REMOVED
-    
-  //XXX not used    
-//  private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
-//      return get(new Key(callingClass, methodName, keys));
-//  }
-//
-//  @SuppressWarnings("unchecked")
-//  private <T> Value<T> get(final Key cacheKey) {
-//      Value<T> value = (Value<T>) cache.get(cacheKey);
-//      logHitOrMiss(cacheKey, value);
-//      return value;
-//  }
-    
-  //XXX not used    
-//  private <T> T execute(final Callable<T> callable, final Key cacheKey) {
-//      if(isIgnoreCache()) {
-//          try {
-//              return callable.call();
-//          } catch (Exception e) {
-//              throw new RuntimeException(e);
-//          }
-//      }
-//      return executeWithCaching(callable, cacheKey);
-//  }
 
 }

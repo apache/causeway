@@ -131,7 +131,6 @@ implements CollectionCountProvider {
     }
 
 
-
     private void addTitleColumn(
             final List<IColumn<ManagedObject, String>> columns,
             final ObjectMemento parentAdapterMementoIfAny,

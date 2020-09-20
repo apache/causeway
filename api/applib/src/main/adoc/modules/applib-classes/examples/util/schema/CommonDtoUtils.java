@@ -33,6 +33,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
+import org.apache.isis.applib.jaxb.JodaTimeXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Blob;
@@ -220,57 +223,57 @@ public final class CommonDtoUtils {
         }
         case LOCAL_DATE: {
             final LocalDate argValue = (LocalDate) pojo;
-            valueDto.setLocalDate(XmlCalendarFactory.create(argValue));
+            valueDto.setLocalDate(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar2(argValue));
             return valueDto;
         }
         case LOCAL_TIME: {
             final LocalTime argValue = (LocalTime) pojo;
-            valueDto.setLocalTime(XmlCalendarFactory.create(argValue));
+            valueDto.setLocalTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar2(argValue));
             return valueDto;
         }
         case LOCAL_DATE_TIME: {
             final LocalDateTime argValue = (LocalDateTime) pojo;
-            valueDto.setLocalDateTime(XmlCalendarFactory.create(argValue));
+            valueDto.setLocalDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar2(argValue));
             return valueDto;
         }
         case OFFSET_DATE_TIME: {
             final OffsetDateTime argValue = (OffsetDateTime) pojo;
-            valueDto.setOffsetDateTime(XmlCalendarFactory.create(argValue));
+            valueDto.setOffsetDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar2(argValue));
             return valueDto;
         }
         case OFFSET_TIME: {
             final OffsetTime argValue = (OffsetTime) pojo;
-            valueDto.setOffsetTime(XmlCalendarFactory.create(argValue));
+            valueDto.setOffsetTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar2(argValue));
             return valueDto;
         }
         case ZONED_DATE_TIME: {
             final ZonedDateTime argValue = (ZonedDateTime) pojo;
-            valueDto.setZonedDateTime(XmlCalendarFactory.create(argValue));
+            valueDto.setZonedDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar2(argValue));
             return valueDto;
         }
         case JODA_DATE_TIME: {
             final org.joda.time.DateTime argValue = (org.joda.time.DateTime) pojo;
-            valueDto.setOffsetDateTime(JodaDateTimeXMLGregorianCalendarAdapter.print(argValue));
+            valueDto.setOffsetDateTime(JodaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case JODA_LOCAL_DATE_TIME: {
             final org.joda.time.LocalDateTime argValue = (org.joda.time.LocalDateTime) pojo;
-            valueDto.setLocalDateTime(JodaLocalDateTimeXMLGregorianCalendarAdapter.print(argValue));
+            valueDto.setLocalDateTime(JodaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case JODA_LOCAL_DATE: {
             final org.joda.time.LocalDate argValue = (org.joda.time.LocalDate) pojo;
-            valueDto.setLocalDate(JodaLocalDateXMLGregorianCalendarAdapter.print(argValue));
+            valueDto.setLocalDate(JodaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case JODA_LOCAL_TIME: {
             final org.joda.time.LocalTime argValue = (org.joda.time.LocalTime) pojo;
-            valueDto.setLocalTime(JodaLocalTimeXMLGregorianCalendarAdapter.print(argValue));
+            valueDto.setLocalTime(JodaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case JAVA_SQL_TIMESTAMP: {
             final java.sql.Timestamp argValue = (java.sql.Timestamp) pojo;
-            valueDto.setTimestamp(JavaSqlTimestampXmlGregorianCalendarAdapter.print(argValue));
+            valueDto.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case ENUM: {
@@ -298,7 +301,6 @@ public final class CommonDtoUtils {
             return valueDto;
         }
         case BLOB: {
-
             final Blob blob = (Blob) pojo;
             if(blob != null) {
                 final BlobDto blobDto = new BlobDto();
@@ -374,35 +376,34 @@ public final class CommonDtoUtils {
         case CHAR:
             final String aChar = valueDto.getChar();
             if(_Strings.isNullOrEmpty(aChar)) { return null; }
-            return (Object)aChar.charAt(0);
+            return aChar.charAt(0);
         case BIG_DECIMAL:
             return valueDto.getBigDecimal();
         case BIG_INTEGER:
             return valueDto.getBigInteger();
          // JAVA TIME    
         case LOCAL_DATE:
-            return XmlCalendarFactory.toLocalDate(valueDto.getLocalDate());
+            return JavaTimeXMLGregorianCalendarMarshalling.toLocalDate(valueDto.getLocalDate());
         case LOCAL_TIME:
-            return XmlCalendarFactory.toLocalTime(valueDto.getLocalTime());
+            return JavaTimeXMLGregorianCalendarMarshalling.toLocalTime(valueDto.getLocalTime());
         case LOCAL_DATE_TIME:
-            return XmlCalendarFactory.toLocalDateTime(valueDto.getLocalDateTime());
+            return JavaTimeXMLGregorianCalendarMarshalling.toLocalDateTime(valueDto.getLocalDateTime());
         case OFFSET_DATE_TIME:
-            return XmlCalendarFactory.toOffsetDateTime(valueDto.getOffsetDateTime());
+            return JavaTimeXMLGregorianCalendarMarshalling.toOffsetDateTime(valueDto.getOffsetDateTime());
         case OFFSET_TIME:
-            return XmlCalendarFactory.toOffsetTime(valueDto.getOffsetTime());
+            return JavaTimeXMLGregorianCalendarMarshalling.toOffsetTime(valueDto.getOffsetTime());
         case ZONED_DATE_TIME:
-            return XmlCalendarFactory.toZonedDateTime(valueDto.getZonedDateTime());
+            return JavaTimeXMLGregorianCalendarMarshalling.toZonedDateTime(valueDto.getZonedDateTime());
         case JAVA_SQL_TIMESTAMP:
-            return JavaSqlTimestampXmlGregorianCalendarAdapter.parse(valueDto.getTimestamp());
-        // JODA
+            return JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(valueDto.getTimestamp());
         case JODA_DATE_TIME:
-            return JodaDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getOffsetDateTime());
+            return JodaTimeXMLGregorianCalendarMarshalling.toDateTime(valueDto.getOffsetDateTime());
         case JODA_LOCAL_DATE:
-            return JodaLocalDateXMLGregorianCalendarAdapter.parse(valueDto.getLocalDate());
+            return JodaTimeXMLGregorianCalendarMarshalling.toLocalDate(valueDto.getLocalDate());
         case JODA_LOCAL_DATE_TIME:
-            return JodaLocalDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getLocalDateTime());
+            return JodaTimeXMLGregorianCalendarMarshalling.toLocalDateTime(valueDto.getLocalDateTime());
         case JODA_LOCAL_TIME:
-            return JodaLocalTimeXMLGregorianCalendarAdapter.parse(valueDto.getLocalTime());
+            return JodaTimeXMLGregorianCalendarMarshalling.toLocalTime(valueDto.getLocalTime());
         case ENUM:
             final EnumDto enumDto = valueDto.getEnum();
             final String enumType = enumDto.getEnumType();

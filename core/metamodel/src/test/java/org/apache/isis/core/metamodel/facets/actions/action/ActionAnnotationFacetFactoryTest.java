@@ -28,7 +28,6 @@ import org.junit.After;
 import org.junit.Before;
 
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -103,11 +102,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }
 
 
-    }
-
-    void allowingCommandConfigurationToReturn(CommandActionsConfiguration value) {
-        val config = metaModelContext.getConfiguration();
-        config.getApplib().getAnnotation().getAction().setCommand(value);
     }
 
     void allowingPublishingConfigurationToReturn(PublishActionsConfiguration value) {

@@ -28,7 +28,7 @@ Whether to execute the command immediately, or to persist it (assuming that an a
 
 <.> `commandPersistence()`
 +
-Whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured).
+Whether the reified `Command` (obtainable from the `InteractionContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured).
 
 <.> `commandDtoProcessor()`
 +

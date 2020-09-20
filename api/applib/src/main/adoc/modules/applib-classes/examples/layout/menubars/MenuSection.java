@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 
-public interface MenuSection {
+public interface MenuSection extends HasNamed {
 
     @Programmatic
     List<ServiceActionLayoutData> getServiceActions();

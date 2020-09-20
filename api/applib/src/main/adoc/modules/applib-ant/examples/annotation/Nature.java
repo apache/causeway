@@ -55,6 +55,22 @@ public enum Nature {
      */
     // tag::refguide[]
     JDO_ENTITY,
+    
+    // end::refguide[]
+    /**
+     * A domain entity whose persistence is managed internally by Isis, using JPA as the persistence implementation.
+     * Domain entities are considered to be part of the domain model layer.
+     *
+     * <p>
+     *     Domain entities are considered to be part of the domain model layer.
+     * </p>
+     *
+     * <p>
+     *    Currently implies no additional semantics other than documentation.
+     * </p>
+     */
+    // tag::refguide[]
+    JPA_ENTITY,
 
     // end::refguide[]
     /**

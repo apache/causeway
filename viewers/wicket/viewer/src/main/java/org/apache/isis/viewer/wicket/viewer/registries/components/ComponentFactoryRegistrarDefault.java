@@ -29,6 +29,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -54,6 +55,7 @@ import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.bookmark.BookmarkPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisClobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisPasswordPanelFactory;
@@ -70,6 +72,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaDateTime
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
+import org.apache.isis.viewer.wicket.ui.components.scalars.oiddto.OidDtoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BytePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.CharacterPanelFactory;
@@ -228,6 +231,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new StringPanelFactory());
 
+
         // work-in-progress
         // componentFactories.add(new JavaAwtImagePanelFactory());
         componentFactories.add(new JavaUtilDatePanelFactory());
@@ -236,6 +240,9 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new JavaSqlTimePanelFactory());
 
         componentFactories.add(new IsisPasswordPanelFactory());
+
+        componentFactories.add(new BookmarkPanelFactory());
+        componentFactories.add(new OidDtoPanelFactory());
 
         componentFactories.add(new IsisBlobPanelFactory());
         componentFactories.add(new IsisClobPanelFactory());

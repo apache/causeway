@@ -21,8 +21,8 @@ public class DomainObjectPublishingEnabledJdoEntities {
         return repositoryService.allInstances(DomainObjectPublishingEnabledJdo.class);
     }
 
-    public DomainObjectPublishingEnabledJdo first() {
-        return all().stream().findFirst().get();
+    public Optional<DomainObjectPublishingEnabledJdo> first() {
+        return all().stream().findFirst();
     }
 
     public DomainObjectPublishingEnabledJdo create(String newValue) {

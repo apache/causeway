@@ -77,8 +77,8 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     @Override
     protected Object doGetTransaction() throws TransactionException {
 
-        val isInSession = isisInteractionTracker.isInInteraction();
-        log.debug("doGetTransaction isInSession={}", isInSession);
+        val isInInteraction = isisInteractionTracker.isInInteraction();
+        log.debug("doGetTransaction isInSession={}", isInInteraction);
 
         val transactionBeforeBegin = 
                 IsisTransactionAspectSupport
@@ -86,7 +86,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
                 .map(IsisTransactionObject::getCurrentTransaction)
                 .orElse(null);
         
-        if(!isInSession) {
+        if(!isInInteraction) {
             
             if(Utils.isJUnitTest()) {
             
@@ -94,11 +94,10 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
                         .orElseGet(InitialisationSession::new);
 
                 log.debug("open new session authenticationSession={}", authenticationSession);
-                isisInteractionFactory.openSession(authenticationSession);
+                isisInteractionFactory.openInteraction(authenticationSession);
                 
                 return IsisTransactionObject.of(transactionBeforeBegin, IsisInteractionScopeType.TEST_SCOPED);
-                
-                
+
             } else {
 
                 throw _Exceptions.illegalState("No IsisInteraction available. "

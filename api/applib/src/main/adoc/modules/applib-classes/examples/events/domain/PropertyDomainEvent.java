@@ -22,6 +22,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
 import lombok.Getter;
+import lombok.Setter;
 
 // tag::refguide[]
 public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
@@ -69,32 +70,27 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
      * (but null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
     // tag::refguide[]
-    @Getter
+    @Getter @Setter
     private T oldValue;
 
     // end::refguide[]
     /**
      * The proposed (post-modification) value of the property; populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
      * (but null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
+     *
+     * <p>
+     *     The proposed new value can also be modified by event handlers
+     *     during the {@link Phase#EXECUTING} phase.  The new value must be
+     *     the same type as the expected value; the framework performs
+     *     no sanity checks.
+     * </p>
      */
     // tag::refguide[]
-    @Getter
+    @Getter @Setter
     private T newValue;
 
     // end::refguide[]
-    /**
-     * Not API; for framework use only.
-     */
-    public void setOldValue(T oldValue) {
-        this.oldValue = oldValue;
-    }
 
-    /**
-     * Not API; for framework use only.
-     */
-    public void setNewValue(T newValue) {
-        this.newValue = newValue;
-    }
 
 
     private static final ToString<PropertyDomainEvent<?,?>> toString =

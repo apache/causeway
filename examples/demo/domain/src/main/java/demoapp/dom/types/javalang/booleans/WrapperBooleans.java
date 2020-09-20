@@ -52,7 +52,7 @@ import demoapp.dom.types.javalang.booleans.vm.WrapperBooleanVm;
 public class WrapperBooleans implements HasAsciiDocDescription {
 
     public String title() {
-        return "Boolean data type";
+        return "Boolean (wrapper) data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)

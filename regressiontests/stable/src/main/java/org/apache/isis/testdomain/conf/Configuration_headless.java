@@ -39,8 +39,8 @@ import org.springframework.transaction.TransactionStatus;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.spi.CommandService;
+
+import org.apache.isis.applib.services.command.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
@@ -111,7 +111,6 @@ public class Configuration_headless {
     public static class HeadlessCommandSupport {
 
         private final Provider<InteractionContext> interactionContextProvider;
-        private final Provider<CommandContext> commandContextProvider;
         private final CommandService commandService;
 
 
@@ -132,26 +131,13 @@ public class Configuration_headless {
         
         public void setupCommandCreateIfMissing() {
             
-            val commandContext = commandContextProvider.get();
-            final Command command = Optional.ofNullable(commandContext.getCommand())
-                    .orElseGet(()->{
-                        val newCommand = commandService.create();
-                        commandContext.setCommand(newCommand);
-                        return newCommand;
-                    });
-            final Command.Executor executor = command.getExecutor();
-            if(executor != Command.Executor.OTHER) {
-                return;
-            }
-            command.internal().setExecutor(Command.Executor.USER);
-            
             val interactionContext = interactionContextProvider.get();
             @SuppressWarnings("unused")
             final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
                     .orElseGet(()->{
-                        val newInteraction = new Interaction();
+                        val newCommand = new Command();
+                        val newInteraction = new Interaction(newCommand);
                         interactionContext.setInteraction(newInteraction);
-                        newInteraction.setUniqueId(command.getUniqueId());
                         return newInteraction;
                     });
         }

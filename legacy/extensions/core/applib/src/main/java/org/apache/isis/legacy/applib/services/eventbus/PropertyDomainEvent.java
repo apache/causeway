@@ -22,6 +22,10 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     // -- Default class

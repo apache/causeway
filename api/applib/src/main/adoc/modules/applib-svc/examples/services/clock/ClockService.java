@@ -18,15 +18,11 @@
  */
 package org.apache.isis.applib.services.clock;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.TimeZone;
 
 import javax.inject.Named;
+import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -35,6 +31,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 
 /**
  * This service allows an application to be decoupled from the system time.  The most common use case is in support of
@@ -64,6 +61,10 @@ public class ClockService {
 
     public java.sql.Timestamp nowAsJavaSqlTimestamp() {
         return Clock.getTimeAsJavaSqlTimestamp();
+    }
+
+    public XMLGregorianCalendar nowAsXMLGregorianCalendar() {
+        return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(nowAsJavaSqlTimestamp());
     }
 
     public long nowAsMillis() {

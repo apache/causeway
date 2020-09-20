@@ -211,18 +211,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     }
 
 
-    @XmlAttribute(required = false)
-    public Boolean getUnchanging() {
-        return getRepainting() != null ? getRepainting() == Repainting.NO_REPAINT : null;
-    }
-
-    public void setUnchanging(Boolean unchanging) {
-        if(getRepainting() == null && unchanging != null) {
-            setRepainting(unchanging ? Repainting.NO_REPAINT : Repainting.REPAINT);
-        }
-    }
-
-
     private Repainting repainting;
 
     @XmlAttribute(required = false)

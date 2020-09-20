@@ -17,7 +17,6 @@ For example the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] u
 
 Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc[schema] instances, for example as used by xref:refguide:applib-svc:CommandService.adoc[`CommandService`] and the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 
-//Bookmarks are also used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
 
 
 == API

@@ -51,6 +51,9 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.legacy.applib.filter.Filter;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 
+/**
+ * @deprecated
+ */
 @Service
 @Named("isisLegacyApplib.domainObjectContainer")
 @Order(OrderPrecedence.MIDPOINT)

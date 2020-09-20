@@ -26,11 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.command.CommandDtoProcessor;
-import org.apache.isis.applib.services.command.CommandWithDto;
-import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto;
-import org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
+import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -52,7 +50,8 @@ public @interface Property {
 
     // end::refguide[]
     /**
-     * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
+     * Whether the property edit should be reified into a
+     * {@link org.apache.isis.applib.services.command.Command} object.
      */
     // tag::refguide[]
     CommandReification command()                                // <.>
@@ -60,39 +59,10 @@ public @interface Property {
 
     // end::refguide[]
     /**
-     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
-     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
-     */
-    // tag::refguide[]
-    CommandPersistence commandPersistence()                     // <.>
-            default CommandPersistence.PERSISTED;
-
-    // end::refguide[]
-    /**
-     * How the command/property edit should be executed.
-     *
-     * <p>
-     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted,
-     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property
-     * will be set to this value.
-     * </p>
-     */
-    // tag::refguide[]
-    CommandExecuteIn commandExecuteIn()                         // <.>
-            default CommandExecuteIn.FOREGROUND;
-
-    // end::refguide[]
-    /**
      * The {@link CommandDtoProcessor} to process this command's DTO.
      *
      * <p>
-     *     Specifying a processor requires that the implementation of {@link CommandService} provides a
-     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additional extends
-     *     from {@link CommandWithDto}.
-     * </p>
-     *
-     * <p>
-     *     Tprocessor itself is used by {@link ContentMappingServiceForCommandDto} and
+     *     The processor itself is used by {@link ContentMappingServiceForCommandDto} and
      *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
      * </p>
      */
@@ -210,7 +180,7 @@ public @interface Property {
      *
      * <p>
      *     For properties the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, usually
-     *     means that the property is required unless it has been overridden by {@link javax.jdo.annotations.Column}
+     *     means that the property is required unless it has been overridden by <code>javax.jdo.annotations.Column</code>
      *     with its <code>javax.jdo.annotations.Column#allowsNull()</code> attribute set to true.
      * </p>
      */

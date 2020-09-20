@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.wrapper.control;
 
 import java.lang.reflect.Method;
 import java.util.EnumSet;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -27,7 +28,6 @@ import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 // tag::refguide[]
@@ -38,17 +38,15 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
     }
 
     /**
-     * Set by framework.
+     * Set by framework; simply used for logging purposes.
      */
-    @Setter(AccessLevel.PACKAGE)
-    @Getter(AccessLevel.PACKAGE)
+    @Getter(AccessLevel.PACKAGE) @Setter
     private Method method;
 
     /**
-     * Set by framework.
+     * Set by framework; simply used for logging purposes.
      */
-    @Setter(AccessLevel.PACKAGE)
-    @Getter(AccessLevel.PACKAGE)
+    @Getter(AccessLevel.PACKAGE) @Setter
     private Bookmark bookmark;
 
     // tag::refguide[]
@@ -67,14 +65,13 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
         // tag::refguide[]
         // ...
     }
-
-    // end::refguide[]
-    /**
-     * Initialized in constructor.
-     */
-    // tag::refguide[]
-    @Getter @NonNull
-    private ExceptionHandler exceptionHandler;                  // <.>
+    
+    private ExceptionHandler exceptionHandler;
+   
+    public Optional<ExceptionHandler> getExceptionHandler() { // <.>
+        return Optional.ofNullable(exceptionHandler);
+    }
+                      
     public T with(ExceptionHandler exceptionHandler) {
         // end::refguide[]
         this.exceptionHandler = exceptionHandler;

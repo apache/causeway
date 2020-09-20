@@ -18,11 +18,6 @@
  */
 package org.apache.isis.applib.layout.menubars;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-public interface Menu {
-
-    @Programmatic
-    String getNamed();
+public interface Menu extends HasNamed {
 
 }

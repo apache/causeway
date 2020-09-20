@@ -8,18 +8,28 @@ import java.lang.annotation.Target;
 import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 //tag::class[]
 @Property(
-    regexPattern = "^[^@+]@[^\\.+]\\.com$"                      // <.>
+    regexPattern = "^\\w+@\\w+[.]com$"                      // <.>
     , regexPatternReplacement = "Must be .com email address"    // <.>
     , regexPatternFlags = Pattern.CASE_INSENSITIVE              // <.>
 )
 @Parameter(
-    regexPattern = "^[^@+]@[^\\.+]\\.com$"                      // <.>
+    regexPattern = "^\\w+@\\w+[.]com$"                      // <.>
     , regexPatternReplacement = "Must be .com email address"    // <.>
     , regexPatternFlags = Pattern.CASE_INSENSITIVE              // <.>
+)
+@PropertyLayout(
+    describedAs =
+        "@Parameter(regexPattern = \"^\\w+@\\w+[.]com$\")"
+)
+@ParameterLayout(
+    describedAs =
+        "@Parameter(regexPattern = \"^\\w+@\\w+[.]com$\")"
 )
 @Inherited
 @Target({

@@ -26,8 +26,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.services.command.CommandService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -71,7 +70,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     protected final IsisConfiguration configuration;
 
     protected final Supplier<ChangedObjectsService> changedObjectsServiceProvider;
-    protected final Supplier<CommandContext> commandContextProvider;
     protected final Supplier<InteractionContext> interactionContextProvider;
     protected final Supplier<MetricsService> metricsServiceProvider;
 
@@ -123,7 +121,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.clockService = lookupService(ClockService.class);
         this.userService = lookupService(UserService.class);
         
-        this.commandContextProvider = ()->lookupService(CommandContext.class);
         this.interactionContextProvider = ()->lookupService(InteractionContext.class);
         this.changedObjectsServiceProvider = ()->lookupService(ChangedObjectsService.class);
         this.metricsServiceProvider = ()->lookupService(MetricsService.class);

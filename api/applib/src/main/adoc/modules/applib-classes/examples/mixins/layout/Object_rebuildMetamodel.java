@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
@@ -33,7 +32,15 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin(method="act") 
+@Action(
+        domainEvent = Object_rebuildMetamodel.ActionDomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT,
+        restrictTo = RestrictTo.PROTOTYPING
+)
+@ActionLayout(
+        cssClassFa = "fa-sync",
+        position = ActionLayout.Position.PANEL
+)
 @RequiredArgsConstructor
 public class Object_rebuildMetamodel {
 
@@ -42,17 +49,6 @@ public class Object_rebuildMetamodel {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_rebuildMetamodel> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT,
-            commandPersistence = CommandPersistence.NOT_PERSISTED,
-            restrictTo = RestrictTo.PROTOTYPING
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-sync",
-            position = ActionLayout.Position.PANEL
-            )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Object act() {
         metaModelService.rebuild(holder.getClass());

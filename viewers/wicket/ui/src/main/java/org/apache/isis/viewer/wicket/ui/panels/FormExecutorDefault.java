@@ -36,7 +36,6 @@ import org.apache.wicket.util.visit.IVisitor;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
@@ -121,12 +120,6 @@ implements FormExecutor {
             if (invalidReasonIfAny.isPresent()) {
                 raiseWarning(targetIfAny, feedbackFormIfAny, invalidReasonIfAny.get());
                 return false;
-            }
-
-            val commandContext = currentCommandContext().orElse(null);
-            if (commandContext != null) {
-                command = commandContext.getCommand();
-                command.internal().setExecutor(Command.Executor.USER);
             }
 
 
@@ -248,11 +241,7 @@ implements FormExecutor {
             // irrespective, capture error in the Command, and propagate
             if (command != null) {
                 
-                val stackTraceAsString = 
-                _Exceptions.streamStacktraceLines(ex, 1000)
-                .collect(Collectors.joining("\n"));
-                
-                command.internal().setException(stackTraceAsString);
+                command.updater().setException(ex);
                 
                 //XXX legacy of
                 //command.internal().setException(Throwables.getStackTraceAsString(ex));
@@ -495,11 +484,6 @@ implements FormExecutor {
 
     protected WicketViewerSettings getSettings() {
         return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
-    }
-
-    // request-scoped
-    private Optional<CommandContext> currentCommandContext() {
-        return getServiceRegistry().lookupService(CommandContext.class);
     }
 
     ///////////////////////////////////////////////////////////////////////////////

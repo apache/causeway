@@ -2,7 +2,7 @@
 ** xref:refguide:config:sections/isis.core.meta-model.adoc[Core MetaModel]
 ** xref:refguide:config:sections/isis.core.meta-model.introspector.adoc[Core MetaModel Introspection]
 ** xref:refguide:config:sections/isis.core.meta-model.validator.adoc[MetaModel Validator]
-** xref:refguide:config:sections/isis.core.runtime.adoc[Core Runtime Services configurations]
+** xref:refguide:config:sections/isis.core.runtime.adoc[Core Runtime configurations]
 ** xref:refguide:config:sections/isis.core.runtime-services.adoc[Core Runtime Services configurations]
 ** xref:refguide:config:sections/isis.security.shiro.adoc[Shiro Security Implementation]
 ** xref:refguide:config:sections/isis.persistence.jdo-datanucleus.adoc[JDO DataNucleus]

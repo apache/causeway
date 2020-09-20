@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -48,12 +47,10 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 
@@ -301,37 +298,8 @@ implements OneToOneAssociation {
             final ManagedObject targetAdapter,
             final ManagedObject valueAdapterOrNull) {
 
-        val currentExecutor = getCommandContext()
-                .getCurrentExecutor()
-                .orElse(Command.Executor.OTHER);
-
-        if (currentExecutor != Command.Executor.USER) {
-            return;
-        }
-
-        setupCommandTarget(targetAdapter, valueAdapterOrNull);
-        setupCommandMemberIdentifier();
-        setupCommandMementoAndExecutionContext(targetAdapter, valueAdapterOrNull);
-    }
-
-    private void setupCommandTarget(
-            final ManagedObject targetAdapter,
-            final ManagedObject valueAdapter) {
-
-        final String arguments = CommandUtil.argDescriptionFor(valueAdapter);
-        setupCommandTarget(targetAdapter, arguments);
-    }
-
-    private void setupCommandMementoAndExecutionContext(
-            final ManagedObject targetAdapter,
-            final ManagedObject valueAdapterOrNull) {
-
-        final CommandDtoServiceInternal commandDtoServiceInternal = getCommandDtoService();
-        final CommandDto dto = commandDtoServiceInternal.asCommandDto(
-                Collections.singletonList(targetAdapter), this, valueAdapterOrNull);
-
-        setupCommandDtoAndExecutionContext(dto);
-
+        setupCommand(targetAdapter, () -> getCommandDtoServiceInternal().asCommandDto(
+                        Collections.singletonList(targetAdapter), this, valueAdapterOrNull));
     }
 
 

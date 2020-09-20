@@ -52,9 +52,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class JdoPersistenceLifecycleService {
 
-    @Inject private MetaModelContext metaModelContext;
-    @Inject private PersistenceSessionFactory persistenceSessionFactory;
-    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    @Inject MetaModelContext metaModelContext;
+    @Inject PersistenceSessionFactory persistenceSessionFactory;
+    @Inject IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
 
     @PostConstruct
     public void postConstr() {
@@ -86,9 +86,10 @@ public class JdoPersistenceLifecycleService {
     }
 
     @EventListener(IsisInteractionLifecycleEvent.class)
-    public void onSessionLifecycleEvent(IsisInteractionLifecycleEvent event) {
+    public void onInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
 
         val eventType = event.getEventType();
+        val isisInteraction = event.getIsisInteraction();
 
         if(log.isDebugEnabled()) {
             log.debug("received session event {}", eventType);
@@ -96,13 +97,13 @@ public class JdoPersistenceLifecycleService {
 
         switch (eventType) {
         case HAS_STARTED:
-            openSession(event.getIsisInteraction());
+            openInteraction(isisInteraction);
             break;
         case IS_ENDING:
-            closeSession(event.getIsisInteraction());
+            closeInteraction(isisInteraction);
             break;
         case FLUSH_REQUEST:
-            flushSession(event.getIsisInteraction());
+            flushInteraction(isisInteraction);
             break;
 
         default:
@@ -113,19 +114,19 @@ public class JdoPersistenceLifecycleService {
 
     // -- HELPER
 
-    private void openSession(IsisInteraction isisInteraction) {
+    private void openInteraction(IsisInteraction isisInteraction) {
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
         isisInteraction.putUserData(IsisPersistenceSessionJdo.class, persistenceSession);
         persistenceSession.open();
     }
 
-    private void closeSession(IsisInteraction isisInteraction) {
+    private void closeInteraction(IsisInteraction isisInteraction) {
         currentSession(isisInteraction)
         .ifPresent(PersistenceSession::close);
     }
 
-    private void flushSession(IsisInteraction isisInteraction) {
+    private void flushInteraction(IsisInteraction isisInteraction) {
         currentSession(isisInteraction)
         .ifPresent(PersistenceSession::flush);
     }

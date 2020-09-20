@@ -1,4 +1,3 @@
-org.apache.isis.applib.services.command.CommandContext
 org.apache.isis.applib.services.iactn.InteractionContext
 org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal
 org.apache.isis.applib.services.scratchpad.Scratchpad

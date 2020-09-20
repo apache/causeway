@@ -23,13 +23,11 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.atomic.LongAdder;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -40,8 +38,6 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
@@ -54,6 +50,7 @@ import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchServi
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -67,17 +64,15 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @IsisInteractionScope
 @Log4j2
+@RequiredArgsConstructor
 public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 
-    @Inject private List<PublisherService> publisherServices;
-
-    @Inject private ClockService clockService;
-    @Inject private UserService userService;
-
-    @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsProvider;
-    @Inject private javax.inject.Provider<CommandContext> commandContextProvider;
-    @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
-    @Inject private javax.inject.Provider<MetricsService> metricsServiceProvider;
+    @Inject final List<PublisherService> publisherServices;
+    @Inject final ClockService clockService;
+    @Inject final UserService userService;
+    @Inject final Provider<ChangedObjectsService> changedObjectsProvider;
+    @Inject final Provider<InteractionContext> interactionContextProvider;
+    @Inject final Provider<MetricsService> metricsServiceProvider;
     
     @Override
     public void publishObjects() {
@@ -105,6 +100,9 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
                         changedObjectsProvider.get().numberObjectPropertiesModified(),
                         changeKindByPublishedAdapter);
 
+        if(publishedObjects == null) {
+            return;
+        }
         for (val publisherService : publisherServices) {
             publisherService.publish(publishedObjects);
         }
@@ -115,19 +113,23 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
             final int numberObjectPropertiesModified,
             final Map<ManagedObject, PublishingChangeKind> changeKindByPublishedAdapter) {
 
-        final Command command = commandContextProvider.get().getCommand();
-        final UUID transactionUuid = command.getUniqueId();
+        final Interaction interaction = interactionContextProvider.get().getInteraction();
+        val uniqueId = interaction.getUniqueId();
 
+        if(uniqueId == null) {
+            // there was no interaction... eg fixture scripts
+            return null;
+        }
+
+        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
         final String userName = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
-        final Interaction interaction = interactionContextProvider.get().getInteraction();
-
-        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
-
-        return new PublishedObjectsDefault(transactionUuid, nextEventSequence, userName, timestamp, numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
+        return new PublishedObjectsDefault(
+                    uniqueId, nextEventSequence,
+                    userName, timestamp,
+                    numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
     }
-
 
 
     @Override

@@ -47,10 +47,10 @@ public class JGrowlUtil {
         final StringBuilder buf = new StringBuilder();
 
         for (String info : messageBroker.getMessages()) {
-            addJGrowlCall(info, MessageSeverity.INFO, buf);
+            addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, buf);
         }
         for (String warning : messageBroker.getWarnings()) {
-            addJGrowlCall(warning, MessageSeverity.WARNING, buf);
+            addJGrowlCall(warning, JGrowlUtil.MessageSeverity.WARNING, buf);
         }
 
         final String error =  messageBroker.getApplicationError();

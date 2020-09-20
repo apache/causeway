@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import org.assertj.core.api.Assertions;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
@@ -215,7 +216,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof CssClassFacetForDomainObjectLayoutAnnotation);
 
                 final CssClassFacetForDomainObjectLayoutAnnotation facetImpl = (CssClassFacetForDomainObjectLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.cssClass(mockAdapter), is("foobar"));
+                Assertions.assertThat(facetImpl.cssClass(mockAdapter)).isEqualTo("foobar");
 
                 expectNoMethodsRemoved();
             }
@@ -228,7 +229,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                assertNotNull(facet);
+                assertNull(facet);
 
                 expectNoMethodsRemoved();
             }

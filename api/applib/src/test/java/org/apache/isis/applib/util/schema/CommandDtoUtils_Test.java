@@ -62,7 +62,18 @@ public class CommandDtoUtils_Test {
         CommandDtoUtils.setUserData(dto, "someKey", "someOtherValue");
         assertThat(CommandDtoUtils.getUserData(dto, "someKey"), is("someOtherValue"));
 
-        CommandDtoUtils.setUserData(dto, "someKey", null);
+    }
+
+    @Test
+    public void clearUserData() {
+        // given
+        CommandDtoUtils.setUserData(dto, "someKey", "someOtherValue");
+        assertThat(CommandDtoUtils.getUserData(dto, "someKey"), is("someOtherValue"));
+
+        // when
+        CommandDtoUtils.clearUserData(dto, "someKey");
+
+        // then
         assertThat(CommandDtoUtils.getUserData(dto, "someKey"), is(nullValue()));
     }
 }
