@@ -177,7 +177,7 @@
 		<vaadin.version>14.3.1</vaadin.version>
 
 		<wicket.version>8.9.0</wicket.version>
-		<wicket-bootstrap.version>2.0.13</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
+		<wicket-bootstrap.version>5.0.1</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
 		<wicket-bootstrap-core.version>2.0.13</wicket-bootstrap-core.version>
 		<wicket-bootstrap-datetimepicker.version>4.17.47</wicket-bootstrap-datetimepicker.version>
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
