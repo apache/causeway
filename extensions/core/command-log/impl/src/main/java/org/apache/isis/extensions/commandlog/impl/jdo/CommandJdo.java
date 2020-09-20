@@ -52,8 +52,8 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTyp
 import org.apache.isis.applib.types.MemberIdentifierType;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.commandlog.impl.util.BigDecimalUtils;
 import org.apache.isis.extensions.commandlog.impl.util.StringUtils;

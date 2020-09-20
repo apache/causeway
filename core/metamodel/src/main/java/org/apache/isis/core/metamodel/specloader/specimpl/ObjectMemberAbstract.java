@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;

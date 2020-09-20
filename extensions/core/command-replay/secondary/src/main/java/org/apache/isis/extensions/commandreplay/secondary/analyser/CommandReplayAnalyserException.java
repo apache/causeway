@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 

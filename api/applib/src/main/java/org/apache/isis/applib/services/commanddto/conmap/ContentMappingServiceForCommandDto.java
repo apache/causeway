@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.commanddto.conmap;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,18 +30,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
-import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorService;
+import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.common.v2.PeriodDto;
 
 import lombok.val;
 
