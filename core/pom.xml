@@ -80,7 +80,7 @@
 
 		<approvaltests.version>4.0.2</approvaltests.version>
 
-		<assertj-guava.version>3.1.0</assertj-guava.version>
+		<assertj-guava.version>3.4.0</assertj-guava.version>
 
 		<camel.version>3.5.0</camel.version>
 
