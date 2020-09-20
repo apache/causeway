@@ -17,28 +17,28 @@ The SPI of the service is:
 ----
 @IsisSessionScope
 public class ChangedObjectsService {
-    public void enlistCreated(final ObjectAdapter adapter);                                     // <1>
+    public void enlistCreated(final ObjectAdapter adapter);                                     // <.>
     public void enlistUpdating(final ObjectAdapter adapter);
     public void enlistDeleting(final ObjectAdapter adapter);
 
-    public boolean hasChangedAdapters();                                                        // <2>
+    public boolean hasChangedAdapters();                                                        // <.>
 
-    public Map<ObjectAdapter, PublishingChangeKind> getChangeKindByEnlistedAdapter();     // <3>
+    public Map<ObjectAdapter, PublishingChangeKind> getChangeKindByEnlistedAdapter();           // <.>
     public int numberObjectsDirtied();
     public int numberObjectPropertiesModified();
 
-    public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties();   // <4>
+    public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties();   // <.>
 
-    public void clearChangedObjectProperties();                                                 // <5>
+    public void clearChangedObjectProperties();                                                 // <.>
 }
 ----
-<1> Enlists an object that has just been created, updated or deleted, capturing the pre-modification values of the properties.
-<2> Used by the framework to determine whether to set the "persist hint" on the `Command` object (as per xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`]).
-<3> Used by xref:core:runtime-services:PublisherDispatchService.adoc[`PublisherDispatchService`] to obtain details of and
+<.> Enlists an object that has just been created, updated or deleted, capturing the pre-modification values of the properties.
+<.> Used by the framework to determine whether to send the completed `Command` to xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`], for example so that it can be persisted).
+<.> Used by xref:core:runtime-services:PublisherDispatchService.adoc[`PublisherDispatchService`] to obtain details of and
 counters of all objects changed within the transaction.
-<4> Used by xref:core:runtime-services:AuditerDispatchService.adoc[`AuditerDispatchService`] to obtain all pairs of
+<.> Used by xref:core:runtime-services:AuditerDispatchService.adoc[`AuditerDispatchService`] to obtain all pairs of
 pre/post values of changed properties
-<5> Called by the framework to for clean up after auditing and publishing has completed.
+<.> Called by the framework to for clean up after auditing and publishing has completed.
 
 For enlisted objects, if just created, then a dummy value `"[NEW]"` is used for the pre-modification value; if just
 deleted, then a dummy value `"[DELETED]"` is used for the post-modification value.  The post-modification values of

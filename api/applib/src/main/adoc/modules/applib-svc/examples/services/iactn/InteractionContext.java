@@ -77,7 +77,6 @@ public class InteractionContext implements TransactionScopeListener, DisposableB
         this.interaction = interaction;
     }
 
-    // tag::refguide[]
 
     @Override
     public void onTransactionEnded() {
@@ -92,5 +91,7 @@ public class InteractionContext implements TransactionScopeListener, DisposableB
         setInteraction(null);
     }
 
+    // tag::refguide[]
+    // ...
 }
 // end::refguide[]
