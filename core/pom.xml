@@ -108,7 +108,7 @@
 		<docx4j.version>3.2.1</docx4j.version>
 
 		<easymock.version>2.5.2</easymock.version>
-		<error_prone_annotations.version>2.3.2</error_prone_annotations.version>
+		<error_prone_annotations.version>2.4.0</error_prone_annotations.version>
 
 		<findbugs-annotations.version>2.0.1</findbugs-annotations.version>
 
