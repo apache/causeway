@@ -311,6 +311,7 @@ as a replacement for
                 <mb3:serviceAction objectType="isisExtensionsCommandLog.CommandServiceMenu" id="activeCommands"/>
                 <mb3:serviceAction objectType="isisExtensionsCommandLog.CommandServiceMenu" id="findCommands"/>
                 <mb3:serviceAction objectType="isisExtensionsCommandLog.CommandServiceMenu" id="findCommandById"/>
+                <mb3:serviceAction objectType="isisExtensionsCommandLog.CommandServiceMenu" id="truncateLog"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Command Replay - Primary</mb3:named>

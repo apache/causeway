@@ -110,7 +110,7 @@ public class ActionCommandJdo
 
 //tag::annotation-2[]
     @Action(
-        command = CommandReification.DISABLED
+        command = CommandReification.DISABLED           // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyCommandDisabled"
         , associateWithSequence = "1"
@@ -126,7 +126,7 @@ public class ActionCommandJdo
     public String default0UpdatePropertyCommandDisabledUsingAnnotation() {
         return getPropertyCommandDisabled();
     }
-//end::annotation[]
+//end::annotation-2[]
 
 //tag::meta-annotation[]
     @ActionCommandEnabledMetaAnnotation      // <.>

@@ -36,7 +36,7 @@ public enum Scale {
 
     private final String value;
 
-    private Scale(final String value) {
+    Scale(final String value) {
         this.value = value;
     }
 

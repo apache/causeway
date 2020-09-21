@@ -1,5 +1,5 @@
 [[agilej]]
-= Appendix: AgileJ
+= AgileJ
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -8,9 +8,13 @@
 
 link:http://www.agilej.com/[AgileJ Structure Views] is a free product to reverse engineer and visualize Java classes from source code.
 
-NOTE: This material does not constitute an endorsement; AgileJ Structure Views is not affiliated to Apache Software Foundation in any way.
+[NOTE]
+====
+This material does not constitute an endorsement; AgileJ Structure Views is not affiliated to Apache Software Foundation in any way.
+====
 
-The key to using the tool is in developing a suitable filter script, a DSL.  You can use the following script as a starting point for visualizing Apache Isis domain models:
+The key to using the tool is in developing a suitable filter script, a DSL.
+You can use the following script as a starting point for visualizing Apache Isis domain models:
 
 [source,AgileJ]
 ----

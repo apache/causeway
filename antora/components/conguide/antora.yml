@@ -21,4 +21,8 @@ version: latest
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
+- modules/documentation/nav.adoc
+- modules/intellij/nav.adoc
+- modules/eclipse/nav.adoc
 - modules/git/nav.adoc
+- modules/agile/nav.adoc

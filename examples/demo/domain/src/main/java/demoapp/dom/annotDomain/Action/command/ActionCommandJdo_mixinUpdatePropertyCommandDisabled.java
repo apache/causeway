@@ -7,7 +7,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
 @Action(
-    command = CommandReification.DISABLED
+    command = CommandReification.DISABLED       // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyCommandDisabled"
     , associateWithSequence = "2"

@@ -2,15 +2,27 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+The Apache Isis website and documentation are written in link:https://asciidoctor.org/[Asciidoc], using link:https://antora.org/[Antora] as a static website generator.
 
 == Prerequisites:
 
 The prerequisites to install are:
 
-* Node LTS
-* Antora
+* Node LTS (link:https://nodejs.org/[])
+* Antora (comprising: link:https://www.npmjs.com/package/@antora/cli[@antora/cli] and link:https://www.npmjs.com/package/@antora/site-generator-default[@antora/site-generator-default])
 
-See the link:https://docs.antora.org/antora/2.2/install/install-antora/[Antora docs] for details.
+* Asciidoctor Kroki (link:https://www.npmjs.com/package/asciidoctor-kroki[asciidoctor-kroki])
++
+for diagramming support for Antora
+
+Assuming you have installed the latest Node LTS, these can be installed using:
+
+[source,bash]
+----
+npm i -g @antora/cli @antora/site-generator-default asciidoctor-kroki
+----
+
+See the link:https://docs.antora.org/antora/2.3/install/install-antora/[Antora docs] for details.
 
 We also generate some Asciidoc files dynamically from other source code.
 This requires:
@@ -20,11 +32,13 @@ This requires:
 * link:https://pandoc.org/installing.html[pandoc]
 
 
-Also strongly recommended:
+== Authoring
+
+To create/update documentation, we strongly recommend:
 
 * IntelliJ link:https://plugins.jetbrains.com/plugin/7391-asciidoc[Asciidoc plugin]
-+
-TIP: even if you don't use IntelliJ as your primary IDE, it's worth using it for writing documentation - there's currently nothing as good as this plugin on any other editor platform, especially when it comes to Antora.
+
+Even if you don't use IntelliJ as your primary IDE, it's worth using it for writing documentation - there's currently nothing as good as this plugin on any other editor platform, especially when it comes to Antora.
 
 
 == Build

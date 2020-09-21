@@ -59,7 +59,8 @@ public class CommandServiceListenerForJdo implements CommandServiceListener {
         val existingCommandJdoIfAny =
                 commandJdoRepository.findByUniqueId(command.getUniqueId());
         if(existingCommandJdoIfAny.isPresent()) {
-            if(true || log.isDebugEnabled()) {
+            if(log.isDebugEnabled()) {
+                // this isn't expected to happen ... we just log the fact if it does
                 val existingCommandDto = existingCommandJdoIfAny.get().getCommandDto();
 
                 String existingCommandDtoXml = JaxbUtil.toXml(existingCommandDto);

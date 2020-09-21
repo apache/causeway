@@ -1,0 +1,19 @@
+#Organize Import Order
+#Sat Jan 04 15:55:51 CET 2020
+11=\#org.isisaddons
+12=org.incode
+13=\#org.incode
+14=lombok
+15=
+16=\#
+0=java
+1=\#java
+2=javax
+3=\#javax
+4=com
+5=\#com
+6=org
+7=\#org
+8=org.apache.isis
+9=\#org.apache.isis
+10=org.isisaddons

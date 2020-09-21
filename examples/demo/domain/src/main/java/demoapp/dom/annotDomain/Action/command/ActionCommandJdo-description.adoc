@@ -1,140 +1,134 @@
-CAUTION: TODO - to document
+The `command` semantic is used to allow or suppress the reification of an action invocation or property edit into a `Command`.
 
-//The `publishing` semantic specifies that the invocation of an object action should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI].
-//This is performed _after_ the action has been invoked.
-//
-//The publishing from the framework to the SPI is in-memory.
-//A typical SPI implementation would then publish over the network, or perhaps store in a database.
-//(Note that the framework provides an link:https://isis.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern]).
-//
-//The semantic can be specified using either the `@Action` annotation, or through a meta-annotation.
-//
-//NOTE: The demo shows publishing of entities, as this is much more common use case than publishing a view model.
-//
-//== Annotated
-//
-//The `publisher` semantic can be specified explicitly using an annotation through `@Action#publishing()`:
-//
-//* it can be applied to an action:
-//+
-//[source,java,indent=0]
-//----
-//include::ActionPublishingJdo.java[tags=annotation]
-//----
-//<.> explicitly specifies that invoking the action should be published.
-//
-//* or to a mixin:
-//+
-//[source,java,indent=0]
-//----
-//include::ActionPublishingJdo_mixinUpdateProperty.java[tags=class]
-//----
-//<.> explicitly specifies that invoking the mixin action should be published.
-//
-//
-//== Meta-annotated
-//
-//The `publishing` semantic can also be specified using a custom meta-annotation:
-//
-//* the meta-annotation is defined as:
-//+
-//[source,java,indent=0]
-//----
-//include::ActionPublishingEnabledMetaAnnotation.java[tags=class]
-//----
-//<.> annotated for an action
-//<.> annotation can be applied to an action method or to a mixin
-//
-//* and can be applied to an action:
-//+
-//[source,java,indent=0]
-//----
-//include::ActionPublishingJdo.java[tags=meta-annotation]
-//----
-//<.> semantic is inherited from the meta-annotation
-//
-//* or to a mixin:
-//+
-//[source,java,indent=0]
-//----
-//include::ActionPublishingJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
-//----
-//<.> semantic is inherited from the meta-annotation
-//
-//
-//=== Meta-annotated Overridden
-//
-//The meta-annotation can itself be overridden:
-//
-//* for an action:
-//+
-//[source,java,indent=0]
-//----
-//include::ActionPublishingJdo.java[tags=meta-annotation-overridden]
-//----
-//<.> semantic from meta-annotation ...
-//<.> \... is overridden by the `@Action` annotation
-//
-//* or on a mixin:
-//+
-//[source,java,indent=0]
-//----
-//include::ActionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
-//----
-//<.> semantic from meta-annotation ...
-//<.> \... is overridden by the `@Action` annotation
-//
-//
-//== PublisherService
-//
-//The demo provides a simple implementation of `PublisherService` that just stores the DTOs in memory:
-//
-//[source,java]
-//----
-//include::spiimpl/PublisherServiceSpiForActions.java[tags=class]
-//----
-//<.> serializes to `InteractionDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/ixn.html[Apache Isis schema].
-//
-//The demo implementation also provides a way to query these executions:
-//
-//[source,java,indent=0]
-//----
-//include::spiimpl/PublisherServiceSpiForActions.java[tags=demo]
-//----
-//
-//Supporting mixins surface this list as contributions on the object:
-//
-//* `interactionExecutions` collection:
-//+
-//[source,java,indent=0]
-//----
-//include::spiimpl/ActionPublishingJdo_interactionExecutions.java[tags=class]
-//----
-//
-//* `clearInteractionExecutions` action:
-//+
-//[source,java,indent=0]
-//----
-//include::spiimpl/ActionPublishingJdo_clearInteractionExecutions.java[tags=class]
-//----
-//
-//
-//== Configuration
-//
-//By default, publishing of action invocations is disabled.
-//This can be configured globally:
-//
-//[source,yaml]
-//.application.yml
-//----
-//isis:
-//  applib:
-//    annotation:
-//      action:
-//        publishing: none
-//----
-//
-//In addition to globally enabling or disabling action publishing, it is also possible to specify `ignore_safe`.
-//
-//This enables publishing for all actions except those that have safe (that is, query-only) semantics.
-//In other words actions are published except for those that don't change (aren't declared as changing) the state of the system.
+When allowed (the default), then the `Command` is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandServiceListener.html#section-top[`CommandServiceListener`]  SPI.
+This is performed _after_ the interaction (action invocation or property edit) has completed.
+The link:https://isis.apache.org/extensions/latest/command-log/about.html[Command Log] extension provides an implementation to allow ``Command``s to be persisted; this combines with the link:https://isis.apache.org/extensions/latest/command-replay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
+The associated `commandDtoProcessor()` attribute allows the `Command` XML to be processed before being replicated.
+
+Commands are also used under the covers to allow actions/edits to be called asynchronously using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[`WrapperFactory`].
+
+[NOTE]
+====
+The list of persisted ``Command``s can be viewed in a collection at the bottom of the page.
+``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
+
+(If running in prototype mode), the list of persisted ``Command``s can also be truncated from the activity menu.
+====
+
+== Annotated
+
+The `command` semantic can be specified explicitly using an annotation through `@Action#command()`:
+
+* it can be applied to an action:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo.java[tags=annotation]
+----
+<.> explicitly specifies that invoking the action should be reified .
+
+* or to a mixin:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo_mixinUpdateProperty.java[tags=class]
+----
+<.> explicitly specifies that invoking the mixin action should be reified.
+
+The command reification can also be disabled:
+
+* for an action:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo.java[tags=annotation-2]
+----
+<.> explicitly specifies that invoking the action should not be reified.
+
+* or to a mixin:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo_mixinUpdatePropertyCommandDisabled.java[tags=class]
+----
+<.> explicitly specifies that invoking the mixin action should not be reified.
+
+
+== Meta-annotated
+
+The `command` semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java,indent=0]
+----
+include::ActionCommandEnabledMetaAnnotation.java[tags=class]
+----
+<.> annotated for an action
+<.> annotation can be applied to an action method or to a mixin
+
+* and can be applied to an action:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo.java[tags=meta-annotation]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or to a mixin:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+----
+<.> semantic is inherited from the meta-annotation
+
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* for an action:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Action` annotation
+
+* or on a mixin:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Action` annotation
+
+
+== CommandServiceListener
+
+The demo includes the link:https://isis.apache.org/extensions/latest/command-log/about.html[Command Log] extension, so every command is persisted.
+These can be viewed in the collection at the bottom of the page.
+``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
+
+
+== Configuration
+
+By default, reification of commands for action invocations is enabled.
+This can be configured globally:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  applib:
+    annotation:
+      action:
+        command: none   # or 'all', or 'ignore_safe'
+----
+
+In addition to globally enabling or disabling command reification, it is also possible to specify `ignore_safe`.
+This enables commands for all actions except those that have safe (that is, query-only) semantics.
+In other words actions are reified to commands except for those that don't change (aren't declared as changing) the state of the system.
