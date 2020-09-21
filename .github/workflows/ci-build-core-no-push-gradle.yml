@@ -1,12 +1,13 @@
 name: Build and Test (w/ Gradle)
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+#disable gradle build until ISIS-2437 is resolved
+#  push:
+#    branches:
+#      - master
+#  pull_request:
+#    branches:
+#      - master
 
 jobs:
   build:
