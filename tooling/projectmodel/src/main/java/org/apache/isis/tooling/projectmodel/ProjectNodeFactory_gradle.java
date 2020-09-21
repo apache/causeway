@@ -62,7 +62,7 @@ class ProjectNodeFactory_gradle {
         
         val projNode = ProjectNode.builder()
                 .parent(parent)
-                .artifactKey(artifactKeyOf(gradleProj))
+                .artifactCoordinates(artifactKeyOf(gradleProj))
                 .name(_Strings.nullToEmpty(gradleProj.getName()))
                 .description(_Strings.nullToEmpty(gradleProj.getDescription()))
                 .projectDirectory(gradleProj.getProjectDirectory())

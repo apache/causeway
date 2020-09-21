@@ -21,10 +21,9 @@ package org.apache.isis.tooling.projectmodel.gradle;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import lombok.SneakyThrows;
 import lombok.val;
 
-public class GradleSettingsWriter {
+public class GradleSettingsWriter extends WriterAbstract {
 
     public static String toString(GradleSettings gradleSettings) {
         if(gradleSettings==null) {
@@ -65,16 +64,6 @@ public class GradleSettingsWriter {
         });
     }
     
-    // -- HELPER
-    
-    @SneakyThrows
-    private static void writeWithFormat(Writer writer, String format, Object...args) {
-        writer.write(String.format(format, args));
-    }
-    
-    @SneakyThrows
-    private static void writeEmptyLine(Writer writer) {
-        writer.write("\n");
-    }
+
     
 }

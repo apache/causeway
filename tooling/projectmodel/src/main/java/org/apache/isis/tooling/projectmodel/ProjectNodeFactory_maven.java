@@ -67,7 +67,7 @@ class ProjectNodeFactory_maven {
             final @NonNull Model mavenProj) {
         val projNode = ProjectNode.builder()
                 .parent(parent)
-                .artifactKey(artifactCoordinatesOf(mavenProj))
+                .artifactCoordinates(artifactCoordinatesOf(mavenProj))
                 .name(_Strings.nullToEmpty(mavenProj.getName()))
                 .description(_Strings.nullToEmpty(mavenProj.getDescription()))
                 .projectDirectory(mavenProj.getProjectDirectory())
@@ -86,13 +86,16 @@ class ProjectNodeFactory_maven {
     }
     
     private static Dependency toDependency(final @NonNull org.apache.maven.model.Dependency dependency) {
+        val artifactCoordinates = ArtifactCoordinates.of(
+                dependency.getGroupId(), 
+                dependency.getArtifactId(),
+                dependency.getType(),
+                Optional.ofNullable(dependency.getVersion()).orElse("<managed>") //TODO to resolve this requires interpolation
+                );
+        
         return Dependency.builder()
-                .artifactKey(ArtifactCoordinates.of(
-                        dependency.getGroupId(), 
-                        dependency.getArtifactId(),
-                        dependency.getType(),
-                        Optional.ofNullable(dependency.getVersion()).orElse("<managed>") //TODO to resolve this requires interpolation
-                        ))
+                .artifactCoordinates(artifactCoordinates)
+                .shortName(ArtifactShortNameFactory.toShortName(artifactCoordinates))
                 .build();
     }
     

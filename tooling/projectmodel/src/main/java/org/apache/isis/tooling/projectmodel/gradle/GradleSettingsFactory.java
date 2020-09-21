@@ -32,15 +32,19 @@ import lombok.val;
 public class GradleSettingsFactory {
 
     public static GradleSettings generateFromMaven(File projRootFolder, String rootProjectName) {
-        
         val projTree = ProjectNodeFactory.maven(projRootFolder);
-        val rootPath = _Files.canonicalPath(projRootFolder).get();
+        return generateFromMaven(projTree, rootProjectName);
+    }
+    
+    public static GradleSettings generateFromMaven(ProjectNode projTree, String rootProjectName) {
+        
+        val rootPath = _Files.canonicalPath(projTree.getProjectDirectory()).get();
         
         val gradleSettings = new GradleSettings(rootProjectName);
         val folderByArtifactKey = gradleSettings.getBuildArtifactsByArtifactKey();
         
         projTree.depthFirst(projModel -> {
-            folderByArtifactKey.put(projModel.getArtifactKey(), gradleBuildArtifactFor(projModel, rootPath));
+            folderByArtifactKey.put(projModel.getArtifactCoordinates(), gradleBuildArtifactFor(projModel, rootPath));
         });
         
         return gradleSettings;
@@ -49,7 +53,7 @@ public class GradleSettingsFactory {
     // -- HELPER
     
     private static GradleBuildArtifact gradleBuildArtifactFor(ProjectNode projModel, String rootPath) {
-        val name = toCanonicalBuildName(projModel.getArtifactKey());
+        val name = toCanonicalBuildName(projModel.getArtifactCoordinates());
         val realtivePath = toCanonicalRelativePath(projModel, rootPath);
         return GradleBuildArtifact.of(name, realtivePath, projModel.getProjectDirectory());
     }

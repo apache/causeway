@@ -18,12 +18,9 @@
  */
 package org.apache.isis.tooling.projectmodel.test;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -36,20 +33,8 @@ import org.apache.isis.tooling.projectmodel.ProjectVisitor;
 
 import lombok.val;
 
-class ProjectTreeTest {
+class ProjectTreeTest extends ProjectModelTestAbstract {
     
-    File projRootFolder;
-    
-    @BeforeEach
-    void setUp() throws Exception {
-        projRootFolder = new File("./").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
-        System.out.println("running ProjectTreeTest at " + projRootFolder.getAbsolutePath());
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
-    }
-
     @Test @Disabled("for now we are missing some build.gradle files")
     void testGradle() {
         
@@ -86,11 +71,11 @@ class ProjectTreeTest {
     }
     
     private static String toString(ProjectNode node) {
-        val artifactKey = node.getArtifactKey();
+        val artifactKey = node.getArtifactCoordinates();
         val groupId = artifactKey.getGroupId();
         val artifactId = artifactKey.getArtifactId();
-        val type = artifactKey.getType();
-        return String.format("%s:%s:%s", groupId, artifactId, type);
+        val packaging = artifactKey.getPackaging();
+        return String.format("%s:%s:%s", groupId, artifactId, packaging);
     }
     
     private void assertHasSomeArtifactKeys(Set<String> artifactKeys) {

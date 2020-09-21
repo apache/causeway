@@ -31,14 +31,14 @@ public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
 
     @NonNull private final String groupId;
     @NonNull private final String artifactId;
-    @NonNull private final String type;
+    @NonNull private final String packaging;
     @NonNull private final String version;
     
     private final AtomicReference<ComparableVersion> comparableVersion = new AtomicReference<ComparableVersion>();
     
     @Override
     public String toString() {
-        return String.format("%s:%s:%s:%s", groupId, artifactId, type, version); 
+        return String.format("%s:%s:%s:%s", groupId, artifactId, packaging, version); 
     }
 
     // -- COMPARATOR
@@ -46,7 +46,7 @@ public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
     private final static Comparator<ArtifactCoordinates> comparator = Comparator
             .comparing(ArtifactCoordinates::getGroupId)
             .thenComparing(ArtifactCoordinates::getArtifactId)
-            .thenComparing(ArtifactCoordinates::getType)
+            .thenComparing(ArtifactCoordinates::getPackaging)
             .thenComparing(ArtifactCoordinates::getComparableVersion);
     
     private ComparableVersion getComparableVersion() {

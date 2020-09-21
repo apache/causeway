@@ -26,7 +26,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -42,20 +41,14 @@ import org.apache.isis.tooling.projectmodel.gradle.GradleSettingsWriter;
 import lombok.SneakyThrows;
 import lombok.val;
 
-class GradleSettingsTest {
+class GradleSettingsTest extends ProjectModelTestAbstract {
 
-    File projRootFolder;
     boolean hasUnresolvableGradleBuildArtifacts;
     
     @BeforeEach
     void setUp() throws Exception {
-        projRootFolder = new File("./").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
-        System.out.println("running GradleSettingsTest at " + projRootFolder.getAbsolutePath());
+        super.setUp();
         hasUnresolvableGradleBuildArtifacts = false;
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
     }
 
     @Test @Disabled("activate only if you want to see the settings.gradle written to stdout")

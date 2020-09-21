@@ -41,7 +41,7 @@ public class ProjectNode implements Comparable<ProjectNode> {
     @EqualsAndHashCode.Exclude @ToString.Exclude 
     private final TreeSet<Dependency> dependencies = new TreeSet<Dependency>();
     
-    private final ArtifactCoordinates artifactKey;
+    private final ArtifactCoordinates artifactCoordinates;
     private final String name;
     private final String description;
     private final File projectDirectory;
@@ -63,7 +63,7 @@ public class ProjectNode implements Comparable<ProjectNode> {
     }
     
     public boolean containsOrEquals(final @NonNull ProjectNode other) {
-        if(this.getArtifactKey().equals(other.getArtifactKey())) {
+        if(this.getArtifactCoordinates().equals(other.getArtifactCoordinates())) {
             return true;
         }
         for(val child : getChildren()){
@@ -84,7 +84,7 @@ public class ProjectNode implements Comparable<ProjectNode> {
         if(other.contains(this)) {
             return 1;
         }
-        return this.getArtifactKey().compareTo(other.getArtifactKey());
+        return this.getArtifactCoordinates().compareTo(other.getArtifactCoordinates());
     }
     
    
