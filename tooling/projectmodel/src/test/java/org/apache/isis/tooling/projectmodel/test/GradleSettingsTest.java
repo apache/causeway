@@ -35,9 +35,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.tooling.projectmodel.gen.GradleSettings;
-import org.apache.isis.tooling.projectmodel.gen.GradleSettingsFactory;
-import org.apache.isis.tooling.projectmodel.gen.GradleSettingsWriter;
+import org.apache.isis.tooling.projectmodel.gradle.GradleSettings;
+import org.apache.isis.tooling.projectmodel.gradle.GradleSettingsFactory;
+import org.apache.isis.tooling.projectmodel.gradle.GradleSettingsWriter;
 
 import lombok.SneakyThrows;
 import lombok.val;

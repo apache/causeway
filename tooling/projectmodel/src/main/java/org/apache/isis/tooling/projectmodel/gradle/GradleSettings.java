@@ -16,43 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.projectmodel.gen;
+package org.apache.isis.tooling.projectmodel.gradle;
 
-import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
-import org.apache.isis.tooling.projectmodel.ArtifactKey;
+import org.apache.isis.tooling.projectmodel.ArtifactCoordinates;
 
 import lombok.Data;
-import lombok.Value;
-import lombok.val;
 
 @Data
 public class GradleSettings {
 
-    @Value(staticConstructor = "of")
-    public static class GradleBuildArtifact {
-        private final String name;
-        private final String realtivePath;
-        private final File projectDirectory;
-        
-        public final boolean isRoot() {
-            return realtivePath.equals("/");
-        }
-        
-        public final Optional<File> getDefaultBuildFile() {
-            val buildFile = new File(getProjectDirectory(), "build.gradle");
-            if(buildFile.exists()) {
-                return Optional.of(buildFile);
-            }
-            return Optional.empty();
-        }
-        
-    }
-    
     private final String rootProjectName;
-    private final Map<ArtifactKey, GradleBuildArtifact> buildArtifactsByArtifactKey = new LinkedHashMap<>();
+    private final Map<ArtifactCoordinates, GradleBuildArtifact> buildArtifactsByArtifactKey = new LinkedHashMap<>();
     
 }

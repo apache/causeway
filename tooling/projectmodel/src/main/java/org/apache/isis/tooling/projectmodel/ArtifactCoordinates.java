@@ -27,7 +27,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-public class ArtifactKey implements Comparable<ArtifactKey> {
+public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
 
     @NonNull private final String groupId;
     @NonNull private final String artifactId;
@@ -43,11 +43,11 @@ public class ArtifactKey implements Comparable<ArtifactKey> {
 
     // -- COMPARATOR
     
-    private final static Comparator<ArtifactKey> comparator = Comparator
-            .comparing(ArtifactKey::getGroupId)
-            .thenComparing(ArtifactKey::getArtifactId)
-            .thenComparing(ArtifactKey::getType)
-            .thenComparing(ArtifactKey::getComparableVersion);
+    private final static Comparator<ArtifactCoordinates> comparator = Comparator
+            .comparing(ArtifactCoordinates::getGroupId)
+            .thenComparing(ArtifactCoordinates::getArtifactId)
+            .thenComparing(ArtifactCoordinates::getType)
+            .thenComparing(ArtifactCoordinates::getComparableVersion);
     
     private ComparableVersion getComparableVersion() {
         if(comparableVersion.get()==null) {
@@ -57,7 +57,7 @@ public class ArtifactKey implements Comparable<ArtifactKey> {
     }
 
     @Override
-    public int compareTo(ArtifactKey o) {
+    public int compareTo(ArtifactCoordinates o) {
         return comparator.compare(this, o);
     }
     

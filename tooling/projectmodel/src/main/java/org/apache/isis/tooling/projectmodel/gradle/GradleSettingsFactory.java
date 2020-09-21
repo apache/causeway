@@ -16,16 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.projectmodel.gen;
+package org.apache.isis.tooling.projectmodel.gradle;
 
 import java.io.File;
 
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.tooling.projectmodel.ArtifactKey;
+import org.apache.isis.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.isis.tooling.projectmodel.ProjectNode;
 import org.apache.isis.tooling.projectmodel.ProjectNodeFactory;
-import org.apache.isis.tooling.projectmodel.gen.GradleSettings.GradleBuildArtifact;
 
 import lombok.NonNull;
 import lombok.val;
@@ -55,7 +54,7 @@ public class GradleSettingsFactory {
         return GradleBuildArtifact.of(name, realtivePath, projModel.getProjectDirectory());
     }
 
-    private static String toCanonicalBuildName(final @NonNull ArtifactKey artifactKey) {
+    private static String toCanonicalBuildName(final @NonNull ArtifactCoordinates artifactKey) {
         return String.format(":%s:%s", artifactKey.getGroupId(), artifactKey.getArtifactId());
     }
     

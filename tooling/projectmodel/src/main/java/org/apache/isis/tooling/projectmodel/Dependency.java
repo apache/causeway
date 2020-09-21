@@ -26,7 +26,7 @@ import lombok.Data;
 @Data @Builder
 public class Dependency implements Comparable<Dependency> {
     
-    private final ArtifactKey artifactKey;
+    private final ArtifactCoordinates artifactKey;
     
     // -- COMPARATOR
     

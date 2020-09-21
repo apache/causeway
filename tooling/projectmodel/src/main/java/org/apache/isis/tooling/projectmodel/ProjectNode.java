@@ -41,7 +41,7 @@ public class ProjectNode implements Comparable<ProjectNode> {
     @EqualsAndHashCode.Exclude @ToString.Exclude 
     private final TreeSet<Dependency> dependencies = new TreeSet<Dependency>();
     
-    private final ArtifactKey artifactKey;
+    private final ArtifactCoordinates artifactKey;
     private final String name;
     private final String description;
     private final File projectDirectory;

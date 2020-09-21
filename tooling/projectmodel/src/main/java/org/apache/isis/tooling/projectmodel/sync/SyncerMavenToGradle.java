@@ -16,20 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.projectmodel;
+package org.apache.isis.tooling.projectmodel.sync;
 
-import java.io.File;
-
-import lombok.NonNull;
-
-public class ProjectNodeFactory {
-
-    public static ProjectNode maven(final @NonNull File projRootFolder) {
-        return ProjectNodeFactory_maven.createProjectTree(projRootFolder);
-    }
-
-    public static ProjectNode gradle(final @NonNull File projRootFolder) {
-        return ProjectNodeFactory_gradle.createProjectTree(projRootFolder);
-    }
+public class SyncerMavenToGradle {
 
 }
