@@ -3,6 +3,6 @@
 
 * xref:conguide:documentation:about.adoc[Documentation]
 ** xref:conguide:documentation:building-docs-and-website.adoc[Building Docs and Website]
-** xref:conguide:documentation:asciidoc-syntax[Asciidoc Syntax]
 ** xref:conguide:documentation:tooling.adoc[Tooling]
+** xref:conguide:documentation:asciidoc-syntax.adoc[Asciidoc Syntax]
 

@@ -119,12 +119,16 @@ public class ActionCommandJdo
         named = "Update Property"
         , describedAs = "@Action(command = ENABLED)"
     )
+//tag::annotation-2[]
     public ActionCommandJdo updatePropertyCommandDisabledUsingAnnotation(final String value) {
+        // ...
+//end::annotation-2[]
         setPropertyCommandDisabled(value);
         return this;
     }
     public String default0UpdatePropertyCommandDisabledUsingAnnotation() {
         return getPropertyCommandDisabled();
+//tag::annotation-2[]
     }
 //end::annotation-2[]
 
@@ -140,11 +144,14 @@ public class ActionCommandJdo
         , describedAs = "@ActionCommandEnabledMetaAnnotation"
     )
     public ActionCommandJdo updatePropertyUsingMetaAnnotation(final String value) {
+        // ...
+//end::meta-annotation[]
         setPropertyMetaAnnotated(value);
         return this;
     }
     public String default0UpdatePropertyUsingMetaAnnotation() {
         return getPropertyMetaAnnotated();
+//tag::meta-annotation[]
     }
 //end::meta-annotation[]
 
@@ -162,11 +169,14 @@ public class ActionCommandJdo
             "@ActionCommandDisabledMetaAnnotation @Action(command = ENABLED)"
     )
     public ActionCommandJdo updatePropertyUsingMetaAnnotationButOverridden(final String value) {
+        // ...
+//end::meta-annotation-overridden[]
         setPropertyMetaAnnotatedOverridden(value);
         return this;
     }
     public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
         return getPropertyMetaAnnotatedOverridden();
+//tag::meta-annotation-overridden[]
     }
 //end::meta-annotation-overridden[]
 

@@ -1,9 +1,8 @@
 The `command` semantic is used to allow or suppress the reification of an action invocation or property edit into a `Command`.
 
-When allowed (the default), then the `Command` is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandServiceListener.html#section-top[`CommandServiceListener`]  SPI.
-This is performed _after_ the interaction (action invocation or property edit) has completed.
-The link:https://isis.apache.org/extensions/latest/command-log/about.html[Command Log] extension provides an implementation to allow ``Command``s to be persisted; this combines with the link:https://isis.apache.org/extensions/latest/command-replay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
-The associated `commandDtoProcessor()` attribute allows the `Command` XML to be processed before being replicated.
+When allowed (the default), then the `Command` is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandServiceListener.html#section-top[`CommandServiceListener`] SPI, _after_ the interaction has completed.
+One use case is to replicate and replay commands to a secondary system, for example for regression testing.
+For more on this, see "Command Replay" section below.
 
 Commands are also used under the covers to allow actions/edits to be called asynchronously using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[`WrapperFactory`].
 
@@ -109,7 +108,7 @@ include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=
 
 == CommandServiceListener
 
-The demo includes the link:https://isis.apache.org/extensions/latest/command-log/about.html[Command Log] extension, so every command is persisted.
+The demo includes the link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Command Log] extension, so every command is persisted.
 These can be viewed in the collection at the bottom of the page.
 ``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
 
@@ -132,3 +131,33 @@ isis:
 In addition to globally enabling or disabling command reification, it is also possible to specify `ignore_safe`.
 This enables commands for all actions except those that have safe (that is, query-only) semantics.
 In other words actions are reified to commands except for those that don't change (aren't declared as changing) the state of the system.
+
+== Command Replay
+
+The link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow ``Command``s to be persisted.
+It also provides a RESTful endpoint to allow ``Command``s to be queried.
+This is used by the link:https://isis.apache.org/extensions/2.0.0-M3/command-replay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
+
+The associated `commandDtoProcessor()` semantic allows the `Command` XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
+One use case is to allow data to be obfuscated for security, or to replace large payloads (such as Blobs) with a smaller dummy payload.
+As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[`CommandDtoProcessorService`] SPI.
+
+The command replay can be demonstrated by running a second instance of the demo app, using the "secondary" Spring Boot profile.
+This is most easily done by specifying a system property:
+
+    -Dspring.profiles.active=secondary
+
+This activates the `application-secondary.properties` configuration file:
+
+[source,properties]
+----
+isis.extensions.command-replay.primary-access.base-url-restful=http://localhost:8080/restful/
+isis.extensions.command-replay.primary-access.user=sven
+isis.extensions.command-replay.primary-access.password=pass
+isis.extensions.command-replay.primary-access.base-url-wicket=http://localhost:8080/wicket/
+
+server.port=9090
+----
+
+The secondary instance of demoapp is accessible at link:http://localhost:9090[].
+Since both primary and secondary start with the same initial state, any commands executed on the primary are replicated to the secondary and result in the same changes of state.

@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 )
 @RequiredArgsConstructor
 public class ActionCommandJdo_mixinUpdatePropertyMetaAnnotation {
+    // ...
+//end::class[]
 
     private final ActionCommandJdo actionCommandJdo;
 
@@ -29,5 +31,6 @@ public class ActionCommandJdo_mixinUpdatePropertyMetaAnnotation {
     public String default0Act() {
         return actionCommandJdo.getPropertyMetaAnnotated();
     }
+//tag::class[]
 }
 //end::class[]

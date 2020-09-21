@@ -5,6 +5,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import lombok.RequiredArgsConstructor;
+
 //tag::class[]
 @Action(
     command = CommandReification.DISABLED       // <.>
@@ -16,23 +18,20 @@ import org.apache.isis.applib.annotation.SemanticsOf;
     named = "Mixin Update Property"
     , describedAs = "@Action(command = DISABLED)"
 )
+@RequiredArgsConstructor
 public class ActionCommandJdo_mixinUpdatePropertyCommandDisabled {
     // ...
 //end::class[]
 
     private final ActionCommandJdo actionCommandJdo;
 
-    public ActionCommandJdo_mixinUpdatePropertyCommandDisabled(ActionCommandJdo actionCommandJdo) {
-        this.actionCommandJdo = actionCommandJdo;
-    }
-
-//tag::class[]
     public ActionCommandJdo act(final String value) {
-        actionCommandJdo.setProperty(value);
+        actionCommandJdo.setPropertyCommandDisabled(value);
         return actionCommandJdo;
     }
     public String default0Act() {
-        return actionCommandJdo.getProperty();
+        return actionCommandJdo.getPropertyCommandDisabled();
     }
+//tag::class[]
 }
 //end::class[]
