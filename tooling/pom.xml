@@ -40,7 +40,7 @@
 
 		<java.version>11</java.version>
 
-		<asciidoctorj.version>2.1.0</asciidoctorj.version>
+		<asciidoctorj.version>2.4.1</asciidoctorj.version>
 		<gradle-tooling.version>6.6.1</gradle-tooling.version>
 		<lombok.version>1.18.12</lombok.version>
 		<maven-model-builder.version>3.6.3</maven-model-builder.version>
