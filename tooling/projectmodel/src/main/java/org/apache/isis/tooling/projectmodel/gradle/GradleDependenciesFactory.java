@@ -39,8 +39,10 @@ public class GradleDependenciesFactory {
         
         projTree.depthFirst(projModel -> {
             
-            projModel.getDependencies().forEach(dependency->{
-                dependenciesByShortName.put(dependency.getShortName(), dependency);    
+            projModel.getDependencies().stream()
+            .filter(dependency->dependency.getLocation().isExternal())
+            .forEach(extDependency->{
+                dependenciesByShortName.put(extDependency.getShortName(), extDependency);    
             });
             
         });

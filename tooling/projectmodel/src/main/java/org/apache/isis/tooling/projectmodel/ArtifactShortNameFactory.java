@@ -23,6 +23,6 @@ import lombok.NonNull;
 public class ArtifactShortNameFactory {
     
     public static String toShortName(final @NonNull ArtifactCoordinates coors) {
-        return String.format("%s:%s:%s", coors.getGroupId(), coors.getArtifactId(), coors.getVersion());
+        return String.format("%s:%s", coors.getGroupId(), coors.getArtifactId());
     }
 }

@@ -35,10 +35,14 @@ public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
     @NonNull private final String version;
     
     private final AtomicReference<ComparableVersion> comparableVersion = new AtomicReference<ComparableVersion>();
-    
+
     @Override
     public String toString() {
         return String.format("%s:%s:%s:%s", groupId, artifactId, packaging, version); 
+    }
+    
+    public String toStringWithGroupAndId() {
+        return String.format("%s:%s", groupId, artifactId);
     }
 
     // -- COMPARATOR

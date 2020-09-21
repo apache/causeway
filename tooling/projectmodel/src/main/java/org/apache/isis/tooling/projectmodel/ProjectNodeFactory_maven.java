@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.projectmodel;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ import javax.annotation.Nullable;
 import org.apache.maven.model.Model;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.tooling.projectmodel.Dependency.Location;
 import org.apache.isis.tooling.projectmodel.maven.MavenModelFactory;
 import org.apache.isis.tooling.projectmodel.maven.SimpleModelResolver;
 
@@ -41,10 +43,26 @@ class ProjectNodeFactory_maven {
         val modelResolver = new SimpleModelResolver(projRootFolder);
         val rootModel = modelResolver.getRootModel();
         val interpolate = false; //XXX interpolation is experimental
-        return visitMavenProject(null, rootModel, modelResolver, interpolate);
+        val projTree = visitMavenProject(null, rootModel, modelResolver, interpolate);
+        
+        // now post process the tree structure:
+        // first pass: collect local artifacts
+        // second pass: update all local dependencies' location to LOCAL
+        val localArtifacts = new HashSet<String>();
+        projTree.depthFirst(projModel->{
+            localArtifacts.add(projModel.getArtifactCoordinates().toStringWithGroupAndId());
+        });
+        
+        projTree.depthFirst(projModel->{
+            projModel.getDependencies().stream()
+            .filter(dep->localArtifacts.contains(dep.getArtifactCoordinates().toStringWithGroupAndId()))
+            .forEach(localDep->localDep.setLocation(Location.LOCAL));
+        });
+        
+        return projTree;
     }
 
- // -- HELPER MAVEN
+    // -- HELPER
 
     private static ProjectNode visitMavenProject(
             final @Nullable ProjectNode parent, 
@@ -95,6 +113,7 @@ class ProjectNodeFactory_maven {
         
         return Dependency.builder()
                 .artifactCoordinates(artifactCoordinates)
+                .location(Location.EXTERNAL) // just priming here to be overwritten in post-processing if required
                 .shortName(ArtifactShortNameFactory.toShortName(artifactCoordinates))
                 .build();
     }
@@ -119,5 +138,8 @@ class ProjectNodeFactory_maven {
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
     }
+    
+    
+
     
 }

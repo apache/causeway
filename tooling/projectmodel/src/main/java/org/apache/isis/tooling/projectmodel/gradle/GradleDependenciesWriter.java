@@ -23,7 +23,6 @@ import java.io.Writer;
 
 import org.apache.isis.commons.internal.base._Strings;
 
-import lombok.SneakyThrows;
 import lombok.val;
 
 public class GradleDependenciesWriter extends WriterAbstract {
