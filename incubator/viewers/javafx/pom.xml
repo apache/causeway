@@ -32,7 +32,7 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.incubator.viewer.javafx</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/javafx</git-plugin.propertiesDir>
-		<javafx.version>11.0.2</javafx.version>
+		<javafx.version>15</javafx.version>
 	</properties>
 
 	<packaging>pom</packaging>
