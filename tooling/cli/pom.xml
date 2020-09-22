@@ -33,28 +33,7 @@
 	<build>
 		<plugins>
 
-			<!-- Enabling the Annotation Processor see https://picocli.info/ 
-				They also have a guide for Eclipse and IntelliJ on how to derive 
-				Annotation Processing settings in your IDE from this Maven pom. 			
-			-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<!-- annotationProcessorPaths requires maven-compiler-plugin version 
-					3.5 or higher -->
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>info.picocli</groupId>
-							<artifactId>picocli-codegen</artifactId>
-							<version>${picocli.version}</version>
-						</path>
-					</annotationProcessorPaths>
-					<compilerArgs>
-						<arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
+
 			
 			
 		</plugins>
