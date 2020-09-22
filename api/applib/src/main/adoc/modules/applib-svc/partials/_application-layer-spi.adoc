@@ -21,7 +21,7 @@ Domain service SPIs influence how the framework handles application layer concer
 
 
 
-|xref:refguide:applib-svc:CommandService.adoc[CommandService]
+|xref:refguide:applib-svc:CommandServiceInternal.adoc[CommandService]
 |Service to act as a factory and repository (create and save) of command instances, ie representations of an action invocation.
 Used for command/auditing and background services.
 |

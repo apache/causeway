@@ -21,7 +21,6 @@ package org.apache.isis.applib.services.command.spi;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +47,8 @@ public interface CommandServiceListener {
     void onComplete(final Command command);           // <.>
 
     /**
-     * At least one implementation is required to satisfy injection point into
-     * {@link org.apache.isis.applib.services.command.CommandService}.
+     * At least one implementation is required to satisfy injection point
+     * internal to the framework.
      */
     @Service
     @Named("isisApplib.CommandServiceListenerNull")

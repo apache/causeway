@@ -40,7 +40,6 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
-import javax.annotation.RegEx;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.Constraint;
@@ -60,7 +59,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.audit.AuditerService;
-import org.apache.isis.applib.services.command.CommandService;
+import org.apache.isis.applib.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.PublishedObjects;
@@ -649,9 +648,10 @@ public class IsisConfiguration {
             public static class Action {
 
                 /**
-                 * The default for whether action invocations should be reified as a
-                 * {@link org.apache.isis.applib.services.command.Command} using the
-                 * {@link CommandService},
+                 * The default for whether action invocations should be reified
+                 * as a {@link org.apache.isis.applib.services.command.Command},
+                 * to be sent to any registered
+                 * {@link org.apache.isis.applib.services.command.spi.CommandServiceListener}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
@@ -830,10 +830,11 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether property edits should be reified as a
-                 * {@link org.apache.isis.applib.services.command.Command} using the
-                 * {@link CommandService},
-                 * for example for auditing, or to be replayed against a
-                 * secondary system, for regression testing.
+                 * as a {@link org.apache.isis.applib.services.command.Command},
+                 * to be sent to any registered
+                 * {@link org.apache.isis.applib.services.command.spi.CommandServiceListener}s,
+                 * either for auditing or for replayed against a secondary
+                 * system, eg for regression testing.
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using

@@ -58,6 +58,6 @@ When ``Interaction``s are persisted (eg by way of the xref:mappings:outbox-publi
 traceability.
 The xref:security:audit-trail:about.adoc[Auditer] module provides an implementation of the `AuditerService`.
 
-For xref:refguide:applib-svc:CommandService.adoc[`CommandService`] can be also be used to capture actions, for example using the xref:extensions:command-log:about.adoc[Command Log] extension.
+For xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] can be also be used to capture actions, for example using the xref:extensions:command-log:about.adoc[Command Log] extension.
 ====
 

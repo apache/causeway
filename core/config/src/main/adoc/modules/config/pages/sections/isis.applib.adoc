@@ -44,7 +44,7 @@ isis.applib.annotation.action. +
 command
 
 | 
-| The default for whether action invocations should be reified as a ``Command`` using the ``CommandService``, either for auditing or for replayed against a secondary system, eg for regression testing.
+| The default for whether action invocations should be reified as a ``Command`` using the ``CommandServiceListener``, either for auditing or for replayed against a secondary system, eg for regression testing.
 
 This setting can be overridden on a case-by-case basis using ``Action#command()``.
 
@@ -415,7 +415,7 @@ isis.applib.annotation.property. +
 command
 
 | 
-| The default for whether property edits should be reified as a ``Command`` using the ``CommandService``, for example for auditing, or to be replayed against a secondary system, for regression testing.
+| The default for whether property edits should be reified as a ``Command`` using the ``CommandServiceListener``, for example for auditing, or to be replayed against a secondary system, for regression testing.
 
 This setting can be overridden on a case-by-case basis using ``Property#command()``.
 

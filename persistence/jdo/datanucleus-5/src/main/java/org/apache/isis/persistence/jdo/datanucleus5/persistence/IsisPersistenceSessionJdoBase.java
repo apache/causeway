@@ -26,7 +26,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.CommandService;
+import org.apache.isis.applib.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -63,7 +63,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     @Getter protected final MetaModelContext metaModelContext;
     protected final ServiceInjector serviceInjector;
     protected final ServiceRegistry serviceRegistry;
-    protected final CommandService commandService;
+    protected final CommandServiceInternal commandServiceInternal;
     protected final FactoryService factoryService;
     protected final ClockService clockService;
     protected final UserService userService;
@@ -115,8 +115,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.configuration = metaModelContext.getConfiguration();
         this.specificationLoader = metaModelContext.getSpecificationLoader();
 
-        
-        this.commandService = lookupService(CommandService.class);
+        this.commandServiceInternal = lookupService(CommandServiceInternal.class);
         this.factoryService = lookupService(FactoryService.class);
         this.clockService = lookupService(ClockService.class);
         this.userService = lookupService(UserService.class);

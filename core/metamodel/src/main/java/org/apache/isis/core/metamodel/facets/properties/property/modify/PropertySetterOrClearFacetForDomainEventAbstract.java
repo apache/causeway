@@ -26,17 +26,17 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandService;
+import org.apache.isis.applib.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
@@ -260,6 +260,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         if( command==null ) {
             return head.getTarget();
         }
+        val commandFacet = getFacetHolder().getFacet(CommandFacet.class);
+        command.updater().setReified(commandFacet != null);
 
         val propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
 
@@ -319,10 +321,6 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     private InteractionContext getInteractionContext() {
         return getServiceRegistry().lookupServiceElseFail(InteractionContext.class);
-    }
-
-    private CommandService getCommandService() {
-        return getServiceRegistry().lookupServiceElseFail(CommandService.class);
     }
 
     private ClockService getClockService() {

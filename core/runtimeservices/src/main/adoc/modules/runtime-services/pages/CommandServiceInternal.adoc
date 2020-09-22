@@ -4,5 +4,5 @@
 :page-partial:
 
 
-The `CommandService` service is an internal service whose responsibility is simply to notify all known xref:CommandServiceListener.adoc[`CommandServiceListener`] when the `Command` has completed.
+The `CommandServiceInternal` service is an internal service whose responsibility is simply to notify all known xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`] when the `Command` has completed.
 

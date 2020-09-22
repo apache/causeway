@@ -28,6 +28,7 @@ The `command()` attribute can be used to explicitly enable or disable command re
 
 
 
+[#commanddtoprocessor]
 == `commandDtoProcessor()`
 
 The `commandDtoProcessor` attribute allows an implementation of `CommandDtoProcessor` to be specified.

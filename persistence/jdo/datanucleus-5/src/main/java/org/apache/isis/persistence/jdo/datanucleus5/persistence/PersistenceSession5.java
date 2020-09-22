@@ -234,7 +234,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             command.updater().setCompletedAt(completedAt);
         }
 
-        commandService.complete(command);
+        commandServiceInternal.complete(command);
 
         interaction.clear();
     }

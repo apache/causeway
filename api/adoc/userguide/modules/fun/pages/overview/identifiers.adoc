@@ -60,7 +60,7 @@ When the PDF is scanned by the mail room, the barcode could be read to attach th
 
 * as a handle to any object in an audit record, as used by xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`];
 
-* similarly within implementations of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] to persist `Command` objects
+* similarly within implementations of xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] to persist `Command` objects
 
 * similarly within implementations of xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] to persist published action invocations
 

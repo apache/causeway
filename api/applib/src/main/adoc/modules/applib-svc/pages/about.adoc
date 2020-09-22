@@ -187,7 +187,7 @@ This captures whether the command succeeded or failed.
 The xref:extensions:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:extensions:command-replay:about.adoc[Command Replay] extension.
 
 
-Implementations of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
+Implementations of xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
 
 Similarly, implementations of xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.

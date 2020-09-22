@@ -117,7 +117,6 @@ _Components_
 * org.apache.isis.applib.annotation.ViewModel
 * org.apache.isis.applib.services.audit.AuditerServiceLogging
 * org.apache.isis.applib.services.clock.ClockService
-* org.apache.isis.applib.services.command.CommandService
 * org.apache.isis.applib.services.command.spi.CommandServiceListener$Null
 * org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto
 * org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto

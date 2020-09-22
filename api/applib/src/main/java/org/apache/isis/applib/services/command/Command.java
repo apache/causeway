@@ -260,9 +260,18 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
     // end::refguide[]
 
 
+    /**
+     * Whether this command has been reified
+     */
+    // tag::refguide[]
+    @Getter
+    private boolean reified;
+    // end::refguide[]
+
     private final Updater UPDATER = new Updater();
 
     public class Updater implements CommandOutcomeHandler {
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          *
@@ -331,6 +340,19 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
         public void setSystemStateChanged(boolean systemStateChanged) {
             Command.this.systemStateChanged = systemStateChanged;
         }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         *
+         * <p>
+         * Hint that this {@link Command} has resulted in a change of state to the system.
+         * Implementations can use this to persist the command, for example.
+         * </p>
+         */
+        public void setReified(boolean reified) {
+            Command.this.reified = reified;
+        }
+
     };
 
     /**

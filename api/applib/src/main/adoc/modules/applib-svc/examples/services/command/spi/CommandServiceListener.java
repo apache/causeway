@@ -48,8 +48,8 @@ public interface CommandServiceListener {
     void onComplete(final Command command);           // <.>
 
     /**
-     * At least one implementation is required to satisfy injection point into
-     * {@link org.apache.isis.applib.services.command.CommandService}.
+     * At least one implementation is required to satisfy injection points
+     * internal to the framework.
      */
     @Service
     @Named("isisApplib.CommandServiceListenerNull")

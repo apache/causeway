@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
-import org.apache.isis.applib.services.command.CommandService;
+import org.apache.isis.applib.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.value.Blob;
@@ -101,7 +101,7 @@ public @interface Action {
      * The {@link CommandDtoProcessor} to process this command's DTO.
      *
      * <p>
-     *     Specifying a processor requires that the implementation of {@link CommandService} provides a
+     *     Specifying a processor requires that the implementation of {@link CommandServiceInternal} provides a
      *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additionally extends
      *     from {@link CommandWithDto}.
      * </p>

@@ -54,7 +54,7 @@ Here, Apache Isis would be used to provide the UI for the _read_ model, with the
 Mixins would decorate these entities, but would act upon a write model whose persistence is handled outside of Apache Isis, probably using Spring Boot directly to provide a datasource.
 To synchronise the write- and read- model, the events emitted by xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] could be used.
 
-With respect to commands, Apache Isis provides the xref:refguide:applib-svc:CommandService.adoc[`CommandService`] which allows each business action to be reified into a `Command`.
+With respect to commands, Apache Isis provides the xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] which allows each business action to be reified into a `Command`.
 However, names are misleading here: Apache Isis' commands are relatively passive, merely recording the intent of the user to invoke some operation.
 In a CQRS architecture, commands take a more active role, locating and acting upon the domain objects.
 More significantly, in CQRS each command has its own class, such as `PlaceOrderCommand`, instantiated by the client and then executed.

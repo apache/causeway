@@ -32,7 +32,7 @@ The typical way to indicate that an object should be audited is to annotate it w
 The auditing service works very well with implementations of xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] that persist the ``Interaction.Execution`` objects obtained from the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] service.
 The interaction execution captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditerService` audit entries capture the _effect_ of that interaction in terms of changed state.
 
-The xref:refguide:applib-svc:CommandService.adoc[`CommandService`] can also be combined with the auditer service, however
+The xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] can also be combined with the auditer service, however
 ``Command``s are primarily concerned with capture the _intent_ of an action, not the actual action invocation itself.
 
 

@@ -34,7 +34,7 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandService;
+import org.apache.isis.applib.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -160,6 +161,8 @@ implements ImperativeFacet {
         val interactionContext = getInteractionContext();
         val interaction = interactionContext.getInteraction();
         val command = interaction.getCommand();
+        val commandFacet = getFacetHolder().getFacet(CommandFacet.class);
+        command.updater().setReified(commandFacet != null);
 
         val actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
 
@@ -360,10 +363,6 @@ implements ImperativeFacet {
 
     private QueryResultsCache getQueryResultsCache() {
         return serviceRegistry.lookupServiceElseFail(QueryResultsCache.class);
-    }
-
-    private CommandService getCommandService() {
-        return serviceRegistry.lookupServiceElseFail(CommandService.class);
     }
 
     private ClockService getClockService() {

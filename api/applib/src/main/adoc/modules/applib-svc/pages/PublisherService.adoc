@@ -126,8 +126,8 @@ To support these use cases several other services are involved:
 * the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
 
 
-The services provided by this module combine very well with the xref:refguide:applib-svc:CommandService.adoc[`CommandService`] and with xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`].
-The `CommandService` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `PublisherService` captures the __effect__ of that interaction in terms of events, and the `AuditerService` captures the effect of the interaction in terms of changed state.
+The services provided by this module combine very well with the xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`] and with xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`].
+The ``Command`` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `PublisherService` captures the __effect__ of that interaction in terms of events, and the `AuditerService` captures the effect of the interaction in terms of changed state.
 You may also want to configure the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], which also captures the effect of the interaction but as an event.
 All three of these services collaborate implicitly by way of the xref:applib-classes:roles-mixins-contributees/contributee.adoc#HasUniqueId[`HasUniqueId`] interface.
 
