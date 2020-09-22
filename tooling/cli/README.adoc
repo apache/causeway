@@ -1,0 +1,47 @@
+= Tooling - CLI
+
+Command Line Interface for the _Apache Isis Tooling_ ecosystem. 
+
+WARNING: This is work-in-progress. Regard the following text as an early draft.
+
+== Usage
+
+Use the included help command to see a list of available commands.
+
+[source]
+.calling for help
+----
+java -cp "pathToCLIJar;..." org.apache.isis.tooling.cli.Cli --help 
+----
+
+NOTE: TODO: list of commands
+
+Per default, the current directory is used as the target to perform sub-commands 
+in. Default options can be overruled by specifying a configuration file: 
+
+[source,yml]
+.isis-tooling.yml
+----
+# TODO options to be defined
+----
+
+== Install
+
+NOTE: TODO: How to use Maven commands to fetch the dependencies, such that
+the jar artifacts can be used from command line with little hassle
+as possible? 
+
+Use Maven and our snapshot repository for a preview:
+https://github.com/apache-isis-committers/isis-nightly#maven[]
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.tooling</groupId>
+    <artifactId>isis-tooling-cli</artifactId>
+    <version>2.0.0-???</version>
+</dependency>
+----
+
+
+ 

@@ -44,6 +44,7 @@
 		<gradle-tooling.version>6.6.1</gradle-tooling.version>
 		<lombok.version>1.18.12</lombok.version>
 		<maven-model-builder.version>3.6.3</maven-model-builder.version>
+		<picocli.version>4.5.1</picocli.version>
 		<structurizr.version>1.5.0</structurizr.version>
 
 	</properties>
@@ -120,6 +121,12 @@
 				<groupId>org.apache.maven</groupId>
 				<artifactId>maven-model-builder</artifactId>
 				<version>${maven-model-builder.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>info.picocli</groupId>
+				<artifactId>picocli</artifactId>
+				<version>${picocli.version}</version>
 			</dependency>
 
 			<dependency>
@@ -209,6 +216,9 @@
 		<module>javamodel</module>
 		<module>model4adoc</module>
 		<module>projectmodel</module>
+		
+		<!-- depends on all the others -->
+		<module>cli</module>
 	</modules>
 
 	<profiles>
