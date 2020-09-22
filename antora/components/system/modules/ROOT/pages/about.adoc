@@ -1,11 +1,6 @@
 = System Overview
-:page-role: -toc
 
-:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-partial:
-:sectanchors:
-
-These tables summarize all Maven artifacts available with Apache Isis.
+These tables summarize all Maven artifacts available with _Apache Isis_.
 
 == Base
 
@@ -81,6 +76,7 @@ _Dependencies_
 * org.springframework:spring-tx:jar:<managed>
 * org.springframework.boot:spring-boot-starter:jar:<managed>
 * org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
+* org.yaml:snakeyaml:jar:<managed>
 
 
 |===
@@ -1633,10 +1629,10 @@ _Dependencies_
 
 
 |org.apache.isis.extensions
-|isis-extensions-command-log-impl
+|isis-extensions-command-log-jdo
 |jar
 |\extensions\core\command-log\impl
-|Apache Isis Ext - Command Log Implementation
+|Apache Isis Ext - Command Log Implementation (JDO)
 |_Components_
 
 * org.apache.isis.extensions.commandlog.impl.CommandServiceListenerForJdo
@@ -1680,7 +1676,7 @@ _Dependencies_
 * org.apache.isis.core:isis-core-config:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.core:isis-schema:jar:<managed>
-* org.apache.isis.extensions:isis-extensions-command-log-impl:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed>
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-applib:jar:<managed>
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-impl:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
@@ -1710,7 +1706,7 @@ _Dependencies_
 * org.apache.isis.core:isis-core-config:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.core:isis-schema:jar:<managed>
-* org.apache.isis.extensions:isis-extensions-command-log-impl:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-quartz-impl:jar:<managed>
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-applib:jar:<managed>
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-impl:jar:<managed>
@@ -1916,7 +1912,7 @@ _Dependencies_
 * com.google.guava:guava:jar:<managed>
 * org.apache.isis.core:isis-core-config:jar:<managed>
 * org.apache.isis.core:isis-core-security:jar:<managed>
-* org.apache.isis.extensions:isis-extensions-command-log-impl:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed>
 * org.springframework.boot:spring-boot-starter-quartz:jar:<managed>
 
 
@@ -2346,7 +2342,7 @@ _Dependencies_
 
 _Dependencies_
 
-* com.google.code.findbugs:annotations:jar:2.0.1
+* com.google.code.findbugs:annotations:jar:3.0.1u2
 * org.junit.jupiter:junit-jupiter-api:jar:<managed>
 * org.junit.jupiter:junit-jupiter-engine:jar:<managed>
 * org.junit.vintage:junit-vintage-engine:jar:<managed>
@@ -2354,6 +2350,23 @@ _Dependencies_
 * org.projectlombok:lombok:jar:<managed>
 * org.slf4j:slf4j-api:jar:<managed>
 * org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
+
+
+
+|org.apache.isis.tooling
+|isis-tooling-cli
+|jar
+|\tooling\cli
+|Apache Isis Tooling - CLI (Command Line Interface)
+|Command Line Interface for the _Apache Isis Tooling_ ecosystem.
+
+_Dependencies_
+
+* info.picocli:picocli:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.tooling:isis-tooling-javamodel:jar:<managed>
+* org.apache.isis.tooling:isis-tooling-model4adoc:jar:<managed>
+* org.apache.isis.tooling:isis-tooling-projectmodel:jar:<managed>
 
 
 
@@ -2609,7 +2622,7 @@ _Dependencies_
 _Dependencies_
 
 * com.h2database:h2:jar:<managed>
-* org.apache.isis.extensions:isis-extensions-command-log-impl:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-exceldownload-ui:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-modelannotation:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed>
@@ -2983,5 +2996,4 @@ _Dependencies_
 
 
 |===
-
 
