@@ -23,12 +23,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
 
+import org.apache.isis.commons.internal.base._Strings;
+
 import lombok.NonNull;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
 public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
 
+    public static final String MANAGED_VERSION = "<managed>";     
+    
     @NonNull private final String groupId;
     @NonNull private final String artifactId;
     @NonNull private final String packaging;
@@ -44,7 +48,17 @@ public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
     public String toStringWithGroupAndId() {
         return String.format("%s:%s", groupId, artifactId);
     }
+    
+    public String toStringWithGroupAndIdAndVersion() {
+        return String.format("%s:%s:%s", groupId, artifactId, version);
+    }
 
+    public boolean isVersionResolved() {
+        return _Strings.isNotEmpty(version)
+                && !MANAGED_VERSION.equals(version)
+                && !version.startsWith("$");
+    }
+    
     // -- COMPARATOR
     
     private final static Comparator<ArtifactCoordinates> comparator = Comparator

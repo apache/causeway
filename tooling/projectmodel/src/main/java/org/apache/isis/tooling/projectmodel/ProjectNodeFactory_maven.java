@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.projectmodel;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -45,7 +46,14 @@ class ProjectNodeFactory_maven {
         val interpolate = false; //XXX interpolation is experimental
         val projTree = visitMavenProject(null, rootModel, modelResolver, interpolate);
         
-        // now post process the tree structure:
+        postProcessDependencyLocation(projTree);
+        postProcessDependencyVersion(projTree);
+        return projTree;
+    }
+
+    // -- HELPER
+
+    private static void postProcessDependencyLocation(final @Nullable ProjectNode projTree) {
         // first pass: collect local artifacts
         // second pass: update all local dependencies' location to LOCAL
         val localArtifacts = new HashSet<String>();
@@ -58,12 +66,31 @@ class ProjectNodeFactory_maven {
             .filter(dep->localArtifacts.contains(dep.getArtifactCoordinates().toStringWithGroupAndId()))
             .forEach(localDep->localDep.setLocation(Location.LOCAL));
         });
-        
-        return projTree;
     }
+    
+    private static void postProcessDependencyVersion(final @Nullable ProjectNode projTree) {
+        
+        // first pass: collect external artifacts, that provide a non-empty version
+        // second pass: update all external dependencies' versions
+        val externalVersionByArtifact = new HashMap<String, String>();
+        projTree.depthFirst(projModel->{
+            
+            projModel.getDependencies().stream()
+            .filter(dependency->dependency.getLocation().isExternal())
+            .map(Dependency::getArtifactCoordinates)
+            .filter(ArtifactCoordinates::isVersionResolved)
+            .forEach(coors->{
+                externalVersionByArtifact.put(
+                        coors.toStringWithGroupAndId(),
+                        coors.getVersion());
+            });
+            
+        });
 
-    // -- HELPER
+        System.out.println("externalVersionbyArtifact " + externalVersionByArtifact);
 
+    }
+    
     private static ProjectNode visitMavenProject(
             final @Nullable ProjectNode parent, 
             final @NonNull Model mavenProj, 
@@ -108,7 +135,7 @@ class ProjectNodeFactory_maven {
                 dependency.getGroupId(), 
                 dependency.getArtifactId(),
                 dependency.getType(),
-                Optional.ofNullable(dependency.getVersion()).orElse("<managed>") //TODO to resolve this requires interpolation
+                Optional.ofNullable(dependency.getVersion()).orElse(ArtifactCoordinates.MANAGED_VERSION) //TODO to resolve this requires interpolation
                 );
         
         return Dependency.builder()

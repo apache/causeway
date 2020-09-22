@@ -56,9 +56,11 @@ public class GradleDependenciesWriter extends WriterAbstract {
         
         gradleDependencies.getDependenciesByShortName().forEach((shortName, dependency)->{
             
-            val shortNameWithPadding = _Strings.padEnd(shortName, 32, ' ');    
+            val shortNameWithPadding = _Strings.padEnd(shortName, 64, ' ');    
         
-            writeWithFormat(writer, "        %s : \"%s\",\n", shortNameWithPadding, dependency.getArtifactCoordinates().toString());
+            writeWithFormat(writer, "        %s : \"%s\",\n", 
+                    shortNameWithPadding, 
+                    dependency.getArtifactCoordinates().toStringWithGroupAndIdAndVersion());
             
             
         });
