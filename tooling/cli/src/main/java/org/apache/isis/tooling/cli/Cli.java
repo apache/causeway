@@ -18,6 +18,109 @@
  */
 package org.apache.isis.tooling.cli;
 
-public class Cli {
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Callable;
+
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.tooling.cli.projdoc.ProjectDocModel;
+import org.apache.isis.tooling.projectmodel.ProjectNodeFactory;
+
+import lombok.val;
+
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+
+@Command(
+        name = "cli", 
+        mixinStandardHelpOptions = true, 
+        version = "0.1",
+        description = "CLI for the Apache Isis Tooling Ecosystem",
+        subcommands = {
+                Cli.ProjectDocCommand.class})
+class Cli implements Callable<Integer> {
+
+    @Option(
+            names = {"-p", "--project"}, 
+            description = "path to the (multi-module) project root (default: current dir)")
+    private String projectRootPath;
+
+    private _Lazy<CliConfig> configRef = _Lazy.threadSafe(()->CliConfig
+            .read(projectRootPath!=null
+                    ? new File(projectRootPath, "isis-tooling.yml")
+                    : new File("isis-tooling.yml")));
+
+    public CliConfig getConfig() {
+        return configRef.get();
+    }
+    
+    public  File getProjectRoot() {
+        return projectRootPath!=null
+                ? new File(projectRootPath)
+                : new File(".");
+    }
+
+    @Override
+    public Integer call() throws Exception { 
+        // not used
+        return 0;
+    }
+
+    // -- SUB COMMANDS
+
+    @Command(
+            name = "projdoc",
+            description = "Writes a System Overview document (AsciiDoc) to given output.")
+    static class ProjectDocCommand extends CliCommandAbstract {
+
+        @Option(
+                names = {"-o", "--output"}, 
+                description = "path to the output file (default: NONE = write to std.out)")
+        private String outputFilePath;
+
+        @Override
+        public Integer call() throws Exception {
+            
+            val projTree = ProjectNodeFactory.maven(getProjectRoot());
+            val projectDocModel = new ProjectDocModel(projTree);
+            val adoc = projectDocModel.toAsciiDoc(getConfig().getProjectDoc());
+            
+            if(outputFilePath!=null) {
+                try(val fos = new FileOutputStream(new File(outputFilePath))){
+                    fos.write(_Strings.toBytes(adoc, StandardCharsets.UTF_8));
+                }
+            } else {
+                System.out.println(adoc);
+            }
+            
+            return 0;
+        }
+    }
+    
+    //TODO mvn2gradle
+    //description = "Detects differences between Maven and Gradle (multi-module) projects.",
+    
+
+    //    @Command
+    //    int shout() {
+    //        System.out.println("HI! " + getConfig());
+    //        return 0;
+    //    }
+
+    // -- ENTRY POINT
+
+    public static void main(String... args) {
+        val cli = new Cli();
+        _Context.putSingleton(Cli.class, cli);
+        int exitCode = new CommandLine(cli).execute(args);
+        System.exit(exitCode);
+    }
+
+    // -- HELPER
+
 
 }

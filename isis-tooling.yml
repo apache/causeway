@@ -1,0 +1,30 @@
+projectDoc:
+  description: "These tables summarize all Maven artifacts available with _Apache Isis_."
+  artifactGroups:
+    Base: org.apache.isis
+    Commons: org.apache.isis.commons.*
+    Core: org.apache.isis.core.*
+    App: org.apache.isis.app.*
+    
+    Mavendeps: org.apache.isis.mavendeps.*
+    Mappings: org.apache.isis.mappings.*
+    
+    Persistence: org.apache.isis.persistence.*
+    Security: org.apache.isis.security.*
+    
+    Valuetypes: org.apache.isis.valuetypes.*
+    Viewer: org.apache.isis.viewer.*
+
+    Testing: org.apache.isis.testing.*
+    Regression Tests: org.apache.isis.regressiontests.*
+    
+    Extensions: org.apache.isis.extensions.*
+    Subdomains: org.apache.isis.subdomains.*
+    
+    Tooling: org.apache.isis.tooling.*
+    
+    Examples: org.apache.isis.examples.*
+    
+    Incubator: org.apache.isis.incubator.*
+    Legacy: org.apache.isis.legacy.*
+     
