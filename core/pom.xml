@@ -163,7 +163,7 @@
 
 		<reflections.version>0.9.11</reflections.version>
 
-		<select2.version>4.0.10</select2.version>
+		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.6.0</shiro.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
