@@ -19,9 +19,11 @@
 #
 isis:
 
+
   applib:
     annotation:
       action:
+        command: ignore_safe
         explicit: true
         publishing: none
       action-layout:
@@ -41,6 +43,7 @@ isis:
         editing: false
         publishing: none
       property:
+        command: all
         publishing: none
       property-layout:
         label-position: LEFT

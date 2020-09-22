@@ -27,13 +27,15 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ErrorMenu")
 @DomainObjectLayout(named="Error Handling")
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class ErrorMenu {
 
-    @Inject private FactoryService factoryService;
+    final FactoryService factoryService;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")

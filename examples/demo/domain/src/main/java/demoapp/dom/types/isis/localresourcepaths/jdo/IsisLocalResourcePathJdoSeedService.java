@@ -30,10 +30,7 @@ public class IsisLocalResourcePathJdoSeedService extends SeedServiceAbstract {
                     });
         }
 
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<LocalResourcePath> samples;
+        @Inject RepositoryService repositoryService;
+        @Inject Samples<LocalResourcePath> samples;
     }
 }

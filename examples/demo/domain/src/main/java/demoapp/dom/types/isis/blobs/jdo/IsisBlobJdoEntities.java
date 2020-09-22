@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class IsisBlobJdoEntities {
+
+    final RepositoryService repositoryService;
 
     public Optional<IsisBlobJdo> find(final Blob readOnlyProperty) {
         return repositoryService.firstMatch(IsisBlobJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
@@ -21,7 +26,5 @@ public class IsisBlobJdoEntities {
         return repositoryService.allInstances(IsisBlobJdo.class);
     }
 
-    @Inject
-    RepositoryService repositoryService;
 
 }

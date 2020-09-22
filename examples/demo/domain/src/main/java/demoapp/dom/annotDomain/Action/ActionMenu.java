@@ -18,9 +18,6 @@
  */
 package demoapp.dom.annotDomain.Action;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -29,6 +26,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -43,12 +41,15 @@ import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdo;
 import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdoEntities;
 import demoapp.dom.annotDomain.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.annotDomain.Action.typeOf.child.ActionTypeOfChildVm;
-import demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdo;
-import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
 @Log4j2
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
+
+    final ActionCommandJdoEntities actionCommandJdoEntities;
+    final ActionPublishingJdoEntities actionPublishingJdoEntities;
+    final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ring", describedAs = "Semantic relationship between actions and other properties or collections")
@@ -106,13 +107,5 @@ public class ActionMenu {
         return typeOfVm;
     }
 
-    @Inject
-    ActionPublishingJdoEntities actionPublishingJdoEntities;
-
-    @Inject
-    ActionCommandJdoEntities actionCommandJdoEntities;
-
-    @Inject
-    NameSamples samples;
 
 }

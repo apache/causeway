@@ -30,12 +30,16 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 //tag::sessionTree[]
 @Service
 @Named("demo.FileTreeNodeService")
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class FileTreeNodeService {
+
+    final Provider<HttpSession> httpSessionProvider;
 
     public TreeNode<FileNodeVm> sessionTree() {
         TreeNode<FileNodeVm> tree = (TreeNode<FileNodeVm>) httpSessionProvider.get().getAttribute(TreeNode.class.getName());
@@ -60,10 +64,6 @@ public class FileTreeNodeService {
 
 
 //tag::sessionTree[]
-
     // ...
-
-    @Inject
-    private Provider<HttpSession> httpSessionProvider;
 }
 //end::sessionTree[]

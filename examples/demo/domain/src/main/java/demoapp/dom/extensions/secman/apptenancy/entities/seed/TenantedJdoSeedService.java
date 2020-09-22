@@ -30,12 +30,8 @@ public class TenantedJdoSeedService extends SeedServiceAbstract {
                     });
         }
 
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        NameSamples secManNameSamples;
+        @Inject RepositoryService repositoryService;
+        @Inject NameSamples secManNameSamples;
     }
-
 
 }

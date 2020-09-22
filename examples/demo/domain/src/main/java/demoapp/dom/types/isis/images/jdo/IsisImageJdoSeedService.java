@@ -30,10 +30,7 @@ public class IsisImageJdoSeedService extends SeedServiceAbstract {
                     });
         }
 
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<Image> samples;
+        @Inject RepositoryService repositoryService;
+        @Inject Samples<Image> samples;
     }
 }

@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.LocalResourcePath;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class IsisLocalResourcePathJdoEntities {
+
+    final RepositoryService repositoryService;
 
     public Optional<IsisLocalResourcePathJdo> find(final LocalResourcePath readOnlyProperty) {
         return repositoryService.firstMatch(IsisLocalResourcePathJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
@@ -21,7 +26,5 @@ public class IsisLocalResourcePathJdoEntities {
         return repositoryService.allInstances(IsisLocalResourcePathJdo.class);
     }
 
-    @Inject
-    RepositoryService repositoryService;
 
 }

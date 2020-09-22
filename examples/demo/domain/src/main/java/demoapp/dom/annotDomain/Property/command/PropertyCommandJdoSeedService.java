@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.Property.publishing;
+package demoapp.dom.annotDomain.Property.command;
 
 import javax.inject.Inject;
 
@@ -7,15 +7,13 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class PropertyPublishingJdoSeedService extends SeedServiceAbstract {
+public class PropertyCommandJdoSeedService extends SeedServiceAbstract {
 
-    public PropertyPublishingJdoSeedService() {
+    public PropertyCommandJdoSeedService() {
         super(PropertyPublishingJdoEntityFixture::new);
     }
 
@@ -24,7 +22,7 @@ public class PropertyPublishingJdoSeedService extends SeedServiceAbstract {
         @Override
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
-                    .map(PropertyPublishingJdo::new)
+                    .map(PropertyCommandJdo::new)
                     .forEach(domainObject -> {
                         repositoryService.persist(domainObject);
                         executionContext.addResult(this, domainObject);
@@ -32,7 +30,10 @@ public class PropertyPublishingJdoSeedService extends SeedServiceAbstract {
 
         }
 
-        @Inject RepositoryService repositoryService;
-        @Inject Samples<String> samples;
+        @Inject
+        RepositoryService repositoryService;
+
+        @Inject
+        Samples<String> samples;
     }
 }

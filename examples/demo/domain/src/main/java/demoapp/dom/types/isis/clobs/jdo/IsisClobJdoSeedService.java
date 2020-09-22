@@ -30,10 +30,7 @@ public class IsisClobJdoSeedService extends SeedServiceAbstract {
                     });
         }
 
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<Clob> samples;
+        @Inject RepositoryService repositoryService;
+        @Inject Samples<Clob> samples;
     }
 }

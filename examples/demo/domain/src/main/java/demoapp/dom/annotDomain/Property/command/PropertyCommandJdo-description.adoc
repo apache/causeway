@@ -1,15 +1,14 @@
-The `command` semantic is used to allow or suppress the reification of an action invocation into a `Command`.
+The `command` semantic is used to allow or suppress the reification of an property edit into a `Command`.
 
 When allowed (the default), then the `Command` is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandServiceListener.html#section-top[`CommandServiceListener`] SPI, _after_ the interaction has completed.
 One use case is to replicate and replay commands to a secondary system, for example for regression testing.
 For more on this, see the "Command Replay" section below.
 
-Commands are also used under the covers to allow actions invocations to be made asynchronously using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[`WrapperFactory`].
-This can be useful for long-running actions.
+Commands are also used under the covers to allow property edits to be made asynchronously using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[`WrapperFactory`].
 
 [NOTE]
 ====
-The list of persisted ``Command``s can be viewed in a collection on the left bottom of this page.
+The list of persisted ``Command``s can be viewed in a collection at the left bottom of the page.
 ``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
 
 If running in prototype mode, the list of persisted ``Command``s can also be truncated from the activity menu.
@@ -17,41 +16,21 @@ If running in prototype mode, the list of persisted ``Command``s can also be tru
 
 == Annotated
 
-The `command` semantic can be specified explicitly using an annotation through `@Action#command()`:
+The `command` semantic can be specified explicitly using an annotation through `@Property#command()`:
 
-* it can be applied to an action:
-+
 [source,java,indent=0]
 ----
-include::ActionCommandJdo.java[tags=annotation]
+include::PropertyCommandJdo.java[tags=annotation]
 ----
 <.> explicitly specifies that invoking the action should be reified .
 
-* or to a mixin:
-+
-[source,java,indent=0]
-----
-include::ActionCommandJdo_mixinUpdateProperty.java[tags=class]
-----
-<.> explicitly specifies that invoking the mixin action should be reified.
-
 The command reification can also be disabled:
 
-* for an action:
-+
 [source,java,indent=0]
 ----
-include::ActionCommandJdo.java[tags=annotation-2]
+include::PropertyCommandJdo.java[tags=annotation-2]
 ----
 <.> explicitly specifies that invoking the action should not be reified.
-
-* or to a mixin:
-+
-[source,java,indent=0]
-----
-include::ActionCommandJdo_mixinUpdatePropertyCommandDisabled.java[tags=class]
-----
-<.> explicitly specifies that invoking the mixin action should not be reified.
 
 
 == Meta-annotated
@@ -62,24 +41,16 @@ The `command` semantic can also be specified using a custom meta-annotation:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandEnabledMetaAnnotation.java[tags=class]
+include::PropertyCommandEnabledMetaAnnotation.java[tags=class]
 ----
-<.> annotated for an action
-<.> annotation can be applied to an action method or to a mixin
+<.> annotated for a property
+<.> annotation can be applied to a property field or getter method
 
-* and can be applied to an action:
+* and can be applied to a property:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo.java[tags=meta-annotation]
-----
-<.> semantic is inherited from the meta-annotation
-
-* or to a mixin:
-+
-[source,java,indent=0]
-----
-include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+include::PropertyCommandJdo.java[tags=meta-annotation]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -88,29 +59,19 @@ include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
 
 The meta-annotation can itself be overridden:
 
-* for an action:
-+
 [source,java,indent=0]
 ----
-include::ActionCommandJdo.java[tags=meta-annotation-overridden]
+include::PropertyCommandJdo.java[tags=meta-annotation-overridden]
 ----
 <.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Action` annotation
+<.> \... is overridden by the `@Property` annotation
 
-* or on a mixin:
-+
-[source,java,indent=0]
-----
-include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
-----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Action` annotation
 
 
 == CommandServiceListener
 
 The demo includes the link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Command Log] extension, so every command is persisted.
-These can be viewed in the collection at the left bottom of the page.
+These can be viewed in the collection at the bottom of the left page.
 ``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
 
 
@@ -125,7 +86,7 @@ This can be configured globally:
 isis:
   applib:
     annotation:
-      action:
+      property:
         command: none   # or 'all', or 'ignore_safe'
 ----
 

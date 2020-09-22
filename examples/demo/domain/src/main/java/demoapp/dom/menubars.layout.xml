@@ -122,6 +122,7 @@ as a replacement for
             </mb3:section>
             <mb3:section>
                 <mb3:named>@Property</mb3:named>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="command"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="domainEvent"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="editing"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>

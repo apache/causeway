@@ -6,19 +6,38 @@
 
 This section tackles the topic of enabling access to an Apache Isis application directly, or at least, not through either the xref:vw:ROOT:about.adoc[Wicket] or xref:vro:ROOT:about.adoc[Restful] viewers.
 
-There are several main use-cases:
-
-* enabling background execution, eg of a thread managed by Quartz scheduler and running within the webapp
+There are a number of use-cases:
 
 * integration from other systems, eg for a subscriber on a pub/sub mechanism such as Camel, pushing changes through an Apache Isis domain model.
 
 * leveraging an Apache Isis application within a batch process
 
-Note that the calling thread runs in the same process space as the Apache Isis domain object model (must be physically linked to the JAR files containing the domain classes).  For use cases where the calling thread runs in some other process space (eg migrating data from a legacy system), then the xref:vro:ROOT:about.adoc[Restful Objects viewer] is usually the way to go.
+Note that the calling thread runs in the same process space as the Apache Isis domain object model (must be physically linked to the JAR files containing the domain classes).
+For use cases where the calling thread runs in some other process space (eg migrating data from a legacy system), then the xref:vro:ROOT:about.adoc[Restful Objects viewer] is usually the way to go.
 
-The API described in this chapter is reasonably low-level, allowing code to interact very directly with the Apache Isis metamodel and runtime.  Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Isis annotations or hide/disable/validate methods.  However the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] service could be used to enforce such business rules if required.
+The key to headless access is the `IsisInteractionFactory` service, a singleton managed by Spring.
+Use it as follows:
 
+[source,java]
+----
+@Service
+@lombok.RequiredArgsConstructor(onConstructor_ = { @Inject })
+private static class HeadlessAccess {
 
+    final IsisInteractionFactory isisInteractionFactory;
+    final TransactionService transactionService;
 
-include::headless-access/AbstractIsisSessionTemplate.adoc[leveloffset=+1]
-//include::headless-access/BackgroundCommandExecution.adoc[leveloffset=+1]
+    @Override
+    public R call(AuthenticationSession session, Supplier<R> supplier) {
+        return isisInteractionFactory.callAuthenticated(session, () -> {
+            return transactionService.executeWithinTransaction(() -> {
+                    return supplier.get();
+                });
+        });
+    }
+}
+----
+
+The API described here is reasonably low-level, allowing code to interact very directly with the Apache Isis metamodel and runtime.
+Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Isis annotations or hide/disable/validate methods.
+

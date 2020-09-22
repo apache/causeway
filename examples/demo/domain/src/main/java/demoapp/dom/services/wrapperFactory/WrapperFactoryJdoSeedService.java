@@ -30,10 +30,7 @@ public class WrapperFactoryJdoSeedService extends SeedServiceAbstract {
 
         }
 
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<String> samples;
+        @Inject RepositoryService repositoryService;
+        @Inject Samples<String> samples;
     }
 }

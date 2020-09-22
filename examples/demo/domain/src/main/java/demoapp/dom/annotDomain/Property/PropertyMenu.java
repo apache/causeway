@@ -30,9 +30,12 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import demoapp.dom.annotDomain.Property.command.PropertyCommandJdo;
+import demoapp.dom.annotDomain.Property.command.PropertyCommandJdoEntities;
 import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 import demoapp.dom.annotDomain.Property.editing.PropertyEditingVm;
 import demoapp.dom.annotDomain.Property.fileAccept.PropertyFileAcceptVm;
@@ -48,7 +51,20 @@ import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
 @Log4j2
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
+
+    final PropertyCommandJdoEntities propertyCommandJdoEntities;
+    final PropertyPublishingJdoEntities propertyPublishingJdoEntities;
+    final Samples<Blob> blobSamples;
+    final Samples<Clob> clobSamples;
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
+    public PropertyCommandJdo command(){
+        return propertyCommandJdoEntities.first();
+    }
+
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of properties")
@@ -158,11 +174,5 @@ public class PropertyMenu {
                 .ifPresent(clobConsumer);
     }
 
-    @Inject
-    Samples<Blob> blobSamples;
-    @Inject
-    Samples<Clob> clobSamples;
-    @Inject
-    PropertyPublishingJdoEntities propertyPublishingJdoEntities;
 
 }

@@ -7,10 +7,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@Action(publishing = Publishing.ENABLED)        // <.>
+@Action(command = CommandReification.ENABLED)   // <.>
 @Inherited
 @Target({
         ElementType.TYPE, ElementType.METHOD    // <.>

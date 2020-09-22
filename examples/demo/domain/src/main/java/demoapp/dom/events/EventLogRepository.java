@@ -27,18 +27,21 @@ import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
+import lombok.RequiredArgsConstructor;
+
 @Repository
 @Named("demoapp.eventLogRepository")
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class EventLogRepository {
 
-    @Inject private RepositoryService repository;
+    final RepositoryService repositoryService;
 
     public List<EventLogEntry> listAll(){
-        return repository.allInstances(EventLogEntry.class);
+        return repositoryService.allInstances(EventLogEntry.class);
     }
 
     public void add(EventLogEntry entry) {
-        repository.persist(entry);
+        repositoryService.persist(entry);
     }
 
 }

@@ -1,4 +1,4 @@
-package demoapp.dom.annotDomain.Action.command;
+package demoapp.dom.annotDomain.Property.command;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -8,15 +8,16 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.Property;
 
 //tag::class[]
-@Action(command = CommandReification.DISABLED)  // <.>
+@Property(command = CommandReification.DISABLED)    // <.>
 @Inherited
 @Target({
-        ElementType.TYPE, ElementType.METHOD    // <.>
+        ElementType.FIELD, ElementType.METHOD       // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ActionCommandDisabledMetaAnnotation {
+public @interface PropertyCommandDisabledMetaAnnotation {
 
 }
 //end::class[]

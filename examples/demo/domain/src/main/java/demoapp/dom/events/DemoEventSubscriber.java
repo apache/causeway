@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -43,10 +44,11 @@ import static demoapp.dom._infra.utils.LogUtils.emphasize;
 @Named("demoapp.eventSubscriber")
 @Qualifier("demo")
 @Log4j2
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class DemoEventSubscriber {
 
-    @Inject private WrapperFactory wrapper;
-    @Inject private FactoryService factoryService;
+    final WrapperFactory wrapper;
+    final FactoryService factoryService;
     
     @EventListener(UiButtonEvent.class) // <-- listen on the event, triggered by button in the UI 
     public void on(UiButtonEvent event) {

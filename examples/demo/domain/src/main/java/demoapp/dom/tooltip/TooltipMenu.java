@@ -28,14 +28,16 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import demoapp.dom.actions.assoc.DemoItem;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.TooltipMenu")
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class TooltipMenu {
 
-    @Inject private FactoryService factoryService;
+    final FactoryService factoryService;
 
     @Action
     @ActionLayout(

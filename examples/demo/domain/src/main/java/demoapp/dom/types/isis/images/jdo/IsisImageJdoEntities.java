@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Image;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class IsisImageJdoEntities {
+
+    final RepositoryService repositoryService;
 
     public Optional<IsisImageJdo> find(final Image readOnlyProperty) {
         return repositoryService.firstMatch(IsisImageJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
@@ -20,8 +25,5 @@ public class IsisImageJdoEntities {
     public List<IsisImageJdo> all() {
         return repositoryService.allInstances(IsisImageJdo.class);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

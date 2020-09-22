@@ -25,12 +25,14 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.value.Blob;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.CollectionMenu")
 @Log4j2
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class CollectionMenu {
 
 

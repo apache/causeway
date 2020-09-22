@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.value.Blob;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -46,7 +47,11 @@ import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyLayoutMenu")
 @Log4j2
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class PropertyLayoutMenu {
+
+    final ClockService clockService;
+    final Samples<Blob> samples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-file-code", describedAs = "HTML styling")
@@ -148,10 +153,5 @@ public class PropertyLayoutMenu {
         return vm;
     }
 
-    @Inject
-    ClockService clockService;
-
-    @Inject
-    Samples<Blob> samples;
 
 }

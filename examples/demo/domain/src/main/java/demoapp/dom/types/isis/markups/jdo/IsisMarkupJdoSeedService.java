@@ -30,10 +30,8 @@ public class IsisMarkupJdoSeedService extends SeedServiceAbstract {
                     });
         }
 
-        @Inject
-        RepositoryService repositoryService;
+        @Inject RepositoryService repositoryService;
+        @Inject Samples<Markup> samples;
 
-        @Inject
-        Samples<Markup> samples;
     }
 }
