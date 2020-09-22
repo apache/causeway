@@ -19,12 +19,12 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-command-log-impl</artifactId>
-    <name>Apache Isis Ext - Command Log Implementation</name>
+    <artifactId>isis-extensions-command-log-jdo</artifactId>
+    <name>Apache Isis Ext - Command Log Implementation (JDO)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.commandlog.impl</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/commandlog/impl</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.commandlog.jdo</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/commandlog/jdo</git-plugin.propertiesDir>
     </properties>
 
     <build>

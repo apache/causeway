@@ -49,7 +49,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-command-log-impl</artifactId>
+			<artifactId>isis-extensions-command-log-jdo</artifactId>
 		</dependency>
 
 		<!--
