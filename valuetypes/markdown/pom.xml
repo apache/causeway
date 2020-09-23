@@ -29,7 +29,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<flexmark.version>0.34.32</flexmark.version>
+		<flexmark.version>0.62.2</flexmark.version>
 	</properties>
 
 	<modules>
