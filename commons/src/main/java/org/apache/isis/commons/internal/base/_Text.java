@@ -249,7 +249,7 @@ public final class _Text {
             _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
         });
         
-        _Assert.assertEquals(na.size(), nb.size());
+        _Assert.assertEquals(na.size(), nb.size(), ()->String.format("normalized texts differ in number of lines"));
     }
     
     // -- HELPER
