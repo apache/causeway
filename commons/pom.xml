@@ -26,7 +26,7 @@
 
 	<name>Apache Isis Commons</name>
 	<description>
-        Isis library, defining utilities (potentially) required by the entire Apache Isis ecosystem.
+		Apache Isis Commons is a library with utilities, that are shared with the entire Apache Isis ecosystem.
     </description>
 
 	<properties>
