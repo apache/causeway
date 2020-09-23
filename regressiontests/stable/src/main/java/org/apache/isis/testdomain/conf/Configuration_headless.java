@@ -39,8 +39,7 @@ import org.springframework.transaction.TransactionStatus;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
-
-import org.apache.isis.applib.services.command.CommandService;
+import org.apache.isis.applib.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
@@ -111,7 +110,7 @@ public class Configuration_headless {
     public static class HeadlessCommandSupport {
 
         private final Provider<InteractionContext> interactionContextProvider;
-        private final CommandService commandService;
+        private final CommandServiceInternal commandService;
 
 
         @EventListener(IsisInteractionLifecycleEvent.class)
