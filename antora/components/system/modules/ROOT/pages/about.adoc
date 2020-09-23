@@ -4,6 +4,49 @@ These tables summarize all Maven artifacts available with _Apache Isis_.
 
 == Base
 
+[plantuml,Base,svg]
+----
+@startuml(id=Base)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
+  rectangle "==Apache Isis (Aggregator)\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Antora\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+}
+@enduml
+----
+
 .Projects/Modules (Base)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -51,6 +94,31 @@ These tables summarize all Maven artifacts available with _Apache Isis_.
 
 == Commons
 
+[plantuml,Commons,svg]
+----
+@startuml(id=Commons)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Commons\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
+}
+@enduml
+----
+
 .Projects/Modules (Commons)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -61,7 +129,7 @@ These tables summarize all Maven artifacts available with _Apache Isis_.
 |jar
 |\commons
 |Apache Isis Commons
-|Isis library, defining utilities (potentially) required by the entire Apache Isis ecosystem.
+|Apache Isis Commons is a library with utilities, that are shared with the entire Apache Isis ecosystem.
 
 _Dependencies_
 
@@ -70,6 +138,7 @@ _Dependencies_
 * javax:javaee-api:jar:<managed>
 * org.junit.jupiter:junit-jupiter-api:jar:<managed>
 * org.junit.jupiter:junit-jupiter-engine:jar:<managed>
+* org.junit.jupiter:junit-jupiter-params:jar:<managed>
 * org.junit.vintage:junit-vintage-engine:jar:<managed>
 * org.slf4j:slf4j-api:jar:<managed>
 * org.springframework:spring-context:jar:<managed>
@@ -82,6 +151,91 @@ _Dependencies_
 |===
 
 == Core
+
+[plantuml,Core,svg]
+----
+@startuml(id=Core)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<11>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<10>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Core\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Core - AppLib\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+  rectangle "==Apache Isis Core - Code Gen (ByteBuddy)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Core - Configuration\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Core - MetaModel\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+  rectangle "==Apache Isis Core - Runtime\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis Core - Runtime Services\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Isis Core - Schemas\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis Core - Security\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis Core - Unit Test Support\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Core - WebApp\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
+}
+@enduml
+----
 
 .Projects/Modules (Core)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
@@ -117,6 +271,7 @@ _Components_
 * org.apache.isis.applib.annotation.ViewModel
 * org.apache.isis.applib.services.audit.AuditerServiceLogging
 * org.apache.isis.applib.services.clock.ClockService
+* org.apache.isis.applib.services.command.CommandService
 * org.apache.isis.applib.services.command.spi.CommandServiceListener$Null
 * org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto
 * org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto
@@ -394,6 +549,31 @@ _Dependencies_
 
 == App
 
+[plantuml,App,svg]
+----
+@startuml(id=App)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Starter Parent\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+}
+@enduml
+----
+
 .Projects/Modules (App)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -411,6 +591,61 @@ _Dependencies_
 |===
 
 == Mavendeps
+
+[plantuml,Mavendeps,svg]
+----
+@startuml(id=Mavendeps)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Maven Deps\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Maven Deps - BDD Integ Spec\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Maven Deps - Integration Testing\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
+  rectangle "==Apache Isis Maven Deps - JDK11\n<size:10>[Container: packaging: pom]</size>" <<5>> as 5
+  rectangle "==Apache Isis Maven Deps - Testing\n<size:10>[Container: packaging: pom]</size>" <<6>> as 6
+  rectangle "==Apache Isis Maven Deps - Webapp\n<size:10>[Container: packaging: pom]</size>" <<7>> as 7
+}
+@enduml
+----
 
 .Projects/Modules (Mavendeps)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
@@ -511,6 +746,61 @@ _Dependencies_
 
 == Mappings
 
+[plantuml,Mappings,svg]
+----
+@startuml(id=Mappings)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Ext - REST Client (applib)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+  rectangle "==Apache Isis Ext - REST Client (parent)\n<size:10>[Container: packaging: pom]</size>" <<6>> as 6
+  rectangle "==Apache Isis Map - JaxRS Client (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Map - JaxRS Client (impl)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Map - JaxRS Client (parent)\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Mappings\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+}
+@enduml
+----
+
 .Projects/Modules (Mappings)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -588,6 +878,61 @@ _Dependencies_
 |===
 
 == Persistence
+
+[plantuml,Persistence,svg]
+----
+@startuml(id=Persistence)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Persistence - JDO\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Persistence - JDO (applib)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+  rectangle "==Apache Isis Persistence - JDO (datanucleus 5)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Persistence - JPA\n<size:10>[Container: packaging: pom]</size>" <<5>> as 5
+  rectangle "==Apache Isis Persistence - JPA (applib)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Persistence - JPA (model)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+}
+@enduml
+----
 
 .Projects/Modules (Persistence)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
@@ -699,6 +1044,43 @@ _Dependencies_
 
 == Security
 
+[plantuml,Security,svg]
+----
+@startuml(id=Security)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Security - Bypass\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
+  rectangle "==Apache Isis Security - Keycloak\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+  rectangle "==Apache Isis Security - Shiro\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+}
+@enduml
+----
+
 .Projects/Modules (Security)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -768,6 +1150,151 @@ _Dependencies_
 |===
 
 == Valuetypes
+
+[plantuml,Valuetypes,svg]
+----
+@startuml(id=Valuetypes)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<22>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<11>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<14>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<15>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<16>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<17>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<18>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<19>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<20>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<21>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<10>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Val - Asciidoctor (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Val - Asciidoctor (Persistence)\n<size:10>[Container: packaging: pom]</size>" <<6>> as 6
+  rectangle "==Apache Isis Val - Asciidoctor (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Val - Asciidoctor (parent)\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Val - Asciidoctor (persistence jdo DN5)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+  rectangle "==Apache Isis Val - Asciidoctor (ui vaadin)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Isis Val - Asciidoctor (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis Val - Asciidoctor (ui)\n<size:10>[Container: packaging: pom]</size>" <<8>> as 8
+  rectangle "==Apache Isis Val - Markdown (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
+  rectangle "==Apache Isis Val - Markdown (Persistence)\n<size:10>[Container: packaging: pom]</size>" <<14>> as 14
+  rectangle "==Apache Isis Val - Markdown (applib)\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis Val - Markdown (parent)\n<size:10>[Container: packaging: pom]</size>" <<11>> as 11
+  rectangle "==Apache Isis Val - Markdown (persistence jdo DN5)\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
+  rectangle "==Apache Isis Val - Markdown (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<17>> as 17
+  rectangle "==Apache Isis Val - Markdown (ui)\n<size:10>[Container: packaging: pom]</size>" <<16>> as 16
+  rectangle "==Apache Isis Val - SSE (ui)\n<size:10>[Container: packaging: pom]</size>" <<21>> as 21
+  rectangle "==Apache Isis Val - Server Sent Events\n<size:10>[Container: packaging: jar]</size>" <<19>> as 19
+  rectangle "==Apache Isis Val - Server Sent Events (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<20>> as 20
+  rectangle "==Apache Isis Val - Server Sent Events (parent)\n<size:10>[Container: packaging: pom]</size>" <<18>> as 18
+  rectangle "==Apache Isis Val - Server Sent Events (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<22>> as 22
+  rectangle "==Apache Isis Value types\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+}
+@enduml
+----
 
 .Projects/Modules (Valuetypes)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
@@ -1062,6 +1589,91 @@ _Dependencies_
 
 == Viewer
 
+[plantuml,Viewer,svg]
+----
+@startuml(id=Viewer)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<11>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<10>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Viewer - Common Model\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
+  rectangle "==Apache Isis Viewer - RO\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Viewer - RO (AppLib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Viewer - RO (JAX-RS Resteasy v4)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Viewer - RO (Rendering)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Viewer - RO (Testing)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+  rectangle "==Apache Isis Viewer - RO (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis Viewer - Wicket\n<size:10>[Container: packaging: pom]</size>" <<9>> as 9
+  rectangle "==Apache Isis Viewer - Wicket (Model)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis Viewer - Wicket (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
+  rectangle "==Apache Isis Viewer - Wicket (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+}
+@enduml
+----
+
 .Projects/Modules (Viewer)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -1297,6 +1909,127 @@ _Dependencies_
 |===
 
 == Testing
+
+[plantuml,Testing,svg]
+----
+@startuml(id=Testing)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<11>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<14>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<15>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<16>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<17>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<18>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<10>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Testing\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Tst - FakeData (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Tst - FakeData (fixtures)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Tst - FakeData (integ tests)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Tst - FakeData (parent)\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Tst - Fixtures (applib)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis Tst - Fixtures (parent)\n<size:10>[Container: packaging: pom]</size>" <<7>> as 7
+  rectangle "==Apache Isis Tst - H2 Console (parent)\n<size:10>[Container: packaging: pom]</size>" <<9>> as 9
+  rectangle "==Apache Isis Tst - H2 Console (ui)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis Tst - HSQLDB Manager\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis Tst - HSQLDB Manager (parent)\n<size:10>[Container: packaging: pom]</size>" <<11>> as 11
+  rectangle "==Apache Isis Tst - Integ Test Support (applib)\n<size:10>[Container: packaging: jar]</size>" <<14>> as 14
+  rectangle "==Apache Isis Tst - Integ Test Support (parent)\n<size:10>[Container: packaging: pom]</size>" <<13>> as 13
+  rectangle "==Apache Isis Tst - Spec/Cucumber (applib)\n<size:10>[Container: packaging: jar]</size>" <<16>> as 16
+  rectangle "==Apache Isis Tst - Spec/Cucumber (parent)\n<size:10>[Container: packaging: pom]</size>" <<15>> as 15
+  rectangle "==Apache Isis Tst - Unit Test Support (applib)\n<size:10>[Container: packaging: jar]</size>" <<18>> as 18
+  rectangle "==Apache Isis Tst - Unit Test Support (parent)\n<size:10>[Container: packaging: pom]</size>" <<17>> as 17
+}
+@enduml
+----
 
 .Projects/Modules (Testing)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
@@ -1541,6 +2274,37 @@ _Dependencies_
 
 == Regression Tests
 
+[plantuml,Regression Tests,svg]
+----
+@startuml(id=Regression_Tests)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis - Regression Tests\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis - Regression Tests (stable)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+}
+@enduml
+----
+
 .Projects/Modules (Regression Tests)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -1598,6 +2362,205 @@ _Dependencies_
 |===
 
 == Extensions
+
+[plantuml,Extensions,svg]
+----
+@startuml(id=Extensions)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<22>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<23>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<24>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<25>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<26>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<27>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<28>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<29>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<30>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<31>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<10>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<11>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<14>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<15>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<16>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<17>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<18>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<19>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<20>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<21>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Ext - @Model\n<size:10>[Container: packaging: jar]</size>" <<17>> as 17
+  rectangle "==Apache Isis Ext - CORS (impl)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Isis Ext - CORS (parent)\n<size:10>[Container: packaging: pom]</size>" <<8>> as 8
+  rectangle "==Apache Isis Ext - Command Log\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Ext - Command Log Implementation (JDO)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Ext - Command Replay\n<size:10>[Container: packaging: pom]</size>" <<5>> as 5
+  rectangle "==Apache Isis Ext - Command Replay for Primary\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Ext - Command Replay for Secondary\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+  rectangle "==Apache Isis Ext - Flyway\n<size:10>[Container: packaging: pom]</size>" <<12>> as 12
+  rectangle "==Apache Isis Ext - Flyway Impl\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
+  rectangle "==Apache Isis Ext - Quartz\n<size:10>[Container: packaging: pom]</size>" <<22>> as 22
+  rectangle "==Apache Isis Ext - Quartz Impl\n<size:10>[Container: packaging: jar]</size>" <<23>> as 23
+  rectangle "==Apache Isis Ext - Sec Man\n<size:10>[Container: packaging: pom]</size>" <<24>> as 24
+  rectangle "==Apache Isis Ext - Sec Man API\n<size:10>[Container: packaging: jar]</size>" <<25>> as 25
+  rectangle "==Apache Isis Ext - Sec Man Encryption (Using jbcrypt)\n<size:10>[Container: packaging: jar]</size>" <<26>> as 26
+  rectangle "==Apache Isis Ext - Sec Man Model\n<size:10>[Container: packaging: jar]</size>" <<27>> as 27
+  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JDO)\n<size:10>[Container: packaging: jar]</size>" <<28>> as 28
+  rectangle "==Apache Isis Ext - Sec Man Realm (Using Shiro)\n<size:10>[Container: packaging: jar]</size>" <<29>> as 29
+  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<31>> as 31
+  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<30>> as 30
+  rectangle "==Apache Isis Ext - Wicket Viewer - Excel Download (parent)\n<size:10>[Container: packaging: pom]</size>" <<10>> as 10
+  rectangle "==Apache Isis Ext - Wicket Viewer - Excel Download (ui)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
+  rectangle "==Apache Isis Ext - Wicket Viewer - fullcalendar (applib)\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
+  rectangle "==Apache Isis Ext - Wicket Viewer - fullcalendar (parent)\n<size:10>[Container: packaging: pom]</size>" <<14>> as 14
+  rectangle "==Apache Isis Ext - Wicket Viewer - fullcalendar (ui)\n<size:10>[Container: packaging: jar]</size>" <<16>> as 16
+  rectangle "==Apache Isis Ext - Wicket Viewer - pdf.js (applib)\n<size:10>[Container: packaging: jar]</size>" <<19>> as 19
+  rectangle "==Apache Isis Ext - Wicket Viewer - pdf.js (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<20>> as 20
+  rectangle "==Apache Isis Ext - Wicket Viewer - pdf.js (parent)\n<size:10>[Container: packaging: pom]</size>" <<18>> as 18
+  rectangle "==Apache Isis Ext - Wicket Viewer - pdf.js (ui)\n<size:10>[Container: packaging: jar]</size>" <<21>> as 21
+  rectangle "==Apache Isis Extensions\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+}
+@enduml
+----
 
 .Projects/Modules (Extensions)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
@@ -1705,7 +2668,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-config:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.core:isis-schema:jar:<managed>
-* org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-quartz-impl:jar:<managed>
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-applib:jar:<managed>
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-impl:jar:<managed>
@@ -2032,6 +2994,157 @@ _Dependencies_
 
 == Subdomains
 
+[plantuml,Subdomains,svg]
+----
+@startuml(id=Subdomains)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<11>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<22>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<23>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<14>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<15>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<16>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<17>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<18>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<19>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<20>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<21>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<10>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Sub - Base (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Sub - Base (parent)\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Sub - Docx (applib)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Sub - Docx (parent)\n<size:10>[Container: packaging: pom]</size>" <<5>> as 5
+  rectangle "==Apache Isis Sub - Excel (Fixtures)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Isis Sub - Excel (Integ Tests)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis Sub - Excel (applib)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis Sub - Excel (parent)\n<size:10>[Container: packaging: pom]</size>" <<7>> as 7
+  rectangle "==Apache Isis Sub - Excel (testing support)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
+  rectangle "==Apache Isis Sub - Freemarker (applib)\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
+  rectangle "==Apache Isis Sub - Freemarker (parent)\n<size:10>[Container: packaging: pom]</size>" <<12>> as 12
+  rectangle "==Apache Isis Sub - Ognl (applib)\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
+  rectangle "==Apache Isis Sub - Ognl (parent)\n<size:10>[Container: packaging: pom]</size>" <<14>> as 14
+  rectangle "==Apache Isis Sub - PDF Box (applib)\n<size:10>[Container: packaging: jar]</size>" <<17>> as 17
+  rectangle "==Apache Isis Sub - PDF Box (parent)\n<size:10>[Container: packaging: pom]</size>" <<16>> as 16
+  rectangle "==Apache Isis Sub - Spring (applib)\n<size:10>[Container: packaging: jar]</size>" <<19>> as 19
+  rectangle "==Apache Isis Sub - Spring (parent)\n<size:10>[Container: packaging: pom]</size>" <<18>> as 18
+  rectangle "==Apache Isis Sub - XdocReport (applib)\n<size:10>[Container: packaging: jar]</size>" <<21>> as 21
+  rectangle "==Apache Isis Sub - XdocReport (parent)\n<size:10>[Container: packaging: pom]</size>" <<20>> as 20
+  rectangle "==Apache Isis Sub - Zip (applib)\n<size:10>[Container: packaging: jar]</size>" <<23>> as 23
+  rectangle "==Apache Isis Sub - Zip (parent)\n<size:10>[Container: packaging: pom]</size>" <<22>> as 22
+  rectangle "==Apache Isis Subdomains\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+}
+@enduml
+----
+
 .Projects/Modules (Subdomains)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -2325,6 +3438,61 @@ _Dependencies_
 
 == Tooling
 
+[plantuml,Tooling,svg]
+----
+@startuml(id=Tooling)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis - Tooling\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Tooling - C4 Modeling\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+  rectangle "==Apache Isis Tooling - CLI (Command Line Interface)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Tooling - Java Model (Code Mining)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Tooling - Model for AsciiDoc\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Tooling - Project Model (Code mining)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+}
+@enduml
+----
+
 .Projects/Modules (Tooling)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -2353,6 +3521,23 @@ _Dependencies_
 
 
 |org.apache.isis.tooling
+|isis-tooling-c4modeling
+|jar
+|\tooling\c4modeling
+|Apache Isis Tooling - C4 Modeling
+|Library for programmatic C4 Model generation. 
+        
+        See https://c4model.com/
+
+_Dependencies_
+
+* com.structurizr:structurizr-core:jar:<managed>
+* com.structurizr:structurizr-plantuml:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
+
+
+
+|org.apache.isis.tooling
 |isis-tooling-cli
 |jar
 |\tooling\cli
@@ -2363,6 +3548,7 @@ _Dependencies_
 
 * info.picocli:picocli:jar:<managed>
 * org.apache.isis.commons:isis-commons:jar:<managed>
+* org.apache.isis.tooling:isis-tooling-c4modeling:jar:<managed>
 * org.apache.isis.tooling:isis-tooling-javamodel:jar:<managed>
 * org.apache.isis.tooling:isis-tooling-model4adoc:jar:<managed>
 * org.apache.isis.tooling:isis-tooling-projectmodel:jar:<managed>
@@ -2421,6 +3607,61 @@ _Dependencies_
 |===
 
 == Examples
+
+[plantuml,Examples,svg]
+----
+@startuml(id=Examples)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Demo - Domain\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+  rectangle "==Demo - JavaFX\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Demo - Parent\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Demo - Vaadin\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Demo - Web\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Demo - Wicket\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+}
+@enduml
+----
 
 .Projects/Modules (Examples)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
@@ -2481,6 +3722,8 @@ _Dependencies_
 * demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.enabled.DomainObjectPublishingEnabledMetaAnnotatedJdoSeedService
 * demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.enabled.DomainObjectPublishingEnabledMetaAnnotOverriddenJdoEntities
 * demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.enabled.DomainObjectPublishingEnabledMetaAnnotOverriddenJdoSeedService
+* demoapp.dom.annotDomain.Property.command.PropertyCommandJdoEntities
+* demoapp.dom.annotDomain.Property.command.PropertyCommandJdoSeedService
 * demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoEntities
 * demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoSeedService
 * demoapp.dom.annotDomain._changes.PublisherServiceToCaptureChangesInMemory
@@ -2716,6 +3959,85 @@ _Dependencies_
 
 == Incubator
 
+[plantuml,Incubator,svg]
+----
+@startuml(id=Incubator)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<11>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<10>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Inc - Client kroViz\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+  rectangle "==Apache Isis Inc - Viewer JavaFX\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
+  rectangle "==Apache Isis Inc - Viewer JavaFX (Model)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Inc - Viewer JavaFX (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Inc - Viewer JavaFX (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+  rectangle "==Apache Isis Inc - Viewer Vaadin\n<size:10>[Container: packaging: pom]</size>" <<8>> as 8
+  rectangle "==Apache Isis Inc - Viewer Vaadin (Model)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Isis Inc - Viewer Vaadin (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis Inc - Viewer Vaadin (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
+  rectangle "==Apache Isis Incubator\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+}
+@enduml
+----
+
 .Projects/Modules (Incubator)
 [cols="2m,2m,1m,1m,2,5a", options="header"]
 |===
@@ -2880,6 +4202,61 @@ _Dependencies_
 |===
 
 == Legacy
+
+[plantuml,Legacy,svg]
+----
+@startuml(id=Legacy)
+title package-ecosystem - Containers
+caption Artifact Dependency Diagram
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis Legacy\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Legacy - Applib\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+  rectangle "==Apache Isis Legacy - Commons\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Legacy - Metamodel\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Legacy - REST Client\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Legacy - Runtime\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+}
+@enduml
+----
 
 .Projects/Modules (Legacy)
 [cols="2m,2m,1m,1m,2,5a", options="header"]

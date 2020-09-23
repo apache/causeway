@@ -18,6 +18,8 @@
  */
 package org.apache.isis.tooling.model4adoc;
 
+import javax.annotation.Nullable;
+
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;
@@ -26,6 +28,9 @@ import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.tooling.model4adoc.ast.SimpleBlock;
 import org.apache.isis.tooling.model4adoc.ast.SimpleCell;
 import org.apache.isis.tooling.model4adoc.ast.SimpleColumn;
@@ -33,6 +38,7 @@ import org.apache.isis.tooling.model4adoc.ast.SimpleDocument;
 import org.apache.isis.tooling.model4adoc.ast.SimpleRow;
 import org.apache.isis.tooling.model4adoc.ast.SimpleTable;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -125,6 +131,52 @@ public class AsciiDocFactory {
         return cell(row, col, source);
     }
     
+    public static class SourceFactory {
+
+        public static String wrap(@NonNull String sourceType, @NonNull String source, @Nullable String title, Can<String> options) {
+            val sb = new StringBuilder();
+            sb.append("[").append(sourceType);
+            options.stream().map(String::trim).filter(_Strings::isNotEmpty).map(s->","+s).forEach(sb::append);
+            sb.append("]\n").append("----\n");
+            if(_Strings.isNotEmpty(title)) {
+                val trimmedTitle = title.trim();
+                if(!trimmedTitle.isEmpty()) {
+                    sb.append(".").append(trimmedTitle).append("\n");
+                }
+            }
+            _Text.normalize(_Text.getLines(source))
+            .forEach(line->sb.append(line).append("\n"));
+            sb.append("----\n");
+            return sb.toString();
+        }
+        
+        public static String xml(@NonNull String xmlSource, @Nullable String title) {
+            return wrap("source,xml", xmlSource, title, Can.empty());
+        }
+        
+//        [source,java]
+//        .title
+//        ----
+//        public class SomeClass extends SomeOtherClass {
+//            ...
+//        }
+//        ----
+        public static String java(@NonNull String javaSource, @Nullable String title) {
+            return wrap("source,java", javaSource, title, Can.empty());
+        }
+        
+//      [plantuml,c4-demo,svg]
+//      ----
+//      @startuml
+//      ...
+//      @enduml
+//      ----
+        public static String plantuml(@NonNull String plantumlSource, @NonNull String diagramKey, @Nullable String title) {
+            return wrap(String.format("plantuml,%s,svg", diagramKey), plantumlSource, title, Can.of());
+        }
+        
+        
+    }
     
     // -- HELPER
     

@@ -105,6 +105,12 @@
 
 			<dependency>
 				<groupId>org.apache.isis.tooling</groupId>
+				<artifactId>isis-tooling-c4modeling</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.tooling</groupId>
 				<artifactId>isis-tooling-model4adoc</artifactId>
 				<version>${project.version}</version>
 			</dependency>

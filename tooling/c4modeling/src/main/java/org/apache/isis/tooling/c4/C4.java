@@ -20,25 +20,34 @@ package org.apache.isis.tooling.c4;
 
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import com.structurizr.Workspace;
-import com.structurizr.io.plantuml.PlantUMLWriter;
+import com.structurizr.io.plantuml.AbstractPlantUMLWriter;
+import com.structurizr.io.plantuml.StructurizrPlantUMLWriter;
 import com.structurizr.model.Element;
 import com.structurizr.model.Model;
+import com.structurizr.model.Person;
+import com.structurizr.model.SoftwareSystem;
 import com.structurizr.model.Tags;
+import com.structurizr.view.Shape;
+import com.structurizr.view.SystemContextView;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
+import org.apache.isis.commons.internal.base._Strings;
+
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class C4 {
 
-    final PlantUMLWriter plantUMLWriter = new PlantUMLWriter();
-
     @Getter private final Workspace workspace;
+    private final AbstractPlantUMLWriter plantUMLWriter;
 
     /**
      * Creates a new workspace.
@@ -46,12 +55,17 @@ public class C4 {
      * @param name          the name of the workspace
      * @param description   a short description
      */
-    public static C4 of(String name, String description) {
-        val c4 = new C4(new Workspace(name, description));
+    public static C4 of(@NonNull String name, @Nullable String description) {
+        val plantUMLWriter = new StructurizrPlantUMLWriter();
+        val c4 = new C4(new Workspace(name, _Strings.nullToEmpty(description)), plantUMLWriter);
         c4.applyDefaultStyles();
         return c4;
     }
-
+    
+    public String getWorkspaceName() {
+        return workspace.getName();
+    }
+    
     /**
      * @return the software architecture model
      */
@@ -72,6 +86,20 @@ public class C4 {
     public String toPlantUML(View view) {
         return plantUMLWriter.toString(view);
     }
+    
+    // -- SIMPLE FACTORIES
+    
+    public Person person(@NonNull String name, @Nullable String description) {
+        return getModel().addPerson(name, _Strings.nullToEmpty(description));
+    }
+    
+    public SoftwareSystem softwareSystem(@NonNull String name, @Nullable String description) {
+        return getModel().addSoftwareSystem(name, _Strings.nullToEmpty(description));
+    }
+    
+    public SystemContextView systemContextView(@NonNull SoftwareSystem softwareSystem, @NonNull String key, @Nullable String description) {
+        return getViewSet().createSystemContextView(softwareSystem, key, _Strings.nullToEmpty(description));
+    }
 
     // -- EXPERIMENTAL
 
@@ -89,14 +117,18 @@ public class C4 {
         val styles = getViewSet().getConfiguration().getStyles();
 
         styles.addElementStyle(Tags.ELEMENT).color("#fffffe");
-        styles.addElementStyle(Tags.PERSON).background("#08427b");
+        //styles.addElementStyle(Tags.PERSON).background("#08427b");
         styles.addElementStyle(Tags.CONTAINER).background("#438dd5");
 
 
         //        styles.addElementStyle(Tags.SOFTWARE_SYSTEM)
         //        .color("#ffffff")    
         //        .background("#1168bd");
-        //styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+        styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
     }
+
+
+
+
 
 }

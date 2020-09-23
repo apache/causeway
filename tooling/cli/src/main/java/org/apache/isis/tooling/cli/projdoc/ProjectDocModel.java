@@ -28,12 +28,16 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import com.structurizr.model.SoftwareSystem;
+
 import org.asciidoctor.ast.Document;
 
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig.ProjectDoc;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
+import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 import org.apache.isis.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.isis.tooling.projectmodel.Dependency;
@@ -97,14 +101,54 @@ public class ProjectDocModel {
     
     // -- HELPER
 
+    private static class GroupDiagram {
+        
+        private final C4 c4;
+        private final SoftwareSystem softwareSystem;
+        
+        public GroupDiagram(C4 c4) {
+            this.c4 = c4;
+            this.softwareSystem = c4.softwareSystem("package-ecosystem", null);
+        }
+
+        public void collect(ProjectNode module) {
+            softwareSystem.addContainer(
+                    module.getName(), 
+                    "",//module.getDescription(), 
+                    String.format("packaging: %s", module.getArtifactCoordinates().getPackaging()));
+        }
+
+        public String toPlantUml() {
+            
+            val key = c4.getWorkspaceName();
+            
+            val containerView = c4.getViewSet().createContainerView(softwareSystem, key, "Artifact Dependency Diagram");
+            containerView.addAllContainers();
+            
+            val plantUmlSource = c4.toPlantUML(containerView);
+            return plantUmlSource;
+        }
+        
+        public String toAsciiDoc() {
+            
+            val key = c4.getWorkspaceName();
+            
+            return AsciiDocFactory.SourceFactory.plantuml(toPlantUml(), key, null);
+        }
+        
+    }
+
     private void createSection(
             final @NonNull Document doc, 
             final @NonNull String sectionName, 
             final @Nullable String groupIdPattern) {
 
-        val block = block(doc);
+        val titleBlock = block(doc);
 
-        block.setSource(String.format("== %s", sectionName));
+        titleBlock.setSource(String.format("== %s", sectionName));
+        
+        val descriptionBlock = block(doc);
+        val groupDiagram = new GroupDiagram(C4.of(sectionName, null));
 
         val table = table(doc);
         table.setTitle(String.format("Projects/Modules (%s)", sectionName));
@@ -132,6 +176,7 @@ public class ProjectDocModel {
             val projRelativePath = _Files.toRelativePath(projRoot, projPath);
 
             modulesWritten.add(module);
+            groupDiagram.collect(module);
 
             val row = row(table);
             cell(table, row, module.getArtifactCoordinates().getGroupId());
@@ -142,6 +187,8 @@ public class ProjectDocModel {
             cell(table, row, details(module));
         });
 
+        descriptionBlock.setSource(groupDiagram.toAsciiDoc());
+        
         modules.removeAll(modulesWritten);
 
     }
