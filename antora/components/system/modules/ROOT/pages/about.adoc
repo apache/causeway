@@ -8,7 +8,7 @@ These tables summarize all Maven artifacts available with _Apache Isis_.
 ----
 @startuml(id=Base)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -44,6 +44,8 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Antora\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
   rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
 }
+2 .[#707070].> 4 : ""
+2 .[#707070].> 3 : ""
 @enduml
 ----
 
@@ -98,7 +100,7 @@ package "package-ecosystem\n[Software System]" {
 ----
 @startuml(id=Commons)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -156,7 +158,7 @@ _Dependencies_
 ----
 @startuml(id=Core)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -234,6 +236,16 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Core - Unit Test Support\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Core - WebApp\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
 }
+2 .[#707070].> 3 : ""
+2 .[#707070].> 4 : ""
+2 .[#707070].> 5 : ""
+2 .[#707070].> 7 : ""
+2 .[#707070].> 8 : ""
+2 .[#707070].> 9 : ""
+2 .[#707070].> 12 : ""
+2 .[#707070].> 10 : ""
+2 .[#707070].> 6 : ""
+2 .[#707070].> 11 : ""
 @enduml
 ----
 
@@ -553,7 +565,7 @@ _Dependencies_
 ----
 @startuml(id=App)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -596,7 +608,7 @@ package "package-ecosystem\n[Software System]" {
 ----
 @startuml(id=Mavendeps)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -644,6 +656,11 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Maven Deps - Testing\n<size:10>[Container: packaging: pom]</size>" <<6>> as 6
   rectangle "==Apache Isis Maven Deps - Webapp\n<size:10>[Container: packaging: pom]</size>" <<7>> as 7
 }
+2 .[#707070].> 3 : ""
+2 .[#707070].> 4 : ""
+2 .[#707070].> 5 : ""
+2 .[#707070].> 6 : ""
+2 .[#707070].> 7 : ""
 @enduml
 ----
 
@@ -750,7 +767,7 @@ _Dependencies_
 ----
 @startuml(id=Mappings)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -798,6 +815,11 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Map - JaxRS Client (parent)\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
   rectangle "==Apache Isis Mappings\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
+6 .[#707070].> 7 : ""
+3 .[#707070].> 4 : ""
+3 .[#707070].> 5 : ""
+2 .[#707070].> 6 : ""
+2 .[#707070].> 3 : ""
 @enduml
 ----
 
@@ -883,7 +905,7 @@ _Dependencies_
 ----
 @startuml(id=Persistence)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -931,6 +953,10 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Persistence - JPA (applib)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Persistence - JPA (model)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
 }
+2 .[#707070].> 3 : ""
+2 .[#707070].> 4 : ""
+5 .[#707070].> 6 : ""
+5 .[#707070].> 7 : ""
 @enduml
 ----
 
@@ -1048,7 +1074,7 @@ _Dependencies_
 ----
 @startuml(id=Security)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -1155,7 +1181,7 @@ _Dependencies_
 ----
 @startuml(id=Valuetypes)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -1293,6 +1319,26 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Val - Server Sent Events (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<22>> as 22
   rectangle "==Apache Isis Value types\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
+6 .[#707070].> 7 : ""
+3 .[#707070].> 5 : ""
+3 .[#707070].> 6 : ""
+3 .[#707070].> 4 : ""
+3 .[#707070].> 8 : ""
+8 .[#707070].> 9 : ""
+8 .[#707070].> 10 : ""
+14 .[#707070].> 15 : ""
+11 .[#707070].> 13 : ""
+11 .[#707070].> 14 : ""
+11 .[#707070].> 12 : ""
+11 .[#707070].> 16 : ""
+16 .[#707070].> 17 : ""
+21 .[#707070].> 22 : ""
+18 .[#707070].> 21 : ""
+18 .[#707070].> 19 : ""
+18 .[#707070].> 20 : ""
+2 .[#707070].> 3 : ""
+2 .[#707070].> 11 : ""
+2 .[#707070].> 18 : ""
 @enduml
 ----
 
@@ -1593,7 +1639,7 @@ _Dependencies_
 ----
 @startuml(id=Viewer)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -1671,6 +1717,14 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Viewer - Wicket (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
   rectangle "==Apache Isis Viewer - Wicket (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
 }
+3 .[#707070].> 4 : ""
+3 .[#707070].> 5 : ""
+3 .[#707070].> 6 : ""
+3 .[#707070].> 7 : ""
+3 .[#707070].> 8 : ""
+9 .[#707070].> 10 : ""
+9 .[#707070].> 11 : ""
+9 .[#707070].> 12 : ""
 @enduml
 ----
 
@@ -1914,7 +1968,7 @@ _Dependencies_
 ----
 @startuml(id=Testing)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -2028,6 +2082,22 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Tst - Unit Test Support (applib)\n<size:10>[Container: packaging: jar]</size>" <<18>> as 18
   rectangle "==Apache Isis Tst - Unit Test Support (parent)\n<size:10>[Container: packaging: pom]</size>" <<17>> as 17
 }
+2 .[#707070].> 3 : ""
+2 .[#707070].> 7 : ""
+2 .[#707070].> 9 : ""
+2 .[#707070].> 11 : ""
+2 .[#707070].> 13 : ""
+2 .[#707070].> 15 : ""
+2 .[#707070].> 17 : ""
+3 .[#707070].> 4 : ""
+3 .[#707070].> 5 : ""
+3 .[#707070].> 6 : ""
+7 .[#707070].> 8 : ""
+9 .[#707070].> 10 : ""
+11 .[#707070].> 12 : ""
+13 .[#707070].> 14 : ""
+15 .[#707070].> 16 : ""
+17 .[#707070].> 18 : ""
 @enduml
 ----
 
@@ -2278,7 +2348,7 @@ _Dependencies_
 ----
 @startuml(id=Regression_Tests)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -2302,6 +2372,7 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis - Regression Tests\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis - Regression Tests (stable)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
 }
+2 .[#707070].> 3 : ""
 @enduml
 ----
 
@@ -2367,7 +2438,7 @@ _Dependencies_
 ----
 @startuml(id=Extensions)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -2559,6 +2630,35 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Ext - Wicket Viewer - pdf.js (ui)\n<size:10>[Container: packaging: jar]</size>" <<21>> as 21
   rectangle "==Apache Isis Extensions\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
+8 .[#707070].> 9 : ""
+3 .[#707070].> 4 : ""
+5 .[#707070].> 6 : ""
+5 .[#707070].> 7 : ""
+12 .[#707070].> 13 : ""
+22 .[#707070].> 23 : ""
+24 .[#707070].> 25 : ""
+24 .[#707070].> 26 : ""
+24 .[#707070].> 27 : ""
+24 .[#707070].> 28 : ""
+24 .[#707070].> 29 : ""
+30 .[#707070].> 31 : ""
+10 .[#707070].> 11 : ""
+14 .[#707070].> 15 : ""
+14 .[#707070].> 16 : ""
+18 .[#707070].> 19 : ""
+18 .[#707070].> 20 : ""
+18 .[#707070].> 21 : ""
+2 .[#707070].> 17 : ""
+2 .[#707070].> 8 : ""
+2 .[#707070].> 3 : ""
+2 .[#707070].> 5 : ""
+2 .[#707070].> 12 : ""
+2 .[#707070].> 22 : ""
+2 .[#707070].> 24 : ""
+2 .[#707070].> 30 : ""
+2 .[#707070].> 10 : ""
+2 .[#707070].> 14 : ""
+2 .[#707070].> 18 : ""
 @enduml
 ----
 
@@ -2998,7 +3098,7 @@ _Dependencies_
 ----
 @startuml(id=Subdomains)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -3008,22 +3108,22 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<11>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<23>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<12>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3108,12 +3208,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3142,6 +3242,27 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Sub - Zip (parent)\n<size:10>[Container: packaging: pom]</size>" <<22>> as 22
   rectangle "==Apache Isis Subdomains\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
+3 .[#707070].> 4 : ""
+5 .[#707070].> 6 : ""
+7 .[#707070].> 9 : ""
+7 .[#707070].> 10 : ""
+7 .[#707070].> 8 : ""
+7 .[#707070].> 11 : ""
+12 .[#707070].> 13 : ""
+14 .[#707070].> 15 : ""
+16 .[#707070].> 17 : ""
+18 .[#707070].> 19 : ""
+20 .[#707070].> 21 : ""
+22 .[#707070].> 23 : ""
+2 .[#707070].> 3 : ""
+2 .[#707070].> 5 : ""
+2 .[#707070].> 7 : ""
+2 .[#707070].> 12 : ""
+2 .[#707070].> 14 : ""
+2 .[#707070].> 16 : ""
+2 .[#707070].> 18 : ""
+2 .[#707070].> 20 : ""
+2 .[#707070].> 22 : ""
 @enduml
 ----
 
@@ -3442,7 +3563,7 @@ _Dependencies_
 ----
 @startuml(id=Tooling)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -3490,6 +3611,11 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Tooling - Model for AsciiDoc\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Tooling - Project Model (Code mining)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
 }
+2 .[#707070].> 3 : ""
+2 .[#707070].> 4 : ""
+2 .[#707070].> 5 : ""
+2 .[#707070].> 6 : ""
+2 .[#707070].> 7 : ""
 @enduml
 ----
 
@@ -3612,7 +3738,7 @@ _Dependencies_
 ----
 @startuml(id=Examples)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -3660,6 +3786,11 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Demo - Web\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Demo - Wicket\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
 }
+2 .[#707070].> 3 : ""
+2 .[#707070].> 4 : ""
+2 .[#707070].> 5 : ""
+2 .[#707070].> 6 : ""
+2 .[#707070].> 7 : ""
 @enduml
 ----
 
@@ -3963,7 +4094,7 @@ _Dependencies_
 ----
 @startuml(id=Incubator)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -4035,6 +4166,14 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Inc - Viewer Vaadin (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
   rectangle "==Apache Isis Incubator\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
+4 .[#707070].> 5 : ""
+4 .[#707070].> 6 : ""
+4 .[#707070].> 7 : ""
+8 .[#707070].> 9 : ""
+8 .[#707070].> 10 : ""
+8 .[#707070].> 11 : ""
+2 .[#707070].> 4 : ""
+2 .[#707070].> 8 : ""
 @enduml
 ----
 
@@ -4207,7 +4346,7 @@ _Dependencies_
 ----
 @startuml(id=Legacy)
 title package-ecosystem - Containers
-caption Artifact Dependency Diagram
+caption Artifact Dependency Diagram (Maven)
 
 skinparam {
   shadowing false
@@ -4255,6 +4394,11 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Legacy - REST Client\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Legacy - Runtime\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
 }
+2 .[#707070].> 3 : ""
+2 .[#707070].> 4 : ""
+2 .[#707070].> 5 : ""
+2 .[#707070].> 6 : ""
+2 .[#707070].> 7 : ""
 @enduml
 ----
 

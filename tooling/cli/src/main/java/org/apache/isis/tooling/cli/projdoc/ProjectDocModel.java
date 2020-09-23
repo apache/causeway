@@ -20,7 +20,9 @@ package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -28,12 +30,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import com.structurizr.model.SoftwareSystem;
+import com.structurizr.model.Container;
 
 import org.asciidoctor.ast.Document;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.math._AdjacencyMatrix;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig.ProjectDoc;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
@@ -51,6 +55,7 @@ import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.row;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import guru.nidi.codeassert.config.Language;
@@ -78,10 +83,10 @@ public class ProjectDocModel {
 
         val doc = doc();
         doc.setTitle("System Overview");
-        
+
         val block = block(doc);
         block.setSource(projectDocConfig.getDescription());
-        
+
         projectDocConfig.getArtifactGroups().forEach((section, groupId)->{
             createSection(doc, section, groupId);
         });
@@ -98,44 +103,63 @@ public class ProjectDocModel {
         } 
 
     }
-    
+
     // -- HELPER
 
     private static class GroupDiagram {
+
+        @RequiredArgsConstructor(staticName = "of")
+        private static class ProjectAndContainerTuple {
+            final ProjectNode projectNode;
+            final Container container;
+        }
         
         private final C4 c4;
-        private final SoftwareSystem softwareSystem;
-        
+        private final List<ProjectNode> projectNodes = new ArrayList<>(); 
+
         public GroupDiagram(C4 c4) {
             this.c4 = c4;
-            this.softwareSystem = c4.softwareSystem("package-ecosystem", null);
         }
 
         public void collect(ProjectNode module) {
-            softwareSystem.addContainer(
-                    module.getName(), 
-                    "",//module.getDescription(), 
-                    String.format("packaging: %s", module.getArtifactCoordinates().getPackaging()));
+            projectNodes.add(module);
         }
 
         public String toPlantUml() {
-            
             val key = c4.getWorkspaceName();
-            
-            val containerView = c4.getViewSet().createContainerView(softwareSystem, key, "Artifact Dependency Diagram");
+            val softwareSystem = c4.softwareSystem("package-ecosystem", null);
+
+            val tuples = Can.ofCollection(projectNodes)
+                    .map(projectNode->{
+                        val name = projectNode.getName();
+                        val description = ""; //projectNode.getDescription() XXX needs sanitizing, potentially breaks plantuml/asciidoc syntax
+                        val technology = String.format("packaging: %s", projectNode.getArtifactCoordinates().getPackaging());
+                        val container = softwareSystem.addContainer(name, description, technology);
+                        return ProjectAndContainerTuple.of(projectNode, container);
+                    });
+
+            val adjMatrix = _AdjacencyMatrix.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
+
+            tuples.forEach(tuple->{
+                adjMatrix.streamNeighbors(tuple)
+                .forEach(dependentTuple->{
+                    tuple.container.uses(dependentTuple.container, "");
+                });
+            });
+
+            val containerView = c4.getViewSet().createContainerView(softwareSystem, key, "Artifact Dependency Diagram (Maven)");
             containerView.addAllContainers();
-            
+
             val plantUmlSource = c4.toPlantUML(containerView);
             return plantUmlSource;
         }
-        
+
         public String toAsciiDoc() {
-            
             val key = c4.getWorkspaceName();
-            
+
             return AsciiDocFactory.SourceFactory.plantuml(toPlantUml(), key, null);
         }
-        
+
     }
 
     private void createSection(
@@ -146,7 +170,7 @@ public class ProjectDocModel {
         val titleBlock = block(doc);
 
         titleBlock.setSource(String.format("== %s", sectionName));
-        
+
         val descriptionBlock = block(doc);
         val groupDiagram = new GroupDiagram(C4.of(sectionName, null));
 
@@ -188,7 +212,7 @@ public class ProjectDocModel {
         });
 
         descriptionBlock.setSource(groupDiagram.toAsciiDoc());
-        
+
         modules.removeAll(modulesWritten);
 
     }
