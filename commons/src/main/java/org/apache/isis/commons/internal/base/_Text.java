@@ -19,16 +19,24 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -67,8 +75,46 @@ public final class _Text {
     public static Can<String> getLines(final @Nullable String text){
         return Can.ofStream(streamLines(text));
     }
+    
+    /**
+     * Reads content from given {@code input} into a {@link Can} of lines, 
+     * removing new line characters {@code \n,\r} in the process.
+     * @param text - nullable
+     * @return non-null
+     */
+    public static Can<String> readLines(final @Nullable InputStream input, final @NonNull Charset charset){
+        if(input==null) {
+            return Can.empty();
+        }
+        val lines = new ArrayList<String>();
+        try(Scanner scanner = new Scanner(input, charset.name())){
+            scanner.useDelimiter("\\n");
+            while(scanner.hasNext()) {
+                val line = scanner.next();
+                lines.add(line.replace("\r", ""));
+            }
+        }
+        return Can.ofCollection(lines);
+    }
+    
+    @SneakyThrows
+    public static Can<String> readLinesFromResource(
+            final @NonNull Class<?> resourceLocation, 
+            final @NonNull String resourceName, 
+            final @NonNull Charset charset) {
+        try(val input = resourceLocation.getResourceAsStream(resourceName)){
+            return readLines(input, charset);    
+        } 
+    }
 
     // -- NORMALIZING
+    
+    public static String normalize(final @Nullable String text) {
+        if(text==null) {
+            return "";
+        }
+        return normalize(getLines(text)).stream().collect(Collectors.joining("\n"));
+    }
     
     /**
      * Converts given {@code lines} into a {@link Can} of lines, 
@@ -177,6 +223,35 @@ public final class _Text {
 
     }
     
+    // -- TESTING SUPPORT
+    
+    public static void assertTextEquals(final @Nullable String a, final @Nullable String b) {
+        assertTextEquals(getLines(a), getLines(b));
+    }
+    
+    public static void assertTextEquals(final @NonNull Can<String> a, final @Nullable String b) {
+        assertTextEquals(a, getLines(b));
+    }
+    
+    public static void assertTextEquals(final @Nullable String a, final @NonNull Can<String> b) {
+        assertTextEquals(getLines(a), b);
+    }
+    
+    public static void assertTextEquals(final @NonNull Can<String> a, final @NonNull Can<String> b) {
+        
+        val na = normalize(a);
+        val nb = normalize(b);
+        
+        final int[] lineNrRef = {0};
+        
+        na.zip(nb, (left, right)->{
+            final int lineNr = ++lineNrRef[0];
+            _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
+        });
+        
+        _Assert.assertEquals(na.size(), nb.size());
+    }
+    
     // -- HELPER
     
     private static boolean hasNonWhiteSpaceChars(String s) {
@@ -186,7 +261,6 @@ public final class _Text {
         return !s.trim().isEmpty();
     }
     
-    //XXX Java records to the rescue please!
     @Getter
     private static class Line {
         private final int index; // zero based
@@ -207,8 +281,6 @@ public final class _Text {
         return lines.stream().map(line->new Line(indexRef[0]++, line));
     }
     
-    
-    //XXX Java records to the rescue please!
     private static interface IndexAwareLineToIntFunction {
         public int apply(int lineIndex, String line);
     }

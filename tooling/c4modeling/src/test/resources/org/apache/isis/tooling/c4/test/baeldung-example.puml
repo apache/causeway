@@ -1,0 +1,34 @@
+@startuml(id=context)
+title Payment Terminal - System Context
+caption Payment Gateway Diagram
+
+skinparam {
+  shadowing false
+  arrowColor #707070
+  actorBorderColor #707070
+  componentBorderColor #707070
+  rectangleBorderColor #707070
+  noteBackgroundColor #ffffff
+  noteBorderColor #707070
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+rectangle 1 <<Person>> #dddddd [
+  Merchant
+  --
+  Merchant
+]
+rectangle 4 <<Software System>> #dddddd [
+  Fraud Detector
+  --
+  Fraud Detector
+]
+rectangle 2 <<Software System>> #dddddd [
+  Payment Terminal
+  --
+  Payment Terminal
+]
+1 .[#707070].> 2 : Makes payment
+2 .[#707070].> 4 : Obtains fraud score
+@enduml
