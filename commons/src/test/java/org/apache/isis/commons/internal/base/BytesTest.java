@@ -22,21 +22,22 @@ package org.apache.isis.commons.internal.base;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
 
-public class BytesTest {
+import lombok.val;
+
+class BytesTest {
 
     final int n = 256;
     private final byte[] allBytes = new byte[n];
@@ -50,8 +51,8 @@ public class BytesTest {
                             + "additionalLinkItem-0-additionalLink", 
                             StandardCharsets.UTF_8);
 
-    @Before
-    public void before() {
+    @BeforeEach
+    void before() {
         for(int i=0; i<n; ++i) {
             allBytes[i] = (byte)i;
         }
@@ -60,111 +61,102 @@ public class BytesTest {
     // -- PREPEND/APPEND
 
     @Test
-    public void concatNullWithNull() throws Exception {
-        Assert.assertNull(_Bytes.append(null, null));
-        Assert.assertNull(_Bytes.prepend(null, null));
+    void concatNullWithNull() throws Exception {
+        assertNull(_Bytes.append(null, null));
+        assertNull(_Bytes.prepend(null, null));
     }
 
     @Test
-    public void concatNullWithEmpty() throws Exception {
-        Assert.assertArrayEquals(_Constants.emptyBytes, _Bytes.append(null));
-        Assert.assertArrayEquals(_Constants.emptyBytes, _Bytes.prepend(null));
+    void concatNullWithEmpty() throws Exception {
+        assertArrayEquals(_Constants.emptyBytes, _Bytes.append(null));
+        assertArrayEquals(_Constants.emptyBytes, _Bytes.prepend(null));
     }
 
     @Test
-    public void concatWithNull() throws Exception {
+    void concatWithNull() throws Exception {
         assertArrayEqualsButNotSame(allBytes, _Bytes.append(allBytes, null));
         assertArrayEqualsButNotSame(allBytes, _Bytes.prepend(allBytes, null));
     }
 
     @Test
-    public void concatWithEmpty() throws Exception {
+    void concatWithEmpty() throws Exception {
         assertArrayEqualsButNotSame(allBytes, _Bytes.append(allBytes));
         assertArrayEqualsButNotSame(allBytes, _Bytes.prepend(allBytes));
     }
 
     @Test
-    public void concatHappyCase() throws Exception {
+    void concatHappyCase() throws Exception {
         assertArrayEqualsButNotSame(new byte[] {1,2,3,4,5}, _Bytes.append(new byte[] {1,2,3}, (byte)4, (byte)5));
         assertArrayEqualsButNotSame(new byte[] {4,5,1,2,3}, _Bytes.prepend(new byte[] {1,2,3}, (byte)4, (byte)5));
     }
 
     @Test
-    public void compressIdentityWithNull() throws Exception {
-        Assert.assertNull(_Bytes.decompress(_Bytes.compress(null)));
+    void compressIdentityWithNull() throws Exception {
+        assertNull(_Bytes.decompress(_Bytes.compress(null)));
     }
 
     @Test
-    public void compressIdentityWithByteRange() throws Exception {
-        Assert.assertArrayEquals(allBytes,
+    void compressIdentityWithByteRange() throws Exception {
+        assertArrayEquals(allBytes,
                 _Bytes.decompress(_Bytes.compress(allBytes)));
     }
 
     @Test
-    public void compressIdentityWithTestimonial() throws Exception {
-        Assert.assertArrayEquals(testimonial,
+    void compressIdentityWithTestimonial() throws Exception {
+        assertArrayEquals(testimonial,
                 _Bytes.decompress(_Bytes.compress(testimonial)));
     }
 
     @Test
-    public void compressionRatio() throws Exception {
+    void compressionRatio() throws Exception {
         // lower is better
         final double compressionRatio = (double)_Bytes.compress(testimonial).length / testimonial.length;
-        Assert.assertThat(compressionRatio, lessThan(0.7));
+        assertThat(compressionRatio, lessThan(0.7));
     }
 
 
     // -- COMPRESSION
 
-    @RunWith(Parameterized.class)
-    public static class CompressionTest {
-
-
-        @Parameters
-        public static Object[] data() {
-            return new Object[] { 
-                    (byte[]) null,
-                    new byte[] { },
-                    new byte[] { 0 }, 
-                    new byte[] { 0, 1 },
-                    new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 17 
-                    new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 18
-                    new byte[] { 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 19
-            };
-        }
-
-        @Parameter
-        public byte[] input;
-
-
-        @Test
-        public void compressIdentity() throws Exception {
-            Assert.assertArrayEquals(input,
-                    _Bytes.decompress(_Bytes.compress(input)));
-        }
-
+    private static byte[] data(int index) {
+        return (byte[]) new Object[] { 
+                (byte[]) null,
+                new byte[] { },
+                new byte[] { 0 }, 
+                new byte[] { 0, 1 },
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 17 
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 18
+                new byte[] { 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 19
+        }[index];
+    }
+    
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6}) // data indices
+    void compressionRundtrip(int dataIndex) throws Exception {
+        val input = data(dataIndex);
+        assertArrayEquals(input,
+                _Bytes.decompress(_Bytes.compress(input)));
     }
 
     // -- BASE-64
 
     @Test
-    public void base64IdentityWithNull() throws Exception {
-        Assert.assertNull(_Bytes.decodeBase64(
+    void base64IdentityWithNull() throws Exception {
+        assertNull(_Bytes.decodeBase64(
                 Base64.getUrlDecoder(), 
                 _Bytes.encodeToBase64(Base64.getUrlEncoder(), null)));
     }
 
     @Test
-    public void base64IdentityWithByteRange() throws Exception {
-        Assert.assertArrayEquals(allBytes,
+    void base64IdentityWithByteRange() throws Exception {
+        assertArrayEquals(allBytes,
                 _Bytes.decodeBase64(
                         Base64.getUrlDecoder(), 
                         _Bytes.encodeToBase64(Base64.getUrlEncoder(), allBytes)));
     }
 
     @Test
-    public void base64IdentityWithTestimonial() throws Exception {
-        Assert.assertArrayEquals(testimonial,
+    void base64IdentityWithTestimonial() throws Exception {
+        assertArrayEquals(testimonial,
                 _Bytes.decodeBase64(
                         Base64.getUrlDecoder(), 
                         _Bytes.encodeToBase64(Base64.getUrlEncoder(), testimonial)));
@@ -173,23 +165,23 @@ public class BytesTest {
     // -- OPERATOR COMPOSITION
 
     @Test
-    public void composedOperatorWithNull() throws Exception {
-        Assert.assertNull(_Bytes.asCompressedUrlBase64.apply(null));
-        Assert.assertNull(_Bytes.ofCompressedUrlBase64.apply(null));
-        Assert.assertNull(_Bytes.asUrlBase64.apply(null));
-        Assert.assertNull(_Bytes.ofUrlBase64.apply(null));
+    void composedOperatorWithNull() throws Exception {
+        assertNull(_Bytes.asCompressedUrlBase64.apply(null));
+        assertNull(_Bytes.ofCompressedUrlBase64.apply(null));
+        assertNull(_Bytes.asUrlBase64.apply(null));
+        assertNull(_Bytes.ofUrlBase64.apply(null));
     }
 
     @Test
-    public void composedIdentityWithByteRange() throws Exception {
-        Assert.assertArrayEquals(allBytes,
+    void composedIdentityWithByteRange() throws Exception {
+        assertArrayEquals(allBytes,
                 _Bytes.ofCompressedUrlBase64.apply(
                         _Bytes.asCompressedUrlBase64.apply(allBytes)));
     }
 
     @Test
-    public void composedIdentityWithTestimonial() throws Exception {
-        Assert.assertArrayEquals(testimonial,
+    void composedIdentityWithTestimonial() throws Exception {
+        assertArrayEquals(testimonial,
                 _Bytes.ofCompressedUrlBase64.apply(
                         _Bytes.asCompressedUrlBase64.apply(testimonial)));
     }
@@ -197,8 +189,8 @@ public class BytesTest {
     // -- HELPER
 
     private void assertArrayEqualsButNotSame(byte[] a, byte[] b) {
-        Assert.assertFalse(a == b);
-        Assert.assertArrayEquals(a, b);
+        assertFalse(a == b);
+        assertArrayEquals(a, b);
     }
 
 }

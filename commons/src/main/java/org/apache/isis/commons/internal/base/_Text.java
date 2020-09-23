@@ -1,0 +1,224 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+package org.apache.isis.commons.internal.base;
+
+import java.util.function.ToIntFunction;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.commons.collections.Can;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+
+/**
+ * <h1>- internal use only -</h1>
+ * <p>
+ * Provides common text processing algorithms.
+ * </p>
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * These may be changed or removed without notice!
+ * </p>
+ *
+ * @since 2.0
+ */
+public final class _Text {
+
+    private _Text() {}
+
+    /**
+     * Converts given {@code text} into a {@link Stream} of lines, 
+     * removing new line characters {@code \n,\r} in the process.
+     * @param text - nullable
+     * @return non-null
+     * @apiNote Java 11+ provides {@code String.lines()}
+     */
+    public static Stream<String> streamLines(final @Nullable String text){
+        return _Strings.splitThenStream(text, "\n")
+                .map(s->s.replace("\r", ""));
+    }
+    
+    /**
+     * Converts given {@code text} into a {@link Can} of lines, 
+     * removing new line characters {@code \n,\r} in the process.
+     * @param text - nullable
+     * @return non-null
+     */
+    public static Can<String> getLines(final @Nullable String text){
+        return Can.ofStream(streamLines(text));
+    }
+
+    // -- NORMALIZING
+    
+    /**
+     * Converts given {@code lines} into a {@link Can} of lines, 
+     * with any empty lines removed that appear 
+     * <ul>
+     * <li>before the first non-empty line</li>
+     * <li>immediately after an empty line</li>
+     * <li>after the last non-empty line</li>
+     * </ul>
+     * A line is considered non-empty, 
+     * if it contains non-whitespace characters.
+     * 
+     * @param lines
+     * @return non-null
+     */
+    public static Can<String> normalize(final @NonNull Can<String> lines) {
+        return removeRepeatedEmptyLines(removeTrailingEmptyLines(removeLeadingEmptyLines(lines)));
+    }
+    
+    /**
+     * Converts given {@code lines} into a {@link Can} of lines, 
+     * with any empty lines removed that appear before the first non-empty line.
+     * A line is considered non-empty, 
+     * if it contains non-whitespace characters.
+     * 
+     * @param lines
+     * @return non-null
+     */
+    public static Can<String> removeLeadingEmptyLines(final @NonNull Can<String> lines) {
+        
+        if(lines.isEmpty()) {
+            return lines;
+        }
+        
+        final int[] nonEmptyLineCount = {0}; 
+        
+        return lines.stream()
+                // peek with side-effect
+                .peek(line->{
+                    if(hasNonWhiteSpaceChars(line)) nonEmptyLineCount[0]++;
+                })
+                .filter(line->nonEmptyLineCount[0]>0)
+                .collect(Can.toCan());
+    }
+    
+    /**
+     * Converts given {@code lines} into a {@link Can} of lines, 
+     * with any empty lines removed that appear after the last non-empty line.
+     * A line is considered non-empty, 
+     * if it contains non-whitespace characters.
+     * 
+     * @param lines
+     * @return non-null
+     */
+    public static Can<String> removeTrailingEmptyLines(final @NonNull Can<String> lines) {
+        
+        if(lines.isEmpty()) {
+            return lines;
+        }
+        
+        final int lastLineIndex = lines.size()-1;
+        
+        final int lastNonEmptyLineIndex = lines.stream()
+        .mapToInt(indexAndlineToIntFunction((index, line)->hasNonWhiteSpaceChars(line) ? index : -1))
+        .max()
+        .orElse(-1);
+
+        if(lastLineIndex == lastNonEmptyLineIndex) {
+            return lines; // reuse immutable object
+        }
+        
+        return lines.stream().limit(lastNonEmptyLineIndex+1).collect(Can.toCan());
+    }
+    
+    /**
+     * Converts given {@code lines} into a {@link Can} of lines, 
+     * with any empty lines removed that appear immediately after an empty line.
+     * A line is considered non-empty, 
+     * if it contains non-whitespace characters.
+     * 
+     * @param lines
+     * @return non-null
+     */
+    public static Can<String> removeRepeatedEmptyLines(final @NonNull Can<String> lines) {
+        
+        // we need at least 2 lines
+        if(lines.size()<2) {
+            return lines;
+        }
+        
+        final int[] latestEmptyLineIndex = {-2};
+        
+        return streamLineObjects(lines)
+        .peek(line->{
+            if(!line.isEmpty()) {
+                return; // ignore
+            }
+            if(latestEmptyLineIndex[0] == line.getIndex()-1) {
+                line.setMarkedForRemoval(true);
+            }
+            latestEmptyLineIndex[0] = line.getIndex(); 
+        })
+        .filter(line->!line.isMarkedForRemoval())
+        .map(Line::getString)
+        .collect(Can.toCan());
+
+    }
+    
+    // -- HELPER
+    
+    private static boolean hasNonWhiteSpaceChars(String s) {
+        if(s==null) {
+            return false;
+        }
+        return !s.trim().isEmpty();
+    }
+    
+    //XXX Java records to the rescue please!
+    @Getter
+    private static class Line {
+        private final int index; // zero based
+        private final String string;
+        private final boolean empty; // whether has no non-whitespace characters
+        @Setter private boolean markedForRemoval;
+
+        public Line(int index, String string) {
+            this.index = index;
+            this.string = string;
+            this.empty = !hasNonWhiteSpaceChars(string);
+        }
+        
+    }
+    
+    private static Stream<Line> streamLineObjects(final @NonNull Can<String> lines) {
+        final int[] indexRef = {0};
+        return lines.stream().map(line->new Line(indexRef[0]++, line));
+    }
+    
+    
+    //XXX Java records to the rescue please!
+    private static interface IndexAwareLineToIntFunction {
+        public int apply(int lineIndex, String line);
+    }
+    
+    private static ToIntFunction<String> indexAndlineToIntFunction(IndexAwareLineToIntFunction mapper) {
+        final int[] indexRef = {0};
+        return line->mapper.apply(indexRef[0]++, line);
+    }
+    
+    
+    
+
+}

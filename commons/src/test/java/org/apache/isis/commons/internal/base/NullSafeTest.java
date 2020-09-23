@@ -26,14 +26,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class NullSafeTest {
 
@@ -79,43 +77,43 @@ class NullSafeTest {
     
     @Test
     void isEmptyString() throws Exception {
-        Assert.assertThat(_NullSafe.isEmpty((String)null), is(true));
-        Assert.assertThat(_NullSafe.isEmpty(""), is(true));
-        Assert.assertThat(_NullSafe.isEmpty(" 12 aBc"), is(false));
+        assertThat(_NullSafe.isEmpty((String)null), is(true));
+        assertThat(_NullSafe.isEmpty(""), is(true));
+        assertThat(_NullSafe.isEmpty(" 12 aBc"), is(false));
     }
 
     @Test
     void isEmptyCollection() throws Exception {
-        Assert.assertThat(_NullSafe.isEmpty((Collection<?>)null), is(true));
-        Assert.assertThat(_NullSafe.isEmpty(Collections.emptyList()), is(true));
-        Assert.assertThat(_NullSafe.isEmpty(Arrays.asList(new String[] {"foo", "bar"})), is(false));
+        assertThat(_NullSafe.isEmpty((Collection<?>)null), is(true));
+        assertThat(_NullSafe.isEmpty(Collections.emptyList()), is(true));
+        assertThat(_NullSafe.isEmpty(Arrays.asList(new String[] {"foo", "bar"})), is(false));
     }
 
     @Test
     void absence() throws Exception {
-        Assert.assertThat(_NullSafe.isAbsent(null), is(true));
-        Assert.assertThat(_NullSafe.isAbsent(""), is(false));
+        assertThat(_NullSafe.isAbsent(null), is(true));
+        assertThat(_NullSafe.isAbsent(""), is(false));
     }
 
     @Test
     void presence() throws Exception {
-        Assert.assertThat(_NullSafe.isPresent(null), is(false));
-        Assert.assertThat(_NullSafe.isPresent(""), is(true));
+        assertThat(_NullSafe.isPresent(null), is(false));
+        assertThat(_NullSafe.isPresent(""), is(true));
     }
 
 
     @Test
     void emptyStreamWithArray() throws Exception {
 
-        Assert.assertNotNull(_NullSafe.stream((String[])null));
+        assertNotNull(_NullSafe.stream((String[])null));
 
-        Assert.assertNotNull(_NullSafe.stream(_Strings.emptyArray));
-        Assert.assertEquals(0L, _NullSafe.stream(_Strings.emptyArray).count());
+        assertNotNull(_NullSafe.stream(_Strings.emptyArray));
+        assertEquals(0L, _NullSafe.stream(_Strings.emptyArray).count());
     }
 
     @Test
     void streamWithArray() throws Exception {
-        Assert.assertThat(
+        assertThat(
                 _NullSafe.stream(new String[] {"foo", "bar"})
                 .collect(Collectors.joining("|")),
                 is("foo|bar"));
@@ -124,15 +122,15 @@ class NullSafeTest {
     @Test
     void emptyStreamWithCollection() throws Exception {
 
-        Assert.assertNotNull(_NullSafe.stream((List<?>)null));
+        assertNotNull(_NullSafe.stream((List<?>)null));
 
-        Assert.assertNotNull(_NullSafe.stream(Arrays.asList(_Strings.emptyArray)));
-        Assert.assertEquals(0L, _NullSafe.stream(Arrays.asList(_Strings.emptyArray)).count());
+        assertNotNull(_NullSafe.stream(Arrays.asList(_Strings.emptyArray)));
+        assertEquals(0L, _NullSafe.stream(Arrays.asList(_Strings.emptyArray)).count());
     }
 
     @Test
     void streamWithCollection() throws Exception {
-        Assert.assertThat(
+        assertThat(
                 _NullSafe.stream(Arrays.asList(new String[] {"foo", "bar"}))
                 .collect(Collectors.joining("|")),
                 is("foo|bar"));
@@ -141,15 +139,15 @@ class NullSafeTest {
     @Test
     void emptyStreamWithIterator() throws Exception {
 
-        Assert.assertNotNull(_NullSafe.stream((Iterator<?>)null));
+        assertNotNull(_NullSafe.stream((Iterator<?>)null));
 
-        Assert.assertNotNull(_NullSafe.stream(Arrays.asList(_Strings.emptyArray)).iterator());
-        Assert.assertEquals(0L, _NullSafe.stream(Arrays.asList(_Strings.emptyArray).iterator()).count());
+        assertNotNull(_NullSafe.stream(Arrays.asList(_Strings.emptyArray)).iterator());
+        assertEquals(0L, _NullSafe.stream(Arrays.asList(_Strings.emptyArray).iterator()).count());
     }
 
     @Test
     void streamWithIterator() throws Exception {
-        Assert.assertThat(
+        assertThat(
                 _NullSafe.stream(Arrays.asList(new String[] {"foo", "bar"}).iterator())
                 .collect(Collectors.joining("|")),
                 is("foo|bar"));

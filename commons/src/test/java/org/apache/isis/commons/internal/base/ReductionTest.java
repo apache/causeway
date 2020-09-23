@@ -21,18 +21,17 @@ package org.apache.isis.commons.internal.base;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.collections._Lists;
 
-public class ReductionTest {
+class ReductionTest {
 
     @Test
-    public void findMinimum() throws Exception {
+    void findMinimum() throws Exception {
 
         final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
 
@@ -40,11 +39,11 @@ public class ReductionTest {
 
         values.forEach(toMinReduction);
 
-        Assert.assertThat(toMinReduction.getResult().get(), is(1));
+        assertThat(toMinReduction.getResult().get(), is(1));
     }
 
     @Test
-    public void findMinimum_initialized_low() throws Exception {
+    void findMinimum_initialized_low() throws Exception {
 
         final int initial = -1;
 
@@ -54,11 +53,11 @@ public class ReductionTest {
 
         values.forEach(toMinReduction);
 
-        Assert.assertThat(toMinReduction.getResult().get(), is(initial));
+        assertThat(toMinReduction.getResult().get(), is(initial));
     }
 
     @Test
-    public void findMinimum_initialized_high() throws Exception {
+    void findMinimum_initialized_high() throws Exception {
 
         final int initial = 3;
 
@@ -68,7 +67,7 @@ public class ReductionTest {
 
         values.forEach(toMinReduction);
 
-        Assert.assertThat(toMinReduction.getResult().get(), is(1));
+        assertThat(toMinReduction.getResult().get(), is(1));
     }
 
 
