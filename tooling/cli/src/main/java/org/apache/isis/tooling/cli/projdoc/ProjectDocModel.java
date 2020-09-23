@@ -106,13 +106,13 @@ public class ProjectDocModel {
 
     // -- HELPER
 
+    @RequiredArgsConstructor(staticName = "of")
+    private static class ProjectAndContainerTuple {
+        final ProjectNode projectNode;
+        final Container container;
+    }
+    
     private static class GroupDiagram {
-
-        @RequiredArgsConstructor(staticName = "of")
-        private static class ProjectAndContainerTuple {
-            final ProjectNode projectNode;
-            final Container container;
-        }
         
         private final C4 c4;
         private final List<ProjectNode> projectNodes = new ArrayList<>(); 
@@ -138,7 +138,9 @@ public class ProjectDocModel {
                         return ProjectAndContainerTuple.of(projectNode, container);
                     });
 
-            val adjMatrix = _AdjacencyMatrix.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
+            //XXX lombok issue, not using val here
+            final _AdjacencyMatrix<ProjectAndContainerTuple> adjMatrix = 
+                    _AdjacencyMatrix.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
 
             tuples.forEach(tuple->{
                 adjMatrix.streamNeighbors(tuple)
