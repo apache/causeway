@@ -159,6 +159,12 @@
 				<version>${structurizr.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>com.structurizr</groupId>
+				<artifactId>structurizr-plantuml</artifactId>
+				<version>${structurizr.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -231,8 +237,9 @@
 	</dependencies>
 
 	<modules>
-		<module>javamodel</module>
+		<module>c4modeling</module>
 		<module>model4adoc</module>
+		<module>javamodel</module>
 		<module>projectmodel</module>
 
 		<!-- depends on all the others -->

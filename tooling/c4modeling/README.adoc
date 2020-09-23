@@ -1,0 +1,46 @@
+= Tooling - C4 Modeling
+
+Allows for programmatic generation of C4 models. 
+
+NOTE: Uses https://structurizr.com/[structurizr]. Details on the _C4 Model_ can be found at https://c4model.com/[_c4model.com_].
+
+WARNING: This is work-in-progress, no official Maven artifacts are published yet at the time of writing.
+However, snapshots are available with our nightly-builds:
+https://github.com/apache-isis-committers/isis-nightly[]
+
+== Usage
+
+TODO
+
+[source,java]
+----
+//TODO
+----
+
+PlantUml syntax generated:
+
+[source]
+----
+TODO
+----
+
+which renders as
+
+TODO
+
+== Install
+
+Use Maven and our snapshot repository for a preview:
+https://github.com/apache-isis-committers/isis-nightly#maven[]
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.tooling</groupId>
+    <artifactId>isis-tooling-c4modeling</artifactId>
+    <version>2.0.0-???</version>
+</dependency>
+----
+
+
+ 
