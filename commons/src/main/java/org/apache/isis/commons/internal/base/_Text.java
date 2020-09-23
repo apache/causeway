@@ -19,7 +19,10 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -103,6 +106,24 @@ public final class _Text {
             final @NonNull String resourceName, 
             final @NonNull Charset charset) {
         try(val input = resourceLocation.getResourceAsStream(resourceName)){
+            return readLines(input, charset);    
+        } 
+    }
+    
+    @SneakyThrows
+    public static Can<String> readLinesFromUrl(
+            final @NonNull URL url, 
+            final @NonNull Charset charset) {
+        try(val input = url.openStream()){
+            return readLines(input, charset);    
+        } 
+    }
+    
+    @SneakyThrows
+    public static Can<String> readLinesFromFile(
+            final @NonNull File file, 
+            final @NonNull Charset charset) {
+        try(val input = new FileInputStream(file)){
             return readLines(input, charset);    
         } 
     }
@@ -289,8 +310,6 @@ public final class _Text {
         final int[] indexRef = {0};
         return line->mapper.apply(indexRef[0]++, line);
     }
-    
-    
     
 
 }

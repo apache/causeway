@@ -19,7 +19,6 @@
 package org.apache.isis.tooling.projectmodel.test;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -33,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.tooling.projectmodel.gradle.GradleSettings;
 import org.apache.isis.tooling.projectmodel.gradle.GradleSettingsFactory;
 import org.apache.isis.tooling.projectmodel.gradle.GradleSettingsWriter;
@@ -98,12 +97,11 @@ class GradleSettingsTest extends ProjectModelTestAbstract {
     private void checkBuildFile(File buildFile, Set<String> knownBuildArtifactNames) {
         //System.out.println(String.format("checking %s", buildFile.getAbsolutePath()));
         
-        val lines = _Strings.readAllLines(new FileInputStream(buildFile), StandardCharsets.UTF_8);
-        
+        val lines = _Text.readLinesFromFile(buildFile, StandardCharsets.UTF_8);
         for(val line : lines) {
             checkBuildFileLine(buildFile, line, knownBuildArtifactNames);
         }
-        
+       
     }
 
     private void checkBuildFileLine(File buildFile, String line, Set<String> knownBuildArtifactNames) {

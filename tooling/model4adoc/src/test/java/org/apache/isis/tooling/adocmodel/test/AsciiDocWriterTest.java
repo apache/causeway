@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.adocmodel.test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import org.asciidoctor.Asciidoctor;
@@ -31,6 +32,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.cell;
@@ -69,8 +72,6 @@ class AsciiDocWriterTest {
     @Test
     void testSimpleTable() throws IOException {
         
-        val adocRef = Util.readResource(this, "simple-table.adoc");
-        
         val table = table(doc);
         table.setTitle("Table");
         
@@ -90,14 +91,13 @@ class AsciiDocWriterTest {
         
         //System.out.println(actualAdoc); debug
         
-        assertEquals(adocRef, actualAdoc);
-        
+        _Text.assertTextEquals(
+                _Text.readLinesFromResource(this.getClass(), "simple-table.adoc", StandardCharsets.UTF_8), 
+                actualAdoc);
     }
     
     @Test
     void testAttributedTable() throws IOException {
-        
-        val adocRef = Util.readResource(this, "attributed-table.adoc");
         
         val table = table(doc);
         table.setTitle("Some table");
@@ -114,31 +114,32 @@ class AsciiDocWriterTest {
         
         //System.out.println(actualAdoc); // debug
         
-        assertEquals(adocRef, actualAdoc);
+        _Text.assertTextEquals(
+                _Text.readLinesFromResource(this.getClass(), "attributed-table.adoc", StandardCharsets.UTF_8), 
+                actualAdoc);
         
     }
     
     @Test @Disabled
     void testSimpleTableModel() throws IOException {
     
-        val adocRef = Util.readResource(this, "simple-table.adoc");
+        val adocRef = _Strings.readFromResource(this.getClass(), "simple-table.adoc", StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
         
         String actualAdoc = AsciiDocWriter.toString(refDoc);
         
-        debug(refDoc);
+        //debug(refDoc);
         
-        System.out.println(actualAdoc);
+        //System.out.println(actualAdoc); //debug
         
-        assertEquals(adocRef, actualAdoc);
+        _Text.assertTextEquals(adocRef, actualAdoc);
     }
-    
     
     @Test
     void testAttributedTableModel() throws IOException {
     
-        val adocRef = Util.readResource(this, "attributed-table.adoc");
+        val adocRef = _Strings.readFromResource(this.getClass(), "attributed-table.adoc", StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
         
@@ -148,9 +149,10 @@ class AsciiDocWriterTest {
         
         //System.out.println(actualAdoc); // debug
         
-        assertEquals(adocRef, actualAdoc);
+        _Text.assertTextEquals(adocRef, actualAdoc);
     }
     
+    @SuppressWarnings("unused")
     private static void debug(Document doc) {
         val refTable = (Table)doc.getBlocks().get(0);
         val refCol = refTable.getColumns().get(0);
