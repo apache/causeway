@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 
 import com.structurizr.model.Container;
 
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.asciidoctor.ast.Document;
 
 import org.apache.isis.commons.collections.Can;
@@ -54,6 +55,7 @@ import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.headRow;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.row;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -107,9 +109,10 @@ public class ProjectDocModel {
     // -- HELPER
 
     @RequiredArgsConstructor(staticName = "of")
+    @EqualsAndHashCode
     private static class ProjectAndContainerTuple {
         final ProjectNode projectNode;
-        final Container container;
+        @EqualsExclude final Container container;
     }
     
     private static class GroupDiagram {
@@ -125,20 +128,21 @@ public class ProjectDocModel {
             projectNodes.add(module);
         }
 
+        //XXX lombok issues, not using val here
         public String toPlantUml() {
             val key = c4.getWorkspaceName();
             val softwareSystem = c4.softwareSystem("package-ecosystem", null);
 
-            val tuples = Can.ofCollection(projectNodes)
-                    .map(projectNode->{
-                        val name = projectNode.getName();
-                        val description = ""; //projectNode.getDescription() XXX needs sanitizing, potentially breaks plantuml/asciidoc syntax
-                        val technology = String.format("packaging: %s", projectNode.getArtifactCoordinates().getPackaging());
-                        val container = softwareSystem.addContainer(name, description, technology);
-                        return ProjectAndContainerTuple.of(projectNode, container);
-                    });
+            final Can<ProjectAndContainerTuple> tuples = Can.<ProjectNode>ofCollection(projectNodes)
+            .map(projectNode->{
+                val name = projectNode.getName();
+                val description = ""; //projectNode.getDescription() XXX needs sanitizing, potentially breaks plantuml/asciidoc syntax
+                val technology = String.format("packaging: %s", projectNode.getArtifactCoordinates().getPackaging());
+                val container = softwareSystem.addContainer(name, description, technology);
+                return ProjectAndContainerTuple.of(projectNode, container);
+            });
 
-            //XXX lombok issue, not using val here
+            
             final _AdjacencyMatrix<ProjectAndContainerTuple> adjMatrix = 
                     _AdjacencyMatrix.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
 
