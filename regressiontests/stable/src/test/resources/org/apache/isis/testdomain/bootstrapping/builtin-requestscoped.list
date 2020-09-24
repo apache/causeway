@@ -2,6 +2,6 @@ org.apache.isis.applib.services.iactn.InteractionContext
 org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal
 org.apache.isis.applib.services.scratchpad.Scratchpad
 org.apache.isis.core.runtimeservices.changes.ChangedObjectsServiceInternal
-org.apache.isis.core.runtimeservices.metrics.MetricsServiceDefault
+org.apache.isis.core.runtimeservices.metrics.MetricsServiceForJdo
 PublisherDispatchServiceDefault
 org.apache.isis.objectstore.jdo.datanucleus.service.support.TimestampService

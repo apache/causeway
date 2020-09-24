@@ -1007,7 +1007,7 @@ _Components_
 * org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 * org.apache.isis.persistence.jdo.datanucleus5.jdosupport.IsisJdoSupportDN5
 * org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingModelPlugin
-* org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault
+* org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceForJdo
 * org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo
 * org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5
 

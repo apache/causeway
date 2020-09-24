@@ -25,7 +25,10 @@ include::refguide:applib-svc:example$services/metrics/MetricsService.java[tags="
 
 == Implementation
 
-The framework provides a default implementation of this API, namely `o.a.i.c.r.s.metrics.MetricsServiceDefault`.
+The framework provides persistence layer specific implementations of this API:
+ 
+- `o.a.i.**.MetricsServiceForJdo` 
+- `o.a.i.**.MetricsServiceForJpa`
 
 
 

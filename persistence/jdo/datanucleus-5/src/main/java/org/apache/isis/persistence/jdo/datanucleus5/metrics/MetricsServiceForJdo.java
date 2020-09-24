@@ -38,13 +38,13 @@ import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
 @Service
-@Named("isisJdoDn5.MetricsServiceDefault")
+@Named("isisJdoDn5.MetricsServiceForJdo")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
 //@Log4j2
-public class MetricsServiceDefault 
+public class MetricsServiceForJdo 
 implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, TransactionScopeListener {
 
     @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsProvider;
