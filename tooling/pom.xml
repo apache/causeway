@@ -34,11 +34,11 @@
 	<packaging>pom</packaging>
 
 	<properties>
+	
+		<maven.compiler.release>11</maven.compiler.release>
 
 		<jar-plugin.automaticModuleName>org.apache.isis.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/tooling</git-plugin.propertiesDir>
-
-		<java.version>11</java.version>
 
 		<asciidoctorj.version>2.4.1</asciidoctorj.version>
 		<gradle-tooling.version>6.6.1</gradle-tooling.version>
@@ -82,14 +82,6 @@
 				</excludes>
 			</resource>
 		</resources>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<release>${java.version}</release>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 
 	<dependencyManagement>

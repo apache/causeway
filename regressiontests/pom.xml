@@ -33,10 +33,11 @@
 	<packaging>pom</packaging>
 
 	<properties>
+		
+		<maven.compiler.release>11</maven.compiler.release>
+		
 		<skip.regressionTests>false</skip.regressionTests>
 		<skipTests>${skip.regressionTests}</skipTests>
-		
-		<java.version>11</java.version>
 		
 	</properties>
 
@@ -58,13 +59,6 @@
 			</resource>
 		</resources>
 		<plugins>
-		
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<release>${java.version}</release>
-				</configuration>
-			</plugin>
 		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

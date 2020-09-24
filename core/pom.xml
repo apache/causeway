@@ -35,7 +35,7 @@
     </description>
 
 	<properties>
-
+	
 		<isis.skipTests>false</isis.skipTests>
 		<maven.test.skip>${isis.skipTests}</maven.test.skip>
 
@@ -45,8 +45,6 @@
 		<git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
 		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.arg>-parameters</maven.compiler.arg>
 
 		<dependency.locations.enabled>false</dependency.locations.enabled>
@@ -301,8 +299,9 @@
 					<configuration>
 						<showDeprecation>false</showDeprecation>
 						<showWarnings>false</showWarnings>
-						<source>${maven.compiler.source}</source>
-						<target>${maven.compiler.target}</target>
+						<!-- defaults, to be overridden with option maven.compiler.release -->
+						<source>1.8</source>
+						<target>1.8</target>
 						<compilerArgs>
 					        <arg>${maven.compiler.arg}</arg>
 					    </compilerArgs>
