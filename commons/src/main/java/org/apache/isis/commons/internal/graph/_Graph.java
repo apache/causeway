@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.math;
+package org.apache.isis.commons.internal.graph;
 
 import java.util.function.BiPredicate;
 import java.util.stream.Stream;
@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0
  */
 @RequiredArgsConstructor(staticName = "of")
-public class _AdjacencyMatrix<T> {
+public class _Graph<T> {
 
     private final Can<T> nodes;
     private final BiPredicate<T, T> relationPredicate;

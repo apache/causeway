@@ -38,7 +38,7 @@ import org.asciidoctor.ast.Document;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.math._AdjacencyMatrix;
+import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig.ProjectDoc;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
@@ -143,8 +143,8 @@ public class ProjectDocModel {
             });
 
             
-            final _AdjacencyMatrix<ProjectAndContainerTuple> adjMatrix = 
-                    _AdjacencyMatrix.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
+            final _Graph<ProjectAndContainerTuple> adjMatrix = 
+                    _Graph.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
 
             tuples.forEach(tuple->{
                 adjMatrix.streamNeighbors(tuple)
