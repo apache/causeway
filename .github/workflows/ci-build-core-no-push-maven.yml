@@ -54,7 +54,7 @@ jobs:
       run: bash $CI_SCRIPTS_PATH/build-core.sh
       env:
         # also build and run regressiontests and kroviz
-        MVN_ADDITIONAL_OPTS: -Dregressiontests-module -Dkroviz-module
+        MVN_ADDITIONAL_OPTS: -Dregressiontests-module -Dkroviz-module -T 1C
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context 
