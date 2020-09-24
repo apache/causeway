@@ -105,7 +105,7 @@
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
 		<datanucleus-rdbms.version>5.2.4</datanucleus-rdbms.version>
 
-		<docx4j.version>3.2.1</docx4j.version>
+		<docx4j.version>6.1.2</docx4j.version>
 
 		<easymock.version>4.2</easymock.version>
 		<error_prone_annotations.version>2.4.0</error_prone_annotations.version>
