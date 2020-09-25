@@ -86,7 +86,6 @@
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
 		<commons-io.version>2.8.0</commons-io.version>
 		<commons-lang3.version>3.11</commons-lang3.version>
-		<commons-logging.version>99.0-does-not-exist</commons-logging.version>
 
 		<cucumber.version>6.7.0</cucumber.version>
 
@@ -932,14 +931,6 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
-			</dependency>
-
-			<dependency>
-				<!-- required because resteasy-jaxrs declares as a test dependency whereas
-					httpclient4 needs it as a compile dependency -->
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging</artifactId>
-				<version>${commons-logging.version}</version>
 			</dependency>
 
 			<dependency>
