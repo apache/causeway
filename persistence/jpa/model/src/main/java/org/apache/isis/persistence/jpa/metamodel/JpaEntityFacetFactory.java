@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -83,7 +84,6 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
 
         private final Class<?> entityClass;
         private final ServiceRegistry serviceRegistry;
-        private final _Lazy<Optional<EntityType<?>>> jpaEntityTypeRef = _Lazy.threadSafe(this::queryJpaMetamodel) ;
         
         protected JpaEntityFacet(
                 final FacetHolder holder,
@@ -137,9 +137,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 final @NonNull ObjectSpecification entitySpec, 
                 final @NonNull String identifier) {
             
-            val primaryKeyType = getJpaEntityType().getIdType().getJavaType();
-            val primaryKey = getObjectIdSerializer().parse(primaryKeyType, identifier);
-            
+            val primaryKey = getObjectIdSerializer().parse(identifier);
             val entityManager = getEntityManager();
             val entity = entityManager.find(entityClass, primaryKey);
             
@@ -261,6 +259,8 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         
         // -- JPA METAMODEL
         
+        private final _Lazy<Optional<EntityType<?>>> jpaEntityTypeRef = _Lazy.threadSafe(this::queryJpaMetamodel);
+        
         /** get the JPA meta-model associated with this (corresponding) entity*/
         private EntityType<?> getJpaEntityType() {
             return jpaEntityTypeRef.get().orElseThrow(_Exceptions::noSuchElement);
@@ -272,6 +272,19 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             .stream()
             .filter(type->type.getJavaType().equals(entityClass))
             .findFirst();
+        }
+        
+        // -- OBJECT ID SERIALIZATION
+        
+        private final _Lazy<JpaObjectIdSerializer<Object>> objectIdSerializerRef = _Lazy.threadSafe(this::createObjectIdSerializer);
+        
+        protected JpaObjectIdSerializer<Object> getObjectIdSerializer() {
+            return objectIdSerializerRef.get();
+        }
+        
+        protected JpaObjectIdSerializer<Object> createObjectIdSerializer() {
+            val primaryKeyType = getJpaEntityType().getIdType().getJavaType();
+            return _Casts.uncheckedCast(createJpaObjectIdSerializer(primaryKeyType, serviceRegistry));
         }
         
         // -- DEPENDENCIES
@@ -288,70 +301,94 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             return entityManager.getEntityManagerFactory().getPersistenceUnitUtil();
         }
         
-        protected JpaObjectIdSerializer getObjectIdSerializer() {
-            val codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
-            val serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
-            return new JpaObjectIdSerializer(codec, serializer);
+    }
+    
+    // -- HELPER - OBJECT ID SERIALIZATION
+    
+
+    @SuppressWarnings("rawtypes")
+    private static JpaObjectIdSerializer createJpaObjectIdSerializer(
+            final @NonNull Class<?> primaryKeyType,
+            final @NonNull ServiceRegistry serviceRegistry) {
+        
+        
+        // not strictly required, but to have simpler entity URLs for simple primary-key types
+        {
+            if(primaryKeyType.equals(Long.class)
+                    || primaryKeyType.equals(long.class)) {
+                return new LongIdSerializer();
+            }
+            if(primaryKeyType.equals(Integer.class)
+                    || primaryKeyType.equals(int.class)) {
+                return new IntegerIdSerializer();
+            }
+            if(primaryKeyType.equals(Short.class)
+                    || primaryKeyType.equals(short.class)) {
+                return new ShortIdSerializer();
+            }
+            if(primaryKeyType.equals(Byte.class)
+                    || primaryKeyType.equals(byte.class)) {
+                return new ByteIdSerializer();
+            }
         }
         
+        val codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
+        val serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
+        return new JpaObjectIdSerializerUsingMementos<>(primaryKeyType, codec, serializer);
     }
-
+    
+    
     @RequiredArgsConstructor
-    private static class JpaObjectIdSerializer {
-        
+    private static abstract class JpaObjectIdSerializer<T> {
+        @SuppressWarnings("unused")
+        final Class<T> primaryKeyType;
+        abstract String stringify(T id);
+        abstract T parse(String stringifiedPrimaryKey);
+    }
+    
+    private static class LongIdSerializer extends JpaObjectIdSerializer<Long> {
+        public LongIdSerializer() { super(Long.class); }
+        @Override String stringify(Long id) { return id.toString(); }
+        @Override Long parse(String stringifiedPrimaryKey) { return Long.parseLong(stringifiedPrimaryKey); }
+    }
+    private static class IntegerIdSerializer extends JpaObjectIdSerializer<Integer> {
+        public IntegerIdSerializer() { super(Integer.class); }
+        @Override String stringify(Integer id) { return id.toString(); }
+        @Override Integer parse(String stringifiedPrimaryKey) { return Integer.parseInt(stringifiedPrimaryKey); }
+    }
+    private static class ShortIdSerializer extends JpaObjectIdSerializer<Short> {
+        public ShortIdSerializer() { super(Short.class); }
+        @Override String stringify(Short id) { return id.toString(); }
+        @Override Short parse(String stringifiedPrimaryKey) { return Short.parseShort(stringifiedPrimaryKey); }
+    }
+    private static class ByteIdSerializer extends JpaObjectIdSerializer<Byte> {
+        public ByteIdSerializer() { super(Byte.class); }
+        @Override String stringify(Byte id) { return id.toString(); }
+        @Override Byte parse(String stringifiedPrimaryKey) { return Byte.parseByte(stringifiedPrimaryKey); }
+    }
+    
+    private static class JpaObjectIdSerializerUsingMementos<T> extends JpaObjectIdSerializer<T> {
         private final UrlEncodingService codec;
         private final SerializingAdapter serializer;
         
+        public JpaObjectIdSerializerUsingMementos(
+                final @NonNull Class<T> primaryKeyType, 
+                final @NonNull UrlEncodingService codec,
+                final @NonNull SerializingAdapter serializer) {
+            super(primaryKeyType);
+            this.codec = codec;
+            this.serializer = serializer;
+        }
+       
         public String stringify(Object id) {
-
-            // not strictly required, but to have simpler entity URLs for simple primary-key types 
-            {
-                if(id instanceof Long) {
-                    return ((Long)id).toString();
-                }
-                if(id instanceof Integer) {
-                    return ((Integer)id).toString();
-                }
-                if(id instanceof Short) {
-                    return ((Short)id).toString();
-                }
-                if(id instanceof Byte) {
-                    return ((Byte)id).toString();
-                }
-            }
-            
             return newMemento().put("id", id).asString();
         }
         
-        public Object parse(
-                final @NonNull Class<?> primaryKeyType, 
-                final String stringifiedPrimaryKey) {
-            
+        public T parse(final String stringifiedPrimaryKey) {
             if(_Strings.isEmpty(stringifiedPrimaryKey)) {
                 return null;
             }
-
-            // not strictly required, but to have simpler entity URLs for simple primary-key types 
-            {
-                if(primaryKeyType.equals(Long.class)
-                        || primaryKeyType.equals(long.class)) {
-                    return Long.parseLong(stringifiedPrimaryKey);
-                }
-                if(primaryKeyType.equals(Integer.class)
-                        || primaryKeyType.equals(int.class)) {
-                    return Integer.parseInt(stringifiedPrimaryKey);
-                }
-                if(primaryKeyType.equals(Short.class)
-                        || primaryKeyType.equals(short.class)) {
-                    return Short.parseShort(stringifiedPrimaryKey);
-                }
-                if(primaryKeyType.equals(Byte.class)
-                        || primaryKeyType.equals(byte.class)) {
-                    return Byte.parseByte(stringifiedPrimaryKey);
-                }
-            }
-            
-            return parseMemento(stringifiedPrimaryKey).get("id", Object.class);
+            return _Casts.uncheckedCast(parseMemento(stringifiedPrimaryKey).get("id", Object.class));
         }
        
         // -- HELPER
