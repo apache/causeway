@@ -19,10 +19,12 @@
 package org.apache.isis.persistence.jpa.metamodel;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceUnitUtil;
+import javax.persistence.metamodel.EntityType;
 
 import org.springframework.data.jpa.repository.JpaContext;
 
@@ -33,6 +35,7 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos;
@@ -80,6 +83,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
 
         private final Class<?> entityClass;
         private final ServiceRegistry serviceRegistry;
+        private final _Lazy<Optional<EntityType<?>>> jpaEntityTypeRef = _Lazy.threadSafe(this::queryJpaMetamodel) ;
         
         protected JpaEntityFacet(
                 final FacetHolder holder,
@@ -129,13 +133,17 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier) {
+        public ManagedObject fetchByIdentifier(
+                final @NonNull ObjectSpecification entitySpec, 
+                final @NonNull String identifier) {
             
-            val primaryKey = getObjectIdSerializer().parse(identifier);
+            val primaryKeyType = getJpaEntityType().getIdType().getJavaType();
+            val primaryKey = getObjectIdSerializer().parse(primaryKeyType, identifier);
+            
             val entityManager = getEntityManager();
             val entity = entityManager.find(entityClass, primaryKey);
             
-            return ManagedObject.of(spec, entity);
+            return ManagedObject.of(entitySpec, entity);
         }
 
         @Override
@@ -251,6 +259,21 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             return pojo;
         }
         
+        // -- JPA METAMODEL
+        
+        /** get the JPA meta-model associated with this (corresponding) entity*/
+        private EntityType<?> getJpaEntityType() {
+            return jpaEntityTypeRef.get().orElseThrow(_Exceptions::noSuchElement);
+        }
+        
+        /** find the JPA meta-model associated with this (corresponding) entity*/ 
+        private Optional<EntityType<?>> queryJpaMetamodel() {
+            return getEntityManager().getMetamodel().getEntities()
+            .stream()
+            .filter(type->type.getJavaType().equals(entityClass))
+            .findFirst();
+        }
+        
         // -- DEPENDENCIES
         
         protected JpaContext getJpaContext() {
@@ -280,14 +303,55 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         private final SerializingAdapter serializer;
         
         public String stringify(Object id) {
+
+            // not strictly required, but to have simpler entity URLs for simple primary-key types 
+            {
+                if(id instanceof Long) {
+                    return ((Long)id).toString();
+                }
+                if(id instanceof Integer) {
+                    return ((Integer)id).toString();
+                }
+                if(id instanceof Short) {
+                    return ((Short)id).toString();
+                }
+                if(id instanceof Byte) {
+                    return ((Byte)id).toString();
+                }
+            }
+            
             return newMemento().put("id", id).asString();
         }
         
-        public Object parse(String input) {
-            if(_Strings.isEmpty(input)) {
+        public Object parse(
+                final @NonNull Class<?> primaryKeyType, 
+                final String stringifiedPrimaryKey) {
+            
+            if(_Strings.isEmpty(stringifiedPrimaryKey)) {
                 return null;
             }
-            return parseMemento(input).get("id", Object.class);
+
+            // not strictly required, but to have simpler entity URLs for simple primary-key types 
+            {
+                if(primaryKeyType.equals(Long.class)
+                        || primaryKeyType.equals(long.class)) {
+                    return Long.parseLong(stringifiedPrimaryKey);
+                }
+                if(primaryKeyType.equals(Integer.class)
+                        || primaryKeyType.equals(int.class)) {
+                    return Integer.parseInt(stringifiedPrimaryKey);
+                }
+                if(primaryKeyType.equals(Short.class)
+                        || primaryKeyType.equals(short.class)) {
+                    return Short.parseShort(stringifiedPrimaryKey);
+                }
+                if(primaryKeyType.equals(Byte.class)
+                        || primaryKeyType.equals(byte.class)) {
+                    return Byte.parseByte(stringifiedPrimaryKey);
+                }
+            }
+            
+            return parseMemento(stringifiedPrimaryKey).get("id", Object.class);
         }
        
         // -- HELPER
