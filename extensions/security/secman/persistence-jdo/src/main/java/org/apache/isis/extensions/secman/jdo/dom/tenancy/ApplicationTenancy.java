@@ -48,7 +48,6 @@ import lombok.Setter;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.APPLICATION,
-        schema = "isissecurity",
         table = "ApplicationTenancy")
 @javax.jdo.annotations.Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)

@@ -32,8 +32,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Lists;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 /**
  * <h1>- internal use only -</h1>
  * <p>
