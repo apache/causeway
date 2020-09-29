@@ -33,9 +33,11 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
             Class<?> annotatedClass, 
             FacetHolder holder) {
 
-        this(
-                semanticsProviderName(config, annotatedClass), 
-                semanticsProviderClass(annotatedClass),
+        super(ValueSemanticsProviderUtil
+                .valueSemanticsProviderOrNull(
+                        semanticsProviderClass(annotatedClass),
+                        semanticsProviderName(config, annotatedClass)), 
+                AddFacetsIfInvalidStrategy.DO_ADD, 
                 holder);
     }
 
@@ -49,17 +51,6 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     }
     
     // -- HELPER
-    
-    private ValueFacetAnnotation(
-            String candidateSemanticsProviderName, 
-            Class<?> candidateSemanticsProviderClass, 
-            FacetHolder holder) {
-
-        super(ValueSemanticsProviderUtil
-                .valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), 
-                AddFacetsIfInvalidStrategy.DO_ADD, 
-                holder);
-    }
     
     private static String semanticsProviderName(IsisConfiguration config, Class<?> annotatedClass) {
         

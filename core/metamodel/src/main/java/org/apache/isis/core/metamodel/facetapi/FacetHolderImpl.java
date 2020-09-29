@@ -108,7 +108,7 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     private Map<Class<? extends Facet>, Facet> snapshot() {
         val snapshot = _Maps.<Class<? extends Facet>, Facet>newAliasMap(HashMap::new);
         facetsByType.values().forEach(topLevelFacet->{
-             
+            
             snapshot.remap(
                     topLevelFacet.facetType(), 
                     Can.ofNullable(topLevelFacet.facetAliasType()), 
@@ -116,7 +116,6 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
 
             // honor contributed facets via recursive lookup
             collectChildren(snapshot, topLevelFacet);
-
 
         });
         return snapshot;

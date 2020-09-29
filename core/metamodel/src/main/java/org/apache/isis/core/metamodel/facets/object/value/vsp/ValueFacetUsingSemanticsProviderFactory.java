@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -33,14 +32,8 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
 
     protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
         final ValueFacetUsingSemanticsProvider facet = 
-                new ValueFacetUsingSemanticsProvider(adapter, adapter);
+                new ValueFacetUsingSemanticsProvider(adapter, adapter.getFacetHolder());
         FacetUtil.addFacet(facet);
     }
-
-
-    public ServiceInjector getContext() {
-        return super.getServiceInjector();
-    }
-
 
 }

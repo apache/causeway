@@ -27,6 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public final class ValueSemanticsProviderUtil {
 
     private ValueSemanticsProviderUtil() {
@@ -52,16 +55,30 @@ public final class ValueSemanticsProviderUtil {
     public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(
             final Class<?> candidateClass, 
             final String classCandidateName) {
-
+        
         final Class<? extends ValueSemanticsProvider<?>> clazz = candidateClass != null 
                 ? uncheckedCast(ClassUtil.implementingClassOrNull(
                         candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class))
-                        : null;
+                : null;
                 
-        return clazz != null 
-                ? clazz 
-                        : uncheckedCast(ClassUtil.implementingClassOrNull(
-                                classCandidateName, ValueSemanticsProvider.class, FacetHolder.class));
+        if(clazz != null) {
+            return clazz;
+        }
+
+        final Class<? extends ValueSemanticsProvider<?>> classForName = 
+                uncheckedCast(ClassUtil.implementingClassOrNull(
+                        classCandidateName, ValueSemanticsProvider.class, FacetHolder.class));
+        
+        if(classForName!=null) {
+            return classForName;
+        }
+        
+        if(_Strings.isNotEmpty(classCandidateName)) {
+            log.warn("cannot find ValueSemanticsProvider referenced by class name {}", classCandidateName);
+        }
+        
+        return null;
+        
     }
 
 }

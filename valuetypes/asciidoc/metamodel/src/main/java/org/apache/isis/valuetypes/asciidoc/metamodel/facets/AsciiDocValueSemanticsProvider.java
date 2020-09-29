@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 public class AsciiDocValueSemanticsProvider
-extends ValueSemanticsProviderAndFacetAbstract<AsciiDoc>
+extends ValueSemanticsProviderAndFacetAbstract<AsciiDoc> 
 implements AsciiDocValueFacet {
 
     private static final int TYPICAL_LENGTH = 0;
@@ -67,23 +67,6 @@ implements AsciiDocValueFacet {
         return titleString(value);
     }
 
-
-    @Override
-    public String asciiDocValue(final ManagedObject object) {
-        if (object == null) {
-            return "";
-        }
-        final AsciiDoc asciiDoc = (AsciiDoc) object.getPojo();
-        return asciiDoc.asHtml();
-    }
-
-    @Override
-    public ManagedObject createValue(final ManagedObject object, final String html) {
-        final AsciiDoc asciiDoc = new AsciiDoc(html);
-        return getObjectManager().adapt(asciiDoc);
-    }
-
-
     @Override
     protected String doEncode(final Object object) {
         AsciiDoc asciiDoc = (AsciiDoc)object;
@@ -99,6 +82,23 @@ implements AsciiDocValueFacet {
     @Override
     public String toString() {
         return "AsciiDocValueSemanticsProvider";
+    }
+    
+    // -- AsciiDocValueFacet
+    
+    @Override
+    public String asciiDocValue(final ManagedObject object) {
+        if (object == null) {
+            return "";
+        }
+        final AsciiDoc asciiDoc = (AsciiDoc) object.getPojo();
+        return asciiDoc.asHtml();
+    }
+
+    @Override
+    public ManagedObject createValue(final ManagedObject object, final String html) {
+        final AsciiDoc asciiDoc = new AsciiDoc(html);
+        return getObjectManager().adapt(asciiDoc);
     }
 
 }

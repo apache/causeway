@@ -82,7 +82,7 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
         super.setFacetAliasType(ValueFacet.class);
 
         this.semanticsProvider = semanticsProvider;
-
+        
         // note: we can't use the runtimeContext to inject dependencies into the
         // semanticsProvider,
         // because there won't be any PersistenceSession when initially building
@@ -136,6 +136,12 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
             if (defaultsProvider != null) {
                 this.addContributedFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
+            
+            // if the SemanticsProvider is a facet then add it as a contributing facet
+            if(semanticsProvider instanceof Facet) {
+                this.addContributedFacet(((Facet) semanticsProvider));
+            }
+
         }
     }
 
