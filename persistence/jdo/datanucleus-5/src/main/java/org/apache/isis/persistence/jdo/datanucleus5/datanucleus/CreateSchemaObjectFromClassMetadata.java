@@ -24,6 +24,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.enhancer.EnhancementNucleusContextImpl;
@@ -33,6 +35,8 @@ import org.datanucleus.store.ConnectionEncryptionProvider;
 
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -122,44 +126,52 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
 
     protected String buildSqlToExec(final AbstractClassMetaData cmd) {
         final String schemaName = schemaNameFor(cmd);
-        return String.format("CREATE SCHEMA \"%s\"", schemaName);
+        final String schemaCreateSqlSyntax = schemaCreateSqlSyntaxFor(cmd);
+        return String.format(schemaCreateSqlSyntax, schemaName);
     }
 
     /**
      * Determine the name of the schema.
      */
     protected String schemaNameFor(final AbstractClassMetaData cmd) {
-        String schemaName = cmd.getSchema();
-
-        // DN uses different casing for identifiers.
-        //
-        // http://www.datanucleus.org/products/accessplatform_3_2/jdo/orm/datastore_identifiers.html
-        // http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/datastore_identifiers.html
-        //
-        // the following attempts to accommodate heuristically for the "out-of-the-box" behaviour for three common
-        // db vendors without requiring lots of complex configuration of DataNucleus
-        //
-
-        String url = getPropertyAsString("javax.jdo.option.ConnectionURL");
-
-        if(url.contains("postgres")) {
-            // in DN 4.0, was forcing lower case:
-            // schemaName = schemaName.toLowerCase(Locale.ROOT);
-
-            // in DN 4.1, am guessing that may be ok to leave unchaged (quoted identifiers?)
+        return cmd.getSchema();
+    }
+    
+    /**
+     * Determine the schema creation SQL syntax.
+     */
+    protected String schemaCreateSqlSyntaxFor(final AbstractClassMetaData cmd) {
+        val jdbcVariant = JdbcVariant.detect(getPropertyAsString("javax.jdo.option.ConnectionURL"));
+        switch (jdbcVariant) {
+        case MYSQL:
+            //XXX [ISIS-2439]
+            return "CREATE SCHEMA `%s`";
+        case POSTGRES:
+        case HSQLDB:
+        case SQLSERVER:
+        case OTHER:
+        default:
+            return "CREATE SCHEMA \"%s\"";
         }
-        if(url.contains("hsqldb")) {
-            // in DN 4.0, was forcing upper case:
-            // schemaName = schemaName.toUpperCase(Locale.ROOT);
-
-            // in DN 4.1, seems to be ok to leave as unchanged (is quoted identifiers what makes this work?)
-        }
-        if(url.contains("sqlserver")) {
-            // unchanged
-        }
-        return schemaName;
     }
 
+    @RequiredArgsConstructor
+    private static enum JdbcVariant {
+        POSTGRES(url->url.startsWith("jdbc:postgres:")),
+        HSQLDB(url->url.startsWith("jdbc:hsqldb:")),
+        SQLSERVER(url->url.startsWith("jdbc:sqlserver:")),
+        MYSQL(url->url.startsWith("jdbc:mysql:") 
+                || url.startsWith("jdbc:mariadb:")),
+        OTHER(url->true)
+        ;
+        final Predicate<String> matcher;
+        static JdbcVariant detect(String connectionUrl) {
+            return Stream.of(JdbcVariant.values())
+            .filter(variant->variant.matcher.test(connectionUrl))
+            .findFirst()
+            .orElse(OTHER);
+        }
+    }
 
     // -- helpers: closeSafely, getConnectionPassword
     protected void closeSafely(final AutoCloseable connection) {
