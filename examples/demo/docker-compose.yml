@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  primary:
+    image: "apacheisis/demo-wicket:latest"
+    environment:
+      - PROTOTYPING=true
+      - SPRING_PROFILES_ACTIVE=primary
+    ports:
+      - "8080:8080"
+  secondary:
+    image: "apacheisis/demo-wicket:latest"
+    environment:
+      - PROTOTYPING=true
+      - SPRING_PROFILES_ACTIVE=secondary
+      - ISIS_EXTENSIONS_COMMANDREPLAY_PRIMARYACCESS_BASEURLRESTFUL=http://primary:8080/restful/
+      - ISIS_EXTENSIONS_COMMANDREPLAY_PRIMARYACCESS_BASEURLWICKET=http://primary:8080/wicket/
+    ports:
+      - "9090:9090"
+    depends_on:
+      - primary
