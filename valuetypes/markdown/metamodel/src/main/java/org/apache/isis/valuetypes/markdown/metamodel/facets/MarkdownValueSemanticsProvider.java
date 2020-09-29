@@ -67,23 +67,6 @@ implements MarkdownValueFacet {
         return titleString(value);
     }
 
-
-    @Override
-    public String markdownValue(final ManagedObject object) {
-        if (object == null) {
-            return "";
-        }
-        final Markdown markdown = (Markdown) object.getPojo();
-        return markdown.asHtml();
-    }
-
-    @Override
-    public ManagedObject createValue(final ManagedObject object, final String html) {
-        final Markdown markdown = new Markdown(html);
-        return getObjectManager().adapt(markdown);
-    }
-
-
     @Override
     protected String doEncode(final Object object) {
         Markdown markdown = (Markdown)object;
@@ -99,6 +82,23 @@ implements MarkdownValueFacet {
     @Override
     public String toString() {
         return "MarkdownValueSemanticsProvider";
+    }
+    
+    // -- MarkdownValueFacet
+    
+    @Override
+    public String markdownValue(final ManagedObject object) {
+        if (object == null) {
+            return "";
+        }
+        final Markdown markdown = (Markdown) object.getPojo();
+        return markdown.asHtml();
+    }
+
+    @Override
+    public ManagedObject createValue(final ManagedObject object, final String html) {
+        final Markdown markdown = new Markdown(html);
+        return getObjectManager().adapt(markdown);
     }
 
 }

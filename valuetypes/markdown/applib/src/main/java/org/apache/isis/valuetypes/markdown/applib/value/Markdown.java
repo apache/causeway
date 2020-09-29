@@ -29,7 +29,8 @@ import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
  * Immutable value type holding pre-rendered HTML.
  *
  */
-@org.apache.isis.applib.annotation.Value
+@org.apache.isis.applib.annotation.Value(
+        semanticsProviderName = "org.apache.isis.valuetypes.markdown.metamodel.facets.MarkdownValueSemanticsProvider")
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
 public class Markdown implements HasHtml, Serializable {
 

@@ -23,7 +23,6 @@ import java.util.Collections;
 
 import javax.inject.Named;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
@@ -34,7 +33,6 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeDefinition;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
-import org.apache.isis.valuetypes.markdown.metamodel.facets.MarkdownValueFacetUsingSemanticsProviderFactory;
 
 @Configuration
 @Import({
@@ -50,9 +48,10 @@ public class IsisModuleValMarkdownMetaModel {
 class MarkdownMetaModelRefiner implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addFactory(
-                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
-                MarkdownValueFacetUsingSemanticsProviderFactory.class);
+//blueprint
+//        programmingModel.addFactory(
+//                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
+//                MarkdownValueFacetUsingSemanticsProviderFactory.class);
     }
 }
 
