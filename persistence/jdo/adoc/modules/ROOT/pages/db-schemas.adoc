@@ -13,7 +13,7 @@ For example:
 [source,java]
 ----
 @javax.jdo.annotations.PersistenceCapable( ...
-        schema = "isissecurity",
+        schema = "isisExtensionsSecman",
         table = "ApplicationUser")
 public class ApplicationUser ... { /* ... */ }
 ----
@@ -22,7 +22,7 @@ results in a `CREATE TABLE` statement of:
 
 [source,sql]
 ----
-CREATE TABLE isissecurity."ApplicationUser" (
+CREATE TABLE isisExtensionsSecman."ApplicationUser" (
     ...
 )
 ----
