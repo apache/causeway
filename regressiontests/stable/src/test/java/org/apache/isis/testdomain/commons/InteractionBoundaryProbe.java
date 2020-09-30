@@ -81,18 +81,30 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnded");
     }
 
-    // -- ASSERTIONS
+    // -- ASSERTIONS (INTERACTIONAL)
+    
+    public static void assertInteractional(KVStoreForTesting kvStoreForTesting, Runnable runnable) {
+        assertInteractional(kvStoreForTesting, ()->{ runnable.run(); return null; });
+    }
+    
+    public static <T> T assertInteractional(KVStoreForTesting kvStoreForTesting, Supplier<T> supplier) {
+
+        final long iaStartCountBefore = totalInteractionsStarted(kvStoreForTesting);
+        final long iaEndCountBefore = totalInteractionsEnded(kvStoreForTesting);
+        val result = supplier.get();
+        final long iaStartCountAfter = totalInteractionsStarted(kvStoreForTesting);
+        final long iaEndCountAfter = totalInteractionsEnded(kvStoreForTesting);
+
+        Assertions.assertEquals(1, iaStartCountAfter - iaStartCountBefore);
+        Assertions.assertEquals(1, iaEndCountAfter - iaEndCountBefore);
+        
+        return result;
+    }
+    
+    // -- ASSERTIONS (TRANSACTIONAL)
     
     public static void assertTransactional(KVStoreForTesting kvStoreForTesting, Runnable runnable) {
-
-        final long txStartCountBefore = totalTransactionsStarted(kvStoreForTesting);
-        final long txEndCountBefore = totalTransactionsEnded(kvStoreForTesting);
-        runnable.run();
-        final long txStartCountAfter = totalTransactionsStarted(kvStoreForTesting);
-        final long txEndCountAfter = totalTransactionsEnded(kvStoreForTesting);
-
-        Assertions.assertEquals(1, txStartCountAfter - txStartCountBefore);
-        Assertions.assertEquals(1, txEndCountAfter - txEndCountBefore);
+        assertTransactional(kvStoreForTesting, ()->{ runnable.run(); return null; });
     }
     
     public static <T> T assertTransactional(KVStoreForTesting kvStoreForTesting, Supplier<T> supplier) {

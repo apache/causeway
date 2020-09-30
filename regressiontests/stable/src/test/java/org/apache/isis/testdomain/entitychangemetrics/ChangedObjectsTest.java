@@ -88,16 +88,20 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
+        // each test runs in its own interaction context (check)
+        val testRunNr = kvStoreForTesting.incrementCounter(ChangedObjectsTest.class, "test-run");
+        assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
     }
     
     @Test
     void wrapperInvocation_shouldSpawnSingleTransaction() {
-        
+
         // given
-        val inventoryManager = factoryService.create(JdoInventoryManager.class);
         
         // spawns its own transactional boundary (check)
         val book = assertTransactional(kvStoreForTesting, this::getBookSample);
+        val inventoryManager = factoryService.create(JdoInventoryManager.class);
+
         
         // spawns its own transactional boundary (check)
         val product = assertTransactional(kvStoreForTesting, 
@@ -108,6 +112,11 @@ class ChangedObjectsTest extends InteractionTestAbstract {
 
     @Test 
     void actionInteraction_shouldSpawnSingleTransaction() {
+        
+        // spawns its own transactional boundary (check)
+        val book = assertTransactional(
+                kvStoreForTesting, 
+                this::getBookSample);
 
         val managedAction = startActionInteractionOn(
                 JdoInventoryManager.class, 
@@ -118,10 +127,6 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         assertFalse(managedAction.checkVisibility().isPresent()); // is visible
         assertFalse(managedAction.checkUsability().isPresent()); // can invoke
         
-        // spawns its own transactional boundary (check)
-        val book = assertTransactional(
-                kvStoreForTesting, 
-                this::getBookSample);
         
         val args = managedAction.getInteractionHead()
                 .getPopulatedParameterValues(_Lists.of(book, 12.));
@@ -133,8 +138,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         
         val product = (JdoProduct)either.leftIfAny().getPojo();
         
-        assertEquals(12., product.getPrice(), 1E-3);
-        
+        assertEquals(12., product.getPrice(), 1E-3);                
     }
     
     // -- HELPER
