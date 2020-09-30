@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
@@ -19,20 +20,20 @@ import lombok.val;
 
 @Action(
     semantics = SemanticsOf.SAFE,
-    domainEvent = CommandJdo_openOnPrimary.ActionDomainEvent.class
+    domainEvent = Object_openOnPrimary.ActionDomainEvent.class,
+    restrictTo = RestrictTo.PROTOTYPING
 )
 @RequiredArgsConstructor
-public class CommandJdo_openOnPrimary<T> {
+public class Object_openOnPrimary {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandReplaySecondary.ActionDomainEvent<CommandJdo_openOnPrimary> { }
+            extends IsisModuleExtCommandReplaySecondary.ActionDomainEvent<Object_openOnPrimary> { }
 
-    final CommandJdo commandJdo;
+    final Object object;
 
-    @MemberOrder(name = "transactionId", sequence = "1")
     public URL act() {
         val baseUrlPrefix = lookupBaseUrlPrefix();
-        val urlSuffix = bookmarkService.bookmarkFor(commandJdo).toString();
+        val urlSuffix = bookmarkService.bookmarkFor(object).toString();
 
         try {
             return new URL(baseUrlPrefix + urlSuffix);

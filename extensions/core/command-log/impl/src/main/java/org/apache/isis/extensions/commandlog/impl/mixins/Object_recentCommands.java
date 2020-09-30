@@ -8,6 +8,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -20,10 +21,10 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
  * This mixin contributes a <tt>recentCommands</tt> action to any domain object
  * (unless also {@link HasUniqueId} - cmmands don't themselves have commands).
  */
-@Mixin(method = "act")
 @Action(
     semantics = SemanticsOf.SAFE,
-    domainEvent = Object_recentCommands.ActionDomainEvent.class
+    domainEvent = Object_recentCommands.ActionDomainEvent.class,
+    restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
     cssClassFa = "fa-bolt",

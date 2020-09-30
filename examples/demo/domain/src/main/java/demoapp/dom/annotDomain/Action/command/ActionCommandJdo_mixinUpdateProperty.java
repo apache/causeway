@@ -8,7 +8,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
 @Action(
-    command = CommandReification.ENABLED
+    command = CommandReification.ENABLED        // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "property"
     , associateWithSequence = "2"
@@ -27,7 +27,6 @@ public class ActionCommandJdo_mixinUpdateProperty {
         this.actionCommandJdo = actionCommandJdo;
     }
 
-//tag::class[]
     public ActionCommandJdo act(final String value) {
         actionCommandJdo.setProperty(value);
         return actionCommandJdo;
@@ -35,5 +34,6 @@ public class ActionCommandJdo_mixinUpdateProperty {
     public String default0Act() {
         return actionCommandJdo.getProperty();
     }
+//tag::class[]
 }
 //end::class[]

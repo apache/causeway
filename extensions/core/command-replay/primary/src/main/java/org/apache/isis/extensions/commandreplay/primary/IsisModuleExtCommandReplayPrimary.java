@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
+import org.apache.isis.extensions.commandreplay.primary.config.PrimaryConfig;
+import org.apache.isis.extensions.commandreplay.primary.mixins.Object_openOnSecondary;
 import org.apache.isis.extensions.commandreplay.primary.restapi.CommandRetrievalService;
 import org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand;
 import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimaryService;
@@ -18,6 +20,10 @@ import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimar
         CommandRetrievalService.class,
         CommandReplayOnPrimaryService.class,
         CaptureResultOfCommand.class,
+        PrimaryConfig.class,
+
+        // mixins
+        Object_openOnSecondary.class,
 
 })
 @Profile("primary")

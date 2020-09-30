@@ -29,6 +29,7 @@ import org.apache.isis.extensions.commandreplay.secondary.executor.CommandExecut
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.job.ReplicateAndReplayJob;
+import org.apache.isis.extensions.commandreplay.secondary.mixins.Object_openOnPrimary;
 import org.apache.isis.extensions.commandreplay.secondary.ui.CommandReplayOnSecondaryService;
 import org.apache.isis.extensions.quartz.IsisModuleExtQuartzImpl;
 import org.apache.isis.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
@@ -52,6 +53,10 @@ import lombok.val;
 
         // @Service's
         SecondaryConfig.class,
+
+        // mixins
+        Object_openOnPrimary.class,
+
 })
 @Profile("secondary")
 public class IsisModuleExtCommandReplaySecondary {

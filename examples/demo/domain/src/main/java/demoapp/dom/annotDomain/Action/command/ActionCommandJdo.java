@@ -90,7 +90,7 @@ public class ActionCommandJdo
 
 //tag::annotation[]
     @Action(
-        command = CommandReification.ENABLED
+        command = CommandReification.ENABLED        // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
         , associateWithSequence = "1"
@@ -100,11 +100,14 @@ public class ActionCommandJdo
         , describedAs = "@Action(command = ENABLED)"
     )
     public ActionCommandJdo updatePropertyUsingAnnotation(final String value) {
+        // ...
+//end::annotation[]
         setProperty(value);
         return this;
     }
     public String default0UpdatePropertyUsingAnnotation() {
         return getProperty();
+//tag::annotation[]
     }
 //end::annotation[]
 
@@ -119,7 +122,6 @@ public class ActionCommandJdo
         named = "Update Property"
         , describedAs = "@Action(command = ENABLED)"
     )
-//tag::annotation-2[]
     public ActionCommandJdo updatePropertyCommandDisabledUsingAnnotation(final String value) {
         // ...
 //end::annotation-2[]
@@ -159,7 +161,7 @@ public class ActionCommandJdo
     @ActionCommandDisabledMetaAnnotation        // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , command = CommandReification.ENABLED
+        , command = CommandReification.ENABLED  // <.>
         , associateWith = "propertyMetaAnnotatedOverridden"
         , associateWithSequence = "1"
     )

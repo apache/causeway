@@ -15,6 +15,7 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -39,7 +40,10 @@ public class CommandReplayAnalyserResult implements CommandReplayAnalyser {
             return null;
         }
 
-        final CommandDto dto = commandJdo.getCommandDto();
+        val dto = commandJdo.getCommandDto();
+        if(dto.getMember().getInteractionType() == InteractionType.PROPERTY_EDIT) {
+            return null;
+        }
 
         // see if the outcome was the same...
         // ... either the same result when replayed

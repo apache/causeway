@@ -3068,6 +3068,13 @@ public class IsisConfiguration {
                 private Optional<String> baseUrlWicket;
             }
 
+            private final SecondaryAccess secondaryAccess = new SecondaryAccess();
+            @Data
+            public static class SecondaryAccess {
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlWicket;
+            }
+
             private Integer batchSize = 10;
 
             private final QuartzSession quartzSession = new QuartzSession();

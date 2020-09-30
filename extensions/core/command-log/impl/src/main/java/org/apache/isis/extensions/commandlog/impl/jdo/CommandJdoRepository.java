@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.commandlog.impl.jdo;
 
+import java.rmi.activation.ActivationID;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +50,9 @@ import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
+import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidDto;
+import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -333,11 +336,13 @@ public class CommandJdoRepository {
     @Programmatic
     public CommandJdo saveForReplay(final CommandDto dto) {
 
-        final MapDto userData = dto.getUserData();
-        if (userData == null ) {
-            throw new IllegalStateException(String.format(
-                    "Can only persist DTOs with additional userData; got: \n%s",
-                    CommandDtoUtils.toXml(dto)));
+        if(dto.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
+            final MapDto userData = dto.getUserData();
+            if (userData == null ) {
+                throw new IllegalStateException(String.format(
+                        "Can only persist action DTOs with additional userData; got: \n%s",
+                        CommandDtoUtils.toXml(dto)));
+            }
         }
 
         final CommandJdo commandJdo = new CommandJdo();

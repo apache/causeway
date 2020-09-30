@@ -14,6 +14,7 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
+import org.apache.isis.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -39,6 +40,9 @@ public class CommandReplayAnalyserException implements CommandReplayAnalyser {
         }
 
         val dto = commandJdo.getCommandDto();
+        if(dto.getMember().getInteractionType() == InteractionType.PROPERTY_EDIT) {
+            return null;
+        }
 
         val primaryException = CommandDtoUtils.getUserData(dto, UserDataKeys.EXCEPTION);
         if (_Strings.isNullOrEmpty(primaryException)) {
