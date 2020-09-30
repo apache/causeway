@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.interact;
+package org.apache.isis.testdomain.commons;
 
 import java.util.Collections;
 import java.util.concurrent.atomic.LongAdder;
@@ -42,7 +42,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 
 import lombok.val;
 
-abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
     
     @Inject protected ObjectManager objectManager;
     @Inject protected IsisInteractionFactory interactionFactory;

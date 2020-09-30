@@ -18,25 +18,21 @@
  */
 package org.apache.isis.testdomain.transactions;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
-import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.testdomain.Smoketest;
+import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
@@ -47,7 +43,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class,
-                TransactionScopeListenerTest.IsisInteractionScopedProbe.class
+                InteractionBoundaryProbe.class
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 /**
@@ -62,36 +58,13 @@ class TransactionScopeListenerTest {
     @Inject private KVStoreForTesting kvStoreForTesting;
     
     /* Expectations:
-     * 1. for each IsisInteractionScope there should be a new IsisInteractionScopedProbe instance
-     * 2. for each Transaction the current IsisInteractionScopedProbe should get notified
+     * 1. for each IsisInteractionScope there should be a new InteractionBoundaryProbe instance
+     * 2. for each Transaction the current InteractionBoundaryProbe should get notified
      * 
      * first we have 1 IsisInteractionScope with 1 expected Transaction during 'setUp'
      * then we have 1 IsisInteractionScope with 3 expected Transactions within the test method
      *  
      */
-    
-    @Service
-    @IsisInteractionScope
-    public static class IsisInteractionScopedProbe implements TransactionScopeListener {
-
-        @Inject private KVStoreForTesting kvStoreForTesting;
-        
-        @PostConstruct
-        public void init() {
-            kvStoreForTesting.incrementCounter(IsisInteractionScopedProbe.class, "init");
-        }
-        
-        @PreDestroy
-        public void destroy() {
-            kvStoreForTesting.incrementCounter(IsisInteractionScopedProbe.class, "destroy");
-        }
-        
-        @Override
-        public void onTransactionEnded() {
-            kvStoreForTesting.incrementCounter(IsisInteractionScopedProbe.class, "tx");
-        }
-        
-    }
     
     @BeforeEach
     void setUp() {
@@ -103,7 +76,6 @@ class TransactionScopeListenerTest {
             fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
             
         });
-        
         
     }
     
@@ -130,17 +102,12 @@ class TransactionScopeListenerTest {
             
         });
         
-        long totalTransactions = kvStoreForTesting.getCounter(IsisInteractionScopedProbe.class, "tx");
-        long totalSessionScopesInitialized = kvStoreForTesting.getCounter(IsisInteractionScopedProbe.class, "init");
-        long totalSessionScopesDestroyed = kvStoreForTesting.getCounter(IsisInteractionScopedProbe.class, "destroy");
-        
-        assertEquals(4, totalTransactions);
-        assertEquals(2, totalSessionScopesInitialized);
-        assertEquals(2, totalSessionScopesDestroyed);
+        assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
+        assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
+        assertEquals(4, InteractionBoundaryProbe.totalTransactionsStarted(kvStoreForTesting));
+        assertEquals(4, InteractionBoundaryProbe.totalTransactionsEnded(kvStoreForTesting));
 
     }
-    
-
     
 
 }

@@ -18,9 +18,14 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -64,6 +69,27 @@ implements HasMetaModel<ObjectAction> {
         .map(objectActionParameter->
             ManagedObject.empty(objectActionParameter.getSpecification()))
         .collect(Can.toCan());
+    }
+    
+    /**  
+     * Immutable tuple of ManagedObjects, wrapping the passed in argument pojos.
+     * Nulls are allowed as arguments, but the list size must match the expected parameter count.
+     * <p>
+     * The size of the tuple corresponds to the number of parameters.
+     * @param pojoArgList - argument pojos
+     */
+    public Can<ManagedObject> getPopulatedParameterValues(@Nullable List<Object> pojoArgList) {
+        
+        val params = getMetaModel().getParameters();
+        
+        _Assert.assertEquals(params.size(), _NullSafe.size(pojoArgList));
+        
+        if(params.isEmpty()) {
+            return Can.empty();
+        }
+        
+        return params.zipMap(pojoArgList, (objectActionParameter, argPojo)->
+            ManagedObject.of(objectActionParameter.getSpecification(), argPojo));
     }
     
     public ParameterNegotiationModel model(

@@ -32,6 +32,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.testdomain.Smoketest;
+import org.apache.isis.testdomain.commons.InteractionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
