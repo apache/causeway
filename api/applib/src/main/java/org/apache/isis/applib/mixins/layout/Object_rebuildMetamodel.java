@@ -44,10 +44,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Object_rebuildMetamodel {
 
-    private final Object holder;
-
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_rebuildMetamodel> {}
+
+    private final Object holder;
 
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Object act() {

@@ -36,29 +36,23 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Mixin(method="act")
+@Action(
+        domainEvent = Object_openRestApi.ActionDomainEvent.class,
+        semantics = SemanticsOf.SAFE,
+        restrictTo = RestrictTo.PROTOTYPING
+)
+@ActionLayout(
+        cssClassFa = "fa-external-link-alt",
+        position = ActionLayout.Position.PANEL_DROPDOWN
+)
 @RequiredArgsConstructor
 public class Object_openRestApi {
-
-    @Inject private BookmarkService bookmarkService;
-    //@Inject private ConfigurationViewService configurationViewService;
-    @Inject private RestfulPathProvider restfulPathProvider;
-
-    private final Object holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_openRestApi> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-external-link-alt",
-            position = ActionLayout.Position.PANEL_DROPDOWN
-            )
+    private final Object holder;
+
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "750.1")
     public LocalResourcePath act() {
         val bookmark = bookmarkService.bookmarkForElseThrow(holder);
@@ -76,5 +70,8 @@ public class Object_openRestApi {
     public interface RestfulPathProvider {
         Optional<String> getRestfulPath();
     }
+
+    @Inject BookmarkService bookmarkService;
+    @Inject RestfulPathProvider restfulPathProvider;
 
 }
