@@ -742,7 +742,6 @@ _Dependencies_
 
 _Dependencies_
 
-* commons-logging:commons-logging:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
 * org.apache.isis.core:isis-core-security:jar:<managed>
@@ -1007,7 +1006,7 @@ _Components_
 * org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 * org.apache.isis.persistence.jdo.datanucleus5.jdosupport.IsisJdoSupportDN5
 * org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingModelPlugin
-* org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceForJdo
+* org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault
 * org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo
 * org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5
 
@@ -2405,7 +2404,7 @@ _Dependencies_
 * org.apache.isis.security:isis-security-shiro:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-common:jar:<managed>
-* org.eclipse.persistence:org.eclipse.persistence.moxy:jar:2.7.5
+* org.eclipse.persistence:org.eclipse.persistence.moxy:jar:2.7.7
 * org.glassfish:javax.json:jar:1.1.4
 * org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
@@ -4005,7 +4004,7 @@ _Dependencies_
 * org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed>
 * org.apache.isis.testing:isis-testing-h2console-ui:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
-* org.assertj:assertj-core:jar:3.16.1
+* org.assertj:assertj-core:jar:3.17.2
 * org.projectlombok:lombok:jar:<managed>
 
 
@@ -4068,6 +4067,7 @@ _Dependencies_
 * org.apache.isis.extensions:isis-extensions-command-replay-secondary:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed>
 * org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed>
+* org.springframework.boot:spring-boot-starter-actuator:jar:${spring-boot.version}
 
 
 
