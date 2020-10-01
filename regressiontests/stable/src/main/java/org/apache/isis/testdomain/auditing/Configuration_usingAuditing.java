@@ -21,11 +21,8 @@ package org.apache.isis.testdomain.auditing;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-
 @Configuration
 @Import({
-    KVStoreForTesting.class,
     AuditerServiceForTesting.class
 })
 public class Configuration_usingAuditing {

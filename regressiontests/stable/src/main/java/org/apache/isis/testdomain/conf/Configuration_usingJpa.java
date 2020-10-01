@@ -31,6 +31,7 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.persistence.jpa.IsisModuleJpa;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jpa.JpaTestDomainModule;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
@@ -42,6 +43,7 @@ import org.apache.isis.testdomain.jpa.JpaTestDomainModule;
     ,IsisModuleSecurityBypass.class
     ,IsisModuleJpa.class,
     //,IsisModuleTestingFixturesApplib.class
+    KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @ComponentScan(
         basePackageClasses= {               

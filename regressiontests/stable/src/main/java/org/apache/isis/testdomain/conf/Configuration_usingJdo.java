@@ -35,12 +35,12 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
-    KVStoreForTesting.class,
     MyService.class, // testing injection into entities 
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
     IsisModuleJdoDataNucleus5.class,
-    IsisModuleTestingFixturesApplib.class
+    IsisModuleTestingFixturesApplib.class,
+    KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @ComponentScan(
         basePackageClasses= {               

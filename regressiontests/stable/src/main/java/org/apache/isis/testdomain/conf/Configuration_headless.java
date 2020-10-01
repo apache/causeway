@@ -49,6 +49,7 @@ import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -58,7 +59,8 @@ import lombok.val;
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
     IsisModuleExtModelAnnotation.class, // @Model support
-    Configuration_headless.HeadlessCommandSupport.class
+    Configuration_headless.HeadlessCommandSupport.class,
+    KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),

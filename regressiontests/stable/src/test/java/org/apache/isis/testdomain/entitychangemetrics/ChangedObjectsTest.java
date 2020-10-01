@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.entitychangemetrics;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -37,6 +40,7 @@ import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 
@@ -55,6 +59,8 @@ import lombok.val;
     ,IsisPresets.UseLog4j2Test
 })
 class ChangedObjectsTest extends InteractionTestAbstract {
+    
+    @Inject protected FixtureScripts fixtureScripts;
     
     @Configuration
     public class Config {
@@ -87,6 +93,10 @@ class ChangedObjectsTest extends InteractionTestAbstract {
                 ()->wrapper.wrap(inventoryManager).updateProductPrice(book, 12.));
         
         assertEquals(12., product.getPrice(), 1E-3);
+        
+        // previous transaction has committed, so ChangedObjectsService should have cleared its data  
+        assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
+        
     }
 
     @Test 
@@ -100,6 +110,9 @@ class ChangedObjectsTest extends InteractionTestAbstract {
                 ()->invokeAction(JdoInventoryManager.class, "updateProductPrice", _Lists.of(book, 12.)));
         
         assertEquals(12., product.getPrice(), 1E-3);                
+        
+        // previous transaction has committed, so ChangedObjectsService should have cleared its data  
+        assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
     }
     
     // -- HELPER
@@ -111,7 +124,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         val book = books.listIterator().next();
         return book;
     }
-
+    
 
 }
 
