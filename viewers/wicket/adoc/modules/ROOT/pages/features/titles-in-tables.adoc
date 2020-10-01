@@ -11,7 +11,7 @@ If an object's title is specified with from `@Title` annotation then the Wicket 
 
 In other words, suppose we have:
 
-image::how-tos/ui-hints/object-titles-and-icons/cust-order-product.png[width="579px",link="{imagesdir}/how-tos/ui-hints/object-titles-and-icons/cust-order-product.png"]
+image::how-tos/ui-hints/object-titles-and-icons/cust-order-product.png[width="579px"]
 
 so that `Customer` has a collection of `Order`s:
 

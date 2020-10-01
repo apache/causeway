@@ -13,7 +13,7 @@ One of these attributes may also be used as the application version number.
 
 Here's what the About page looks like with this configuration added:
 
-image::about-page/about-page.png[width="800px",link="{imagesdir}/about-page/about-page.png"]
+image::about-page/about-page.png[width="800px"]
 
 [NOTE]
 ====

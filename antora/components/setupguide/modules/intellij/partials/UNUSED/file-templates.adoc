@@ -8,7 +8,7 @@ Next we recommend you import a set of standard file templates.
 These are used to create new classes or supporting files:
 
 .File templates
-image::030-import-settings/040-file-templates.png[width="400px",link="{imagesdir}/030-import-settings/040-file-templates.png"]
+image::030-import-settings/040-file-templates.png[width="400px"]
 
 The file templates are provided as a settings JAR file, namely *link:{attachmentsdir}/isis-settings-file-templates.jar[isis-settings-file-templates.jar]*.
 Download this file.
@@ -16,7 +16,7 @@ Download this file.
 Next, import using `File > Import Settings`, specifying the directory that you have downloaded the file to:
 
 .IntelliJ Import Settings - Specify JAR file
-image::030-import-settings/010-settings-import-jar.png[width="400px",link="{imagesdir}/030-import-settings/010-settings-import-jar.png"]
+image::030-import-settings/010-settings-import-jar.png[width="400px"]
 
 Select all the categories (there should just be one), and hit OK. then hit restart.
 

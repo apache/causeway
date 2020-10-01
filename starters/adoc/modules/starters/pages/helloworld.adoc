@@ -51,11 +51,11 @@ Then browse to link:http://localhost:8080[], and read on.
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Wicket viewer] or use Swagger to access the xref:vro:ROOT:about.adoc[Restful Objects viewer]:
 
-image::helloworld/using/010-root-page.png[width="600px",link="{imagesdir}/helloworld/using/010-root-page.png"]
+image::helloworld/using/010-root-page.png[width="600px"]
 
 Choose the generic Wicket UI, and navigate to the login page:
 
-image::helloworld/using/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}/helloworld/using/020-login-to-wicket-viewer.png"]
+image::helloworld/using/020-login-to-wicket-viewer.png[width="600px"]
 
 The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.
 You can login with:
@@ -67,7 +67,7 @@ You can login with:
 
 Once you've logged in you'll see the default home page:
 
-image::helloworld/using/030-home-page.png[width="600px",link="{imagesdir}/helloworld/using/030-home-page.png"]
+image::helloworld/using/030-home-page.png[width="600px"]
 
 
 ==== Create an object
@@ -75,15 +75,15 @@ image::helloworld/using/030-home-page.png[width="600px",link="{imagesdir}/hellow
 The application is configured to run with an in-memory database, so initially there is no data.
 Create an object using the menu:
 
-image::helloworld/using/040-create-object-from-menu.png[width="600px",link="{imagesdir}/helloworld/using/040-create-object-from-menu.png"]
+image::helloworld/using/040-create-object-from-menu.png[width="600px"]
 
 which brings up a modal dialog:
 
-image::helloworld/using/050-create-object-from-menu-prompt.png[width="600px",link="{imagesdir}/helloworld/using/050-create-object-from-menu-prompt.png"]
+image::helloworld/using/050-create-object-from-menu-prompt.png[width="600px"]
 
 hitting OK returns the created object:
 
-image::helloworld/using/060-created-object.png[width="600px",link="{imagesdir}/helloworld/using/060-created-object.png"]
+image::helloworld/using/060-created-object.png[width="600px"]
 
 The above functionality is implemented by this code:
 
@@ -106,7 +106,7 @@ The `HelloWorldObject` contains a couple of properties, and a single action to u
 
 The `name` property is read-only, and can only be modified using the `updateName` action:
 
-image::helloworld/using/070-update-name.png[width="600px",link="{imagesdir}/helloworld/using/070-update-name.png"]
+image::helloworld/using/070-update-name.png[width="600px"]
 
 The above functionality is implemented by this code:
 
@@ -128,7 +128,7 @@ public String default0UpdateName() {
 +
 The framework provides a default implementation that just logs the interaction:
 +
-image::helloworld/using/075-logged-action.png[width="600px",link="{imagesdir}using/075-logged-action.png"]
+image::helloworld/using/075-logged-action.png[width="600px"]
 
 
 ==== Edit a property
@@ -136,18 +136,18 @@ image::helloworld/using/075-logged-action.png[width="600px",link="{imagesdir}usi
 The `notes` property is editable, and can be edited in-place.
 For example:
 
-image::helloworld/using/080-edit-notes.png[width="600px",link="{imagesdir}/helloworld/using/080-edit-notes.png"]
+image::helloworld/using/080-edit-notes.png[width="600px"]
 
 
 ==== Actions requiring confirmations
 
 It's also possible to delete an object:
 
-image::helloworld/using/090-delete-object.png[width="600px",link="{imagesdir}/helloworld/using/090-delete-object.png"]
+image::helloworld/using/090-delete-object.png[width="600px"]
 
 The viewer displays a message confirming that the object has been deleted:
 
-image::helloworld/using/100-object-deleted.png[width="600px",link="{imagesdir}/helloworld/using/100-object-deleted.png"]
+image::helloworld/using/100-object-deleted.png[width="600px"]
 
 The above functionality is implemented by this code:
 
@@ -169,30 +169,30 @@ public void delete() {
 
 Using menu:Prototyping[Open Swagger UI] menu item (or just going back to the home page at link:http://localhost:8080[localhost:8080]) we can use link:https://swagger.io/[Swagger UI] as a front-end to the REST API provided by the Restful Objects viewer.
 
-image::helloworld/using/200-swagger-ui-before-reload.png[width="600px",link="{imagesdir}/helloworld/using/200-swagger-ui-before-reload.png"]
+image::helloworld/using/200-swagger-ui-before-reload.png[width="600px"]
 
 The public API (where the calling client is assumed to be 3rd party) only exposes view models, not entities.
 If the API is private (or for prototyping), then resources corresponding to entities are also exposed:
 
-image::helloworld/using/210-helloworld-resources.png[width="600px",link="{imagesdir}/helloworld/using/210-helloworld-resources.png"]
+image::helloworld/using/210-helloworld-resources.png[width="600px"]
 
 For example, an object can be created using the resource that represents the `HelloWorldObjects#create` action:
 
-image::helloworld/using/220-create-object-thru-rest-api.png[width="600px",link="{imagesdir}/helloworld/using/220-create-object-thru-rest-api.png"]
+image::helloworld/using/220-create-object-thru-rest-api.png[width="600px"]
 
 CAUTION: if invoking the action returns a 401 (unauthorised), then navigate to the REST API directly (link:http://localhost:8080/restful[] to authenticate the browser first]).
 
 The response indicates that the object was successfully created:
 
-image::helloworld/using/230-create-object-thru-rest-api-response.png[width="600px",link="{imagesdir}/helloworld/using/230-create-object-thru-rest-api-response.png"]
+image::helloworld/using/230-create-object-thru-rest-api-response.png[width="600px"]
 
 The Swagger UI also provides a resource to retrieve any object:
 
-image::helloworld/using/240-retrieve-object-using-rest-api.png[width="600px",link="{imagesdir}/helloworld/using/240-retrieve-object-using-rest-api.png"]
+image::helloworld/using/240-retrieve-object-using-rest-api.png[width="600px"]
 
 This results in a representation of the domain object (as per the requested `Response Content Type`, ie `ACCEPT` header):
 
-image::helloworld/using/250-retrieve-object-using-rest-api-response.png[width="600px",link="{imagesdir}/helloworld/using/250-retrieve-object-using-rest-api-response.png"]
+image::helloworld/using/250-retrieve-object-using-rest-api-response.png[width="600px"]
 
 
 The Swagger UI is provided as a convenience; the REST API is actually a complete hypermedia API (in other words you can follow the links to access all the behaviour exposed in the regular Wicket app).
@@ -470,11 +470,11 @@ Basically, though, it amounts to running the `main()` method in the `HelloWorldA
 
 Here's what the setup looks like in IntelliJ IDEA:
 
-image::helloworld/helloworld.png[width="600px",link="{imagesdir}/helloworld/helloworld.png"]
+image::helloworld/helloworld.png[width="600px"]
 
 which uses an IntelliJ feature to execute a different _Run Configuration_ for the DataNucleus enhancer beforehand:
 
-image::helloworld/helloworld-before-launch.png[width="600px",link="{imagesdir}/helloworld/helloworld-before-launch.png"]
+image::helloworld/helloworld-before-launch.png[width="600px"]
 
 
 

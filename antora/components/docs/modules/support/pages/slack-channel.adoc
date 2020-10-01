@@ -9,43 +9,43 @@ Anyone can join:
 
 * navigate to https://s.apache.org/slack-invite[]
 +
-image:slack/010.png[link={imagesdir}/slack/010.png]
+image::slack/010.png[]
 
 * enter your email:
 +
-image:slack/020.png[link={imagesdir}/slack/020.png]
+image::slack/020.png[]
 +
-image:slack/030.png[link={imagesdir}/slack/030.png]
+image::slack/030.png[]
 
 * as it says, check your email:
 +
-image:slack/040.png[link={imagesdir}/slack/040.png]
+image::slack/040.png[]
 
 * as it says, check your email:
 +
-image:slack/050.png[link={imagesdir}/slack/050.png]
+image::slack/050.png[]
 
 * Create an account on the Slack:
 +
-image:slack/060.png[link={imagesdir}/slack/060.png]
+image::slack/060.png[]
 
 * you'll then arrive in the Slack, with the following welcome page.  You can skip this first step (1):
 +
-image:slack/070.png[link={imagesdir}/slack/070.png]
+image::slack/070.png[]
 
 * Instead, scroll down the page to the step (2) to browse channels:
 +
-image:slack/080.png[link={imagesdir}/slack/080.png]
+image::slack/080.png[]
 
 * Enter 'isis' in the search box, and click through to the `#apache-isis` channel:
 +
-image:slack/090.png[link={imagesdir}/slack/090.png]
+image::slack/090.png[]
 
 * At this point you are still just previewing the channel, so press `Join Channel`:
 +
-image:slack/100.png[link={imagesdir}/slack/100.png]
+image::slack/100.png[]
 
 * Finally, say hello:
 +
-image:slack/110.png[link={imagesdir}/slack/110.png]
+image::slack/110.png[]
 

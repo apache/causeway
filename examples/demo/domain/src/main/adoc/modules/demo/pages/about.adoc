@@ -8,7 +8,7 @@ It's also a useful reference to help you develop your own Apache Isis applicatio
 It is packaged up as a Docker image (link:https://hub.docker.com/r/apacheisis/demo-wicket/tags/[apacheisis/demo-wicket]) on Docker Hub.
 
 
-image::https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-light.png[link="https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-light.png"]
+image::teaser-light.png[]
 
 
 == Prereqs

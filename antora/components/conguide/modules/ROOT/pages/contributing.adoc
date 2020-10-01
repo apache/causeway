@@ -21,7 +21,7 @@ As a contributor, we recommend that you fork the https://github.com/apache/isis.
 
 The diagram below illustrates the process:
 
-image::contributing/git-workflow.png[width="600px",link="{imagesdir}/contributing/git-workflow.png"]
+image::contributing/git-workflow.png[width="600px"]
 
 
 That is:
@@ -42,7 +42,7 @@ If you choose to create your own fork then you'll need an account on https://git
 You then fork simply by pressing the "Fork" button:
 
 
-image::contributing/github-forking.png[width="600px",link="{imagesdir}/contributing/github-forking.png"]
+image::contributing/github-forking.png[width="600px"]
 
 
 
@@ -58,7 +58,7 @@ Again, the info is easily found in the github page:
 
 
 
-image::contributing/github-cloning.png[width="600px",link="{imagesdir}/contributing/github-cloning.png"]
+image::contributing/github-cloning.png[width="600px"]
 
 If you've created your own fork, then you need to add the `upstream` remote to the https://github.com/apache/isis[github.com/apache/isis].
 This remote is traditionally called `upstream`.

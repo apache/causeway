@@ -302,11 +302,11 @@ The `mvn deploy` commands will have uploaded all of the release artifacts into a
 
 Log onto http://repository.apache.org[repository.apache.org] (using your ASF LDAP account):
 
-image::release-process/nexus-staging-0.png[width="600px",link="{imagesdir}/release-process/nexus-staging-0.png"]
+image::release-process/nexus-staging-0.png[width="600px"]
 
 And then check that the release has been staged (select `staging repositories` from left-hand side):
 
-image::release-process/nexus-staging-1.png[width="600px",link="{imagesdir}/release-process/nexus-staging-1.png"]
+image::release-process/nexus-staging-1.png[width="600px"]
 
 If nothing appears in a staging repo you should stop here and work out why.
 
@@ -318,21 +318,21 @@ This will make it available so that people can check the release.
 
 Press the Close button and complete the dialog:
 
-image::release-process/nexus-staging-2.png[width="600px",link="{imagesdir}/release-process/nexus-staging-2.png"]
+image::release-process/nexus-staging-2.png[width="600px"]
 
 Nexus should start the process of closing the repository.
 
-image::release-process/nexus-staging-2a.png[width="600px",link="{imagesdir}/release-process/nexus-staging-2a.png"]
+image::release-process/nexus-staging-2a.png[width="600px"]
 
 All being well, the close should (eventually) complete successfully (keep hitting refresh):
 
-image::release-process/nexus-staging-3.png[width="600px",link="{imagesdir}/release-process/nexus-staging-3.png"]
+image::release-process/nexus-staging-3.png[width="600px"]
 
 The Nexus repository manager will also email you with confirmation of a successful close.
 
 If Nexus has problems with the key signature, however, then the close will be aborted:
 
-image::release-process/nexus-staging-4.png[width="600px",link="{imagesdir}/release-process/nexus-staging-4.png"]
+image::release-process/nexus-staging-4.png[width="600px"]
 
 Use `gpg --keyserver hkp://pgp.mit.edu --recv-keys nnnnnnnn` to confirm that the key is available.
 

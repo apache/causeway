@@ -26,21 +26,21 @@ Download either the xref:docs:starters:helloworld.adoc[HelloWorld] or xref:docs:
 
 From the welcome screen, select "import project":
 
-image::015-import-project/010-welcome.png[width="400px",link="{imagesdir}/015-import-project/010-welcome.png"]
+image::015-import-project/010-welcome.png[width="400px"]
 
 Navigate to the top-level pom.xml of the starter app:
 
-image::015-import-project/020-import-pom.png[width="300px",link="{imagesdir}/015-import-project/020-import-pom.png"]
+image::015-import-project/020-import-pom.png[width="300px"]
 
 Project imported:
 
-image::015-import-project/030-imported.png[width="800px",link="{imagesdir}/015-import-project/030-imported.png"]
+image::015-import-project/030-imported.png[width="800px"]
 Start off by creating a new project:
 
 
 Use menu:File[Project Structure] to confirm that JDK 8 is configured:
 
-image::015-import-project/040-project-structure.png[width="600px",link="{imagesdir}/015-import-project/040-project-structure.png"]
+image::015-import-project/040-project-structure.png[width="600px"]
 
 
 
@@ -58,13 +58,13 @@ We highly recommend you set these.
 On the *Compiler* Settings page, ensure that `build automatically` is enabled (and optionally `compile independent modules in parallel`):
 
 .IntelliJ Compiler Settings
-image::040-other-settings-compiler/010-build-automatically.png[width="700px",link="{imagesdir}/040-other-settings-compiler/010-build-automatically.png"]
+image::040-other-settings-compiler/010-build-automatically.png[width="700px"]
 
 
 On the *Annotation Processors* page, confirm that these are enabled for all of the `packaging=jar` modules (in other words, those that contain Java and have a `src/main/java` directory):
 
 .IntelliJ Annotation Processor Settings
-image::040-other-settings-compiler/020-annotation-processor.png[width="700px",link="{imagesdir}/040-other-settings-compiler/020-annotation-processor.png"]
+image::040-other-settings-compiler/020-annotation-processor.png[width="700px"]
 
 This setting enables the generation of the `Q*` classes for DataNucleus type-safe queries, as well as being required for frameworks such as xref:setupguide:ROOT:hints-and-tips.adoc#project-lombok[Project Lombok].
 
@@ -76,19 +76,19 @@ There are also some other settings for Maven that we recommend you adjust (thoug
 On the Maven settings page:
 
 .IntelliJ Maven Settings - Installation
-image::042-other-settings-maven/010-maven-installation.png[width="700px",link="{imagesdir}/042-other-settings-maven/010-maven-installation.png"]
+image::042-other-settings-maven/010-maven-installation.png[width="700px"]
 
 Still on the Maven settings page, configure as follows:
 
 .IntelliJ Maven Settings - Configuration
-image::042-other-settings-maven/020-maven-configuration.png[width="700px",link="{imagesdir}/042-other-settings-maven/020-maven-configuration.png"]
+image::042-other-settings-maven/020-maven-configuration.png[width="700px"]
 
 === Editor Settings
 
 On the *Auto Import* settings page, check the `optimize imports on the fly` and `add unambiguous imports on the fly`
 
 .IntelliJ Auto Import Setting
-image::044-other-settings-misc/010-auto-import.png[width="700px",link="{imagesdir}/044-other-settings-misc/010-auto-import.png"]
+image::044-other-settings-misc/010-auto-import.png[width="700px"]
 
 You might also want to exclude certain packages or classes from auto-import, for example:
 
@@ -134,7 +134,7 @@ However, this is easily solved: we can just have IntelliJ run the enhance as a s
 First, set up the run configuration to do the enhance:
 
 .Run Configuration to enhance the entities
-image::110-running-the-app/005-datanucleus-enhance-run-configuration.png[width="700px",link="{imagesdir}/110-running-the-app/005-datanucleus-enhance-run-configuration.png"]
+image::110-running-the-app/005-datanucleus-enhance-run-configuration.png[width="700px"]
 
 TIP: Check "work offline" (on the General tab) to speed this up slightly.
 
@@ -147,7 +147,7 @@ Then, set up the run configuration for the app.
 Note how it runs the enhance configuration first:
 
 .Run Configuration to run the app
-image::110-running-the-app/010-run-configuration.png[width="700px",link="{imagesdir}/110-running-the-app/010-run-configuration.png"]
+image::110-running-the-app/010-run-configuration.png[width="700px"]
 
 You should now be able to run the app using `Run > Run Configuration`.
 The same configuration can also be used to debug the app if you so need.
@@ -159,12 +159,12 @@ The easiest way to run the unit tests is just to right click on the relevant pac
 Hopefully your tests will pass (!).
 
 .Running Unit Tests from Project Explorer
-image::110-running-the-app/030-running-unit-tests.png[width="300px",link="{imagesdir}/110-running-the-app/030-running-unit-tests.png"]
+image::110-running-the-app/030-running-unit-tests.png[width="300px"]
 
 As a side-effect, this will create a run configuration, very similar to the one we manually created for the main app:
 
 .Unit Tests Run Configuration
-image::110-running-the-app/040-running-unit-tests-run-configuration.png[width="700px",link="{imagesdir}/110-running-the-app/040-running-unit-tests-run-configuration.png"]
+image::110-running-the-app/040-running-unit-tests-run-configuration.png[width="700px"]
 
 Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
 
@@ -175,13 +175,13 @@ Integration tests can be run in the same way as unit tests, however the module m
 One approach is to initially run the tests use the right click on the `integtests` module:
 
 .Running Integ Tests from Project Explorer
-image::110-running-the-app/045-running-integ-tests.png[width="400px",link="{imagesdir}/110-running-the-app/045-running-integ-tests.png"]
+image::110-running-the-app/045-running-integ-tests.png[width="400px"]
 
 The tests might fail because the entities won't have been enhanced.
 However, we can then easily update the run configuration to run the datanucleus enhancer goal (same as when running the application):
 
 .Integration Tests Run Configuration
-image::110-running-the-app/050-running-integration-tests-run-configuration.png[width="700px",link="{imagesdir}/110-running-the-app/050-running-integration-tests-run-configuration.png"]
+image::110-running-the-app/050-running-integration-tests-run-configuration.png[width="700px"]
 
 
 CAUTION: Make sure that the `search for tests` radio button is set to `In single module`.

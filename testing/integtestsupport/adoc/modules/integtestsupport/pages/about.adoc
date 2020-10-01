@@ -409,7 +409,7 @@ Otherwise an exception is thrown.
 The type of exception depends upon what sort of check failed.
 It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'll get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
 
-image::wrapper-factory.png[width="600px",link="{imagesdir}/wrapper-factory.png"]
+image::wrapper-factory.png[width="600px"]
 
 
 
@@ -643,5 +643,5 @@ When running integration tests through the IDE, and if using the JDO/DataNucleus
 
 If using IntelliJ, we recommend creating a run Maven configuration that runs `datanucleus:enhance`, and then pinning the configuration once run as a tab in the "Debug" window for easy access.
 
-image::pin-enhance-run-configuration.png[width="400px",link="{imagesdir}/pin-enhance-run-configuration.png"]
+image::pin-enhance-run-configuration.png[width="400px"]
 ====

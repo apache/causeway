@@ -32,32 +32,32 @@ The xref:security:ROOT:about.adoc[Security Manager] extension provides a partial
 
 The user is presented with a login page:
 
-image::user-registration/login-page-default.png[width="300px",link="{imagesdir}/user-registration/login-page-default.png"]
+image::user-registration/login-page-default.png[width="300px"]
 
 
 Navigate to the sign up page. Complete the page, and verify:
 
-image::user-registration/sign-up-page.png[width="300px",link="{imagesdir}/user-registration/sign-up-page.png"]
+image::user-registration/sign-up-page.png[width="300px"]
 
 
 Back to the login page:
 
-image::user-registration/sign-up-login-page-after-sign-up.png[width="300px",link="{imagesdir}/user-registration/sign-up-login-page-after-sign-up.png"]
+image::user-registration/sign-up-login-page-after-sign-up.png[width="300px"]
 
 
 Email arrives, with link:
 
-image::user-registration/sign-up-email-with-verification-link.png[width="500px",link="{imagesdir}/user-registration/sign-up-email-with-verification-link.png"]
+image::user-registration/sign-up-email-with-verification-link.png[width="500px"]
 
 
 Follow the link, complete the page:
 
-image::user-registration/sign-up-registration-page.png[width="300px",link="{imagesdir}/user-registration/sign-up-registration-page.png"]
+image::user-registration/sign-up-registration-page.png[width="300px"]
 
 
 Automatically logged in:
 
-image::user-registration/sign-up-after-registration.png[width="800px",link="{imagesdir}/user-registration/sign-up-after-registration.png"]
+image::user-registration/sign-up-after-registration.png[width="800px"]
 
 
 

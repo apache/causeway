@@ -17,7 +17,7 @@ The number of bookmarks to preserve can be configured.
 
 The following screenshot (nb: using a pre 1.8.0 version of the xref:vw:ROOT:about.adoc[Wicket viewer] UI), taken from https://github.com/apache/isis-app-todoapp[Isisaddons example todoapp] (not ASF), shows how the bookmarks are listed in a sliding panel.
 
-image::bookmarked-pages/panel.png[width="800px",link="{imagesdir}/bookmarked-pages/panel.png"]
+image::bookmarked-pages/panel.png[width="800px"]
 
 
 Note how the list contains both domain objects and an action ("not yet complete").
@@ -25,7 +25,7 @@ Note how the list contains both domain objects and an action ("not yet complete"
 Bookmarks can also form a hierarchy.
 The following screenshot, also taken from the https://github.com/estatio/estatio[Estatio] application, shows a variety of different bookmarked objects with a nested structure:
 
-image::bookmarked-pages/panel-estatio.png[width="800px",link="{imagesdir}/bookmarked-pages/panel-estatio.png"]
+image::bookmarked-pages/panel-estatio.png[width="800px"]
 
 Some - like `Property`, `Lease` and `Party` - are root nodes.
 However, `LeaseItem` is bookmarkable as a child of `Lease`, and `LeaseTerm` is bookmarkable only as a child of `LeaseItem`.
