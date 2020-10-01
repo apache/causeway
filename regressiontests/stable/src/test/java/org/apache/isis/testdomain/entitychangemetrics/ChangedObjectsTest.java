@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.entitychangemetrics;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,13 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
@@ -45,10 +37,6 @@ import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-
-import static org.apache.isis.testdomain.commons.InteractionBoundaryProbe.assertTransactional;
 
 import lombok.val;
 
@@ -68,12 +56,6 @@ import lombok.val;
 })
 class ChangedObjectsTest extends InteractionTestAbstract {
     
-    @Inject private RepositoryService repository;
-    @Inject private FixtureScripts fixtureScripts;
-    @Inject private WrapperFactory wrapper;
-    @Inject private FactoryService factoryService;
-    @Inject private KVStoreForTesting kvStoreForTesting;
-
     @Configuration
     public class Config {
         // so that we get a new ApplicationContext.
@@ -97,14 +79,11 @@ class ChangedObjectsTest extends InteractionTestAbstract {
     void wrapperInvocation_shouldSpawnSingleTransaction() {
 
         // given
-        
-        // spawns its own transactional boundary (check)
-        val book = assertTransactional(kvStoreForTesting, this::getBookSample);
+        val book = getBookSample();
         val inventoryManager = factoryService.create(JdoInventoryManager.class);
-
         
         // spawns its own transactional boundary (check)
-        val product = assertTransactional(kvStoreForTesting, 
+        val product = assertTransactional( 
                 ()->wrapper.wrap(inventoryManager).updateProductPrice(book, 12.));
         
         assertEquals(12., product.getPrice(), 1E-3);
@@ -113,30 +92,12 @@ class ChangedObjectsTest extends InteractionTestAbstract {
     @Test 
     void actionInteraction_shouldSpawnSingleTransaction() {
         
-        // spawns its own transactional boundary (check)
-        val book = assertTransactional(
-                kvStoreForTesting, 
-                this::getBookSample);
+        // given
+        val book = getBookSample();
 
-        val managedAction = startActionInteractionOn(
-                JdoInventoryManager.class, 
-                "updateProductPrice", 
-                Where.OBJECT_FORMS)
-                .getManagedAction().get(); // should not throw  
-
-        assertFalse(managedAction.checkVisibility().isPresent()); // is visible
-        assertFalse(managedAction.checkUsability().isPresent()); // can invoke
-        
-        
-        val args = managedAction.getInteractionHead()
-                .getPopulatedParameterValues(_Lists.of(book, 12.));
-        
         // spawns its own transactional boundary (check) 
-        val either = assertTransactional(kvStoreForTesting, ()->managedAction.invoke(args));
-        
-        assertTrue(either.isLeft());
-        
-        val product = (JdoProduct)either.leftIfAny().getPojo();
+        val product = (JdoProduct) assertTransactional( 
+                ()->invokeAction(JdoInventoryManager.class, "updateProductPrice", _Lists.of(book, 12.)));
         
         assertEquals(12., product.getPrice(), 1E-3);                
     }
@@ -144,7 +105,8 @@ class ChangedObjectsTest extends InteractionTestAbstract {
     // -- HELPER
     
     private JdoBook getBookSample() {
-        val books = repository.allInstances(JdoBook.class);
+        // spawns its own transactional boundary (check)
+        val books = assertTransactional(()->repositoryService.allInstances(JdoBook.class));
         assertEquals(1, books.size());
         val book = books.listIterator().next();
         return book;
