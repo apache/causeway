@@ -20,12 +20,9 @@
 package org.apache.isis.core.runtimeservices.publish;
 
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-
-import org.springframework.lang.NonNull;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
@@ -62,13 +59,13 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     private final Map<ManagedObject, PublishingChangeKind> changesByAdapter;
 
     public PublishedObjectsDefault(
-            @lombok.NonNull final UUID transactionUuid,
-            @lombok.NonNull final int sequence,
-            @lombok.NonNull final String userName,
-            @lombok.NonNull final Timestamp completedAt,
-            @lombok.NonNull final int numberLoaded,
-            @lombok.NonNull final int numberObjectPropertiesModified,
-            @lombok.NonNull final Map<ManagedObject, PublishingChangeKind> changesByAdapter) {
+            final @lombok.NonNull UUID transactionUuid,
+            final int sequence,
+            final @lombok.NonNull String userName,
+            final @lombok.NonNull Timestamp completedAt,
+            final int numberLoaded,
+            final int numberObjectPropertiesModified,
+            final @lombok.NonNull Map<ManagedObject, PublishingChangeKind> changesByAdapter) {
 
         this.transactionUuid = transactionUuid;
         this.sequence = sequence;
@@ -151,8 +148,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     }
 
     private int numAdaptersOfKind(final PublishingChangeKind kind) {
-        final Collection<ManagedObject> objectAdapters = adaptersByChange.get().get(kind);
-        return objectAdapters != null ? objectAdapters.size() : 0;
+        return _NullSafe.size(adaptersByChange.get().get(kind));
     }
 
 

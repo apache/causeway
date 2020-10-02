@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.publish;
 
 import java.sql.Timestamp;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.schema.chg.v2.ChangesDto;
