@@ -13,7 +13,7 @@ If you are happy to use a database then we strongly recommend you use the xref:s
 
 If you go down this route, then the architecture is as follows:
 
-image::configuration/configuring-shiro/jdbc/configure-shiro-to-use-custom-jdbc-realm.png[width="600px",link="{imagesdir}/configuration/jdbc/configuring-shiro/configure-shiro-to-use-custom-jdbc-realm.png"]
+image::configuration/configuring-shiro/jdbc/configure-shiro-to-use-custom-jdbc-realm.png[width="600px"]
 
 
 

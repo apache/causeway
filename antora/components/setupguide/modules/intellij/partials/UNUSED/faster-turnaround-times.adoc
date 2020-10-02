@@ -54,7 +54,7 @@ This is done using:
 `File > Settings > Build, Execution, Deployment > Compiler > Excludes`, and then exclude the `.../dom/src/main/java`
 directory:
 
-image::070-advanced/002-compiler-exclude.png[width="800px",link="{imagesdir}/070-advanced/002-compiler-exclude.png"]
+image::070-advanced/002-compiler-exclude.png[width="800px"]
 
 
 The script can be run in the background using:
@@ -66,7 +66,7 @@ gradle -t --offline &
 
 from the command line (in the `dom` module).
 
-image::070-advanced/004-gradle-output.png[width="600px",link="{imagesdir}/070-advanced/004-gradle-output.png"]
+image::070-advanced/004-gradle-output.png[width="600px"]
 
 == Using Gradle for liveReload
 
@@ -132,7 +132,7 @@ gradle -t --offline -b liveReload.gradle &
 from the command line (in the `dom` module):
 
 
-image::070-advanced/005-gradle-output.png[width="600px",link="{imagesdir}/070-advanced/005-gradle-output.png"]
+image::070-advanced/005-gradle-output.png[width="600px"]
 
 
 Live reload also requires that the `isis.viewer.wicket.liveReloadUrl` configuration property is set appropriately:
@@ -146,7 +146,7 @@ isis.viewer.wicket.liveReloadUrl=http://localhost:35729/livereload.js?snipver=1
 You can confirm the script is loaded correctly using the web browser's development tools, eg:
 
 
-image::070-advanced/006-livereload-js.png[width="800px",link="{imagesdir}/070-advanced/006-livereload-js.png"]
+image::070-advanced/006-livereload-js.png[width="800px"]
 
 == Setting up DCEVM
 
@@ -172,21 +172,21 @@ Be sure to run with appropriate privileges to be able to write to the installati
 
 After a few seconds this will display a dialog listing all installations of JDK that have been found:
 
-image::070-advanced/010-dcevm-list-of-found-jdk-installations.png[width="600px",link="{imagesdir}/070-advanced/010-dcevm-list-of-found-jdk-installations.png"]
+image::070-advanced/010-dcevm-list-of-found-jdk-installations.png[width="600px"]
 
 
 Select the corresponding installation, and select `Replace by DCEVM`.
 
-image::070-advanced/020-dcevm-once-installed.png[width="600px",link="{imagesdir}/070-advanced/020-dcevm-once-installed.png"]
+image::070-advanced/020-dcevm-once-installed.png[width="600px"]
 
 
 In IntelliJ, register the JDK in `File > Project Structure` dialog:
 
-image::070-advanced/030-dcevm-intellij-project-structure.png[width="600px",link="{imagesdir}/070-advanced/030-dcevm-intellij-project-structure.png"]
+image::070-advanced/030-dcevm-intellij-project-structure.png[width="600px"]
 
 Finally, in the run configuration, select the patched JDK:
 
-image::070-advanced/040-dcevm-run-configuration.png[width="600px",link="{imagesdir}/070-advanced/040-dcevm-run-configuration.png"]
+image::070-advanced/040-dcevm-run-configuration.png[width="600px"]
 
 == Setting up JRebel
 

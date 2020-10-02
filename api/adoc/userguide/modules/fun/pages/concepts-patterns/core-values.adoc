@@ -24,7 +24,7 @@ These extra unnecessary features make the system difficult to learn and use.;
 The diagram below illustrates the dichotomy:
 
 .build-vs-buy
-image::core-concepts/philosophy/build-vs-buy.png[width="550px",link="{imagesdir}/core-concepts/philosophy/build-vs-buy.png"]
+image::core-concepts/philosophy/build-vs-buy.png[width="550px"]
 
 What happens in this case is that end-users -- needing some sort of solution for their particular business problem -- will end up using unused fields to store the information they need.
 We end up with no correlation between the fields definitions and the values stored therein, sometimes with the datatypes not even matching.
@@ -70,7 +70,7 @@ Apache Isis' architecture allows the internal structure to be maintained in two 
 The diagram below illustrates this:
 
 .decoupled applications
-image::core-concepts/philosophy/decoupled-applications.png[width="800px",link="{imagesdir}/core-concepts/philosophy/decoupled-applications.png"]
+image::core-concepts/philosophy/decoupled-applications.png[width="800px"]
 
 Here, the presentation layer (xref:vw:ROOT:about.adoc[Wicket UI] or xref:vro:ROOT:about.adoc[REST API]) is handled by the framework, while the developer focusses on just the domain layer.
 The framework encourages splitting this functionality into modules; each such module has its counterpart (typically tables within a given RDBMS database schema) within the persistence layer.

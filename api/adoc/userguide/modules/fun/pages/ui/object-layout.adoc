@@ -43,7 +43,7 @@ More information on Bootstrap 3's grid system can be found link:http://getbootst
 
 Probably the easiest way to understand dynamic XML layouts is by example, in this case of a "todo item":
 
-image::layout-dynamic-xml/ToDoItem.png[width="940px",link="{imagesdir}/layout-dynamic-xml/ToDoItem.png"]
+image::layout-dynamic-xml/ToDoItem.png[width="940px"]
 
 === Namespaces
 

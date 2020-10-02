@@ -45,11 +45,11 @@ Then browse to link:http://localhost:8080[], and read on.
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Wicket viewer] or use Swagger to access the xref:vro:ROOT:about.adoc[Restful Objects viewer]:
 
-image::simpleapp/using/010-root-page.png[width="600px",link="{imagesdir}/simpleapp/using/010-root-page.png"]
+image::simpleapp/using/010-root-page.png[width="600px"]
 
 Choose the generic Wicket UI, and navigate to the login page:
 
-image::simpleapp/using/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}/simpleapp/using/020-login-to-wicket-viewer.png"]
+image::simpleapp/using/020-login-to-wicket-viewer.png[width="600px"]
 
 The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.
 You can login with:
@@ -61,7 +61,7 @@ You can login with:
 
 Once you've logged in you'll see the default home page:
 
-image::simpleapp/using/030-home-page.png[width="600px",link="{imagesdir}/simpleapp/using/030-home-page.png"]
+image::simpleapp/using/030-home-page.png[width="600px"]
 
 This is a view model annotated with xref:refguide:applib-ant:HomePage.adoc[@HomePage]:
 
@@ -93,11 +93,11 @@ public class HomePageViewModel {
 When prototyping against an in-memory database, it's useful to have a mechanism to create some initial state.
 This can be done using fixture scripts, accessible from the menu:Prototyping[Run Fixture Script]:
 
-image::simpleapp/using/032-run-fixture-script-prompt.png[width="600px",link="{imagesdir}/simpleapp/using/032-run-fixture-script-prompt.png"]
+image::simpleapp/using/032-run-fixture-script-prompt.png[width="600px"]
 
 This brings up a dialog to select the fixture script:
 
-image::simpleapp/using/033-run-fixture-script-prompt.png[width="600px",link="{imagesdir}/simpleapp/using/033-run-fixture-script-prompt.png"]
+image::simpleapp/using/033-run-fixture-script-prompt.png[width="600px"]
 
 The "Domain App Demo" in the drop-down refers to this code:
 
@@ -121,11 +121,11 @@ public class DomainAppDemo extends FixtureScript {
 
 When executed, all objects created by the fixture are listed:
 
-image::simpleapp/using/034-run-fixture-script-result.png[width="600px",link="{imagesdir}/simpleapp/using/034-run-fixture-script-result.png"]
+image::simpleapp/using/034-run-fixture-script-result.png[width="600px"]
 
 Navigating back to the home page shows the newly created objects:
 
-image::simpleapp/using/036-home-page-after-fixture-scriptpng.png[width="600px",link="{imagesdir}/simpleapp/using/036-home-page-after-fixture-scriptpng.png"]
+image::simpleapp/using/036-home-page-after-fixture-scriptpng.png[width="600px"]
 
 
 As well as running in fixtures from the UI, you can also specify a configuration property to run a fixture script as part of the application start-up:
@@ -142,15 +142,15 @@ As well as running in fixtures from the UI, you can also specify a configuration
 
 You can also of course create new objects:
 
-image::simpleapp/using/040-create-object-from-menu.png[width="600px",link="{imagesdir}/simpleapp/using/040-create-object-from-menu.png"]
+image::simpleapp/using/040-create-object-from-menu.png[width="600px"]
 
 To avoid obscuring the current page, this is configured to bring up a sidebar dialog:
 
-image::simpleapp/using/050-create-object-from-menu-prompt.png[width="600px",link="{imagesdir}/simpleapp/using/050-create-object-from-menu-prompt.png"]
+image::simpleapp/using/050-create-object-from-menu-prompt.png[width="600px"]
 
 Hitting OK returns the created object:
 
-image::simpleapp/using/060-created-object.png[width="600px",link="{imagesdir}/simpleapp/using/060-created-object.png"]
+image::simpleapp/using/060-created-object.png[width="600px"]
 
 The above functionality is implemented by this code:
 
@@ -175,7 +175,7 @@ The `SimpleObject` contains a couple of properties, and a single action to updat
 
 The `name` property is read-only, and can only be modified using the `updateName` action:
 
-image::simpleapp/using/070-update-name.png[width="600px",link="{imagesdir}/simpleapp/using/070-update-name.png"]
+image::simpleapp/using/070-update-name.png[width="600px"]
 
 The above functionality is implemented by this code:
 
@@ -200,11 +200,11 @@ public String default0UpdateName() {
 +
 The framework provides a default implementation that just logs the interaction:
 +
-image::simpleapp/using/075-publish-logging-1.png[width="600px",link="{imagesdir}/simpleapp/using/075-publish-logging-1.png"]
+image::simpleapp/using/075-publish-logging-1.png[width="600px"]
 +
 It also logs the fact that the object itself was modified:
 +
-image::simpleapp/using/076-publish-logging-2.png[width="600px",link="{imagesdir}/simpleapp/using/076-publish-logging-2.png"]
+image::simpleapp/using/076-publish-logging-2.png[width="600px"]
 
 
 
@@ -213,18 +213,18 @@ image::simpleapp/using/076-publish-logging-2.png[width="600px",link="{imagesdir}
 The `notes` property is editable, and can be edited in-place.
 For example:
 
-image::simpleapp/using/080-edit-notes.png[width="600px",link="{imagesdir}/simpleapp/using/080-edit-notes.png"]
+image::simpleapp/using/080-edit-notes.png[width="600px"]
 
 
 ==== Actions requiring confirmations
 
 It's also possible to delete an object:
 
-image::simpleapp/using/090-delete-object.png[width="600px",link="{imagesdir}/simpleapp/using/090-delete-object.png"]
+image::simpleapp/using/090-delete-object.png[width="600px"]
 
 The viewer displays a message confirming that the object has been deleted:
 
-image::simpleapp/using/100-object-deleted.png[width="600px",link="{imagesdir}/simpleapp/using/100-object-deleted.png"]
+image::simpleapp/using/100-object-deleted.png[width="600px"]
 
 The above functionality is implemented by this code:
 
@@ -247,30 +247,30 @@ public void delete() {
 
 Using menu:Prototyping[Open Swagger UI] menu item (or just going back to the home page at link:http://localhost:8080[localhost:8080]) we can use link:https://swagger.io/[Swagger UI] as a front-end to the REST API provided by the Restful Objects viewer.
 
-image::simpleapp/using/200-swagger-ui-before-reload.png[width="600px",link="{imagesdir}/simpleapp/using/200-swagger-ui-before-reload.png"]
+image::simpleapp/using/200-swagger-ui-before-reload.png[width="600px"]
 
 The public API (where the calling client is assumed to be 3rd party) only exposes view models, not entities.
 If the API is private (or for prototyping), then resources corresponding to entities are also exposed:
 
-image::simpleapp/using/210-simpleapp-resources.png[width="600px",link="{imagesdir}/simpleapp/using/210-simpleapp-resources.png"]
+image::simpleapp/using/210-simpleapp-resources.png[width="600px"]
 
 For example, an object can be created using the resource that represents the `SimpleObjects#create` action:
 
-image::simpleapp/using/220-create-object-thru-rest-api.png[width="600px",link="{imagesdir}/simpleapp/using/220-create-object-thru-rest-api.png"]
+image::simpleapp/using/220-create-object-thru-rest-api.png[width="600px"]
 
 CAUTION: if invoking the action returns a 401 (unauthorised), then navigate to the REST API directly (link:http://localhost:8080/restful[] to authenticate the browser first]).
 
 The response indicates that the object was successfully created:
 
-image::simpleapp/using/230-create-object-thru-rest-api-response.png[width="600px",link="{imagesdir}/simpleapp/using/230-create-object-thru-rest-api-response.png"]
+image::simpleapp/using/230-create-object-thru-rest-api-response.png[width="600px"]
 
 The Swagger UI also provides a resource to retrieve any object:
 
-image::simpleapp/using/240-retrieve-object-using-rest-api.png[width="600px",link="{imagesdir}/simpleapp/using/240-retrieve-object-using-rest-api.png"]
+image::simpleapp/using/240-retrieve-object-using-rest-api.png[width="600px"]
 
 This results in a representation of the domain object (as per the requested `Response Content Type`, ie `ACCEPT` header):
 
-image::simpleapp/using/250-retrieve-object-using-rest-api-response.png[width="600px",link="{imagesdir}/simpleapp/using/250-retrieve-object-using-rest-api-response.png"]
+image::simpleapp/using/250-retrieve-object-using-rest-api-response.png[width="600px"]
 
 
 The Swagger UI is provided as a convenience; the REST API is actually a complete hypermedia API (in other words you can follow the links to access all the behaviour exposed in the regular Wicket app).
@@ -334,7 +334,7 @@ There will be several of these app manifests, typically one for the webapp itsel
 The link:{attachmentsdir}/simpleapp-modules-dependencies.pptx[diagram] below shows how classes fit together:
 
 .Module Dependencies
-image::simpleapp/simpleapp-modules-dependencies.png[width="800px",link="{imagesdir}/simpleapp/simpleapp-modules-dependencies.png"]
+image::simpleapp/simpleapp-modules-dependencies.png[width="800px"]
 
 
 
@@ -921,11 +921,11 @@ Basically, though, it amounts to running the `main()` method in the `SimpleApp`,
 
 Here's what the setup looks like in IntelliJ IDEA:
 
-image::simpleapp/simpleapp-webapp.png[width="600px",link="{imagesdir}/simpleapp/simpleapp-webapp.png"]
+image::simpleapp/simpleapp-webapp.png[width="600px"]
 
 which uses an IntelliJ feature to run a different run configuration to run DataNucleus enhancer beforehand:
 
-image::simpleapp/simpleapp-webapp-before-launch.png[width="600px",link="{imagesdir}/simpleapp/simpleapp-webapp-before-launch.png"]
+image::simpleapp/simpleapp-webapp-before-launch.png[width="600px"]
 
 
 

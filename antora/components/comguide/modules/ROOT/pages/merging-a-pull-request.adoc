@@ -116,7 +116,7 @@ git checkout master && git merge --no-ff ISIS-1162_pr-31 && git branch -d ISIS-1
 
 The screenshot belows shows the history we end up with:
 
-image::committers/github-pr-history.png[link="{imagesdir}/committers/github-pr-history.png"]
+image::committers/github-pr-history.png[]
 
 This shows the fork being merged into the temporary branch ("ISIS-1162_pr-31"), then some further tidy-up, and finally the merging of the temporary branch into mainline.
 

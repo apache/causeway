@@ -37,7 +37,7 @@ public class ToDoItem implements Comparable<ToDoItem> {         // <.>
 
 When the `dependencies` collection is rendered, the elements are sorted by the `description` property first:
 
-image::reference-annotations/CollectionLayout/sortedby-dependencies.png[width="720px",link="{imagesdir}/reference-annotations/CollectionLayout/sortedby-dependencies.png"]
+image::reference-annotations/CollectionLayout/sortedby-dependencies.png[width="720px"]
 
 [NOTE]
 ====

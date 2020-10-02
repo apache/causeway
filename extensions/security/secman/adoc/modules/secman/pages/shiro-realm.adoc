@@ -8,7 +8,7 @@ The SecMan extension includes a Shiro realm, which fits in as follows:
 
 The general configuration is as follows:
 
-image::shiro-realm/configure-shiro-to-use-isisaddons-security-module-realm.PNG[width="600px",link="{imagesdir}/configure-shiro-to-use-isisaddons-security-module-realm.PNG"]
+image::shiro-realm/configure-shiro-to-use-isisaddons-security-module-realm.PNG[width="600px"]
 
 where the `IsisModuleSecurityRealm` realm is the implementation provided by the module.
 
@@ -21,7 +21,7 @@ Most organizations use LDAP for user credentials, and maintaining two separate u
 The `IsisModuleSecurityRealm` can therefore be configured with a subsidiary "delegate" realm that is responsible for performing the primary authentication of the user; if that passes then a user is created (as a domain entity) automatically.
 In most cases this delegate realm will be the LDAP realm, and so the architecture becomes:
 
-image::shiro-realm/configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG[width="600px",link="{imagesdir}/configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG"]
+image::shiro-realm/configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG[width="600px"]
 
 
 The xref:security:ROOT:about.adoc[SecMan extension] has many more features than are described here, all of which are described in the module's README.

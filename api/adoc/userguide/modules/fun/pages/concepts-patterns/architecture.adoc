@@ -21,7 +21,7 @@ With Apache Isis the responsibility for presentation is a framework concern, the
 A few years ago Alistair Cockburn reworked the traditional layered architecture diagram and came up with the *_hexagonal architecture_* (also known as/very similar to the link:http://jeffreypalermo.com/blog/the-onion-architecture-part-1/[Onion] architecture):
 
 .The hexagonal architecture emphasizes multiple implementations of the different layers.
-image::core-concepts/philosophy/hexagonal-architecture.png[width="700px",link="{imagesdir}/core-concepts/philosophy/hexagonal-architecture.png"]
+image::core-concepts/philosophy/hexagonal-architecture.png[width="700px"]
 
 What Cockburn emphasizes is that there's usually more than one way *into* an application (what he called the *_user-side' ports_*) and more than one way *out of* an application too (the *_data-side ports_*).
 This is very similar to the concept of primary and secondary actors in use cases: a primary actor (often a human user but not always) is active and initiates an interaction, while a secondary actor (almost always an external system) is passive and waits to be interacted with.

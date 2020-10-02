@@ -292,11 +292,11 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //
 //With 'remember me' not suppressed (the default):
 //
-//image::suppress-remember-me/login-page-default.png[width="300px",link="{imagesdir}/suppress-remember-me/login-page-default.png"]
+//image::suppress-remember-me/login-page-default.png[width="300px"]
 //
 //and with the checkbox suppressed:
 //
-//image::suppress-remember-me/login-page-suppress-remember-me.png[width="300px",link="{imagesdir}/suppress-remember-me/login-page-suppress-remember-me.png"]
+//image::suppress-remember-me/login-page-suppress-remember-me.png[width="300px"]
 //
 //
 //
@@ -317,11 +317,11 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //
 //With 'sign up' not suppressed (the default):
 //
-//image::suppress-sign-up/login-page-default.png[width="300px",link="{imagesdir}/suppress-sign-up/login-page-default.png"]
+//image::suppress-sign-up/login-page-default.png[width="300px"]
 //
 //and with the link suppressed:
 //
-//image::suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{imagesdir}/suppress-sign-up/login-page-suppress-sign-up.png"]
+//image::suppress-sign-up/login-page-suppress-sign-up.png[width="300px"]
 //
 //
 //
@@ -339,11 +339,11 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //
 //With 'password reset' not suppressed (the default):
 //
-//image::suppress-password-reset/login-page-default.png[width="300px",link="{imagesdir}/suppress-password-reset/login-page-default.png"]
+//image::suppress-password-reset/login-page-default.png[width="300px"]
 //
 //and with the link suppressed:
 //
-//image::suppress-password-reset/login-page-suppress-password-reset.png[width="300px",link="{imagesdir}/suppress-password-reset/login-page-suppress-password-reset.png"]
+//image::suppress-password-reset/login-page-suppress-password-reset.png[width="300px"]
 //
 //
 //
@@ -701,11 +701,11 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //----
 //
 //.Example 1
-//image::theme-chooser/example-1.png[width="720px",link="{imagesdir}/theme-chooser/example-1.png"]
+//image::theme-chooser/example-1.png[width="720px"]
 //
 //
 //.Example 2:
-//image::theme-chooser/example-2.png[width="720px",link="{imagesdir}/theme-chooser/example-2.png"]
+//image::theme-chooser/example-2.png[width="720px"]
 //
 //
 //It is also possible to restrict the themes shown to some subset of those in bootswatch.

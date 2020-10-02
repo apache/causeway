@@ -35,17 +35,17 @@ The DataNucleus plugin hooks into the Eclipse compiler and will automatically en
 * Use Help > Install New Software:
 
 +
-image::2017-oxygen/030-datanucleus-install-new-software.png[width="600px",link="{imagesdir}/2017-oxygen/030-datanucleus-install-new-software.png"]
+image::2017-oxygen/030-datanucleus-install-new-software.png[width="600px"]
 
 * Specify the DataNucleus plugin repository:
 
 +
-image::2017-oxygen/040-datanucleus-specify-repository.png[width="400px",link="{imagesdir}/2017-oxygen/040-datanucleus-specify-repository.png"]
+image::2017-oxygen/040-datanucleus-specify-repository.png[width="400px"]
 
 * Select the plugin
 
 +
-image::2017-oxygen/050-datanucleus-select-plugin.png[width="600px",link="{imagesdir}/2017-oxygen/050-datanucleus-select-plugin.png"]
+image::2017-oxygen/050-datanucleus-select-plugin.png[width="600px"]
 
 * Press Next and Finish to complete the installation of the plugin
 
@@ -60,12 +60,12 @@ For Eclipse IDE this requires an link:https://projectlombok.org/setup/eclipse[in
 * Locate the `lombok.jar` jar file:
 
 +
-image::2017-oxygen/010-lombok-locate-jar.png[width="600px",link="{imagesdir}/2017-oxygen/010-lombok-locate-jar.png"]
+image::2017-oxygen/010-lombok-locate-jar.png[width="600px"]
 
 * Run using `java -jar` (or double click on Windows):
 
 +
-image::2017-oxygen/020-lombok-install-into-eclipse.png[width="600px",link="{imagesdir}/2017-oxygen/020-lombok-install-into-eclipse.png"]
+image::2017-oxygen/020-lombok-install-into-eclipse.png[width="600px"]
 
 Then restart Eclipse.
 
@@ -81,7 +81,7 @@ Both DataNucleus and Project Lombok use annotation processors that must be enabl
 
 For each project, open its _Properties_ page and then _Java Compiler > Annotation Processing_ to specify the generated source directory of `target/generated-sources/annotations`:
 
-image::2017-oxygen/060-enable-annotation-processor.png[width="600px",link="{imagesdir}/2017-oxygen/060-enable-annotation-processor.png"]
+image::2017-oxygen/060-enable-annotation-processor.png[width="600px"]
 
 Eclipse should automatically add this directory as a source path; at this point all remaining compiler errors should disappear.
 
@@ -94,12 +94,12 @@ Make sure you are in the 'Java' Perspective, not the 'Java EE' Perspective.
 
 In Eclipse, for the _domain object model_ project(s), first add DataNucleus support:
 
-image::eclipse-100-project-support.png[width="600px",link="{imagesdir}/eclipse-100-project-support.png"]
+image::eclipse-100-project-support.png[width="600px"]
 
 
 Then turn on Auto-Enhancement:
 
-image::eclipse-110-project-support.png[width="600px",link="{imagesdir}/eclipse-110-project-support.png"]
+image::eclipse-110-project-support.png[width="600px"]
 
 === Update the classpath
 
@@ -111,11 +111,11 @@ If you've based your app on either the xref:docs:starters:helloworld.adoc[HelloW
 
 Then, tell DataNucleus to use the project classpath:
 
-image::eclipse-010-windows-preferences.png[width="750px",link="{imagesdir}/eclipse-010-windows-preferences.png"]
+image::eclipse-010-windows-preferences.png[width="750px"]
 
 When the enhancer runs, it will print out to the console:
 
-image::eclipse-120-console.png[width="500px",link="{imagesdir}/eclipse-120-console.png"]
+image::eclipse-120-console.png[width="500px"]
 
 === Workaround for path limits (the DN plugin to use the persistence.xml)
 
@@ -126,7 +126,7 @@ To fix this, we configure the enhancer to read from the `persistence.xml` file.
 As a prerequisite, first make sure that your domain object model has a `persistence.xml` file.
 Then specify the `persistence-unit` in the project properties:
 
-image::eclipse-025-project-properties.png[width="750px",link="{imagesdir}/eclipse-025-project-properties.png"]
+image::eclipse-025-project-properties.png[width="750px"]
 
 === Workaround: If the enhancer fails
 
@@ -134,20 +134,20 @@ On occasion it appears that Eclipse can attempt to run two instances of the Data
 This is probably due to multiple Eclipse builders being defined; we've noticed multiple entries in the Eclipse's `Debug` view:
 
 
-image::eclipse-210-enhancer-fails-duplicates.png[width="600px",link="{imagesdir}/eclipse-210-enhancer-fails-duplicates.png"]
+image::eclipse-210-enhancer-fails-duplicates.png[width="600px"]
 
 
 At any rate, you'll know you've encountered this error if you see the following in the console:
 
 
-image::eclipse-200-enhancer-fails-duplicates.png[width="600px",link="{imagesdir}/eclipse-200-enhancer-fails-duplicates.png"]
+image::eclipse-200-enhancer-fails-duplicates.png[width="600px"]
 
 
 
 The best solution is to remove DataNucleus support and then to re-add it:
 
 
-image::eclipse-220-enhancer-fails-duplicates.png[width="600px",link="{imagesdir}/eclipse-220-enhancer-fails-duplicates.png"]
+image::eclipse-220-enhancer-fails-duplicates.png[width="600px"]
 
 
 If you consistently hit problems, then the final recourse is to disable the automatic enhancement and to remember to manually enhance your domain object model before each run.

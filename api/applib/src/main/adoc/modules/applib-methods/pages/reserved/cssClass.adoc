@@ -14,7 +14,7 @@ In conjunction with xref:refguide:config:application-specific/application-css.ad
 For example, in a todo app we can use this technique to add a strikethrough for completed todo items.
 This is shown on the home page:
 
-image::reference-methods/reserved/cssClass/strikethrough.png[width="800px",link="{imagesdir}/reference-methods/reserved/cssClass/strikethrough.png"]
+image::reference-methods/reserved/cssClass/strikethrough.png[width="800px"]
 
 
 The code to accomplish this is straightforward:

@@ -12,11 +12,11 @@ This can be changed to display a png logo instead.
 
 The screenshot below shows the example https://github.com/apache/isis-app-todoapp/[TodoApp] with a 'brand logo' image in its header:
 
-image::brand-logo/brand-logo.png[width="750px",link="{imagesdir}/brand-logo/brand-logo.png"]
+image::brand-logo/brand-logo.png[width="750px"]
 
 A custom brand logo (typically larger) can also be specified for the signin page:
 
-image::brand-logo/brand-logo-signin.png[width="750px",link="{imagesdir}/brand-logo/brand-logo-signin.png"]
+image::brand-logo/brand-logo-signin.png[width="750px"]
 
 
 

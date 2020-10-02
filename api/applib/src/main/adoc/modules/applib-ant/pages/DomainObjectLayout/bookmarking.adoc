@@ -11,7 +11,7 @@ This attribute is also supported for  xref:refguide:applib-ant:ActionLayout.adoc
 
 In the xref:vw:ROOT:about.adoc[Wicket Viewer], a link to a bookmarked object is shown in the bookmarks panel:
 
-image::reference-annotations/DomainObjectLayout/bookmarking.png[width="720px",link="{imagesdir}/reference-annotations/DomainObjectLayout/bookmarking.png"]
+image::reference-annotations/DomainObjectLayout/bookmarking.png[width="720px"]
 
 [NOTE]
 ====
@@ -33,7 +33,7 @@ indicates that the `ToDoItem` class is bookmarkable:
 It is also possible to nest bookmarkable entities.
 For example:
 
-image::reference-annotations/DomainObjectLayout/bookmarking-nested.png[width="720px",link="{imagesdir}/reference-annotations/DomainObjectLayout/bookmarking-nested.png"]
+image::reference-annotations/DomainObjectLayout/bookmarking-nested.png[width="720px"]
 
 [NOTE]
 ====

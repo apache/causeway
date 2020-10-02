@@ -27,7 +27,7 @@ You'll see that it is used by both the xref:docs:starters:helloworld.adoc[HelloW
 
 The diagram below (link:{attachmentsdir}/parent-pom.pptx[PPT]) below shows how the parent POM relates to other POMs:
 
-image::parent-pom.png[width="800px",link="{imagesdir}/parent-pom.png"]
+image::parent-pom.png[width="800px"]
 
 
 As the diagram shows, the parent POM inherits two Spring Boot parent POMs: directly from `org.springframework.boot:spring-boot-starter-parent`, and transitively inherits from `org.springframework.boot:spring-boot-dependencies`.

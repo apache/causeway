@@ -107,7 +107,7 @@ xref:userguide:fun:domain-entities-and-services.adoc#domain-services[here].
 It's worth extending the xref:userguide:fun:concepts-patterns.adoc#hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
 
 .The hexagonal architecture with API and SPI implementations
-image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px",link="{imagesdir}/core-concepts/philosophy/hexagonal-architecture-addons.png"]
+image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
 
 The xref:extensions:ROOT:about.adoc[extensions] catalog provide SPI implementations of the common cross-cutting concerns.
 You can also write your own domain services as well, for example to interface with some external CMS system, say.

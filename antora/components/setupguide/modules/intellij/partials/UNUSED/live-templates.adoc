@@ -7,7 +7,7 @@ We also recommend you import a set of live templates.
 These are used to add new methods to existing classes:
 
 .Live templates
-image::030-import-settings/050-live-templates.png[width="600px",link="{imagesdir}/030-import-settings/050-live-templates.png"]
+image::030-import-settings/050-live-templates.png[width="600px"]
 
 The live templates have a prefix of either:
 

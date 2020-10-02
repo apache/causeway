@@ -707,13 +707,13 @@ Use the `image:` macro to reference images.
 For example:
 
 ....
-image:_images/vscode.png[]
+image:vscode.png[]
 ....
 
 To make the image clickable, add in the `link` attribute:
 
 ....
-image:_images/vscode.png[link="_images/vscode.png"]
+image:vscode.png[link="{attachmentsdir}/some-doc.pdf"]
 ....
 
 
@@ -723,7 +723,7 @@ It's also possible to specify the width using `scaledwidth` (for PDF/HTML) or `w
 For example:
 
 ....
-image:_images/vscode.png[link="_images/vscode.png",width="800px"]
+image:vscode.png[width="800px"]
 ....
 
 

@@ -48,7 +48,7 @@ CAUTION: We release from Maven Central before anything else; we don't want to pu
 
 From the http://repository.apache.org[ASF Nexus repository], select the staging repository and select 'release' from the top menu.
 
-image::release-process/nexus-release-1.png[width="600px",link="{imagesdir}/release-process/nexus-release-1.png"]
+image::release-process/nexus-release-1.png[width="600px"]
 
 This moves the release artifacts into an Apache releases repository; from there they will be automatically moved to the Maven repository.
 

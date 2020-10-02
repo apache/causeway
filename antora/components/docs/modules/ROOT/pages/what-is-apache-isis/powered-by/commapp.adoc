@@ -8,7 +8,7 @@
 CommApp is an application whose domain is that of managing businesses themselves, specifically the commercial aspects of a business.
 You can get a feel for it from this screenshot:
 
-image::what-is-apache-isis/powered-by/commapp/screenshot-1.png[width="900px",link="{imagesdir}/what-is-apache-isis/powered-by/commapp/screenshot-1.png"]
+image::what-is-apache-isis/powered-by/commapp/screenshot-1.png[width="900px"]
 
 which shows how the app integrates a number of the (non-ASF) link:https://platform.incode.org[Incode Platform^] components (excel, fullcalendar2, gmap3 and wickedcharts).
 

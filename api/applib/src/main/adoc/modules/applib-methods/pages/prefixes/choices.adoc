@@ -58,7 +58,7 @@ Action parameters also support the notion of dependent choices, whereby the list
 
 For example, consider a todo app whereby ``ToDoItem``s are categorized and then can also be subcategorized:
 
-image::reference-methods/prefixes/choices/dependent.png[width="800px",link="{imagesdir}/reference-methods/prefixes/choices/dependent.png"]
+image::reference-methods/prefixes/choices/dependent.png[width="800px"]
 
 If implemented as a mixin xref:userguide:fun:mixins.adoc#contributed-action[contributed action], the code would look something like:
 

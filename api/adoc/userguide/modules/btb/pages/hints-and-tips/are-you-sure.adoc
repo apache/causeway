@@ -28,6 +28,6 @@ public SimpleObject updateName(
 
 This will render as:
 
-image::hints-and-tips/action-semantics-are-you-sure.png[link="{imagesdir}/hints-and-tips/action-semantics-are-you-sure.png"]
+image::hints-and-tips/action-semantics-are-you-sure.png[]
 
 

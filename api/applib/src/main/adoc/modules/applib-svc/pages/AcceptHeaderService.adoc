@@ -37,7 +37,7 @@ The `AcceptHeaderService` allows the responsibility for content negotiation (det
 
 The diagram below illustrated this:
 
-image::reference-services-api/acceptheaderservice.png[width="700px",link="{imagesdir}/reference-services-api/acceptheaderservice.png"]
+image::reference-services-api/acceptheaderservice.png[width="700px"]
 
 The REST request is submitted to a domain service with a xref:refguide:applib-ant:DomainService.adoc#nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
 This uses the `AcceptHeaderService` to obtain the values of the HTTP `Accept` header.

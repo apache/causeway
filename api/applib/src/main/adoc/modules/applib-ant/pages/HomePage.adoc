@@ -10,7 +10,7 @@ This often returns a view model that acts as some sort of dashboard, presenting 
 
 For example, a todo app could use `@HomePage` to return a dashboard of todo items to complete:
 
-image::reference-annotations/HomePage/HomePage.png[width="800px",link="{imagesdir}/reference-annotations/HomePage/HomePage.png"]
+image::reference-annotations/HomePage/HomePage.png[width="800px"]
 
 
 The corresponding code is:
