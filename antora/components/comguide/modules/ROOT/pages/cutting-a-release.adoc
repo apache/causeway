@@ -47,16 +47,7 @@ git checkout master
 git pull --ff-only
 ----
 
-Check that there are no snapshot dependencies:
-
-[source,bash,subs="attributes+"]
-----
-grep SNAPSHOT $(/bin/find . -name pom.xml | grep -v target  sort)
-----
-
-The only mention of `SNAPSHOT` should be in the `revision` property of the root `core-prent/pom.xml` file.
-
-Finally, switch to the `isis-parent` directory:
+Switch to the `isis-parent` directory:
 
 [source,bash,subs="attributes+"]
 ----
@@ -73,14 +64,38 @@ To run the RAT tool, use:
 [source,bash,subs="attributes+"]
 .find unapproved/missing licenses
 ----
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
+pushd isis-parent
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased
+popd
 
-for a in `/bin/find .. -name rat.txt -print`; do grep '!???' $a; done
-for a in `/bin/find .. -name rat.txt -print`; do grep '!AL' $a; done
+pushd antora
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
+popd
+
+pushd examples/demo
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
+popd
+
+pushd incubator
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
+popd
+
+pushd regressiontests
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
+popd
+
+pushd tooling
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
+popd
+
+for a in `/bin/find .. -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
+for a in `/bin/find .. -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt
 ----
 
-where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0.
-This will allow the command to run over all submodules, rather than failing after the first one.
+NOTE: the parent `pom.xml` in each of these locations has the `apache-rat-plugin` appropriately configured.
+
+This script runs over all submodules, including non-released modules.
+
 The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
 The `for` command collates all the errors.
 
@@ -90,15 +105,7 @@ Investigate and fix any reported violations, typically by either:
 * updating the `<excludes>` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
 * also look to remove any stale `<exclude>` entries
 
-Once you've fixed all issues, confirm once more that `apache-rat-plugin` no longer reports any license violations, this time leaving the `rat.numUnapprovedLicenses` property to its default, 0:
-
-[source,bash]
-.verify no unapproved/missing licenses
-----
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=0
-
-for a in `/bin/find .. -name rat.txt -print`; do grep '!???' $a; done
-----
+Once you've fixed all issues, run the script again to confirm that all license violations have been fixed.
 
 === Missing License Check
 

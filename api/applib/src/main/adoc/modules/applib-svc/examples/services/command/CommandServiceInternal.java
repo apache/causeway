@@ -40,13 +40,13 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.CommandService")
+@Named("isisRuntimeServices.CommandServiceInternal")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
-@Qualifier("Default")
+@Qualifier("Internal")
 @Log4j2
 // tag::refguide[]
-public class CommandService {
+public class CommandServiceInternal {
 
     // end::refguide[]
     /**
@@ -63,6 +63,9 @@ public class CommandService {
         // ...
     // end::refguide[]
 
+        if(! command.isReified()) {
+            return;
+        }
         if(command.getLogicalMemberIdentifier() == null) {
             // eg if seed fixtures
             return;

@@ -82,6 +82,82 @@
 				</excludes>
 			</resource>
 		</resources>
+
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.rat</groupId>
+				<artifactId>apache-rat-plugin</artifactId>
+				<version>0.13</version>
+
+				<!-- APACHE ISIS customisation 4/7: start -->
+				<configuration>
+					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+					<excludeSubProjects>true</excludeSubProjects>
+					<excludes>
+						<exclude>**/target/**</exclude>
+						<exclude>**/target-ide/**</exclude>
+
+						<exclude>**/node_modules/**</exclude>
+						<exclude>**/node/npm</exclude>
+						<exclude>**/node/npm.cmd</exclude>
+
+						<exclude>**/*.project</exclude>
+						<exclude>**/.classpath</exclude>
+						<exclude>**/.settings/**</exclude>
+						<exclude>**/*.launch</exclude>
+
+						<exclude>**/*.iml</exclude>
+						<exclude>**/webpack.generated.js</exclude>
+
+						<exclude>**/*.pdn</exclude>
+						<exclude>**/*.svg</exclude>
+						<exclude>**/*.rtf</exclude>
+						<exclude>**/*.json</exclude>
+						<exclude>**/*.min.js</exclude>
+						<exclude>**/*.puml</exclude>
+
+						<exclude>**/module-nav.adoc</exclude>
+						<exclude>**/component-nav.adoc</exclude>
+
+						<exclude>**/MANIFEST.MF</exclude>
+						<exclude>**/*.ucd</exclude>
+						<exclude>**/*.ucls</exclude>
+
+						<exclude>**/datanucleus.log</exclude>
+						<exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
+						<exclude>**/gradlew</exclude>
+						<exclude>**/gradlew.bat</exclude>
+
+						<exclude>**/intellij/launch/*.xml</exclude>
+
+						<exclude>**/org/apache/isis/tooling/adocmodel/test/attributed-table.adoc</exclude>
+						<exclude>**/org/apache/isis/tooling/adocmodel/test/simple-table.adoc</exclude>
+
+						<exclude>**/META-INF/services/**</exclude>
+					</excludes>
+					<licenses>
+						<license
+								implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+							<licenseFamilyCategory>AL2  </licenseFamilyCategory>
+							<licenseFamilyName>Apache License 2.0</licenseFamilyName>
+							<notes />
+							<patterns>
+								<pattern>Licensed to the Apache Software Foundation (ASF) under
+									one</pattern>
+							</patterns>
+						</license>
+					</licenses>
+					<licenseFamilies>
+						<licenseFamily
+								implementation="org.apache.rat.license.SimpleLicenseFamily">
+							<familyName>Apache License 2.0</familyName>
+						</licenseFamily>
+					</licenseFamilies>
+				</configuration>
+			</plugin>
+		</plugins>
+
 	</build>
 
 	<dependencyManagement>

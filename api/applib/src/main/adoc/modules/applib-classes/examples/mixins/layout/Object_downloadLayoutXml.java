@@ -36,54 +36,42 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Mixin(method="act") 
+@Action(
+        domainEvent = Object_downloadLayoutXml.ActionDomainEvent.class,
+        semantics = SemanticsOf.SAFE,
+        restrictTo = RestrictTo.PROTOTYPING
+)
+@ActionLayout(
+        cssClassFa = "fa-download",
+        position = ActionLayout.Position.PANEL_DROPDOWN
+)
 @RequiredArgsConstructor
 public class Object_downloadLayoutXml {
-
-    private final Object holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadLayoutXml> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-download",
-            position = ActionLayout.Position.PANEL_DROPDOWN
-            )
+    private final Object holder;
+
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
     public Object act(
-
-            // PARAM 0
             @ParameterLayout(
                     named = MixinConstants.FILENAME_PROPERTY_NAME,
                     describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
-
-            // PARAM 1
             final LayoutService.Style style) {
 
         val xmlString = layoutService.toXml(holder.getClass(), style);
         return  Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
-    // -- PARAM 0 (fileName)
-
     public String default0Act() {
         return holder.getClass().getSimpleName() + ".layout";
     }
 
-    // -- PARAM 1 (style)
-
     public LayoutService.Style default1Act() {
         return LayoutService.Style.NORMALIZED;
     }
-
-    // -- DEPENDENCIES
 
     @Inject LayoutService layoutService;
 

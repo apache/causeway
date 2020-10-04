@@ -33,10 +33,10 @@ under the License.
 
 	<!-- ORG.APACHE:APACHE : commented out : start
 
-	<groupId>org.apache</groupId>
-	<artifactId>apache</artifactId>
-	<version>21</version>
-	<packaging>pom</packaging>
+    <groupId>org.apache</groupId>
+    <artifactId>apache</artifactId>
+    <version>23</version>
+    <packaging>pom</packaging>
 
 	ORG.APACHE:APACHE : commented out : end -->
 
@@ -59,15 +59,15 @@ under the License.
 
 	<!-- ORG.APACHE:APACHE : commented out : start
 
-	<name>The Apache Software Foundation</name>
-	<description>
-		The Apache Software Foundation provides support for the Apache community of open-source software projects.
-		The Apache projects are characterized by a collaborative, consensus based development process, an open and
-		pragmatic software license, and a desire to create high quality software that leads the way in its field.
-		We consider ourselves not simply a group of projects sharing a server, but rather a community of developers
-		and users.
-	</description>
-	<url>https://www.apache.org/</url>
+    <name>The Apache Software Foundation</name>
+    <description>
+        The Apache Software Foundation provides support for the Apache community of open-source software projects.
+        The Apache projects are characterized by a collaborative, consensus based development process, an open and
+        pragmatic software license, and a desire to create high quality software that leads the way in its field.
+        We consider ourselves not simply a group of projects sharing a server, but rather a community of developers
+        and users.
+    </description>
+    <url>https://www.apache.org/</url>
 
 	ORG.APACHE:APACHE : commented out : end -->
 
@@ -106,7 +106,7 @@ under the License.
         <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</developerConnection>
         <url>https://github.com/apache/maven-apache-parent/tree/${project.scm.tag}</url>
-        <tag>apache-21</tag>
+        <tag>apache-23</tag>
     </scm>
 	ORG.APACHE:APACHE : commented out : end -->
 
@@ -316,7 +316,7 @@ under the License.
 	<properties>
 		<distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
 		<distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
-		<organization.logo>https://www.apache.org/images/asf_logo_wide.gif</organization.logo>
+		<organization.logo>https://www.apache.org/images/asf_logo_wide_2016.png</organization.logo>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
@@ -324,22 +324,33 @@ under the License.
 		<arguments />
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-		<surefire.version>2.22.2</surefire.version>
+		<surefire.version>2.22.0</surefire.version>
 		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
+		<project.build.outputTimestamp>2020-01-22T15:10:15Z</project.build.outputTimestamp>
 
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
 	</properties>
 
-<!-- 	<repositories> -->
-<!-- 		<repository> -->
-<!-- 			<id>apache.snapshots</id> -->
-<!-- 			<name>Apache Snapshot Repository</name> -->
-<!-- 			<url>https://repository.apache.org/snapshots</url> -->
-<!-- 			<releases> -->
-<!-- 				<enabled>false</enabled> -->
-<!-- 			</releases> -->
-<!-- 		</repository> -->
-<!-- 	</repositories> -->
+	<repositories>
+		<repository>
+			<id>apache.snapshots</id>
+			<name>Apache Snapshot Repository</name>
+			<url>https://repository.apache.org/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>apache.snapshots</id>
+			<name>Apache Snapshot Repository</name>
+			<url>https://repository.apache.org/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<build>
 		<pluginManagement>
@@ -418,12 +429,12 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-invoker-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.2.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.2.0</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -452,19 +463,18 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.3</version>
+					<version>3.0.0-M1</version>
 					<configuration>
 						<useReleaseProfile>false</useReleaseProfile>
 						<goals>deploy</goals>
 						<arguments>-Papache-release ${arguments}</arguments>
-						<waitBeforeTagging>10</waitBeforeTagging>
 					</configuration>
 				</plugin>
 				<!-- END SNIPPET: release-plugin-configuration -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-remote-resources-plugin</artifactId>
-					<version>1.5</version>
+					<version>1.7.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -480,6 +490,28 @@ under the License.
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-scm-publish-plugin</artifactId>
 					<version>3.0.0</version>
+					<dependencies><!-- TODO remove these overridden dependencies when upgrading to 3.1.0, see MSCMPUB-37 -->
+						<dependency>
+							<groupId>org.apache.maven.scm</groupId>
+							<artifactId>maven-scm-api</artifactId>
+							<version>1.10.0</version>
+						</dependency>
+						<dependency>
+							<groupId>org.apache.maven.scm</groupId>
+							<artifactId>maven-scm-provider-gitexe</artifactId>
+							<version>1.10.0</version>
+						</dependency>
+						<dependency>
+							<groupId>org.apache.maven.scm</groupId>
+							<artifactId>maven-scm-provider-svn-commons</artifactId>
+							<version>1.10.0</version>
+						</dependency>
+						<dependency>
+							<groupId>org.apache.maven.scm</groupId>
+							<artifactId>maven-scm-provider-svnexe</artifactId>
+							<version>1.10.0</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -489,7 +521,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>3.0.1</version>
+					<version>3.2.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

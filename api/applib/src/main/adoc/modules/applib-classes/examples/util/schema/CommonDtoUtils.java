@@ -58,6 +58,8 @@ import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import static org.apache.isis.commons.internal.collections._Maps.entry;
 
+import lombok.val;
+
 public final class CommonDtoUtils {
 
     // -- PARAM_DTO_TO_NAME, PARAM_DTO_TO_TYPE
@@ -519,7 +521,7 @@ public final class CommonDtoUtils {
             return null;
         }
         final Optional<MapDto.Entry> entryIfAny = entryIfAnyFor(mapDto, key);
-        return entryIfAny.isPresent() ? entryIfAny.get().getValue() : null;
+        return entryIfAny.map(MapDto.Entry::getValue).orElse(null);
     }
 
     public static void putMapKeyValue(final MapDto mapDto, final String key, final String value) {
@@ -530,7 +532,7 @@ public final class CommonDtoUtils {
         if(entryIfAny.isPresent()) {
             entryIfAny.get().setValue(value);
         } else {
-            final MapDto.Entry entry = new MapDto.Entry();
+            val entry = new MapDto.Entry();
             entry.setKey(key);
             entry.setValue(value);
             mapDto.getEntry().add(entry);
