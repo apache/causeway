@@ -106,14 +106,14 @@
 
 						<exclude>**/META-INF/services/**</exclude>
 
-						<exclude>**/clients/kroviz/package.json.d/project.info</exclude>
-						<exclude>**/clients/kroviz/src/main/resources/hbs/**</exclude>
-						<exclude>**/clients/kroviz/src/test/kotlin/org/apache/isis/client/kroviz/snapshots/**</exclude>
-						<exclude>**/clients/kroviz/webpack.config.d/**</exclude>
+						<exclude>**/package.json.d/project.info</exclude>
+						<exclude>**/src/main/resources/hbs/**</exclude>
+						<exclude>**/src/test/kotlin/org/apache/isis/client/kroviz/snapshots/**</exclude>
+						<exclude>**/webpack.config.d/*.js</exclude>
 
-						<exclude>**/viewers/vaadin/ui/pnpm-lock.yaml</exclude>
-						<exclude>**/viewers/vaadin/ui/pnpmfile.js</exclude>
-						<exclude>**/viewers/vaadin/ui/webpack.config.js</exclude>
+						<exclude>**/ui/pnpm-lock.yaml</exclude>
+						<exclude>**/ui/pnpmfile.js</exclude>
+						<exclude>**/ui/webpack.config.js</exclude>
 					</excludes>
 					<licenses>
 						<license

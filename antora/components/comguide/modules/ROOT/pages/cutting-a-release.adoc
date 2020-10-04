@@ -64,6 +64,8 @@ To run the RAT tool, use:
 [source,bash,subs="attributes+"]
 .find unapproved/missing licenses
 ----
+mvn clean
+
 pushd isis-parent
 mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased
 popd
@@ -119,6 +121,7 @@ It's first necessary to have built the framework locally at least once:
 
 [source,bash,subs="attributes+"]
 ----
+cd isis-parent
 mvn clean install -o
 ----
 
