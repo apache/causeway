@@ -1,4 +1,4 @@
-== Mixin actions
+v== Mixin actions
 
 A number of mixin actions contribute through the `IsisMarkupHolder` interface, demonstrate the use of `Markup` as a parameter and as a return type.
 For example:

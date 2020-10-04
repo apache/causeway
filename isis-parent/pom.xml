@@ -533,13 +533,33 @@ under the License.
 							<exclude>**/.settings/**</exclude>
 							<exclude>**/*.launch</exclude>
 
+							<exclude>**/demo/CREDITS.TXT</exclude>
+							<exclude>**/demo/domain/src/main/java/demoapp/dom/types/isis/clobs/samples/**</exclude>
+							<exclude>**/demo/domain/src/main/java/demoapp/dom/types/isis/markups/samples/**</exclude>
+							<exclude>**/demo/domain/src/main/java/demoapp/dom/types/isisext/asciidocs/samples/**</exclude>
+							<exclude>**/demo/domain/src/main/java/demoapp/dom/types/isisext/markdowns/samples/**</exclude>
+							<exclude>**/demo/domain/src/main/resources/banner.txt</exclude>
+							<exclude>**/demo/domain/src/main/resources/static/**</exclude>
+							<exclude>**/demo/domain/src/test/resources/demoapp/dom/_infra/resources/</exclude>
+							<exclude>**/demo/wicket/src/test/e2e/cypress-scaffolding/integration/examples/*.spec.js</exclude>
+							<exclude>**/demo/wicket/src/test/e2e/cypress-scaffolding/integration/typescript/basic.ts</exclude>
+							<exclude>**/demo/vaadin/node_modules/**</exclude>
+
+							<exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
+
+							<exclude>**/isis/tooling/model4adoc/src/test/resources/org/apache/isis/tooling/adocmodel/test/**</exclude>
+
 							<exclude>**/*.iml</exclude>
+							<exclude>**/webpack.config.js</exclude>
 							<exclude>**/webpack.generated.js</exclude>
+							<exclude>**/pnpm-lock.yaml</exclude>
+							<exclude>**/pnpmfile.js</exclude>
 
 							<exclude>**/*.pdn</exclude>
 							<exclude>**/*.svg</exclude>
 							<exclude>**/*.rtf</exclude>
 							<exclude>**/*.json</exclude>
+							<exclude>**/.gitkeep</exclude>
 							<exclude>**/*.min.js</exclude>
 							<exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
 							<exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
@@ -550,6 +570,8 @@ under the License.
 							<exclude>**/MANIFEST.MF</exclude>
 							<exclude>**/*.ucd</exclude>
 							<exclude>**/*.ucls</exclude>
+							<exclude>**/*.puml</exclude>
+							<exclude>**/antora/supplemental-ui/**</exclude>
 
 							<exclude>**/xml/objects/**</exclude>
 							<exclude>**/test.data</exclude>
@@ -565,7 +587,8 @@ under the License.
 							<exclude>**/bootstrap-growl.js</exclude>
 							<exclude>**/moment.js</exclude>
 							<exclude>**/prism*.js</exclude>
-							<exclude>**/prism.css</exclude>
+							<exclude>**/prism*.css</exclude>
+							<exclude>**/kroviz/webpack.config.d/**</exclude>
 
 							<exclude>**/bootstrap-datetimepicker.min.css</exclude>
 							<exclude>**/bootstrap-datetimepicker.css</exclude>
@@ -582,6 +605,10 @@ under the License.
 							<exclude>**/translations**.po</exclude>
 							<exclude>**/translations.pot</exclude>
 							<exclude>**/intellij/launch/*.xml</exclude>
+
+							<exclude>**/css/home/scss-files.txt</exclude>
+							<exclude>**/css/home/styles.css</exclude>
+							<exclude>**/css/site-custom.css</exclude>
 
 							<exclude>**/swagger-ui/**</exclude>
 
@@ -616,6 +643,15 @@ under the License.
 								<notes />
 								<patterns>
 									<pattern>ASCII text placed in the public domain by Moby Lexical Tools, 1992.</pattern>
+								</patterns>
+							</license>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>JMOCK</licenseFamilyCategory>
+								<licenseFamilyName>JMock</licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>Copyright (c) 2000-2007, jMock.org</pattern>
 								</patterns>
 							</license>
 							<license

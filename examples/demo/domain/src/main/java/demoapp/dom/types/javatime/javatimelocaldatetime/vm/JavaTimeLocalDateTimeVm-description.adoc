@@ -1,4 +1,4 @@
-JAXB supports `Character` out-of-the-box, so no special annotations are required.
+vJAXB supports `Character` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
