@@ -20,8 +20,10 @@ package org.apache.isis.core.runtime.persistence.changetracking;
 
 import lombok.NonNull;
 import lombok.Value;
+import lombok.experimental.PackagePrivate;
 
 @Value(staticConstructor = "of")
+@PackagePrivate
 final class AuditEntry {
 
     @NonNull private final AdapterAndProperty adapterAndProperty;

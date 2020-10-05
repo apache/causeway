@@ -23,6 +23,9 @@ import java.util.Objects;
 
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
 
+import lombok.experimental.PackagePrivate;
+
+@PackagePrivate
 final class PreAndPostValues {
 
     private final Object pre;
