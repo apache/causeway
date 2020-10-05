@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
+import org.apache.isis.core.runtime.persistence.changetracking.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionFlushException;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;

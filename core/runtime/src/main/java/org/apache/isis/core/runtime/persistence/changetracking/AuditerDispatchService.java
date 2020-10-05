@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.transaction;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
 import java.util.List;
 import java.util.UUID;

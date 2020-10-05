@@ -613,7 +613,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
 
-        changedObjectsServiceProvider.get().enlistDeleting(adapter);
+        getEntityChangeTracker().enlistDeleting(adapter);
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
         objectAdapterContext.postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
@@ -685,8 +685,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         val adapter = adapterFor(pojo);
 
-        final boolean wasAlreadyEnlisted = changedObjectsServiceProvider.get().isEnlisted(adapter);
-        changedObjectsServiceProvider.get().enlistCreated(adapter);
+        final boolean wasAlreadyEnlisted = getEntityChangeTracker().isEnlisted(adapter);
+        getEntityChangeTracker().enlistCreated(adapter);
 
         if(!wasAlreadyEnlisted) {
             CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
@@ -704,11 +704,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                     String.format("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo));
         }
 
-        final boolean wasAlreadyEnlisted = changedObjectsServiceProvider.get().isEnlisted(adapter);
+        final boolean wasAlreadyEnlisted = getEntityChangeTracker().isEnlisted(adapter);
 
         // we call this come what may;
         // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        changedObjectsServiceProvider.get().enlistUpdating(adapter);
+        getEntityChangeTracker().enlistUpdating(adapter);
 
         if(!wasAlreadyEnlisted) {
             // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so

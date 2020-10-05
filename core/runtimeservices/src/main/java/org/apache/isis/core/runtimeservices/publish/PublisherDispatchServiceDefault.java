@@ -47,7 +47,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.persistence.transaction.HasEnlistedForPublishing;
+import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedForPublishing;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

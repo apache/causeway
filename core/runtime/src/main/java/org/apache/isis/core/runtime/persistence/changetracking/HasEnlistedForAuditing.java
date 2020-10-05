@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.transaction;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
-import lombok.NonNull;
-import lombok.Value;
+import java.util.Set;
 
-@Value(staticConstructor = "of")
-public class AuditEntry {
+//TODO[ISIS-2441] intermediate for refactoring keep?
+public interface HasEnlistedForAuditing {
 
-    @NonNull private final AdapterAndProperty adapterAndProperty;
-    @NonNull private final PreAndPostValues preAndPostValues;
-    
+    Set<AuditEntry> getChangedObjectProperties();
+
 }

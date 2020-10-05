@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.transaction;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -56,7 +57,9 @@ import lombok.val;
 @IsisInteractionScope
 //@Log4j2
 public class ChangedObjectsService 
-implements TransactionScopeListener, HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
+implements TransactionScopeListener,
+EntityChangeTracker,
+HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
 
     // end::refguide[]
     /**
@@ -84,22 +87,12 @@ implements TransactionScopeListener, HasEnlistedForAuditing, HasEnlistedForPubli
     @Getter(onMethod_ = {@Override})
     private final Map<ManagedObject, PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
     
-
+    @Override
     public boolean isEnlisted(final @NonNull ManagedObject adapter) {
         return changeKindByEnlistedAdapter.containsKey(adapter);
     }
 
-
-    /**
-     * Auditing and publishing support: for object stores to enlist an object that has just been created,
-     * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value.
-     *
-     * <p>
-     * The post-modification values are captured when the transaction commits.
-     *
-     * <p>
-     * Supported by the JDO object store; check documentation for support in other objectstores.
-     */
+    @Override
     public void enlistCreated(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;
@@ -108,17 +101,7 @@ implements TransactionScopeListener, HasEnlistedForAuditing, HasEnlistedForPubli
         enlistForAuditing(adapter, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
     }
 
-
-    /**
-     * Auditing and publishing support: for object stores to enlist an object that is about to be updated,
-     * capturing the pre-modification values of the properties of the {@link ManagedObject}.
-     *
-     * <p>
-     * The post-modification values are captured when the transaction commits.
-     *
-     * <p>
-     * Supported by the JDO object store; check documentation for support in other objectstores.
-     */
+    @Override
     public void enlistUpdating(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;
@@ -127,17 +110,7 @@ implements TransactionScopeListener, HasEnlistedForAuditing, HasEnlistedForPubli
         enlistForAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
-    /**
-     * Auditing and publishing support: for object stores to enlist an object that is about to be deleted,
-     * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
-     *
-     * <p>
-     * The post-modification values are captured  when the transaction commits.  In the case of deleted objects, a
-     * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
-     *
-     * <p>
-     * Supported by the JDO object store; check documentation for support in other objectstores.
-     */
+    @Override
     public void enlistDeleting(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;

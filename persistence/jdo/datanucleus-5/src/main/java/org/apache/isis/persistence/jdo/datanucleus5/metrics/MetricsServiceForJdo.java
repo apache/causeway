@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.core.runtime.persistence.transaction.HasEnlistedForMetrics;
+import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedForMetrics;
 
 @Service
 @Named("isisJdoDn5.MetricsServiceForJdo")

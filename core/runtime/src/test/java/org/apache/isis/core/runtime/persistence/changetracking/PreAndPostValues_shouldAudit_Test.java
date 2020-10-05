@@ -16,15 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.changes;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.isis.core.runtime.persistence.changetracking.PreAndPostValues;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
-import org.apache.isis.core.runtime.persistence.transaction.PreAndPostValues;
 
 public class PreAndPostValues_shouldAudit_Test {
 

@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.transaction;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
 import java.util.Map;
 import java.util.Objects;
 
-public class PreAndPostValues {
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
+
+final class PreAndPostValues {
 
     private final Object pre;
     /**
