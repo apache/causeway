@@ -304,8 +304,8 @@ public class IsisTransactionJdo implements Transaction {
     }
 
     /**
+     * Called by both {@link #commit()} and {@link #flush()}:
      * <p>
-     * Called by both {@link #commit()} and by {@link #flush()}:
      * <table>
      * <tr>
      * <th>called from</th>
@@ -330,7 +330,7 @@ public class IsisTransactionJdo implements Transaction {
         // it's possible that in executing these commands that more will be created.
         // so we keep flushing until no more are available (ISIS-533)
         //
-        // this is a do...while rather than a while... just for backward compatibilty
+        // this is a do...while rather than a while... just for backward compatibility
         // with previous algorithm that always went through the execute phase at least once.
         //
         do {
@@ -376,17 +376,17 @@ public class IsisTransactionJdo implements Transaction {
 
         try {
             
+            doFlush();
+            
             auditerDispatchService.audit();
             publisherDispatchService.publishObjects();
-            
-            doFlush();
 
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
         } finally {
             for (TransactionScopeListener listener : transactionScopeListeners) {
-                listener.onTransactionEnded();
+                listener.onTransactionEnding();
             }
         }
     }
@@ -404,6 +404,7 @@ public class IsisTransactionJdo implements Transaction {
         }
 
         setState(State.COMMITTED);
+        
     }
 
     // -- abortCause, markAsAborted

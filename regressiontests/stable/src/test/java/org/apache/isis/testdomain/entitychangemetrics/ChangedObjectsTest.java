@@ -52,7 +52,8 @@ import lombok.val;
                 InteractionBoundaryProbe.class
         }, 
         properties = {
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG"
+                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.SilenceWicket
@@ -69,6 +70,8 @@ class ChangedObjectsTest extends InteractionTestAbstract {
 
     @BeforeEach
     void setUp() {
+        
+        System.err.println("===BEFORE SETUP");
 
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
@@ -79,6 +82,8 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         // each test runs in its own interaction context (check)
         val testRunNr = kvStoreForTesting.incrementCounter(ChangedObjectsTest.class, "test-run");
         assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
+        
+        System.err.println("===AFTER SETUP");
     }
     
     @Test
@@ -88,9 +93,13 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         val book = getBookSample();
         val inventoryManager = factoryService.create(JdoInventoryManager.class);
         
+        System.err.println("=1==BEFORE  TX");
+        
         // spawns its own transactional boundary (check)
         val product = assertTransactional( 
                 ()->wrapper.wrap(inventoryManager).updateProductPrice(book, 12.));
+        
+        System.err.println("=1==AFTER  TX");
         
         assertEquals(12., product.getPrice(), 1E-3);
         
@@ -105,9 +114,13 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         // given
         val book = getBookSample();
 
+        System.err.println("=2==BEFORE  TX");
+        
         // spawns its own transactional boundary (check) 
         val product = (JdoProduct) assertTransactional( 
                 ()->invokeAction(JdoInventoryManager.class, "updateProductPrice", _Lists.of(book, 12.)));
+        
+        System.err.println("=2==AFTER  TX");
         
         assertEquals(12., product.getPrice(), 1E-3);                
         
@@ -118,10 +131,16 @@ class ChangedObjectsTest extends InteractionTestAbstract {
     // -- HELPER
     
     private JdoBook getBookSample() {
+        
+        System.err.println("===BEFORE BOOK");
+        
         // spawns its own transactional boundary (check)
         val books = assertTransactional(()->repositoryService.allInstances(JdoBook.class));
         assertEquals(1, books.size());
         val book = books.listIterator().next();
+        
+        System.err.println("===AFTER BOOK");
+        
         return book;
     }
     

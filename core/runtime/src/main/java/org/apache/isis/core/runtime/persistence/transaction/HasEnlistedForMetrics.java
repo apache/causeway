@@ -16,32 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.runtime.persistence.transaction;
 
-package org.apache.isis.applib.services;
+//TODO[ISIS-2441] intermediate for refactoring keep?
+public interface HasEnlistedForMetrics {
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
+    int numberObjectsDirtied();
 
-/**
- * Domain services that need to be aware of transaction boundaries can
- * implement this interface.
- * 
- * @apiNote Implementing services most likely need to be scoped in a way that
- * binds the scope to the current thread (eg. {@link IsisInteractionScope})
- *  
- * @since 2.0 (renamed from WithTransactionScope)
- */
-// tag::refguide[]
-public interface TransactionScopeListener {
-    
-    default void onTransactionStarted() {
-        // default: do nothing
-    }
-
-    /** triggered during the pre-commit phase in a transaction*/
-    default void onTransactionEnding() {
-        // default: do nothing
-    }
-    
-    
 }
-// end::refguide[]

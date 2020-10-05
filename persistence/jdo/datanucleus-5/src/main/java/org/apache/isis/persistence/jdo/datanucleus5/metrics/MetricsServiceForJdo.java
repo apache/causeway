@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.transaction.HasEnlistedForMetrics;
 
 @Service
 @Named("isisJdoDn5.MetricsServiceForJdo")
@@ -47,7 +47,7 @@ import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsServic
 public class MetricsServiceForJdo 
 implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, TransactionScopeListener {
 
-    @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsProvider;
+    @Inject private javax.inject.Provider<HasEnlistedForMetrics> changedObjectsProvider;
     
     private LongAdder numberLoaded = new LongAdder();
 
@@ -71,7 +71,7 @@ implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, Tra
      * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
      */
     @Override
-    public void onTransactionEnded() {
+    public void onTransactionEnding() {
         numberLoaded.reset();
     }
     

@@ -21,7 +21,6 @@ package org.apache.isis.core.runtime.persistence.transaction;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import javax.inject.Named;
 
@@ -30,18 +29,22 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.TransactionScopeListener;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 // tag::refguide[]
@@ -50,8 +53,10 @@ import lombok.val;
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
+@IsisInteractionScope
 //@Log4j2
-public class ChangedObjectsService implements TransactionScopeListener {
+public class ChangedObjectsService 
+implements TransactionScopeListener, HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
 
     // end::refguide[]
     /**
@@ -72,13 +77,15 @@ public class ChangedObjectsService implements TransactionScopeListener {
      *  Will be null until {@link #getChangedObjectProperties()} is called, thereafter contains the actual changes.
      * </p>
      */
-    private Set<AuditEntry> changedObjectProperties;
+    private final _Lazy<Set<AuditEntry>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
 
     // used for publishing
-    private final Map<ManagedObject,PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+    @Getter(onMethod_ = {@Override})
+    private final Map<ManagedObject, PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+    
 
-    public boolean isEnlisted(ManagedObject adapter) {
+    public boolean isEnlisted(final @NonNull ManagedObject adapter) {
         return changeKindByEnlistedAdapter.containsKey(adapter);
     }
 
@@ -93,19 +100,12 @@ public class ChangedObjectsService implements TransactionScopeListener {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    public void enlistCreated(final ManagedObject adapter) {
-
+    public void enlistCreated(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;
         }
-
         enlistForPublishing(adapter, PublishingChangeKind.CREATE);
-
-        final Stream<ObjectAssociation> properties = adapter.getSpecification()
-                .streamAssociations(Contributed.EXCLUDED)
-                .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-        enlist(adapter, properties, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
+        enlistForAuditing(adapter, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
     }
 
 
@@ -119,19 +119,12 @@ public class ChangedObjectsService implements TransactionScopeListener {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    public void enlistUpdating(final ManagedObject adapter) {
-
+    public void enlistUpdating(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;
         }
-
         enlistForPublishing(adapter, PublishingChangeKind.UPDATE);
-
-        final Stream<ObjectAssociation> properties = adapter.getSpecification()
-                .streamAssociations(Contributed.EXCLUDED)
-                .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-        enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
+        enlistForAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
     /**
@@ -145,30 +138,63 @@ public class ChangedObjectsService implements TransactionScopeListener {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    public void enlistDeleting(final ManagedObject adapter) {
-
+    public void enlistDeleting(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;
         }
-
         final boolean enlisted = enlistForPublishing(adapter, PublishingChangeKind.DELETE);
         if(!enlisted) {
             return;
         }
-
-        final Stream<ObjectAssociation> properties = adapter.getSpecification()
-                .streamAssociations(Contributed.EXCLUDED)
-                .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-        enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
-
+        enlistForAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
 
+    @Override
+    public Set<AuditEntry> getChangedObjectProperties() {
+        return changedObjectPropertiesRef.get();
+    }
+
+    @Override
+    public int numberObjectPropertiesModified() {
+        return changedObjectPropertiesRef.get().size();
+    }
+    
+    @Override
+    public int numberObjectsDirtied() {
+        return changeKindByEnlistedAdapter.size();
+    }
+    
+    protected boolean shouldIgnore(final @NonNull ManagedObject adapter) {
+        val spec = adapter.getSpecification();
+        return HasUniqueId.class.isAssignableFrom(spec.getCorrespondingClass());
+    }
+
+    // end::refguide[]
+    
+    /**
+     * @apiNote intended to be called at the end of a transaction by the framework internally
+     */
+    @Override
+    public void onTransactionEnding() {
+        System.err.println("PRE COMMIT");
+        enlistedObjectProperties.clear();
+        changeKindByEnlistedAdapter.clear();
+        changedObjectPropertiesRef.clear();
+    }
+
+    // -- HELPER
+
+    static String asString(Object object) {
+        return object != null? object.toString(): null;
+    }
+    
     /**
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
-    private boolean enlistForPublishing(final ManagedObject adapter, final PublishingChangeKind current) {
+    private boolean enlistForPublishing(
+            final @NonNull ManagedObject adapter, 
+            final @NonNull PublishingChangeKind current) {
         final PublishingChangeKind previous = changeKindByEnlistedAdapter.get(adapter);
         if(previous == null) {
             changeKindByEnlistedAdapter.put(adapter, current);
@@ -200,92 +226,20 @@ public class ChangedObjectsService implements TransactionScopeListener {
         return previous == null;
     }
 
-    /**
-     * Intended to be called at the end of the transaction.  Use {@link #onTransactionEnded()} once fully read.
-     */
-    public Set<AuditEntry> getChangedObjectProperties() {
-        return changedObjectProperties != null
-                ? changedObjectProperties
-                        : (changedObjectProperties = capturePostValuesAndDrain(enlistedObjectProperties));
-    }
-
-    private Set<AuditEntry> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
-
-        final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = _Maps.newLinkedHashMap();
-
-        while(!changedObjectProperties.isEmpty()) {
-
-            final Set<AdapterAndProperty> keys = _Sets.newLinkedHashSet(changedObjectProperties.keySet());
-            for (val adapterAndProperty : keys) {
-
-                val preAndPostValues = changedObjectProperties.remove(adapterAndProperty);
-
-                ManagedObject adapter = adapterAndProperty.getAdapter();
-                if(EntityUtil.isDestroyed(adapter)) {
-                    // don't touch the object!!!
-                    // JDO, for example, will complain otherwise...
-                    preAndPostValues.setPost(IsisTransactionPlaceholder.DELETED);
-                } else {
-                    preAndPostValues.setPost(adapterAndProperty.getPropertyValue());
-                }
-
-                // if we encounter the same objectProperty again, this will simply overwrite it
-                processedObjectProperties.put(adapterAndProperty, preAndPostValues);
-            }
-        }
-
-        return processedObjectProperties.entrySet().stream()
-                .filter(PreAndPostValues::shouldAudit)
-                .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
-                .collect(_Sets.toUnmodifiable());
-
-    }
-
-    protected boolean shouldIgnore(final ManagedObject adapter) {
-        final ObjectSpecification adapterSpec = adapter.getSpecification();
-        final Class<?> adapterClass = adapterSpec.getCorrespondingClass();
-        return HasUniqueId.class.isAssignableFrom(adapterClass);
-    }
-
-
-    public Map<ManagedObject, PublishingChangeKind> getChangeKindByEnlistedAdapter() {
-        return changeKindByEnlistedAdapter;
-    }
-
-    public int numberObjectsDirtied() {
-        return changeKindByEnlistedAdapter.size();
-    }
-
-    public int numberObjectPropertiesModified() {
-        if(changedObjectProperties == null) {
-            // normally done during auditing, but in case none of the objects in this xactn are audited...
-            getChangedObjectProperties();
-        }
-        return changedObjectProperties.size();
-    }
-
-    /**
-     * Intended to be called at the end of a transaction.
-     *
-     * TODO: we ought to use Spring's @TransactionScope rather than roll-our-own.
-     */
-    @Override
-    public void onTransactionEnded() {
-        enlistedObjectProperties.clear();
-        changeKindByEnlistedAdapter.clear();
-        changedObjectProperties = null;
-    }
-
-
-    static String asString(Object object) {
-        return object != null? object.toString(): null;
-    }
-
-    private void enlist(
+    private void enlistForAuditing(
             final ManagedObject adapter, 
-            final Stream<ObjectAssociation> properties, 
             final Function<AdapterAndProperty, PreAndPostValues> pre) {
-        properties
+        
+        if(changedObjectPropertiesRef.isMemoized()) {
+            throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
+                    + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
+        }
+        
+        System.err.println("ENLIST " + adapter);
+        
+        adapter.getSpecification()
+        .streamAssociations(Contributed.EXCLUDED)
+        .filter(ObjectAssociation.Predicates.PROPERTIES)
         .filter(property->!property.isNotPersisted())
         .map(property->AdapterAndProperty.of(adapter, property))
         .filter(aap->!enlistedObjectProperties.containsKey(aap)) // already enlisted, so ignore
@@ -293,6 +247,38 @@ public class ChangedObjectsService implements TransactionScopeListener {
             enlistedObjectProperties.put(aap, pre.apply(aap));
         });
     }
+    
+    /** 
+     * For any enlisted Object Properties collects those, that are meant for auditing. 
+     * then clears enlisted objects.
+     */
+    private Set<AuditEntry> capturePostValuesAndDrain() {
+        
+        System.err.println("capturePostValuesAndDrain");
+        
+        val postValues = enlistedObjectProperties.entrySet().stream()
+        .peek(this::updatePostOn)
+        .filter(PreAndPostValues::shouldAudit)
+        .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
+        .collect(_Sets.toUnmodifiable());
+        
+        enlistedObjectProperties.clear();
+        
+        return postValues;
 
+    }
 
+    private final void updatePostOn(Map.Entry<AdapterAndProperty, PreAndPostValues> enlistedEntry) {
+        val adapterAndProperty = enlistedEntry.getKey();
+        val preAndPostValues = enlistedEntry.getValue();
+        val adapter = adapterAndProperty.getAdapter();
+        if(EntityUtil.isDestroyed(adapter)) {
+            // don't touch the object!!!
+            // JDO, for example, will complain otherwise...
+            preAndPostValues.setPost(IsisTransactionPlaceholder.DELETED);
+        } else {
+            preAndPostValues.setPost(adapterAndProperty.getPropertyValue());
+        }
+    }
+    
 }

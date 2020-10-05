@@ -59,8 +59,8 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
 
     /** TRANSACTION END BOUNDARY */
     @Override
-    public void onTransactionEnded() {
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnded");
+    public void onTransactionEnding() {
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
     }
     
     // -- ACCESS TO COUNTERS
@@ -78,7 +78,7 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
     }
     
     public static long totalTransactionsEnded(KVStoreForTesting kvStoreForTesting) {
-        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnded");
+        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnding");
     }
 
     // -- ASSERTIONS (INTERACTIONAL)

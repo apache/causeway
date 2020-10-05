@@ -53,7 +53,7 @@ import lombok.val;
 public class AuditerDispatchService {
     
     @Inject private List<AuditerService> auditerServices;
-    @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsProvider;
+    @Inject private javax.inject.Provider<HasEnlistedForAuditing> changedObjectsProvider;
     @Inject private UserService userService;
     @Inject private ClockService clockService;
     @Inject private TransactionService transactionService;
