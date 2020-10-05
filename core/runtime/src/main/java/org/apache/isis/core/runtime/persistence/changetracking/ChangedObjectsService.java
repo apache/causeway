@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,12 +33,29 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
+import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.TransactionScopeListener;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -86,14 +104,13 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
     // used for publishing
     @Getter(onMethod_ = {@Override})
     private final Map<ManagedObject, PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
-    
+
     @Override
     public boolean isEnlisted(final @NonNull ManagedObject adapter) {
         return changeKindByEnlistedAdapter.containsKey(adapter);
     }
 
-    @Override
-    public void enlistCreated(final @NonNull ManagedObject adapter) {
+    private void enlistCreatedInternal(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;
         }
@@ -101,8 +118,7 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
         enlistForAuditing(adapter, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
     }
 
-    @Override
-    public void enlistUpdating(final @NonNull ManagedObject adapter) {
+    private void enlistUpdatingInternal(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;
         }
@@ -110,8 +126,7 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
         enlistForAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
-    @Override
-    public void enlistDeleting(final @NonNull ManagedObject adapter) {
+    private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
         if(shouldIgnore(adapter)) {
             return;
         }
@@ -132,19 +147,19 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
     public int numberObjectPropertiesModified() {
         return changedObjectPropertiesRef.get().size();
     }
-    
+
     @Override
     public int numberObjectsDirtied() {
         return changeKindByEnlistedAdapter.size();
     }
-    
+
     protected boolean shouldIgnore(final @NonNull ManagedObject adapter) {
         val spec = adapter.getSpecification();
         return HasUniqueId.class.isAssignableFrom(spec.getCorrespondingClass());
     }
 
     // end::refguide[]
-    
+
     /**
      * @apiNote intended to be called at the end of a transaction by the framework internally
      */
@@ -161,7 +176,7 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
     static String asString(Object object) {
         return object != null? object.toString(): null;
     }
-    
+
     /**
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
@@ -202,14 +217,14 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
     private void enlistForAuditing(
             final ManagedObject adapter, 
             final Function<AdapterAndProperty, PreAndPostValues> pre) {
-        
+
         if(changedObjectPropertiesRef.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
-        
+
         System.err.println("ENLIST " + adapter);
-        
+
         adapter.getSpecification()
         .streamAssociations(Contributed.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
@@ -220,23 +235,23 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
             enlistedObjectProperties.put(aap, pre.apply(aap));
         });
     }
-    
+
     /** 
      * For any enlisted Object Properties collects those, that are meant for auditing. 
      * then clears enlisted objects.
      */
     private Set<AuditEntry> capturePostValuesAndDrain() {
-        
+
         System.err.println("capturePostValuesAndDrain");
-        
+
         val postValues = enlistedObjectProperties.entrySet().stream()
-        .peek(this::updatePostOn)
-        .filter(PreAndPostValues::shouldAudit)
-        .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
-        .collect(_Sets.toUnmodifiable());
-        
+                .peek(this::updatePostOn)
+                .filter(PreAndPostValues::shouldAudit)
+                .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
+                .collect(_Sets.toUnmodifiable());
+
         enlistedObjectProperties.clear();
-        
+
         return postValues;
 
     }
@@ -253,5 +268,84 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
             preAndPostValues.setPost(adapterAndProperty.getPropertyValue());
         }
     }
+
+    // -- ENTITY CHANGE TRACKING
+
+    @Override
+    public void enlistCreated(ManagedObject entity) {
+        val hasAlreadyBeenEnlisted = isEnlisted(entity);
+        enlistCreatedInternal(entity);
+
+        if(!hasAlreadyBeenEnlisted) {
+            CallbackFacet.Util.callCallback(entity, PersistedCallbackFacet.class);
+            postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
+        }
+    }
+
+    @Override
+    public void enlistDeleting(ManagedObject entity) {
+        enlistDeletingInternal(entity);
+        CallbackFacet.Util.callCallback(entity, RemovingCallbackFacet.class);
+        postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
+    }
+
+    @Override
+    public void enlistUpdating(ManagedObject entity) {
+        val hasAlreadyBeenEnlisted = isEnlisted(entity);
+        // we call this come what may;
+        // additional properties may now have been changed, and the changeKind for publishing might also be modified
+        enlistUpdatingInternal(entity);
+
+        if(!hasAlreadyBeenEnlisted) {
+            // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
+            CallbackFacet.Util.callCallback(entity, UpdatingCallbackFacet.class);
+            postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
+        }
+    }
+
+    @Override
+    public void recognizeLoaded(ManagedObject entity) {
+        CallbackFacet.Util.callCallback(entity, LoadedCallbackFacet.class);
+        postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);        
+    }
+
+    @Override
+    public void recognizePersisting(ManagedObject entity) {
+        CallbackFacet.Util.callCallback(entity, PersistingCallbackFacet.class);
+        postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);        
+    }
     
+    @Override
+    public void recognizeUpdating(ManagedObject entity) {
+        CallbackFacet.Util.callCallback(entity, UpdatedCallbackFacet.class);
+        postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
+    }
+
+    //  -- HELPER
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void postLifecycleEventIfRequired(
+            ManagedObject adapter,
+            Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
+
+        val lifecycleEventFacet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
+        if(lifecycleEventFacet == null) {
+            return;
+        }
+        val eventInstance = (AbstractLifecycleEvent) _InstanceUtil
+                .createInstance(lifecycleEventFacet.getEventType());
+        val pojo = adapter.getPojo();
+        postEvent(eventInstance, pojo);
+
+    }
+
+    @Inject private EventBusService eventBusService;
+
+    private void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
+        if(eventBusService!=null) {
+            event.initSource(pojo);
+            eventBusService.post(event);
+        }
+    }
+
 }

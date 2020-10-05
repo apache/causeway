@@ -21,15 +21,10 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
@@ -62,7 +57,6 @@ final public class ObjectAdapterContext {
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
     private final ServiceInjector serviceInjector;
-    private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
 
     private ObjectAdapterContext(
             MetaModelContext mmc, 
@@ -72,7 +66,6 @@ final public class ObjectAdapterContext {
 
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, runtimeContext);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
-        this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);
 
         this.persistenceSession = persistenceSession;
         this.specificationLoader = mmc.getSpecificationLoader();
@@ -192,12 +185,5 @@ final public class ObjectAdapterContext {
         return objectAdapterProviderMixin;
     }
 
-    // -- LIFECYCLE EVENT SUPPORT
-
-    public void postLifecycleEventIfRequired(
-            final ManagedObject adapter,
-            final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
-        lifecycleEventMixin.postLifecycleEventIfRequired(adapter, lifecycleEventFacetClass);
-    }
 
 }

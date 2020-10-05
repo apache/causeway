@@ -31,39 +31,38 @@ public interface EntityChangeTracker {
     /**
      * Auditing and publishing support: for object stores to enlist an object that has just been created,
      * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value.
-     *
+     * <p>
+     * fires the appropriate events and lifecycle callbacks TODO which ones
      * <p>
      * The post-modification values are captured when the transaction commits.
-     *
-     * <p>
-     * Supported by the JDO object store; check documentation for support in other objectstores.
      */
     void enlistCreated(ManagedObject entity);
-    
     
     /**
      * Auditing and publishing support: for object stores to enlist an object that is about to be deleted,
      * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
-     *
+     * <p>
+     * fires the appropriate events and lifecycle callbacks TODO which ones
      * <p>
      * The post-modification values are captured  when the transaction commits.  In the case of deleted objects, a
      * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
-     *
-     * <p>
-     * Supported by the JDO object store; check documentation for support in other objectstores.
      */
     void enlistDeleting(ManagedObject entity);
     
     /**
      * Auditing and publishing support: for object stores to enlist an object that is about to be updated,
      * capturing the pre-modification values of the properties of the {@link ManagedObject}.
-     *
+     * <p>
+     * fires the appropriate events and lifecycle callbacks TODO which ones
      * <p>
      * The post-modification values are captured when the transaction commits.
-     *
-     * <p>
-     * Supported by the JDO object store; check documentation for support in other objectstores.
      */
     void enlistUpdating(ManagedObject entity);
+
+    void recognizeLoaded(ManagedObject entity);
+
+    void recognizePersisting(ManagedObject entity);
+
+    void recognizeUpdating(ManagedObject entity);
 
 }

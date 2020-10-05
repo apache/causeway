@@ -57,19 +57,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -611,12 +598,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
-        ObjectAdapter adapter = adapterFor(pojo);
-
-        getEntityChangeTracker().enlistDeleting(adapter);
-
-        CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
-        objectAdapterContext.postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
+        val entity = adapterFor(pojo);
+        getEntityChangeTracker().enlistDeleting(entity);
     }
 
     @Override
@@ -627,12 +610,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 //        serviceInjector.injectServicesInto(pojo); //redundant
 
         final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-        final ObjectAdapter adapter = objectAdapterContext.recreatePojo(originalOid, pojo);
+        final ObjectAdapter entity = objectAdapterContext.recreatePojo(originalOid, pojo);
 
-        CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
-        objectAdapterContext.postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
+        getEntityChangeTracker().recognizeLoaded(entity);
 
-        return adapter;
+        return entity;
     }
 
     @Override
@@ -656,12 +638,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
         if (getEntityState(pojo).isDetached()) {
-            val managedObject = ManagedObject.of(specificationLoader::loadSpecification, pojo);
+            val entity = ManagedObject.of(specificationLoader::loadSpecification, pojo);
 
-            // persisting
-            // previously this was performed in the DataNucleusSimplePersistAlgorithm.
-            CallbackFacet.Util.callCallback(managedObject, PersistingCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(managedObject, PersistingLifecycleEventFacet.class);
+            getEntityChangeTracker().recognizePersisting(entity);
 
         } else {
             // updating
@@ -682,55 +661,30 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void enlistCreatedAndInvokeIsisPersistedCallback(final Persistable pojo) {
-
-        val adapter = adapterFor(pojo);
-
-        final boolean wasAlreadyEnlisted = getEntityChangeTracker().isEnlisted(adapter);
-        getEntityChangeTracker().enlistCreated(adapter);
-
-        if(!wasAlreadyEnlisted) {
-            CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
-        }
-
+        val entity = adapterFor(pojo);
+        getEntityChangeTracker().enlistCreated(entity);
     }
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-
-        final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
-        if (adapter == null) {
-            throw new RuntimeException(
-                    String.format("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo));
+        val entity = objectAdapterContext.fetchPersistent(pojo);
+        if (entity == null) {
+            throw _Exceptions
+                .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
         }
-
-        final boolean wasAlreadyEnlisted = getEntityChangeTracker().isEnlisted(adapter);
-
-        // we call this come what may;
-        // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        getEntityChangeTracker().enlistUpdating(adapter);
-
-        if(!wasAlreadyEnlisted) {
-            // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
-            CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
-        }
-
+        getEntityChangeTracker().enlistUpdating(entity);
     }
 
     @Override
     public void invokeIsisUpdatedCallback(Persistable pojo) {
-
-        final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
-        if (adapter == null) {
-            throw new RuntimeException(
-                    String.format("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo));
+        val entity = objectAdapterContext.fetchPersistent(pojo);
+        if (entity == null) {
+            throw _Exceptions
+                .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
         }
-
         // the callback and transaction.enlist are done in the preStore callback
         // (can't be done here, as the enlist requires to capture the 'before' values)
-        CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
-        objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
+        getEntityChangeTracker().recognizeUpdating(entity);
     }
 
     /**
