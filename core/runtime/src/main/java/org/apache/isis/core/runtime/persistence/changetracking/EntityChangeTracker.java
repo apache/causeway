@@ -74,5 +74,7 @@ public interface EntityChangeTracker {
      */
     void recognizeUpdating(ManagedObject entity);
 
+    void incrementLoaded();
+
 }
 

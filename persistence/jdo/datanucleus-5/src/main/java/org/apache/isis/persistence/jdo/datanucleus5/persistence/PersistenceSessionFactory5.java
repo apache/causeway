@@ -26,7 +26,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.PropertyNames;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,7 +46,6 @@ import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStat
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusContextUtil;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus5.entities.JdoEntityTypeRegistry;
-import org.apache.isis.persistence.jdo.datanucleus5.lifecycles.JdoStoreLifecycleListenerForIsis;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -74,7 +72,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
     
-    private StoreLifecycleListener storeLifecycleListener;
     private MetaModelContext metaModelContext;
     private IsisConfiguration configuration;
     private final JdoEntityTypeRegistry jdoEntityTypeRegistry = new JdoEntityTypeRegistry();
@@ -91,9 +88,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
         // Why? because that method causes entity classes to be loaded which register with DN's EnhancementHelper,
         // which are then cached in DN.  It results in our CreateSchema listener not firing.
         _Blackhole.consume(applicationComponents.get());
-        
-        this.storeLifecycleListener = new JdoStoreLifecycleListenerForIsis();
-        metaModelContext.getServiceInjector().injectServicesInto(storeLifecycleListener);
     }
 
 
@@ -196,7 +190,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
             applicationComponents.clear();
         }
         this.configuration = null;
-        this.storeLifecycleListener = null;
     }
 
     @Override
@@ -211,7 +204,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
         return new PersistenceSession5(
                 metaModelContext, 
                 persistenceManagerFactory,
-                storeLifecycleListener,
                 this);
     }
 

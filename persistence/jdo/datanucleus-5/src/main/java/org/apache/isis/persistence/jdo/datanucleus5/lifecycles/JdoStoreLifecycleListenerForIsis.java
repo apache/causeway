@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.lifecycles;
 
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
@@ -33,8 +34,9 @@ import lombok.val;
  * @since 2.0
  *
  */
-public class JdoStoreLifecycleListenerForIsis implements
-javax.jdo.listener.StoreLifecycleListener {
+@Vetoed // managed by isis
+public class JdoStoreLifecycleListenerForIsis 
+implements javax.jdo.listener.StoreLifecycleListener {
     
     @Inject private RuntimeEventService runtimeEventService;
 

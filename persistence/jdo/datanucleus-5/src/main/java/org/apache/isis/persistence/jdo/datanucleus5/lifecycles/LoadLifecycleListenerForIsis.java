@@ -16,11 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.changetracking;
+package org.apache.isis.persistence.jdo.datanucleus5.lifecycles;
 
-//TODO[ISIS-2441] intermediate for refactoring keep?
-public interface HasEnlistedForMetrics {
+import javax.enterprise.inject.Vetoed;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.jdo.listener.InstanceLifecycleEvent;
 
-    int numberObjectsDirtied();
+import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTracker;
+
+/**
+ * To be registered with each JDO PersistenceManager instance, in order to collect
+ * persistence related metrics
+ * 
+ * @since 2.0
+ *
+ */
+@Vetoed // managed by isis
+public class LoadLifecycleListenerForIsis 
+implements javax.jdo.listener.LoadLifecycleListener {
+    
+    @Inject private Provider<EntityChangeTracker> entityChangeTrackerProvider;
+
+    @Override
+    public void postLoad(final InstanceLifecycleEvent event) {
+        entityChangeTrackerProvider.get().incrementLoaded();
+    }
 
 }

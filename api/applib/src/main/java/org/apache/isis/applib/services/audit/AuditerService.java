@@ -21,7 +21,6 @@ package org.apache.isis.applib.services.audit;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
 /**

@@ -37,8 +37,6 @@ import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.identity.SingleFieldIdentity;
-import javax.jdo.listener.InstanceLifecycleListener;
-import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
@@ -70,6 +68,8 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.quer
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.datanucleus5.lifecycles.JdoStoreLifecycleListenerForIsis;
+import org.apache.isis.persistence.jdo.datanucleus5.lifecycles.LoadLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
@@ -94,7 +94,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private ObjectAdapterContext objectAdapterContext;
     @Getter private final TransactionService transactionService;
-    private final StoreLifecycleListener storeLifecycleListener;
+    private Runnable unregisterLifecycleListeners;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -104,12 +104,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public PersistenceSession5(
             final MetaModelContext metaModelContext,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
-            final StoreLifecycleListener storeLifecycleListener, 
             final FixturesInstalledStateHolder stateHolder) {
 
         super(metaModelContext, jdoPersistenceManagerFactory, stateHolder);
         this.transactionService = metaModelContext.getTransactionService();
-        this.storeLifecycleListener = storeLifecycleListener;
     }
 
     // -- open
@@ -141,20 +139,21 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         objectAdapterContext = ObjectAdapterContext.openContext(super.metaModelContext, this);
 
-        // tell the proxy of all request-scoped services to instantiate the underlying
-        // services, store onto the thread-local and inject into them...
-        //startRequestOnRequestScopedServices();
-
-        // ... and invoke all @PostConstruct
-        //postConstructOnRequestScopedServices();
-
-        val metricsService = metricsServiceProvider.get();
-        if(metricsService instanceof InstanceLifecycleListener) {
-            persistenceManager
-            .addInstanceLifecycleListener((InstanceLifecycleListener)metricsService, (Class[]) null);
-        }
-
+        // install JDO specific entity change listeners ...
+        
+        val loadLifecycleListener = new LoadLifecycleListenerForIsis();
+        val storeLifecycleListener = new JdoStoreLifecycleListenerForIsis();
+        
+        serviceInjector.injectServicesInto(loadLifecycleListener);
+        serviceInjector.injectServicesInto(storeLifecycleListener);
+            
+        persistenceManager.addInstanceLifecycleListener(loadLifecycleListener, (Class[]) null);
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
+        
+        this.unregisterLifecycleListeners = ()->{
+            persistenceManager.removeInstanceLifecycleListener(loadLifecycleListener);
+            persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
+        };
 
         this.state = State.OPEN;
     }
@@ -182,7 +181,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         completeCommandFromInteractionAndClearDomainEvents();
 
-        persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
+        unregisterLifecycleListeners.run();
+        unregisterLifecycleListeners = null;
         
         try {
             persistenceManager.close();

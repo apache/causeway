@@ -20,6 +20,7 @@ package org.apache.isis.core.runtime.persistence.changetracking;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
 import javax.inject.Inject;
@@ -37,6 +38,7 @@ import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -76,8 +78,9 @@ import lombok.val;
 //@Log4j2
 public class ChangedObjectsService 
 implements TransactionScopeListener,
+MetricsService,
 EntityChangeTracker,
-HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
+HasEnlistedForAuditing, HasEnlistedForPublishing {
 
     // end::refguide[]
     /**
@@ -146,11 +149,6 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
     @Override
     public int numberObjectPropertiesModified() {
         return changedObjectPropertiesRef.get().size();
-    }
-
-    @Override
-    public int numberObjectsDirtied() {
-        return changeKindByEnlistedAdapter.size();
     }
 
     protected boolean shouldIgnore(final @NonNull ManagedObject adapter) {
@@ -268,6 +266,18 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
             preAndPostValues.setPost(adapterAndProperty.getPropertyValue());
         }
     }
+    
+    // -- METRICS SERVICE
+    
+    @Override
+    public int numberObjectsLoaded() {
+        return Math.toIntExact(numberLoaded.longValue());
+    }
+    
+    @Override
+    public int numberObjectsDirtied() {
+        return changeKindByEnlistedAdapter.size();
+    }
 
     // -- ENTITY CHANGE TRACKING
 
@@ -320,6 +330,13 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
         CallbackFacet.Util.callCallback(entity, UpdatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
     }
+    
+    private final LongAdder numberLoaded = new LongAdder();
+    
+    @Override
+    public void incrementLoaded() {
+        numberLoaded.increment();
+    }
 
     //  -- HELPER
 
@@ -347,5 +364,6 @@ HasEnlistedForAuditing, HasEnlistedForPublishing, HasEnlistedForMetrics {
             eventBusService.post(event);
         }
     }
+
 
 }
