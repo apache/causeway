@@ -28,16 +28,15 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -48,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -190,7 +190,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     public static class CssClass extends DomainObjectLayoutFactoryTest {
 
         @Mock
-        ObjectAdapter mockAdapter;
+        ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends CssClass {
 
@@ -273,7 +273,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     public static class CssClassFa extends DomainObjectLayoutFactoryTest {
 
         @Mock
-        ObjectAdapter mockAdapter;
+        ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends CssClassFa {
 
@@ -353,7 +353,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     public static class DescribedAs extends DomainObjectLayoutFactoryTest {
 
         @Mock
-        ObjectAdapter mockAdapter;
+        ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends DescribedAs {
 
@@ -430,7 +430,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     public static class Named extends DomainObjectLayoutFactoryTest {
 
         @Mock
-        ObjectAdapter mockAdapter;
+        ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends Named {
 
@@ -507,7 +507,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     public static class Paged extends DomainObjectLayoutFactoryTest {
 
         @Mock
-        ObjectAdapter mockAdapter;
+        ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends Paged {
 
@@ -584,7 +584,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     public static class Plural extends DomainObjectLayoutFactoryTest {
 
         @Mock
-        ObjectAdapter mockAdapter;
+        ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends Plural {
 

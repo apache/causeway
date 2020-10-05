@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;

@@ -20,8 +20,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 /**
  * 
  * @since 2.0

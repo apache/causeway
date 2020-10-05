@@ -34,7 +34,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -74,7 +73,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         private ObjectSpecification objectSpec;
 
         @Override
-        public ObjectAdapter get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
+        public ManagedObject get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }
 

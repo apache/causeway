@@ -27,13 +27,13 @@ import javax.jdo.Query;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.metamodel.JdoPropertyUtils;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 

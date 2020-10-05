@@ -33,11 +33,11 @@ import org.junit.runner.RunWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 @RunWith(JMock.class)
 public class TitleFacetViaMethodTest {
@@ -47,7 +47,7 @@ public class TitleFacetViaMethodTest {
     private TitleFacetViaTitleMethod facet;
     private FacetHolder mockFacetHolder;
 
-    private ObjectAdapter mockOwningAdapter;
+    private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInItsTitleMethod pojo;
 
@@ -67,7 +67,7 @@ public class TitleFacetViaMethodTest {
         
         pojo = new DomainObjectWithProblemInItsTitleMethod();
         mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockOwningAdapter = mockery.mock(ObjectAdapter.class);
+        mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInItsTitleMethod.class.getMethod("title");
         facet = new TitleFacetViaTitleMethod(iconNameMethod, null, null, mockFacetHolder);
 

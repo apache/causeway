@@ -18,7 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.runtime.context.RuntimeContext;
 

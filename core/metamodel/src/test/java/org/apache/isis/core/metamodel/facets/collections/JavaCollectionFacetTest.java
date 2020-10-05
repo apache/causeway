@@ -36,9 +36,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.JavaCollectionFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class JavaCollectionFacetTest {
 
@@ -48,8 +48,8 @@ public class JavaCollectionFacetTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock private FacetHolder mockFacetHolder;
-    @Mock private ObjectAdapter mockCollection;
-    @Mock private Collection<ObjectAdapter> mockWrappedCollection;
+    @Mock private ManagedObject mockCollection;
+    @Mock private Collection<ManagedObject> mockWrappedCollection;
 
     private MetaModelContext_forTesting metaModelContext;
 

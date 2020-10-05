@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;

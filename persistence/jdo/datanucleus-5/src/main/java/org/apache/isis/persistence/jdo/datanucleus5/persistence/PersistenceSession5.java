@@ -52,7 +52,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
@@ -84,6 +83,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.quer
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.DestroyObjectCommand;

@@ -24,7 +24,6 @@ import java.util.Optional;
 
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ToString;

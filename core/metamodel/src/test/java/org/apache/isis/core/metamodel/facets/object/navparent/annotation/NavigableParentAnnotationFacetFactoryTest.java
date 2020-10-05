@@ -29,13 +29,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
@@ -44,7 +44,7 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
     private NavigableParentAnnotationFacetFactory facetFactory;
 
     @Mock
-    private ObjectAdapter mockObjectAdapter;
+    private ManagedObject mockObjectAdapter;
     @Mock
     private AuthenticationSession mockAuthenticationSession;
 
