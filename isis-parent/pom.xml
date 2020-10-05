@@ -324,7 +324,7 @@ under the License.
 		<arguments />
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-		<surefire.version>2.22.0</surefire.version>
+		<surefire.version>2.22.2</surefire.version>
 		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
 		<project.build.outputTimestamp>2020-01-22T15:10:15Z</project.build.outputTimestamp>
 
