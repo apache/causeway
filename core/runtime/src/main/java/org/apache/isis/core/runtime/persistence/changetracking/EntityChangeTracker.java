@@ -24,15 +24,15 @@ public interface EntityChangeTracker {
 
     /**
      * @param adapter
-     * @return whether given {@code adapter} has already been enlisted.
+     * @return whether given {@code entity} has already been enlisted.
      */
-    boolean isEnlisted(ManagedObject adapter);
+    boolean isEnlisted(ManagedObject entity);
     
     /**
      * Auditing and publishing support: for object stores to enlist an object that has just been created,
      * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value.
      * <p>
-     * fires the appropriate events and lifecycle callbacks TODO which ones
+     * Fires the appropriate event and lifecycle callback: {@literal PERSISTED}
      * <p>
      * The post-modification values are captured when the transaction commits.
      */
@@ -42,7 +42,7 @@ public interface EntityChangeTracker {
      * Auditing and publishing support: for object stores to enlist an object that is about to be deleted,
      * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
      * <p>
-     * fires the appropriate events and lifecycle callbacks TODO which ones
+     * Fires the appropriate event and lifecycle callback: {@literal REMOVING}
      * <p>
      * The post-modification values are captured  when the transaction commits.  In the case of deleted objects, a
      * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
@@ -53,16 +53,26 @@ public interface EntityChangeTracker {
      * Auditing and publishing support: for object stores to enlist an object that is about to be updated,
      * capturing the pre-modification values of the properties of the {@link ManagedObject}.
      * <p>
-     * fires the appropriate events and lifecycle callbacks TODO which ones
+     * Fires the appropriate event and lifecycle callback: {@literal UPDATING}
      * <p>
      * The post-modification values are captured when the transaction commits.
      */
     void enlistUpdating(ManagedObject entity);
 
+    /**
+     * Fires the appropriate event and lifecycle callback: {@literal LOADED} 
+     */
     void recognizeLoaded(ManagedObject entity);
 
+    /**
+     * Fires the appropriate event and lifecycle callback: {@literal PERSISTING} 
+     */
     void recognizePersisting(ManagedObject entity);
 
+    /**
+     * Fires the appropriate event and lifecycle callback: {@literal UPDATING} 
+     */
     void recognizeUpdating(ManagedObject entity);
 
 }
+
