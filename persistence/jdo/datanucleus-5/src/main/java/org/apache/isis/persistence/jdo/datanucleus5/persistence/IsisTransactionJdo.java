@@ -305,7 +305,7 @@ public class IsisTransactionJdo implements Transaction {
     }
 
     /**
-     * Called by {@link #preCommit()}:
+     * Called by {@link #preCommit()} and {@link #flush()}:
      * <p>
      * <table>
      * <tr>

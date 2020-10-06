@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
 
+import lombok.val;
 import lombok.experimental.PackagePrivate;
 
 @PackagePrivate
@@ -100,8 +101,8 @@ final class PreAndPostValues {
     }
     
     public static boolean shouldAudit(Map.Entry<?, PreAndPostValues> input) { 
-        final PreAndPostValues papv = input.getValue();
-        return papv.shouldAudit();
+        val preAndPostValues = input.getValue();
+        return preAndPostValues.shouldAudit();
     }
     
 }

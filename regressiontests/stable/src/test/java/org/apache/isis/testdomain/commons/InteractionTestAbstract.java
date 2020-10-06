@@ -92,7 +92,7 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
         val args = managedAction.getInteractionHead()
                 .getPopulatedParameterValues(pojoArgList);
         
-        // spawns its own transactional boundary 
+        // spawns its own transactional boundary, or reuses an existing one if available 
         val either = managedAction.invoke(args);
         
         assertTrue(either.isLeft()); // assert action did not throw

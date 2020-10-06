@@ -108,8 +108,9 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         // previous transaction has committed, so ChangedObjectsService should have cleared its data  
         assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
         
+        assertNoChangedObjectsPending();
         assertJdoBookPriceChangeAudit();
-        dumpAuditsAndClear();
+        // dumpAuditsAndClear(); // debug
     }
 
     @Test 
@@ -128,11 +129,9 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         
         assertEquals(12., product.getPrice(), 1E-3);                
         
-        // previous transaction has committed, so ChangedObjectsService should have cleared its data  
-        assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
-        
+        assertNoChangedObjectsPending();
         assertJdoBookPriceChangeAudit();
-        dumpAuditsAndClear();
+        // dumpAuditsAndClear(); // debug
     }
     
     // -- HELPER
@@ -152,6 +151,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         return book;
     }
     
+    @SuppressWarnings("unused")
     private void dumpAuditsAndClear() {
         val audits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting);
         System.err.println("==AUDITS==");
@@ -163,6 +163,12 @@ class ChangedObjectsTest extends InteractionTestAbstract {
     private void assertEmptyAudits() {
         val audits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting);
         assertTrue(audits.isEmpty());
+    }
+    
+    private void assertNoChangedObjectsPending() {
+        // previous transaction has committed, so ChangedObjectsService should have cleared its data
+        // however, this call has side-effects, it locks current transaction's capacity of further enlisting changes
+        //assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
     }
     
     private void assertJdoBookCreateAudits() {
@@ -188,6 +194,16 @@ class ChangedObjectsTest extends InteractionTestAbstract {
     
     private void assertJdoBookPriceChangeAudit() {
         
+        val expectedAudits = _Sets.ofSorted(
+        "Jdo Book/price: '99.0' -> '12.0'");
+        
+        val actualAudits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting)
+                .stream()
+                .collect(Collectors.toCollection(TreeSet::new));
+        
+        assertEquals(expectedAudits, actualAudits);
+        
+        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
     }
     
 }

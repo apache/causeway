@@ -143,12 +143,14 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
 
     @Override
     public Set<AuditEntry> getChangedObjectProperties() {
+        // this code path has side-effects, it locks the result for this transaction, 
+        // such that cannot enlist on top of it
         return changedObjectPropertiesRef.get();
     }
 
     @Override
     public int numberObjectPropertiesModified() {
-        return changedObjectPropertiesRef.get().size();
+        return getChangedObjectProperties().size();
     }
 
     protected boolean shouldIgnore(final @NonNull ManagedObject adapter) {
@@ -163,7 +165,7 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
      */
     @Override
     public void onTransactionEnding() {
-        System.err.println("PRE COMMIT");
+        System.err.println("ENTITY CHANGE TRACKING - CLEARING ALL");
         enlistedObjectProperties.clear();
         changeKindByEnlistedAdapter.clear();
         changedObjectPropertiesRef.clear();
@@ -235,7 +237,7 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
     }
 
     /** 
-     * For any enlisted Object Properties collects those, that are meant for auditing. 
+     * For any enlisted Object Properties collects those, that are meant for auditing, 
      * then clears enlisted objects.
      */
     private Set<AuditEntry> capturePostValuesAndDrain() {
@@ -243,7 +245,7 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
         System.err.println("capturePostValuesAndDrain");
 
         val postValues = enlistedObjectProperties.entrySet().stream()
-                .peek(this::updatePostOn)
+                .peek(this::updatePostOn) // set post values of audits, which have been left empty up to now
                 .filter(PreAndPostValues::shouldAudit)
                 .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
                 .collect(_Sets.toUnmodifiable());
@@ -257,8 +259,8 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
     private final void updatePostOn(Map.Entry<AdapterAndProperty, PreAndPostValues> enlistedEntry) {
         val adapterAndProperty = enlistedEntry.getKey();
         val preAndPostValues = enlistedEntry.getValue();
-        val adapter = adapterAndProperty.getAdapter();
-        if(EntityUtil.isDestroyed(adapter)) {
+        val entity = adapterAndProperty.getAdapter();
+        if(EntityUtil.isDestroyed(entity)) {
             // don't touch the object!!!
             // JDO, for example, will complain otherwise...
             preAndPostValues.setPost(IsisTransactionPlaceholder.DELETED);
