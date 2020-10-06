@@ -85,21 +85,17 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
     // end::refguide[]
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
-     *
      * <p>
-     *     When {@link #getChangedObjectProperties()} is called, then this is cleared out and {@link #changedObjectProperties} is non-null, containing
-     *     the actual differences.
-     * </p>
+     * When {@link #getChangedObjectProperties()} is called, then this is cleared out and 
+     * {@link #changedObjectProperties} is non-null, containing the actual differences.
      */
     // tag::refguide[]
     private final Map<AdapterAndProperty, PreAndPostValues> enlistedObjectProperties = _Maps.newLinkedHashMap();
 
     /**
      * Used for auditing; contains the pre- and post- values of every property of every object that actually changed.
-     *
      * <p>
-     *  Will be null until {@link #getChangedObjectProperties()} is called, thereafter contains the actual changes.
-     * </p>
+     * Will be null until {@link #getChangedObjectProperties()} is called, thereafter contains the actual changes.
      */
     private final _Lazy<Set<AuditEntry>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 

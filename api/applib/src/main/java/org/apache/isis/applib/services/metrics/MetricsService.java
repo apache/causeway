@@ -27,14 +27,10 @@ public interface MetricsService {
     // end::refguide[]
     /**
      * The number of objects that have, so far in this request, been loaded from the database.
-     *
      * <p>
-     *     Corresponds to the number of times that <code>javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)</code> (or equivalent) is fired.
-     * </p>
-     *
+     * Corresponds to the number of times that <code>javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)</code> (or equivalent) is fired.
      * <p>
-     *     Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
-     * </p>
+     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
      */
     // tag::refguide[]
     int numberObjectsLoaded();      // <.>
@@ -43,14 +39,10 @@ public interface MetricsService {
     /**
      * The number of objects that have, so far in this request, been dirtied/will need updating in the database); a
      * good measure of the footprint of the interaction.
-     *
      * <p>
-     *     Corresponds to the number of times that <code>javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)</code> (or equivalent) callback is fired.
-     * </p>
-     *
+     * Corresponds to the number of times that <code>javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)</code> (or equivalent) callback is fired.
      * <p>
-     *     Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
-     * </p>
+     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
      */
     // tag::refguide[]
     int numberObjectsDirtied();     // <.>
