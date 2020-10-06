@@ -181,7 +181,7 @@ public class IsisTransactionJdo implements Transaction {
         log.debug("new transaction {}", this);
         
         for (TransactionScopeListener listener : transactionScopeListeners) {
-            listener.onTransactionStarted();;
+            listener.onTransactionStarted();
         }
         
     }
@@ -296,7 +296,8 @@ public class IsisTransactionJdo implements Transaction {
         log.debug("flush transaction {}", this);
 
         try {
-            doFlush();
+            flushCommands();
+            flushTransaction();
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionFlushException(ex));
             throw ex;
@@ -304,7 +305,7 @@ public class IsisTransactionJdo implements Transaction {
     }
 
     /**
-     * Called by both {@link #commit()} and {@link #flush()}:
+     * Called by {@link #preCommit()}:
      * <p>
      * <table>
      * <tr>
@@ -324,7 +325,7 @@ public class IsisTransactionJdo implements Transaction {
      * </tr>
      * </table>
      */
-    private void doFlush() {
+    private void flushCommands() {
 
         //
         // it's possible that in executing these commands that more will be created.
@@ -353,6 +354,10 @@ public class IsisTransactionJdo implements Transaction {
         } while(!persistenceCommands.isEmpty());
 
     }
+    
+    private void flushTransaction() {
+        getPersistenceSession().flushTransaction();
+    }
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
         return isisInteractionTracker.currentInteractionSession()
@@ -376,7 +381,8 @@ public class IsisTransactionJdo implements Transaction {
 
         try {
             
-            doFlush();
+            flushCommands();
+            flushTransaction();
             
             auditerDispatchService.audit();
             publisherDispatchService.publishObjects();

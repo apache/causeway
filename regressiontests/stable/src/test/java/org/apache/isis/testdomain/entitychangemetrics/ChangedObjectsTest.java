@@ -18,20 +18,24 @@
  */
 package org.apache.isis.testdomain.entitychangemetrics;
 
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
+import org.apache.isis.testdomain.auditing.AuditerServiceForTesting;
 import org.apache.isis.testdomain.auditing.Configuration_usingAuditing;
 import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.commons.InteractionTestAbstract;
@@ -49,7 +53,7 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingAuditing.class,
-                InteractionBoundaryProbe.class
+                InteractionBoundaryProbe.class,
         }, 
         properties = {
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
@@ -62,11 +66,6 @@ import lombok.val;
 class ChangedObjectsTest extends InteractionTestAbstract {
     
     @Inject protected FixtureScripts fixtureScripts;
-    
-    @Configuration
-    public class Config {
-        // so that we get a new ApplicationContext.
-    }
 
     @BeforeEach
     void setUp() {
@@ -75,6 +74,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
 
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
         
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
@@ -82,6 +82,8 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         // each test runs in its own interaction context (check)
         val testRunNr = kvStoreForTesting.incrementCounter(ChangedObjectsTest.class, "test-run");
         assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
+        
+        assertJdoBookCreateAudits();
         
         System.err.println("===AFTER SETUP");
     }
@@ -106,6 +108,8 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         // previous transaction has committed, so ChangedObjectsService should have cleared its data  
         assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
         
+        assertJdoBookPriceChangeAudit();
+        dumpAuditsAndClear();
     }
 
     @Test 
@@ -126,6 +130,9 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         
         // previous transaction has committed, so ChangedObjectsService should have cleared its data  
         assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
+        
+        assertJdoBookPriceChangeAudit();
+        dumpAuditsAndClear();
     }
     
     // -- HELPER
@@ -139,12 +146,50 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         assertEquals(1, books.size());
         val book = books.listIterator().next();
         
-        System.err.println("===AFTER BOOK");
+        assertEmptyAudits(); // query only, no entity changes expected
         
+        System.err.println("===AFTER BOOK");
         return book;
     }
     
+    private void dumpAuditsAndClear() {
+        val audits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting);
+        System.err.println("==AUDITS==");
+        audits.forEach(System.err::println);
+        System.err.println("==========");
+        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
+    }
 
+    private void assertEmptyAudits() {
+        val audits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting);
+        assertTrue(audits.isEmpty());
+    }
+    
+    private void assertJdoBookCreateAudits() {
+        
+        val expectedAudits = _Sets.ofSorted(
+        "Jdo Book/author: '[NEW]' -> 'Sample Author'",
+        "Jdo Book/price: '[NEW]' -> '99.0'",
+        "Jdo Book/publisher: '[NEW]' -> 'Sample Publisher'",
+        "Jdo Book/isbn: '[NEW]' -> 'Sample ISBN'",
+        "Jdo Book/description: '[NEW]' -> 'A sample book for testing.'",
+        "Jdo Book/name: '[NEW]' -> 'Sample Book'",
+        "Jdo Inventory/name: '[NEW]' -> 'Sample Inventory'");
+        
+        val actualAudits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting)
+                .stream()
+                .collect(Collectors.toCollection(TreeSet::new));
+        
+        assertEquals(expectedAudits, actualAudits);
+        
+        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
+        
+    }
+    
+    private void assertJdoBookPriceChangeAudit() {
+        
+    }
+    
 }
 
 

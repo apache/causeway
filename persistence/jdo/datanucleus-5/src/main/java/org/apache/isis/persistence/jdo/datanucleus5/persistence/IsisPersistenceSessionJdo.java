@@ -47,6 +47,10 @@ extends PersistenceSession, ObjectAdapterProvider {
      */
     void abortTransaction();
     
+    /**
+     * to tell the underlying object store to flush a transaction.
+     */
+    void flushTransaction();
     
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}

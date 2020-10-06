@@ -211,6 +211,14 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         }
     }
     
+    @Override
+    public void flushTransaction() {
+        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
+        if (transaction.isActive()) {
+            transaction.getPersistenceManager().flush();
+        }
+    }
+    
     // -- OID
     
     /**
