@@ -51,12 +51,12 @@ import lombok.Setter;
  *
  * @see IsisInteractionFactory
  */
-public class IsisInteraction extends RuntimeContextBase {
+public class InteractionSession extends RuntimeContextBase {
 
     @Getter private final AuthenticationSession authenticationSession;
     @Getter private final long lifecycleStartedAtSystemNanos;
 
-    public IsisInteraction(
+    public InteractionSession(
             @NonNull final MetaModelContext mmc,
             @NonNull final AuthenticationSession authenticationSession) {
 

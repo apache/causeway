@@ -46,7 +46,7 @@ public class LineBreaker {
         log.info("about to shutdown the JVM");
 
         // allow for current interaction to complete gracefully
-        isisInteractionTracker.currentInteraction()
+        isisInteractionTracker.currentInteractionSession()
         .ifPresent(interaction->{
             interaction.setOnClose(()->System.exit(0));
         });

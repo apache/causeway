@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
 
 import javax.annotation.PostConstruct;
@@ -93,7 +92,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
@@ -305,8 +304,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final Object[] args,
             final AsyncControl<R> asyncControl) {
 
-        val isisInteraction = currentIsisInteraction();
-        val asyncAuthSession = authSessionFrom(asyncControl, isisInteraction.getAuthenticationSession());
+        val interactionSession = currentInteractionSession();
+        val asyncAuthSession = authSessionFrom(asyncControl, interactionSession.getAuthenticationSession());
         val command = interactionContextProvider.get().getInteraction().getCommand();
 
         val targetAdapter = memberAndTarget.getTarget();
@@ -487,12 +486,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
 
-    private IsisInteraction currentIsisInteraction() {
-        return isisInteractionTracker.currentInteraction().orElseThrow(() -> new RuntimeException("No IsisInteraction is open"));
+    private InteractionSession currentInteractionSession() {
+        return isisInteractionTracker.currentInteractionSession().orElseThrow(() -> new RuntimeException("No IsisInteraction is open"));
     }
 
     private ObjectManager currentObjectManager() {
-        return currentIsisInteraction().getObjectManager();
+        return currentInteractionSession().getObjectManager();
     }
 
     @RequiredArgsConstructor

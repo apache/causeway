@@ -36,7 +36,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory;
@@ -89,7 +89,7 @@ public class JdoPersistenceLifecycleService {
     public void onInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
 
         val eventType = event.getEventType();
-        val isisInteraction = event.getIsisInteraction();
+        val interactionSession = event.getInteractionSession();
 
         if(log.isDebugEnabled()) {
             log.debug("received session event {}", eventType);
@@ -97,13 +97,13 @@ public class JdoPersistenceLifecycleService {
 
         switch (eventType) {
         case HAS_STARTED:
-            openInteraction(isisInteraction);
+            openInteraction(interactionSession);
             break;
         case IS_ENDING:
-            closeInteraction(isisInteraction);
+            closeInteraction(interactionSession);
             break;
         case FLUSH_REQUEST:
-            flushInteraction(isisInteraction);
+            flushInteraction(interactionSession);
             break;
 
         default:
@@ -114,24 +114,24 @@ public class JdoPersistenceLifecycleService {
 
     // -- HELPER
 
-    private void openInteraction(IsisInteraction isisInteraction) {
+    private void openInteraction(InteractionSession isisInteraction) {
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
         isisInteraction.putUserData(IsisPersistenceSessionJdo.class, persistenceSession);
         persistenceSession.open();
     }
 
-    private void closeInteraction(IsisInteraction isisInteraction) {
+    private void closeInteraction(InteractionSession isisInteraction) {
         currentSession(isisInteraction)
         .ifPresent(PersistenceSession::close);
     }
 
-    private void flushInteraction(IsisInteraction isisInteraction) {
+    private void flushInteraction(InteractionSession isisInteraction) {
         currentSession(isisInteraction)
         .ifPresent(PersistenceSession::flush);
     }
 
-    private Optional<IsisPersistenceSessionJdo> currentSession(IsisInteraction isisInteraction) {
+    private Optional<IsisPersistenceSessionJdo> currentSession(InteractionSession isisInteraction) {
         return Optional.ofNullable(isisInteraction)
                 .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class));
     }

@@ -83,7 +83,7 @@ implements JdoPersistenceCapableFacet {
     }
     
     protected IsisPersistenceSessionJdo getPersistenceSessionJdo() {
-        return isisInteractionTracker.get().currentInteraction()
+        return isisInteractionTracker.get().currentInteractionSession()
                 .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class))
                 .orElse(null);
     }

@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.InteractionSession;
 
 import lombok.experimental.UtilityClass;
 
@@ -46,7 +46,7 @@ public final class IsisContext {
      * Returns a new CompletableFuture that is asynchronously completed by a task running in the 
      * ForkJoinPool.commonPool() with the value obtained by calling the given Supplier {@code computation}.
      * <p>
-     * If the calling thread is within an open {@link IsisInteraction} then the ForkJoinPool does make this
+     * If the calling thread is within an open {@link InteractionSession} then the ForkJoinPool does make this
      * session also available for any forked threads, via means of {@link InheritableThreadLocal}.
      * 
      * @param computation

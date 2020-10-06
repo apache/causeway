@@ -216,7 +216,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     // //////////////////////////////////////
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
-        return isisInteractionTracker.currentInteraction()
+        return isisInteractionTracker.currentInteractionSession()
                 .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class))
                 .orElse(null);
     }

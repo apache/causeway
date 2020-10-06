@@ -43,7 +43,7 @@ public class LogoutHandlerWkt implements LogoutHandler {
         }
         
         if(isisInteractionTracker.isInInteraction()) {
-            isisInteractionTracker.currentInteraction()
+            isisInteractionTracker.currentInteractionSession()
             .ifPresent(interaction->
                 interaction.setOnClose(currentWktSession::invalidateNow));
             

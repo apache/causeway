@@ -53,7 +53,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
@@ -75,7 +75,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Is the factory of {@link IsisInteraction}s, also holding a reference to the current session using
+ * Is the factory of {@link InteractionSession}s, also holding a reference to the current session using
  * a thread-local.
  *
  * <p>
@@ -153,24 +153,24 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
 
     }
 
-    private final ThreadLocal<Stack<IsisInteraction>> isisInteractionStack = ThreadLocal.withInitial(Stack::new);
+    private final ThreadLocal<Stack<InteractionSession>> interactionSessionStack = ThreadLocal.withInitial(Stack::new);
     
     @Override
-    public IsisInteraction openInteraction(@NonNull final AuthenticationSession authenticationSession) {
+    public InteractionSession openInteraction(@NonNull final AuthenticationSession authenticationSession) {
 
         val authSessionToUse = getAuthenticationSessionOverride()
                 .orElse(authenticationSession);
-        val newIsisInteraction = new IsisInteraction(metaModelContext, authSessionToUse);
+        val newIsisInteraction = new InteractionSession(metaModelContext, authSessionToUse);
         
-        isisInteractionStack.get().push(newIsisInteraction);
+        interactionSessionStack.get().push(newIsisInteraction);
 
         initializeApplibCommandAndInteraction();
 
-        postOpen(isisInteractionStack.get().size(), newIsisInteraction);
+        postOpen(interactionSessionStack.get().size(), newIsisInteraction);
         
         log.debug("new IsisInteraction created (conversation-id={}, total-sessions-on-stack={}, {})", 
                 conversationId.get(), 
-                isisInteractionStack.get().size(),
+                interactionSessionStack.get().size(),
                 _Probe.currentThreadId());
         
         return newIsisInteraction;
@@ -188,27 +188,27 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     public void closeSessionStack() {
         log.debug("about to close IsisInteraction stack (conversation-id={}, total-sessions-on-stack={}, {})", 
                 conversationId.get(), 
-                isisInteractionStack.get().size(),
+                interactionSessionStack.get().size(),
                 _Probe.currentThreadId());
 
         closeInteractionStackDownToStackSize(0);
     }
     
     @Override
-    public Optional<IsisInteraction> currentInteraction() {
-        val stack = isisInteractionStack.get();
+    public Optional<InteractionSession> currentInteractionSession() {
+        val stack = interactionSessionStack.get();
         return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
     }
 
     @Override
     public boolean isInInteraction() {
-        return !isisInteractionStack.get().isEmpty();
+        return !interactionSessionStack.get().isEmpty();
     }
 
     @Override
     public boolean isInTransaction() {
 
-        return currentInteraction().map(isisInteraction->{
+        return currentInteractionSession().map(isisInteraction->{
             if (isisInteraction.getCurrentTransactionId() != null) {
                 if (!isisInteraction.getCurrentTransactionState().isComplete()) {
                     return true;
@@ -226,7 +226,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
             @NonNull final AuthenticationSession authenticationSession, 
             @NonNull final Callable<R> callable) {
         
-        final int stackSizeWhenEntering = isisInteractionStack.get().size();
+        final int stackSizeWhenEntering = interactionSessionStack.get().size();
         openInteraction(authenticationSession);
         
         try {
@@ -271,7 +271,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     
     // -- HELPER
     
-    private void postOpen(int stackSizeAfterOpen, IsisInteraction newIsisInteraction) {
+    private void postOpen(int stackSizeAfterOpen, InteractionSession newIsisInteraction) {
         final boolean isTopLevel = stackSizeAfterOpen==1;
         if(isTopLevel) {
             conversationId.set(UUID.randomUUID());
@@ -279,7 +279,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         }
     }
     
-    private void preClose(int stackSizeBeforeClose, IsisInteraction isisInteraction) {
+    private void preClose(int stackSizeBeforeClose, InteractionSession isisInteraction) {
         final boolean isTopLevel = stackSizeBeforeClose==1;
         if(isTopLevel) {
             runtimeEventService.fireInteractionIsEnding(isisInteraction); // only fire on top-level session 
@@ -293,17 +293,17 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         log.debug("about to close IsisInteraction stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,
                 conversationId.get(), 
-                isisInteractionStack.get().size(),
+                interactionSessionStack.get().size(),
                 _Probe.currentThreadId());
         
-        val stack = isisInteractionStack.get();
+        val stack = interactionSessionStack.get();
         while(stack.size()>downToStackSize) {
             preClose(stack.size(), stack.peek()); // keep the stack unmodified yet, to allow for callbacks to properly operate
             stack.pop();    
         }
         if(downToStackSize == 0) {
             // cleanup thread-local
-            isisInteractionStack.remove();
+            interactionSessionStack.remove();
             conversationId.remove();
         }
     }

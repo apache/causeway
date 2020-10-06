@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtime.events.iactn;
 
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.InteractionSession;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -34,7 +34,7 @@ public class IsisInteractionLifecycleEvent {
     }
 
     @Getter String conversationId;
-    @Getter IsisInteraction isisInteraction;
+    @Getter InteractionSession interactionSession;
     @Getter EventType eventType;
 
 }
