@@ -98,6 +98,23 @@ public final class _Sets {
         return Stream.of(elements)
                 .collect(toUnmodifiable(LinkedHashSet::new)); // preserve order
     }
+    
+    /**
+     * Copies all elements into a new unmodifiable SortedSet (of natural order).
+     * @param elements
+     * @return non null
+     */
+    @SafeVarargs
+    public static <T> SortedSet<T> ofSorted(T ... elements) {
+        _With.requires(elements, "elements");// don't accept null as argument
+        if(elements.length==0) {
+            return Collections.emptySortedSet();
+        }
+        return Collections.unmodifiableSortedSet(
+                Stream.of(elements)
+                .collect(Collectors.toCollection(TreeSet::new))); // natural order
+    }
+    
 
     /**
      * Copies all elements from iterable into a new unmodifiable Set preserving iteration order.
