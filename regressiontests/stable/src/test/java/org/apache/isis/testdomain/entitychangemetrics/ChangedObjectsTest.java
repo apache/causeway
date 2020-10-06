@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -64,50 +65,58 @@ import lombok.val;
     ,IsisPresets.UseLog4j2Test
 })
 class ChangedObjectsTest extends InteractionTestAbstract {
-    
+
     @Inject protected FixtureScripts fixtureScripts;
 
     @BeforeEach
     void setUp() {
-        
         System.err.println("===BEFORE SETUP");
 
         // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+        //fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
         AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
-        
+
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
         // each test runs in its own interaction context (check)
         val testRunNr = kvStoreForTesting.incrementCounter(ChangedObjectsTest.class, "test-run");
         assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
-        
+
         assertJdoBookCreateAudits();
-        
+
         System.err.println("===AFTER SETUP");
     }
-    
+
+    @AfterEach
+    void tearDown() {
+        System.err.println("===BEFORE TEARDOWN");
+
+        // cleanup
+        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+
+        assertJdoBookDeleteAudits();
+
+        System.err.println("===AFTER TEARDOWN");
+    }
+
     @Test
     void wrapperInvocation_shouldSpawnSingleTransaction() {
 
         // given
         val book = getBookSample();
         val inventoryManager = factoryService.create(JdoInventoryManager.class);
-        
+
         System.err.println("=1==BEFORE  TX");
-        
+
         // spawns its own transactional boundary (check)
         val product = assertTransactional( 
                 ()->wrapper.wrap(inventoryManager).updateProductPrice(book, 12.));
-        
+
         System.err.println("=1==AFTER  TX");
-        
+
         assertEquals(12., product.getPrice(), 1E-3);
-        
-        // previous transaction has committed, so ChangedObjectsService should have cleared its data  
-        assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
-        
+
         assertNoChangedObjectsPending();
         assertJdoBookPriceChangeAudit();
         // dumpAuditsAndClear(); // debug
@@ -115,42 +124,42 @@ class ChangedObjectsTest extends InteractionTestAbstract {
 
     @Test 
     void actionInteraction_shouldSpawnSingleTransaction() {
-        
+
         // given
         val book = getBookSample();
 
         System.err.println("=2==BEFORE  TX");
-        
+
         // spawns its own transactional boundary (check) 
         val product = (JdoProduct) assertTransactional( 
                 ()->invokeAction(JdoInventoryManager.class, "updateProductPrice", _Lists.of(book, 12.)));
-        
+
         System.err.println("=2==AFTER  TX");
-        
+
         assertEquals(12., product.getPrice(), 1E-3);                
-        
+
         assertNoChangedObjectsPending();
         assertJdoBookPriceChangeAudit();
         // dumpAuditsAndClear(); // debug
     }
-    
+
     // -- HELPER
-    
+
     private JdoBook getBookSample() {
-        
+
         System.err.println("===BEFORE BOOK");
-        
+
         // spawns its own transactional boundary (check)
         val books = assertTransactional(()->repositoryService.allInstances(JdoBook.class));
         assertEquals(1, books.size());
         val book = books.listIterator().next();
-        
+
         assertEmptyAudits(); // query only, no entity changes expected
-        
+
         System.err.println("===AFTER BOOK");
         return book;
     }
-    
+
     @SuppressWarnings("unused")
     private void dumpAuditsAndClear() {
         val audits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting);
@@ -164,48 +173,70 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         val audits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting);
         assertTrue(audits.isEmpty());
     }
-    
+
     private void assertNoChangedObjectsPending() {
         // previous transaction has committed, so ChangedObjectsService should have cleared its data
         // however, this call has side-effects, it locks current transaction's capacity of further enlisting changes
-        //assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
+        // missing a good solution on how to test this yet
+        // assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
     }
-    
+
     private void assertJdoBookCreateAudits() {
-        
+
         val expectedAudits = _Sets.ofSorted(
-        "Jdo Book/author: '[NEW]' -> 'Sample Author'",
-        "Jdo Book/price: '[NEW]' -> '99.0'",
-        "Jdo Book/publisher: '[NEW]' -> 'Sample Publisher'",
-        "Jdo Book/isbn: '[NEW]' -> 'Sample ISBN'",
-        "Jdo Book/description: '[NEW]' -> 'A sample book for testing.'",
-        "Jdo Book/name: '[NEW]' -> 'Sample Book'",
-        "Jdo Inventory/name: '[NEW]' -> 'Sample Inventory'");
-        
+                "Jdo Book/author: '[NEW]' -> 'Sample Author'",
+                "Jdo Book/price: '[NEW]' -> '99.0'",
+                "Jdo Book/publisher: '[NEW]' -> 'Sample Publisher'",
+                "Jdo Book/isbn: '[NEW]' -> 'Sample ISBN'",
+                "Jdo Book/description: '[NEW]' -> 'A sample book for testing.'",
+                "Jdo Book/name: '[NEW]' -> 'Sample Book'",
+                "Jdo Inventory/name: '[NEW]' -> 'Sample Inventory'");
+
         val actualAudits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting)
                 .stream()
                 .collect(Collectors.toCollection(TreeSet::new));
-        
+
         assertEquals(expectedAudits, actualAudits);
-        
+
         AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
-        
+
     }
-    
+
+    private void assertJdoBookDeleteAudits() {
+
+        val expectedAudits = _Sets.ofSorted(
+                "Jdo Book/author: 'Sample Author' -> '[DELETED]'", 
+                "Jdo Book/description: 'A sample book for testing.' -> '[DELETED]'",
+                "Jdo Book/isbn: 'Sample ISBN' -> '[DELETED]'",
+                "Jdo Book/name: 'Sample Book' -> '[DELETED]'", 
+                "Jdo Book/price: '12.0' -> '[DELETED]'",
+                "Jdo Book/publisher: 'Sample Publisher' -> '[DELETED]'",
+                "Jdo Inventory/name: 'Sample Inventory' -> '[DELETED]'");
+
+        val actualAudits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting)
+                .stream()
+                .collect(Collectors.toCollection(TreeSet::new));
+
+        assertEquals(expectedAudits, actualAudits);
+
+        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
+
+    }
+
     private void assertJdoBookPriceChangeAudit() {
-        
+
         val expectedAudits = _Sets.ofSorted(
-        "Jdo Book/price: '99.0' -> '12.0'");
-        
+                "Jdo Book/price: '99.0' -> '12.0'");
+
         val actualAudits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting)
                 .stream()
                 .collect(Collectors.toCollection(TreeSet::new));
-        
+
         assertEquals(expectedAudits, actualAudits);
-        
+
         AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
     }
-    
+
 }
 
 
