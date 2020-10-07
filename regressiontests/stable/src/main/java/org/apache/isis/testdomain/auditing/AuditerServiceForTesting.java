@@ -60,7 +60,7 @@ public class AuditerServiceForTesting implements AuditerService {
                 targetClassName, propertyName, preValue, postValue);
 
         @SuppressWarnings("unchecked")
-        final List<String> auditEntries = (List<String>) kvStore.get(this, "audit").orElseGet(ArrayList::new);
+        val auditEntries = (List<String>) kvStore.get(this, "audit").orElseGet(ArrayList::new);
         
         auditEntries.add(auditEntry);
         
@@ -72,7 +72,8 @@ public class AuditerServiceForTesting implements AuditerService {
     
     @SuppressWarnings("unchecked")
     public static Can<String> getAuditEntries(KVStoreForTesting kvStore) {
-        return Can.ofCollection((List<String>) kvStore.get(AuditerServiceForTesting.class, "audit")
+        return Can.ofCollection(
+                (List<String>) kvStore.get(AuditerServiceForTesting.class, "audit")
                 .orElse(null));
     }
     

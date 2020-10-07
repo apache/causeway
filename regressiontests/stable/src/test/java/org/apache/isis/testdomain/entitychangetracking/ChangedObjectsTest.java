@@ -40,6 +40,7 @@ import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.publishing.Configuration_usingPublishing;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
@@ -49,6 +50,7 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingAuditing.class,
+                Configuration_usingPublishing.class,
                 InteractionBoundaryProbe.class,
         }, 
         properties = {

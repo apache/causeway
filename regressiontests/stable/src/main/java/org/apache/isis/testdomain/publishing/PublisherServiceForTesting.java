@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testdomain.publishing;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -26,12 +29,16 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
+import org.apache.isis.applib.util.JaxbUtil;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service
+@Log4j2
 public class PublisherServiceForTesting implements PublisherService {
 
     @Inject private KVStoreForTesting kvStore;
@@ -43,26 +50,52 @@ public class PublisherServiceForTesting implements PublisherService {
 
     @Override
     public void publish(Execution<?, ?> execution) {
-        _Probe.errOut("PUBLISH EXECUTION %s", execution);
-        kvStore.put(this, "execution", 999);
+        _Probe.errOut("PUBLISH EXECUTION %s", JaxbUtil.toXml(execution.getDto()));
+        
+        @SuppressWarnings("unchecked")
+        val publishedEntries = 
+            (List<Execution<?, ?>>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
+        
+        publishedEntries.add(execution);
+        
+        kvStore.put(this, "published", publishedEntries);
+        log.debug("publish execution {}", execution);
     }
 
     @Override
     public void publish(PublishedObjects publishedObjects) {
         
-        _Probe.errOut("PUBLISH OBJECTS %s", publishedObjects);
+        _Probe.errOut("PUBLISH OBJECTS %s", JaxbUtil.toXml(publishedObjects.getDto()));
         
-        kvStore.put(this, "uuid", publishedObjects.getUniqueId().toString());
-        kvStore.put(this, "user", publishedObjects.getUsername());
+        @SuppressWarnings("unchecked")
+        val publishedEntries = 
+            (List<PublishedObjects>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
         
-        kvStore.put(this, "created", publishedObjects.getNumberCreated());
-        kvStore.put(this, "deleted", publishedObjects.getNumberDeleted());
-        kvStore.put(this, "loaded", publishedObjects.getNumberLoaded());
-        kvStore.put(this, "updated", publishedObjects.getNumberUpdated());
-        kvStore.put(this, "modified", publishedObjects.getNumberPropertiesModified());
+        publishedEntries.add(publishedObjects);
         
-        kvStore.put(this, "dto", publishedObjects.getDto());
+        kvStore.put(this, "published", publishedEntries);
+        log.debug("publish objects {}", publishedObjects);
         
     }
-
+    
+    // -- UTILITIES
+    
+    @SuppressWarnings("unchecked")
+    public static Can<PublishedObjects> getPublishedObjects(KVStoreForTesting kvStore) {
+        return Can.ofCollection(
+                (List<PublishedObjects>) kvStore.get(PublisherServiceForTesting.class, "publishedObjects")
+                .orElse(null));
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static Can<Execution<?, ?>> getPublishedExecutions(KVStoreForTesting kvStore) {
+        return Can.ofCollection(
+                (List<Execution<?, ?>>) kvStore.get(PublisherServiceForTesting.class, "publishedExecutions")
+                .orElse(null));
+    }
+    
+    public static void clearPublishedEntries(KVStoreForTesting kvStore) {
+        kvStore.clear(PublisherServiceForTesting.class);
+    }
+    
 }
