@@ -15,13 +15,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.apache.isis.incubator</groupId>
-        <artifactId>isis-incubator</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+<!--     <parent> -->
+<!--         <groupId>org.apache.isis.incubator</groupId> -->
+<!--         <artifactId>isis-incubator</artifactId> -->
+<!--         <version>2.0.0-SNAPSHOT</version> -->
+<!--         <relativePath>../../pom.xml</relativePath> -->
+<!--     </parent> -->
 
+	<version>2.0.0-SNAPSHOT</version>
+	
     <groupId>org.apache.isis.incubator.clients</groupId>
     <artifactId>isis-client-kroviz</artifactId>
     <name>Apache Isis Inc - Client kroViz</name>
@@ -97,6 +99,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>gradle</id>
