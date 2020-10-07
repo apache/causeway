@@ -74,7 +74,7 @@ implements AutoCompleteFacet {
             final String search,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val resultAdapter = getPublishingServiceInternal()
+        val resultAdapter = getPublisherDispatchService()
         .withPublishingSuppressed(()->{
                 final Object list = _Reflect.invokeMethodOn(repositoryMethod, getRepository(), search)
                         .onFailure(e->log.warn("failure while executing auto-complete", e))
@@ -91,7 +91,7 @@ implements AutoCompleteFacet {
         return getServiceRegistry().lookupService(repositoryClass).orElse(null);
     }
 
-    private PublisherDispatchService getPublishingServiceInternal() {
+    private PublisherDispatchService getPublisherDispatchService() {
         return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
     }
 

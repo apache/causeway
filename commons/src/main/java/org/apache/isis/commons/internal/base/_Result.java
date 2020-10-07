@@ -34,6 +34,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.ToString;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -199,7 +200,11 @@ public final class _Result<L> {
                 return value;
             }
         }
-        return defaultValueSupplier.get();
+        val defaultValue = defaultValueSupplier.get();
+        if(defaultValue!=null) {
+            return defaultValue;
+        }
+        throw new NoSuchElementException();
     }
     
     public @Nullable L getNullableOrElse(final @NonNull Supplier<L> defaultValueSupplier) {
