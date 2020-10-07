@@ -46,7 +46,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -165,7 +164,7 @@ implements ImperativeFacet {
         command.updater().setReified(commandFacet != null);
 
         val actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
-        _Probe.errOut("ACTION INVOKE %s", actionId);
+        log.debug("about to invoke action {}", actionId);
 
         val targetAdapter = head.getTarget();
         val mixedInAdapter = head.getMixedIn().orElse(null);

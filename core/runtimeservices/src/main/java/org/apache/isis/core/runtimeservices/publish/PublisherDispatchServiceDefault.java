@@ -45,7 +45,6 @@ import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -145,14 +144,9 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
 
     private void publishToPublisherServices(final Interaction.Execution<?,?> execution) {
-        
-        _Probe.errOut("EXECUTION PUBLISHING %s", execution);
-
         if(isSuppressed()) {
-            _Probe.errOut("\t SUPPRESSED");
             return;
         }
-
         for (val publisherService : publisherServices) {
             publisherService.publish(execution);
         }

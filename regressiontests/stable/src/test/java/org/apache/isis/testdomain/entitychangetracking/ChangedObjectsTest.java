@@ -103,6 +103,8 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         val book = getBookSample();
         val inventoryManager = factoryService.create(JdoInventoryManager.class);
 
+        assertEquals(99., book.getPrice(), 1E-3);
+        
         System.err.println("=1==BEFORE  TX");
 
         // spawns its own transactional boundary (check)
@@ -123,6 +125,8 @@ class ChangedObjectsTest extends InteractionTestAbstract {
 
         // given
         val book = getBookSample();
+        
+        assertEquals(99., book.getPrice(), 1E-3);
 
         System.err.println("=2==BEFORE  TX");
 

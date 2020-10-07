@@ -29,10 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
@@ -51,7 +48,7 @@ public class PublisherServiceForTesting implements PublisherService {
 
     @Override
     public void publish(Execution<?, ?> execution) {
-        _Probe.errOut("PUBLISH EXECUTION %s", MemberExecutionDtoUtils.toXml(execution.getDto()));
+        //_Probe.errOut("PUBLISH EXECUTION %s", MemberExecutionDtoUtils.toXml(execution.getDto()));
         
         @SuppressWarnings("unchecked")
         val publishedEntries = 
@@ -65,8 +62,7 @@ public class PublisherServiceForTesting implements PublisherService {
 
     @Override
     public void publish(PublishedObjects publishedObjects) {
-        
-        _Probe.errOut("PUBLISH OBJECTS %s", ChangesDtoUtils.toXml(publishedObjects.getDto()));
+        //_Probe.errOut("PUBLISH OBJECTS %s", ChangesDtoUtils.toXml(publishedObjects.getDto()));
         
         @SuppressWarnings("unchecked")
         val publishedEntries = 

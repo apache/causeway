@@ -67,6 +67,7 @@ import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlace
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 // tag::refguide[]
 @Service
@@ -75,7 +76,7 @@ import lombok.val;
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
-//@Log4j2
+@Log4j2
 public class ChangedObjectsService 
 implements TransactionScopeListener,
 MetricsService,
@@ -161,7 +162,7 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
      */
     @Override
     public void onTransactionEnding() {
-        System.err.println("ENTITY CHANGE TRACKING - CLEARING ALL");
+        log.debug("purging data");
         enlistedObjectProperties.clear();
         changeKindByEnlistedAdapter.clear();
         changedObjectPropertiesRef.clear();
@@ -219,7 +220,7 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
 
-        System.err.println("ENLIST " + adapter);
+        log.debug("enlist property changes for auditing {}", adapter);
 
         adapter.getSpecification()
         .streamAssociations(Contributed.EXCLUDED)
@@ -237,8 +238,6 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
      * then clears enlisted objects.
      */
     private Set<AuditEntry> capturePostValuesAndDrain() {
-
-        System.err.println("capturePostValuesAndDrain");
 
         val postValues = enlistedObjectProperties.entrySet().stream()
                 .peek(this::updatePostOn) // set post values of audits, which have been left empty up to now
