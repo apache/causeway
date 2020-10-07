@@ -32,9 +32,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class CssClassFacetMethodTest {
 
@@ -44,7 +44,7 @@ public class CssClassFacetMethodTest {
     private CssClassFacetMethod facet;
     private FacetHolder mockFacetHolder;
 
-    private ObjectAdapter mockOwningAdapter;
+    private ManagedObject mockOwningAdapter;
 
     private DomainObjectInCssClassMethod pojo;
 
@@ -59,7 +59,7 @@ public class CssClassFacetMethodTest {
 
         pojo = new DomainObjectInCssClassMethod();
         mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockOwningAdapter = mockery.mock(ObjectAdapter.class);
+        mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectInCssClassMethod.class.getMethod("cssClass");
         facet = new CssClassFacetMethod(iconNameMethod, mockFacetHolder);
 

@@ -141,7 +141,7 @@ implements FormExecutor {
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
             {
                 val commonContext = targetEntityModel.getCommonContext();
-                commonContext.getIsisInteractionTracker().currentInteraction()
+                commonContext.getIsisInteractionTracker().currentInteractionSession()
                 .ifPresent(interaction->{
                     commonContext.lookupServiceElseFail(RuntimeEventService.class)
                     .fireInteractionFlushRequest(interaction);

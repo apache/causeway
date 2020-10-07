@@ -23,11 +23,11 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.

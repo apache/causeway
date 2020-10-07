@@ -16,25 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.events.iactn;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
-import org.apache.isis.core.runtime.iactn.InteractionSession;
+import java.util.Set;
 
-import lombok.Getter;
-import lombok.ToString;
-import lombok.Value;
+//TODO[ISIS-2441] intermediate for refactoring keep?
+public interface HasEnlistedForAuditing {
 
-@Value(staticConstructor="of") @ToString(of = "eventType")
-public class IsisInteractionLifecycleEvent {
-
-    public enum EventType {
-        HAS_STARTED,
-        IS_ENDING,
-        FLUSH_REQUEST
-    }
-
-    @Getter String conversationId;
-    @Getter InteractionSession interactionSession;
-    @Getter EventType eventType;
+    Set<AuditEntry> getChangedObjectProperties();
 
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.transaction;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
@@ -50,10 +51,11 @@ import lombok.val;
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
+@Log4j2
 public class AuditerDispatchService {
     
     @Inject private List<AuditerService> auditerServices;
-    @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsProvider;
+    @Inject private javax.inject.Provider<HasEnlistedForAuditing> changedObjectsProvider;
     @Inject private UserService userService;
     @Inject private ClockService clockService;
     @Inject private TransactionService transactionService;
@@ -77,6 +79,8 @@ public class AuditerDispatchService {
         val currentTime = clockService.nowAsJavaSqlTimestamp();
         val changedObjectProperties = changedObjectsProvider.get().getChangedObjectProperties();
     
+        log.debug("about to process {} audits", ()->changedObjectProperties.size());
+        
         for (val auditEntry : changedObjectProperties) {
             auditChangedProperty(currentTime, currentUser, auditEntry);
         }

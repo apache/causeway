@@ -42,13 +42,13 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
     /** INTERACTION BEGIN BOUNDARY */
     @PostConstruct
     public void init() {
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iactnStarted");
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
     }
 
     /** INTERACTION END BOUNDARY */
     @PreDestroy
     public void destroy() {
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iactnEnded");
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
     }
 
     /** TRANSACTION BEGIN BOUNDARY */
@@ -59,18 +59,18 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
 
     /** TRANSACTION END BOUNDARY */
     @Override
-    public void onTransactionEnded() {
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnded");
+    public void onTransactionEnding() {
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
     }
     
     // -- ACCESS TO COUNTERS
     
     public static long totalInteractionsStarted(KVStoreForTesting kvStoreForTesting) {
-        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iactnStarted");
+        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iaStarted");
     }
     
     public static long totalInteractionsEnded(KVStoreForTesting kvStoreForTesting) {
-        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iactnEnded");
+        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iaEnded");
     }
 
     public static long totalTransactionsStarted(KVStoreForTesting kvStoreForTesting) {
@@ -78,7 +78,7 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
     }
     
     public static long totalTransactionsEnded(KVStoreForTesting kvStoreForTesting) {
-        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnded");
+        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnding");
     }
 
     // -- ASSERTIONS (INTERACTIONAL)

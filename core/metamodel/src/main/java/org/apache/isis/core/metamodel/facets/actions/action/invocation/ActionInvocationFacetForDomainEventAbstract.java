@@ -34,7 +34,6 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -165,6 +164,7 @@ implements ImperativeFacet {
         command.updater().setReified(commandFacet != null);
 
         val actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
+        log.debug("about to invoke action {}", actionId);
 
         val targetAdapter = head.getTarget();
         val mixedInAdapter = head.getMixedIn().orElse(null);
@@ -219,7 +219,6 @@ implements ImperativeFacet {
         if (publishedActionFacet != null) {
             getPublishingServiceInternal().publishAction(priorExecution);
         }
-
 
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
     }

@@ -63,7 +63,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.schema.cmd.v2.ActionDto;
@@ -402,8 +401,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         val objectSpec = specificationLoader.loadSpecification(oid.getObjectSpecId());
         val loadRequest = ObjectLoader.Request.of(objectSpec, oid.getIdentifier());
 
-        Optional<IsisInteraction> isisInteraction = isisInteractionTracker.currentInteraction();
-        return isisInteraction
+        return isisInteractionTracker.currentInteractionSession()
                 .map(x -> x.getObjectManager().loadObject(loadRequest))
                 .orElse(null);
     }

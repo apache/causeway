@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 /**
- * The factory of {@link IsisInteraction}s, also holding a reference to the
+ * The factory of {@link InteractionSession}s, also holding a reference to the
  * current session using a thread-local.
  *
  * <p>
@@ -44,11 +44,11 @@ public interface IsisInteractionFactory {
     }
 
     /**
-     * Creates a new {@link IsisInteraction}, which represents the span of
-     * activities user interacting with the application.
+     * Creates a new {@link InteractionSession}, which represents a user's span of
+     * activities interacting with the application.
      *
      * <p>
-     *     If there is already an {@link IsisInteraction} available (as held
+     *     If there is already an {@link InteractionSession} available (as held
      *     in a thread-local stack), then the interactions are stacked.
      *     These are closed using {@link #closeSessionStack()}.
      * </p>
@@ -56,7 +56,7 @@ public interface IsisInteractionFactory {
      * @param authenticationSession
      * @return
      */
-    public IsisInteraction openInteraction(AuthenticationSession authenticationSession);
+    public InteractionSession openInteraction(AuthenticationSession authenticationSession);
 
     /**
      * @return whether the calling thread is within the context of an open IsisInteraction

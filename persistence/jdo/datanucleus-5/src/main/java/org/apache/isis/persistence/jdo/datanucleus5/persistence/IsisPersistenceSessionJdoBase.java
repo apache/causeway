@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFactory;
@@ -69,7 +69,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     protected final UserService userService;
     protected final IsisConfiguration configuration;
 
-    protected final Supplier<ChangedObjectsService> changedObjectsServiceProvider;
+    protected final Supplier<EntityChangeTracker> entityChangeTrackerProvider;
     protected final Supplier<InteractionContext> interactionContextProvider;
     protected final Supplier<MetricsService> metricsServiceProvider;
 
@@ -121,7 +121,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.userService = lookupService(UserService.class);
         
         this.interactionContextProvider = ()->lookupService(InteractionContext.class);
-        this.changedObjectsServiceProvider = ()->lookupService(ChangedObjectsService.class);
+        this.entityChangeTrackerProvider = ()->lookupService(EntityChangeTracker.class);
         this.metricsServiceProvider = ()->lookupService(MetricsService.class);
         
 
@@ -140,6 +140,10 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         return specificationLoader;
     }
 
+    public EntityChangeTracker getEntityChangeTracker() {
+        return entityChangeTrackerProvider.get();
+    }
+    
     /**
      * Only populated once {@link #open()}'d
      */
@@ -204,6 +208,14 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
         if (transaction.isActive()) {
             transaction.rollback();
+        }
+    }
+    
+    @Override
+    public void flushTransaction() {
+        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
+        if (transaction.isActive()) {
+            transaction.getPersistenceManager().flush();
         }
     }
     

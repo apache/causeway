@@ -37,8 +37,6 @@ import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.identity.SingleFieldIdentity;
-import javax.jdo.listener.InstanceLifecycleListener;
-import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
@@ -52,25 +50,11 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -84,6 +68,9 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.quer
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.datanucleus5.lifecycles.JdoStoreLifecycleListenerForIsis;
+import org.apache.isis.persistence.jdo.datanucleus5.lifecycles.LoadLifecycleListenerForIsis;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.DestroyObjectCommand;
@@ -107,7 +94,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private ObjectAdapterContext objectAdapterContext;
     @Getter private final TransactionService transactionService;
-    private final StoreLifecycleListener storeLifecycleListener;
+    private Runnable unregisterLifecycleListeners;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -117,12 +104,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public PersistenceSession5(
             final MetaModelContext metaModelContext,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
-            final StoreLifecycleListener storeLifecycleListener, 
             final FixturesInstalledStateHolder stateHolder) {
 
         super(metaModelContext, jdoPersistenceManagerFactory, stateHolder);
         this.transactionService = metaModelContext.getTransactionService();
-        this.storeLifecycleListener = storeLifecycleListener;
     }
 
     // -- open
@@ -154,20 +139,21 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         objectAdapterContext = ObjectAdapterContext.openContext(super.metaModelContext, this);
 
-        // tell the proxy of all request-scoped services to instantiate the underlying
-        // services, store onto the thread-local and inject into them...
-        //startRequestOnRequestScopedServices();
-
-        // ... and invoke all @PostConstruct
-        //postConstructOnRequestScopedServices();
-
-        val metricsService = metricsServiceProvider.get();
-        if(metricsService instanceof InstanceLifecycleListener) {
-            persistenceManager
-            .addInstanceLifecycleListener((InstanceLifecycleListener)metricsService, (Class[]) null);
-        }
-
+        // install JDO specific entity change listeners ...
+        
+        val loadLifecycleListener = new LoadLifecycleListenerForIsis();
+        val storeLifecycleListener = new JdoStoreLifecycleListenerForIsis();
+        
+        serviceInjector.injectServicesInto(loadLifecycleListener);
+        serviceInjector.injectServicesInto(storeLifecycleListener);
+            
+        persistenceManager.addInstanceLifecycleListener(loadLifecycleListener, (Class[]) null);
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
+        
+        this.unregisterLifecycleListeners = ()->{
+            persistenceManager.removeInstanceLifecycleListener(loadLifecycleListener);
+            persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
+        };
 
         this.state = State.OPEN;
     }
@@ -195,7 +181,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         completeCommandFromInteractionAndClearDomainEvents();
 
-        persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
+        unregisterLifecycleListeners.run();
+        unregisterLifecycleListeners = null;
         
         try {
             persistenceManager.close();
@@ -611,12 +598,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
-        ObjectAdapter adapter = adapterFor(pojo);
-
-        changedObjectsServiceProvider.get().enlistDeleting(adapter);
-
-        CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
-        objectAdapterContext.postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
+        val entity = adapterFor(pojo);
+        getEntityChangeTracker().enlistDeleting(entity);
     }
 
     @Override
@@ -627,12 +610,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 //        serviceInjector.injectServicesInto(pojo); //redundant
 
         final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-        final ObjectAdapter adapter = objectAdapterContext.recreatePojo(originalOid, pojo);
+        final ObjectAdapter entity = objectAdapterContext.recreatePojo(originalOid, pojo);
 
-        CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
-        objectAdapterContext.postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
+        getEntityChangeTracker().recognizeLoaded(entity);
 
-        return adapter;
+        return entity;
     }
 
     @Override
@@ -656,12 +638,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
         if (getEntityState(pojo).isDetached()) {
-            val managedObject = ManagedObject.of(specificationLoader::loadSpecification, pojo);
+            val entity = ManagedObject.of(specificationLoader::loadSpecification, pojo);
 
-            // persisting
-            // previously this was performed in the DataNucleusSimplePersistAlgorithm.
-            CallbackFacet.Util.callCallback(managedObject, PersistingCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(managedObject, PersistingLifecycleEventFacet.class);
+            getEntityChangeTracker().recognizePersisting(entity);
 
         } else {
             // updating
@@ -682,55 +661,30 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void enlistCreatedAndInvokeIsisPersistedCallback(final Persistable pojo) {
-
-        val adapter = adapterFor(pojo);
-
-        final boolean wasAlreadyEnlisted = changedObjectsServiceProvider.get().isEnlisted(adapter);
-        changedObjectsServiceProvider.get().enlistCreated(adapter);
-
-        if(!wasAlreadyEnlisted) {
-            CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
-        }
-
+        val entity = adapterFor(pojo);
+        getEntityChangeTracker().enlistCreated(entity);
     }
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-
-        final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
-        if (adapter == null) {
-            throw new RuntimeException(
-                    String.format("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo));
+        val entity = objectAdapterContext.fetchPersistent(pojo);
+        if (entity == null) {
+            throw _Exceptions
+                .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
         }
-
-        final boolean wasAlreadyEnlisted = changedObjectsServiceProvider.get().isEnlisted(adapter);
-
-        // we call this come what may;
-        // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        changedObjectsServiceProvider.get().enlistUpdating(adapter);
-
-        if(!wasAlreadyEnlisted) {
-            // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
-            CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
-        }
-
+        getEntityChangeTracker().enlistUpdating(entity);
     }
 
     @Override
     public void invokeIsisUpdatedCallback(Persistable pojo) {
-
-        final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
-        if (adapter == null) {
-            throw new RuntimeException(
-                    String.format("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo));
+        val entity = objectAdapterContext.fetchPersistent(pojo);
+        if (entity == null) {
+            throw _Exceptions
+                .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
         }
-
         // the callback and transaction.enlist are done in the preStore callback
         // (can't be done here, as the enlist requires to capture the 'before' values)
-        CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
-        objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
+        getEntityChangeTracker().recognizeUpdating(entity);
     }
 
     /**

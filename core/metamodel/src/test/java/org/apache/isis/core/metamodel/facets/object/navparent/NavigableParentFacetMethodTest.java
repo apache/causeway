@@ -32,9 +32,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class NavigableParentFacetMethodTest {
 
@@ -43,7 +43,7 @@ public class NavigableParentFacetMethodTest {
     private NavigableParentFacetMethod facet;
     private FacetHolder mockFacetHolder;
 
-    private ObjectAdapter mockOwningAdapter;
+    private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInNavigableParentMethod pojo;
 
@@ -58,7 +58,7 @@ public class NavigableParentFacetMethodTest {
 
         pojo = new DomainObjectWithProblemInNavigableParentMethod();
         mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockOwningAdapter = mockery.mock(ObjectAdapter.class);
+        mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method navigableParentMethod = DomainObjectWithProblemInNavigableParentMethod.class.getMethod("parent");
         facet = new NavigableParentFacetMethod(navigableParentMethod, mockFacetHolder);
 

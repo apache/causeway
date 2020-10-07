@@ -31,14 +31,11 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.TransactionScopeListener;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metrics.MetricsService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Interaction}.
@@ -55,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @IsisInteractionScope
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+//@Log4j2
 public class InteractionContext implements TransactionScopeListener, DisposableBean {
 
     // end::refguide[]
@@ -79,11 +76,11 @@ public class InteractionContext implements TransactionScopeListener, DisposableB
 
 
     @Override
-    public void onTransactionEnded() {
+    public void onTransactionEnding() {
         val command = getInteraction().getCommand();
         command.updater().setSystemStateChanged(
-                command.isSystemStateChanged() ||
-                        metricsService.numberObjectsDirtied() > 0);
+                command.isSystemStateChanged() 
+                || metricsService.numberObjectsDirtied() > 0);
     }
 
     @Override

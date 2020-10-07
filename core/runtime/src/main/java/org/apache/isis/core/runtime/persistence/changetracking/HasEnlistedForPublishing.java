@@ -16,15 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.transaction;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
-import lombok.NonNull;
-import lombok.Value;
+import java.util.Map;
 
-@Value(staticConstructor = "of")
-public class AuditEntry {
+import org.apache.isis.applib.annotation.PublishingChangeKind;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-    @NonNull private final AdapterAndProperty adapterAndProperty;
-    @NonNull private final PreAndPostValues preAndPostValues;
-    
+//TODO[ISIS-2441] intermediate for refactoring keep?
+public interface HasEnlistedForPublishing {
+
+    Map<ManagedObject, PublishingChangeKind> getChangeKindByEnlistedAdapter();
+
+    int numberObjectPropertiesModified();
+
 }

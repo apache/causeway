@@ -80,7 +80,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     
     public ActionInteraction checkSemanticConstraint(@NonNull SemanticConstraint semanticConstraint) {
 
-        chain = chain.leftRemap(action->{
+        chain = chain.mapIfLeft(action->{
 
             val actionSemantics = action.getAction().getSemantics();
 
@@ -89,13 +89,13 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
                 return _Either.left(action);
 
             case IDEMPOTENT:
-                return (! actionSemantics.isIdempotentInNature()) 
-                        ? _Either.right(InteractionVeto.actionNotIdempotent(action)) 
-                        : _Either.left(action);
+                return actionSemantics.isIdempotentInNature() 
+                        ? _Either.left(action)
+                        : _Either.right(InteractionVeto.actionNotIdempotent(action)) ;
             case SAFE:
-                return (! actionSemantics.isSafeInNature()) 
-                        ? _Either.right(InteractionVeto.actionNotSafe(action)) 
-                        : _Either.left(action);
+                return actionSemantics.isSafeInNature() 
+                        ? _Either.left(action)
+                        : _Either.right(InteractionVeto.actionNotSafe(action));
             default:
                 throw _Exceptions.unmatchedCase(semanticConstraint); // unexpected code reach
             }

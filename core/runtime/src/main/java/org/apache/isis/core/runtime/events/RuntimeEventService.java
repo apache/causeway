@@ -32,7 +32,7 @@ import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtime.events.persistence.PostStoreEvent;
 import org.apache.isis.core.runtime.events.persistence.PreStoreEvent;
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 
 import lombok.val;
@@ -65,21 +65,21 @@ public class RuntimeEventService {
 
     // -- INTERACTION
 
-    public void fireInteractionHasStarted(IsisInteraction interaction) {
+    public void fireInteractionHasStarted(InteractionSession interaction) {
         val conversationId = interactionTracker.getConversationId().orElse(null);
         eventBusService.post(
                 IsisInteractionLifecycleEvent
                 .of(conversationId, interaction, IsisInteractionLifecycleEvent.EventType.HAS_STARTED));
     }
 
-    public void fireInteractionIsEnding(IsisInteraction interaction) {
+    public void fireInteractionIsEnding(InteractionSession interaction) {
         val conversationId = interactionTracker.getConversationId().orElse(null);
         eventBusService.post(
                 IsisInteractionLifecycleEvent
                 .of(conversationId, interaction, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
     }
 
-	public void fireInteractionFlushRequest(IsisInteraction interaction) {
+	public void fireInteractionFlushRequest(InteractionSession interaction) {
 	    val conversationId = interactionTracker.getConversationId().orElse(null);
 	    eventBusService.post(
 	            IsisInteractionLifecycleEvent

@@ -16,25 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.events.iactn;
+package org.apache.isis.persistence.jdo.datanucleus5.lifecycles;
 
-import org.apache.isis.core.runtime.iactn.InteractionSession;
+import javax.enterprise.inject.Vetoed;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.jdo.listener.InstanceLifecycleEvent;
 
-import lombok.Getter;
-import lombok.ToString;
-import lombok.Value;
+import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTracker;
 
-@Value(staticConstructor="of") @ToString(of = "eventType")
-public class IsisInteractionLifecycleEvent {
+/**
+ * To be registered with each JDO PersistenceManager instance, in order to collect
+ * persistence related metrics
+ * 
+ * @since 2.0
+ *
+ */
+@Vetoed // managed by isis
+public class LoadLifecycleListenerForIsis 
+implements javax.jdo.listener.LoadLifecycleListener {
+    
+    @Inject private Provider<EntityChangeTracker> entityChangeTrackerProvider;
 
-    public enum EventType {
-        HAS_STARTED,
-        IS_ENDING,
-        FLUSH_REQUEST
+    @Override
+    public void postLoad(final InstanceLifecycleEvent event) {
+        entityChangeTrackerProvider.get().incrementLoaded();
     }
-
-    @Getter String conversationId;
-    @Getter InteractionSession interactionSession;
-    @Getter EventType eventType;
 
 }

@@ -32,9 +32,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class LayoutFacetMethodTest {
 
@@ -43,7 +43,7 @@ public class LayoutFacetMethodTest {
     private LayoutFacetMethod facet;
     private FacetHolder mockFacetHolder;
 
-    private ObjectAdapter mockOwningAdapter;
+    private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInLayoutMethod pojo;
 
@@ -58,7 +58,7 @@ public class LayoutFacetMethodTest {
 
         pojo = new DomainObjectWithProblemInLayoutMethod();
         mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockOwningAdapter = mockery.mock(ObjectAdapter.class);
+        mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInLayoutMethod.class.getMethod("layout");
         facet = new LayoutFacetMethod(iconNameMethod, mockFacetHolder);
 

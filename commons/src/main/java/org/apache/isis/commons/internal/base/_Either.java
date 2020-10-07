@@ -30,6 +30,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -109,39 +110,58 @@ public final class _Either<L, R> {
         return right!=null;
     }
 
-    // -- COMPOSITION
-
-    public <X, Y> _Either<X, Y> map(Function<L, X> leftMapper, Function<R, Y> rightMapper){
+    // -- MAPPING
+    
+    public <T> _Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
+        return isLeft()
+                ? _Either.left(leftMapper.apply(left))
+                : _Either.right(right);
+    }
+    
+    public <T> _Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
+        return isLeft()
+                ? _Either.left(left)
+                : _Either.right(rightMapper.apply(right));
+    }
+    
+    public <X, Y> _Either<X, Y> bimap(
+            final @NonNull Function<L, X> leftMapper, 
+            final @NonNull Function<R, Y> rightMapper){
         return isLeft()
                 ? left(leftMapper.apply(left))
                 : right(rightMapper.apply(right));
     }
 
-    public <X, Y> _Either<X, Y> mapNullable(Function<L, X> leftMapper, Function<R, Y> rightMapper){
+    public <X, Y> _Either<X, Y> bimapNullable(
+            final @NonNull Function<L, X> leftMapper, 
+            final @NonNull Function<R, Y> rightMapper){
         return isLeft()
                 ? leftNullable(leftMapper.apply(left))
                 : rightNullable(rightMapper.apply(right));
     }
     
-    public _Either<L, R> leftRemap(Function<L, _Either<L, R>> leftRemapper){
+    public _Either<L, R> mapIfLeft(Function<L, _Either<L, R>> leftRemapper){
         return isLeft()
                 ? leftRemapper.apply(left)
                 : this;
     }
 
-    public _Either<L, R> rightReMap(Function<R, _Either<L, R>> rightRemapper){
+    public _Either<L, R> mapIfRight(Function<R, _Either<L, R>> rightRemapper){
         return isLeft()
                 ? this
                 : rightRemapper.apply(right);
     }
 
-    // -- REDUCTION
+    
+    // -- FOLDING
 
-    public <X> X get(BiFunction<L, R, X> reduction){
-        return reduction.apply(left, right);
+    public <T> T fold(BiFunction<L, R, T> biMapper){
+        return biMapper.apply(left, right);
     }
-
-    public <X> X get(Function<L, X> leftMapper, Function<R, X> rightMapper){
+    
+    public <T> T fold(
+            final @NonNull Function<L, T> leftMapper,
+            final @NonNull Function<R, T> rightMapper){
         return isLeft()
                 ? leftMapper.apply(left)
                 : rightMapper.apply(right);

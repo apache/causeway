@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
+import org.apache.isis.core.runtime.persistence.changetracking.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionFlushException;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
@@ -181,7 +181,7 @@ public class IsisTransactionJdo implements Transaction {
         log.debug("new transaction {}", this);
         
         for (TransactionScopeListener listener : transactionScopeListeners) {
-            listener.onTransactionStarted();;
+            listener.onTransactionStarted();
         }
         
     }
@@ -296,7 +296,8 @@ public class IsisTransactionJdo implements Transaction {
         log.debug("flush transaction {}", this);
 
         try {
-            doFlush();
+            flushCommands();
+            flushTransaction();
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionFlushException(ex));
             throw ex;
@@ -304,8 +305,8 @@ public class IsisTransactionJdo implements Transaction {
     }
 
     /**
+     * Called by {@link #preCommit()} and {@link #flush()}:
      * <p>
-     * Called by both {@link #commit()} and by {@link #flush()}:
      * <table>
      * <tr>
      * <th>called from</th>
@@ -324,13 +325,13 @@ public class IsisTransactionJdo implements Transaction {
      * </tr>
      * </table>
      */
-    private void doFlush() {
+    private void flushCommands() {
 
         //
         // it's possible that in executing these commands that more will be created.
         // so we keep flushing until no more are available (ISIS-533)
         //
-        // this is a do...while rather than a while... just for backward compatibilty
+        // this is a do...while rather than a while... just for backward compatibility
         // with previous algorithm that always went through the execute phase at least once.
         //
         do {
@@ -353,9 +354,13 @@ public class IsisTransactionJdo implements Transaction {
         } while(!persistenceCommands.isEmpty());
 
     }
+    
+    private void flushTransaction() {
+        getPersistenceSession().flushTransaction();
+    }
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
-        return isisInteractionTracker.currentInteraction()
+        return isisInteractionTracker.currentInteractionSession()
                 .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class))
                 .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdo available"));
     }
@@ -376,17 +381,18 @@ public class IsisTransactionJdo implements Transaction {
 
         try {
             
+            flushCommands();
+            flushTransaction();
+            
             auditerDispatchService.audit();
             publisherDispatchService.publishObjects();
-            
-            doFlush();
 
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
         } finally {
             for (TransactionScopeListener listener : transactionScopeListeners) {
-                listener.onTransactionEnded();
+                listener.onTransactionEnding();
             }
         }
     }
@@ -404,6 +410,7 @@ public class IsisTransactionJdo implements Transaction {
         }
 
         setState(State.COMMITTED);
+        
     }
 
     // -- abortCause, markAsAborted

@@ -87,7 +87,7 @@ public class Interaction implements HasUniqueId {
     }
 
     @Getter
-    private Command command;                        // <.>
+    private final Command command;                  // <.>
 
     @Override
     public UUID getUniqueId() {                     // <.>

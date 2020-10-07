@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
@@ -43,13 +42,5 @@ public interface ObjectAdapter extends ManagedObject {
      * are not mapped and have a <tt>null</tt> oid.
      */
     Oid getOid(); //XXX[2033] referenced by 'metamodel' only to create a bookmark (CommandUtil)
-
-    /**
-     * Whether this instance belongs to another object (meaning its
-     * {@link #getOid()} will be a {@link ParentedOid}).
-     */
-    default boolean isParented() {
-        return getOid() instanceof ParentedOid;
-    }
 
 }

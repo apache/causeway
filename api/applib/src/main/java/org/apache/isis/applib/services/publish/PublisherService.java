@@ -31,6 +31,8 @@ public interface PublisherService {
 
     // end::refguide[]
     /**
+     * Publish each {@link Interaction.Execution} immediately after it completes.
+     * <p>
      * Most implementations are expected to use {@link Interaction.Execution#getDto()} to create a serializable
      * XML representation of the execution.  The easiest way to do this is using {@link InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
      * some flexibility here, though.
@@ -38,6 +40,11 @@ public interface PublisherService {
     // tag::refguide[]
     void publish(final Interaction.Execution<?, ?> execution);  // <.>
 
+    // end::refguide[]
+    /**
+     * Publish all changed entities at end of transaction (during pre-commit phase).
+     */
+    // tag::refguide[]
     void publish(final PublishedObjects publishedObjects);      // <.>
 }
 // end::refguide[]

@@ -16,12 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.transaction;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
 import java.util.Map;
 import java.util.Objects;
 
-public class PreAndPostValues {
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
+
+import lombok.val;
+import lombok.experimental.PackagePrivate;
+
+@PackagePrivate
+final class PreAndPostValues {
 
     private final Object pre;
     /**
@@ -95,8 +101,8 @@ public class PreAndPostValues {
     }
     
     public static boolean shouldAudit(Map.Entry<?, PreAndPostValues> input) { 
-        final PreAndPostValues papv = input.getValue();
-        return papv.shouldAudit();
+        val preAndPostValues = input.getValue();
+        return preAndPostValues.shouldAudit();
     }
     
 }

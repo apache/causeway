@@ -21,8 +21,10 @@ package org.apache.isis.persistence.jdo.datanucleus5.persistence.command;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+/** captures entity creation and deletion */
 public interface PersistenceCommand {
+    
     void execute();
-
     ManagedObject onManagedObject();
+    
 }

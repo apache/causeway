@@ -19,6 +19,8 @@
 package org.apache.isis.testdomain.auditing;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
@@ -53,14 +56,29 @@ public class AuditerServiceForTesting implements AuditerService {
             String memberIdentifier, String propertyName, String preValue, String postValue, String user,
             Timestamp timestamp) {
 
-        val audit = new StringBuilder()
-                .append("targetClassName=").append(targetClassName).append(",").append("propertyName=")
-                .append(propertyName).append(",").append("preValue=").append(preValue).append(",")
-                .append("postValue=").append(postValue).append(";")
-                .toString();
+        val auditEntry = String.format("%s/%s: '%s' -> '%s'", 
+                targetClassName, propertyName, preValue, postValue);
 
-        kvStore.put(this, "audit", audit);
-        log.debug("audit {}", audit);
+        @SuppressWarnings("unchecked")
+        val auditEntries = (List<String>) kvStore.get(this, "audit").orElseGet(ArrayList::new);
+        
+        auditEntries.add(auditEntry);
+        
+        kvStore.put(this, "audit", auditEntries);
+        log.debug("audit {}", auditEntry);
+    }
+    
+    // -- UTILITIES
+    
+    @SuppressWarnings("unchecked")
+    public static Can<String> getAuditEntries(KVStoreForTesting kvStore) {
+        return Can.ofCollection(
+                (List<String>) kvStore.get(AuditerServiceForTesting.class, "audit")
+                .orElse(null));
+    }
+    
+    public static void clearAuditEntries(KVStoreForTesting kvStore) {
+        kvStore.clear(AuditerServiceForTesting.class);
     }
 
 }

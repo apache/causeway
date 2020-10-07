@@ -28,7 +28,7 @@ import java.io.InputStream;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.base._Result;
 
 import lombok.val;
 
@@ -68,12 +68,8 @@ public class _Yaml {
      * @param content
      * @return
      */
-    public static <T> _Either<T, Exception> tryReadYaml(final Class<T> clazz, InputStream content) {
-        try {
-            return _Either.left(readYaml(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<T> tryReadYaml(final Class<T> clazz, InputStream content) {
+        return _Result.of(()->readYaml(clazz, content));
     }
     
     // -- FROM STRING
@@ -99,12 +95,8 @@ public class _Yaml {
      * @param content
      * @return
      */
-    public static <T> _Either<T, Exception> tryReadYaml(final Class<T> clazz, String content) {
-        try {
-            return _Either.left(readYaml(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<T> tryReadYaml(final Class<T> clazz, String content) {
+        return _Result.of(()->readYaml(clazz, content));
     }
     
     // -- FROM FILE
@@ -134,12 +126,8 @@ public class _Yaml {
      * @param content
      * @return
      */
-    public static <T> _Either<T, Exception> tryReadYaml(final Class<T> clazz, File content) {
-        try {
-            return _Either.left(readYaml(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<T> tryReadYaml(final Class<T> clazz, File content) {
+        return _Result.of(()->readYaml(clazz, content));
     }
     
     // -- FROM BYTE ARRAY
@@ -168,12 +156,8 @@ public class _Yaml {
      * @param content
      * @return
      */
-    public static <T> _Either<T, Exception> tryReadYaml(final Class<T> clazz, byte[] content) {
-        try {
-            return _Either.left(readYaml(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<T> tryReadYaml(final Class<T> clazz, byte[] content) {
+        return _Result.of(()->readYaml(clazz, content));
     }
     
 }

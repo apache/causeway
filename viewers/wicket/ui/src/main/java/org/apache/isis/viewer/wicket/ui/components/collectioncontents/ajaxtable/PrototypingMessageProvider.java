@@ -59,7 +59,7 @@ class PrototypingMessageProvider {
 
         final StringBuilder tookTimingMessage = new StringBuilder();
 
-        commonContext().getIsisInteractionTracker().currentInteraction()
+        commonContext().getIsisInteractionTracker().currentInteractionSession()
         .ifPresent(interaction->{
             val stopWatch = _Timing.atSystemNanos(interaction.getLifecycleStartedAtSystemNanos());    
             tookTimingMessage.append(String.format(Locale.US, "... took %.2f seconds", stopWatch.getSeconds()));

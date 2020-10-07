@@ -19,12 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -34,6 +34,10 @@ import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchServi
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public abstract class AutoCompleteFacetAbstract 
 extends FacetAbstract 
 implements AutoCompleteFacet {
@@ -70,23 +74,13 @@ implements AutoCompleteFacet {
             final String search,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ManagedObject resultAdapter =
-                getPublishingServiceInternal().withPublishingSuppressed(
-                        new PublisherDispatchService.Block<ManagedObject>() {
-                    @Override
-                    public ManagedObject exec() {
-                        final Object list = invoke();
-                        return getObjectManager().adapt(list);
-                    }
-
-                    private Object invoke()  {
-                        try {
-                            return repositoryMethod.invoke(getRepository(), search);
-                        } catch (IllegalAccessException | InvocationTargetException e) {
-                            return Collections.emptyList();
-                        }
-                    }
-                });
+        val resultAdapter = getPublisherDispatchService()
+        .withPublishingSuppressed(()->{
+                final Object list = _Reflect.invokeMethodOn(repositoryMethod, getRepository(), search)
+                        .onFailure(e->log.warn("failure while executing auto-complete", e))
+                        .getOrElse(Collections::emptyList);
+                return getObjectManager().adapt(list);
+        });
 
         return ManagedObjects.VisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
                 .collect(Can.toCan());
@@ -97,7 +91,7 @@ implements AutoCompleteFacet {
         return getServiceRegistry().lookupService(repositoryClass).orElse(null);
     }
 
-    private PublisherDispatchService getPublishingServiceInternal() {
+    private PublisherDispatchService getPublisherDispatchService() {
         return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
     }
 

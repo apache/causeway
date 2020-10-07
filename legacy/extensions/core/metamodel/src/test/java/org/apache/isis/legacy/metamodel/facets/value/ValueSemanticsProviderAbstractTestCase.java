@@ -39,7 +39,6 @@ import static org.junit.Assert.fail;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -47,6 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.Encodable
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
@@ -56,7 +56,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Mock protected FacetHolder mockFacetHolder;
     @Mock protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
-    @Mock protected ObjectAdapter mockAdapter;
+    @Mock protected ManagedObject mockAdapter;
     
     protected MetaModelContext metaModelContext;
     
@@ -119,7 +119,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         return parseableFacet;
     }
 
-    protected ObjectAdapter createAdapter(final Object object) {
+    protected ManagedObject createAdapter(final Object object) {
         return mockAdapter;
     }
 

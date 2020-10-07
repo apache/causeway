@@ -45,10 +45,10 @@ import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -216,7 +216,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     // //////////////////////////////////////
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
-        return isisInteractionTracker.currentInteraction()
+        return isisInteractionTracker.currentInteractionSession()
                 .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class))
                 .orElse(null);
     }

@@ -33,7 +33,7 @@ import javax.jdo.listener.StoreLifecycleListener;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 
 public class IsisLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
@@ -96,8 +96,6 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         final Persistable pojo = Utils.persistenceCapableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
             persistenceSession.invokeIsisPersistingCallback(pojo);
-        } else {
-            persistenceSession.enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
         }
     }
 
@@ -113,11 +111,12 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
+        final Persistable pojo = Utils.persistenceCapableFor(event);
+        persistenceSession.enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
     }
 
     @Override
     public void postDirty(InstanceLifecycleEvent event) {
-
         // cannot assert on the frameworks being in agreement, due to the scenario documented
         // in the FrameworkSynchronizer#preDirtyProcessing(...)
         //

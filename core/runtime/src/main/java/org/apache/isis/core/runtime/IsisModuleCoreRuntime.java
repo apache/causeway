@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.events.persistence.TimestampService;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
-import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
-import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.changetracking.AuditerDispatchService;
+import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsService;
 
 @Configuration
 @Import({

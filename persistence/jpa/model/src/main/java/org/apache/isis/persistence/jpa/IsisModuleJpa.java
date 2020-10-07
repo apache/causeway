@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jpa.metamodel.JpaProgrammingModelPlugin;
-import org.apache.isis.persistence.jpa.metamodel.metrics.MetricsServiceForJpa;
 
 @Configuration
 @Import({
@@ -44,7 +43,6 @@ import org.apache.isis.persistence.jpa.metamodel.metrics.MetricsServiceForJpa;
 //        IsisJdoSupportDN5.class,
 //        IsisPlatformTransactionManagerForJdo.class,
 //        JdoPersistenceLifecycleService.class,
-          MetricsServiceForJpa.class,
 //        PersistenceSessionFactory5.class,
 //        JdoMetamodelMenu.class,
 //

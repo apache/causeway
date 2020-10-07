@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.runtimeservices.publish;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,11 +48,10 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedForPublishing;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
@@ -63,14 +62,14 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
-@Log4j2
 @RequiredArgsConstructor
+//@Log4j2
 public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 
     @Inject final List<PublisherService> publisherServices;
     @Inject final ClockService clockService;
     @Inject final UserService userService;
-    @Inject final Provider<ChangedObjectsService> changedObjectsProvider;
+    @Inject final Provider<HasEnlistedForPublishing> changedObjectsProvider;
     @Inject final Provider<InteractionContext> interactionContextProvider;
     @Inject final Provider<MetricsService> metricsServiceProvider;
     
@@ -113,7 +112,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
             final int numberObjectPropertiesModified,
             final Map<ManagedObject, PublishingChangeKind> changeKindByPublishedAdapter) {
 
-        final Interaction interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().getInteraction();
         val uniqueId = interaction.getUniqueId();
 
         if(uniqueId == null) {
@@ -122,8 +121,8 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
         }
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
-        final String userName = userService.getUser().getName();
-        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
+        val userName = userService.getUser().getName();
+        val timestamp = clockService.nowAsJavaSqlTimestamp();
 
         return new PublishedObjectsDefault(
                     uniqueId, nextEventSequence,
@@ -145,12 +144,10 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
 
     private void publishToPublisherServices(final Interaction.Execution<?,?> execution) {
-
         if(isSuppressed()) {
             return;
         }
-
-        for (final PublisherService publisherService : publisherServices) {
+        for (val publisherService : publisherServices) {
             publisherService.publish(execution);
         }
     }
@@ -164,10 +161,10 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
     }
     
     @Override
-    public <T> T withPublishingSuppressed(final Block<T> block) {
+    public <T> T withPublishingSuppressed(final Supplier<T> block) {
         try {
             suppressionRequestCounter.increment();
-            return block.exec();
+            return block.get();
         } finally {
             suppressionRequestCounter.decrement();
         }
