@@ -52,7 +52,7 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
     public PropertyInteraction modifyProperty(
             @NonNull final Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
 
-        chain = chain.leftRemap(property->{
+        chain = chain.mapIfLeft(property->{
             val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));
             return validityVeto.isPresent()
                 ? _Either.right(validityVeto.get()) 

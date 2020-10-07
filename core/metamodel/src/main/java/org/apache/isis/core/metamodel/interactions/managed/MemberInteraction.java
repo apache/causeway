@@ -44,7 +44,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
     }
     
     public H checkVisibility() {
-        chain = chain.leftRemap(property->{
+        chain = chain.mapIfLeft(property->{
             val visibilityVeto = property.checkVisibility();
             return visibilityVeto.isPresent()
                 ? _Either.right(visibilityVeto.get()) 
@@ -54,7 +54,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
     }
     
     public H checkUsability() {
-        chain = chain.leftRemap(property->{
+        chain = chain.mapIfLeft(property->{
             val usablitiyVeto = property.checkUsability();
             return usablitiyVeto.isPresent()
                 ? _Either.right(usablitiyVeto.get()) 
