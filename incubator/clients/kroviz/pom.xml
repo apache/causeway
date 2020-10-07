@@ -79,7 +79,7 @@
             </properties>
         </profile>
         <profile>
-        	<id>skipBrowserTests</id>
+        	<id>!browserTests</id>
 			<activation>
 				<property>
 					<name>skipBrowserTests</name>
@@ -99,6 +99,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>gradle</id>
