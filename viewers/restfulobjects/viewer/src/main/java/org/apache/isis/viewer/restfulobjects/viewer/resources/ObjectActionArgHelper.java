@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.base._Result;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -54,23 +55,23 @@ public class ObjectActionArgHelper {
         val parameters = action.getParameters();
         for (int i = 0; i < jsonArgList.size(); i++) {
             final JsonRepresentation argRepr = jsonArgList.get(i);
-            val paramMeta = parameters.getElseFail(i);
+            final int argIndex = i;
+            val paramMeta = parameters.getElseFail(argIndex);
             val paramSpec = paramMeta.getSpecification();
-            try {
-                if(paramMeta.isOptional() && argRepr == null) {
-                    argAdapters.add(_Either.leftNullable(ManagedObject.empty(paramSpec)));
-                } else {
-                    val argAdapter = new JsonParserHelper(resourceContext, paramSpec)
-                            .objectAdapterFor(argRepr);
-                    argAdapters.add(_Either.left(argAdapter));
-                }
-            } catch (Exception e) {
-                
-                val veto = InteractionVeto.actionParamInvalid(
-                        String.format("exception when parsing paramNr %d [%s]: %s", i, argRepr, e));
-                
-                argAdapters.add(_Either.right(veto));
-            }
+            
+            val objectOrVeto = _Result.of(()->
+                    (paramMeta.isOptional() && argRepr == null) 
+                    ? ManagedObject.empty(paramSpec)
+                    : new JsonParserHelper(resourceContext, paramSpec)
+                            .objectAdapterFor(argRepr))
+            .<_Either<ManagedObject, InteractionVeto>>fold(
+                    _Either::left, 
+                    exception->_Either.right(
+                            InteractionVeto.actionParamInvalid(
+                                    String.format("exception when parsing paramNr %d [%s]: %s", 
+                                            argIndex, argRepr, exception))));
+            
+            argAdapters.add(objectOrVeto);
         }
         return Can.ofCollection(argAdapters);
     }

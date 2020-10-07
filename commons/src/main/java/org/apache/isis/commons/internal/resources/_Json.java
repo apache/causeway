@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.base._Result;
 
 import lombok.val;
 
@@ -73,12 +73,8 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> _Either<T, Exception> tryReadJson(final Class<T> clazz, InputStream content) {
-        try {
-            return _Either.left(readJson(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<T> tryReadJson(final Class<T> clazz, InputStream content) {
+        return _Result.of(()->readJson(clazz, content));
     }
 
     /**
@@ -108,12 +104,8 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> _Either<List<T>, Exception> tryReadJsonList(final Class<T> clazz, InputStream content) {
-        try {
-            return _Either.left(readJsonList(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<List<T>> tryReadJsonList(final Class<T> clazz, InputStream content) {
+        return _Result.of(()->readJsonList(clazz, content));
     }
 
 
@@ -144,12 +136,8 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> _Either<T, Exception> tryReadJson(final Class<T> clazz, String content) {
-        try {
-            return _Either.left(readJson(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<T> tryReadJson(final Class<T> clazz, String content) {
+        return _Result.of(()->readJson(clazz, content));
     }
 
     /**
@@ -179,12 +167,8 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> _Either<List<T>, Exception> tryReadJsonList(final Class<T> clazz, String content) {
-        try {
-            return _Either.left(readJsonList(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<List<T>> tryReadJsonList(final Class<T> clazz, String content) {
+        return _Result.of(()->readJsonList(clazz, content));
     }
 
 
@@ -215,12 +199,8 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> _Either<T, Exception> tryReadJson(final Class<T> clazz, File content) {
-        try {
-            return _Either.left(readJson(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<T> tryReadJson(final Class<T> clazz, File content) {
+        return _Result.of(()->readJson(clazz, content));
     }
 
     /**
@@ -250,12 +230,8 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> _Either<List<T>, Exception> tryReadJsonList(final Class<T> clazz, File content) {
-        try {
-            return _Either.left(readJsonList(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<List<T>> tryReadJsonList(final Class<T> clazz, File content) {
+        return _Result.of(()->readJsonList(clazz, content));
     }
 
     // -- BYTE CONTENT
@@ -285,12 +261,8 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> _Either<T, Exception> tryReadJson(final Class<T> clazz, byte[] content) {
-        try {
-            return _Either.left(readJson(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<T> tryReadJson(final Class<T> clazz, byte[] content) {
+        return _Result.of(()->readJson(clazz, content));
     }
 
     /**
@@ -320,12 +292,8 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> _Either<List<T>, Exception> tryReadJsonList(final Class<T> clazz, byte[] content) {
-        try {
-            return _Either.left(readJsonList(clazz, content));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<List<T>> tryReadJsonList(final Class<T> clazz, byte[] content) {
+        return _Result.of(()->readJsonList(clazz, content));
     }
     
     // -- WRITING
@@ -341,20 +309,12 @@ public class _Json {
         return toString(objectMapper, pojo);
     }
     
-    public static <T> _Either<String, Exception> tryToString(ObjectMapper objectMapper, Object pojo) {
-        try {
-            return _Either.left(toString(objectMapper, pojo));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<String> tryToString(ObjectMapper objectMapper, Object pojo) {
+        return _Result.of(()->toString(objectMapper, pojo));
     }
     
-    public static <T> _Either<String, Exception> tryToString(Object pojo) {
-        try {
-            return _Either.left(toString(pojo));
-        } catch (Exception e) {
-            return _Either.right(e);
-        }
+    public static <T> _Result<String> tryToString(Object pojo) {
+        return _Result.of(()->toString(pojo));
     }
 
 }
