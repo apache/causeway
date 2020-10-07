@@ -479,7 +479,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.2.0</version>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -748,10 +748,9 @@ under the License.
 							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
 							
 							 <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
-							 <!-- [ahuber] duplicates the above, hence breaks the build I think -->
-<!-- 							<supplementalModels> -->
-<!-- 								<supplementalModel>supplemental-models.xml</supplementalModel> -->
-<!-- 							</supplementalModels> -->
+							<supplementalModels>
+								<supplementalModel>supplemental-models.xml</supplementalModel>
+							</supplementalModels>
 							<resourceBundles>
 								<resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
 							</resourceBundles>
