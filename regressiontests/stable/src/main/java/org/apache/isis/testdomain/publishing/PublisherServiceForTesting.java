@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.extern.log4j.Log4j2;
@@ -42,20 +43,26 @@ public class PublisherServiceForTesting implements PublisherService {
 
     @Override
     public void publish(Execution<?, ?> execution) {
-        System.err.println("!!! writing execution");
+        _Probe.errOut("PUBLISH EXECUTION %s", execution);
         kvStore.put(this, "execution", 999);
     }
 
     @Override
     public void publish(PublishedObjects publishedObjects) {
         
-        System.err.println("!!! writing objects");
+        _Probe.errOut("PUBLISH OBJECTS %s", publishedObjects);
+        
+        kvStore.put(this, "uuid", publishedObjects.getUniqueId().toString());
+        kvStore.put(this, "user", publishedObjects.getUsername());
         
         kvStore.put(this, "created", publishedObjects.getNumberCreated());
         kvStore.put(this, "deleted", publishedObjects.getNumberDeleted());
         kvStore.put(this, "loaded", publishedObjects.getNumberLoaded());
         kvStore.put(this, "updated", publishedObjects.getNumberUpdated());
         kvStore.put(this, "modified", publishedObjects.getNumberPropertiesModified());
+        
+        kvStore.put(this, "dto", publishedObjects.getDto());
+        
     }
 
 }

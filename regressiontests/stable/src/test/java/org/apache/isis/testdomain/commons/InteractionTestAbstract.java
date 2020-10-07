@@ -20,8 +20,10 @@ package org.apache.isis.testdomain.commons;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -36,6 +38,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
@@ -43,6 +46,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsService;
+import org.apache.isis.testdomain.auditing.AuditerServiceForTesting;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
@@ -180,5 +184,84 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
         return InteractionBoundaryProbe.assertTransactional(kvStoreForTesting, supplier);
     }
     
+    // -- ASSERTIONS (AUDITING)
+    
+    protected void assertEmptyAudits() {
+        val audits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting);
+        assertTrue(audits.isEmpty());
+    }
+
+    protected void assertNoChangedObjectsPending() {
+        // previous transaction has committed, so ChangedObjectsService should have cleared its data
+        // however, this call has side-effects, it locks current transaction's capacity of further enlisting changes
+        // missing a good solution on how to test this yet
+        // assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
+    }
+    
+    protected void assertJdoBookCreateAudits() {
+
+        val expectedAudits = _Sets.ofSorted(
+                "Jdo Book/author: '[NEW]' -> 'Sample Author'",
+                "Jdo Book/price: '[NEW]' -> '99.0'",
+                "Jdo Book/publisher: '[NEW]' -> 'Sample Publisher'",
+                "Jdo Book/isbn: '[NEW]' -> 'Sample ISBN'",
+                "Jdo Book/description: '[NEW]' -> 'A sample book for testing.'",
+                "Jdo Book/name: '[NEW]' -> 'Sample Book'",
+                "Jdo Inventory/name: '[NEW]' -> 'Sample Inventory'");
+
+        val actualAudits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting)
+                .stream()
+                .collect(Collectors.toCollection(TreeSet::new));
+
+        assertEquals(expectedAudits, actualAudits);
+
+        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
+
+    }
+
+    protected void assertJdoBookDeleteAudits() {
+
+        val expectedAudits = _Sets.ofSorted(
+                "Jdo Book/author: 'Sample Author' -> '[DELETED]'", 
+                "Jdo Book/description: 'A sample book for testing.' -> '[DELETED]'",
+                "Jdo Book/isbn: 'Sample ISBN' -> '[DELETED]'",
+                "Jdo Book/name: 'Sample Book' -> '[DELETED]'", 
+                "Jdo Book/price: '12.0' -> '[DELETED]'",
+                "Jdo Book/publisher: 'Sample Publisher' -> '[DELETED]'",
+                "Jdo Inventory/name: 'Sample Inventory' -> '[DELETED]'");
+
+        val actualAudits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting)
+                .stream()
+                .collect(Collectors.toCollection(TreeSet::new));
+
+        assertEquals(expectedAudits, actualAudits);
+
+        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
+
+    }
+
+    protected void assertJdoBookPriceChangeAudit() {
+
+        val expectedAudits = _Sets.ofSorted(
+                "Jdo Book/price: '99.0' -> '12.0'");
+
+        val actualAudits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting)
+                .stream()
+                .collect(Collectors.toCollection(TreeSet::new));
+
+        assertEquals(expectedAudits, actualAudits);
+
+        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
+    }
+
+    // -- UTILTITIES 
+    
+    protected void dumpAudits() {
+        val audits = AuditerServiceForTesting.getAuditEntries(kvStoreForTesting);
+        System.err.println("==AUDITS==");
+        audits.forEach(System.err::println);
+        System.err.println("==========");
+    }
+
     
 }
