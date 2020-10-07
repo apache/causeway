@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -162,10 +163,10 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
     }
     
     @Override
-    public <T> T withPublishingSuppressed(final Block<T> block) {
+    public <T> T withPublishingSuppressed(final Supplier<T> block) {
         try {
             suppressionRequestCounter.increment();
-            return block.exec();
+            return block.get();
         } finally {
             suppressionRequestCounter.decrement();
         }

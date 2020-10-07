@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.publishing;
 
+import java.util.function.Supplier;
+
 import org.apache.isis.applib.services.iactn.Interaction;
 
 public interface PublisherDispatchService {
@@ -28,13 +30,9 @@ public interface PublisherDispatchService {
 
     void publishProperty(Interaction.Execution<?,?> execution);
 
-    interface Block<T> {
-        T exec();
-    }
-
     /**
      * Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.
      */
-    <T> T withPublishingSuppressed(final Block<T> block);
+    <T> T withPublishingSuppressed(Supplier<T> block);
 
 }

@@ -49,18 +49,15 @@ import lombok.val;
  * By now we do this for collection parameter types List, Set, SortedSet, Collection and Arrays.
  * </p>
  */
-public class CanonicalParameterUtil {
+public final class CanonicalParameterUtil {
 
-    public static <T> T construct(Constructor<T> constructor, Object[] executionParameters)
-            throws IllegalAccessException, InvocationTargetException, InstantiationException {
-
+    public static <T> T construct(Constructor<T> constructor, Object[] executionParameters) {
         val adaptedExecutionParameters = preprocess(constructor, executionParameters);
-        try {
-            // this utility supports effective private constructors as well
-            return _Reflect.invokeConstructor(constructor, adaptedExecutionParameters);
-        } catch (IllegalArgumentException e) {
-            throw verboseArgumentException(constructor.getParameterTypes(), adaptedExecutionParameters, e);
-        }
+        
+        // supports effective private constructors as well
+        return _Reflect.invokeConstructor(constructor, adaptedExecutionParameters)
+        .mapException(ex->toVerboseException(constructor.getParameterTypes(), adaptedExecutionParameters, ex))
+        .getOrThrow();
     }
     
     public static Object invoke(Method method, Object targetPojo, Object[] executionParameters)
@@ -68,11 +65,10 @@ public class CanonicalParameterUtil {
 
         val adaptedExecutionParameters = preprocess(method, executionParameters);
 
-        try {
-            return method.invoke(targetPojo, adaptedExecutionParameters);
-        } catch (IllegalArgumentException e) {
-            throw verboseArgumentException(method.getParameterTypes(), adaptedExecutionParameters, e);
-        }
+        // supports effective private methods as well
+        return _Reflect.invokeMethodOn(method, targetPojo, adaptedExecutionParameters)
+        .mapException(ex->toVerboseException(method.getParameterTypes(), adaptedExecutionParameters, ex))
+        .getNullableOrThrow();
     }
     
     private static Object[] preprocess(Executable executable, Object[] executionParameters) {
@@ -99,7 +95,6 @@ public class CanonicalParameterUtil {
      * @param parameterType
      * @return
      */
-
     private static Object adapt(Object obj, Class<?> parameterType) {
 
         if(obj==null) {
@@ -142,10 +137,10 @@ public class CanonicalParameterUtil {
         return obj;
     }
 
-    private static IllegalArgumentException verboseArgumentException(
+    private static IllegalArgumentException toVerboseException(
             Class<?>[] parameterTypes, 
             Object[] adaptedExecutionParameters,
-            IllegalArgumentException e) {
+            Throwable e) {
 
         val sb = new StringBuilder();
         

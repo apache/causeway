@@ -29,7 +29,6 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -48,6 +47,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -469,38 +469,43 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
     
-    public static Object invokeMethodOn(
+    
+    public static _Result<Object> invokeMethodOn(
             @NonNull final Method method, 
             @NonNull final Object target, 
-            final Object... args) throws IllegalAccessException, InvocationTargetException {
+            final Object... args) {
         
         /*sonar-ignore-on*/
-        if(method.isAccessible()) {
-            return method.invoke(target, args);
-        }
-        try {
-            method.setAccessible(true);
-            return method.invoke(target, args);
-        } finally {
-            method.setAccessible(false);
-        }
+        return _Result.ofNullable(()->{
+            if(method.isAccessible()) {
+                return method.invoke(target, args);
+            }
+            try {
+                method.setAccessible(true);
+                return method.invoke(target, args);
+            } finally {
+                method.setAccessible(false);
+            }
+        });
         /*sonar-ignore-off*/
     }
     
-    public static <T> T invokeConstructor(
+    public static <T> _Result<T> invokeConstructor(
             @NonNull final Constructor<T> constructor, 
-            final Object... args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            final Object... args) {
         
         /*sonar-ignore-on*/
-        if(constructor.isAccessible()) {
-            return constructor.newInstance(args);
-        }
-        try {
-            constructor.setAccessible(true);
-            return constructor.newInstance(args);
-        } finally {
-            constructor.setAccessible(false);
-        }
+        return _Result.of(()->{
+            if(constructor.isAccessible()) {
+                return constructor.newInstance(args);
+            }
+            try {
+                constructor.setAccessible(true);
+                return constructor.newInstance(args);
+            } finally {
+                constructor.setAccessible(false);
+            }
+        });
         /*sonar-ignore-off*/
     }
     
