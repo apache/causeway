@@ -23,17 +23,15 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.resources._Xml;
+import org.apache.isis.commons.internal.resources._Xml.ReadOptions;
+import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -53,57 +51,45 @@ public class JaxbUtil {
     // -- READ
 
     public static <T> T fromXml(
-            final Reader reader,
-            final Class<T> dtoClass) {
-        Unmarshaller un = null;
-        try {
-            un = jaxbContextFor(dtoClass).createUnmarshaller();
-            return _Casts.uncheckedCast(un.unmarshal(reader));
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
+            final @NonNull Reader reader,
+            final @NonNull Class<T> dtoClass) {
+        
+        return _Xml.readXml(dtoClass, reader, ReadOptions.builder()
+                .useContextCache(true)
+                .build());
     }
 
     public static <T> T fromXml(
-            final Class<?> contextClass,
-            final String resourceName,
-            final Class<T> dtoClass) throws IOException {
+            final @NonNull Class<?> contextClass,
+            final @NonNull String resourceName,
+            final @NonNull Class<T> dtoClass) throws IOException {
 
-        val s = _Resources.loadAsStringUtf8(contextClass, resourceName);
-        return fromXml(new StringReader(s), dtoClass);
+        val xmlString = _Resources.loadAsStringUtf8(contextClass, resourceName);
+        return fromXml(new StringReader(xmlString), dtoClass);
     }
 
     // -- WRITE
 
-    public static <T> String toXml(final T dto) {
+    public static <T> String toXml(final @NonNull T dto) {
         final CharArrayWriter caw = new CharArrayWriter();
         toXml(dto, caw);
         return caw.toString();
     }
 
-    public static <T> void toXml(final T dto, final Writer writer) {
-        try {
-            final Class<?> aClass = dto.getClass();
-            final Marshaller m = jaxbContextFor(aClass).createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            m.marshal(dto, writer);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
+    public static <T> void toXml(
+            final @NonNull T dto, 
+            final @NonNull Writer writer) {
+        _Xml.writeXml(dto, writer, WriteOptions.builder()
+                .useContextCache(true)
+                .formattedOutput(true)
+                .build());
     }
-
-    private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();
-
-    public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
-        return jaxbContextByClass.computeIfAbsent(dtoClass, JaxbUtil::contextOf );
-    }
-
-    private static <T> JAXBContext contextOf(final Class<T> dtoClass) {
-        try {
-            return JAXBContext.newInstance(dtoClass);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
+    
+    // -- CACHING
+    
+    public static JAXBContext jaxbContextFor(final @NonNull Class<?> dtoClass) {
+        val useCache = true;
+        return _Xml.jaxbContextFor(dtoClass, useCache);
     }
 
 }

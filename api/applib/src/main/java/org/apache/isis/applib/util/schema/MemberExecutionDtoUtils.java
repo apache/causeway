@@ -18,59 +18,24 @@
  */
 package org.apache.isis.applib.util.schema;
 
-import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.isis.applib.util.JaxbUtil;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.resources._Xml;
+import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 import org.apache.isis.schema.common.v2.DifferenceDto;
 import org.apache.isis.schema.common.v2.PeriodDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.MetricsDto;
 import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 
+import lombok.NonNull;
+import lombok.val;
+
 public final class MemberExecutionDtoUtils {
 
     public static <T extends MemberExecutionDto> T clone(final T dto) {
-        final Class<T> aClass = _Casts.uncheckedCast(dto.getClass());
-        return clone(dto, aClass);
-    }
-
-    private static <T> T clone(final T dto, final Class<T> dtoClass) {
-        try {
-            JAXBContext jaxbContext = jaxbContextFor(dtoClass);
-
-            final Marshaller marshaller = jaxbContext.createMarshaller();
-
-            final QName name = new QName("", dtoClass.getSimpleName());
-            final JAXBElement<T> jaxbElement = new JAXBElement<>(name, dtoClass, null, dto);
-            final StringWriter stringWriter = new StringWriter();
-
-            marshaller.marshal(jaxbElement, stringWriter);
-
-            final StringReader reader = new StringReader(stringWriter.toString());
-
-            final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-            final JAXBElement<T> root = unmarshaller.unmarshal(new StreamSource(reader), dtoClass);
-
-            return root.getValue();
-
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
-        return JaxbUtil.jaxbContextFor(dtoClass);
+        return _Xml.clone(dto);
     }
 
     public static MetricsDto metricsFor(final MemberExecutionDto executionDto) {
@@ -116,4 +81,23 @@ public final class MemberExecutionDtoUtils {
         }
         return differenceDto;
     }
+    
+    public static <T extends MemberExecutionDto> String toXml(final @NonNull T dto) {
+        val writer = new StringWriter();
+        toXml(dto, writer);
+        return writer.toString();
+    }
+
+    public static <T extends MemberExecutionDto> void toXml(
+            final @NonNull T dto, 
+            final @NonNull Writer writer) {
+        
+        _Xml.writeXml(dto, writer, WriteOptions.builder()
+                .useContextCache(true)
+                .formattedOutput(true)
+                .allowMissingRootElement(true)
+                .build());
+    }
+
+    
 }
