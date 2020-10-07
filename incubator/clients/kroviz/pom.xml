@@ -79,10 +79,10 @@
             </properties>
         </profile>
         <profile>
-        	<id>!browserTests</id>
+        	<id>skipBrowserTests</id>
 			<activation>
 				<property>
-					<name>skipBrowserTests</name>
+					<name>!browserTests</name>
 				</property>
 			</activation>
 			<properties>
