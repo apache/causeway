@@ -43,11 +43,10 @@ import lombok.val;
  * <h1>- internal use only -</h1>
  * <p>
  * Utilities for the XML format.
- * </p>
  * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package!
+ * <br/>
  * These may be changed or removed without notice!
- * </p>
  * @since 2.0
  */
 public final class _Xml {

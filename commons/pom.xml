@@ -53,6 +53,48 @@
 		</resources>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>jdk11-supplemental</id>
+			<activation>
+				<jdk>[11,)</jdk>
+			</activation>
+
+			<!-- These dependencies are required in order to build on jdk11 -->
+			<dependencies>
+				<dependency>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</dependency>
+			</dependencies>
+			<build>
+				<pluginManagement>
+
+					<plugins>
+						<plugin>
+							<groupId>org.jvnet.jaxb2.maven2</groupId>
+							<artifactId>maven-jaxb2-plugin</artifactId>
+							<version>0.14.0</version>
+							<configuration>
+								<removeOldOutput>true</removeOldOutput>
+								<episode>true</episode>
+							</configuration>
+						</plugin>
+					</plugins>
+
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+
 	<dependencies>
 
 		<!-- JEE API -->
@@ -105,8 +147,7 @@
 
 		<!-- Add Log4j2 Dependency, as a replacement for Spring's default 'logback'. 
 			This requires for the 'spring-boot-starter' to exclude the default logging 
-			artifact 'org.springframework.boot:spring-boot-starter-logging' 
-			see https://www.callicoder.com/spring-boot-log4j-2-example/ -->
+			artifact 'org.springframework.boot:spring-boot-starter-logging' see https://www.callicoder.com/spring-boot-log4j-2-example/ -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
@@ -140,9 +181,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-params</artifactId>
-		    <scope>test</scope>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
