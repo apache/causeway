@@ -30,8 +30,11 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
+import com.sun.xml.bind.v2.runtime.IllegalAnnotationsException;
+
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -146,7 +149,11 @@ public final class _Xml {
 
     @SneakyThrows
     private static <T> JAXBContext contextOf(final Class<T> type) {
-        return JAXBContext.newInstance(type);
+        try {
+            return JAXBContext.newInstance(type);
+        } catch (IllegalAnnotationsException e) {
+            throw _Exceptions.unrecoverableFormatted("%s", e.getErrors(), e);
+        }
     }
 
 }

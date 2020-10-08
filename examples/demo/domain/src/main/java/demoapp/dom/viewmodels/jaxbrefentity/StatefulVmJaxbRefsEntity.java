@@ -59,7 +59,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
     @XmlTransient @Inject 
-    private transient ChildJdoEntities childJdoEntities;
+    private ChildJdoEntities childJdoEntities;
     
     public String title() {
         return String.format("%s; %s children", getMessage(), getChildren().size());

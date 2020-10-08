@@ -460,7 +460,7 @@ implements ImperativeFacet {
                     }
                 };
 
-                return ThrowableExtensions.handleInvocationException(e, method.getName(), recovery);
+                return ThrowableExtensions.handleInvocationException(e, method.toString(), recovery);
             }
         }
     }
