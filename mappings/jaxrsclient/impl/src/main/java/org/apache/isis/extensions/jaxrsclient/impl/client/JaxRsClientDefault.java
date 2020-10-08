@@ -32,8 +32,7 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsClient;
 import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsResponse;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.val;
 
 public class JaxRsClientDefault implements JaxRsClient {
 
@@ -124,14 +123,14 @@ public class JaxRsClientDefault implements JaxRsClient {
     }
 
     private MediaType mediaTypeFor(final Class<?> dtoClass, final String reprType) {
-        // application/xml;profile="urn~org.restfulobjects~repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
-        return new MediaType("application", "xml",
-                new HashMap<String,String>() {{
-                    put("profile", "urn:org.restfulobjects:repr-types/" + reprType);
-                    put("x-ro-domain-type", dtoClass.getName());
-                }});
+        
+     // application/xml;profile="urn~org.restfulobjects~repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
+        val parameters = new HashMap<String,String>();
+        parameters.put("profile", "urn:org.restfulobjects:repr-types/" + reprType);
+        parameters.put("x-ro-domain-type", dtoClass.getName());
+        
+        return new MediaType("application", "xml", parameters);
     }
-
 
     private static String encode(final String username, final String password) {
         return org.apache.cxf.common.util.Base64Utility.encode(asBytes(username, password));
