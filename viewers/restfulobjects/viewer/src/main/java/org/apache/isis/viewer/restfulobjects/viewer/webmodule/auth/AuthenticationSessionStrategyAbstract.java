@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.val;
@@ -40,6 +41,9 @@ public abstract class AuthenticationSessionStrategyAbstract implements Authentic
         if(authenticationManager==null) {
             val servletContext = getServletContext(servletRequest);
             val webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            if(webApplicationContext==null) {
+                throw _Exceptions.illegalState("Requires a WebApplicationContext (Spring).");
+            }
             authenticationManager = webApplicationContext.getBean(AuthenticationManager.class);
         }
         return authenticationManager;
