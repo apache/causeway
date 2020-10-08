@@ -18,13 +18,16 @@
  */
 package org.apache.isis.core.runtime.session;
 
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * 
@@ -45,7 +48,7 @@ public class IsisRequestCycle {
 
         isisInteractionFactory.openInteraction(authenticationSession);
 
-        txStatus = transactionTemplate.getTransactionManager().getTransaction(null);
+        txStatus = getTransactionManager().getTransaction(null);
 
     }
 
@@ -66,12 +69,22 @@ public class IsisRequestCycle {
 
         try {
 
-            transactionTemplate.getTransactionManager().commit(txStatus);
+            getTransactionManager().commit(txStatus);
 
         } finally {
             isisInteractionFactory.closeSessionStack();
         }
 
+    }
+    
+    // -- HELPER
+    
+    private PlatformTransactionManager getTransactionManager() {
+        val txMan = transactionTemplate.getTransactionManager();
+        if(txMan == null) {
+            throw _Exceptions.illegalState("IsisRequestCycle needs a PlatformTransactionManager (Spring)");
+        }
+        return txMan;
     }
 
 

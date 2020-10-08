@@ -1192,12 +1192,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1287,12 +1287,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1430,7 +1430,7 @@ _Dependencies_
 |Apache Isis Val - Asciidoctor (ui)
 |_Dependencies_
 
-* com.github.jnr:jnr-constants:jar:0.9.11
+* com.github.jnr:jnr-constants:jar:0.10.0
 * com.github.jnr:jnr-enxio:jar:0.20
 * com.github.jnr:jnr-posix:jar:3.0.49
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
@@ -3027,7 +3027,7 @@ _Dependencies_
 _Dependencies_
 
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
-* org.apache.isis.extensions:isis-extensions-secman-api:jar:2.0.0-SNAPSHOT
+* org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
 
 
 

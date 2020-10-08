@@ -36,7 +36,12 @@ public interface TransactionScopeListener {
     default void onTransactionStarted() {
         // default: do nothing
     }
+
+    /** triggered during the pre-commit phase in a transaction*/
+    default void onTransactionEnding() {
+        // default: do nothing
+    }
     
-    void onTransactionEnded();
+    
 }
 // end::refguide[]

@@ -76,7 +76,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
         // each test runs in its own interaction context (check)
-        val testRunNr = kvStoreForTesting.incrementCounter(ChangedObjectsTest.class, "test-run");
+        val testRunNr = (long)kvStoreForTesting.incrementCounter(ChangedObjectsTest.class, "test-run");
         assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
 
         assertJdoBookCreateAudits();

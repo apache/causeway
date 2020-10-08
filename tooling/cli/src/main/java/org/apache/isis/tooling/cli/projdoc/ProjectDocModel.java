@@ -86,8 +86,11 @@ public class ProjectDocModel {
         val doc = doc();
         doc.setTitle("System Overview");
 
-        val block = block(doc);
-        block.setSource(projectDocConfig.getDescription());
+        _Strings.nonEmpty(projectDocConfig.getLicenseHeader())
+        .ifPresent(block(doc)::setSource);
+        
+        _Strings.nonEmpty(projectDocConfig.getDescription())
+        .ifPresent(block(doc)::setSource);
 
         projectDocConfig.getArtifactGroups().forEach((section, groupId)->{
             createSection(doc, section, groupId);
