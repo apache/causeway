@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.commanddto.conmap;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
@@ -46,8 +47,8 @@ import lombok.val;
 @Qualifier("CommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
-    @Override
-    public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
+    @Override @Nullable
+    public Object map(final Object object, final List<MediaType> acceptableMediaTypes) {
         final boolean supported = Util.isSupported(CommandDto.class, acceptableMediaTypes);
         if(!supported) {
             return null;
@@ -56,12 +57,14 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         return asProcessedDto(object);
     }
 
+    @Nullable
     CommandDto asProcessedDto(final Object object) {
         val commandDto = asCommandDto(object);
         return asProcessedDto(object, commandDto);
     }
 
-    private CommandDto asCommandDto(Object object) {
+    @Nullable
+    private CommandDto asCommandDto(final Object object) {
         if(object instanceof CommandDto) {
             return (CommandDto) object;
         }
@@ -71,10 +74,15 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         return null;
     }
 
-    private CommandDto asProcessedDto(final Object domainObject, CommandDto commandDto) {
+    @Nullable
+    private CommandDto asProcessedDto(final Object domainObject, @Nullable CommandDto commandDto) {
 
+        if(commandDto == null) {
+            return null;
+        }
+        
         // global processors
-        for (final CommandDtoProcessorService commandDtoProcessorService : commandDtoProcessorServices) {
+        for (val commandDtoProcessorService : commandDtoProcessorServices) {
             commandDto = commandDtoProcessorService.process(domainObject, commandDto);
             if(commandDto == null) {
                 // any processor could return null, effectively breaking the chain.

@@ -1750,7 +1750,7 @@ _Dependencies_
 
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
-* org.webjars:font-awesome:jar:5.13.0
+* org.webjars:font-awesome:jar:5.15.0
 
 
 

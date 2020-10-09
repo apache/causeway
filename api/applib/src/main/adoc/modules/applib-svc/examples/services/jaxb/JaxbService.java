@@ -18,13 +18,9 @@
  */
 package org.apache.isis.applib.services.jaxb;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.JAXBContext;
@@ -32,34 +28,37 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.isis.applib.ApplicationException;
-import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
-import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.resources._Xml;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
 
 // tag::refguide[]
 public interface JaxbService {
 
-    Object fromXml(                                     // <.>
+    default Object fromXml(                             // <.>
             JAXBContext jaxbContext,
-            String xml);
+            String xml) {
+        return fromXml(jaxbContext, xml, null);
+    }
 
     Object fromXml(                                     // <.>
             JAXBContext jaxbContext,
             String xml,
-            Map<String,Object> unmarshallerProperties);
+            @Nullable Map<String,Object> unmarshallerProperties);
 
     // end::refguide[]
     /**
      * As {@link #fromXml(JAXBContext, String)}, but downcast to a specific type.
      */
     // tag::refguide[]
-    <T> T fromXml(Class<T> domainClass, String xml);    // <.>
+    default <T> T fromXml(Class<T> domainClass, String xml) { // <.>
+        return fromXml(domainClass, xml, null);
+    }
 
     // end::refguide[]
     /**
@@ -69,13 +68,15 @@ public interface JaxbService {
     <T> T fromXml(                                      // <.>
             Class<T> domainClass,
             String xml,
-            Map<String,Object> unmarshallerProperties);
+            @Nullable Map<String,Object> unmarshallerProperties);
 
-    String toXml(final Object domainObject);            // <.>
-
+    default String toXml(Object domainObject) {         // <.>
+        return toXml(domainObject, null);
+    }
+        
     String toXml(                                       // <.>
-            final Object domainObject,
-            Map<String,Object> marshallerProperties);
+            Object domainObject,
+            @Nullable Map<String,Object> marshallerProperties);
 
     // end::refguide[]
     /**
@@ -110,137 +111,83 @@ public interface JaxbService {
         // tag::refguide[]
     }
 
-    Map<String, String> toXsd(                          // <.>
-            final Object domainObject,
-            final IsisSchemas isisSchemas);
+    Map<String, String> toXsd(                 // <.>
+            Object domainObject, 
+            IsisSchemas isisSchemas);
 
     // end::refguide[]
     class Simple implements JaxbService {
 
-        @Override
-        public Object fromXml(final JAXBContext jaxbContext, final String xml) {
-            return fromXml(jaxbContext, xml, _Maps.newHashMap());
-        }
-
-        @Override
-        public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
+        @Override @SneakyThrows @Nullable
+        public Object fromXml(
+                final @NonNull JAXBContext jaxbContext, 
+                final @Nullable String xml, 
+                final @Nullable Map<String, Object> unmarshallerProperties) {
             try {
-
                 return internalFromXml(jaxbContext, xml, unmarshallerProperties);
-
-            } catch (final JAXBException ex) {
-                throw new NonRecoverableException("Error unmarshalling XML", ex);
+            } catch (Exception e) {
+                throw _Xml.verbose("unmarshalling XML", null, e);
             }
         }
 
-        protected Object internalFromXml(
-                @NonNull final JAXBContext jaxbContext,
-                @Nullable final String xml,
-                @Nullable final Map<String, Object> unmarshallerProperties) throws JAXBException {
+        @Override @SneakyThrows @Nullable
+        public <T> T fromXml(
+                final @NonNull Class<T> domainClass, 
+                final @Nullable String xml, 
+                final @Nullable Map<String, Object> unmarshallerProperties) {
             
-            if(xml==null) {
-                return null;
-            }
-            
-            final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-            if(unmarshallerProperties!=null) {
-                for (Map.Entry<String, Object> entry : unmarshallerProperties.entrySet()) {
-                    unmarshaller.setProperty(entry.getKey(), entry.getValue());
-                }
-            }
-
-            configure(unmarshaller);
-
-            return unmarshaller.unmarshal(new StringReader(xml));
-        }
-
-        @Override
-        public <T> T fromXml(final Class<T> domainClass, final String xml) {
-            return fromXml(domainClass, xml, _Maps.newHashMap());
-        }
-
-        @Override
-        public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
-            final JAXBContext context = jaxbContextFor(domainClass);
-            return _Casts.uncheckedCast(fromXml(context, xml, unmarshallerProperties));
-        }
-
-        private static <T> JAXBContext jaxbContextFor(final Class<T> clazz)  {
             try {
-                return JaxbUtil.jaxbContextFor(clazz);
-            } catch (RuntimeException e) {
-                throw new NonRecoverableException("Error obtaining JAXBContext for class '" + clazz + "'", e.getCause());
+                val jaxbContext = jaxbContextForClass(domainClass);
+                return _Casts.uncheckedCast(internalFromXml(jaxbContext, xml, unmarshallerProperties));
+            } catch (Exception e) {
+                throw _Xml.verbose("unmarshalling XML", domainClass, e);
             }
         }
 
-        @Override
-        public String toXml(final Object domainObject) {
-            return toXml(domainObject, _Maps.newHashMap());
-        }
+        @Override @SneakyThrows
+        public String toXml(
+                final @NonNull Object domainObject, 
+                final @Nullable Map<String, Object> marshallerProperties)  {
 
-        @Override
-        public String toXml(final Object domainObject, final Map<String, Object> marshallerProperties)  {
-
-            final Class<?> domainClass = domainObject.getClass();
-            final JAXBContext context = jaxbContextFor(domainObject);
+            val domainClass = domainObject.getClass();
+            val jaxbContext = jaxbContextForObject(domainObject);
             try {
-                final Marshaller marshaller = context.createMarshaller();
+                val marshaller = jaxbContext.createMarshaller();
 
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                for (Map.Entry<String, Object> entry : marshallerProperties.entrySet()) {
-                    marshaller.setProperty(entry.getKey(), entry.getValue());
+                if(!_NullSafe.isEmpty(marshallerProperties)) {
+                    for (val entry : marshallerProperties.entrySet()) {
+                        marshaller.setProperty(entry.getKey(), entry.getValue());
+                    }
                 }
 
                 configure(marshaller);
 
-                final StringWriter sw = new StringWriter();
-                marshaller.marshal(domainObject, sw);
-                final String xml = sw.toString();
+                val writer = new StringWriter();
+                marshaller.marshal(domainObject, writer);
+                val xml = writer.toString();
 
                 return xml;
 
-            } catch (final JAXBException ex) {
-                final Class<? extends JAXBException> exClass = ex.getClass();
-
-                final String name = exClass.getName();
-                if(name.equals("com.sun.xml.bind.v2.runtime.IllegalAnnotationsException")) {
-                    // report a better error if possible
-                    // this is done reflectively so as to not have to bring in a new Maven dependency
-                    List<? extends Exception> errors = null;
-                    String annotationExceptionMessages = null;
-                    try {
-                        final Method getErrorsMethod = exClass.getMethod("getErrors");
-                        errors = _Casts.uncheckedCast(getErrorsMethod.invoke(ex));
-
-                        annotationExceptionMessages = ": " +
-                                _NullSafe.stream(errors)
-                        .map(Exception::getMessage)
-                        .collect(Collectors.joining("; "));
-
-                    } catch (Exception e) {
-                        // fall through if we hit any snags, and instead throw the more generic error message.
-                    }
-                    if(errors != null) {
-                        throw new NonRecoverableException(
-                                "Error marshalling domain object to XML, due to illegal annotations on domain object class '"
-                                        + domainClass.getName() + "'; " + errors.size() + " error"
-                                        + (errors.size() == 1? "": "s")
-                                        + " reported" + (!errors
-                                                .isEmpty() ? annotationExceptionMessages : ""), ex);
-                    }
-                }
-
-                throw new NonRecoverableException("Error marshalling domain object to XML; domain object class is '" + domainClass.getName() + "'", ex);
+            } catch (Exception e) {
+                throw _Xml.verbose("marshalling domain object to XML", domainClass, e);
             }
         }
 
         /**
          * Optional hook
          */
-        protected JAXBContext jaxbContextFor(final Object domainObject) {
-            final Class<?> domainClass = domainObject.getClass();
-            return jaxbContextFor(domainClass);
+        protected JAXBContext jaxbContextForObject(final @NonNull Object domainObject) {
+            val useCache = true;
+            return _Xml.jaxbContextFor(domainObject.getClass(), useCache);
+        }
+        
+        /**
+         * Optional hook
+         */
+        protected JAXBContext jaxbContextForClass(final @NonNull Class<?> domainObjectClass) {
+            val useCache = true;
+            return _Xml.jaxbContextFor(domainObjectClass, useCache);
         }
 
         /**
@@ -255,21 +202,41 @@ public interface JaxbService {
         protected void configure(final Marshaller marshaller) {
         }
 
-        @Override
-        public Map<String,String> toXsd(final Object domainObject, final IsisSchemas isisSchemas) {
-
-            try {
-                final Class<?> domainClass = domainObject.getClass();
-                final JAXBContext context = jaxbContextFor(domainClass);
-
-                final CatalogingSchemaOutputResolver outputResolver = new CatalogingSchemaOutputResolver(isisSchemas);
-                context.generateSchema(outputResolver);
-
-                return outputResolver.asMap();
-            } catch (final IOException ex) {
-                throw new ApplicationException(ex);
+        @Nullable
+        protected Object internalFromXml(
+                final @NonNull JAXBContext jaxbContext,
+                final @Nullable String xml,
+                final @Nullable Map<String, Object> unmarshallerProperties) throws JAXBException {
+            
+            if(xml==null) {
+                return null;
             }
+            
+            val unmarshaller = jaxbContext.createUnmarshaller();
+            if(!_NullSafe.isEmpty(unmarshallerProperties)) {
+                for (val entry : unmarshallerProperties.entrySet()) {
+                    unmarshaller.setProperty(entry.getKey(), entry.getValue());
+                }
+            }
+            configure(unmarshaller);
+
+            val pojo = unmarshaller.unmarshal(new StringReader(xml));
+            return pojo;
         }
+        
+        @Override @SneakyThrows
+        public Map<String,String> toXsd(
+                final @NonNull Object domainObject, 
+                final @NonNull IsisSchemas isisSchemas) {
+
+            val jaxbContext = jaxbContextForObject(domainObject);
+
+            val outputResolver = new CatalogingSchemaOutputResolver(isisSchemas);
+            jaxbContext.generateSchema(outputResolver);
+
+            return outputResolver.asMap();
+        }
+        
     }
 
     // tag::refguide[]
