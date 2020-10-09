@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -64,7 +65,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * A persistent representation of a {@link Command}.
@@ -251,7 +251,7 @@ import lombok.extern.log4j.Log4j2;
         cssClassUiEvent = CommandJdo.CssClassUiEvent.class,
         layoutUiEvent = CommandJdo.LayoutUiEvent.class
 )
-@Log4j2
+//@Log4j2
 @NoArgsConstructor
 public class CommandJdo
         implements DomainChangeRecord, Comparable<CommandJdo>, HasCommandDto {
@@ -439,6 +439,10 @@ public class CommandJdo
     @Getter @Setter
     private Bookmark target;
 
+    public String getTargetStr() {
+        return Optional.ofNullable(getTarget()).map(Bookmark::toString).orElse(null);
+    }
+    
     @Override
     public String getTargetMember() {
         return getCommandDto().getMember().getLogicalMemberIdentifier();

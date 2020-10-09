@@ -18,14 +18,12 @@
  */
 package org.apache.isis.extensions.commandlog.impl.jdo;
 
-import java.rmi.activation.ActivationID;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -52,7 +50,6 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidDto;
-import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
