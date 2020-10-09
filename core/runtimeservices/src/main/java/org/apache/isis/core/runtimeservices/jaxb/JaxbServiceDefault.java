@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.jaxb;
+package org.apache.isis.core.runtimeservices.jaxb;
 
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -34,70 +34,40 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.resources._Xml;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
 
 @Service
-@Named("isisApplib.JaxbServiceDefault")
+@Named("isisRuntimeServices.JaxbServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@NoArgsConstructor @AllArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class JaxbServiceDefault extends JaxbService.Simple {
 
-    @Inject private ServiceRegistry serviceRegistry;
-    @Inject private ServiceInjector serviceInjector;
-    /*@Inject circular dependency*/private MetaModelService metaModelService;
+    private final ServiceInjector serviceInjector;
+    /*circular dependency, so use provider*/
+    private final Provider<MetaModelService> metaModelServiceProvider;
 
-    /*@Inject circular dependency*/
-    public JaxbServiceDefault(ServiceInjector serviceInjector, MetaModelService metaModelService) {
-        this.serviceInjector = serviceInjector;
-        this.metaModelService = metaModelService;
-    }
-    
-    @PostConstruct
-    public void init(){
-        this.metaModelService = serviceRegistry.lookupServiceElseFail(MetaModelService.class);
-    }
-
-    @Override
-    public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
-        try {
-            Object pojo = internalFromXml(jaxbContext, xml, unmarshallerProperties);
-
-            if(pojo instanceof DomainObjectList) {
-
-                // go around the loop again, so can properly deserialize the contents
-                DomainObjectList list = (DomainObjectList) pojo;
-                JAXBContext jaxbContextForList = jaxbContextFor(list);
-
-                return internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
-            }
-
-            return pojo;
-
-        } catch (final JAXBException ex) {
-            throw new NonRecoverableException("Error unmarshalling XML", ex);
-        }
-    }
-
-    @Override
-    protected JAXBContext jaxbContextFor(final Object domainObject) {
-        final Class<?> domainClass = domainObject.getClass();
+    @Override @SneakyThrows
+    protected JAXBContext jaxbContextForObject(final @NonNull Object domainObject) {
         if(domainObject instanceof DomainObjectList) {
-            DomainObjectList list = (DomainObjectList) domainObject;
+            val domainClass = domainObject.getClass();
+            val domainObjectList = (DomainObjectList) domainObject;
             try {
-                final String elementObjectType = list.getElementObjectType();
-                final Class<?> elementType = metaModelService.fromObjectType(elementObjectType);
+                val elementType = metaModelServiceProvider.get()
+                        .fromObjectType(domainObjectList.getElementObjectType());
                 if (elementType!=null 
                         && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
                     
@@ -105,13 +75,28 @@ public class JaxbServiceDefault extends JaxbService.Simple {
                 } else {
                     return JAXBContext.newInstance(domainClass);
                 }
-            } catch (JAXBException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw _Xml.verbose("obtaining JAXBContext for a DomainObjectList", domainClass, e);
             }
         }
-        return super.jaxbContextFor(domainObject);
+        return super.jaxbContextForObject(domainObject);
     }
 
+    @Override
+    protected Object internalFromXml(@NonNull JAXBContext jaxbContext, String xml,
+            Map<String, Object> unmarshallerProperties) throws JAXBException {
+     
+        val pojo = super.internalFromXml(jaxbContext, xml, unmarshallerProperties);
+        if(pojo instanceof DomainObjectList) {
+
+            // go around the loop again, so can properly deserialize the contents
+            val domainObjectList = (DomainObjectList) pojo;
+            val jaxbContextForList = jaxbContextForObject(domainObjectList);
+
+            return internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
+        }
+        return pojo;
+    }
 
     @Override
     protected void configure(final Unmarshaller unmarshaller) {

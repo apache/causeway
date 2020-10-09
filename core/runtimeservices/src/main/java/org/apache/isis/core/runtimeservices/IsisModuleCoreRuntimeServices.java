@@ -41,6 +41,7 @@ import org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefa
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo;
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePoMenu;
 import org.apache.isis.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault;
+import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
@@ -80,6 +81,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         HomePageResolverServiceDefault.class,
         InteractionDtoServiceInternalDefault.class,
         IsisInteractionFactoryDefault.class,
+        JaxbServiceDefault.class,
         TranslationServicePo.class,
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,

@@ -23,6 +23,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.JAXBContext;
@@ -33,6 +35,7 @@ import javax.xml.namespace.QName;
 import com.sun.xml.bind.v2.runtime.IllegalAnnotationsException;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -80,11 +83,11 @@ public final class _Xml {
 
     @SneakyThrows
     public static <T> T readXml(
-            final @NonNull Class<T> type,
+            final @NonNull Class<T> dtoClass,
             final @NonNull Reader reader,
             final @NonNull ReadOptions readOptions) {
         
-        val unmarshaller = jaxbContextFor(type, readOptions.isUseContextCache()).createUnmarshaller();
+        val unmarshaller = jaxbContextFor(dtoClass, readOptions.isUseContextCache()).createUnmarshaller();
         return _Casts.uncheckedCast(unmarshaller.unmarshal(reader));
     }
 
@@ -137,22 +140,50 @@ public final class _Xml {
     }
     
     
+    // -- 
+    
+    public static Exception verbose(String doingWhat, @Nullable Class<?> dtoClass, Exception e) {
+        
+        val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
+        
+        if(e instanceof IllegalAnnotationsException) {
+            // report a better error if possible
+            val errors = ((IllegalAnnotationsException) e).getErrors();
+            if(_NullSafe.size(errors)>0) {
+            
+                return _Exceptions.unrecoverable(String.format("Error %s, "
+                        + "due to illegal annotations on object class '%s'; "
+                        + "%d error(s) reported: %s",
+                        doingWhat,
+                        dtoClassName,
+                        errors.size(),
+                        errors.stream()
+                            .map(Exception::getMessage)
+                            .collect(Collectors.joining("; "))),
+                        e);
+            }                    
+        }
+
+        return _Exceptions.unrecoverable(String.format("Error %s; "
+                + "object class is '%s'", doingWhat, dtoClassName), e);
+    }
+    
     // -- JAXB CONTEXT CACHE
 
     private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();
 
-    public static <T> JAXBContext jaxbContextFor(final Class<T> type, final boolean useCache)  {
+    public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass, final boolean useCache)  {
         return useCache
-                ? jaxbContextByClass.computeIfAbsent(type, _Xml::contextOf)
-                : contextOf(type);
+                ? jaxbContextByClass.computeIfAbsent(dtoClass, _Xml::contextOf)
+                : contextOf(dtoClass);
     }
 
     @SneakyThrows
-    private static <T> JAXBContext contextOf(final Class<T> type) {
+    private static <T> JAXBContext contextOf(final Class<T> dtoClass) {
         try {
-            return JAXBContext.newInstance(type);
-        } catch (IllegalAnnotationsException e) {
-            throw _Exceptions.unrecoverableFormatted("%s", e.getErrors(), e);
+            return JAXBContext.newInstance(dtoClass);
+        } catch (Exception e) {
+            throw verbose("obtaining JAXBContext for class", dtoClass, e);
         }
     }
 

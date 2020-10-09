@@ -22,16 +22,16 @@ package org.apache.isis.core.metamodel.commons.internal.reflection;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
@@ -114,21 +114,26 @@ class ReflectTest {
         assertNotNull(annot);
     }
 
+    static class A extends I.B {}
+    static interface I {
+        static class B implements I {}
+    }
+    
+    
     @Test
     void typeHierarchyAndInterfaces2() {
 
-        Class<?> type = JaxbServiceDefault.class;
+        Class<?> type = A.class;
 
         val typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
-                .map(t->t.getName())
-                .collect(Collectors.toSet());
+                .map(t->t.getSimpleName())
+                .collect(Collectors.toCollection(TreeSet::new));
 
-        assertSetContainsAll(_Sets.<String>of(
-                "org.apache.isis.applib.services.jaxb.JaxbServiceDefault",
-                "org.apache.isis.applib.services.jaxb.JaxbService$Simple",
-                "org.apache.isis.applib.services.jaxb.JaxbService",
-                "java.lang.Object"),
-            typeSet);
+        assertEquals(_Sets.<String>ofSorted(
+                "A",
+                "B",
+                "I",
+                "Object"), typeSet);
 
     }
 
