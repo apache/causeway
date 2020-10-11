@@ -26,7 +26,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.CommandServiceInternal;
+import org.apache.isis.core.metamodel.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;

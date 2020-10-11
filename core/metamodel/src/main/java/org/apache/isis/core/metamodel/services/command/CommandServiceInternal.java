@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.command;
+package org.apache.isis.core.metamodel.services.command;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -40,7 +40,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisRuntimeServices.CommandServiceInternal")
+@Named("isisMetaModel.CommandServiceInternal")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Internal")

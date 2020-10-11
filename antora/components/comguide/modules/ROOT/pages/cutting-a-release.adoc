@@ -252,14 +252,16 @@ Delete all Isis artifacts from your local Maven repo, then build using the `-o` 
 [source,bash,subs="attributes+"]
 ----
 rm -rf ~/.m2/repository/org/apache/isis
-mvn clean install -o -Dreleased
+mvn clean install \
+        -Papache-release \
+    -o
 ----
 
 [NOTE]
 ====
-The `released system property activates a profile that only runs the modules actually to be released (ignores the incubator modules).
+The `apache-release` profile is set to only check the modules actually to be released (ignores the incubator modules).
 
-That's because the incubator modules require Java 11, whereas (for now at least) the non-incubator module are built and released by Java 8.
+Partly that's because there's no need to check the inubator modules, it's also because the incubator modules require Java 11 (Java 8 is used for everything else)
 ====
 
 

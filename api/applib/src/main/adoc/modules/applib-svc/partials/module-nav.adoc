@@ -11,7 +11,6 @@
 ** xref:refguide:applib-svc:ClockService.adoc[ClockService]
 ** xref:refguide:applib-svc:CommandDtoProcessorService.adoc[CommandDtoProcessorService]
 ** xref:refguide:applib-svc:CommandExecutorService.adoc[CommandExecutorService]
-** xref:refguide:applib-svc:CommandServiceInternal.adoc[CommandService]
 ** xref:refguide:applib-svc:CommandServiceListener.adoc[CommandServiceListener]
 ** xref:refguide:applib-svc:ConfigurationMenu.adoc[ConfigurationMenu]
 ** xref:refguide:applib-svc:ConfigurationViewService.adoc[ConfigurationViewService]
