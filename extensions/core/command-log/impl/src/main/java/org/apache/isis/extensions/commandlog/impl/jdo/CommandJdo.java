@@ -108,14 +108,14 @@ import lombok.val;
             name="findRecentByTarget",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE targetStr == :targetStr "
+                    + "WHERE target == :target "
                     + "ORDER BY this.timestamp DESC, uniqueIdStr DESC "
                     + "RANGE 0,30"),
     @javax.jdo.annotations.Query(
             name="findByTargetAndTimestampBetween",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE targetStr == :targetStr " 
+                    + "WHERE target == :target "
                     + "&& timestamp >= :from " 
                     + "&& timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
@@ -123,21 +123,21 @@ import lombok.val;
             name="findByTargetAndTimestampAfter",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE targetStr == :targetStr " 
+                    + "WHERE target == :target "
                     + "&& timestamp >= :from "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTargetAndTimestampBefore",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE targetStr == :targetStr " 
+                    + "WHERE target == :target "
                     + "&& timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTarget",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE targetStr == :targetStr " 
+                    + "WHERE target == :target "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTimestampBetween",
@@ -442,7 +442,7 @@ public class CommandJdo
     public String getTargetStr() {
         return Optional.ofNullable(getTarget()).map(Bookmark::toString).orElse(null);
     }
-    
+
     @Override
     public String getTargetMember() {
         return getCommandDto().getMember().getLogicalMemberIdentifier();

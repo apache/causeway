@@ -134,7 +134,7 @@ public class CommandJdoRepository {
             final Bookmark target
             , final LocalDate from
             , final LocalDate to) {
-        final String targetStr = target.toString();
+
         final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
         final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
         
@@ -143,25 +143,25 @@ public class CommandJdoRepository {
             if(to != null) {
                 query = new QueryDefault<>(CommandJdo.class,
                         "findByTargetAndTimestampBetween", 
-                        "targetStr", targetStr,
+                        "target", target,
                         "from", fromTs,
                         "to", toTs);
             } else {
                 query = new QueryDefault<>(CommandJdo.class,
                         "findByTargetAndTimestampAfter", 
-                        "targetStr", targetStr,
+                        "target", target,
                         "from", fromTs);
             }
         } else {
             if(to != null) {
                 query = new QueryDefault<>(CommandJdo.class,
                         "findByTargetAndTimestampBefore", 
-                        "targetStr", targetStr,
+                        "target", target,
                         "to", toTs);
             } else {
                 query = new QueryDefault<>(CommandJdo.class,
                         "findByTarget", 
-                        "targetStr", targetStr);
+                        "target", target);
             }
         }
         return repositoryService.allMatches(query);
@@ -184,12 +184,11 @@ public class CommandJdoRepository {
 
 
     public List<CommandJdo> findRecentByTarget(final Bookmark target) {
-        final String targetStr = target.toString();
         return repositoryService.allMatches(
                 new QueryDefault<>(
                         CommandJdo.class,
                         "findRecentByTarget",
-                        "targetStr", targetStr));
+                        "target", target));
     }
 
 

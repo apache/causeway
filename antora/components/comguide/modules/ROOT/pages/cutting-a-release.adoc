@@ -233,10 +233,6 @@ We use `mvn versions:set` to manually bump the release version:
 mvn versions:set -DnewVersion=$ISISREL
 mvn install -o -DskipTests
 
-pushd ../starters
-mvn versions:set -DnewVersion=$ISISREL
-popd
-
 git add ..
 git commit -m "$ISISJIRA: bumps version to $ISISREL"
 ----
