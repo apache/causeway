@@ -995,6 +995,11 @@ under the License.
 		<!-- APACHE ISIS customisation 7/7: start -->
 		<profile>
 			<id>released</id>
+			<activation>
+				<property>
+					<name>released</name>
+				</property>
+			</activation>
 			<modules>
 				<module>../core</module>
 				<module>../extensions</module>
