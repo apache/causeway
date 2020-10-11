@@ -22,6 +22,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,14 +31,15 @@ import javax.annotation.Nullable;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
-
-import com.sun.xml.bind.v2.runtime.IllegalAnnotationsException;
+import javax.xml.stream.XMLInputFactory;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -62,6 +64,7 @@ public final class _Xml {
     @Value @Builder
     public static class ReadOptions {
         private final @Builder.Default boolean useContextCache = false;
+        private final @Builder.Default boolean allowMissingRootElement = false;
         
         public static ReadOptions defaults() {
             return ReadOptions.builder().build();
@@ -88,6 +91,14 @@ public final class _Xml {
             final @NonNull ReadOptions readOptions) {
         
         val unmarshaller = jaxbContextFor(dtoClass, readOptions.isUseContextCache()).createUnmarshaller();
+        
+        if(readOptions.isAllowMissingRootElement()
+                && !_Annotations.isPresent(dtoClass, XmlRootElement.class)) {
+            val xsr = XMLInputFactory.newFactory().createXMLStreamReader(reader);
+            final JAXBElement<T> userElement = unmarshaller.unmarshal(xsr, dtoClass);
+            return userElement.getValue();            
+        }
+        
         return _Casts.uncheckedCast(unmarshaller.unmarshal(reader));
     }
 
@@ -107,14 +118,15 @@ public final class _Xml {
             final @NonNull Writer writer,
             final @NonNull WriteOptions writeOptions) {
         
-        val type = _Casts.<Class<T>>uncheckedCast(dto.getClass());
-        val marshaller = jaxbContextFor(type, writeOptions.useContextCache).createMarshaller();
+        val dtoClass = _Casts.<Class<T>>uncheckedCast(dto.getClass());
+        val marshaller = jaxbContextFor(dtoClass, writeOptions.useContextCache).createMarshaller();
         if(writeOptions.isFormattedOutput()) {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         }
-        if(writeOptions.isAllowMissingRootElement()) {
-            val qName = new QName("", type.getSimpleName());
-            val jaxbElement = new JAXBElement<T>(qName, type, null, dto);
+        if(writeOptions.isAllowMissingRootElement()
+            && !_Annotations.isPresent(dtoClass, XmlRootElement.class)) {
+            val qName = new QName("", dtoClass.getSimpleName());
+            val jaxbElement = new JAXBElement<T>(qName, dtoClass, null, dto);
             marshaller.marshal(jaxbElement, writer);
         } else {
             marshaller.marshal(dto, writer);    
@@ -136,6 +148,7 @@ public final class _Xml {
         val reader = new StringReader(writer.toString());
         return readXml(type, reader, ReadOptions.builder()
                 .useContextCache(true)
+                .allowMissingRootElement(true)
                 .build());
     }
     
@@ -146,22 +159,31 @@ public final class _Xml {
         
         val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
         
-        if(e instanceof IllegalAnnotationsException) {
+        if("com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(e.getClass().getName())) {
             // report a better error if possible
-            val errors = ((IllegalAnnotationsException) e).getErrors();
-            if(_NullSafe.size(errors)>0) {
-            
-                return _Exceptions.unrecoverable(String.format("Error %s, "
-                        + "due to illegal annotations on object class '%s'; "
-                        + "%d error(s) reported: %s",
-                        doingWhat,
-                        dtoClassName,
-                        errors.size(),
-                        errors.stream()
-                            .map(Exception::getMessage)
-                            .collect(Collectors.joining("; "))),
-                        e);
-            }                    
+            // this is done reflectively because on JDK 8 this is only provided by Oracle JDK 
+            try {
+                
+                val errors = _Casts.<List<? extends Exception>>uncheckedCast(
+                        e.getClass().getMethod("getErrors").invoke(e));
+
+                if(_NullSafe.size(errors)>0) {
+                    
+                    return _Exceptions.unrecoverable(String.format("Error %s, "
+                            + "due to illegal annotations on object class '%s'; "
+                            + "%d error(s) reported: %s",
+                            doingWhat,
+                            dtoClassName,
+                            errors.size(),
+                            errors.stream()
+                                .map(Exception::getMessage)
+                                .collect(Collectors.joining("; "))),
+                            e);
+                }
+
+            } catch (Exception ex) {
+                // just fall through if we hit any issues
+            }
         }
 
         return _Exceptions.unrecoverable(String.format("Error %s; "
