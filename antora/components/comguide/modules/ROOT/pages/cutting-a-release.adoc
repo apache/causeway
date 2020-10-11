@@ -227,6 +227,10 @@ We use `mvn versions:set` to manually bump the release version:
 mvn versions:set -DnewVersion=$ISISREL
 mvn install -o -DskipTests
 
+pushd ../starters
+mvn versions:set -DnewVersion=$ISISREL
+popd
+
 git add ..
 git commit -m "$ISISJIRA: bumps version to $ISISREL"
 ----
@@ -350,6 +354,7 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing.
 See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 ====
 
+[#reset-revision-property]
 === Reset `revision` property
 
 At the beginning of the release process we bumped the version to the release version, ie `$ISISREL`.
