@@ -829,7 +829,7 @@ public class IsisConfiguration {
             public static class Property {
 
                 /**
-                 * The default for whether property edits should be reified as a
+                 * The default for whether property edits should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
                  * {@link org.apache.isis.applib.services.command.spi.CommandServiceListener}s,

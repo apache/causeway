@@ -47,12 +47,6 @@ git checkout master
 git pull --ff-only
 ----
 
-Switch to the `isis-parent` directory:
-
-[source,bash,subs="attributes+"]
-----
-cd isis-parent
-----
 
 === License headers
 

@@ -115,6 +115,15 @@ yUser
 
 
 |
+[[isis.extensions.command-replay.secondary-access.base-url-wicket]]
+isis.extensions.command-replay. +
+secondary-access.base-url-wicket
+
+| 
+| null
+
+
+|
 [[isis.extensions.cors.allowed-headers]]
 isis.extensions.cors. +
 allowed-headers

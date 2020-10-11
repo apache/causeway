@@ -43,10 +43,6 @@ resteasy.jaxrs.app.registration
 | 
 | How the implementation of the JAX-RS application is discovered.
 
-There should be very little reason to change this from its default.
-
-See https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md#jax-rs-application-registration-methods[here] for more details.
-
 
 |
 [[resteasy.jaxrs.default-path]]
@@ -56,6 +52,14 @@ resteasy.jaxrs.default-path
 | The path at which the RO viewer should be mounted.
 
 Note that this is used rather than ``prefix`` because there is _NO_ implementation of ``Application``, so we rely on it being automatically created.
+
+
+|
+[[resteasy.jaxrs.defaultPath]]
+resteasy.jaxrs.defaultPath
+
+| 
+| The path at which the RO viewer should be mounted.
 
 
 |
