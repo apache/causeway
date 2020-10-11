@@ -987,7 +987,6 @@ under the License.
 				<module>../starters</module>
 				<module>../subdomains</module>
 				<module>../testing</module>
-				<module>../tooling</module>
 				<module>../valuetypes</module>
 			</modules>
 		</profile>
@@ -1004,7 +1003,6 @@ under the License.
 				<module>../starters</module>
 				<module>../subdomains</module>
 				<module>../testing</module>
-				<module>../tooling</module>
 				<module>../valuetypes</module>
 			</modules>
 		</profile>
