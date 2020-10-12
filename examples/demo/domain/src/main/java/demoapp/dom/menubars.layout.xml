@@ -240,10 +240,17 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>Other</mb3:named>
         </mb3:menu>
     </mb3:primary>
-
 	<mb3:secondary>
         <mb3:menu>
             <mb3:named>Prototyping</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="isisExtFixtures.FixtureScripts" id="runFixtureScript">
+                    <cpt:named>Run Fixture Script</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisExtFixtures.FixtureScripts" id="recreateObjectsAndReturnFirst">
+                    <cpt:named>Recreate Objects And Return First</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
             <mb3:section>
                 <mb3:serviceAction objectType="isisApplib.LayoutServiceMenu" id="downloadLayouts">
                     <cpt:named>Download Object Layouts (ZIP)</cpt:named>
@@ -253,38 +260,16 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isisExtFixtures.FixtureScripts" id="recreateObjectsAndReturnFirst">
-                    <cpt:named>Recreate Objects And Return First</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisExtFixtures.FixtureScripts" id="runFixtureScript">
-                    <cpt:named>Run Fixture Script</cpt:named>
-                </mb3:serviceAction>
-            </mb3:section>
-            <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.MetaModelServiceMenu" id="downloadMetaModelCsv">
-                    <cpt:named>Download Meta Model (CSV)</cpt:named>
-                </mb3:serviceAction>
                 <mb3:serviceAction objectType="isisApplib.MetaModelServiceMenu" id="downloadMetaModelXml">
                     <cpt:named>Download Meta Model (XML)</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisApplib.MetaModelServiceMenu" id="downloadMetaModelCsv">
+                    <cpt:named>Download Meta Model (CSV)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
                 <mb3:serviceAction objectType="isisJdoDn5.JdoMetamodelMenu" id="downloadMetamodels">
                     <cpt:named>Download JDO Metamodels (ZIP)</cpt:named>
-                </mb3:serviceAction>
-            </mb3:section>
-            <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="downloadTranslations">
-                    <cpt:named>Download Translations</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="switchToWritingTranslations">
-                    <cpt:named>Switch To Writing Translations</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="resetTranslationCache">
-                    <cpt:named>Clear translation cache</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="switchToReadingTranslations">
-                    <cpt:named>Switch To Reading Translations</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
@@ -296,6 +281,20 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="isisApplib.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition">
                     <cpt:named>Download Swagger Schema Definition</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="downloadTranslations">
+                    <cpt:named>Download Translations</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="resetTranslationCache">
+                    <cpt:named>Clear translation cache</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="switchToReadingTranslations">
+                    <cpt:named>Switch To Reading Translations</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="switchToWritingTranslations">
+                    <cpt:named>Switch To Writing Translations</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
 			<mb3:section>
@@ -405,17 +404,14 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
-        
     </mb3:secondary>
-
     <mb3:tertiary>
         <mb3:menu>
-        	<mb3:named/>
+            <mb3:named/>
             <mb3:section>
                 <mb3:serviceAction objectType="isissecurity.MeService" id="me"/>
                 <mb3:serviceAction objectType="isisApplib.ConfigurationMenu" id="configuration"/>
-            </mb3:section>
-	        <mb3:section>
+            </mb3:section><mb3:section>
 	            <mb3:serviceAction objectType="isisSecurityApi.LogoutMenu" id="logout">
 	                <cpt:named>Logout</cpt:named>
 	            </mb3:serviceAction>
