@@ -10,7 +10,7 @@ The BDD tooling parses this text and uses it to actually interact with the syste
 As a byproduct the BDD frameworks generate readable output of some form; this is often an annotated version of the original specification, marked up to indicate which specifications passed, which have failed.
 This readable output is a form of "living documentation"; it captures the actual behaviour of the system, and so is guaranteed to be accurate.
 
-There are many BDD tools out there; Apache Isis provides an integration with link:https://cucumber.io/docs/reference/jvm#java[Cucumber JVM] (see also the https://github.com/cucumber/cucumber-jvm[github site]):
+There are many BDD tools out there; Apache Isis provides an integration with link:https://cucumber.io/docs/installation/java/[Cucumber JVM] (see also the https://github.com/cucumber/cucumber-jvm[github site]):
 
 
 == How it works
@@ -73,9 +73,15 @@ The Cucumber engine is configured using JUnit 5's standard mechanism, namely the
 [source,ini]
 .junit-platform.properties
 ----
-cucumber.filter.tags=not @backlog and not @ignore
-cucumber.glue=domainapp.webapp.bdd.stepdefs
+cucumber.publish.quiet=true                                                # <.>
+cucumber.filter.tags=not @backlog and not @ignore                          # <.>
+cucumber.glue=domainapp.webapp.bdd                                         # <.>
+cucumber.plugin=pretty, json:target/cucumber-reports/cucumber-report.json  # <.>
 ----
+<.> disable verbose cucumber report publishing information 
+<.> tag based test filtering
+<.> restrict classpath search for _@Cucumber_ annotated classes
+<.> activate built-in reporting plugins: _pretty_ to console and _json_ to filesystem
 
 We also use two "infrastructure" step definitions to bootstrap and configure Spring.
 These are also boilerplate:
@@ -116,10 +122,14 @@ public class TransactionalStepDef {                         // <2>
 
     @Before(order = OrderPrecedence.EARLY)
     public void beforeScenario(){
+        //open InteractionSession to be closed after scenario (see below)
+        isisInteractionFactory.openInteraction(new InitialisationSession());
+    
         val txTemplate = new TransactionTemplate(txMan);    // <3>
         val status = txTemplate.getTransactionManager().getTransaction(null);
         afterScenario = () -> {
             txTemplate.getTransactionManager().rollback(status);
+            isisInteractionFactory.closeSessionStack();
         };
 
         status.flush();
@@ -287,54 +297,11 @@ If you just want to set up BDD spec support, then use:
 </dependency>
 ----
 
-=== Cucumber CLI
-
-At the time of writing, the Maven Surefire does not support custom JUnit platform test engines.
-As a workaround, we use the Antrun plugin to execute the Cucumber CLI.
-
-[source,xml]
-.webapp/pom.xml
-----
-<plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-antrun-plugin</artifactId>
-  <executions>
-    <execution>
-      <id>cucumber-cli</id>
-      <phase>integration-test</phase>
-      <goals>
-        <goal>run</goal>
-      </goals>
-      <configuration>
-        <target>
-          <echo message="Running Cucumber CLI" />
-          <java classname="io.cucumber.core.cli.Main"
-                fork="true"
-                failonerror="true"
-                newenvironment="true"
-                maxmemory="1024m"
-                classpathref="maven.test.classpath">
-            <arg value="--plugin" />
-            <arg value="json:${project.build.directory}/cucumber-no-clobber.json" />
-            <arg value="--glue" />
-            <arg value="domainapp.webapp.bdd.stepdefs" />
-            <arg value="${project.build.directory}/test-classes/domainapp/webapp/bdd/specs" />
-          </java>
-        </target>
-      </configuration>
-    </execution>
-  </executions>
-</plugin>
-----
-This uses all of the step definitions found in the `stepdefs` package, and writes the results to the `cucumber-no-clobber.json` file.
-
-TIP: see link:https://github.com/cucumber/cucumber-jvm/blob/master/core/src/main/resources/io/cucumber/core/options/USAGE.txt[Cucumber-JVM] documentat for the full set of arguments.
-
 === Generated Report
 
 BDD is all about creating a conversation with the domain expert, and that includes providing meaningful feedback as to whether the spec is passing or failing.
 
-The xref:docs:starters:simpleapp.adoc[SimpleApp]'s `webapp` module uses a Maven plugin to generate a snazzy HTML website based on the contents of the `.json` file emitted by the xref:about.adoc#cucumber-cli[Cucumber CLI].
+The xref:docs:starters:simpleapp.adoc[SimpleApp]'s `webapp` module uses a Maven plugin to generate a snazzy HTML website based on the contents of the `.json` file emitted by the Cucumber built-in reporting plugin _json_.
 
 The plugin's configuration is:
 
@@ -357,7 +324,7 @@ The plugin's configuration is:
         <outputDirectory>${project.build.directory}</outputDirectory>
         <inputDirectory>${project.build.directory}</inputDirectory>
         <jsonFiles>
-          <param>**/cucumber-no-clobber.json</param>
+          <param>**/cucumber-report.json</param>
         </jsonFiles>
         <skip>${skipBDD}</skip>
       </configuration>
@@ -366,7 +333,7 @@ The plugin's configuration is:
 </plugin>
 ----
 
-Note how this reads the same file that was generated by Cucumber CLI.
+Note how this reads the same file that was generated by Cucumber.
 
 The report generated by xref:docs:starters:simpleapp.adoc[SimpleApp] looks like this:
 
