@@ -22,8 +22,15 @@ import io.cucumber.junit.platform.engine.Cucumber;
 
 /**
  * Cucumber will scan the package of a class annotated with @Cucumber for feature files.
+ * <p>
+ * Make sure this class name ends with Test, as Surefire when bundled with Apache Isis 
+ * filters JUnit tests also by class name. 
  */
 @Cucumber
-public class HasCucumberFeatures {
+public class CucumberTest {
+
+    // See:
+    // https://github.com/cucumber/cucumber-jvm/issues/1149
+    // https://github.com/cucumber/cucumber-jvm/tree/master/junit-platform-engine
 
 }
