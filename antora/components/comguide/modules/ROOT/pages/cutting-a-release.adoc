@@ -210,11 +210,18 @@ git branch $ISISBRANCH
 git worktree add ../isis-release $ISISBRANCH
 ----
 
-* Switch to the `isis-parent` directory in the new worktree:
+* Switch to the new worktree and push the branch:
 +
 [source,bash,subs="attributes+"]
 ----
 cd ../isis-release
+git push origin $ISISBRANCH -u
+----
+
+* Finally switch to the `isis-parent` directory:
++
+[source,bash,subs="attributes+"]
+----
 cd isis-parent
 ----
 
