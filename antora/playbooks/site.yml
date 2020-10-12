@@ -333,6 +333,7 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
+    page-isisprev: "2.0.0-M3"
     page-isisrel: "2.0.0-M4"
 
 output:

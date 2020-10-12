@@ -218,7 +218,11 @@ cd ../isis-release
 cd isis-parent
 ----
 
-=== Bump `revision` property to `$ISISREL`
+=== Bump code to `$ISISREL`
+
+Search through the `.java` files for `{page-isisprev}`, and change to `{page-isisrel}`.
+
+=== Bump projects to `$ISISREL`
 
 We use `mvn versions:set` to manually bump the release version:
 
@@ -233,16 +237,6 @@ popd
 
 git add ..
 git commit -m "$ISISJIRA: bumps version to $ISISREL"
-----
-
-so that they should read:
-
-[source,xml,subs="attributes+"]
-----
-<properties>
-    <revision>{page-isisrel}</revision>
-    ...
-</properties>
 ----
 
 NOTE: After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to `2.0.0-SNAPSHOT`.

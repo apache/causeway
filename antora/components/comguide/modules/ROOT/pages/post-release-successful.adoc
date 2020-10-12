@@ -476,7 +476,7 @@ git branch -d release-{page-isisrel}-RC1              # branch no longer needed
 
 == Bump \{page-isisrel} in `site.yml`
 
-In `site.yml` file, bump the version of `\{page-isisrel}`, and commit.
+In `site.yml` file, bump the version of `\{page-isisrel}` and also `\{page-isisprev}`, and commit.
 
 == Update the ASF Reporter website
 

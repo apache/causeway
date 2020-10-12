@@ -29,24 +29,6 @@ import java.util.Map;
  */
 public interface IsisConfigurationLegacy {
 
-    //TODO[2112] remove comment    
-    //    /**
-    //     * How to handle the case when the configuration already contains the key being added.
-    //     */
-    //    public enum ContainsPolicy {
-    //        /**
-    //         * If the configuration already contains the key, then ignore the new value.
-    //         */
-    //        IGNORE,
-    //        /**
-    //         * If the configuration already contains the key, then overwrite with the new.
-    //         */
-    //        OVERWRITE,
-    //        /**
-    //         * If the configuration already contains the key, then throw an exception.
-    //         */
-    //        EXCEPTION
-    //    }
 
 
     // -- VERSION
