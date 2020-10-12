@@ -58,7 +58,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisSystemEnvironment {
     
-    public static final String VERSION = "2.0.0-M3"; // landed here, but could be anywhere else if reasonable
+    public static final String VERSION = "2.0.0-M4"; // landed here, but could be anywhere else if reasonable
     
     @Inject private ApplicationContext springContext;
     

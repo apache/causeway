@@ -18,7 +18,6 @@
  */
 package demoapp.dom._infra.resources;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,6 +26,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.val;
 
@@ -38,7 +38,7 @@ public class MarkupVariableResolverService {
         "SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java",
         "SOURCES_DEMO", "https://github.com/apache/isis/tree/master/examples/demo/domain/src/main/java",
         "ISSUES_DEMO", "https://issues.apache.org/jira/",
-        "ISIS_VERSION", "2.0.0-M3"
+        "ISIS_VERSION", IsisSystemEnvironment.VERSION
     );
 
     /**
