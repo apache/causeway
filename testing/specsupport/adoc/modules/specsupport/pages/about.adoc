@@ -76,12 +76,12 @@ The Cucumber engine is configured using JUnit 5's standard mechanism, namely the
 cucumber.publish.quiet=true                                                # <.>
 cucumber.filter.tags=not @backlog and not @ignore                          # <.>
 cucumber.glue=domainapp.webapp.bdd                                         # <.>
-cucumber.plugin=pretty, json:target/cucumber-reports/cucumber-report.json  # <.>
+cucumber.plugin=pretty, html:target/cucumber-reports/cucumber-html.json    # <.>
 ----
 <.> disable verbose cucumber report publishing information 
 <.> tag based test filtering
 <.> restrict classpath search for _@Cucumber_ annotated classes
-<.> activate built-in reporting plugins: _pretty_ to console and _json_ to filesystem
+<.> activate built-in reporting plugins: _pretty_ to console and _html_ to filesystem
 
 We also use two "infrastructure" step definitions to bootstrap and configure Spring.
 These are also boilerplate:
