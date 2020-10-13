@@ -5,7 +5,7 @@ NEXUSREPONUM=11xx
 curl https://downloads.apache.org/isis/KEYS > /tmp/KEYS
 gpg --import /tmp/KEYS
 
-rm -rf isis-$VERSION*
+rm -rf isis-$VERSION
 
 curl -O -L https://raw.githubusercontent.com/apache/isis/release-$VERSION-$RC/scripts/verify-isis-release.sh
 

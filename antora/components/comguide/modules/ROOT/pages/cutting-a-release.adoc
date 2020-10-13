@@ -372,10 +372,11 @@ Therefore (still in the `isis-parent` directory):
 [source,bash,subs="attributes+"]
 ----
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
-mvn install -DskipTests -o
+mvn install -DskipTests -o -Dreleased -P'!all'
 
 pushd ../starters
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
+mvn install -DskipTests -o
 popd
 
 git add ..
@@ -439,11 +440,12 @@ git checkout -b $ISISBRANCH
 mvn versions:update-parent -DparentVersion=$ISISREL # <.>
 mvn versions:set -DnewVersion=$ISISREL
 
-mvn clean install -o -Dmetamodel.lockdown
-mvn -pl webapp test -o -Dmavendeps.lockdown
+mvn clean install -Dmetamodel.lockdown
+mvn -pl webapp test -Dmavendeps.lockdown -B         # <.>
 ----
 <.> requires the current parent to exist locally in `~/.m2/repository`.
 If this isn't the case, then manually edit instead.
+<.> the -B flag is required to avoid control characters in generated output
 +
 Approve any failed lockdown tests (the mavendeps will fail first time around because the dependencies on Apache Isis itself have just be bumped).
 +
@@ -453,6 +455,11 @@ Repeat, then run the app as a sanity check:
 ----
 mvn -pl webapp spring-boot:run
 ----
++
+You could also check the output of the Cucumber tests, under:
+
+** `webapp/target/cucumber-reports` and
+** `webapp/target/cucumber-html-reports`.
 
 * For both apps, commit any changes and then push the release branch to origin once ok:
 +
