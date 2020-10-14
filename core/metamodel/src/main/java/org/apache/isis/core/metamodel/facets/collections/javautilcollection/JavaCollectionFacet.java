@@ -23,7 +23,10 @@ import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -50,28 +53,41 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
         return pojoCollection;
     }
 
+    /**
+     * @param collectionAdapter - {@link ManagedObject} wrapping a collection. 
+     */
     @Override
-    public int size(final ManagedObject collection) {
-        return pojoCollection(collection).size();
-    }
-
-    @Override
-    public Stream<ManagedObject> stream(ManagedObject collectionAdapter) {
+    public Stream<ManagedObject> stream(final @Nullable ManagedObject collectionAdapter) {
+        final Collection<?> coll = pojoCollection(collectionAdapter); // might be null
+        if(_NullSafe.isEmpty(coll)) {
+            return Stream.of();
+        }
 
         val objectManager = super.getObjectManager();
 
-        return pojoCollection(collectionAdapter)
-                .stream()
+        return coll.stream()
                 .map(objectManager::adapt);
+    }
+
+    /**
+     * @param collectionAdapter - {@link ManagedObject} wrapping a collection. 
+     */
+    @Override
+    public int size(final @Nullable ManagedObject collectionAdapter) {
+        return _NullSafe.size(pojoCollection(collectionAdapter));
     }
 
     /**
      * The underlying collection of objects (not {@link ManagedObject}s).
      */
-    private Collection<?> pojoCollection(final ManagedObject collectionAdapter) {
-        return (Collection<?>) collectionAdapter.getPojo();
+    @Nullable
+    private Collection<?> pojoCollection(final @Nullable ManagedObject collectionAdapter) {
+        return collectionAdapter == null
+                ? (Collection<?>) null
+                : (Collection<?>) collectionAdapter.getPojo();
     }
 
 
+    
 
 }

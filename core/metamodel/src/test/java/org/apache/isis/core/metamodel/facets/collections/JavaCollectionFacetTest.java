@@ -71,13 +71,17 @@ public class JavaCollectionFacetTest {
     public void firstElementForEmptyCollectionIsNull() {
         context.checking(new Expectations() {
             {
-                oneOf(mockCollection).getPojo();
+                                
+                allowing(mockCollection).getPojo();
                 will(returnValue(mockWrappedCollection));
 
-                oneOf(mockWrappedCollection).stream();
+                allowing(mockWrappedCollection).stream();
                 will(returnValue(Stream.empty()));
                 
-                oneOf(mockFacetHolder).getMetaModelContext();
+                allowing(mockWrappedCollection).size();
+                will(returnValue(0));
+                
+                allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));
 
             }
