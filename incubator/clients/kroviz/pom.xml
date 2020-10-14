@@ -91,6 +91,14 @@
     </profiles>
 
     <build>
+    
+    	<resources>
+    		<resource>
+    			<filtering>false</filtering>
+    			<directory>**</directory>
+    		</resource>
+    	</resources>
+    
         <plugins>
         
             <!-- execute Gradle command -->
