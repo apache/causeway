@@ -479,7 +479,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.2.0</version>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -739,14 +739,14 @@ under the License.
 							<goal>process</goal>
 						</goals>
 						<configuration>
-
+						
 						    <!-- Reference the supplemental-model artifact from module supplemental-model -->
 				            <supplementalModelArtifacts>
 				            	<supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
 				            </supplementalModelArtifacts>
-
+						
 							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-
+							
 							 <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
 							<supplementalModels>
 								<supplementalModel>supplemental-models.xml</supplementalModel>
@@ -774,7 +774,7 @@ under the License.
 					</execution>
 				</executions>
 			</plugin>
-
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
