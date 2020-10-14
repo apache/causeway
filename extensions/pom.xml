@@ -45,6 +45,9 @@
 				<includes>
 					<include>**</include>
 				</includes>
+				<excludes>
+					<exclude>**/*.zip</exclude>
+				</excludes>
 			</resource>
 			<resource>
 				<filtering>false</filtering>
