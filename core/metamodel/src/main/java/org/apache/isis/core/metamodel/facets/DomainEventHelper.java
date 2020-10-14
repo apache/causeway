@@ -24,9 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
@@ -48,7 +45,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
@@ -218,24 +214,26 @@ public class DomainEventHelper {
     public <S, T> PropertyDomainEvent<S, T> postEventForProperty(
             final AbstractDomainEvent.Phase phase,
             final Class<? extends PropertyDomainEvent<S, T>> eventType,
-                    final PropertyDomainEvent<S, T> existingEvent,
-                    final IdentifiedHolder identified,
-                    final InteractionHead head,
-                    final T oldValue,
-                    final T newValue) {
+            final PropertyDomainEvent<S, T> existingEvent,
+            final IdentifiedHolder identified,
+            final InteractionHead head,
+            final T oldValue,
+            final T newValue) {
         
         _Assert.assertTypeIsInstanceOf(eventType, PropertyDomainEvent.class);
 
         try {
             final PropertyDomainEvent<S, T> event;
-            final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-            final Identifier identifier = identified.getIdentifier();
 
             if(existingEvent != null && phase.isExecuted()) {
                 // reuse existing event from the executing phase
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
+                
+                final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
+                final Identifier identifier = identified.getIdentifier();
+                
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
                 // copy over if have
@@ -262,11 +260,11 @@ public class DomainEventHelper {
     }
 
     static <S,T> PropertyDomainEvent<S,T> newPropertyDomainEvent(
-            final Class<? extends PropertyDomainEvent<S, T>> type,
-                    final Identifier identifier,
-                    final S source,
-                    final T oldValue,
-                    final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
+            final @NonNull Class<? extends PropertyDomainEvent<S, T>> type,
+            final @NonNull Identifier identifier,
+            final S source,
+            final T oldValue,
+            final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
 
         val constructors = _Reflect.getPublicConstructors(type);
 
@@ -275,7 +273,9 @@ public class DomainEventHelper {
         for (val constructor : noArgConstructors) {
             final Object event = invokeConstructor(constructor);
             final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
-            pde.initSource(source);
+            if(source!=null) {
+                pde.initSource(source);
+            }
             pde.setIdentifier(identifier);
             pde.setOldValue(oldValue);
             pde.setNewValue(newValue);

@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,6 +33,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -191,7 +193,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
                 rootOidIfAny.ifPresent(rootOid->{
-                    representation.mapPut("domainType", rootOid.getObjectSpecId().asString());
+                    Optional.ofNullable(rootOid.getObjectSpecId())
+                    .map(ObjectSpecId::asString)
+                    .ifPresent(objectSpecIdLiteral->
+                        representation.mapPut("domainType", objectSpecIdLiteral));
                     representation.mapPut("instanceId", rootOid.getIdentifier());
                 });
             }

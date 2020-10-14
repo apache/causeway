@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -230,7 +231,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
         //final ObjectSpecification returnType = objectAndActionInvocation.getAction().getReturnType();
 
-        if (returnedAdapter == null) {
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
             return null;
         }
 
