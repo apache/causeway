@@ -129,10 +129,6 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
             final ResultType resultType,
             final JsonRepresentation representation) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
-            return null;
-        }
-
         switch (resultType) {
         case VOID:
             return null;
@@ -152,6 +148,10 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         case SCALAR_VALUE:
 
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
+                return null; //TODO[ISIS-2449] how to represent null value?
+            }
+            
             final ScalarValueReprRenderer scalarValueReprRenderer =
             new ScalarValueReprRenderer(resourceContext, null, representation);
             scalarValueReprRenderer.with(returnedAdapter)
@@ -160,6 +160,10 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
             return scalarValueReprRenderer;
 
         case DOMAIN_OBJECT:
+            
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
+                return null; //TODO[ISIS-2449] how to represent null value?
+            }
 
             final DomainObjectReprRenderer objectReprRenderer =
             new DomainObjectReprRenderer(resourceContext, null, representation);
