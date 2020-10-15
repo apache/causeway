@@ -193,7 +193,10 @@ public class ResponseDigest<T> {
             
             if(genericType==null) {
                 // when response is a singleton
-                entities = Can.ofSingleton(readSingle());
+                val singleton = readSingle();
+                entities = singleton==null
+                        ? Can.empty()
+                        : Can.ofSingleton(singleton);
             } else {
                 // when response is a list
                 entities = Can.ofCollection(readList());

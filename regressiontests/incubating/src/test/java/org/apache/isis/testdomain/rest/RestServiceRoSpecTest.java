@@ -34,6 +34,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.rospec.Configuration_usingRoSpec;
+import org.apache.isis.testdomain.rospec.RoSpecSampler;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 
@@ -54,12 +55,40 @@ class RestServiceRoSpecTest {
 
     @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;
+    
+    private RoSpecSampler refSampler = new RoSpecSampler(); 
 
     @Test
     void string() {
         val digest = getDigest(String.class, "string");
         val returnValue = digest.getEntities().getSingletonOrFail();
-        assertEquals("aString", returnValue);
+        assertEquals(refSampler.string(), returnValue);
+    }
+    
+    @Test
+    void stringNull() {
+        val digest = getDigest(String.class, "stringNull");
+        assertTrue(digest.getEntities().isEmpty());        
+    }
+    
+    @Test
+    void integer() {
+        val digest = getDigest(Integer.class, "integer");
+        val returnValue = digest.getEntities().getSingletonOrFail();
+        assertEquals(refSampler.integer(), returnValue);
+    }
+    
+    @Test
+    void integerNull() {
+        val digest = getDigest(String.class, "integerNull");
+        assertTrue(digest.getEntities().isEmpty());        
+    }
+    
+    @Test
+    void integerPrimitive() {
+        val digest = getDigest(int.class, "integerPrimitive");
+        val returnValue = digest.getEntities().getSingletonOrFail();
+        assertEquals(refSampler.integerPrimitive(), returnValue);
     }
     
     // -- HELPER
