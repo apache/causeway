@@ -94,13 +94,17 @@ public class RestEndpointService {
         return client;
     }
     
+    // -- NEW REQUEST BUILDER
+    
+    public Invocation.Builder newInvocationBuilder(RestfulClient client, String actionPath) {
+        return client.request(actionPath, SuppressionType.ALL);
+    }
+    
     // -- ENDPOINTS
 
     public ResponseDigest<JdoBook> getRecommendedBookOfTheWeek(RestfulClient client) {
-        Invocation.Builder request = client.request(
-                INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke",
-                SuppressionType.ALL);
-
+        
+        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke");
         val args = client.arguments()
                 .build();
 
@@ -112,10 +116,7 @@ public class RestEndpointService {
     
     public ResponseDigest<JdoBook> getMultipleBooks(RestfulClient client) throws JAXBException {
         
-        Invocation.Builder request = client.request(
-                INVENTORY_RESOURCE + "/actions/multipleBooks/invoke",
-                SuppressionType.ALL);
-
+        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
         val args = client.arguments()
                 .addActionParameter("nrOfBooks", 2)
                 .build();
@@ -128,10 +129,8 @@ public class RestEndpointService {
     
     
     public ResponseDigest<JdoBook> storeBook(RestfulClient client, JdoBook newBook) throws JAXBException {
-        val request = client.request(
-                INVENTORY_RESOURCE + "/actions/storeBook/invoke", 
-                SuppressionType.ALL);
         
+        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/storeBook/invoke");
         val args = client.arguments()
                 .addActionParameter("newBook", JdoBookDto.from(newBook).encode())
                 .build();
@@ -143,10 +142,8 @@ public class RestEndpointService {
     }
 
     public ResponseDigest<JdoBookDto> getRecommendedBookOfTheWeekAsDto(RestfulClient client) {
-        Invocation.Builder request = client.request(
-                INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekAsDto/invoke",
-                SuppressionType.ALL);
-
+        
+        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekAsDto/invoke");
         val args = client.arguments()
                 .build();
 
@@ -158,10 +155,7 @@ public class RestEndpointService {
     
     public ResponseDigest<JdoBookDto> getMultipleBooksAsDto(RestfulClient client) throws JAXBException {
         
-        Invocation.Builder request = client.request(
-                INVENTORY_RESOURCE + "/actions/multipleBooksAsDto/invoke",
-                SuppressionType.ALL);
-
+        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/multipleBooksAsDto/invoke");
         val args = client.arguments()
                 .addActionParameter("nrOfBooks", 2)
                 .build();
@@ -174,10 +168,8 @@ public class RestEndpointService {
     
     
     public ResponseDigest<String> getHttpSessionInfo(RestfulClient client) {
-        val request = client.request(
-                INVENTORY_RESOURCE + "/actions/httpSessionInfo/invoke", 
-                SuppressionType.ALL);
-
+        
+        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/httpSessionInfo/invoke");
         val args = client.arguments()
                 .build();
 
