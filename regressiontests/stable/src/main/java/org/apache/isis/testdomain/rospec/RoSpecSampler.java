@@ -18,15 +18,20 @@
  */
 package org.apache.isis.testdomain.rospec;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
         nature = NatureOfService.REST, 
         objectType = "testdomain.RoSpecSampler")
 public class RoSpecSampler {
 
+    // -- STRING
+    
     @Action 
     public String string() {
         return "aString";
@@ -36,6 +41,42 @@ public class RoSpecSampler {
     public String stringNull() {
         return null;
     }
+    
+    // -- STRING ARRAY
+    
+    @Action 
+    public String[] stringArray() {
+        return new String[] {"Hello", "World!"};
+    }
+    
+    @Action 
+    public String[] stringArrayEmpty() {
+        return new String[0];
+    }
+    
+    @Action 
+    public String[] stringArrayNull() {
+        return null;
+    }
+    
+    // -- STRING LIST
+    
+    @Action 
+    public List<String> stringList() {
+        return _Lists.of("Hello", "World!");
+    }
+    
+    @Action 
+    public List<String> stringListEmpty() {
+        return _Lists.of();
+    }
+    
+    @Action 
+    public List<String> stringListNull() {
+        return null;
+    }
+    
+    // -- INT
     
     @Action 
     public int integerPrimitive() {
@@ -51,5 +92,37 @@ public class RoSpecSampler {
     public Integer integerNull() {
         return null;
     }
+    
+    // -- CUSTOMER
+    
+    @Action 
+    public Customer customer() {
+        return new Customer("Hello World!", 22);
+    }
+    
+    @Action 
+    public Customer customerNull() {
+        return null;
+    }
+    
+    // -- CUSTOMER LIST
+    
+    @Action 
+    public List<Customer> customerList() {
+        return _Lists.of(
+                new Customer("Alice", 22),
+                new Customer("Bob", 33));
+    }
+    
+    @Action 
+    public List<Customer> customerListEmpty() {
+        return _Lists.of();
+    }
+    
+    @Action 
+    public List<Customer> customerListNull() {
+        return null;
+    }
+    
     
 }

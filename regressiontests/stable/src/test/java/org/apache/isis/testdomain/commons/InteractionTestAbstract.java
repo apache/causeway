@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,16 +36,15 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsService;
 import org.apache.isis.testdomain.auditing.AuditerServiceForTesting;
+import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
@@ -114,32 +112,11 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
     }
     
     protected void assertComponentWiseEquals(Object a, Object b) {
-        
-        val array1 = _NullSafe.streamAutodetect(a)
-            .collect(_Arrays.toArray(Object.class));
-        val array2 = _NullSafe.streamAutodetect(b)
-            .collect(_Arrays.toArray(Object.class));
-        
-        assertArrayEquals(array1, array2);
-        
+        CollectionAssertions.assertComponentWiseEquals(a, b);
     }
     
     protected void assertComponentWiseUnwrappedEquals(Object a, Object b) {
-        
-        val array1 = _NullSafe.streamAutodetect(a)
-            .map(element->(element instanceof ManagedObject) 
-                    ? ((ManagedObject)element).getPojo()
-                    : element)
-            .collect(_Arrays.toArray(Object.class));
-        
-        val array2 = _NullSafe.streamAutodetect(b)
-                .map(element->(element instanceof ManagedObject) 
-                        ? ((ManagedObject)element).getPojo()
-                        : element)
-                .collect(_Arrays.toArray(Object.class));
-        
-        assertArrayEquals(array1, array2);
-        
+        CollectionAssertions.assertComponentWiseUnwrappedEquals(a, b);
     }
     
     protected void assertEmpty(Object x) {

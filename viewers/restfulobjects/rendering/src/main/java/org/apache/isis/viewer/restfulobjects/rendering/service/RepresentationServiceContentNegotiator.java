@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,12 +43,14 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRoRendering.RepresentationServiceContentNegotiator")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("ContentNegotiator")
+@Log4j2
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
     @Inject private List<ContentNegotiationService> contentNegotiationServices;
@@ -137,9 +140,17 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     ResponseBuilder buildResponse(
             Function<ContentNegotiationService, ResponseBuilder> connegServiceBuildResponse) {
         
+        log.debug("ContentNegotiationServices:\n{}", ()->contentNegotiationServices.stream()
+                .map(Object::getClass)
+                .map(Class::getSimpleName)
+                .map(s->" - "+s)
+                .collect(Collectors.joining("\n")));
+        
         for (val contentNegotiationService : contentNegotiationServices) {
             val responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
             if(responseBuilder != null) {
+                
+                log.debug("--> winner: %s", ()->contentNegotiationService.getClass().getSimpleName());
                 return responseBuilder;
             }
         }

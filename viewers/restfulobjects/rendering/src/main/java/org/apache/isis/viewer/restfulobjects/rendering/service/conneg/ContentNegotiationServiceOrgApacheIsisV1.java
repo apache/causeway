@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
+import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -229,18 +230,19 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         }
 
         final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
-        //final ObjectSpecification returnType = objectAndActionInvocation.getAction().getReturnType();
-
-        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
-            return null;
-        }
 
         final ActionResultRepresentation.ResultType resultType = objectAndActionInvocation.determineResultType();
         switch (resultType) {
         case DOMAIN_OBJECT:
 
-            rootRepresentation = JsonRepresentation.newMap();
-            appendObjectTo(resourceContext, returnedAdapter, rootRepresentation, suppression);
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
+                // 404 not found
+                return Responses.ofNotFound();
+                
+            } else {
+                rootRepresentation = JsonRepresentation.newMap();
+                appendObjectTo(resourceContext, returnedAdapter, rootRepresentation, suppression);
+            }
 
             break;
 
@@ -277,9 +279,8 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         // set appropriate Content-Type
         responseBuilder.type(
                 resultType == ActionResultRepresentation.ResultType.DOMAIN_OBJECT
-                ? CONTENT_TYPE_OAI_V1_OBJECT
-                        : CONTENT_TYPE_OAI_V1_LIST
-                );
+                        ? CONTENT_TYPE_OAI_V1_OBJECT
+                        : CONTENT_TYPE_OAI_V1_LIST);
 
         return responseBuilder(responseBuilder);
     }

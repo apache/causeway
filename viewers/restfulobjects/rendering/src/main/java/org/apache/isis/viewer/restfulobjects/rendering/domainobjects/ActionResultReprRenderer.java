@@ -113,7 +113,8 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     }
 
     private void addResultTo(
-            final ResultType resultType, final JsonRepresentation representation) {
+            final ResultType resultType, 
+            final JsonRepresentation representation) {
 
         if(returnedAdapter == null) {
             return;
@@ -162,7 +163,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         case DOMAIN_OBJECT:
             
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
-                return null; //TODO[ISIS-2449] how to represent null value?
+                return null; //TODO[ISIS-2449] should'nt we instead respond with a 404 not found?
             }
 
             final DomainObjectReprRenderer objectReprRenderer =

@@ -154,7 +154,7 @@ public class ResponseDigest<T> {
     public T singletonOrElseMapFailure(Function<Exception, T> failureMapper) {
         return isSuccess() 
                 ? getEntity().orElseGet(()->failureMapper.apply(new NoSuchElementException()))
-                        : failureMapper.apply(getFailureCause());
+                : failureMapper.apply(getFailureCause());
     }
 
     /**
@@ -177,12 +177,18 @@ public class ResponseDigest<T> {
             return this;
         }
 
+        // a valid result corresponding to object not found, which is not an error per se  
+        if(response.getStatusInfo().getStatusCode() == 404) {
+            entities = Can.empty();
+            return this;
+        }
+
         if(!response.hasEntity()) {
             entities = Can.empty();
             failureCause = new NoSuchElementException(defaultFailureMessage(response));
             return this;
         }
-
+        
         if(response.getStatusInfo().getFamily() != Family.SUCCESSFUL) {
             entities = Can.empty();
             failureCause = new RestfulClientException(defaultFailureMessage(response));

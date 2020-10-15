@@ -18,15 +18,21 @@
  */
 package org.apache.isis.testdomain.rospec;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@Configuration
-@Import({
-    Customer.class,
-    RoSpecSampler.class,
-    RoSpecTestApplication.class
-})
-public class Configuration_usingRoSpec {
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@XmlRootElement(name = "customer")
+@DomainObject(nature = Nature.VIEW_MODEL)
+@Data @NoArgsConstructor @AllArgsConstructor
+public class Customer {
+
+    private String name;
+    private int age;
+    
 }
