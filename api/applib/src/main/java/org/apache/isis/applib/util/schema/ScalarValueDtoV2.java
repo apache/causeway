@@ -16,27 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.restclient;
+package org.apache.isis.applib.util.schema;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-@JsonIgnoreProperties({"links", "resulttype"})
-class ScalarValueDto {
+/**
+ * Represents a nullable scalar value,
+ * as used by ContentNegotiationServiceOrgApacheIsisV2 and its clients.
+ * @since Oct 16, 2020
+ */
+@JsonIgnoreProperties({"links", "extensions"})
+@Data @NoArgsConstructor @AllArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ScalarValueDtoV2 {
+   
+   public static ScalarValueDtoV2 forNull(@NonNull Class<?> type) {
+       return new ScalarValueDtoV2(type.getSimpleName(), null);
+   }
     
-    @JsonIgnoreProperties({"links", "extensions"})
-    public static class ScalarValue {
-        @Getter @Setter private Object value;
-    }
-
-    @Getter @Setter private ScalarValue result;
-    
-    @JsonIgnore
-    public Object getValue() {
-        return result!=null ? result.getValue() : null;
-    }
-    
+   public static ScalarValueDtoV2 forValue(@NonNull Object value) {
+       return new ScalarValueDtoV2(value.getClass().getSimpleName(), value);
+   }
+   
+   private String type;
+   private Object value;
+   
+   @JsonIgnore
+   public boolean isNull() {
+       return value == null;
+   }
+   
 }

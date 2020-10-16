@@ -30,6 +30,13 @@ import org.apache.isis.commons.internal.collections._Lists;
         objectType = "testdomain.RoSpecSampler")
 public class RoSpecSampler {
 
+    // -- VOID
+    
+    @Action 
+    public void voidResult() {
+        
+    }
+    
     // -- STRING
     
     @Action 

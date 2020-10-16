@@ -61,13 +61,21 @@ import lombok.val;
     Configuration_usingRoSpec.class,
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 })
-class RestServiceRoSpecTest {
+class RestServiceSimpifiedRepresentationTest {
 
     @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;
     
     private RoSpecSampler refSampler = new RoSpecSampler(); 
 
+    // -- STRING
+    
+    @Test
+    void voidResult() {
+        val digest = digest("voidResult", void.class);
+        assertTrue(digest.getEntities().isEmpty());
+    }
+    
     // -- STRING
     
     @Test
@@ -88,7 +96,7 @@ class RestServiceRoSpecTest {
     @Test 
     void stringArray() {
         val digest = digestList("stringArray", String.class, new GenericType<List<String>>(){});
-        val returnValue = digest.getEntities().getSingletonOrFail();
+        val returnValue = digest.getEntities();
         assertComponentWiseEquals(refSampler.stringArray(), returnValue);
     }
     

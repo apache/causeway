@@ -35,12 +35,13 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.applib.util.schema.ScalarValueDtoV2;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.resources._Json;
 
 import lombok.NonNull;
 import lombok.val;
@@ -218,21 +219,30 @@ public class ResponseDigest<T> {
 
     private T readSingle() throws JsonParseException, JsonMappingException, IOException {
         if(isValueType(entityType)) {
-            val responseBody = response.readEntity(String.class);
-            return parseValueTypeBody(responseBody);
+            val mapper = new ObjectMapper();
+            val jsonInput = response.readEntity(String.class);
+            val scalarValueDto = mapper.readValue(jsonInput, ScalarValueDtoV2.class);
+            return extractValue(scalarValueDto);
         }
         return response.<T>readEntity(entityType);
     }
     
     private List<T> readList() throws JsonParseException, JsonMappingException, IOException {
         if(isValueType(entityType)) {
-            final List<String> valueBodies = response.readEntity(new GenericType<List<String>>() {});
-            final List<T> resultList = new ArrayList<>(valueBodies.size());
-            for(val valueBody : valueBodies) {
+            val mapper = new ObjectMapper();
+            val jsonInput = response.readEntity(String.class);
+            final List<ScalarValueDtoV2> scalarValueDtoList = 
+                    mapper.readValue(
+                            jsonInput, 
+                            mapper.getTypeFactory().constructCollectionType(List.class, ScalarValueDtoV2.class));
+            
+            final List<T> resultList = new ArrayList<>(scalarValueDtoList.size());
+            for(val valueBody : scalarValueDtoList) {
                 // explicit loop, for simpler exception propagation
-                resultList.add(parseValueTypeBody(valueBody)); 
+                resultList.add(extractValue(valueBody)); 
             }
             return resultList;
+
         }
         return response.readEntity(genericType);
     }
@@ -280,12 +290,11 @@ public class ResponseDigest<T> {
     private boolean isValueType(Class<T> entityType) {
         return CommonDtoUtils.isValueType(entityType);
     }
-
-    private T parseValueTypeBody(String body) 
+    
+    private T extractValue(ScalarValueDtoV2 scalarValueDto) 
             throws JsonParseException, JsonMappingException, IOException {
-
-        val scalarValueDto = _Json.readJson(ScalarValueDto.class, body);
         return _Casts.uncheckedCast(scalarValueDto.getValue());
     }
+
 
 }

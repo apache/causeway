@@ -26,12 +26,17 @@ import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.databind.node.POJONode;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.client.SuppressionType;
+import org.apache.isis.applib.util.schema.ScalarValueDtoV2;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
@@ -56,7 +61,6 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV2")
 public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiationServiceAbstract {
-
 
     /**
      * Unlike RO v1.0, use a single content-type of <code>application/json;profile="urn:org.apache.isis/v2"</code>.
@@ -94,6 +98,29 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
     public static final String CONTENT_TYPE_OAI_V2_LIST = "application/json;"
             + "profile=\"" + ACCEPT_PROFILE + "\""
             + ";repr-type=\"list\""
+            ;
+    
+    /**
+     * The media type (as a string) used as the content-Type header when a single (nullable) value is rendered.
+     *
+     * @see #ACCEPT_PROFILE for discussion.
+     * @since 2.0
+     */
+    public static final String CONTENT_TYPE_OAI_V2_VALUE = "application/json;"
+            + "profile=\"" + ACCEPT_PROFILE + "\""
+            + ";repr-type=\"value\""
+            ;
+    
+    /**
+     * The media type (as a string) used as the content-Type header when a list of values is rendered. 
+     * Also used for action return type void, which is represented by an empty list.
+     *
+     * @see #ACCEPT_PROFILE for discussion.
+     * @since 2.0
+     */
+    public static final String CONTENT_TYPE_OAI_V2_VALUES = "application/json;"
+            + "profile=\"" + ACCEPT_PROFILE + "\""
+            + ";repr-type=\"values\""
             ;
 
     private final ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0;
@@ -232,6 +259,8 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
 
         final ActionResultRepresentation.ResultType resultType = objectAndActionInvocation.determineResultType();
+        final String resultTypeLiteral;
+        
         switch (resultType) {
         case DOMAIN_OBJECT:
 
@@ -244,43 +273,76 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 appendObjectTo(resourceContext, returnedAdapter, rootRepresentation, suppression);
             }
 
+            resultTypeLiteral = CONTENT_TYPE_OAI_V2_OBJECT;
+            
             break;
 
         case LIST:
 
             rootRepresentation = JsonRepresentation.newArray();
             
-            CollectionFacet.streamAdapters(returnedAdapter)
-            .forEach(element->
-                appendElementTo(resourceContext, element, rootRepresentation, suppression));
+            val elementAdapters = CollectionFacet.streamAdapters(returnedAdapter)
+            .collect(_Lists.toUnmodifiable());
+            
+            val isListOfIndentifiable = elementAdapters.stream()
+            .allMatch(elementAdapter->elementAdapter.getSpecification().isIdentifiable());
+            
+            if(isListOfIndentifiable) {
+                
+                elementAdapters
+                .forEach(elementAdapter->
+                    appendElementTo(resourceContext, elementAdapter, rootRepresentation, suppression));
+                
+                resultTypeLiteral = CONTENT_TYPE_OAI_V2_LIST;
 
-            // $$ro representation will be an object in the list with a single property named "$$ro"
-            if(!suppressRO) {
-                JsonRepresentation $$roContainerRepresentation = JsonRepresentation.newMap();
-                rootRepresentation.arrayAdd($$roContainerRepresentation);
-                $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
+                // $$ro representation will be an object in the list with a single property named "$$ro"
+                if(!suppressRO) {
+                    JsonRepresentation $$roContainerRepresentation = JsonRepresentation.newMap();
+                    rootRepresentation.arrayAdd($$roContainerRepresentation);
+                    $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
+                }
+                
+            } else {
+                
+                elementAdapters.stream()
+                .map(elementAdapter->{
+                    val pojo = elementAdapter.getPojo();
+                    return pojo==null
+                        ? ScalarValueDtoV2.forNull(elementAdapter.getSpecification().getCorrespondingClass())
+                        : ScalarValueDtoV2.forValue(pojo);
+                })
+                .forEach(rootRepresentation::arrayAdd);
+                
+                resultTypeLiteral = CONTENT_TYPE_OAI_V2_VALUES;
+                
             }
 
             break;
 
         case SCALAR_VALUE:
+            
+            val pojo = returnedAdapter.getPojo();
+            val dto =  pojo==null
+                ? ScalarValueDtoV2.forNull(returnedAdapter.getSpecification().getCorrespondingClass())
+                : ScalarValueDtoV2.forValue(pojo);
+                
+            rootRepresentation = new JsonRepresentation(new POJONode(dto));
+            resultTypeLiteral = CONTENT_TYPE_OAI_V2_VALUE;
+            
+            break;
+            
         case VOID:
-
-            // not supported
-            return null;
+            // represented as empty array
+            rootRepresentation = JsonRepresentation.newArray();
+            resultTypeLiteral = CONTENT_TYPE_OAI_V2_VALUES;
+            break;
         default:
-            rootRepresentation = null; // unexpected code reach
+            throw _Exceptions.unmatchedCase(resultType);
         }
 
-        final Response.ResponseBuilder responseBuilder =
-                restfulObjectsV1_0.buildResponseTo(
-                        resourceContext, objectAndActionInvocation, $$roRepresentation, rootRepresentation);
-
-        // set appropriate Content-Type
-        responseBuilder.type(
-                resultType == ActionResultRepresentation.ResultType.DOMAIN_OBJECT
-                        ? CONTENT_TYPE_OAI_V2_OBJECT
-                        : CONTENT_TYPE_OAI_V2_LIST);
+        val responseBuilder = restfulObjectsV1_0
+                .buildResponseTo(resourceContext, objectAndActionInvocation, $$roRepresentation, rootRepresentation)
+                .type(resultTypeLiteral);  // set appropriate Content-Type
 
         return responseBuilder(responseBuilder);
     }
