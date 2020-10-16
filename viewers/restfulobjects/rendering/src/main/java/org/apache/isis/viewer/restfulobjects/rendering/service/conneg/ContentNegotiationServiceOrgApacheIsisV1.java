@@ -95,7 +95,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         if(!canAccept(resourceContext)) {
             return null;
         }
-        log.warn("profile '%s' is no longer supported use '%s' instead", 
+        log.warn("profile '{}' is no longer supported use '{}' instead", 
                 ACCEPT_PROFILE,
                 ContentNegotiationServiceOrgApacheIsisV2.ACCEPT_PROFILE);
         return Responses.ofNotImplemented();

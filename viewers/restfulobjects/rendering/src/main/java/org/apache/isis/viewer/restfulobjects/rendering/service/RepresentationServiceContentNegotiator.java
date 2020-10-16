@@ -150,7 +150,7 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
             val responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
             if(responseBuilder != null) {
                 
-                log.debug("--> winner: %s", ()->contentNegotiationService.getClass().getSimpleName());
+                log.debug("--> winner: {}", ()->contentNegotiationService.getClass().getSimpleName());
                 return responseBuilder;
             }
         }

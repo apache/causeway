@@ -50,7 +50,10 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 RestEndpointService.class
-                },
+        },
+        properties = {
+                "logging.level.org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator=DEBUG"
+        },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Import({

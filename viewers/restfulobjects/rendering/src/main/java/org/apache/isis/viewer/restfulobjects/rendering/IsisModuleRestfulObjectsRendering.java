@@ -27,6 +27,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEn
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
+import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV2;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
@@ -53,6 +54,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
         AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
         ContentNegotiationServiceOrgApacheIsisV2.class,
+        ContentNegotiationServiceOrgApacheIsisV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported) 
         ContentNegotiationServiceXRoDomainType.class,
         JsonValueEncoder.class,
         RepresentationServiceContentNegotiator.class,
