@@ -40,6 +40,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
@@ -209,7 +211,16 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
     }
 
     private CredentialsException credentialsException() {
-        return new CredentialsException("Unknown user/password combination");
+        return new CredentialsException("Unknown user/password combination") {
+            private static final long serialVersionUID = 1L;
+            @Override public StackTraceElement[] getStackTrace() {
+                // truncate reported stacktraces down to just 1 line
+                val fullStackTrace = super.getStackTrace();
+                return _NullSafe.size(fullStackTrace)>1
+                        ? _Arrays.subArray(super.getStackTrace(), 0, 1)
+                        : fullStackTrace;
+            }            
+        };
     }
 
     private void authenticateElseThrow_usingDelegatedMechanism(AuthenticationToken token) {

@@ -282,12 +282,45 @@ public final class _Arrays {
      * @param array
      * @return null for empty arrays
      */
-    public static @Nullable <T> T[] emptyToNull(T[] array) {
+    public static @Nullable <T> T[] emptyToNull(@Nullable T[] array) {
         if(array!=null && array.length==0) {
             return null;
         }
         return array;
     }
+    
+    /**
+     * Returns a sub-array of given array. The
+     * sub-array begins at the specified {@code beginIndex} and
+     * extends to the element at index {@code endIndex - 1}.
+     * Thus the length of the sub-array is {@code endIndex-beginIndex}.
+     *
+     * @param      array
+     * @param      beginIndex   the beginning index, inclusive.
+     * @param      endIndex     the ending index, exclusive.
+     * @return     the specified sub-array, which always is a copy 
+     * @exception  IndexOutOfBoundsException  if the
+     *             {@code beginIndex} is negative, or
+     *             {@code endIndex} is larger than the length of
+     *             {@code array} object, or
+     *             {@code beginIndex} is larger than
+     *             {@code endIndex}.
+     */
+    public static <T> T[] subArray(@NonNull T[] array, int beginIndex, int endIndex) {
+        if (beginIndex < 0) {
+            throw new ArrayIndexOutOfBoundsException(beginIndex);
+        }
+        if (endIndex > array.length) {
+            throw new ArrayIndexOutOfBoundsException(endIndex);
+        }
+        final int subLen = endIndex - beginIndex;
+        if (subLen < 0) {
+            throw new ArrayIndexOutOfBoundsException(subLen);
+        }
+        return Arrays.copyOfRange(array, beginIndex, endIndex);
+    }
+    
+    
     
     // -- COMPONENT TYPE INFERENCE
 
