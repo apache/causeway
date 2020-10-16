@@ -38,10 +38,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.apache.isis.applib.util.schema.ScalarValueDtoV2;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 
 import lombok.NonNull;
 import lombok.val;

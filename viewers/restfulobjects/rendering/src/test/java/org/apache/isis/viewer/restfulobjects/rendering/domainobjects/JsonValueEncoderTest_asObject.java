@@ -70,7 +70,7 @@ public class JsonValueEncoderTest_asObject {
         
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = Exception.class)
     public void whenAdapterIsNull() throws Exception {
         jsonValueEncoder.asObject(null, null);
     }
