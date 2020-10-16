@@ -45,6 +45,10 @@ public final class Responses {
     public static Response.ResponseBuilder ofNotFound() {
         return of(RestfulResponse.HttpStatusCode.NOT_FOUND);
     }
+    
+    public static Response.ResponseBuilder ofNotImplemented() {
+        return of(RestfulResponse.HttpStatusCode.NOT_IMPLEMENTED);
+    }
 
     public static Response.ResponseBuilder ofOk(
             final ReprRenderer<?, ?> renderer,

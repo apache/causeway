@@ -27,7 +27,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEn
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
-import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
+import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV2;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceMenu;
@@ -52,7 +52,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
         // @Service's
         AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
-        ContentNegotiationServiceOrgApacheIsisV1.class,
+        ContentNegotiationServiceOrgApacheIsisV2.class,
         ContentNegotiationServiceXRoDomainType.class,
         JsonValueEncoder.class,
         RepresentationServiceContentNegotiator.class,
