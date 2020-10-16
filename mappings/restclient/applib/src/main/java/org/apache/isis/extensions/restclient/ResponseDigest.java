@@ -37,6 +37,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.isis.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -183,7 +184,7 @@ public class ResponseDigest<T> {
             entities = Can.empty();
             return this;
         }
-
+        
         if(!response.hasEntity()) {
             entities = Can.empty();
             failureCause = new NoSuchElementException(defaultFailureMessage(response));
@@ -195,18 +196,30 @@ public class ResponseDigest<T> {
             failureCause = new RestfulClientException(defaultFailureMessage(response));
             return this;
         }
-
+        
+        // see if we can extract the returned representation type (repr-type) from the header
+        val contentTypeHeaderString = response.getHeaderString("Content-Type");
+        val reprType = RepresentationTypeSimplifiedV2.parse(contentTypeHeaderString)
+                .orElse(null);
+        if(reprType==null) {
+            entities = Can.empty();
+            failureCause = new RestfulClientException(String.format(
+                    "Invalid REST response, cannot parse header's Content-Type '%s' for the repr-type to use", 
+                    contentTypeHeaderString));
+            return this;
+        }
+        
         try {
             
             if(genericType==null) {
                 // when response is a singleton
-                val singleton = readSingle();
+                val singleton = readSingle(reprType);
                 entities = singleton==null
                         ? Can.empty()
                         : Can.ofSingleton(singleton);
             } else {
                 // when response is a list
-                entities = Can.ofCollection(readList());
+                entities = Can.ofCollection(readList(reprType));
             }
             
         } catch (Exception e) {
@@ -217,8 +230,10 @@ public class ResponseDigest<T> {
         return this;
     }
 
-    private T readSingle() throws JsonParseException, JsonMappingException, IOException {
-        if(isValueType(entityType)) {
+    private T readSingle(final RepresentationTypeSimplifiedV2 reprType) 
+            throws JsonParseException, JsonMappingException, IOException {
+        if(reprType.isValue() 
+                || isValueType(entityType)) {
             val mapper = new ObjectMapper();
             val jsonInput = response.readEntity(String.class);
             val scalarValueDto = mapper.readValue(jsonInput, ScalarValueDtoV2.class);
@@ -227,8 +242,10 @@ public class ResponseDigest<T> {
         return response.<T>readEntity(entityType);
     }
     
-    private List<T> readList() throws JsonParseException, JsonMappingException, IOException {
-        if(isValueType(entityType)) {
+    private List<T> readList(final RepresentationTypeSimplifiedV2 reprType) 
+            throws JsonParseException, JsonMappingException, IOException {
+        if(reprType.isValues() 
+                || isValueType(entityType)) {
             val mapper = new ObjectMapper();
             val jsonInput = response.readEntity(String.class);
             final List<ScalarValueDtoV2> scalarValueDtoList = 

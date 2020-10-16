@@ -33,6 +33,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -64,64 +65,10 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
 
     /**
      * Unlike RO v1.0, use a single content-type of <code>application/json;profile="urn:org.apache.isis/v2"</code>.
-     *
      * <p>
-     * The response content types ({@link #CONTENT_TYPE_OAI_V2_OBJECT}, {@link #CONTENT_TYPE_OAI_V2_OBJECT_COLLECTION},
-     * {@link #CONTENT_TYPE_OAI_V2_LIST}) append the 'repr-type' parameter.
-     * </p>
+     * The response content types {@link RepresentationTypeSimplifiedV2} append the 'repr-type' parameter.
      */
     public static final String ACCEPT_PROFILE = "urn:org.apache.isis/v2";
-
-    /**
-     * The media type (as a string) used as the content-Type header when a domain object is rendered.
-     *
-     * @see #ACCEPT_PROFILE for discussion.
-     */
-    public static final String CONTENT_TYPE_OAI_V2_OBJECT = "application/json;"
-            + "profile=\"" + ACCEPT_PROFILE + "\""
-            + ";repr-type=\"object\""
-            ;
-    /**
-     * The media type (as a string) used as the content-Type header when a parented collection is rendered.
-     *
-     * @see #ACCEPT_PROFILE for discussion.
-     */
-    public static final String CONTENT_TYPE_OAI_V2_OBJECT_COLLECTION = "application/json;"
-            + "profile=\"" + ACCEPT_PROFILE + "\""
-            + ";repr-type=\"object-collection\""
-            ;
-    /**
-     * The media type (as a string) used as the content-Type header when a standalone collection is rendered.
-     *
-     * @see #ACCEPT_PROFILE for discussion.
-     */
-    public static final String CONTENT_TYPE_OAI_V2_LIST = "application/json;"
-            + "profile=\"" + ACCEPT_PROFILE + "\""
-            + ";repr-type=\"list\""
-            ;
-    
-    /**
-     * The media type (as a string) used as the content-Type header when a single (nullable) value is rendered.
-     *
-     * @see #ACCEPT_PROFILE for discussion.
-     * @since 2.0
-     */
-    public static final String CONTENT_TYPE_OAI_V2_VALUE = "application/json;"
-            + "profile=\"" + ACCEPT_PROFILE + "\""
-            + ";repr-type=\"value\""
-            ;
-    
-    /**
-     * The media type (as a string) used as the content-Type header when a list of values is rendered. 
-     * Also used for action return type void, which is represented by an empty list.
-     *
-     * @see #ACCEPT_PROFILE for discussion.
-     * @since 2.0
-     */
-    public static final String CONTENT_TYPE_OAI_V2_VALUES = "application/json;"
-            + "profile=\"" + ACCEPT_PROFILE + "\""
-            + ";repr-type=\"values\""
-            ;
 
     private final ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0;
 
@@ -162,7 +109,8 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 restfulObjectsV1_0.buildResponseTo(
                         resourceContext, objectAdapter, $$roRepresentation, rootRepresentation);
 
-        responseBuilder.type(CONTENT_TYPE_OAI_V2_OBJECT);
+        responseBuilder.type(
+                RepresentationTypeSimplifiedV2.OBJECT.getContentTypeHeaderValue(ACCEPT_PROFILE));
 
         return responseBuilder(responseBuilder);
     }
@@ -213,7 +161,8 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 restfulObjectsV1_0.buildResponseTo(
                         resourceContext, managedCollection, $$roRepresentation, rootRepresentation);
 
-        responseBuilder.type(CONTENT_TYPE_OAI_V2_OBJECT_COLLECTION);
+        responseBuilder.type(
+                RepresentationTypeSimplifiedV2.OBJECT_COLLECTION.getContentTypeHeaderValue(ACCEPT_PROFILE));
 
         return responseBuilder(responseBuilder);
     }
@@ -259,7 +208,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
 
         final ActionResultRepresentation.ResultType resultType = objectAndActionInvocation.determineResultType();
-        final String resultTypeLiteral;
+        final RepresentationTypeSimplifiedV2 headerContentType; 
         
         switch (resultType) {
         case DOMAIN_OBJECT:
@@ -273,7 +222,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 appendObjectTo(resourceContext, returnedAdapter, rootRepresentation, suppression);
             }
 
-            resultTypeLiteral = CONTENT_TYPE_OAI_V2_OBJECT;
+            headerContentType = RepresentationTypeSimplifiedV2.OBJECT;
             
             break;
 
@@ -293,7 +242,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 .forEach(elementAdapter->
                     appendElementTo(resourceContext, elementAdapter, rootRepresentation, suppression));
                 
-                resultTypeLiteral = CONTENT_TYPE_OAI_V2_LIST;
+                headerContentType = RepresentationTypeSimplifiedV2.LIST;
 
                 // $$ro representation will be an object in the list with a single property named "$$ro"
                 if(!suppressRO) {
@@ -313,7 +262,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 })
                 .forEach(rootRepresentation::arrayAdd);
                 
-                resultTypeLiteral = CONTENT_TYPE_OAI_V2_VALUES;
+                headerContentType = RepresentationTypeSimplifiedV2.VALUES;
                 
             }
 
@@ -327,14 +276,14 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 : ScalarValueDtoV2.forValue(pojo);
                 
             rootRepresentation = new JsonRepresentation(new POJONode(dto));
-            resultTypeLiteral = CONTENT_TYPE_OAI_V2_VALUE;
+            headerContentType = RepresentationTypeSimplifiedV2.VALUE;
             
             break;
             
         case VOID:
             // represented as empty array
             rootRepresentation = JsonRepresentation.newArray();
-            resultTypeLiteral = CONTENT_TYPE_OAI_V2_VALUES;
+            headerContentType = RepresentationTypeSimplifiedV2.VALUES;
             break;
         default:
             throw _Exceptions.unmatchedCase(resultType);
@@ -342,7 +291,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
 
         val responseBuilder = restfulObjectsV1_0
                 .buildResponseTo(resourceContext, objectAndActionInvocation, $$roRepresentation, rootRepresentation)
-                .type(resultTypeLiteral);  // set appropriate Content-Type
+                .type(headerContentType.getContentTypeHeaderValue(ACCEPT_PROFILE));  // set appropriate Content-Type
 
         return responseBuilder(responseBuilder);
     }
