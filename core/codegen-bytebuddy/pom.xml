@@ -64,31 +64,14 @@
 		<dependency>
 			<groupId>org.objenesis</groupId>
 			<artifactId>objenesis</artifactId>
-			<version>${objenesis.version}</version>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.apache.isis.commons</groupId>
 			<artifactId>isis-commons</artifactId>
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-junit4</artifactId>
-			<exclusions>
-				<exclusion>
-					<!-- for dependency convergence -->
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.bytebuddy</groupId>
-					<artifactId>byte-buddy</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 
