@@ -116,9 +116,12 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
             final ResultType resultType, 
             final JsonRepresentation representation) {
 
-        if(returnedAdapter == null) {
+        if(returnedAdapter == null
+                || !ManagedObjects.isSpecified(returnedAdapter)) {
             return;
         }
+        
+        // we have a returnedAdapter with a spec, but it might hold no pojo (null) 
 
         final ReprRendererAbstract<?, ?> renderer = buildResultRenderer(resultType, representation);
         if(renderer != null) {
@@ -149,10 +152,6 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         case SCALAR_VALUE:
 
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
-                return null; //TODO[ISIS-2449] how to represent null value?
-            }
-            
             final ScalarValueReprRenderer scalarValueReprRenderer =
             new ScalarValueReprRenderer(resourceContext, null, representation);
             scalarValueReprRenderer.with(returnedAdapter)
@@ -162,10 +161,6 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         case DOMAIN_OBJECT:
             
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
-                return null; //TODO[ISIS-2449] should'nt we instead respond with a 404 not found?
-            }
-
             final DomainObjectReprRenderer objectReprRenderer =
             new DomainObjectReprRenderer(resourceContext, null, representation);
 

@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -49,6 +50,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.NonNull;
 import lombok.val;
 
 
@@ -163,7 +165,8 @@ public class JsonValueEncoder {
         }
     }
 
-    public Object asObject(final ManagedObject adapter, final String format) {
+    @Nullable
+    public Object asObject(final @NonNull ManagedObject adapter, final String format) {
         
         requires(adapter, "adapter");
         
