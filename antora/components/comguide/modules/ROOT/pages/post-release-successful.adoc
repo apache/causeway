@@ -444,8 +444,6 @@ sh preview.sh
 [source,bash,subs="attributes+"]
 ----
 git push origin asf-site
-
-cd ../isis
 ----
 
 [#update-the-algolia-search-index]
@@ -479,7 +477,7 @@ NOTE: Additional config options for the crawler can be found link:https://www.al
 
 Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
 
-In the `isis` repo (adjust if not on RC1):
+In the `isis` repo (adjust RC number as required):
 
 [source,bash,subs="attributes+"]
 ----
