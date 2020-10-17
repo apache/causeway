@@ -4,57 +4,186 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: Not released yet.
 
-== Migrating from M3 to M4
+This is a further milestone release, consolidating the "re-platforming" of Apache Isis on top of Spring Boot.
 
-=== Maven
+Much of the emphasis in this release has been on stabilisation and regression testing.
+That said, there are some new features.
+The release includes support for a new (additional) link:https://cwiki.apache.org/confluence/display/ISIS/ActionParameters?focusedCommentId=158867933#comment-158867933[programming model for action parameters], allowing for more sophisticated management of parameters that interact with each other.
+On the flip side, support for contributed actions from domain services has been removed; use xref:refguide:applib-classes:roles-mixins-contributees/mixins.adoc[Mixins]instead.
 
-Some Maven artifacts have been renamed:
+This release also has a reworking/simplification of the command service and background commands.
+This includes new extension modules to persist commands (xref:extensions:command-log:about.adoc[Command Log] and xref:extensions:command-replay:about.adoc[Command Replay], to assist regression testing.
 
-[source,xml]
-.Parent (pom)
-----
-<!--
-<groupId>org.apache.isis.core</groupId>
-<artifactId>isis-parent</artifactId>
--->
+Also in this release, the xref:incubator:kroviz:about.adoc[Kroviz client] has been brought into the incubator.
+This is a single-page app that runs within the browser to provide a UI similar to that of the xref:vw:ROOT:about.adoc[Wicket Viewer], but interacting with the domain application exclusively through the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects Viewer].
 
-<groupId>org.apache.isis</groupId>
-<artifactId>isis-parent</artifactId>
-----
+The release also includes some preliminary work preparing the way for support for JPA (as an alternative to xref:pjdo:ROOT:about.adoc[JDO/DataNucleus].
+This support is expected to be in the next milestone release.
 
-[source,xml]
-.Core (pom)
-----
-<!--
-<groupId>org.apache.isis.core</groupId>
-<artifactId>isis</artifactId>
--->
+Other work done in this release includes an experimental porting of the build system from Maven to gradle (though Maven is for now still the official build system of the framework).
 
-<groupId>org.apache.isis.core</groupId>
-<artifactId>isis-core</artifactId>
-----
+The example demo app has also been fleshed out considerably as both a regression tests and to provide living documentation; the docker image can be downloaded from link:https://hub.docker.com/repository/docker/apacheisis/demo-wicket[docker hub].
 
-[source,xml]
-.Commons (jar)
-----
-<!--
-<groupId>org.apache.isis.core.commons</groupId>
-<artifactId>isis-core-commons</artifactId>
--->
 
-<groupId>org.apache.isis.commons</groupId>
-<artifactId>isis-commons</artifactId>
-----
+== New Feature
 
-=== Java
+* link:https://issues.apache.org/jira/browse/ISIS-2422[ISIS-2422] - Treat schema DTOs (InteractionDto, ChangesDto, CommandDto) as value types.
+* link:https://issues.apache.org/jira/browse/ISIS-2416[ISIS-2416] - Allow action domain event handlers to change argument in the executing phase.
+* link:https://issues.apache.org/jira/browse/ISIS-2400[ISIS-2400] - Allow sections within menubars.layout.xml to have a name ... then appear in the menu
+* link:https://issues.apache.org/jira/browse/ISIS-2397[ISIS-2397] - Add removeAll to RepositoryService API
+* link:https://issues.apache.org/jira/browse/ISIS-2367[ISIS-2367] - Promote @Model support from 'incubator' to 'extension'
+* link:https://issues.apache.org/jira/browse/ISIS-2362[ISIS-2362] - New Programming Model for Action Parameters
+* link:https://issues.apache.org/jira/browse/ISIS-2340[ISIS-2340] - New common UI Model Module
+* link:https://issues.apache.org/jira/browse/ISIS-2333[ISIS-2333] - Add Object Mixin for graphical Metamodel Inspection
+* link:https://issues.apache.org/jira/browse/ISIS-2312[ISIS-2312] - Add Jdo Metamodel Download Menu (Zip)
+* link:https://issues.apache.org/jira/browse/ISIS-2278[ISIS-2278] - Reinstate background commands for entities, incorporate fix ISIS-2277 from v1
+* link:https://issues.apache.org/jira/browse/ISIS-2276[ISIS-2276] - BackgroundCommandExecution - should use a different persistent session for each command
+* link:https://issues.apache.org/jira/browse/ISIS-2232[ISIS-2232] - Remove support for domain services contributing properties, collections or actions. (Use mixins instead).
+* link:https://issues.apache.org/jira/browse/ISIS-1536[ISIS-1536] - BackgroundService should fail-fast if there is no BackgroundCommandService implementation available to persist the command.
+* link:https://issues.apache.org/jira/browse/ISIS-1281[ISIS-1281] - Provide a programming API (probably via domain events) to allow object visibility to be vetoed.
 
-Some Java classes and packages have been renamed:
 
-[source,java]
-.Commons
-----
-// org.apache.isis.core.commons.*
-org.apache.isis.commons.*
-----
+=== Incubating: Kroviz
+
+* link:https://issues.apache.org/jira/browse/ISIS-2324[ISIS-2324] - Merge kroviz
+* link:https://issues.apache.org/jira/browse/ISIS-2353[ISIS-2353] - Open New Browser Tab for External Links
+* link:https://issues.apache.org/jira/browse/ISIS-2350[ISIS-2350] - Drag&Drop Example
+* link:https://issues.apache.org/jira/browse/ISIS-2342[ISIS-2342] - Client Kroviz: UI Polishing
+
+=== Incubating: JPA
+
+* link:https://issues.apache.org/jira/browse/ISIS-2332[ISIS-2332] - Add new JPA module to provide a JpaEntityFacet
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-2447[ISIS-2447] - Add Regression Tests for Isis' Cucubmber Integration
+* link:https://issues.apache.org/jira/browse/ISIS-2446[ISIS-2446] - Move JaxbService implementation applib -> runtimeservices
+* link:https://issues.apache.org/jira/browse/ISIS-2438[ISIS-2438] - SecMan: rename entity schema 'isissecurity' -> 'isisExtensionsSecman'
+* link:https://issues.apache.org/jira/browse/ISIS-2435[ISIS-2435] - Commons: Polishing
+* link:https://issues.apache.org/jira/browse/ISIS-2428[ISIS-2428] - Cleanup inconsistent Artifact Names
+* link:https://issues.apache.org/jira/browse/ISIS-2419[ISIS-2419] - Less verbose Action Dialog Validation Feedback, if its (just) a Constraint Violation (suppress Category)
+* link:https://issues.apache.org/jira/browse/ISIS-2394[ISIS-2394] - TenantedFacetFactory should be automatically registered into the programming model
+* link:https://issues.apache.org/jira/browse/ISIS-2392[ISIS-2392] - Add CSS classes and identifiers for cypress regression test suite.
+* link:https://issues.apache.org/jira/browse/ISIS-2379[ISIS-2379] - Fire UserCreatedEvent when a new User Entity gets persisted
+* link:https://issues.apache.org/jira/browse/ISIS-2375[ISIS-2375] - IsisIntegrationTestAbstractWithFixtures should also run module fixtures automatically.
+* link:https://issues.apache.org/jira/browse/ISIS-2372[ISIS-2372] - Wicket No-arg Confirm Dialog: render below instead of right of button
+* link:https://issues.apache.org/jira/browse/ISIS-2331[ISIS-2331] - Decouple from PersistenceSession (move to persistence module)
+* link:https://issues.apache.org/jira/browse/ISIS-2330[ISIS-2330] - Extend ObjectManager with ObjectBulkLoader (handle Queries)
+* link:https://issues.apache.org/jira/browse/ISIS-2327[ISIS-2327] - Use new Popover Label for Object Reference Tooltips
+* link:https://issues.apache.org/jira/browse/ISIS-2323[ISIS-2323] - Allow for IsisInteractions to store User Data (InteractionScoped)
+* link:https://issues.apache.org/jira/browse/ISIS-2320[ISIS-2320] - Rename IsisSessionScope -> IsisInteractionScope
+* link:https://issues.apache.org/jira/browse/ISIS-2270[ISIS-2270] - Rethink, who shall manage Lifecycles of DomainObjects, ViewModels and Mixins
+* link:https://issues.apache.org/jira/browse/ISIS-2231[ISIS-2231] - Bring in incode-platform stuff
+* link:https://issues.apache.org/jira/browse/ISIS-2177[ISIS-2177] - Provide an ObjectManager API to decouple from JDO
+* link:https://issues.apache.org/jira/browse/ISIS-2093[ISIS-2093] - Dialog OK Button: when ARE_YOU_SURE semantics then render style 'DANGER'
+
+
+=== Documentation Improvements
+
+* link:https://issues.apache.org/jira/browse/ISIS-2368[ISIS-2368] - Add lightbox support (=enlarge image on click) for Antora template
+* link:https://issues.apache.org/jira/browse/ISIS-2359[ISIS-2359] - Doc: List of Maven Artifacts
+* link:https://issues.apache.org/jira/browse/ISIS-2336[ISIS-2336] - Ongoing improvements for Antora website
+* link:https://issues.apache.org/jira/browse/ISIS-2334[ISIS-2334] - Schema Update: document field Facet#id
+
+=== Demo App Improvements
+
+* link:https://issues.apache.org/jira/browse/ISIS-2321[ISIS-2321] - Demo: Showcase advanced Mixin (rendering as ViewModel)
+* link:https://issues.apache.org/jira/browse/ISIS-2222[ISIS-2222] - Flesh out demo app with extra examples.
+
+=== CI/Tooling Improvements
+
+* link:https://issues.apache.org/jira/browse/ISIS-2433[ISIS-2433] - Gradle Build: automate 'folder' to 'build artifact name' mapping (settings.gradle)
+* link:https://issues.apache.org/jira/browse/ISIS-2426[ISIS-2426] - Add Tooling Infrastructure (Project Introspection, Code Mining/Analysis, Reporting)
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-2440[ISIS-2440] - AsciiDoc: value facets not registered properly
+* link:https://issues.apache.org/jira/browse/ISIS-2439[ISIS-2439] - JDO Create Schema fails on MariaDB/MySql: SQL Syntax Error
+* link:https://issues.apache.org/jira/browse/ISIS-2432[ISIS-2432] - SecMan Entities don't render a meaningful Title (eg. User: name not shown)
+* link:https://issues.apache.org/jira/browse/ISIS-2430[ISIS-2430] - Cannot assume Action Param Spec to be correct when eagerly loaded, eg. SecMan Menu Action (create user) causes Exception
+* link:https://issues.apache.org/jira/browse/ISIS-2429[ISIS-2429] - Demo: ThereCanBeOnlyOne shutdown is hardwired to port 8080
+* link:https://issues.apache.org/jira/browse/ISIS-2423[ISIS-2423] - Persisted callback and PublisherService#changedObjects are not called, instead appear as updates.
+* link:https://issues.apache.org/jira/browse/ISIS-2421[ISIS-2421] - Demo fat jar fails to launch - could not find asciidoctor jruby file
+* link:https://issues.apache.org/jira/browse/ISIS-2418[ISIS-2418] - deselecting checkboxes for collection per @Action(associateWith) doesn't work.
+* link:https://issues.apache.org/jira/browse/ISIS-2407[ISIS-2407] - CORS Extension breaks Wicket Viewer (bulk select issues)
+* link:https://issues.apache.org/jira/browse/ISIS-2406[ISIS-2406] - Header should be sticky (but currently scrolls up)
+* link:https://issues.apache.org/jira/browse/ISIS-2405[ISIS-2405] - @Property mixin on a view model cannot be defined, fails to render with ClassCastException
+* link:https://issues.apache.org/jira/browse/ISIS-2404[ISIS-2404] - Param Negotiation clears already filled out Param when non-scalar
+* link:https://issues.apache.org/jira/browse/ISIS-2403[ISIS-2403] - 'Rebuild metamodel' seems to deadlock, at least in the demo app.
+* link:https://issues.apache.org/jira/browse/ISIS-2401[ISIS-2401] - Memento creation/recreation roundtrip might get confused when processing Value Types
+* link:https://issues.apache.org/jira/browse/ISIS-2399[ISIS-2399] - Spring bean resolution issues when configuring TenantedAuthorizationFacet
+* link:https://issues.apache.org/jira/browse/ISIS-2398[ISIS-2398] - Rendering a StandaloneCollectionPage in Wicket throws Optional not serializable exception
+* link:https://issues.apache.org/jira/browse/ISIS-2395[ISIS-2395] - JDO mapping required for AsciiDoc and Markdown. (Also, Markup should be abstract)
+* link:https://issues.apache.org/jira/browse/ISIS-2393[ISIS-2393] - Editing a property on a view model does not stick
+* link:https://issues.apache.org/jira/browse/ISIS-2388[ISIS-2388] - Regression: value choice mementos are broken
+* link:https://issues.apache.org/jira/browse/ISIS-2387[ISIS-2387] - Regression: boolean parameters not handled properly
+* link:https://issues.apache.org/jira/browse/ISIS-2386[ISIS-2386] - Regression: null parameters not handled properly (invalid method signatures)
+* link:https://issues.apache.org/jira/browse/ISIS-2385[ISIS-2385] - Jaxb PersistentEntityAdapter fails when asked to marshal detached entities
+* link:https://issues.apache.org/jira/browse/ISIS-2384[ISIS-2384] - Action that takes a List of view models fails to gather them when object has been viewed already
+* link:https://issues.apache.org/jira/browse/ISIS-2383[ISIS-2383] - Regression: cannot create mementos from detached choice pojos
+* link:https://issues.apache.org/jira/browse/ISIS-2380[ISIS-2380] - Regression "Inline as if edit" prompt style is broken in Wicket viewer
+* link:https://issues.apache.org/jira/browse/ISIS-2378[ISIS-2378] - Internal _Strings.readAllLines does not honor selected Charset
+* link:https://issues.apache.org/jira/browse/ISIS-2376[ISIS-2376] - Regression: switching Translation Mode fails (Prototyping Menu)
+* link:https://issues.apache.org/jira/browse/ISIS-2371[ISIS-2371] - Regression: inline editing of entities fails (entity not attached)
+* link:https://issues.apache.org/jira/browse/ISIS-2370[ISIS-2370] - Regression: collection result may display negative time amounts (timing info when prototyping)
+* link:https://issues.apache.org/jira/browse/ISIS-2369[ISIS-2369] - Regression: object references within parented tables render just as text
+* link:https://issues.apache.org/jira/browse/ISIS-2365[ISIS-2365] - Action Dialog: Incompatible Parameter Memento if non-scalar
+* link:https://issues.apache.org/jira/browse/ISIS-2364[ISIS-2364] - Bulk selection (first param in action dialog) is also propagated to other params if of same type.
+* link:https://issues.apache.org/jira/browse/ISIS-2361[ISIS-2361] - Bulk selection (first param in action dialog) gets cleared when validation fails.
+* link:https://issues.apache.org/jira/browse/ISIS-2358[ISIS-2358] - A background command referencing a parent command can cause DN exception
+* link:https://issues.apache.org/jira/browse/ISIS-2343[ISIS-2343] - Integration tests w/ Datanucleus might fail when run in a batch
+* link:https://issues.apache.org/jira/browse/ISIS-2339[ISIS-2339] - Dropdownlist requires 2 clicks in order to show (dialog not initialized properly)
+* link:https://issues.apache.org/jira/browse/ISIS-2338[ISIS-2338] - Regression: all Confirmation Dialogs are broken
+* link:https://issues.apache.org/jira/browse/ISIS-2335[ISIS-2335] - Mixins declared using type-level @Action should not contribute as Association
+* link:https://issues.apache.org/jira/browse/ISIS-2328[ISIS-2328] - Missing publisher facet for @Action declared on mixin.
+* link:https://issues.apache.org/jira/browse/ISIS-2326[ISIS-2326] - No-arg Action w/ Confirmation suppresses Tooltips.
+* link:https://issues.apache.org/jira/browse/ISIS-2319[ISIS-2319] - defaults/disable/hide not honored when pending args are preset with defaults
+* link:https://issues.apache.org/jira/browse/ISIS-2317[ISIS-2317] - ManagedObject instances need a side-effect free toString() method
+* link:https://issues.apache.org/jira/browse/ISIS-2316[ISIS-2316] - New type level @Property (Mixins) get picked up as both association and action
+* link:https://issues.apache.org/jira/browse/ISIS-2315[ISIS-2315] - Bad PageParameter: oidString=images (as seen with SimpleApp)
+* link:https://issues.apache.org/jira/browse/ISIS-2314[ISIS-2314] - ComponentHintKey fails to restore field 'hintStore' on de-serialization
+* link:https://issues.apache.org/jira/browse/ISIS-2313[ISIS-2313] - Do not depend on 2 versions of javax.jdo simultaneously
+* link:https://issues.apache.org/jira/browse/ISIS-2311[ISIS-2311] - Bulk Toggle (Multiselect): UI can get out of sync with underlying model
+* link:https://issues.apache.org/jira/browse/ISIS-2309[ISIS-2309] - @EmbeddedOnly types are broken
+* link:https://issues.apache.org/jira/browse/ISIS-2304[ISIS-2304] - Vaadin Viewer: fix menubar rendering
+* link:https://issues.apache.org/jira/browse/ISIS-1919[ISIS-1919] - Collective UI Improvements
+** link:https://issues.apache.org/jira/browse/ISIS-2098[ISIS-2098] - Buttons (action-links) with confirmation don't show their associated tooltip
+** link:https://issues.apache.org/jira/browse/ISIS-1990[ISIS-1990] - Buttons (action-links) don't honor disabled state if providing a confirmation dialog
+** link:https://issues.apache.org/jira/browse/ISIS-1989[ISIS-1989] - Disabled buttons (action-links) won't show the styled tooltip
+** link:https://issues.apache.org/jira/browse/ISIS-1921[ISIS-1921] - Confirmation-Popups sometimes render outside window bounds
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-2374[ISIS-2374] - Support Gradle Builds
+* link:https://issues.apache.org/jira/browse/ISIS-2341[ISIS-2341] - Ongoing: CI Maintenance
+** link:https://issues.apache.org/jira/browse/ISIS-2425[ISIS-2425] - Gradle Build (CI) does not fail when Metamodel Tests fail
+
+* link:https://issues.apache.org/jira/browse/ISIS-2322[ISIS-2322] - Isis 2.0.0-M4 release activities
+
+== Dependency Upgrades
+
+* link:https://issues.apache.org/jira/browse/ISIS-2434[ISIS-2434] - Bump Spring Boot 2.3.2.RELEASE to 2.3.4.RELEASE
+* link:https://issues.apache.org/jira/browse/ISIS-2391[ISIS-2391] - Upgrade DataNucleus 5.2.2->5.2.3
+* link:https://issues.apache.org/jira/browse/ISIS-2366[ISIS-2366] - Bump to latest Spring Releases
+* link:https://issues.apache.org/jira/browse/ISIS-2357[ISIS-2357] - Upgrade FontAwesome 4 -> 5
+
+
+== Won't Fix
+
+* link:https://issues.apache.org/jira/browse/ISIS-2402[ISIS-2402] - [WON'T FIX] Demo Launch takes >25s until Spring Boot Banner even appears (investigate)
+* link:https://issues.apache.org/jira/browse/ISIS-2436[ISIS-2436] - [NOT AN ISSUE] Secman: Update name(s) for ApplicationUser causes error
+* link:https://issues.apache.org/jira/browse/ISIS-2337[ISIS-2337] - [WON'T FIX] FacetFactories to be managed by Spring
+* link:https://issues.apache.org/jira/browse/ISIS-2318[ISIS-2318] - [CANNOT REPRODUCE] Regression on Mixins: @Action at method level no longer honor association
+* link:https://issues.apache.org/jira/browse/ISIS-2135[ISIS-2135] - [WON'T FIX] Testing: Mockito to replace JMock
+* link:https://issues.apache.org/jira/browse/ISIS-1924[ISIS-1924] - [WON'T FIX] Indicator for Long Running Actions
+* link:https://issues.apache.org/jira/browse/ISIS-996[ISIS-996] - [WON'T FIX] Define component factories as Spring @Components
+
+== Duplicates
+
+These were _not_ implemented in this release ... this is just backlog grooming.
+
+* link:https://issues.apache.org/jira/browse/ISIS-1219[ISIS-1219] - [DUPLICATE?] Extend events to allow subscribers to provide defaults, choices, autoComplete on action parameters.
+* link:https://issues.apache.org/jira/browse/ISIS-510[ISIS-510] - [DUPLICATE] Help page overlay (a la ? in gmail)
+
