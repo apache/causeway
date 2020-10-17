@@ -168,7 +168,8 @@ see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584
 
 ==== Problem
 
-`bash
+[source,bash]
+----
    npm ERR! Error while executing:
    npm ERR! C:\Program Files\Git\bin\git.EXE ls-remote -h -t ssh://git@github.com/jarecsni/font-awesome-webpack.git
    npm ERR!
@@ -179,12 +180,18 @@ see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584
    npm ERR! and the repository exists.
    npm ERR!
    npm ERR! exited with error code: 128
-`
- ### Solution
- `~/.ssh/config`
- ```bash
- ProxyCommand /bin/connect.exe -H proxy.server.name:3128 %h %p
+----
 
+==== Solution
+
+.~/.ssh/config
+[source]
+----
+ProxyCommand /bin/connect.exe -H proxy.server.name:3128 %h %p
+----
+
+[source]
+----
 Host github.com
  User git
  Port 22
@@ -192,7 +199,10 @@ Host github.com
  IdentityFile "C:\users\username.ssh\id_rsa"
  TCPKeepAlive yes
  IdentitiesOnly yes
+----
 
+[source]
+----
 Host ssh.github.com
  User git
  Port 443
@@ -200,17 +210,19 @@ Host ssh.github.com
  IdentityFile "C:\users\username.ssh\id_rsa"
  TCPKeepAlive yes
  IdentitiesOnly yes
- ```
+----
 
-## Karma-Tests do not respond to code changes
- Windows:
- `
- taskkill /f /im node.exe 
-`
- Linux:
- `
- killall node 
-`
+
+== Karma-Tests do not respond to code changes
+
+Windows:
+
+    taskkill /f /im node.exe
+
+Linux:
+
+    killall node
+
 
 == Misc
 
@@ -222,17 +234,19 @@ Kotlin is straightforward and once you now it, you may not want to go back.
 
 include::partial$design/dev-mindmap.adoc[]
 
+
 === Visualize JSON
 
 See https://github.com/meteorbites/json-to-plantuml[json-to-plantuml]
 
+[source,bash]
 ----
 npm install -g json-to-plantuml
-
 ----
 
 === Visualize JS dependencies
 
+[source,bash]
 ----
 npm -g install dependo
 dependo -f amd ./build/js/kroviz.js > dependo.html
