@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.rest;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
@@ -35,8 +36,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.extensions.restclient.ActionParameterListBuilder;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
+import org.apache.isis.testdomain.rospec.BigComplex;
 import org.apache.isis.testdomain.rospec.Configuration_usingRoSpec;
 import org.apache.isis.testdomain.rospec.Customer;
 import org.apache.isis.testdomain.rospec.RoSpecSampler;
@@ -52,7 +55,8 @@ import lombok.val;
                 RestEndpointService.class
         },
         properties = {
-                "logging.level.org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator=DEBUG"
+                "logging.level.org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator=DEBUG",
+                "logging.level.org.apache.isis.extensions.restclient.ResponseDigest=DEBUG"
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(IsisPresets.UseLog4j2Test)
@@ -189,9 +193,33 @@ class RestServiceSimpifiedRepresentationTest {
         assertTrue(digest.getEntities().isEmpty());
     }
     
+    // -- COMPOSITE
+    
+    @Test 
+    void complexAdd() {
+        // given 
+        val a = BigComplex.of(
+                "1.0000000000000000000000000000000000000001", 
+                "-2.0000000000000000000000000000000000000002");
+        val b = BigComplex.of("3", "4");
+        
+        val digest = digest("complexAdd", BigComplex.class, argBuilder->{
+            argBuilder.addActionParameter("are", a.getRe().toPlainString());
+            argBuilder.addActionParameter("aim", a.getIm().toPlainString());
+            argBuilder.addActionParameter("bre", b.getRe().toPlainString());
+            argBuilder.addActionParameter("bim", b.getIm().toPlainString());
+        });
+        val returnValue = digest.getEntities().getSingletonOrFail();
+        BigComplex.assertEquals(a.add(b), returnValue, 1E-9);
+    }
+    
     // -- HELPER
     
-    public <T> ResponseDigest<T> digest(String actionName, Class<T> entityType) {
+    <T> ResponseDigest<T> digest(String actionName, Class<T> entityType) {
+        return digest(actionName, entityType, argBuilder->{});
+    }
+    
+    <T> ResponseDigest<T> digest(String actionName, Class<T> entityType, Consumer<ActionParameterListBuilder> onArgs) {
         
         _Probe.errOut("");
         _Probe.errOut("=== %s", actionName);
@@ -205,7 +233,10 @@ class RestServiceSimpifiedRepresentationTest {
         val request = restService.newInvocationBuilder(client, 
                 String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName)); 
 
-        val args = client.arguments()
+        val argBuilder = client.arguments();
+        onArgs.accept(argBuilder);
+        
+        val args = argBuilder 
                 .build();
 
         val response = request.post(args);
@@ -219,7 +250,7 @@ class RestServiceSimpifiedRepresentationTest {
 
     }
     
-    public <T> ResponseDigest<T> digestList(
+    <T> ResponseDigest<T> digestList(
             String actionName, 
             Class<T> entityType, 
             GenericType<List<T>> genericType) {

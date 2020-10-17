@@ -46,11 +46,13 @@ import org.apache.isis.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 
  * @since 2.0
  */
+@Log4j2
 public class ResponseDigest<T> {
 
     /**
@@ -232,6 +234,9 @@ public class ResponseDigest<T> {
 
     private T readSingle(final RepresentationTypeSimplifiedV2 reprType) 
             throws JsonParseException, JsonMappingException, IOException {
+        
+        log.debug("readSingle({})", reprType);
+        
         if(reprType.isValue() 
                 || isValueType(entityType)) {
             val mapper = new ObjectMapper();
@@ -244,6 +249,9 @@ public class ResponseDigest<T> {
     
     private List<T> readList(final RepresentationTypeSimplifiedV2 reprType) 
             throws JsonParseException, JsonMappingException, IOException {
+        
+        log.debug("readList({})", reprType);
+        
         if(reprType.isValues() 
                 || isValueType(entityType)) {
             val mapper = new ObjectMapper();

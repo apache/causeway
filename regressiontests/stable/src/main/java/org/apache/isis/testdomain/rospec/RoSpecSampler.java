@@ -131,5 +131,12 @@ public class RoSpecSampler {
         return null;
     }
     
+    // -- COMPOSITE
+    
+    @Action 
+    public BigComplex complexAdd(String are, String aim, String bre, String bim) {
+        return BigComplex.of(are, aim).add(BigComplex.of(bre, bim));
+    }
+    
     
 }
