@@ -307,9 +307,12 @@ All of this is changed afterwards.
 
 First, we update all versions in `antora.yml`:
 
-* Update all `antora.yml` files, eg using an IDE:
+* Update all `antora.yml` files:
 +
-** `version: latest` -> `version: {page-isisrel}`
+[source,bash,subs="attributes+"]
+----
+find . -name antora.yml -exec sed -i 's/latest/{page-isisrel}/g' {} \;
+----
 
 * Commit all these changes:
 +
@@ -344,7 +347,6 @@ Lastly, we update `index.html` and then `site.yml`
 
 * Update the home page of the website, `antora/supplemental-ui/index.html`
 +
-Note that this isn't performed in the docs branch (xref:#create-doc-branch[previous section]) because the supplemental files are _not_ versioned as a doc component:
 
 ** update any mention of `master` -> `{page-isisrel}`
 +
@@ -353,6 +355,8 @@ This should be the two sets of starter app instructions for helloworld and simpl
 ** update any mention of `latest` -> `{page-isisrel}`
 +
 This should be in hyperlinks, `<a href="docs/...">`
++
+NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[previous section]) because the supplemental files are _not_ versioned as a doc component:
 
 * Now update `site.yml`
 +
@@ -389,8 +393,6 @@ git revert HEAD
 
 [#update-the-algolia-search-index]
 == Update the Algolia search index
-
-== Index the site
 
 Create a `algolia.env` file holding the `APP_ID` and the admin `API_KEY`, in the root of `isis-site`:
 
