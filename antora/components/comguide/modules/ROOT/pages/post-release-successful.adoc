@@ -305,7 +305,7 @@ All of this is changed afterwards.
 
 === Create doc branch
 
-First, we prepare a doc branch to reference:
+First, we update all versions in `antora.yml`:
 
 * Update all `antora.yml` files, eg using an IDE:
 +
