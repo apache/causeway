@@ -39,7 +39,7 @@ The vote has completed with the following result :
 
 The vote is SUCCESSFUL.
 
-I\'ll now go ahead and complete the post-release activities.
+I'll now go ahead and complete the post-release activities.
 ----
 
 == Release to Maven Central
@@ -101,26 +101,24 @@ As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs), this path i
 Close all JIRA tickets for the release, or moved to future releases if not yet addressed.
 Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
 
-=== Generate Release Notes
-
-From the root directory, generate the release notes for the current release, in Asciidoc format; eg:
-
-[source,bash,subs="attributes+"]
-----
-sh scripts/jira-release-notes.sh ISIS $ISISREL > /tmp/1
-----
-
-[NOTE]
-====
-This script uses 'jq' to parse JSON.
-See the script itself for details of how to install this utility.
-====
-
 === Mark the version as released
 
 In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the version as being released.
 
 In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
+
+[#create-new-jira]
+=== Close all released tickets
+
+From the link:https://issues.apache.org/jira/projects/ISIS?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased[Releases page], review the status of all work items in the release to check that they are closed.
+
+If any are not, open the tickets in the issue navigator (from the release page):
+
+image::release-process/jira-open-release-in-navigator.png[width=800px]
+
+and then use "Bulk change" to transition through workflow:
+
+image::release-process/jira-bulk-tool.png[width=200px]
 
 [#create-new-jira]
 === Create new JIRA
@@ -142,9 +140,26 @@ This should live in  `antora/components/relnotes/modules/ROOT/pages/yyyy/vvv/rel
 +
 In `antora/components/relnotes/ROOT/nav.adoc`
 
+* Generate release notes
++
+From the root directory, generate the release notes for the current release, in Asciidoc format; eg:
++
+[source,bash,subs="attributes+"]
+----
+sh scripts/jira-release-notes.sh ISIS $ISISREL > /tmp/$ISISREL.adoc
+----
++
+[NOTE]
+====
+This script uses 'jq' to parse JSON.
+See the script itself for details of how to install this utility.
+====
+
+* Incorporate the release notes (`/tmp/$ISISREL.adoc`) into the `relnotes.adoc`
+
 * Update the table in the `about.adoc` summary
 +
-In `antora/components/relnotes/ROOT/pages/about.adoc`
+In `antora/components/relnotes/ROOT/pages/about.adoc`.
 
 
 * update the `doap_isis.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
