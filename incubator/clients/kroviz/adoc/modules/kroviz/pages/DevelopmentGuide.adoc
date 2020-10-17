@@ -256,12 +256,9 @@ dependo -f amd ./build/js/kroviz.js > dependo.html
 
 ----
 nyc npm test
-
 ----
 
-===== References
-
-https://github.com/istanbuljs/nyc
+References: link:https://github.com/istanbuljs/nyc[]
 
 === Gradle Build Overview
 

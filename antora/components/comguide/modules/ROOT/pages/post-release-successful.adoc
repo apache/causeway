@@ -107,7 +107,7 @@ In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-c
 
 In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
 
-[#create-new-jira]
+[#close-all-released-tickets]
 === Close all released tickets
 
 From the link:https://issues.apache.org/jira/projects/ISIS?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased[Releases page], review the status of all work items in the release to check that they are closed.
