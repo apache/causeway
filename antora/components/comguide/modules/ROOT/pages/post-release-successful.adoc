@@ -319,7 +319,7 @@ find . -name antora.yml -exec sed -i 's/latest/{page-isisrel}/g' {} \;
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: bumps antora.yml and index.html to $ISISREL"
+git commit -m "$ISISJIRA: bumps antora.yml versions to $ISISREL"
 ----
 
 We now create a branch to reference in the `site.yml`, later on.
@@ -370,7 +370,7 @@ Every content source needs to be updated:
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: adds tag to site.yml"
+git commit -m "$ISISJIRA: updates references to version in index.html and site.yml"
 ----
 
 We are now in a position to actually generate the Antora website:
