@@ -391,33 +391,6 @@ Finally, revert the last commit (backing out changes to `site.yml`):
 git revert HEAD
 ----
 
-[#update-the-algolia-search-index]
-== Update the Algolia search index
-
-Create a `algolia.env` file holding the `APP_ID` and the admin `API_KEY`, in the root of `isis-site`:
-
-[source,ini]
-.algolia.env
-----
-APPLICATION_ID=...
-API_KEY=...
-----
-
-CAUTION: This file should not be checked into the repo, because the API_KEY allows the index to be modified or deleted.
-
-We use the Algolia-provided link:https://hub.docker.com/r/algolia/docsearch-scraper[docker image] for the crawler to perform the search (as per the link:as per https://docsearch.algolia.com/docs/run-your-own/#run-the-crawl-from-the-docker-image[docs]):
-
-[source,bash]
-----
-cd content
-docker run -it --env-file=../algolia.env -e "CONFIG=$(cat ../algolia-config.json | jq -r tostring)" algolia/docsearch-scraper
-----
-
-This posts the index up to the link:https://algolia.com[Algolia] site.
-
-NOTE: Additional config options for the crawler can be found link:https://www.algolia.com/doc/api-reference/crawler/[here].
-
-
 [#publish-website]
 == Publish website
 
@@ -474,6 +447,33 @@ git push origin asf-site
 
 cd ../isis
 ----
+
+[#update-the-algolia-search-index]
+== Update the Algolia search index
+
+Create a `algolia.env` file holding the `APP_ID` and the admin `API_KEY`, in the root of `isis-site`:
+
+[source,ini]
+.algolia.env
+----
+APPLICATION_ID=...
+API_KEY=...
+----
+
+CAUTION: This file should not be checked into the repo, because the API_KEY allows the index to be modified or deleted.
+
+We use the Algolia-provided link:https://hub.docker.com/r/algolia/docsearch-scraper[docker image] for the crawler to perform the search (as per the link:as per https://docsearch.algolia.com/docs/run-your-own/#run-the-crawl-from-the-docker-image[docs]):
+
+[source,bash]
+----
+cd content
+docker run -it --env-file=../algolia.env -e "CONFIG=$(cat ../algolia-config.json | jq -r tostring)" algolia/docsearch-scraper
+----
+
+This posts the index up to the link:https://algolia.com[Algolia] site.
+
+NOTE: Additional config options for the crawler can be found link:https://www.algolia.com/doc/api-reference/crawler/[here].
+
 
 == Merge in release branch
 
