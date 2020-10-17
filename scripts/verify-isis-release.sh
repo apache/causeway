@@ -19,9 +19,10 @@
 
 
 #
-# usage: ./verify_isis_release.sh [nexus_repo_number] [isis_version]
+# usage: ./verify_isis_release.sh [nexus_repo_number] [isis_version] [RC_number]
 #
-# where nexus_repo_number and isis_version are as advised in RC vote message.
+# where nexus_repo_number, isis_version and [RC_number] are as advised in
+# releese candidate vote message.
 #
 #    eg: ./verify_isis_release.sh 1101 2.0.0-M3 RC1
 #
@@ -157,7 +158,7 @@ if [[ -z "$NEXUSREPONUM" || -z "$VERSION" || -z "$RC" ]]; then
 fi
 
 cat <<EOF >/tmp/url.txt
-http://repository.apache.org/content/repositories/orgapacheisis-$NEXUSREPONUM/org/apache/isis/core/isis-parent/$VERSION/isis-parent-$VERSION-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-$NEXUSREPONUM/org/apache/isis/isis-parent/$VERSION/isis-parent-$VERSION-source-release.zip
 EOF
 
 # The work starts here

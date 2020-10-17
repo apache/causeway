@@ -415,7 +415,7 @@ isis.applib.annotation.property. +
 command
 
 | 
-| The default for whether property edits should be reified as a as a ``Command``, to be sent to any registered ``CommandServiceListener``s, either for auditing or for replayed against a secondary system, eg for regression testing.
+| The default for whether property edits should be reified as a ``Command``, to be sent to any registered ``CommandServiceListener``s, either for auditing or for replayed against a secondary system, eg for regression testing.
 
 This setting can be overridden on a case-by-case basis using ``Property#command()``.
 

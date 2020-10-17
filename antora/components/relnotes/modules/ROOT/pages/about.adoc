@@ -16,14 +16,26 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | Bugs
 | Detail
 
+//| 2.0.0-M5
+//| not released yet (upcoming)
+//| Fifth milestone release for Apache Isis 2.0.0
+//| ?
+//| ?
+//| ?
+//|
+//* xref:relnotes:ROOT:2020/2.0.0-M5/relnotes.adoc[Release Notes]
+//* xref:relnotes:ROOT:2020/2.0.0-M5/mignotes.adoc[Migration Notes]
+
 | 2.0.0-M4
-| not released yet (upcoming)
-| Forth milestone release for Apache Isis 2.0.0
-| ?
-| ?
-| ?
+| 17-10-2020
+| Fourth milestone release for Apache Isis 2.0.0
+| 14
+| 28
+| 54
 |
 * xref:relnotes:ROOT:2020/2.0.0-M4/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2018/2.0.0-M4/mignotes.adoc[Migration Notes]
+* link:https://issues.apache.org/jira/projects/ISIS/versions/12347808[JIRA Rel Notes]
 
 | 2.0.0-M3
 | 27-03-2020
@@ -33,7 +45,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | 46
 |
 * xref:relnotes:ROOT:2020/2.0.0-M3/relnotes.adoc[Release Notes]
-* https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12344784[JIRA Rel Notes]
+* link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12344784[JIRA Rel Notes]
 
 | 2.0.0-M2
 | 22-01-2019
@@ -43,7 +55,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | 13
 |
 * xref:relnotes:ROOT:2019/2.0.0-M2/relnotes.adoc[Release Notes]
-* https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342393[JIRA Rel Notes]
+* link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342393[JIRA Rel Notes]
 
 |2.0.0-M1
 | 31-07-2018
@@ -56,7 +68,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 |
 * xref:relnotes:ROOT:2018/2.0.0-M1/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2018/2.0.0-M1/mignotes.adoc[Migration Notes]
-* https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342392[JIRA Rel Notes]
+* link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342392[JIRA Rel Notes]
 
 |===
 
