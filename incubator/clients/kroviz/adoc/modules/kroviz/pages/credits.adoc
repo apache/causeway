@@ -1,0 +1,42 @@
+= Credits
+
+Artwork reused:
+
+* https://commons.wikimedia.org/wiki/File:Vincent_Van_Gogh_-_Wheatfield_with_Crows.jpg by Vincent van Gogh 1890
+* https://fr.wikipedia.org/wiki/Fichier:Meuble_corbeau.svg by Henry Salomé le 06/12/2006
+
+Create banner image:
+
+----
+convert.exe WheatFieldWithCrows.jpg -channel all isis_clut.png -clut WheatFieldWithCrows.png
+----
+
+----
+convert.exe WheatFieldWithCrows.jpg -separate -normalize -combine isis_clut.png -clut WheatFieldWithCrows.png
+----
+
+= Apache Isis colors
+
+In the icon: green, orange, red, blue
+Violet #8064A2
+DarkBlue #4F81BD
+LightBlue #4BACC6
+Green #9BBB59
+Orange #F79646
+Red #C0504D
+
+= Components Colors
+
+"JS Runtime" #f7df1e
+KotlinJS link:./https%3A%2F%2Fgithub.com%2FJetBrains%2Fkotlin%2Ftree%2Fmaster%2Fjs.html[https://github.com/JetBrains/kotlin/tree/master/js] #8167FF-02AEFF {
+kotlinx.serialization as KS #DDE1F9/A9B4EF
+kvision link:./https%3A%2F%2Frjaros.github.io%2Fkvision.html[https://rjaros.github.io/kvision] #00AAD4/216778
+Bootstrap link:./https%3A%2F%2Fgetbootstrap.com%2F.html[https://getbootstrap.com/] #8F5ADC-31135B
+"Font\nAwesome" link:./https%3A%2F%2Ffontawesome.com%2F.html[https://fontawesome.com/] #155592-1C7ED6
+Tabulator link:./http%3A%2F%2Ftabulator.info%2F.html[http://tabulator.info/] #21441F|3DB549
+Chart.js link:./https%3A%2F%2Fwww.chartjs.org%2F.html[https://www.chartjs.org/] #f27173
+kroViz #8064A2-F79646
+
+= Convert PNG to SVG
+
+https://www.pngtosvg.com/

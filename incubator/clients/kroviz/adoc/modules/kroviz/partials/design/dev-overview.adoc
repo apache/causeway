@@ -2,7 +2,7 @@
 
 .Development Overview Diagram
 [plantuml,file="dev-overview.png"]
---
+----
 @startuml
 skinparam nodesep 20
 skinparam ranksep 5
@@ -64,4 +64,4 @@ package.json.lock
 end note
 
 @enduml
---
+----

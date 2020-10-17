@@ -2,7 +2,7 @@
 
 .Development MindMap
 [plantuml,file="dev-mindmap.png"]
---
+----
 @startmindmap
 +_ know\nhow
 --_ basics
@@ -55,5 +55,4 @@
 ---- Plugins
 --- JavaScript
 @endmindmap
---
-~~
+~~--

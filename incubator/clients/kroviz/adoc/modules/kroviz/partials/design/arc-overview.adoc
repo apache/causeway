@@ -2,7 +2,7 @@
 
 .Architecture Overview Diagram
 [plantuml,file="arc-overview.png"]
---
+----
 @startuml
 node Desktop <<client>>{
 component Chrome <<browser>> {
@@ -33,4 +33,4 @@ node server{
 ApacheIsis -- RO
 kroViz --> RO : invoke\ \nuse
 @enduml
---
+----

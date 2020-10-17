@@ -2,7 +2,7 @@
 
 .Aggregator Diagram
 [plantuml,file="uml-aggregator.png"]
---
+----
 @startuml
 
 class LogEntry {
@@ -62,4 +62,4 @@ BaseDisplayable <|-- ObjectDM
 ObjectDM o-- ListDM
 
 @enduml
---
+----

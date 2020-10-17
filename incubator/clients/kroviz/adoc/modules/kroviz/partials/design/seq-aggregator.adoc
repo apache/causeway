@@ -2,7 +2,7 @@
 
 .ListAggregator Sequence Diagram
 [plantuml,file="seq-aggregator.png"]
---
+----
 @startuml
 
 actor User
@@ -59,4 +59,4 @@ deactivate AGGT
 UI -> User : present
 
 @enduml
---
+----

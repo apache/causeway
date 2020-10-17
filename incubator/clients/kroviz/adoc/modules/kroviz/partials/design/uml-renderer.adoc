@@ -2,7 +2,7 @@
 
 .Renderer Diagram
 [plantuml,file="uml-renderer.png"]
---
+----
 @startuml
 
 abstract class Renderer {
@@ -60,4 +60,4 @@ Protocol <|-down- GeoLocationPtc
 Protocol <|-down- TimeLinePtc
 
 @enduml
---
+----

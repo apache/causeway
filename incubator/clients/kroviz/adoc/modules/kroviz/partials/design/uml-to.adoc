@@ -2,7 +2,7 @@
 
 .Transfer Objects Diagram
 [uml,file="uml-to.png"]
---
+----
 abstract class BaseTO {
     fromObject(json)
 } 
@@ -105,4 +105,4 @@ abstract class TitledTO extends LinkedTO {
 }
 TitledTO -> Extensions : extension
 TitledTO o-> inv.Member : members
---
+----
