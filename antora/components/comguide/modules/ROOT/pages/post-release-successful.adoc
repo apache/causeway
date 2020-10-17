@@ -217,26 +217,25 @@ asc="$zip.asc"
 md5="$zip.md5"
 
 
-#
-# isis-core
-#
-type="core"
 fullname="isis-parent"
-pushd isis-core
+pushd isis-parent
 
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
+curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$asc
 svn add $fullname-$new_ver-$asc
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
+curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$md5
 svn add $fullname-$new_ver-$md5
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
+curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$zip
 svn add $fullname-$new_ver-$zip
 
-svn delete $fullname-$old_ver-$asc
-svn delete $fullname-$old_ver-$md5
-svn delete $fullname-$old_ver-$zip
+if [ "Z${old_ver}Z" == "ZZ" ]; then
+        echo "old_ver not specified, so nothing will be removed"
+else
+        svn delete $fullname-$old_ver-$asc
+        svn delete $fullname-$old_ver-$md5
+        svn delete $fullname-$old_ver-$zip
+fi
 
 popd
-
 ----
 
 [source,bash,subs="attributes+"]
