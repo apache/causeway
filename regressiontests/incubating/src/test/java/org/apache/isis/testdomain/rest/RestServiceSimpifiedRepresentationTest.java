@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.rest;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -47,6 +48,7 @@ import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import static org.apache.isis.testdomain.util.CollectionAssertions.assertComponentWiseEquals;
+import static org.apache.isis.testdomain.util.CollectionAssertions.assertComponentWiseNumberEquals;
 
 import lombok.val;
 
@@ -55,8 +57,8 @@ import lombok.val;
                 RestEndpointService.class
         },
         properties = {
-                "logging.level.org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator=DEBUG",
-                "logging.level.org.apache.isis.extensions.restclient.ResponseDigest=DEBUG"
+                //"logging.level.org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator=DEBUG",
+                //"logging.level.org.apache.isis.extensions.restclient.ResponseDigest=DEBUG"
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(IsisPresets.UseLog4j2Test)
@@ -159,6 +161,28 @@ class RestServiceSimpifiedRepresentationTest {
         assertEquals(refSampler.integerPrimitive(), returnValue);
     }
     
+    // -- BIG INT
+    
+    @Test 
+    void bigInteger() {
+        val digest = digest("bigInteger", BigInteger.class);
+        val returnValue = digest.getEntities().getSingletonOrFail();
+        assertEquals(refSampler.bigInteger(), returnValue);
+    }
+    
+    @Test 
+    void bigIntegerNull() {
+        val digest = digest("bigIntegerNull", BigInteger.class);
+        assertTrue(digest.getEntities().isEmpty());
+    }
+    
+    @Test 
+    void bigIntegerList() {
+        val digest = digestList("bigIntegerList", BigInteger.class, new GenericType<List<BigInteger>>(){});
+        val returnValue = digest.getEntities();
+        assertComponentWiseNumberEquals(refSampler.bigIntegerList(), returnValue);
+    }
+    
     // -- CUSTOMER
     
     @Test 
@@ -196,6 +220,13 @@ class RestServiceSimpifiedRepresentationTest {
     // -- COMPOSITE
     
     @Test 
+    void complexList() {
+        val digest = digestList("complexList", BigComplex.class, new GenericType<List<BigComplex>>(){});
+        val returnValue = digest.getEntities();
+        assertComponentWiseEquals(refSampler.complexList(), returnValue);
+    }
+    
+    @Test 
     void complexAdd() {
         // given 
         val a = BigComplex.of(
@@ -210,7 +241,7 @@ class RestServiceSimpifiedRepresentationTest {
             argBuilder.addActionParameter("bim", b.getIm().toPlainString());
         });
         val returnValue = digest.getEntities().getSingletonOrFail();
-        BigComplex.assertEquals(a.add(b), returnValue, 1E-9);
+        BigComplex.assertEquals(a.add(b), returnValue);
     }
     
     // -- HELPER

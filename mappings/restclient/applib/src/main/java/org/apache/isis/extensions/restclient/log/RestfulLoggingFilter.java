@@ -95,9 +95,15 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
             responseBody = "null";
         }
 
+        final String headers = responseContext.getHeaders().entrySet().stream()
+                .map(this::toKeyValueString)
+                .map(this::obscureAuthHeader)
+                .collect(Collectors.joining(",\n\t"));
+        
         final StringBuilder sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS RESPONSE -------------\n")
+        .append("headers: \n\t").append(headers).append("\n")
         .append("response-body: ").append(responseBody).append("\n")
         .append("----------------------------------------\n")
         ;

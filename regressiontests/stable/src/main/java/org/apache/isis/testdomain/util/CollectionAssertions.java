@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.util;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -36,6 +37,23 @@ public final class CollectionAssertions {
             .collect(_Arrays.toArray(Object.class));
         
         assertArrayEquals(array1, array2);
+        
+    }
+    
+    public static void assertComponentWiseNumberEquals(Object a, Object b) {
+        
+        val array1 = _NullSafe.streamAutodetect(a)
+            .map(Number.class::cast)
+            .collect(_Arrays.toArray(Number.class));
+        val array2 = _NullSafe.streamAutodetect(b)
+            .map(Number.class::cast)
+            .collect(_Arrays.toArray(Number.class));
+        
+        assertEquals(array1.length, array2.length);
+        
+        for(int i=0; i<array1.length; ++i) {
+            assertNumberEqualsPoorManEdition(array1[i], array2[i]);
+        }
         
     }
     
@@ -57,5 +75,12 @@ public final class CollectionAssertions {
         
     }
 
+    private static void assertNumberEqualsPoorManEdition(Number a, Number b) {
+        if(a==null) {
+            assertEquals((Object)null, (Object)b);
+        }
+        assertEquals(a.doubleValue(), b.doubleValue(), 1E-9);
+    }
+    
     
 }

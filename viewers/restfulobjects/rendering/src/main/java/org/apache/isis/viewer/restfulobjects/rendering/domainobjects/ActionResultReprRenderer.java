@@ -167,6 +167,13 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
             objectReprRenderer.with(returnedAdapter).includesSelf();
 
             return objectReprRenderer;
+            
+        case SCALAR_VALUES:
+            // Variant of 'list' representing a list of scalar values.
+            // NOT supported by the RO spec v1.0, but allows for custom representations to
+            // support this particular data structure.
+            return null;
+            
         default:
             throw new IllegalStateException("All possible states of ResultType enumerated; resultType = " + resultType);
         }

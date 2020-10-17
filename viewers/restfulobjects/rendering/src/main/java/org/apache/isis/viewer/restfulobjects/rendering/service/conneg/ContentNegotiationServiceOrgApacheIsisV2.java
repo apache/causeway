@@ -35,10 +35,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.isis.applib.client.SuppressionType;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -199,10 +197,10 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
 
         final JsonRepresentation rootRepresentation;
         final JsonRepresentation $$roRepresentation;
-        if(!suppressRO) {
-            $$roRepresentation = JsonRepresentation.newMap();
-        } else {
+        if(suppressRO) {
             $$roRepresentation = null;
+        } else {
+            $$roRepresentation = JsonRepresentation.newMap();
         }
 
         final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
@@ -230,44 +228,38 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
 
             rootRepresentation = JsonRepresentation.newArray();
             
-            val elementAdapters = CollectionFacet.streamAdapters(returnedAdapter)
-            .collect(_Lists.toUnmodifiable());
-            
-            val isListOfIndentifiable = elementAdapters.stream()
-            .allMatch(elementAdapter->elementAdapter.getSpecification().isIdentifiable());
-            
-            if(isListOfIndentifiable) {
-                
-                elementAdapters
-                .forEach(elementAdapter->
-                    appendElementTo(resourceContext, elementAdapter, rootRepresentation, suppression));
-                
-                headerContentType = RepresentationTypeSimplifiedV2.LIST;
+            objectAndActionInvocation.streamElementAdapters()
+            .forEach(elementAdapter->
+                appendElementTo(resourceContext, elementAdapter, rootRepresentation, suppression));
 
-                // $$ro representation will be an object in the list with a single property named "$$ro"
-                if(!suppressRO) {
-                    JsonRepresentation $$roContainerRepresentation = JsonRepresentation.newMap();
-                    rootRepresentation.arrayAdd($$roContainerRepresentation);
-                    $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
-                }
-                
-            } else {
-                
-                elementAdapters.stream()
-                .map(elementAdapter->{
-                    val pojo = elementAdapter.getPojo();
-                    return pojo==null
-                        ? ScalarValueDtoV2.forNull(elementAdapter.getSpecification().getCorrespondingClass())
-                        : ScalarValueDtoV2.forValue(pojo);
-                })
-                .forEach(rootRepresentation::arrayAdd);
-                
-                headerContentType = RepresentationTypeSimplifiedV2.VALUES;
-                
+            // $$ro representation will be an object in the list with a single property named "$$ro"
+            if(!suppressRO) {
+                JsonRepresentation $$roContainerRepresentation = JsonRepresentation.newMap();
+                rootRepresentation.arrayAdd($$roContainerRepresentation);
+                $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
             }
+            
+            headerContentType = RepresentationTypeSimplifiedV2.LIST;
 
             break;
 
+        case SCALAR_VALUES:
+            
+            rootRepresentation = JsonRepresentation.newArray();
+            
+            objectAndActionInvocation.streamElementAdapters()
+            .map(elementAdapter->{
+                val pojo = elementAdapter.getPojo();
+                return pojo==null
+                    ? ScalarValueDtoV2.forNull(elementAdapter.getSpecification().getCorrespondingClass())
+                    : ScalarValueDtoV2.forValue(pojo);
+            })
+            .forEach(rootRepresentation::arrayAdd);
+            
+            headerContentType = RepresentationTypeSimplifiedV2.VALUES;
+            
+            break;
+            
         case SCALAR_VALUE:
             
             val pojo = returnedAdapter.getPojo();

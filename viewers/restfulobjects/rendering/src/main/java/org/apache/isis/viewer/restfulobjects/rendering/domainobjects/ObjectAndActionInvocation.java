@@ -18,7 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.stream.Stream;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
@@ -28,8 +31,13 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectAndActionInvocation {
 
     public static ObjectAndActionInvocation of(
@@ -45,52 +53,12 @@ public class ObjectAndActionInvocation {
                 selfLink);
     }
     
-    private final ManagedObject objectAdapter;
-    private final ObjectAction action;
-    private final JsonRepresentation arguments;
-    private final Can<ManagedObject> argAdapters;
-    private final ManagedObject returnedAdapter;
-    private final ActionResultReprRenderer.SelfLink selfLink;
-
-    public ObjectAndActionInvocation(
-            final ManagedObject objectAdapter,
-            final ObjectAction action,
-            final JsonRepresentation arguments,
-            final Can<ManagedObject> argAdapters,
-            final ManagedObject returnedAdapter,
-            final ActionResultReprRenderer.SelfLink selfLink) {
-        
-        this.objectAdapter = objectAdapter;
-        this.action = action;
-        this.arguments = arguments;
-        this.argAdapters = argAdapters;
-        this.returnedAdapter = returnedAdapter;
-        this.selfLink = selfLink;
-    }
-
-    public ManagedObject getObjectAdapter() {
-        return objectAdapter;
-    }
-
-    public ObjectAction getAction() {
-        return action;
-    }
-
-    public JsonRepresentation getArguments() {
-        return arguments;
-    }
-
-    public Can<ManagedObject> getArgAdapters() {
-        return argAdapters;
-    }
-
-    public ManagedObject getReturnedAdapter() {
-        return returnedAdapter;
-    }
-
-    public ActionResultReprRenderer.SelfLink getSelfLink() {
-        return selfLink;
-    }
+    @Getter private final ManagedObject objectAdapter;
+    @Getter private final ObjectAction action;
+    @Getter private final JsonRepresentation arguments;
+    @Getter private final Can<ManagedObject> argAdapters;
+    @Getter private final ManagedObject returnedAdapter;
+    @Getter private final ActionResultReprRenderer.SelfLink selfLink;
 
 
     /**
@@ -98,19 +66,34 @@ public class ObjectAndActionInvocation {
      */
     public ActionResultRepresentation.ResultType determineResultType() {
 
-        final ObjectSpecification returnType = this.action.getReturnType();
-
-        if (returnType.getCorrespondingClass() == void.class) {
+        val returnTypeSpec = this.action.getReturnType();
+        
+        if (returnTypeSpec.getCorrespondingClass() == void.class) {
             return ActionResultRepresentation.ResultType.VOID;
         }
-
-        final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-        if (collectionFacet != null) {
-            return ActionResultRepresentation.ResultType.LIST;
+        
+        if (isVector(returnedAdapter.getSpecification())) {
+            
+            // though not strictly required, try to be consistent:  empty list vs populated list
+            if(elementAdapters.get().isEmpty()) {
+                val isElementTypeAScalarValue = returnTypeSpec.getElementSpecification()
+                .map(elementSpec->isScalarValue(elementSpec))
+                .orElse(false);
+                return isElementTypeAScalarValue
+                        ? ActionResultRepresentation.ResultType.SCALAR_VALUES
+                        : ActionResultRepresentation.ResultType.LIST;
+            }
+            
+            // inspect the collection's elements
+            val isListOfDomainObjects = streamElementAdapters()
+                    .allMatch(elementAdapter->!isScalarValue(elementAdapter.getSpecification()));
+                        
+            return isListOfDomainObjects
+                    ? ActionResultRepresentation.ResultType.LIST
+                    : ActionResultRepresentation.ResultType.SCALAR_VALUES;
         }
 
-        final EncodableFacet encodableFacet = returnType.getFacet(EncodableFacet.class);
-        if (encodableFacet != null) {
+        if (isScalarValue(returnedAdapter.getSpecification())) {
             return ActionResultRepresentation.ResultType.SCALAR_VALUE;
         }
 
@@ -118,6 +101,25 @@ public class ObjectAndActionInvocation {
         return ActionResultRepresentation.ResultType.DOMAIN_OBJECT;
     }
 
+    public Stream<ManagedObject> streamElementAdapters() {
+        return elementAdapters.get().stream();
+    }
+    
+    // -- HELPER
+    
+    private final _Lazy<Can<ManagedObject>> elementAdapters = _Lazy.threadSafe(this::initElementAdapters);
+    private Can<ManagedObject> initElementAdapters() {
+        return CollectionFacet.streamAdapters(returnedAdapter).collect(Can.toCan());
+    }
+    
+    //TODO[2449] need to check whether that strategy holds consistently
+    private static boolean isScalarValue(final @NonNull ObjectSpecification spec) {
+        return spec.getFacet(EncodableFacet.class)!=null;
+    }
+    
+    private static boolean isVector(final @NonNull ObjectSpecification spec) {
+        return spec.getFacet(CollectionFacet.class)!=null;
+    }
 
-
+   
 }

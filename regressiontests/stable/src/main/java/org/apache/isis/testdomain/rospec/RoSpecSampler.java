@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.rospec;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
@@ -100,6 +101,24 @@ public class RoSpecSampler {
         return null;
     }
     
+    // -- BIG INT
+    
+    @Action 
+    public BigInteger bigInteger() {
+        return BigInteger.valueOf(Long.MAX_VALUE).multiply(BigInteger.TWO);
+    }
+    
+    @Action 
+    public BigInteger bigIntegerNull() {
+        return null;
+    }
+    
+    @Action 
+    public List<BigInteger> bigIntegerList() {
+        return _Lists.of(BigInteger.ZERO, bigInteger());
+    }
+    
+    
     // -- CUSTOMER
     
     @Action 
@@ -132,6 +151,11 @@ public class RoSpecSampler {
     }
     
     // -- COMPOSITE
+    
+    @Action 
+    public List<BigComplex> complexList() {
+        return _Lists.of(BigComplex.zero(), BigComplex.of("2.1", "-4.3"));
+    }
     
     @Action 
     public BigComplex complexAdd(String are, String aim, String bre, String bim) {

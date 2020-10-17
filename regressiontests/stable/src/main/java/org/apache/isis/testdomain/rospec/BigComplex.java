@@ -24,14 +24,16 @@ import java.math.MathContext;
 import org.apache.isis.commons.internal.assertions._Assert;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.val;
 
 /**
  * Example (composite) type for testing.
  */
-@Data @NoArgsConstructor @AllArgsConstructor(staticName = "of")
-public class BigComplex {
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor(staticName = "of")
+public final class BigComplex {
 
     private BigDecimal re;
     private BigDecimal im;
@@ -62,7 +64,22 @@ public class BigComplex {
                 .sqrt(MathContext.UNLIMITED); 
     }
     
-    public static void assertEquals(BigComplex a, BigComplex b, double epsilon) {
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof BigComplex)) {
+            return false;    
+        }
+        val other = (BigComplex) obj;
+        return this.re.compareTo(other.re) == 0
+                && this.im.compareTo(other.im) == 0;
+    }
+    
+    public static void assertEquals(BigComplex a, BigComplex b) {
+        _Assert.assertEquals(a.re.toPlainString(), b.re.toPlainString());
+        _Assert.assertEquals(a.im.toPlainString(), b.im.toPlainString());
+    }
+    
+    public static void assertNumberEquals(BigComplex a, BigComplex b, double epsilon) {
         _Assert.assertTrue(a.subtract(b).norm().doubleValue()<epsilon);
     }
     

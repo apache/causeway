@@ -22,23 +22,32 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 public class ActionResultRepresentation extends AbstractObjectMemberRepresentation {
 
+    @RequiredArgsConstructor
     public enum ResultType {
-        DOMAIN_OBJECT("domainobject"), LIST("list"), SCALAR_VALUE("scalarvalue"), VOID("void");
+        DOMAIN_OBJECT("domainobject"),
+        LIST("list"),
+        SCALAR_VALUE("scalarvalue"),
+        
+        /** 
+         * Variant of 'list' representing a list of scalar values. 
+         * NOT supported by the RO spec v1.0, but allows for custom representations to 
+         * support this particular data structure.
+         * @since 2.0 
+         */
+        SCALAR_VALUES("scalarvalues"),
+        
+        VOID("void");
 
-        private final String value;
-
-        ResultType(final String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
+        @Getter private final String value;
 
         public static ResultType lookup(final String value) {
-            for (final ResultType resultType : values()) {
+            for (val resultType : values()) {
                 if (resultType.value.equals(value)) {
                     return resultType;
                 }
