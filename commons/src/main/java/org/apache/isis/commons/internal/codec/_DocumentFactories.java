@@ -36,7 +36,8 @@ import lombok.experimental.UtilityClass;
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
- * </p>
+ * 
+ * @see https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
  *
  * @since 2.0
  */
@@ -67,10 +68,14 @@ public class _DocumentFactories {
     
     public static XMLInputFactory xmlInputFactory() {
         val xmlInputFactory = XMLInputFactory.newInstance();
-        xmlInputFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // Disable access to external entities in XML parsing
-        xmlInputFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");  // Disable access to external entities in XML parsing
+        
+        // disables DTDs entirely
+        xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        // disable external entities
+        xmlInputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        
         return xmlInputFactory;
     }
-    
+   
     
 }

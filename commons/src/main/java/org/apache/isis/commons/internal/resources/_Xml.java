@@ -153,15 +153,15 @@ public final class _Xml {
     }
     
     
-    // -- 
+    // -- ENHANCE EXCEPTION MESSAGE IF POSSIBLE
     
     public static Exception verboseException(String doingWhat, @Nullable Class<?> dtoClass, Exception e) {
         
         val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
         
-        if("com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(e.getClass().getName())) {
+        if(isIllegalAnnotationsException(e)) {
             // report a better error if possible
-            // this is done reflectively because on JDK 8 this is only provided by Oracle JDK 
+            // this is done reflectively because on JDK 8 this exception type is only provided by Oracle JDK 
             try {
                 
                 val errors = _Casts.<List<? extends Exception>>uncheckedCast(
@@ -188,6 +188,12 @@ public final class _Xml {
 
         return _Exceptions.unrecoverable(String.format("Error %s; "
                 + "object class is '%s'", doingWhat, dtoClassName), e);
+    }
+    
+    private static boolean isIllegalAnnotationsException(Exception e) {
+        /*sonar-ignore-on*/
+        return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(e.getClass().getName());
+        /*sonar-ignore-off*/
     }
     
     // -- JAXB CONTEXT CACHE
