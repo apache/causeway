@@ -78,6 +78,7 @@ public final class CollectionAssertions {
     private static void assertNumberEqualsPoorManEdition(Number a, Number b) {
         if(a==null) {
             assertEquals((Object)null, (Object)b);
+            return;
         }
         assertEquals(a.doubleValue(), b.doubleValue(), 1E-9);
     }

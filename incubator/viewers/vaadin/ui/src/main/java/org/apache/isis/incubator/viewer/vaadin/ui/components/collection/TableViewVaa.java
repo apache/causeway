@@ -20,15 +20,12 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.collection;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -113,7 +110,7 @@ public class TableViewVaa extends VerticalLayout {
      */
     private TableViewVaa(
             @NonNull final ObjectSpecification elementSpec, 
-            @Nullable final Can<ManagedObject> objects,
+            @NonNull final Can<ManagedObject> objects,
             @NonNull final Where where) {
         
         //            final ComboBox<ManagedObject> listBox = new ComboBox<>();
@@ -127,7 +124,7 @@ public class TableViewVaa extends VerticalLayout {
         val objectGrid = new Grid<ManagedObject>();
         add(objectGrid);
         
-        if (_NullSafe.isEmpty(objects)) {
+        if (objects.isEmpty()) {
             //TODO show placeholder: "No rows to display"
             return;
         }
@@ -138,7 +135,7 @@ public class TableViewVaa extends VerticalLayout {
         // than having to spawn new transactions/interactions for each table cell when rendered lazily 
         val table = _Multimaps.<RootOid, String, String>newMapMultimap();
 
-        _NullSafe.stream(objects)
+        objects.stream()
         .forEach(object->{
 
             val id = object.getRootOid().orElse(null);

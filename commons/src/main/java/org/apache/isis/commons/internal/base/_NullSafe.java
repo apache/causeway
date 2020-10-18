@@ -20,11 +20,13 @@ package org.apache.isis.commons.internal.base;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -326,6 +328,19 @@ public final class _NullSafe {
             return defaultValue;
         }
         return map.getOrDefault(key, defaultValue);
+    }
+
+    /**
+     * Null-safe variant of {@link java.util.Map#entrySet()}
+     * @param <K>
+     * @param <V>
+     * @param map
+     * @return
+     */
+    public static <K, V> Set<Map.Entry<K, V>> entrySet(final @Nullable Map<K, V> map) {
+        return map==null
+                ? Collections.emptySet()
+                : map.entrySet();
     }
 
 

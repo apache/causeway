@@ -53,6 +53,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule to enable support for Shiro.
@@ -64,6 +65,7 @@ import lombok.val;
 @Named("isisSecurityKeycloak.WebModuleKeycloak")
 @Order(OrderPrecedence.FIRST + 200)
 @Qualifier("Shiro")
+@Log4j2
 public class WebModuleShiro extends WebModuleAbstract {
     
 
@@ -149,8 +151,15 @@ public class WebModuleShiro extends WebModuleAbstract {
                 org.apache.shiro.mgt.SecurityManager securityManager) {
 
             // reflective access to SecurityManager.getRealms()
-            val realms = (Collection<Realm>) ReflectionUtils
-                    .findMethod(securityManager.getClass(), "getRealms")
+            val realmsGetter = ReflectionUtils
+                    .findMethod(securityManager.getClass(), "getRealms");
+            if(realmsGetter==null) {
+                log.warn("Could not find method 'getRealms()' with Shiro's SecurityManager. "
+                        + "As a consequnce cannot enumerate realms.");
+                return;
+            }
+            
+            val realms = (Collection<Realm>) realmsGetter
                     .invoke(securityManager, _Constants.emptyObjects);
 
             realms.stream().forEach(serviceInjector::injectServicesInto);

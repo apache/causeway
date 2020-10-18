@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.rospec;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Objects;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 
@@ -72,6 +73,11 @@ public final class BigComplex {
         val other = (BigComplex) obj;
         return this.re.compareTo(other.re) == 0
                 && this.im.compareTo(other.im) == 0;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(re, im);
     }
     
     public static void assertEquals(BigComplex a, BigComplex b) {

@@ -153,12 +153,10 @@ public interface JaxbService {
             val jaxbContext = jaxbContextForObject(domainObject);
             try {
                 val marshaller = jaxbContext.createMarshaller();
-
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                if(!_NullSafe.isEmpty(marshallerProperties)) {
-                    for (val entry : marshallerProperties.entrySet()) {
-                        marshaller.setProperty(entry.getKey(), entry.getValue());
-                    }
+                
+                for (val entry : _NullSafe.entrySet(marshallerProperties)) {
+                    marshaller.setProperty(entry.getKey(), entry.getValue());
                 }
 
                 configure(marshaller);
@@ -213,11 +211,11 @@ public interface JaxbService {
             }
             
             val unmarshaller = jaxbContext.createUnmarshaller();
-            if(!_NullSafe.isEmpty(unmarshallerProperties)) {
-                for (val entry : unmarshallerProperties.entrySet()) {
-                    unmarshaller.setProperty(entry.getKey(), entry.getValue());
-                }
+            
+            for (val entry : _NullSafe.entrySet(unmarshallerProperties)) {
+                unmarshaller.setProperty(entry.getKey(), entry.getValue());
             }
+            
             configure(unmarshaller);
 
             val pojo = unmarshaller.unmarshal(new StringReader(xml));

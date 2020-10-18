@@ -32,8 +32,6 @@ import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 public class JavaCollectionFacet extends CollectionFacetAbstract {
 
     public JavaCollectionFacet(final FacetHolder holder) {
@@ -58,15 +56,8 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
      */
     @Override
     public Stream<ManagedObject> stream(final @Nullable ManagedObject collectionAdapter) {
-        final Collection<?> coll = pojoCollection(collectionAdapter); // might be null
-        if(_NullSafe.isEmpty(coll)) {
-            return Stream.of();
-        }
-
-        val objectManager = super.getObjectManager();
-
-        return coll.stream()
-                .map(objectManager::adapt);
+        return _NullSafe.stream(pojoCollection(collectionAdapter))
+                .map(super.getObjectManager()::adapt);
     }
 
     /**

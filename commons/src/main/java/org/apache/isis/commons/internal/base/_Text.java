@@ -207,7 +207,7 @@ public final class _Text {
             return lines; // reuse immutable object
         }
         
-        return lines.stream().limit(lastNonEmptyLineIndex+1).collect(Can.toCan());
+        return lines.stream().limit(1L + lastNonEmptyLineIndex).collect(Can.toCan());
     }
     
     /**
