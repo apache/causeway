@@ -53,7 +53,7 @@ class ProjectNodeFactory_maven {
 
     // -- HELPER
 
-    private static void postProcessDependencyLocation(final @Nullable ProjectNode projTree) {
+    private static void postProcessDependencyLocation(final @NonNull ProjectNode projTree) {
         // first pass: collect local artifacts
         // second pass: update all local dependencies' location to LOCAL
         val localArtifacts = new HashSet<String>();
@@ -68,7 +68,7 @@ class ProjectNodeFactory_maven {
         });
     }
     
-    private static void postProcessDependencyVersion(final @Nullable ProjectNode projTree) {
+    private static void postProcessDependencyVersion(final @NonNull ProjectNode projTree) {
         
         // first pass: collect external artifacts, that provide a non-empty version
         // second pass: update all external dependencies' versions

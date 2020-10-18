@@ -155,7 +155,7 @@ public class WebModuleShiro extends WebModuleAbstract {
                     .findMethod(securityManager.getClass(), "getRealms");
             if(realmsGetter==null) {
                 log.warn("Could not find method 'getRealms()' with Shiro's SecurityManager. "
-                        + "As a consequnce cannot enumerate realms.");
+                        + "As a consequence cannot enumerate realms.");
                 return;
             }
             

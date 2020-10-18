@@ -22,6 +22,7 @@ import java.io.File;
 
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.isis.tooling.projectmodel.ProjectNode;
 import org.apache.isis.tooling.projectmodel.ProjectNodeFactory;
@@ -38,7 +39,8 @@ public class GradleSettingsFactory {
     
     public static GradleSettings generateFromMaven(ProjectNode projTree, String rootProjectName) {
         
-        val rootPath = _Files.canonicalPath(projTree.getProjectDirectory()).get();
+        val rootPath = _Files.canonicalPath(projTree.getProjectDirectory())
+                .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve project root"));
         
         val gradleSettings = new GradleSettings(rootProjectName);
         val folderByArtifactKey = gradleSettings.getBuildArtifactsByArtifactKey();
@@ -63,7 +65,9 @@ public class GradleSettingsFactory {
     }
     
     private static String toCanonicalRelativePath(ProjectNode projModel, String rootPath) {
-        val canonicalProjDir = _Files.canonicalPath(projModel.getProjectDirectory()).get();
+        val canonicalProjDir = _Files.canonicalPath(projModel.getProjectDirectory())
+                .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve relative path"));
+                
         val relativePath = _Files.toRelativePath(rootPath, canonicalProjDir);
         return _Strings.prefix(relativePath.replace('\\', '/'), "/");
     }

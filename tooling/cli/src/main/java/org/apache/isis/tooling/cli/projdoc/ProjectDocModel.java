@@ -38,6 +38,7 @@ import org.asciidoctor.ast.Document;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig.ProjectDoc;
@@ -197,7 +198,8 @@ public class ProjectDocModel {
         cell(table, headRow, "Name");
         cell(table, headRow, "Description");
 
-        val projRoot = _Files.canonicalPath(projTree.getProjectDirectory()).get();
+        val projRoot = _Files.canonicalPath(projTree.getProjectDirectory())
+                .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve project root"));
 
         Set<ProjectNode> modulesWritten = new HashSet<>();
 
