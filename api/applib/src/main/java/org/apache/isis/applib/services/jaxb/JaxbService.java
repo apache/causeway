@@ -126,7 +126,7 @@ public interface JaxbService {
             try {
                 return internalFromXml(jaxbContext, xml, unmarshallerProperties);
             } catch (Exception e) {
-                throw _Xml.verbose("unmarshalling XML", null, e);
+                throw _Xml.verboseException("unmarshalling XML", null, e);
             }
         }
 
@@ -140,7 +140,7 @@ public interface JaxbService {
                 val jaxbContext = jaxbContextForClass(domainClass);
                 return _Casts.uncheckedCast(internalFromXml(jaxbContext, xml, unmarshallerProperties));
             } catch (Exception e) {
-                throw _Xml.verbose("unmarshalling XML", domainClass, e);
+                throw _Xml.verboseException("unmarshalling XML", domainClass, e);
             }
         }
 
@@ -170,7 +170,7 @@ public interface JaxbService {
                 return xml;
 
             } catch (Exception e) {
-                throw _Xml.verbose("marshalling domain object to XML", domainClass, e);
+                throw _Xml.verboseException("marshalling domain object to XML", domainClass, e);
             }
         }
 

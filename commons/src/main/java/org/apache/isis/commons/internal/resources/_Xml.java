@@ -33,10 +33,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLInputFactory;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.codec._DocumentFactories;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -94,7 +94,7 @@ public final class _Xml {
         
         if(readOptions.isAllowMissingRootElement()
                 && !_Annotations.isPresent(dtoClass, XmlRootElement.class)) {
-            val xsr = XMLInputFactory.newFactory().createXMLStreamReader(reader);
+            val xsr = _DocumentFactories.xmlInputFactory().createXMLStreamReader(reader);
             final JAXBElement<T> userElement = unmarshaller.unmarshal(xsr, dtoClass);
             return userElement.getValue();            
         }
@@ -155,7 +155,7 @@ public final class _Xml {
     
     // -- 
     
-    public static Exception verbose(String doingWhat, @Nullable Class<?> dtoClass, Exception e) {
+    public static Exception verboseException(String doingWhat, @Nullable Class<?> dtoClass, Exception e) {
         
         val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
         
@@ -205,7 +205,7 @@ public final class _Xml {
         try {
             return JAXBContext.newInstance(dtoClass);
         } catch (Exception e) {
-            throw verbose("obtaining JAXBContext for class", dtoClass, e);
+            throw verboseException("obtaining JAXBContext for class", dtoClass, e);
         }
     }
 

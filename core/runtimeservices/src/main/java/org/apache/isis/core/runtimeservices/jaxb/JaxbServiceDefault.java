@@ -76,7 +76,7 @@ public class JaxbServiceDefault extends JaxbService.Simple {
                     return JAXBContext.newInstance(domainClass);
                 }
             } catch (Exception e) {
-                throw _Xml.verbose("obtaining JAXBContext for a DomainObjectList", domainClass, e);
+                throw _Xml.verboseException("obtaining JAXBContext for a DomainObjectList", domainClass, e);
             }
         }
         return super.jaxbContextForObject(domainObject);

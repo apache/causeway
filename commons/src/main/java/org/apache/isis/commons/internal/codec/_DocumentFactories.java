@@ -22,6 +22,7 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -63,5 +64,13 @@ public class _DocumentFactories {
     public static Transformer transformer() throws TransformerConfigurationException {
         return transformerFactory().newTransformer();
     }
+    
+    public static XMLInputFactory xmlInputFactory() {
+        val xmlInputFactory = XMLInputFactory.newInstance();
+        xmlInputFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // Disable access to external entities in XML parsing
+        xmlInputFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");  // Disable access to external entities in XML parsing
+        return xmlInputFactory;
+    }
+    
     
 }
