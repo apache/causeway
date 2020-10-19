@@ -36,6 +36,16 @@
     <category rdf:resource="http://projects.apache.org/category/web-framework" />
 
     
+    <!-- 2020-10-17 releases -->
+    <release>
+      <Version>
+        <name>isis</name>
+        <created>2020-10-17</created>
+        <revision>2.0.0-M4</revision>
+      </Version>
+    </release>
+
+
     <!-- 2020-03-27 releases -->
     <release>
       <Version>

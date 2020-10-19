@@ -152,6 +152,15 @@ content:
       start_path: incubator/adoc # incubator
       branches: HEAD
     - url: .
+      start_path: incubator/clients/kroviz/adoc # incubator
+      branches: HEAD
+#    - url: .
+#      start_path: incubator/viewers/javafx/adoc # incubator
+#      branches: HEAD
+    - url: .
+      start_path: incubator/viewers/vaadin/adoc # incubator
+      branches: HEAD
+    - url: .
       start_path: incubator/mappings/microprofile/src/main/adoc # incubator
       branches: HEAD
 
@@ -207,6 +216,9 @@ content:
     - url: .
       start_path: persistence/jdo/adoc # pjdo
       branches: HEAD
+#    - url: .
+#      start_path: persistence/jpa/adoc # pjpa
+#      branches: HEAD
 
 # security
     - url: .
@@ -315,7 +327,7 @@ ui:
 #    url: ../isis-antora/build/ui-bundle.zip
     url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
     snapshot: true
-  supplemental_files: antora/supplemental-ui
+  supplemental_filpes: antora/supplemental-ui
 
 asciidoc:
   extensions:
@@ -333,8 +345,8 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
-    page-isisprev: "2.0.0-M3"
-    page-isisrel: "2.0.0-M4"
+    page-isisprev: "2.0.0-M4"
+    page-isisrel: "2.0.0-M5"
 
 output:
   dir: antora/target/site

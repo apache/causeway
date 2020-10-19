@@ -58,18 +58,6 @@
     </xs:complexType>
 
     <xs:complexType name="oidDto">
-        <xs:sequence>
-            <xs:element name="objectType" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>Deprecated, use the 'objectType' attribute instead.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="objectIdentifier" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>Deprecated, use the 'id' attribute instead.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
         <xs:attribute name="type" type="xs:string"/>
         <xs:attribute name="id" type="xs:string"/>
     </xs:complexType>
