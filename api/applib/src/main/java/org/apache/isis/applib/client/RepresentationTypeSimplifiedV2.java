@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Strings.KeyValuePair;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -56,10 +57,15 @@ public enum RepresentationTypeSimplifiedV2 {
 
     /** 
      * The media type used as content-Type header when a list of values is rendered. 
-     * Also used for action return type void, which is represented by an empty list.
      * @since 2.0
      */
     VALUES("values"),
+    
+    /** 
+     * The media type used as content-Type header when a void action result is rendered.
+     * @since 2.0
+     */
+    VOID("void"),
     
     ;
     
@@ -70,6 +76,7 @@ public enum RepresentationTypeSimplifiedV2 {
     public boolean isList()                 { return this == LIST; }
     public boolean isValue()                { return this == VALUE; }
     public boolean isValues()               { return this == VALUES; }
+    public boolean isVoid()                 { return this == VOID; }
     
     public String getContentTypeHeaderValue(final String profileName) {
         return "application/json;"
@@ -77,27 +84,20 @@ public enum RepresentationTypeSimplifiedV2 {
                 + ";repr-type=\"" + typeLiteral + "\"";
     }
 
-    public static Optional<RepresentationTypeSimplifiedV2> parse(final @Nullable String contentTypeHeaderValue) {
-        
-        return _Strings.splitThenStream(contentTypeHeaderValue, ";")
-        .map(String::trim)
-        .filter(_Strings::isNotEmpty)
-        .filter(s->s.startsWith("repr-type"))
-        .map(s->_Strings.parseKeyValuePair(s, '=').orElse(null))
-        .filter(Objects::nonNull)
-        .map(KeyValuePair::getValue)
-        .filter(_Strings::isNotEmpty)
-        .findAny()
-        .map(RepresentationTypeSimplifiedV2::trimFirstAndLastCharacter)
-        .map(typeLiteral->
-            Stream.of(RepresentationTypeSimplifiedV2.values())
-            .filter(candidate->candidate.typeLiteral.equals(typeLiteral))
-            .findAny()
-            .orElse(null)
-        )
-        .filter(Objects::nonNull);
-        
+    public static Optional<RepresentationTypeSimplifiedV2> parse(
+            final @Nullable String typeLiteral) {
+        return Stream.of(RepresentationTypeSimplifiedV2.values())
+        .filter(candidate->candidate.typeLiteral.equals(typeLiteral))
+        .findAny();
     }
+    
+    public static Optional<RepresentationTypeSimplifiedV2> parseContentTypeHeaderString(
+            final @Nullable String contentTypeHeaderString) {
+        return extractReprType(_Strings.splitThenStream(contentTypeHeaderString, ";"))
+        .map(typeLiteral->parse(typeLiteral).orElse(null))
+        .filter(Objects::nonNull);
+    }
+
     
     // -- HELPER
     
@@ -108,5 +108,19 @@ public enum RepresentationTypeSimplifiedV2 {
         return s.substring(1, s.length()-1);
     }
     
+    private static Optional<String> extractReprType(final @NonNull Stream<String> stringStream) {
+        return stringStream
+        .map(String::trim)
+        .filter(_Strings::isNotEmpty)
+        .filter(s->s.startsWith("repr-type"))
+        .map(s->_Strings.parseKeyValuePair(s, '=').orElse(null))
+        .filter(Objects::nonNull)
+        .map(KeyValuePair::getValue)
+        .filter(_Strings::isNotEmpty)
+        .findAny()
+        .map(RepresentationTypeSimplifiedV2::trimFirstAndLastCharacter);
+    }
+    
+   
     
 }

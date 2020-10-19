@@ -105,6 +105,10 @@ public class ObjectAndActionInvocation {
         return elementAdapters.get().stream();
     }
     
+    public boolean hasElements() {
+        return !elementAdapters.get().isEmpty();
+    }
+    
     // -- HELPER
     
     private final _Lazy<Can<ManagedObject>> elementAdapters = _Lazy.threadSafe(this::initElementAdapters);

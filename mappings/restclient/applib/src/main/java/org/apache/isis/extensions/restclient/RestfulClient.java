@@ -20,6 +20,7 @@ package org.apache.isis.extensions.restclient;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.extensions.restclient.auth.BasicAuthFilter;
 import org.apache.isis.extensions.restclient.auth.BasicAuthFilter.Credentials;
-import org.apache.isis.extensions.restclient.log.RestfulLoggingFilter;
+import org.apache.isis.extensions.restclient.log.ClientConversationLogger;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -151,7 +152,7 @@ public class RestfulClient {
 
         registerDefaultJsonProvider();
         registerBasicAuthFilter();
-        registerRequestDebugLoggingFilter();
+        registerConversationFilters();
     }
 
     public RestfulClientConfig getConfig() {
@@ -256,10 +257,13 @@ public class RestfulClient {
         }
     }
 
-    private void registerRequestDebugLoggingFilter() {
+    private void registerConversationFilters() {
         if(clientConfig.isUseRequestDebugLogging()){
-            client.register(new RestfulLoggingFilter());
+            client.register(new ClientConversationLogger());
         }
+        clientConfig.getClientConversationFilters().stream()
+        .filter(Objects::nonNull)
+        .forEach(client::register);
     }
 
     // -- HELPER
@@ -283,7 +287,6 @@ public class RestfulClient {
 
         return "";
     }
-
-
+    
 
 }

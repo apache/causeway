@@ -201,7 +201,7 @@ public class ResponseDigest<T> {
         
         // see if we can extract the returned representation type (repr-type) from the header
         val contentTypeHeaderString = response.getHeaderString("Content-Type");
-        val reprType = RepresentationTypeSimplifiedV2.parse(contentTypeHeaderString)
+        val reprType = RepresentationTypeSimplifiedV2.parseContentTypeHeaderString(contentTypeHeaderString)
                 .orElse(null);
         if(reprType==null) {
             entities = Can.empty();

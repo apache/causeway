@@ -226,6 +226,12 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
 
         case LIST:
 
+            if(!objectAndActionInvocation.hasElements()) {
+                // 404 not found
+                return Responses.ofNotFound();
+                
+            }
+            
             rootRepresentation = JsonRepresentation.newArray();
             
             objectAndActionInvocation.streamElementAdapters()
@@ -245,6 +251,12 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
 
         case SCALAR_VALUES:
             
+            if(!objectAndActionInvocation.hasElements()) {
+                // 404 not found
+                return Responses.ofNotFound();
+                
+            }
+            
             rootRepresentation = JsonRepresentation.newArray();
             
             objectAndActionInvocation.streamElementAdapters()
@@ -263,9 +275,12 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         case SCALAR_VALUE:
             
             val pojo = returnedAdapter.getPojo();
-            val dto =  pojo==null
-                ? ScalarValueDtoV2.forNull(returnedAdapter.getSpecification().getCorrespondingClass())
-                : ScalarValueDtoV2.forValue(pojo);
+            if(pojo==null) {
+                // 404 not found
+                return Responses.ofNotFound();
+            }
+            
+            val dto = ScalarValueDtoV2.forValue(pojo);
                 
             rootRepresentation = new JsonRepresentation(new POJONode(dto));
             headerContentType = RepresentationTypeSimplifiedV2.VALUE;
@@ -275,7 +290,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         case VOID:
             // represented as empty array
             rootRepresentation = JsonRepresentation.newArray();
-            headerContentType = RepresentationTypeSimplifiedV2.VALUES;
+            headerContentType = RepresentationTypeSimplifiedV2.VOID;
             break;
         default:
             throw _Exceptions.unmatchedCase(resultType);

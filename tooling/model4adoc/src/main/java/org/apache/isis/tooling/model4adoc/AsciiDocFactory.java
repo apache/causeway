@@ -165,6 +165,10 @@ public class AsciiDocFactory {
             return wrap("source,java", javaSource, title, Can.empty());
         }
         
+        public static String json(@NonNull String jsonSource, @Nullable String title) {
+            return wrap("source,json", jsonSource, title, Can.empty());
+        }
+        
 //      [plantuml,c4-demo,svg]
 //      ----
 //      @startuml

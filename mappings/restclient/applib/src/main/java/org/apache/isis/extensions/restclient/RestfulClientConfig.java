@@ -18,10 +18,16 @@
  */
 package org.apache.isis.extensions.restclient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.apache.isis.extensions.restclient.log.ClientConversationFilter;
 
 import lombok.Data;
 
@@ -48,5 +54,8 @@ public class RestfulClientConfig {
 
     @XmlElement(name="useRequestDebugLogging") 
     private boolean useRequestDebugLogging;
+    
+    @XmlTransient
+    private List<ClientConversationFilter> clientConversationFilters = new ArrayList<>();
 
 }

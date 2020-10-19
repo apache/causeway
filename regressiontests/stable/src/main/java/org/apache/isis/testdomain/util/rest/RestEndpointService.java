@@ -29,15 +29,18 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.client.SuppressionType;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.extensions.restclient.RestfulClient;
 import org.apache.isis.extensions.restclient.RestfulClientConfig;
+import org.apache.isis.extensions.restclient.log.ClientConversationFilter;
 import org.apache.isis.testdomain.jdo.JdoBookDto;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -71,6 +74,13 @@ public class RestEndpointService {
     // -- NEW CLIENT
 
     public RestfulClient newClient(boolean useRequestDebugLogging) {
+        return newClient(useRequestDebugLogging, Can.empty());
+    }
+            
+    
+    public RestfulClient newClient(
+            boolean useRequestDebugLogging, 
+            @NonNull Can<ClientConversationFilter> additionalFilters) {
 
         val restRootPath =
                 String.format("http://localhost:%d%s/",
@@ -80,7 +90,7 @@ public class RestEndpointService {
 
         log.info("new restful client created for {}", restRootPath);
 
-        RestfulClientConfig clientConfig = new RestfulClientConfig();
+        val clientConfig = new RestfulClientConfig();
         clientConfig.setRestfulBase(restRootPath);
         // setup basic-auth
         clientConfig.setUseBasicAuth(true); // default = false
@@ -88,8 +98,10 @@ public class RestEndpointService {
         clientConfig.setRestfulAuthPassword("pass");
         // setup request/response debug logging
         clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
+        // register additional filter if any
+        additionalFilters.forEach(clientConfig.getClientConversationFilters()::add);
 
-        RestfulClient client = RestfulClient.ofConfig(clientConfig);
+        val client = RestfulClient.ofConfig(clientConfig);
 
         return client;
     }

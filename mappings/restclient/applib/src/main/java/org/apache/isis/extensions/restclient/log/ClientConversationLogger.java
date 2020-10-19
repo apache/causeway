@@ -18,20 +18,10 @@
  */
 package org.apache.isis.extensions.restclient.log;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.ClientResponseContext;
-import javax.ws.rs.client.ClientResponseFilter;
-
-import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
@@ -41,41 +31,26 @@ import lombok.extern.log4j.Log4j2;
  * 
  * @since 2.0
  */
-@Priority(999) @Log4j2
-public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponseFilter {
+@Log4j2
+public class ClientConversationLogger implements ClientConversationFilter {
     
     @Override
-    public void filter(ClientRequestContext requestContext) throws IOException {
-        final String endpoint = requestContext.getUri().toString();
-        final String method = requestContext.getMethod();
-
-        Exception acceptableMediaTypeParsingFailure;
-        try {
-            @SuppressWarnings("unused")
-            final String acceptableMediaTypes = requestContext.getAcceptableMediaTypes().toString();
-            acceptableMediaTypeParsingFailure = null;
-        } catch (Exception e) {
-            acceptableMediaTypeParsingFailure = e;
-        }
-        final String acceptHeaderParsing = acceptableMediaTypeParsingFailure != null
-                ? "Failed to parse accept header, cause: " + acceptableMediaTypeParsingFailure.getMessage()
-                    : "OK";
-
-        final String headers = requestContext.getStringHeaders().entrySet().stream()
+    public void onRequest(String endpoint, String method, String acceptHeaderParsing,
+            Map<String, List<String>> headers, String body) {
+        
+        val headersAsText = headers.entrySet().stream()
                 .map(this::toKeyValueString)
                 .map(this::obscureAuthHeader)
                 .collect(Collectors.joining(",\n\t"));
 
-        final String requestBody = requestContext.getEntity().toString();
-
-        final StringBuilder sb = new StringBuilder();
+        val sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS REQUEST -------------\n")
         .append("uri: ").append(endpoint).append("\n")
         .append("method: ").append(method).append("\n")
         .append("accept-header-parsing: ").append(acceptHeaderParsing).append("\n")
-        .append("headers: \n\t").append(headers).append("\n")
-        .append("request-body: ").append(requestBody).append("\n")
+        .append("headers: \n\t").append(headersAsText).append("\n")
+        .append("request-body: ").append(body).append("\n")
         .append("----------------------------------------\n")
         ;
 
@@ -83,33 +58,22 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
     }
 
     @Override
-    public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
-
-        final InputStream inputStream = responseContext.getEntityStream();
-        final String responseBody;
-        if(inputStream!=null) {
-            val bytes = _Bytes.ofKeepOpen(inputStream);
-            responseBody = new String(bytes, StandardCharsets.UTF_8);
-            responseContext.setEntityStream(new ByteArrayInputStream(bytes));
-        } else {
-            responseBody = "null";
-        }
-
-        final String headers = responseContext.getHeaders().entrySet().stream()
+    public void onResponse(int httpReturnCode, Map<String, List<String>> headers, String body) {
+        val headersAsText = headers.entrySet().stream()
                 .map(this::toKeyValueString)
                 .map(this::obscureAuthHeader)
                 .collect(Collectors.joining(",\n\t"));
         
-        final StringBuilder sb = new StringBuilder();
+        val sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS RESPONSE -------------\n")
-        .append("headers: \n\t").append(headers).append("\n")
-        .append("response-body: ").append(responseBody).append("\n")
+        .append("http-return-code: \n\t").append(httpReturnCode).append("\n")
+        .append("headers: \n\t").append(headersAsText).append("\n")
+        .append("response-body: ").append(body).append("\n")
         .append("----------------------------------------\n")
         ;
 
         log.info(sb.toString());
-
     }
 
     // -- HELPER
@@ -132,6 +96,8 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
         }
         return keyValueLiteral;
     }
+
+
 
 
 }

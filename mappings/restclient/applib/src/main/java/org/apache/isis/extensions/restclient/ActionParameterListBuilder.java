@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Entity;
 
+import lombok.Getter;
+
 /**
  * 
  * @since 2.0
@@ -31,46 +33,57 @@ import javax.ws.rs.client.Entity;
 public class ActionParameterListBuilder {
 
     private final Map<String, String> actionParameters = new LinkedHashMap<>();
+    
+    @Getter
+    private final Map<String, Class<?>> actionParameterTypes = new LinkedHashMap<>();
 
     public ActionParameterListBuilder addActionParameter(String parameterName, String parameterValue) {
         actionParameters.put(parameterName, parameterValue != null 
                 ? value("\"" + parameterValue + "\"") 
                         : value(JSON_NULL_LITERAL));
+        actionParameterTypes.put(parameterName, String.class);
         return this;
     }
 
     public ActionParameterListBuilder addActionParameter(String parameterName, int parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
+        actionParameterTypes.put(parameterName, int.class);
         return this;
     }
 
     public ActionParameterListBuilder addActionParameter(String parameterName, long parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
+        actionParameterTypes.put(parameterName, long.class);
         return this;
     }
 
     public ActionParameterListBuilder addActionParameter(String parameterName, byte parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
+        actionParameterTypes.put(parameterName, byte.class);
         return this;
     }
 
     public ActionParameterListBuilder addActionParameter(String parameterName, short parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
+        actionParameterTypes.put(parameterName, short.class);
         return this;
     }
 
     public ActionParameterListBuilder addActionParameter(String parameterName, double parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
+        actionParameterTypes.put(parameterName, double.class);
         return this;
     }
 
     public ActionParameterListBuilder addActionParameter(String parameterName, float parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
+        actionParameterTypes.put(parameterName, float.class);
         return this;
     }
 
     public ActionParameterListBuilder addActionParameter(String parameterName, boolean parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
+        actionParameterTypes.put(parameterName, boolean.class);
         return this;
     }
 
