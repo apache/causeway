@@ -222,6 +222,8 @@
  			</snapshots>
  		</repository>
 -->
+		
+		<!-- required for RestEasy -->
 		<repository>
 			<id>JBoss Public Release</id>
 			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
@@ -229,20 +231,12 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		
 		<repository>
 			<id>sonatype-snapshots</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-
-		<!-- required for RestEasy -->
-		<repository>
-			<id>jboss</id>
-			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-			<snapshots>
-				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 
