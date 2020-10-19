@@ -6,6 +6,7 @@
 * xref:vro:ROOT:layout-resources.adoc[Layout Resources]
 * xref:vro:ROOT:health-check.adoc[Health Check]
 * xref:vro:ROOT:simplified-representations.adoc[Simplified Representations]
+* xref:vro:ROOT:simplified-representations-v2.adoc[Simplified Representations v2]
 * xref:vro:ROOT:configuration-properties.adoc[Configuration Properties]
 * xref:vro:ROOT:security.adoc[Security]
 * xref:vro:ROOT:hints-and-tips.adoc[Hints-n-Tips]
