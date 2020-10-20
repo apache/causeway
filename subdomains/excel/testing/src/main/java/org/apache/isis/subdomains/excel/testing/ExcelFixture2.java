@@ -18,14 +18,11 @@
  */
 package org.apache.isis.subdomains.excel.testing;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import com.google.common.io.Resources;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -34,6 +31,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -41,6 +39,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 /**
  * This class should be executed using {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} (it
@@ -119,15 +118,13 @@ public class ExcelFixture2 extends FixtureScript {
     }
 
     private byte[] readBytes() {
-
-        final URL excelResource = getExcelResource();
-        try {
-            bytes = Resources.toByteArray(excelResource);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Could not read from resource: " + excelResource);
+        try(val is = getExcelResource().openStream()) {
+            return _Bytes.of(is);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Could not read from resource: " + getExcelResource());
         }
-        return bytes;
     }
+    
     //endregion
 
 

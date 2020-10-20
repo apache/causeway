@@ -19,16 +19,16 @@
 package org.apache.isis.testing.fakedata.applib.services;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.io.ByteSource;
-import com.google.common.io.Resources;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.resources._Resources;
+
+import lombok.val;
 
 public class IsisBlobs extends AbstractRandomValueGenerator {
 
@@ -72,7 +72,6 @@ public class IsisBlobs extends AbstractRandomValueGenerator {
                 .collect(Collectors.toList());
     }
 
-
     private Blob asBlob(final List<String> fileNames) {
         final int randomIdx = fake.ints().upTo(fileNames.size());
         final String randomFileName = fileNames.get(randomIdx);
@@ -80,12 +79,8 @@ public class IsisBlobs extends AbstractRandomValueGenerator {
     }
 
     private static Blob asBlob(final String fileName) {
-        final URL resource = Resources.getResource(IsisBlobs.class, "blobs/" + fileName);
-        final ByteSource byteSource = Resources.asByteSource(resource);
-        final byte[] bytes;
-        try {
-            bytes = byteSource.read();
-            return new Blob(fileName, mimeTypeFor(fileName), bytes);
+        try(val is = _Resources.load(IsisBlobs.class, "blobs/" + fileName)){
+            return new Blob(fileName, mimeTypeFor(fileName), _Bytes.of(is));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -18,11 +18,11 @@
  */
 package org.apache.isis.subdomains.base.applib.with;
 
+import java.util.Objects;
 import java.util.SortedSet;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Sets;
+import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
 
@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.subdomains.base.applib.Chained;
 
 public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>> 
@@ -178,39 +179,29 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
         // //////////////////////////////////////
 
         @Programmatic
-        public T getPredecessor(final SortedSet<T> siblings, final Predicate<? super T> filter) {
+        public T getPredecessor(final SortedSet<T> siblings, final Predicate<T> filter) {
             return WithInterval.Util.firstElseNull(
                     siblings,
-                    com.google.common.base.Predicates.<T>and(
-                            filter,
-                            endDatePreceding(withInterval.getStartDate())));
+                    filter.and(endDatePreceding(withInterval.getStartDate())));
         }
 
         @Programmatic
-        public T getSuccessor(final SortedSet<T> siblings, final Predicate<? super T> filter) {
+        public T getSuccessor(final SortedSet<T> siblings, final Predicate<T> filter) {
             return WithInterval.Util.firstElseNull(
                     siblings,
-                    com.google.common.base.Predicates.<T>and(
-                            filter,
-                            startDateFollowing(withInterval.getEndDate())));
+                    filter.and(startDateFollowing(withInterval.getEndDate())));
 
         }
 
         private Predicate<T> startDateFollowing(final LocalDate date) {
-            return new Predicate<T>() {
-                @Override
-                public boolean apply(final T ar) {
-                    return date != null && ar != null && Objects.equal(ar.getStartDate(), date.plusDays(1));
-                }
+            return (final T ar) -> {
+                return date != null && ar != null && Objects.equals(ar.getStartDate(), date.plusDays(1));
             };
         }
 
         private Predicate<T> endDatePreceding(final LocalDate date) {
-            return new Predicate<T>() {
-                @Override
-                public boolean apply(final T ar) {
-                    return date != null && ar != null && Objects.equal(ar.getEndDate(), date.minusDays(1));
-                }
+            return (final T ar) -> {
+                return date != null && ar != null && Objects.equals(ar.getEndDate(), date.minusDays(1));
             };
         }
 
@@ -218,7 +209,9 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
 
         @Programmatic
         public SortedSet<T> getTimeline(final SortedSet<T> siblings, final Predicate<? super T> filter) {
-            return Sets.newTreeSet(Sets.filter(siblings, filter));
+            return _NullSafe.stream(siblings)
+            .filter(filter)
+            .collect(Collectors.toCollection(TreeSet::new));
         }
         
         // //////////////////////////////////////

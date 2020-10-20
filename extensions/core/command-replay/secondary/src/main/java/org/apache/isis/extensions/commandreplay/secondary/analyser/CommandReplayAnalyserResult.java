@@ -18,10 +18,10 @@
  */
 package org.apache.isis.extensions.commandreplay.secondary.analyser;
 
+import java.util.Objects;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
-
-import com.google.common.base.Objects;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -29,10 +29,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
-import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
@@ -70,7 +68,7 @@ public class CommandReplayAnalyserResult implements CommandReplayAnalyser {
         val secondaryResult = commandJdo.getResult();
         val secondaryResultStr =
                 secondaryResult != null ? secondaryResult.toString() : null;
-        return Objects.equal(primaryResultStr, secondaryResultStr)
+        return Objects.equals(primaryResultStr, secondaryResultStr)
                 ? null
                 : String.format(
                         "Results differ.  Primary was '%s', secondary is '%s'",

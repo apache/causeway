@@ -18,16 +18,11 @@
  */
 package org.apache.isis.subdomains.excel.integtests.tests;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.common.io.ByteSource;
-import com.google.common.io.Resources;
-
-import org.assertj.core.api.Assertions;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -35,7 +30,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem;
@@ -91,20 +90,17 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
                 bulkUpdateManager.importBlob(new Blob("toDoItems-updated.xlsx", ExcelService.XSLX_MIME_TYPE, updatedBytes));
 
         // then
-        Assertions.assertThat(lineItems.size()).isEqualTo(2);
+        assertThat(lineItems.size()).isEqualTo(2);
 
         final BulkUpdateLineItemForDemoToDoItem lineItem1 = lineItems.get(0);
         final BulkUpdateLineItemForDemoToDoItem lineItem2 = lineItems.get(1);
 
-        Assertions.assertThat(lineItem1.getDescription()).isEqualTo("Buy milk - updated!");
-        Assertions.assertThat(lineItem2.getNotes()).isEqualTo("Get sliced brown if possible.");
+        assertThat(lineItem1.getDescription()).isEqualTo("Buy milk - updated!");
+        assertThat(lineItem2.getNotes()).isEqualTo("Get sliced brown if possible.");
     }
 
-    private static byte[] getBytes(final Class<?> contextClass, final String name) throws IOException {
-        final ByteSource byteSource = Resources.asByteSource(contextClass.getResource(name));
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byteSource.copyTo(baos);
-        return baos.toByteArray();
+    private static byte[] getBytes(final Class<?> contextClass, final String resourceName) throws IOException {
+        return _Bytes.of(_Resources.load(contextClass, resourceName));
     }
 
     private static final Matcher<? super byte[]> lengthWithinPercentage(final byte[] expectedBytes, final int percentage) {

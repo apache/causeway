@@ -24,12 +24,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import com.google.common.io.Resources;
-
 import org.apache.poi.util.IOUtils;
 
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
+
+import lombok.val;
 
 public class ExcelFileBlobConverter {
 
@@ -54,7 +55,8 @@ public class ExcelFileBlobConverter {
         return new Blob("unused", ExcelService.XSLX_MIME_TYPE, bytes);
     }
 
-    //region > bytes
+    // -- bytes
+    
     private byte[] bytes;
 
     private byte[] getBytes(URL resource) {
@@ -65,15 +67,13 @@ public class ExcelFileBlobConverter {
     }
 
     private byte[] readBytes(URL resource) {
-
-        try {
-            bytes = Resources.toByteArray(resource);
-        } catch (IOException e) {
+        try(val is = resource.openStream()) {
+            return _Bytes.of(is);
+        } catch (Exception e) {
             throw new IllegalArgumentException("Could not read from resource: " + resource);
         }
-        return bytes;
     }
-    //endregion
+    
 
 
 }

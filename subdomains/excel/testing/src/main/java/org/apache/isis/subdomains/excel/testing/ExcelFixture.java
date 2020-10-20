@@ -18,16 +18,11 @@
  */
 package org.apache.isis.subdomains.excel.testing;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.io.Resources;
 
 import org.datanucleus.enhancement.Persistable;
 
@@ -38,6 +33,9 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
@@ -46,6 +44,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 /**
  * This class should be executed using {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} (it
@@ -54,16 +53,15 @@ import lombok.Setter;
 @DomainObject(
         objectType = "isisexcel.ExcelFixture"
 )
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class ExcelFixture extends FixtureScript {
 
-    private final List<Class> classes;
+    private final List<Class<?>> classes;
 
     public ExcelFixture(final URL excelResource, final Class... classes) {
         this(excelResource, Arrays.asList(classes));
     }
 
-    public ExcelFixture(final URL excelResource, final List<Class> classes) {
+    public ExcelFixture(final URL excelResource, final List<Class<?>> classes) {
         this(classes);
         setExcelResource(excelResource);
     }
@@ -72,13 +70,13 @@ public class ExcelFixture extends FixtureScript {
         this(upload, Arrays.asList(classes));
     }
 
-    public ExcelFixture(final Blob blob, final List<Class> classes) {
+    public ExcelFixture(final Blob blob, final List<Class<?>> classes) {
         this(classes);
         setBlob(blob);
     }
 
-    private ExcelFixture(final List<Class> classes) {
-        for (Class cls : classes) {
+    private ExcelFixture(final List<Class<?>> classes) {
+        for (Class<?> cls : classes) {
             final boolean viewModel = ExcelFixtureRowHandler.class.isAssignableFrom(cls);
             final boolean persistable = Persistable.class.isAssignableFrom(cls);
             if (!viewModel && !persistable) {
@@ -116,13 +114,13 @@ public class ExcelFixture extends FixtureScript {
      * Output: the objects created by this fixture, for a specific persistable/row handler class.
      */
     @Getter
-    private final Map<Class, List<Object>> objectsByClass = Maps.newHashMap();
+    private final Map<Class<?>, List<Object>> objectsByClass = _Maps.newHashMap();
 
     /**
      * Output: all the objects created by this fixture.
      */
     @Getter
-    private final List objects = Lists.newArrayList();
+    private final List objects = _Lists.newArrayList();
 
     @Programmatic
     @Override
@@ -141,8 +139,8 @@ public class ExcelFixture extends FixtureScript {
             blob = new Blob("unused", ExcelService.XSLX_MIME_TYPE, bytes);
         }
 
-        for (Class cls : classes) {
-            final List rowObjects = excelServiceImpl.fromExcel(blob, cls, cls.getSimpleName());
+        for (Class<?> cls : classes) {
+            final List<?> rowObjects = excelServiceImpl.fromExcel(blob, cls, cls.getSimpleName());
             Object previousRow = null;
             for (final Object rowObj : rowObjects) {
                 final List<Object> createdObjects = create(rowObj, ec, previousRow);
@@ -169,14 +167,11 @@ public class ExcelFixture extends FixtureScript {
     }
 
     private byte[] readBytes() {
-
-        final URL excelResource = getExcelResource();
-        try {
-            bytes = Resources.toByteArray(excelResource);
-        } catch (IOException e) {
+        try(val is = getExcelResource().openStream()) {
+            return _Bytes.of(is);
+        } catch (Exception e) {
             throw new IllegalArgumentException("Could not read from resource: " + excelResource);
         }
-        return bytes;
     }
     //endregion
 
@@ -194,16 +189,16 @@ public class ExcelFixture extends FixtureScript {
         }
     }
 
-    private void addToMap(final Class cls, final List<Object> createdObjects) {
+    private void addToMap(final Class<?> cls, final List<Object> createdObjects) {
         List<Object> objectList = objectsByClass.get(cls);
         if (objectList == null) {
-            objectList = Lists.newArrayList();
+            objectList = _Lists.newArrayList();
             this.objectsByClass.put(cls, objectList);
         }
         objectList.addAll(createdObjects);
     }
 
-    private void addToCombined(final List<Object> createdObjects) {
+    private void addToCombined(final List<?> createdObjects) {
         this.objects.addAll(createdObjects);
     }
 

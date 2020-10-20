@@ -34,14 +34,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -57,6 +49,11 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -207,19 +204,20 @@ class ExcelConverter {
     }
 
     File appendPivotSheet(final List<WorksheetContent> worksheetContents) throws IOException {
-        final ImmutableSet<String> worksheetNames = FluentIterable.from(worksheetContents)
-                .transform(new Function<WorksheetContent, String>() {
-                    @Nullable @Override public String apply(@Nullable final WorksheetContent worksheetContent) {
-                        if(worksheetContent==null) {
-                            return null;
-                        }
-                        return worksheetContent.getSpec().getSheetName();
-                    }
-                }).toSet();
+        
+        
+        val worksheetNames = _NullSafe.stream(worksheetContents)
+        .map(worksheetContent->worksheetContent==null
+                ? null
+                : worksheetContent.getSpec().getSheetName())
+        .filter(_Strings::isNotEmpty)
+        .collect(_Sets.toUnmodifiableSorted());
+        
         if(worksheetNames.size() < worksheetContents.size()) {
-            throw new IllegalArgumentException("Sheet names must have distinct names");
+            throw new IllegalArgumentException("Sheet names must have distinct names and cannot be empty");
         }
-        for (final String worksheetName : worksheetNames) {
+        
+        for (val worksheetName : worksheetNames) {
             if(worksheetName.length() > 30) {
                 throw new IllegalArgumentException(
                         String.format("Sheet name cannot exceed 30 characters (invalid name: '%s')",
@@ -369,7 +367,7 @@ class ExcelConverter {
             final List<WorksheetSpec> worksheetSpecs,
             final byte[] bs) throws IOException, InvalidFormatException {
 
-        final List<List<?>> listOfLists = Lists.newArrayList();
+        final List<List<?>> listOfLists = _Lists.newArrayList();
         for (WorksheetSpec worksheetSpec : worksheetSpecs) {
             listOfLists.add(fromBytes(bs, worksheetSpec));
         }
@@ -397,14 +395,14 @@ class ExcelConverter {
         final String sheetName = worksheetSpec.getSheetName();
         final Mode mode = worksheetSpec.getMode();
 
-        final List<T> importedItems = Lists.newArrayList();
+        final List<T> importedItems = _Lists.newArrayList();
 
         final CellMarshaller cellMarshaller = this.newCellMarshaller(workbook);
 
         final Sheet sheet = lookupSheet(cls, sheetName, workbook);
 
         boolean header = true;
-        final Map<Integer, Property> propertyByColumn = Maps.newHashMap();
+        final Map<Integer, Property> propertyByColumn = _Maps.newHashMap();
 
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(cls);
 
@@ -522,7 +520,7 @@ class ExcelConverter {
     }
 
     private static <T> List<String> determineCandidateSheetNames(final String sheetName, final Class<T> cls) {
-        final List<String> names = Lists.newArrayList();
+        final List<String> names = _Lists.newArrayList();
         if(sheetName != null) {
             names.add(sheetName);
         }

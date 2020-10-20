@@ -19,16 +19,16 @@
 package org.apache.isis.testing.fakedata.applib.services;
 
 import java.io.IOException;
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.CharSource;
-import com.google.common.io.Resources;
-
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Resources;
+
+import lombok.val;
 
 public class IsisClobs extends AbstractRandomValueGenerator {
 
@@ -103,14 +103,10 @@ public class IsisClobs extends AbstractRandomValueGenerator {
         final String randomFileName = fileNames.get(randomIdx);
         return asClob(randomFileName);
     }
-
+    
     private static Clob asClob(final String fileName) {
-        final URL resource = Resources.getResource(IsisBlobs.class, "clobs/" + fileName);
-        final CharSource charSource = Resources.asCharSource(resource, Charsets.US_ASCII);
-        final String chars;
-        try {
-            chars = charSource.read();
-            return new Clob(fileName, mimeTypeFor(fileName), chars);
+        try(val is = _Resources.load(IsisBlobs.class, "clobs/" + fileName)) {
+            return new Clob(fileName, mimeTypeFor(fileName), _Strings.read(is, StandardCharsets.US_ASCII));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

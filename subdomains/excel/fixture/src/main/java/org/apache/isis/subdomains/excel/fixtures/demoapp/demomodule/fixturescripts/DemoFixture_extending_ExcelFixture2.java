@@ -18,9 +18,8 @@
  */
 package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturescripts;
 
-import com.google.common.io.Resources;
-
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
@@ -44,7 +43,7 @@ public class DemoFixture_extending_ExcelFixture2 extends ExcelFixture2 {
     @Override
     protected void execute(final ExecutionContext executionContext) {
 
-        setExcelResource(Resources.getResource(getClass(), getResourceName()));
+        setExcelResource(_Resources.getResourceUrl(getClass(), getResourceName()));
 
         setMatcher(sheetName -> {
 

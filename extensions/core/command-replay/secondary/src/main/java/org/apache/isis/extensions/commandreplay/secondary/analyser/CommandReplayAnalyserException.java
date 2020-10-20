@@ -18,10 +18,10 @@
  */
 package org.apache.isis.extensions.commandreplay.secondary.analyser;
 
+import java.util.Objects;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
-
-import com.google.common.base.Objects;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,7 @@ public class CommandReplayAnalyserException implements CommandReplayAnalyser {
 
         val primaryExceptionTrimmed = trimmed(primaryException);
         val replayedExceptionTrimmed = trimmed(replayedException);
-        return Objects.equal(primaryExceptionTrimmed, replayedExceptionTrimmed)
+        return Objects.equals(primaryExceptionTrimmed, replayedExceptionTrimmed)
                 ? null
                 : String.format("Exceptions differ.  On primary system was '%s'", primaryException);
     }

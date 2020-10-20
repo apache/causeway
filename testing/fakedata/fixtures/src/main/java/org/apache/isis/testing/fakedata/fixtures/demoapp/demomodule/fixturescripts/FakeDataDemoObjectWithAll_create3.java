@@ -22,14 +22,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.testing.fakedata.applib.services.FakeDataService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
-
 import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +41,7 @@ public class FakeDataDemoObjectWithAll_create3 extends FixtureScript {
     private Boolean withFakeData;
 
     @Getter(onMethod = @__( @Programmatic ))
-    private List<FakeDataDemoObjectWithAll> demoObjects = Lists.newArrayList();
+    private List<FakeDataDemoObjectWithAll> demoObjects = _Lists.newArrayList();
 
     @Override
     protected void execute(final ExecutionContext executionContext) {

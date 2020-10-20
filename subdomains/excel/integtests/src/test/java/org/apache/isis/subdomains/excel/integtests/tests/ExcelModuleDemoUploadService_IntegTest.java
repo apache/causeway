@@ -23,13 +23,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.common.io.Resources;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelFileBlobConverter;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
@@ -51,7 +50,7 @@ public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTest
     public void uploadSpreadsheet() throws Exception{
 
         // Given
-        final URL excelResource = Resources.getResource(getClass(), "ToDoItemsWithMultipleSheets.xlsx");
+        final URL excelResource = _Resources.getResourceUrl(getClass(), "ToDoItemsWithMultipleSheets.xlsx");
         final Blob blob = new ExcelFileBlobConverter().toBlob("unused", excelResource);
 
         // When

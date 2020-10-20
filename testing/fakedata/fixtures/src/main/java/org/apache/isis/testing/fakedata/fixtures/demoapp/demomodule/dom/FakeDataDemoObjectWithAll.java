@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,8 +32,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.validation.constraints.Digits;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.google.common.collect.Ordering;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -687,9 +686,13 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
+    private static final Comparator<FakeDataDemoObjectWithAll> comparator = 
+            Comparator.nullsFirst(
+                    Comparator.comparing(FakeDataDemoObjectWithAll::getName));
+    
     @Override
     public int compareTo(final FakeDataDemoObjectWithAll other) {
-        return Ordering.natural().onResultOf(FakeDataDemoObjectWithAll::getName).compare(this, other);
+        return comparator.compare(this, other);
     }
 
 

@@ -20,8 +20,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom;
 
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 public enum Subcategory {
     // professional

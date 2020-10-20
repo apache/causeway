@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.base.Throwables;
-
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -32,6 +30,8 @@ import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
 import static org.hamcrest.CoreMatchers.nullValue;
+
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Hamcrest {@link org.hamcrest.Matcher} implementations.
@@ -292,12 +292,11 @@ public final class IsisMatchers {
             @Override
             public void describeTo(Description arg0) {
                 arg0.appendText("causal chain has message with " + messageFragment);
-
             }
 
             @Override
-            protected boolean matchesSafely(Throwable arg0) {
-                for (Throwable ex : Throwables.getCausalChain(arg0)) {
+            protected boolean matchesSafely(Throwable e) {
+                for (Throwable ex : _Exceptions.getCausalChain(e)) {
                     if (ex.getMessage().contains(messageFragment)) {
                         return true;
                     }

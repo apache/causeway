@@ -35,14 +35,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import junit.framework.AssertionFailedError;
 
@@ -385,7 +385,7 @@ public final class PojoTester {
 			}
 			checkMethodVisibility(property, getterName, getterMethod);
 
-			List<Object> earlierGetterOriginalValues = Lists.newArrayList();
+			List<Object> earlierGetterOriginalValues = _Lists.newArrayList();
 	        for (Method earlierGetter : earlierGetters) {
                 final Object earlierValue = earlierGetter.invoke(bean);
                 earlierGetterOriginalValues.add(earlierValue);
@@ -402,7 +402,7 @@ public final class PojoTester {
 	            for (Method earlierGetter : earlierGetters) {
 	                final Object earlierGetterCurrentValue = earlierGetter.invoke(bean);
 	                final Object earlierGetterOriginalValue = earlierGetterOriginalValues.get(j++);
-                    if(!Objects.equal(earlierGetterOriginalValue, earlierGetterCurrentValue)) {
+                    if(!Objects.equals(earlierGetterOriginalValue, earlierGetterCurrentValue)) {
 	                    throw new TestException(setterName
 	                            + " interferes with " + earlierGetter.getName());
 	                }

@@ -43,8 +43,8 @@ under the License.
         </dependency>
 
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>org.apache.isis.commons</groupId>
+            <artifactId>isis-commons</artifactId>
         </dependency>
 
         <dependency>

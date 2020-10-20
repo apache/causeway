@@ -21,7 +21,7 @@ package org.apache.isis.subdomains.base.applib.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 public final class MessageUtils {
 
@@ -29,7 +29,7 @@ public final class MessageUtils {
     private static final Pattern pattern = Pattern.compile(".*Reason: (.+?)[ ]*Identifier:.*");
 
     public static String normalize(final Exception ex) {
-        if(ex == null || Strings.isNullOrEmpty(ex.getMessage())) {
+        if(ex == null || _Strings.isNullOrEmpty(ex.getMessage())) {
             return null;
         }
         String message = ex.getMessage();

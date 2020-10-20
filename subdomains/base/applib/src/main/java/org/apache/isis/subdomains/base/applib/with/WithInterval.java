@@ -18,11 +18,8 @@
  */
 package org.apache.isis.subdomains.base.applib.with;
 
-import java.util.Iterator;
 import java.util.SortedSet;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.function.Predicate;
 
 import org.joda.time.LocalDate;
 
@@ -30,7 +27,10 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.subdomains.base.applib.valuetypes.LocalDateInterval;
+
+import lombok.experimental.UtilityClass;
 
 public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
 
@@ -97,9 +97,8 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
     @Programmatic
     public boolean isCurrent();
 
+    @UtilityClass
     public static final class Util {
-        private Util() {
-        }
 
         // public static LocalDate effectiveStartDateOf(final WithInterval<?>
         // wi) {
@@ -126,26 +125,25 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
         // }
 
         public static <T extends WithInterval<T>> T firstElseNull(
-                final SortedSet<T> roles, final Predicate<T> predicate) {
-            final Iterable<T> filter = Iterables.filter(roles, predicate);
-            final Iterator<T> iterator = filter.iterator();
-            return iterator.hasNext() ? iterator.next() : null;
+                final SortedSet<T> roles, 
+                final Predicate<T> predicate) {
+            return _NullSafe.stream(roles)
+            .filter(predicate)
+            .findFirst()
+            .orElse(null);
         }
     }
-    
+
+    @UtilityClass
     public static final class Predicates {
-        
-        private Predicates(){}
         
         /**
          * A {@link Predicate} that tests whether the role's {@link WithInterval#isCurrent() current}
          * status is the specified value.
          */
         public static <T extends WithInterval<T>> Predicate<T> whetherCurrentIs(final boolean current) {
-            return new Predicate<T>() {
-                public boolean apply(final T candidate) {
+            return (final T candidate) -> {
                     return candidate != null && candidate.isCurrent() == current;
-                }
             };
         }
 

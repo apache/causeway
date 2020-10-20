@@ -23,14 +23,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.google.common.io.Resources;
-
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.subdomains.excel.testing.ExcelFixture;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
+import org.apache.isis.subdomains.excel.testing.ExcelFixture;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
@@ -49,7 +48,7 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
 
 
     @Getter
-    private List<ExcelDemoToDoItem> todoItems = Lists.newArrayList();
+    private List<ExcelDemoToDoItem> todoItems = _Lists.newArrayList();
 
     @Override
     public void execute(ExecutionContext executionContext) {
@@ -74,7 +73,8 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
     private List<ExcelDemoToDoItem> load(
             final ExecutionContext executionContext,
             final String resourceName) {
-        final URL excelResource = Resources.getResource(getClass(), resourceName);
+        
+        final URL excelResource = _Resources.getResourceUrl(getClass(), resourceName);
         final ExcelFixture excelFixture = new ExcelFixture(excelResource, DemoToDoItemRowHandler.class);
         excelFixture.setExcelResourceName(resourceName);
         executionContext.executeChild(this, excelFixture);
