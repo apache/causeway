@@ -327,7 +327,7 @@ ui:
 #    url: ../isis-antora/build/ui-bundle.zip
     url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
     snapshot: true
-  supplemental_filpes: antora/supplemental-ui
+  supplemental_files: antora/supplemental-ui
 
 asciidoc:
   extensions:
