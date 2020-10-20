@@ -22,7 +22,7 @@ package org.apache.isis.valuetypes.sse.ui.wkt.markup;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
+import org.apache.isis.applib.value.Markup;
 import org.apache.isis.valuetypes.sse.metamodel.facets.SseObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
@@ -33,7 +33,7 @@ import lombok.val;
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in 
  * {@link MarkupPanelFactories}, but specific to 
- * the {@link ListeningMarkup} value-type which requires client-side java-script to be
+ * the {@link Markup} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
 public class ListeningMarkupPanelFactoriesForWicket {
@@ -45,7 +45,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
         private static final long serialVersionUID = 1L;
 
         public Parented() {
-            super(ListeningMarkup.class);
+            super(Markup.class);
         }
 
         
@@ -79,7 +79,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
         private static final long serialVersionUID = 1L;
 
         public Standalone() {
-            super(ListeningMarkup.class);
+            super(Markup.class);
         }
 
         @Override

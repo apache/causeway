@@ -36,7 +36,6 @@ import org.apache.isis.applib.value.Markup;
 import org.apache.isis.valuetypes.sse.applib.annotations.ServerSentEvents;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
 import org.apache.isis.valuetypes.sse.applib.service.SseService.ExecutionBehavior;
-import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -56,7 +55,7 @@ public class AsyncActionDemo implements HasAsciiDocDescription {
     @XmlElement @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)
     @Property
     @ServerSentEvents(observe=DemoTask.class) // bind to a SSE channel
-    @Getter @Setter ListeningMarkup progressView;
+    @Getter @Setter Markup progressView;
 
     @Action
     public AsyncActionDemo startSimpleTask() {

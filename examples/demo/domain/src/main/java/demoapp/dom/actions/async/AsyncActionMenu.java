@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
+import org.apache.isis.applib.value.Markup;
 
 import lombok.val;
 
@@ -41,7 +41,7 @@ public class AsyncActionMenu {
     public AsyncActionDemo asyncActions(){
         val demo = factoryService.viewModel(AsyncActionDemo.class);
         // demo.initDefaults();
-        demo.setProgressView( ListeningMarkup.valueOfHtml("Please start a task!"));
+        demo.setProgressView(Markup.valueOfHtml("Please start a task!"));
         return demo;
     }
 

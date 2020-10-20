@@ -35,7 +35,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
-import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -138,7 +137,7 @@ public class ServerSentEventsServlet extends HttpServlet {
                     return false; // stop listening
                 }
 
-                val payload = marshaller.marshal(ListeningMarkup.valueOfHtml(source.getPayload()));
+                val payload = marshaller.marshal(Markup.valueOfHtml(source.getPayload()));
 
                 writer
                 .append("data: ")

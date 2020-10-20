@@ -19,7 +19,6 @@
 package org.apache.isis.valuetypes.sse.applib;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 
 @Configuration
