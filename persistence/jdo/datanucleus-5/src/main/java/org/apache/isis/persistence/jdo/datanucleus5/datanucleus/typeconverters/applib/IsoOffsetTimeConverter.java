@@ -18,25 +18,26 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib;
 
+import java.time.OffsetTime;
+import java.time.format.DateTimeFormatter;
+
 import org.datanucleus.store.types.converters.TypeConverter;
 
-import org.apache.isis.applib.value.Markup;
-
-public class IsisMarkupConverter implements TypeConverter<Markup, String>{
+public class IsoOffsetTimeConverter implements TypeConverter<OffsetTime, String>{
 
     private static final long serialVersionUID = 1L;
-
+    
     @Override
-    public String toDatastoreType(final Markup memberValue) {
-        return memberValue != null
-                ? memberValue.asHtml()
+    public String toDatastoreType(final OffsetTime offsetTime) {
+        return offsetTime != null
+                ? offsetTime.format(DateTimeFormatter.ISO_OFFSET_TIME)
                 : null;
     }
 
     @Override
-    public Markup toMemberType(final String datastoreValue) {
+    public OffsetTime toMemberType(final String datastoreValue) {
         return datastoreValue != null
-                ? new Markup(datastoreValue)
+                ? OffsetTime.parse(datastoreValue, DateTimeFormatter.ISO_OFFSET_TIME)
                 : null;
     }
 

@@ -30,9 +30,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-
-import lombok.Getter;
 
 @Service
 @Named("isisWicketViewer.WicketViewerSettingsDefault")
@@ -43,7 +42,7 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject @Getter private transient IsisConfiguration configuration;
+    @Inject private transient IsisConfiguration configuration;
 
     @Override
     public int getMaxTitleLengthInStandaloneTables() {
@@ -55,13 +54,6 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
         return getConfiguration().getViewer().getWicket().getMaxTitleLengthInParentedTables();
     }
 
-    /**
-     * Fallback for either {@link #getMaxTitleLengthInParentedTables()} and {@link #getMaxTitleLengthInParentedTables()}
-     */
-    private int getMaxTitleLengthInTables() {
-        return getConfiguration().getViewer().getWicket().getMaxTitleLengthInTables();
-    }
-
     @Override
     public String getDatePattern() {
         return getConfiguration().getViewer().getWicket().getDatePattern();
@@ -70,15 +62,6 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     @Override
     public String getDateTimePattern() {
         return getConfiguration().getViewer().getWicket().getDateTimePattern();
-    }
-
-    /**
-     * @deprecated - seemingly unused.
-     */
-    @Deprecated
-    @Override
-    public String getTimestampPattern() {
-        return getConfiguration().getViewer().getWicket().getTimestampPattern();
     }
 
     @Override
@@ -114,5 +97,14 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     @Override
     public boolean isRedirectEvenIfSameObject() {
         return getConfiguration().getViewer().getWicket().isRedirectEvenIfSameObject();
+    }
+
+    // -- HELPER
+    
+    private IsisConfiguration getConfiguration() {
+        if(configuration==null) {
+            configuration = CommonContextUtils.getCommonContext().getConfiguration();
+        }
+        return configuration;
     }
 }

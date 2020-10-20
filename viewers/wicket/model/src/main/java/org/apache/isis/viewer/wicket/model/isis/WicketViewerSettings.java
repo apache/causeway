@@ -50,14 +50,6 @@ public interface WicketViewerSettings extends Serializable {
     String getDateTimePattern();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setTimestampPattern(String)}
-     *
-     * @deprecated - seemingly unused
-     */
-    @Deprecated
-    String getTimestampPattern();
-
-    /**
      * As per {@link IsisConfiguration.Viewer.Wicket#setReplaceDisabledTagWithReadonlyTag(boolean)}
      */
     boolean isReplaceDisabledTagWithReadonlyTag();

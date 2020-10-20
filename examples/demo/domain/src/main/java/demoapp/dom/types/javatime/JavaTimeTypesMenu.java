@@ -25,9 +25,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
-
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.javatime.javatimelocaldate.JavaTimeLocalDates;
 import demoapp.dom.types.javatime.javatimelocaldatetime.JavaTimeLocalDateTimes;
@@ -37,7 +34,7 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.JavaTimeZonedDateTimes;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaTimeTypesMenu")
 @DomainObjectLayout(named="JavaTimeTypes")
-@Log4j2
+//@Log4j2
 public class JavaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -59,16 +56,16 @@ public class JavaTimeTypesMenu {
     }
 
     @Action(
-            semantics = SemanticsOf.SAFE,
-            hidden = Where.EVERYWHERE   // TODO: ISIS-2409 - NPE
+            semantics = SemanticsOf.SAFE
+            //,hidden = Where.EVERYWHERE   // TODO: ISIS-2409 - NPE
     )
     @ActionLayout(cssClassFa="fa-clock")
     public JavaTimeOffsetTimes offsetTimes(){
         return new JavaTimeOffsetTimes();
     }
 
-    @Action(semantics = SemanticsOf.SAFE,
-            hidden = Where.EVERYWHERE   // TODO: ISIS-2410 - does not render/parse correctly
+    @Action(semantics = SemanticsOf.SAFE
+            //,hidden = Where.EVERYWHERE   // TODO: ISIS-2410 - does not render/parse correctly
     )
     @ActionLayout(cssClassFa="fa-clock")
     public JavaTimeZonedDateTimes zonedDateTimes(){

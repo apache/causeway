@@ -33,11 +33,6 @@
             java-type="org.apache.isis.applib.value.Clob"
             mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.applib.IsisClobMapping"/>
         
-        <!-- TODO[2249] deprecated
-        <mapping
-            java-type="org.apache.isis.applib.value.Money"
-            mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.IsisMoneyMapping"/>
-            -->
     </extension>
 
 
@@ -64,6 +59,21 @@
     <!--
     http://www.datanucleus.org/extensions/java_types.html
     -->
+    
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="java.time.ZonedDateTime"
+                dfg="true" priority="10"
+                converter-name="iso.zoneddatetime-string" />
+    </extension>
+    
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="java.time.OffsetTime"
+                dfg="true" priority="10"
+                converter-name="iso.offsettime-string" />
+    </extension>
+    
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.isis.applib.value.Password"
@@ -123,6 +133,32 @@
     <!--
     http://www.datanucleus.org/extensions/type_converter.html
     -->
+    
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="iso.zoneddatetime-string"
+                member-type="java.time.ZonedDateTime"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsoZonedDateTimeConverter"/>
+    </extension>
+    
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="iso.offsettime-string"
+                member-type="java.time.OffsetTime"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsoOffsetTimeConverter"/>
+    </extension>
+    
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="isis.password-string"
+                member-type="org.apache.isis.applib.value.Password"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsisPasswordConverter"/>
+    </extension>
+    
+    
     <extension point="org.datanucleus.type_converter">
         <type-converter
                 name="isis.password-string"

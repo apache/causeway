@@ -30,14 +30,14 @@ public class IsisPasswordConverter implements TypeConverter<Password, String>{
     public String toDatastoreType(final Password memberValue) {
         return memberValue != null
                 ? memberValue.getPassword()
-                        : null;
+                : null;
     }
 
     @Override
     public Password toMemberType(final String datastoreValue) {
         return datastoreValue != null
                 ? new Password(datastoreValue)
-                        : null;
+                : null;
     }
 
 }

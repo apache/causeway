@@ -21,8 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.
 import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
 
 public class IsisBookmarkConverter implements TypeConverter<Bookmark, String>{
 

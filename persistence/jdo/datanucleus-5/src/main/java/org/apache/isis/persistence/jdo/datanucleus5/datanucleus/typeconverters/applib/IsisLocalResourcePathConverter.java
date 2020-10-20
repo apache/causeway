@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.
 import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.applib.value.Markup;
 
 public class IsisLocalResourcePathConverter implements TypeConverter<LocalResourcePath, String>{
 
