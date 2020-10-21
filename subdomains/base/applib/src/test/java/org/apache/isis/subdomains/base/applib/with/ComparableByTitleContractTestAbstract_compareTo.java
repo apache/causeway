@@ -19,17 +19,23 @@
 package org.apache.isis.subdomains.base.applib.with;
 
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Test;
 
 public abstract class ComparableByTitleContractTestAbstract_compareTo {
-    protected final String packagePrefix;
+    protected final Iterable<Class<? extends WithTitleComparable>> candidates;
     protected Map<Class<?>, Class<?>> noninstantiableSubstitutes;
 
+    /**
+     * @apiNote Usage example:<br>
+     * {@code import org.reflections.Reflections;}<br>
+     * {@code val reflections = new Reflections(packagePrefix);}<br>
+     * {@code val candidates = reflections.getSubTypesOf(WithTitleComparable.class);}
+     */
     public ComparableByTitleContractTestAbstract_compareTo(
-            String packagePrefix, Map<Class<?>, Class<?>> noninstantiableSubstitutes) {
-        this.packagePrefix = packagePrefix;
+            Iterable<Class<? extends WithTitleComparable>> candidates, 
+            Map<Class<?>, Class<?>> noninstantiableSubstitutes) {
+        this.candidates = candidates;
         this.noninstantiableSubstitutes = noninstantiableSubstitutes;
     }
 
@@ -37,9 +43,7 @@ public abstract class ComparableByTitleContractTestAbstract_compareTo {
     @Test
     public void searchAndTest() {
 
-        Set<Class<? extends WithTitleComparable>> subtypes =
-                reflections.getSubTypesOf(WithTitleComparable.class);
-        for (Class<? extends WithTitleComparable> subtype : subtypes) {
+        for (Class<? extends WithTitleComparable> subtype : candidates) {
             if(subtype.isInterface() || subtype.isAnonymousClass() || subtype.isLocalClass() || subtype.isMemberClass()) {
                 // skip (probably a testing class)
                 continue;

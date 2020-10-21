@@ -19,21 +19,23 @@
 package org.apache.isis.subdomains.base.applib.with;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
-
 public abstract class ComparableByNameContractTestAbstract_compareTo {
-    protected final String packagePrefix;
+    protected final Iterable<Class<? extends WithNameComparable>> candidates;
     protected Map<Class<?>, Class<?>> noninstantiableSubstitutes;
 
+    /**
+     * @apiNote Usage example:<br>
+     * {@code import org.reflections.Reflections;}<br>
+     * {@code val reflections = new Reflections(packagePrefix);}<br>
+     * {@code val candidates = reflections.getSubTypesOf(WithNameComparable.class);}
+     */
     public ComparableByNameContractTestAbstract_compareTo(
-            String packagePrefix, Map<Class<?>, Class<?>> noninstantiableSubstitutes) {
-        this.packagePrefix = packagePrefix;
+            Iterable<Class<? extends WithNameComparable>> candidates, 
+            Map<Class<?>, Class<?>> noninstantiableSubstitutes) {
+        this.candidates = candidates;
         this.noninstantiableSubstitutes = noninstantiableSubstitutes;
     }
 
@@ -41,11 +43,7 @@ public abstract class ComparableByNameContractTestAbstract_compareTo {
     @Test
     public void searchAndTest() {
 
-        Set<Class<? extends WithNameComparable>> subtypes =
-                _Reflect.streamTypeHierarchy(WithNameComparable.class, InterfacePolicy.EXCLUDE)
-                .collect(Collectors.toSet());
-                
-        for (Class<? extends WithNameComparable> subtype : subtypes) {
+        for (Class<? extends WithNameComparable> subtype : candidates) {
             if(subtype.isInterface() || subtype.isAnonymousClass() || subtype.isLocalClass() || subtype.isMemberClass()) {
                 // skip (probably a testing class)
                 continue;

@@ -19,17 +19,23 @@
 package org.apache.isis.subdomains.base.applib.with;
 
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Test;
 
 public abstract class ComparableByReferenceContractTestAbstract_compareTo {
-    protected final String packagePrefix;
+    protected final Iterable<Class<? extends WithReferenceComparable>> candidates;
     protected Map<Class<?>, Class<?>> noninstantiableSubstitutes;
 
+    /**
+     * @apiNote Usage example:<br>
+     * {@code import org.reflections.Reflections;}<br>
+     * {@code val reflections = new Reflections(packagePrefix);}<br>
+     * {@code val candidates = reflections.getSubTypesOf(WithReferenceComparable.class);}
+     */
     public ComparableByReferenceContractTestAbstract_compareTo(
-            String packagePrefix, Map<Class<?>, Class<?>> noninstantiableSubstitutes) {
-        this.packagePrefix = packagePrefix;
+            Iterable<Class<? extends WithReferenceComparable>> candidates, 
+            Map<Class<?>, Class<?>> noninstantiableSubstitutes) {
+        this.candidates = candidates;
         this.noninstantiableSubstitutes = noninstantiableSubstitutes;
     }
 
@@ -37,9 +43,7 @@ public abstract class ComparableByReferenceContractTestAbstract_compareTo {
     @Test
     public void searchAndTest() {
 
-        Set<Class<? extends WithReferenceComparable>> subtypes =
-                reflections.getSubTypesOf(WithReferenceComparable.class);
-        for (Class<? extends WithReferenceComparable> subtype : subtypes) {
+        for (Class<? extends WithReferenceComparable> subtype : candidates) {
             if(subtype.isInterface() || subtype.isAnonymousClass() || subtype.isLocalClass() || subtype.isMemberClass()) {
                 // skip (probably a testing class)
                 continue;

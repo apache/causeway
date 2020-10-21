@@ -19,7 +19,6 @@
 package org.apache.isis.subdomains.base.applib.with;
 
 import java.lang.annotation.Annotation;
-import java.util.Set;
 
 import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
@@ -28,13 +27,21 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public abstract class WithFieldUniqueContractTestAllAbstract<T> {
+    protected final Iterable<Class<? extends T>> candidates;
     protected final Class<T> interfaceType;
     protected final String fieldName;
-    protected final String prefix;
 
+    /**
+     * @apiNote Usage example:<br>
+     * {@code import org.reflections.Reflections;}<br>
+     * {@code val reflections = new Reflections(packagePrefix);}<br>
+     * {@code val candidates = reflections.getSubTypesOf(interfaceType);}
+     */
     public WithFieldUniqueContractTestAllAbstract(
-            final String prefix, String fieldName, Class<T> interfaceType) {
-        this.prefix = prefix;
+            Iterable<Class<? extends T>> candidates, 
+            String fieldName, 
+            Class<T> interfaceType) {
+        this.candidates = candidates;
         this.fieldName = fieldName;
         this.interfaceType = interfaceType;
     }
@@ -48,10 +55,9 @@ public abstract class WithFieldUniqueContractTestAllAbstract<T> {
     public void searchAndTest() {
 
         final StringBuilder buf = new StringBuilder();
-
-        Set<Class<? extends T>> domainObjectClasses = reflections.getSubTypesOf(interfaceType);
+        
         checkClass:
-        for (final Class<? extends T> subtype : domainObjectClasses) {
+        for (final Class<? extends T> subtype : candidates) {
             if(subtype.isInterface() || subtype.isAnonymousClass() || subtype.isLocalClass() || subtype.isMemberClass()) {
                 // skip (probably a testing class)
                 continue;
