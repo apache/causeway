@@ -27,7 +27,6 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import org.apache.isis.applib.value.Image;
-import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -57,17 +56,12 @@ public class ImageValueSemanticsProviderTest {
         val restoredImage = adapter.fromEncodedString(encodedImageData);
 
         val pixels = restoredImage.getImage();
-//        assertEquals(0xFF000000, array[0][0]);
-//        assertEquals(0xFF3F218A, array[0][1]);
-//        assertEquals(0xFF123456, array[0][3]);
-//        assertEquals(0xFF7FFFFF, array[0][4]);
-//        assertEquals(-0x7FFFFF, array[0][5]);
-//        assertEquals(-0x700000, array[0][6]);
-        
-        System.out.println(_Ints.tableForm(getPixels(), 10, Integer::toHexString));
-        System.out.println();
-        System.out.println();
-        System.out.println(_Ints.tableForm(pixels, 10, Integer::toHexString));
+
+// debug        
+//        System.out.println(_Ints.tableForm(getPixels(), 10, Integer::toHexString));
+//        System.out.println();
+//        System.out.println();
+//        System.out.println(_Ints.tableForm(pixels, 10, Integer::toHexString));
         
         assertArrayEquals(getPixels(), pixels);
         

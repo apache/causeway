@@ -247,7 +247,7 @@ implements DateValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final T object) {
         final Date date = dateValue(object);
         return encode(date);
     }
