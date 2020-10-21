@@ -21,6 +21,8 @@ package org.apache.isis.applib.value;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Value;
 
 /**
@@ -30,7 +32,9 @@ import org.apache.isis.applib.annotation.Value;
 // end::refguide[]
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProvider")
 public class Image implements Serializable {
+    
     private static final long serialVersionUID = 1L;
+    
     private final int[][] pixels;
 
     /**
@@ -41,28 +45,37 @@ public class Image implements Serializable {
         this.pixels = pixels;
     }
 
-    public Object getValue() {
-        return pixels;
-    }
-
-    @Override
-    public String toString() {
-        final int height = getHeight();
-        return "Image [size=" + height + "x" + (height == 0 || pixels[0] == null ? 0 : pixels[0].length) + "]";
-    }
-
     /**
      * @return 2 dim array of pixels defining this image, where each pixel is a 32 bit ARGB color value
      */
+    @Nullable
     public int[][] getPixels() {
         return pixels;
     }
     
+    /**
+     * @return height of this image or 0 if empty
+     */
     public int getHeight() {
-        return pixels == null ? 0 : pixels.length;
+        return pixels != null 
+                ? pixels.length
+                : 0;
     }
 
+    /**
+     * @return width of this image or 0 if empty
+     */
     public int getWidth() {
-        return pixels == null ? 0 : pixels[0].length;
+        return pixels != null 
+                ? pixels[0].length
+                : 0;
     }
+    
+    @Override
+    public String toString() {
+        return pixels != null
+                ? String.format("Image [size=%dx%d]", getWidth(), getHeight())
+                : "Image [empty]";
+    }
+    
 }
