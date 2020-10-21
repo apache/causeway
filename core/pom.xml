@@ -158,7 +158,7 @@
 
 		<resteasy4-spring-boot-starter.version>4.6.4.Final</resteasy4-spring-boot-starter.version>
 
-		<reflections.version>0.9.11</reflections.version>
+		<reflections.version>0.9.12</reflections.version>
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.6.0</shiro.version>
