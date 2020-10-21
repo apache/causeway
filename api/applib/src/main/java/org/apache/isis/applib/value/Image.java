@@ -99,7 +99,7 @@ public class Image implements Serializable {
      * @return whether this image has any pixels
      */
     public boolean isEmpty() {
-        return pixels!=null;
+        return pixels==null;
     }
     
     @Override
