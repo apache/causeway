@@ -65,7 +65,7 @@ public class _Images {
     
     @SneakyThrows
     public static byte[] toBytes(final @NonNull BufferedImage image){
-        try(val bos = new ByteArrayOutputStream()) {
+        try(val bos = new ByteArrayOutputStream(8 * 1024)) {
             ImageIO.write(image, "png", bos); // png is lossless
             return bos.toByteArray();      
         }

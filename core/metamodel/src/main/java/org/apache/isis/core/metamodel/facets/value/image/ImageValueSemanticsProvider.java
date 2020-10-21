@@ -47,12 +47,12 @@ extends ImageValueSemanticsProviderAbstract<Image> {
     
     @Override
     public BufferedImage getImage(final ManagedObject object) {
-        return _Images.fromPixels(unwrap(object).getImage());
+        return _Images.fromPixels(unwrap(object).getPixels());
     }
     
     @Override
     protected String doEncode(Image image) {
-        return _Images.toBase64(_Images.fromPixels(image.getImage()));
+        return _Images.toBase64(_Images.fromPixels(image.getPixels()));
     }
     
     @Override

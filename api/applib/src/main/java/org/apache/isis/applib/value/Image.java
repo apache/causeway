@@ -31,31 +31,38 @@ import org.apache.isis.applib.annotation.Value;
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProvider")
 public class Image implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final int[][] image;
+    private final int[][] pixels;
 
-    public Image(final int[][] image) {
-        this.image = image;
+    /**
+     * 
+     * @param pixels - 2 dim array of pixels defining this image, where each pixel is a 32 bit ARGB color value;
+     */
+    public Image(final int[][] pixels) {
+        this.pixels = pixels;
     }
 
     public Object getValue() {
-        return image;
+        return pixels;
     }
 
     @Override
     public String toString() {
         final int height = getHeight();
-        return "Image [size=" + height + "x" + (height == 0 || image[0] == null ? 0 : image[0].length) + "]";
+        return "Image [size=" + height + "x" + (height == 0 || pixels[0] == null ? 0 : pixels[0].length) + "]";
     }
 
-    public int[][] getImage() {
-        return image;
+    /**
+     * @return 2 dim array of pixels defining this image, where each pixel is a 32 bit ARGB color value
+     */
+    public int[][] getPixels() {
+        return pixels;
     }
     
     public int getHeight() {
-        return image == null ? 0 : image.length;
+        return pixels == null ? 0 : pixels.length;
     }
 
     public int getWidth() {
-        return image == null ? 0 : image[0].length;
+        return pixels == null ? 0 : pixels[0].length;
     }
 }

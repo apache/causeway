@@ -55,7 +55,7 @@ public class ImageValueSemanticsProviderTest {
         val encodedImageData = adapter.toEncodedString(new Image(getPixels()));
         val restoredImage = adapter.fromEncodedString(encodedImageData);
 
-        val pixels = restoredImage.getImage();
+        val pixels = restoredImage.getPixels();
 
 // debug        
 //        System.out.println(_Ints.tableForm(getPixels(), 10, Integer::toHexString));

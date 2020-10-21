@@ -27,6 +27,7 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -327,12 +328,24 @@ public class _Ints {
     
     public static int[] flatten(final @NonNull int[][] nested) {
         final int n = nested.length;
-        final int m = nested[0].length;
-        val flattened = new int[n*m];
+        final int stride = nested[0].length;
+        val flattened = new int[n*stride];
         for(int i=0; i<n; ++i) {
-            System.arraycopy(nested[i], 0, flattened, i*m, m);
+            System.arraycopy(nested[i], 0, flattened, i*stride, stride);
         }
         return flattened;
+    }
+    
+    // -- ARRAY PARTITION
+    
+    public static int[][] partition(final @NonNull int[] flattened, final int stride) {
+        final int n = flattened.length/stride;
+        _Assert.assertEquals(flattened.length, n*stride, ()->"flattened.length must be divisible by stride");
+        val nested = new int[n][stride];
+        for(int i=0; i<n; ++i) {
+            System.arraycopy(flattened, i*stride, nested[i], 0, stride);
+        }
+        return nested;
     }
     
     // -- PRINTING
