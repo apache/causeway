@@ -37,6 +37,10 @@ public class Image implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private final int[][] pixels;
+    
+    private final int width;
+    private final int height;
+    
 
     /**
      * @param pixels - 2 dim array of pixels defining this image, 
@@ -44,8 +48,24 @@ public class Image implements Serializable {
      *      with {@code A} the alpha value as highest significant 8 bits
      *      followed by {@code R} the red value and so on
      */
-    public Image(final int[][] pixels) {
-        this.pixels = pixels;
+    public Image(final @Nullable int[][] pixels) {
+        
+        final int width = _NullSafe.size(pixels);
+        final int height = width>0
+                ? _NullSafe.size(pixels[0])
+                : 0;
+        final int pixelCount = width * height;
+
+        if(pixelCount>0) {
+            this.width = width;
+            this.height = height;
+            this.pixels = pixels; // should make a clone, but for performance reasons we just copy the reference 
+        } else {
+            this.width = 0;
+            this.height = 0;
+            this.pixels = null;
+        }
+        
     }
 
     /**
@@ -56,6 +76,7 @@ public class Image implements Serializable {
      */
     @Nullable
     public int[][] getPixels() {
+        // should return a clone, but for performance reasons we expose the internal array
         return pixels;
     }
     
@@ -63,18 +84,14 @@ public class Image implements Serializable {
      * @return height of this image or 0 if empty
      */
     public int getHeight() {
-        return isEmpty() 
-                ? 0
-                : pixels.length;
+        return height;
     }
 
     /**
      * @return width of this image or 0 if empty
      */
     public int getWidth() {
-        return isEmpty() 
-                ? 0
-                : pixels[0].length;
+        return width;
     }
     
     /**
@@ -82,18 +99,14 @@ public class Image implements Serializable {
      * @return whether this image has any pixels
      */
     public boolean isEmpty() {
-        if(_NullSafe.isEmpty(pixels)) {
-            return true;
-        }
-        // we have at least one scan-line
-        return _NullSafe.isEmpty(pixels[0]);
+        return pixels!=null;
     }
     
     @Override
     public String toString() {
         return isEmpty()
                 ? "Image [empty]"
-                : String.format("Image [size=%dx%d]", getWidth(), getHeight());
+                : String.format("Image [size=%dx%d]", width, height);
     }
     
 }
