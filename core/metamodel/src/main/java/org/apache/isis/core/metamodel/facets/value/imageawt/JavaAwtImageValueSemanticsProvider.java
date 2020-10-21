@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.value.imageawt;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import org.apache.isis.commons.internal.image._Images;
@@ -42,10 +43,10 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     public int getHeight(final ManagedObject object) {
         return unwrap(object).getHeight();
     }
-
+    
     @Override
-    public BufferedImage getImage(final ManagedObject object) {
-        return unwrap(object);
+    public void render(ManagedObject object, Graphics2D graphics) {
+        graphics.drawImage(unwrap(object), 0, 0, null);
     }
 
     @Override
@@ -66,11 +67,6 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     @Override
     public String toString() {
         return "JavaAwtImageValueSemanticsProvider: ";
-    }
-
-    @Override
-    public ManagedObject createValue(final BufferedImage image) {
-        return getObjectManager().adapt(image);
     }
     
     // -- HELPER

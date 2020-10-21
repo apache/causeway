@@ -19,55 +19,42 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource;
 
-import org.apache.isis.commons.internal.image._Images;
+import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
-@Log4j2
+//@Log4j2
 final class JavaAwtImageDynamicResource extends RenderedDynamicImageResource {
     
     private static final long serialVersionUID = 1L;
     
-    private transient BufferedImage bufferedImage = null;
-    private byte[] imageData;
+    private ScalarModel model;
     
-    public JavaAwtImageDynamicResource(@NonNull BufferedImage image) {
-        super(image.getWidth(), image.getHeight());
-        
-        try {
-            this.bufferedImage = image;    
-            this.imageData = _Images.toBytes(image);      
-        } catch (Exception e) {
-            this.bufferedImage = null;
-        }
+    public static JavaAwtImageDynamicResource of(@NonNull ScalarModel model) {
+        val imageValueFacet = model.getTypeOfSpecification().getFacet(ImageValueFacet.class);
+        val adapter = model.getObject();
+        return new JavaAwtImageDynamicResource(
+                model, 
+                imageValueFacet.getWidth(adapter), 
+                imageValueFacet.getHeight(adapter));
+    }
+
+    private JavaAwtImageDynamicResource(ScalarModel model, int width, int height) {
+        super(width, height);
+        this.model = model;
     }
 
     @Override
-    protected boolean render(final Graphics2D graphics, Attributes attributes) {
-        graphics.drawImage(getBufferedImage(), 0, 0, null);
+    protected boolean render(final Graphics2D graphics, final Attributes attributes) {
+        val imageValueFacet = model.getTypeOfSpecification().getFacet(ImageValueFacet.class);
+        val adapter = model.getObject();
+        imageValueFacet.render(adapter, graphics);
         return true;
     }
     
-    // -- HELPER
-    
-    private BufferedImage getBufferedImage() {
-        if(bufferedImage == null
-                && imageData!=null) {
-            
-            try {
-                bufferedImage = _Images.fromBytes(imageData);    
-            } catch (Exception e) {
-                log.error("failed to deserialize image from previously serilaized image data", e);
-                this.bufferedImage = null;
-                this.imageData=null; // so we don't hit this issue again
-            }
-            
-        }
-        return bufferedImage;
-    }
 }

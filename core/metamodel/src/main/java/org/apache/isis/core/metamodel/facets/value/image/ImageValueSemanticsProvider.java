@@ -19,13 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.value.image;
 
-import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 
 import org.apache.isis.applib.value.Image;
 import org.apache.isis.commons.internal.image._Images;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 
 public class ImageValueSemanticsProvider 
@@ -46,8 +48,9 @@ extends ImageValueSemanticsProviderAbstract<Image> {
     }
     
     @Override
-    public BufferedImage getImage(final ManagedObject object) {
-        return _Images.fromPixels(unwrap(object).getPixels());
+    public void render(ManagedObject object, Graphics2D graphics) {
+        val bufferedImage = _Images.fromPixels(unwrap(object).getPixels());
+        graphics.drawImage(bufferedImage, 0, 0, null);
     }
     
     @Override
@@ -58,11 +61,6 @@ extends ImageValueSemanticsProviderAbstract<Image> {
     @Override
     protected Image doRestore(String base64ImageData) {
         return new Image(_Images.toPixels(_Images.fromBase64(base64ImageData)));
-    }
-    
-    @Override
-    public ManagedObject createValue(BufferedImage image) {
-        return getObjectManager().adapt(new Image(_Images.toPixels(image)));
     }
 
     @Override

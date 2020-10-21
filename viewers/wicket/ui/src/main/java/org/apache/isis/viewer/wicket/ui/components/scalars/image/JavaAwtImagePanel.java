@@ -23,7 +23,6 @@ import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 
-import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -55,13 +54,10 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
             permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
             return;
         }
-            
-        val imageValueFacet = getModel().getTypeOfSpecification().getFacet(ImageValueFacet.class);
-        
-        val awtImageInstance = imageValueFacet.getImage(adapter);
-        val dynamicImageResource = new JavaAwtImageDynamicResource(awtImageInstance);
-        
+                    
+        val dynamicImageResource = JavaAwtImageDynamicResource.of(getModel());
         val wicketImageComponent = new Image(ID_SCALAR_VALUE, dynamicImageResource);
+        
         addOrReplace(wicketImageComponent);
         addOrReplace(new NotificationPanel(
                 ID_FEEDBACK, 

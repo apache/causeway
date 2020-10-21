@@ -71,7 +71,7 @@ public class Image implements Serializable {
     /**
      * @return 2 dim array of pixels defining this image, 
      *      where each pixel is a 32 bit ARGB color value,
-     *      with {@literal A} the alpha value as highest significant 8 bits
+     *      with {@code A} the alpha value as highest significant 8 bits
      *      followed by {@code R} the red value and so on
      */
     @Nullable
