@@ -24,6 +24,7 @@ import java.io.Serializable;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 /**
  * Represents an image.
@@ -62,25 +63,37 @@ public class Image implements Serializable {
      * @return height of this image or 0 if empty
      */
     public int getHeight() {
-        return pixels != null 
-                ? pixels.length
-                : 0;
+        return isEmpty() 
+                ? 0
+                : pixels.length;
     }
 
     /**
      * @return width of this image or 0 if empty
      */
     public int getWidth() {
-        return pixels != null 
-                ? pixels[0].length
-                : 0;
+        return isEmpty() 
+                ? 0
+                : pixels[0].length;
+    }
+    
+    /**
+     * 
+     * @return whether this image has any pixels
+     */
+    public boolean isEmpty() {
+        if(_NullSafe.isEmpty(pixels)) {
+            return true;
+        }
+        // we have at least one scan-line
+        return _NullSafe.isEmpty(pixels[0]);
     }
     
     @Override
     public String toString() {
-        return pixels != null
-                ? String.format("Image [size=%dx%d]", getWidth(), getHeight())
-                : "Image [empty]";
+        return isEmpty()
+                ? "Image [empty]"
+                : String.format("Image [size=%dx%d]", getWidth(), getHeight());
     }
     
 }
