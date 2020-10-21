@@ -19,38 +19,38 @@
 package org.apache.isis.subdomains.base.applib.with;
 
 import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.junit.Test;
-import org.reflections.Reflections;
 
+import lombok.val;
 
 public abstract class ComparableByCodeContractTestAbstract_compareTo {
-    protected final String packagePrefix;
+    protected final Iterable<Class<? extends WithCodeComparable>> candidates;
     protected Map<Class<?>, Class<?>> noninstantiableSubstitutes;
 
+    /**
+     * @apiNote Usage example:<br>
+     * {@code import org.reflections.Reflections;}<br>
+     * {@code val reflections = new Reflections(packagePrefix);}<br>
+     * {@code val candidates = reflections.getSubTypesOf(WithCodeComparable.class);}
+     */
     public ComparableByCodeContractTestAbstract_compareTo(
-            String packagePrefix, ImmutableMap<Class<?>, Class<?>> noninstantiableSubstitutes) {
-        this.packagePrefix = packagePrefix;
+            Iterable<Class<? extends WithCodeComparable>> candidates, 
+            Map<Class<?>, Class<?>> noninstantiableSubstitutes) {
+        this.candidates = candidates;
         this.noninstantiableSubstitutes = noninstantiableSubstitutes;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Test
     public void searchAndTest() {
-        Reflections reflections = new Reflections(packagePrefix);
-
-        Set<Class<? extends WithCodeComparable>> subtypes =
-                reflections.getSubTypesOf(WithCodeComparable.class);
-        for (Class<? extends WithCodeComparable> subtype : subtypes) {
+        
+        for (val subtype : candidates) {
             if(subtype.isInterface() || subtype.isAnonymousClass() || subtype.isLocalClass() || subtype.isMemberClass()) {
                 // skip (probably a testing class)
                 continue;
             }
-            subtype = instantiable(subtype);
-            test(subtype);
+            test(instantiable(subtype));
         }
     }
 

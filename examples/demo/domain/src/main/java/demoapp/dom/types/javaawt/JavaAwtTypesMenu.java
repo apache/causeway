@@ -24,21 +24,16 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
-
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.javaawt.images.JavaAwtImages;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaAwtTypesMenu")
 @DomainObjectLayout(named="JavaAwtTypes")
-@Log4j2
+//@Log4j2
 public class JavaAwtTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-image",
-            hidden = Where.EVERYWHERE // TODO: ISIS-2412
-     )
+    @ActionLayout(cssClassFa="fa-image")
     public JavaAwtImages images(){
         return new JavaAwtImages();
     }

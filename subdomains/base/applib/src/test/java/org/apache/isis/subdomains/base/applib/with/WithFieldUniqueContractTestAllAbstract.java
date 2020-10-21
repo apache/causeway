@@ -26,7 +26,6 @@ import javax.jdo.annotations.Uniques;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.reflections.Reflections;
 
 public abstract class WithFieldUniqueContractTestAllAbstract<T> {
     protected final Class<T> interfaceType;
@@ -48,7 +47,6 @@ public abstract class WithFieldUniqueContractTestAllAbstract<T> {
     @Test
     public void searchAndTest() {
 
-        final Reflections reflections = new Reflections(prefix);
         final StringBuilder buf = new StringBuilder();
 
         Set<Class<? extends T>> domainObjectClasses = reflections.getSubTypesOf(interfaceType);

@@ -85,7 +85,6 @@
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
 		<commons-io.version>2.8.0</commons-io.version>
-		<commons-lang3.version>3.11</commons-lang3.version>
 
 		<cucumber.version>6.8.1</cucumber.version>
 
@@ -157,8 +156,6 @@
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
 		<resteasy4-spring-boot-starter.version>4.6.4.Final</resteasy4-spring-boot-starter.version>
-
-		<reflections.version>0.9.11</reflections.version>
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.6.0</shiro.version>
@@ -1097,12 +1094,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>${commons-lang3.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-rs-client</artifactId>
 				<version>${cxf-rt-rs-client.version}</version>
@@ -1355,13 +1346,6 @@
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz-jobs</artifactId>
 				<version>${quartz-scheduler.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.reflections</groupId>
-				<artifactId>reflections</artifactId>
-				<version>${reflections.version}</version>
-				<scope>test</scope>
 			</dependency>
 
 			<dependency>

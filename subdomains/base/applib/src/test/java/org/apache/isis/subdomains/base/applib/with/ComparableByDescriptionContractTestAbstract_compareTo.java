@@ -19,32 +19,31 @@
 package org.apache.isis.subdomains.base.applib.with;
 
 import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.junit.Test;
-import org.reflections.Reflections;
-
 
 public abstract class ComparableByDescriptionContractTestAbstract_compareTo {
-    protected final String packagePrefix;
+    
+    protected final Iterable<Class<? extends WithDescriptionComparable<?>>> candidates;
     protected Map<Class<?>, Class<?>> noninstantiableSubstitutes;
 
+    /**
+     * @apiNote Usage example:<br>
+     * {@code import org.reflections.Reflections;}<br>
+     * {@code val reflections = new Reflections(packagePrefix);}<br>
+     * {@code val candidates = reflections.getSubTypesOf(WithDescriptionComparable.class);}
+     */
     public ComparableByDescriptionContractTestAbstract_compareTo(
-            String packagePrefix, ImmutableMap<Class<?>, Class<?>> noninstantiableSubstitutes) {
-        this.packagePrefix = packagePrefix;
+            Iterable<Class<? extends WithDescriptionComparable<?>>> candidates, 
+            Map<Class<?>, Class<?>> noninstantiableSubstitutes) {
+        this.candidates = candidates;
         this.noninstantiableSubstitutes = noninstantiableSubstitutes;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Test
     public void searchAndTest() {
-        Reflections reflections = new Reflections(packagePrefix);
-
-        Set<Class<? extends WithDescriptionComparable>> subtypes =
-                reflections.getSubTypesOf(WithDescriptionComparable.class);
-        for (Class<? extends WithDescriptionComparable> subtype : subtypes) {
+        for (Class<? extends WithDescriptionComparable> subtype : candidates) {
             if(subtype.isInterface() || subtype.isAnonymousClass() || subtype.isLocalClass() || subtype.isMemberClass()) {
                 // skip (probably a testing class)
                 continue;

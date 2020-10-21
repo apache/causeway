@@ -66,7 +66,7 @@
                 dfg="true" priority="10"
                 converter-name="iso.zoneddatetime-string" />
     </extension>
-    
+
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="java.time.OffsetTime"

@@ -27,9 +27,11 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource;
 
 import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -47,32 +49,39 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
     }
 
     private void buildGui() {
-        final String name = getModel().getName();
-        final Label scalarName = new Label(ID_SCALAR_NAME, name);
-        addOrReplace(scalarName);
+        val scalarName = getModel().getName();
+        val scalarNameLabel = new Label(ID_SCALAR_NAME, scalarName);
+        addOrReplace(scalarNameLabel);
 
-        final ImageValueFacet imageValueFacet = getModel().getTypeOfSpecification().getFacet(ImageValueFacet.class);
-        final ManagedObject adapter = getModel().getObject();
-        if (adapter != null) {
-            final java.awt.Image imageValue = imageValueFacet.getImage(adapter);
-            final RenderedDynamicImageResource imageResource = new RenderedDynamicImageResource(
-                    imageValue.getWidth(null), imageValue.getHeight(null)) {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected boolean render(final Graphics2D graphics, Attributes attributes) {
-                    graphics.drawImage(imageValue, 0, 0, null);
-                    return true;
-                }
-
-            };
-            final Image image = new Image(ID_SCALAR_VALUE, imageResource);
-            addOrReplace(image);
-            addOrReplace(new NotificationPanel(ID_FEEDBACK, image, new ComponentFeedbackMessageFilter(image)));
-        } else {
+        val adapter = getModel().getObject();
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
+            return;
         }
+            
+        val imageValueFacet = getModel().getTypeOfSpecification().getFacet(ImageValueFacet.class);
+        
+        val awtImageInstance = imageValueFacet.getImage(adapter);
+        val dynamicImageResource = new RenderedDynamicImageResource(
+                awtImageInstance.getWidth(null), awtImageInstance.getHeight(null)) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected boolean render(final Graphics2D graphics, Attributes attributes) {
+                graphics.drawImage(awtImageInstance, 0, 0, null);
+                return true;
+            }
+
+        };
+        
+        val wicketImageComponent = new Image(ID_SCALAR_VALUE, dynamicImageResource);
+        addOrReplace(wicketImageComponent);
+        addOrReplace(new NotificationPanel(
+                ID_FEEDBACK, 
+                wicketImageComponent,
+                new ComponentFeedbackMessageFilter(wicketImageComponent)));
+        
     }
 
 }

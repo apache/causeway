@@ -124,9 +124,6 @@ public class TypeManagerImpl implements TypeManager, Serializable
     /** Map of java types, keyed by the class name. */
     protected Map<String, JavaType> javaTypes = new ConcurrentHashMap<>();
     
-    /** Map of java type priorities, keyed by the class name. */
-    protected Map<String, Integer> javaTypePriorities = new ConcurrentHashMap<>();
-
     /** Map of ContainerHandlers, keyed by the container type class name. */
     protected Map<Class, ? super ContainerHandler> containerHandlersByClass = new ConcurrentHashMap<>();
 
@@ -1160,6 +1157,9 @@ public class TypeManagerImpl implements TypeManager, Serializable
         addJavaType(Enum[].class, null, true, false, null, null, ArrayHandler.class, null);
         addJavaType(Object[].class, null, true, false, null, null, ArrayHandler.class, null);
 
+        // Map of java type priorities, keyed by the class name
+        final Map<String, Integer> javaTypePriorities = new HashMap<>();
+        
         // Add on any plugin mechanism types
         ConfigurationElement[] elems = mgr.getConfigurationElementsForExtension("org.datanucleus.java_type", null, null);
         if (elems != null)
@@ -1232,6 +1232,8 @@ public class TypeManagerImpl implements TypeManager, Serializable
                         javaTypeName += "<" + genericTypeName + ">";
                     }
 
+                    // Register entries for a java type based on the "priority" flag,
+                    // where higher priority is allowed to override lower priority. 
                     
                     boolean doRegister = !javaTypes.containsKey(javaTypeName);
                     if(!doRegister) {
@@ -1243,7 +1245,6 @@ public class TypeManagerImpl implements TypeManager, Serializable
                     
                     if (doRegister)
                     {
-                        // Only add first entry for a java type (ordered by the "priority" flag)
 
                         Class wrapperClass = loadClass(mgr, elems, i, wrapperType, "016005");
                         Class wrapperClassBacked = loadClass(mgr, elems, i, wrapperTypeBacked, "016005");
@@ -1258,7 +1259,7 @@ public class TypeManagerImpl implements TypeManager, Serializable
                         javaTypes.put(typeName, new JavaType(cls, genericType, embedded, dfg, wrapperClass, wrapperClassBacked, containerHandlerClass, typeConverterName));
 
                         // keep track of registered priority values, 
-                        // as an optimization, save heap usage, don't collect priority==0 
+                        // as an optimization, save heap usage, don't collect priority<=0 
                         if(priority>0) {
                             javaTypePriorities.put(javaTypeName, priority);
                         }

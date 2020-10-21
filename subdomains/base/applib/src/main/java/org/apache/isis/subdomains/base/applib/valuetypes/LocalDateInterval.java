@@ -18,8 +18,8 @@
  */
 package org.apache.isis.subdomains.base.applib.valuetypes;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
+
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
@@ -71,15 +71,13 @@ public class LocalDateInterval extends AbstractInterval<LocalDateInterval>{
             return false;
         }
         LocalDateInterval rhs = (LocalDateInterval) obj;
-        return new EqualsBuilder().
-                append(startDate, rhs.startDate).
-                append(endDate, rhs.endDate).
-                isEquals();
+        return Objects.equals(startDate, rhs.startDate)
+                && Objects.equals(endDate, rhs.endDate);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(startDate).append(endDate).hashCode();
+        return Objects.hash(startDate, endDate);
     }
 
     @Override

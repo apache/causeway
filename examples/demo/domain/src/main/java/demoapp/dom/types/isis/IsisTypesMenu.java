@@ -25,9 +25,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
-
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.isis.blobs.IsisBlobs;
 import demoapp.dom.types.isis.clobs.IsisClobs;
@@ -38,7 +35,7 @@ import demoapp.dom.types.isis.passwords.IsisPasswords;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.IsisTypesMenu")
 @DomainObjectLayout(named="Isis Types")
-@Log4j2
+//@Log4j2
 public class IsisTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -53,10 +50,7 @@ public class IsisTypesMenu {
         return new IsisClobs();
     }
 
-    @Action(
-            semantics = SemanticsOf.SAFE,
-            hidden = Where.EVERYWHERE // TODO: ISIS-2411
-    )
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-image")
     public IsisImages images(){
         return new IsisImages();

@@ -18,33 +18,33 @@
  */
 package org.apache.isis.subdomains.base.applib.titled;
 
-import java.util.Set;
-
 import org.junit.Test;
-import org.reflections.Reflections;
 
 import org.apache.isis.subdomains.base.applib.TitledEnum;
-import org.apache.isis.subdomains.base.applib.TitledEnumContractTester;
+
+import lombok.val;
 
 public abstract class TitledEnumContractTestAbstract_title {
-    protected final String prefix;
+    protected final Iterable<Class<? extends TitledEnum>> candidates;
 
-    public TitledEnumContractTestAbstract_title(final String prefix) {
-        this.prefix = prefix;
+    /**
+     * @apiNote Usage example:<br>
+     * {@code import org.reflections.Reflections;}<br>
+     * {@code val reflections = new Reflections(packagePrefix);}<br>
+     * {@code val candidates = reflections.getSubTypesOf(TitledEnum.class);}
+     */
+    public TitledEnumContractTestAbstract_title(final Iterable<Class<? extends TitledEnum>> candidates) {
+        this.candidates = candidates;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     @Test
     public void searchAndTest() {
-        Reflections reflections = new Reflections(prefix);
-
-        Set<Class<? extends TitledEnum>> subtypes =
-                reflections.getSubTypesOf(TitledEnum.class);
-        for (Class<? extends TitledEnum> subtype : subtypes) {
+        for (Class<? extends TitledEnum> subtype : candidates) {
             if(!Enum.class.isAssignableFrom(subtype)) {
                 continue; // ignore non-enums
             }
-            Class<? extends Enum> enumType = (Class<? extends Enum>) subtype;
+            val enumType = (Class<? extends Enum<?>>) subtype;
             new TitledEnumContractTester(enumType).test();
         }
     }
