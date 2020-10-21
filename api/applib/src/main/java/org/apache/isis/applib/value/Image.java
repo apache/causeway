@@ -38,15 +38,20 @@ public class Image implements Serializable {
     private final int[][] pixels;
 
     /**
-     * 
-     * @param pixels - 2 dim array of pixels defining this image, where each pixel is a 32 bit ARGB color value;
+     * @param pixels - 2 dim array of pixels defining this image, 
+     *      where each pixel is a 32 bit ARGB color value,
+     *      with {@code A} the alpha value as highest significant 8 bits
+     *      followed by {@code R} the red value and so on
      */
     public Image(final int[][] pixels) {
         this.pixels = pixels;
     }
 
     /**
-     * @return 2 dim array of pixels defining this image, where each pixel is a 32 bit ARGB color value
+     * @return 2 dim array of pixels defining this image, 
+     *      where each pixel is a 32 bit ARGB color value,
+     *      with {@literal A} the alpha value as highest significant 8 bits
+     *      followed by {@code R} the red value and so on
      */
     @Nullable
     public int[][] getPixels() {
