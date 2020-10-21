@@ -175,7 +175,7 @@
     <extension point="org.datanucleus.type_converter">
         <type-converter
                 name="isis.image-bytearray"
-                member-type="java.time.OffsetTime"
+                member-type="org.apache.isis.applib.value.Image"
                 datastore-type="[B"
                 converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsisImageConverter"/>
     </extension>
