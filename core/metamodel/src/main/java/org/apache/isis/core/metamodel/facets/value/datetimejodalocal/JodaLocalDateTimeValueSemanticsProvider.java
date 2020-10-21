@@ -208,9 +208,8 @@ implements JodaLocalDateTimeValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        final LocalDateTime date = (LocalDateTime) object;
-        return encode(date);
+    protected String doEncode(final LocalDateTime localDateTime) {
+        return encode(localDateTime);
     }
 
     private synchronized String encode(final LocalDateTime date) {

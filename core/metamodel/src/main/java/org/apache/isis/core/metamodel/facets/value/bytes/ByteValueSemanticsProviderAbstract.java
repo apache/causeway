@@ -79,7 +79,7 @@ implements ByteValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public String doEncode(final Object object) {
+    public String doEncode(final Byte object) {
         return object.toString();
     }
 

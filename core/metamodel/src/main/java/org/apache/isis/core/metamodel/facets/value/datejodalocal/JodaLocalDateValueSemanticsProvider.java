@@ -206,8 +206,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        final LocalDate date = (LocalDate) object;
+    protected String doEncode(final LocalDate date) {
         return encode(date);
     }
 

@@ -91,8 +91,7 @@ implements ChangesDtoValueFacet {
 
 
     @Override
-    protected String doEncode(final Object object) {
-        val changesDto = (ChangesDto) object;
+    protected String doEncode(final ChangesDto changesDto) {
         return ChangesDtoUtils.toXml(changesDto);
     }
 

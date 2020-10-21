@@ -68,8 +68,7 @@ implements MarkdownValueFacet {
     }
 
     @Override
-    protected String doEncode(final Object object) {
-        Markdown markdown = (Markdown)object;
+    protected String doEncode(final Markdown markdown) {
         return markdown.asHtml();
     }
 

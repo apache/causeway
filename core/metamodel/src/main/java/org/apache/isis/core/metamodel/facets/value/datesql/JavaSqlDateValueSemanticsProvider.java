@@ -176,8 +176,8 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
     }
 
     @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default
-    protected String doEncode(final Object pojo) {
-        return ((Date)pojo).toString();
+    protected String doEncode(final Date date) {
+        return date.toString();
     }
 
     @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default

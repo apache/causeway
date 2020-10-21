@@ -79,7 +79,7 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final UUID object) {
         return object.toString();
     }
 

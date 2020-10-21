@@ -90,8 +90,7 @@ implements ColorValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        final Color color = (Color) object;
+    protected String doEncode(final Color color) {
         return Integer.toHexString(color.intValue());
     }
 

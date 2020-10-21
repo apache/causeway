@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.javaawt.images.samples;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -34,10 +34,10 @@ import lombok.val;
 import demoapp.dom.types.Samples;
 
 @Service
-public class JavaAwtImagesSamples implements Samples<Image> {
+public class JavaAwtImagesSamples implements Samples<BufferedImage> {
 
     @Override
-    public Stream<Image> stream() {
+    public Stream<BufferedImage> stream() {
         return Stream.of(
                 "apache-wicket.png", "byte-buddy.png", "datanucleus-logo.png",
                 "project-lombok.png", "resteasy_logo_600x.gif", "spring-boot-logo.png")
@@ -46,7 +46,7 @@ public class JavaAwtImagesSamples implements Samples<Image> {
 
 
     @SneakyThrows
-    private Image loadImage(String name) {
+    private BufferedImage loadImage(String name) {
         val bytes = _Bytes.of(_Resources.load(JavaAwtImagesSamples.class, name ));
         return javaAwtImageService.bytesToJavaAwtImage(bytes);
     }

@@ -85,8 +85,7 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        final java.net.URL url = (java.net.URL) object;
+    protected String doEncode(final java.net.URL url) {
         return url != null? url.toString(): "NULL";
     }
 

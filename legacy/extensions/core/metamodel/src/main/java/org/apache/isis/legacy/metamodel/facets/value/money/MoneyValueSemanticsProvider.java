@@ -172,8 +172,7 @@ implements MoneyValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        final Money money = (Money) object;
+    protected String doEncode(final Money money) {
         final String value = String.valueOf(money.doubleValue()) + " " + money.getCurrency();
         return value;
     }

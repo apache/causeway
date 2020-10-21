@@ -74,7 +74,7 @@ implements PasswordValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final Password object) {
         return password(object).getPassword();
     }
 

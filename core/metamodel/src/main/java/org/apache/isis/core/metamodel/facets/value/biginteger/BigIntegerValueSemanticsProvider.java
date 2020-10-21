@@ -98,8 +98,8 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        return object.toString();
+    protected String doEncode(final BigInteger bigInt) {
+        return bigInt.toString();
     }
 
     @Override

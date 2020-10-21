@@ -73,7 +73,7 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final Boolean object) {
         return isSet(object) ? "T" : "F";
     }
 

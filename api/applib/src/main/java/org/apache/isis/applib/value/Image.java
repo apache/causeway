@@ -50,7 +50,7 @@ public class Image implements Serializable {
     public int[][] getImage() {
         return image;
     }
-
+    
     public int getHeight() {
         return image == null ? 0 : image.length;
     }

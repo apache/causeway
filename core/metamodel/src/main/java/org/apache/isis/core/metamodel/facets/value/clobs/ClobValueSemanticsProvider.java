@@ -89,8 +89,7 @@ implements ClobValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        Clob clob = (Clob)object;
+    protected String doEncode(final Clob clob) {
         return clob.getName() + ":" + clob.getMimeType().getBaseType() + ":" + clob.getChars();
     }
 

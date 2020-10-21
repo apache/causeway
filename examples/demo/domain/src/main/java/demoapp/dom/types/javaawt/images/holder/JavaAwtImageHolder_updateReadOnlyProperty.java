@@ -18,11 +18,12 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
+import java.awt.image.BufferedImage;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.Image;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,11 +40,11 @@ public class JavaAwtImageHolder_updateReadOnlyProperty {
 
     private final JavaAwtImageHolder holder;
 
-    public JavaAwtImageHolder act(java.awt.Image newValue) {
+    public JavaAwtImageHolder act(BufferedImage newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public java.awt.Image default0Act() {
+    public BufferedImage default0Act() {
         return holder.getReadOnlyProperty();
     }
 

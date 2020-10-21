@@ -36,7 +36,7 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     private LongValueSemanticsProviderAbstract value;
 
-    private Object longObj;
+    private Long longObj;
     private FacetHolder holder;
 
     @Before
@@ -85,4 +85,5 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         final Object parsed = value.fromEncodedString("234");
         assertEquals("234", parsed.toString());
     }
+
 }

@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -33,7 +33,7 @@ public class JavaAwtImageHolder_actionReturning {
 
     private final JavaAwtImageHolder holder;
 
-    public Image act() {
+    public BufferedImage act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -22,10 +22,12 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
 import java.util.function.Consumer;
+import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -321,7 +323,67 @@ public class _Ints {
         }
     }
     
+    // -- ARRAY FLATTEN
     
+    public static int[] flatten(final @NonNull int[][] nested) {
+        final int n = nested.length;
+        final int m = nested[0].length;
+        val flattened = new int[n*m];
+        for(int i=0; i<n; ++i) {
+            System.arraycopy(nested[i], 0, flattened, i*m, m);
+        }
+        return flattened;
+    }
     
+    // -- PRINTING
+    
+    public static String rowForm(
+            final @NonNull int[] array) {
+        return rowForm(array, 8, Integer::toString);
+    }
+    
+    public static String rowForm(
+            final @NonNull int[] array, 
+            final int columnWidth, 
+            final @NonNull IntFunction<String> cellFormatter) {
+        
+        final int m = array.length;
+        val sb = new StringBuilder();
+        
+        for(int j=0; j<m; ++j) {
+            final int cellValue = array[j];
+            val cellStringFull = cellFormatter.apply(cellValue);
+            val cellStringTrimmed = _Strings.ellipsifyAtEnd(cellStringFull, columnWidth, "..");
+
+            // right align, at column end marker
+            final int spacesCount = columnWidth - cellStringTrimmed.length(); 
+            for(int k=0; k<spacesCount; ++k) {
+                sb.append(' ');
+            }
+            sb.append(cellStringTrimmed);
+        }   
+        sb.append("\n");
+        
+        return sb.toString();
+    }
+
+    
+    public static String tableForm(
+            final @NonNull int[][] nested) {
+        return tableForm(nested, 8, Integer::toString);
+    }
+    
+    public static String tableForm(
+            final @NonNull int[][] nested, 
+            final int columnWidth, 
+            final @NonNull IntFunction<String> cellFormatter) {
+        
+        final int n = nested.length;
+        val sb = new StringBuilder();
+        for(int i=0; i<n; ++i) {
+            sb.append(rowForm(nested[i], columnWidth, cellFormatter));
+        }
+        return sb.toString();
+    }
     
 }

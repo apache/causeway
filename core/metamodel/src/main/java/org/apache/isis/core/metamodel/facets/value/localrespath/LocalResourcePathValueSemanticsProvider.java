@@ -87,8 +87,7 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        final LocalResourcePath url = (LocalResourcePath) object;
+    protected String doEncode(final LocalResourcePath url) {
         return url != null ? url.getPath() : "NULL";
     }
 

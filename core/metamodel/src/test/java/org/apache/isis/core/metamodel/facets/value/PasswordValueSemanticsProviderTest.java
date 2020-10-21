@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanti
 public class PasswordValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private PasswordValueSemanticsProvider adapter;
-    private Object password;
+    private Password password;
     private FacetHolder holder;
 
     @Before

@@ -176,8 +176,7 @@ implements TemporalValueFacet<T> {
     // -- ENCODER/DECODER
 
     @Override
-    protected String doEncode(final Object object) {
-        final T temporal = _Casts.uncheckedCast(object);
+    protected String doEncode(final T temporal) {
         return encodingFormatter.format(temporal);
     }
 

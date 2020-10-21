@@ -87,7 +87,7 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final Integer object) {
         return object.toString();
     }
 

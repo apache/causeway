@@ -18,11 +18,12 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
+import java.awt.image.BufferedImage;
+
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.value.Image;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +37,7 @@ public class JavaAwtImageHolder_mixinProperty {
     private final JavaAwtImageHolder holder;
 
     @MemberOrder(name = "contributed", sequence = "1")
-    public java.awt.Image prop() {
+    public BufferedImage prop() {
         return holder.getReadOnlyProperty();
     }
 

@@ -19,33 +19,17 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.IsisModuleCoreConfig;
-import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import lombok.Data;
-import lombok.val;
 
 @Disabled("legacy injector is no longer used")
 class ServiceInjectorLegacyTest {

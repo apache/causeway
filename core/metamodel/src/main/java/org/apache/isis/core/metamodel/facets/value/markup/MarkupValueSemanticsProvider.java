@@ -94,8 +94,7 @@ implements MarkupValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        Markup markup = (Markup)object;
+    protected String doEncode(final Markup markup) {
         return markup.asHtml();
     }
 

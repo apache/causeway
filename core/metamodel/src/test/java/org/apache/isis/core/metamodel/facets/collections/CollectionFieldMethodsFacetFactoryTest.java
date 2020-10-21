@@ -26,12 +26,17 @@ import java.util.Set;
 
 import org.junit.Rule;
 
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
+import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
+import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaAccessor;
+import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaClearMethod;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetViaMethod;
@@ -47,11 +52,6 @@ import org.apache.isis.core.metamodel.facets.collections.validate.CollectionVali
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaAccessor;
-import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaClearMethod;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import lombok.val;
 

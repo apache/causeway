@@ -252,7 +252,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String toEncodedString(final Object object) {
+    public String toEncodedString(final T object) {
         return doEncode(object);
     }
 
@@ -264,7 +264,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     /**
      * Hook method to perform the actual encoding.
      */
-    protected abstract String doEncode(Object object);
+    protected abstract String doEncode(T object);
 
     /**
      * Hook method to perform the actual restoring.

@@ -21,17 +21,17 @@ package org.apache.isis.core.metamodel.facets.object.ident.icon;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 
 public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
 

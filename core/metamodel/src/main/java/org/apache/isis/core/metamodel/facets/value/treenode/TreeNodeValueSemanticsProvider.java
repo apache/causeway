@@ -92,8 +92,7 @@ implements TreeNodeValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        TreeNode<?> treeNode = (TreeNode<?>)object;
+    protected String doEncode(final TreeNode treeNode) {
 
         final Memento memento = newMemento();
         memento.put("primaryValue", treeNode.getValue());

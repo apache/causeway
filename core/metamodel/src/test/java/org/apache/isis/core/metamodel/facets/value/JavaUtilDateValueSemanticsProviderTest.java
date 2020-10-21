@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -84,6 +85,12 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
         calendar.set(Calendar.MILLISECOND, 0);
 
         assertEquals(calendar.getTime(), newValue);
+    }
+    
+    // -- HELPER
+    
+    private ValueSemanticsProviderAndFacetAbstract<java.util.Date> getValue() {
+        return super.getValue(java.util.Date.class);
     }
 
 }

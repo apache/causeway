@@ -91,8 +91,7 @@ implements InteractionDtoValueFacet {
 
 
     @Override
-    protected String doEncode(final Object object) {
-        val interactionDto = (InteractionDto) object;
+    protected String doEncode(final InteractionDto interactionDto) {
         return InteractionDtoUtils.toXml(interactionDto);
     }
 

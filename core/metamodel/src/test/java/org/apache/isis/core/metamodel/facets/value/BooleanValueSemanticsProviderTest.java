@@ -35,7 +35,7 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
 
     private BooleanValueSemanticsProviderAbstract value;
 
-    private Object booleanObj;
+    private Boolean booleanObj;
     private FacetHolder facetHolder;
 
     @Before

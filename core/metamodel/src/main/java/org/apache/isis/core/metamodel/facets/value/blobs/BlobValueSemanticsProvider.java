@@ -94,8 +94,7 @@ implements BlobValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        Blob blob = (Blob)object;
+    protected String doEncode(final Blob blob) {
         return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" + 
         _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
     }

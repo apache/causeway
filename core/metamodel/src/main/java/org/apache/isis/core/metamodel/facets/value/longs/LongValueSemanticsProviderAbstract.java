@@ -83,7 +83,7 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final Long object) {
         return object.toString();
     }
 

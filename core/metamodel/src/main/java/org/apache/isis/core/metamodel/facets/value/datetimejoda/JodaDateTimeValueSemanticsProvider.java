@@ -172,9 +172,8 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
     }
 
     @Override
-    protected String doEncode(final Object object) {
-        final DateTime date = (DateTime) object;
-        return encodingFormatter().print(date);
+    protected String doEncode(final DateTime dateTime) {
+        return encodingFormatter().print(dateTime);
     }
 
     @Override

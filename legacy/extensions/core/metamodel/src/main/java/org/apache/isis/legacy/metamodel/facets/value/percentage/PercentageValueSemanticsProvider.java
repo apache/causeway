@@ -109,8 +109,7 @@ implements FloatingPointValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        final Percentage per = (Percentage) object;
+    protected String doEncode(final Percentage per) {
         return String.valueOf(per.floatValue());
     }
 

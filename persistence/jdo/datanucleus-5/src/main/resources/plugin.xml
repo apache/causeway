@@ -139,7 +139,7 @@
                 name="iso.zoneddatetime-string"
                 member-type="java.time.ZonedDateTime"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsoZonedDateTimeConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.time.IsoZonedDateTimeConverter"/>
     </extension>
     
     <extension point="org.datanucleus.type_converter">
@@ -147,7 +147,7 @@
                 name="iso.offsettime-string"
                 member-type="java.time.OffsetTime"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsoOffsetTimeConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.time.IsoOffsetTimeConverter"/>
     </extension>
     
     <extension point="org.datanucleus.type_converter">
@@ -157,7 +157,6 @@
                 datastore-type="java.lang.String"
                 converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsisPasswordConverter"/>
     </extension>
-    
     
     <extension point="org.datanucleus.type_converter">
         <type-converter

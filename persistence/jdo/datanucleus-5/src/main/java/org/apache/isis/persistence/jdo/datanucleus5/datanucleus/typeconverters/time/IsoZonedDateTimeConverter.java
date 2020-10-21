@@ -16,30 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.time;
 
-package org.apache.isis.core.metamodel.facets.value.imageawt;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
-import java.awt.image.BufferedImage;
+import org.datanucleus.store.types.converters.TypeConverter;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+public class IsoZonedDateTimeConverter implements TypeConverter<ZonedDateTime, String>{
 
-public class JavaAwtImageValueFacetUsingSemanticsProviderFactory 
-extends ValueFacetUsingSemanticsProviderFactory<BufferedImage> {
-
-    public JavaAwtImageValueFacetUsingSemanticsProviderFactory() {
-        super();
+    private static final long serialVersionUID = 1L;
+    
+    @Override
+    public String toDatastoreType(final ZonedDateTime offsetTime) {
+        return offsetTime != null
+                ? offsetTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                : null;
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContext) {
-        final Class<?> type = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
-
-        if (!BufferedImage.class.isAssignableFrom(type)) {
-            return;
-        }
-        addFacets(new JavaAwtImageValueSemanticsProvider(holder));
+    public ZonedDateTime toMemberType(final String datastoreValue) {
+        return datastoreValue != null
+                ? ZonedDateTime.parse(datastoreValue, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                : null;
     }
 
 }

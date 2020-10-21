@@ -18,20 +18,22 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
+import java.awt.image.BufferedImage;
+
 //tag::class[]
 public interface JavaAwtImageHolder {
 
-    java.awt.Image getReadOnlyProperty();
-    void setReadOnlyProperty(java.awt.Image c);
+    BufferedImage getReadOnlyProperty();
+    void setReadOnlyProperty(BufferedImage c);
 
-    java.awt.Image getReadWriteProperty();
-    void setReadWriteProperty(java.awt.Image c);
+    BufferedImage getReadWriteProperty();
+    void setReadWriteProperty(BufferedImage c);
 
-    java.awt.Image getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(java.awt.Image c);
+    BufferedImage getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(BufferedImage c);
 
-    java.awt.Image getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(java.awt.Image c);
+    BufferedImage getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(BufferedImage c);
 
 }
 //end::class[]

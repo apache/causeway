@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javaawt.images.samples;
 
+import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
@@ -33,12 +34,12 @@ import lombok.SneakyThrows;
 public class JavaAwtImageService {
 
     @SneakyThrows
-    public java.awt.Image bytesToJavaAwtImage(byte[] bytes) {
+    public BufferedImage bytesToJavaAwtImage(byte[] bytes) {
         return ImageIO.read(new ByteArrayInputStream(bytes));
     }
 
     @SneakyThrows
-    public int[][] javaAwtImageToPixels(final java.awt.Image image) {
+    public int[][] javaAwtImageToPixels(final BufferedImage image) {
         final int width = image.getWidth(null);
         final int lines = image.getHeight(null);
         final int pixels[] = new int[width * lines];

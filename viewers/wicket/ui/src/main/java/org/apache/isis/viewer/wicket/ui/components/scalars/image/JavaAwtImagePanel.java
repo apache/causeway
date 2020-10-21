@@ -19,12 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
-import java.awt.Graphics2D;
-
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource;
 
 import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -62,18 +59,7 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
         val imageValueFacet = getModel().getTypeOfSpecification().getFacet(ImageValueFacet.class);
         
         val awtImageInstance = imageValueFacet.getImage(adapter);
-        val dynamicImageResource = new RenderedDynamicImageResource(
-                awtImageInstance.getWidth(null), awtImageInstance.getHeight(null)) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected boolean render(final Graphics2D graphics, Attributes attributes) {
-                graphics.drawImage(awtImageInstance, 0, 0, null);
-                return true;
-            }
-
-        };
+        val dynamicImageResource = new JavaAwtImageDynamicResource(awtImageInstance);
         
         val wicketImageComponent = new Image(ID_SCALAR_VALUE, dynamicImageResource);
         addOrReplace(wicketImageComponent);

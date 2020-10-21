@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueSemanticsProvider;
 
 public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -80,6 +81,12 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     public void testDecode() throws Exception {
         final Object newValue = getValue().fromEncodedString("432289991");
         assertEquals(new BigInteger("432289991"), newValue);
+    }
+    
+    // -- HELPER
+    
+    private ValueSemanticsProviderAndFacetAbstract<BigInteger> getValue() {
+        return super.getValue(BigInteger.class);
     }
 
 }

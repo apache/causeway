@@ -77,8 +77,7 @@ implements StringValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
-        final String text = (String) object;
+    protected String doEncode(final String text) {
         if (text.equals("NULL") || isEscaped(text)) {
             return escapeText(text);
         } else {

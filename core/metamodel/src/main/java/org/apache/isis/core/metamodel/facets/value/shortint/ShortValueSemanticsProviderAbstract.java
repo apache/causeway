@@ -85,7 +85,7 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final Short object) {
         return object.toString();
     }
 

@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javaawt.images.vm;
 
+import java.awt.image.BufferedImage;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -31,7 +33,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.value.Image;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +53,7 @@ public class JavaAwtImageVm
         implements HasAsciiDocDescription, JavaAwtImageHolder2 {
 
 //end::class[]
-    public JavaAwtImageVm(java.awt.Image initialValue) {
+    public JavaAwtImageVm(BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -62,23 +63,23 @@ public class JavaAwtImageVm
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                        // <.>
     @Getter @Setter
-    private java.awt.Image readOnlyProperty;
+    private BufferedImage readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private java.awt.Image readWriteProperty;
+    private BufferedImage readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                       // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Getter @Setter
-    private java.awt.Image readOnlyOptionalProperty;
+    private BufferedImage readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Getter @Setter
-    private java.awt.Image readWriteOptionalProperty;
+    private BufferedImage readWriteOptionalProperty;
 
 }
 //end::class[]

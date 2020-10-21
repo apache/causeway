@@ -23,8 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

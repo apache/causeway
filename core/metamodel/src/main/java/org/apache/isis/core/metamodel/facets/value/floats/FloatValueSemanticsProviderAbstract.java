@@ -85,7 +85,7 @@ implements FloatingPointValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final Float object) {
         return object.toString();
     }
 

@@ -16,29 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib;
+package org.apache.isis.commons.internal.primitives;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import org.junit.jupiter.api.Test;
 
-import org.datanucleus.store.types.converters.TypeConverter;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-public class IsoZonedDateTimeConverter implements TypeConverter<ZonedDateTime, String>{
+class _IntsTest {
 
-    private static final long serialVersionUID = 1L;
-    
-    @Override
-    public String toDatastoreType(final ZonedDateTime offsetTime) {
-        return offsetTime != null
-                ? offsetTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
-                : null;
-    }
-
-    @Override
-    public ZonedDateTime toMemberType(final String datastoreValue) {
-        return datastoreValue != null
-                ? ZonedDateTime.parse(datastoreValue, DateTimeFormatter.ISO_ZONED_DATE_TIME)
-                : null;
+    @Test
+    void arrayFlattening() {
+        
+        assertArrayEquals(
+                new int[] {1, 2, 3, 4, 5, 6},
+                _Ints.flatten(new int[][] {{1, 2, 3}, {4, 5, 6}}));
+        
     }
 
 }

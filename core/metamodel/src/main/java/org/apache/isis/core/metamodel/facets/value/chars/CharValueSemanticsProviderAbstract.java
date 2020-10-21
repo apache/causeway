@@ -70,7 +70,7 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final Character object) {
         return object.toString();
     }
 

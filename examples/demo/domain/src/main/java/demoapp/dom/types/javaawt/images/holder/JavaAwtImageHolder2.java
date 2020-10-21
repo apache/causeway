@@ -18,12 +18,13 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
+import java.awt.image.BufferedImage;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.value.Image;
 
 //tag::class[]
 public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
@@ -36,7 +37,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "1")  // <.>
-    default java.awt.Image getReadOnlyPropertyDerivedLabelPositionLeft() {
+    default BufferedImage getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
@@ -48,7 +49,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "2")
-    default java.awt.Image getReadOnlyPropertyDerivedLabelPositionTop() {
+    default BufferedImage getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
 
@@ -60,7 +61,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "3")
-    default java.awt.Image getReadOnlyPropertyDerivedLabelPositionRight() {
+    default BufferedImage getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
 
@@ -72,7 +73,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "label-positions", sequence = "4")
-    default java.awt.Image getReadOnlyPropertyDerivedLabelPositionNone() {
+    default BufferedImage getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }
 

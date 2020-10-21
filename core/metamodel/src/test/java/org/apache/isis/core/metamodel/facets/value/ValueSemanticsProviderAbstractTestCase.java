@@ -36,6 +36,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -107,8 +108,8 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder);
     }
 
-    protected ValueSemanticsProviderAndFacetAbstract<?> getValue() {
-        return valueSemanticsProvider;
+    protected <T> ValueSemanticsProviderAndFacetAbstract<T> getValue(Class<T> type) {
+        return _Casts.uncheckedCast(valueSemanticsProvider);
     }
 
     protected EncodableFacet getEncodeableFacet() {

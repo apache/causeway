@@ -29,13 +29,13 @@ import org.jmock.api.Invocation;
 import org.junit.Rule;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

@@ -88,7 +88,7 @@ implements DoubleFloatingPointValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final Double object) {
         return object.toString();
     }
 

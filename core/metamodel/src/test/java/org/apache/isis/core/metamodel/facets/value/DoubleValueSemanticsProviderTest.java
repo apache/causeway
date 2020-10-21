@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.doubles.DoubleWrapperValueSemanticsProvider;
 
 public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -77,5 +78,11 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     public void testParse2() throws Exception {
         final Object newValue = getValue().parseTextEntry(null, "1,20.0");
         assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
+    }
+    
+    // -- HELPER
+    
+    private ValueSemanticsProviderAndFacetAbstract<Double> getValue() {
+        return super.getValue(Double.class);
     }
 }

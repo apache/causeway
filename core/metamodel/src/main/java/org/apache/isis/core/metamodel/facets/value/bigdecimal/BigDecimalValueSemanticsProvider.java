@@ -34,7 +34,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
-public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> implements BigDecimalValueFacet {
+public class BigDecimalValueSemanticsProvider 
+extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> 
+implements BigDecimalValueFacet {
 
     private static Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
@@ -114,7 +116,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final BigDecimal object) {
         // for dotnet compatibility - toString pre 1.3 was equivalent to
         // toPlainString later.
         try {

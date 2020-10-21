@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javaawt.images.jdo;
 
+import java.awt.image.BufferedImage;
+
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -48,7 +50,7 @@ public class JavaAwtImageJdo                                          // <.>
         implements HasAsciiDocDescription, JavaAwtImageHolder2 {
 
 //end::class[]
-    public JavaAwtImageJdo(java.awt.Image initialValue) {
+    public JavaAwtImageJdo(BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -58,25 +60,25 @@ public class JavaAwtImageJdo                                          // <.>
     @MemberOrder(name = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private java.awt.Image readOnlyProperty;
+    private BufferedImage readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @MemberOrder(name = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
-    private java.awt.Image readWriteProperty;
+    private BufferedImage readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private java.awt.Image readOnlyOptionalProperty;
+    private BufferedImage readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @MemberOrder(name = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private java.awt.Image readWriteOptionalProperty;
+    private BufferedImage readWriteOptionalProperty;
 
 }
 //end::class[]

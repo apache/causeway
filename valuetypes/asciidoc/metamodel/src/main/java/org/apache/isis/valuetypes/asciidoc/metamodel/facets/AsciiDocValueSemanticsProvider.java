@@ -68,8 +68,7 @@ implements AsciiDocValueFacet {
     }
 
     @Override
-    protected String doEncode(final Object object) {
-        AsciiDoc asciiDoc = (AsciiDoc)object;
+    protected String doEncode(final AsciiDoc asciiDoc) {
         return asciiDoc.asHtml();
     }
 

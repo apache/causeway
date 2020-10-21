@@ -100,7 +100,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     }
 
     @Override
-    protected String doEncode(final Object object) {
+    protected String doEncode(final T object) {
         return titleString(object);
     }
 

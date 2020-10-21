@@ -19,13 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.value.image;
 
+import java.awt.image.BufferedImage;
+
 import org.apache.isis.applib.value.Image;
+import org.apache.isis.commons.internal.image._Images;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
-public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
+public class ImageValueSemanticsProvider 
+extends ImageValueSemanticsProviderAbstract<Image> {
 
     public ImageValueSemanticsProvider(final FacetHolder holder) {
         super(holder, Image.class);
@@ -33,35 +37,32 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
 
     @Override
     public int getHeight(final ManagedObject object) {
-        return image(object).getHeight();
-    }
-
-    private Image image(final ManagedObject object) {
-        return (Image) object.getPojo();
-    }
-
-    @Override
-    public java.awt.Image getImage(final ManagedObject object) {
-        return createImage(image(object).getImage());
-    }
-
-    @Override
-    protected int[][] getPixels(final Object object) {
-        return ((Image) object).getImage();
-    }
-
-    public Class<?> getValueClass() {
-        return Image.class;
+        return unwrap(object).getHeight();
     }
 
     @Override
     public int getWidth(final ManagedObject object) {
-        return image(object).getWidth();
+        return unwrap(object).getWidth();
     }
-
+    
     @Override
-    protected Image setPixels(final int[][] pixels) {
-        return new Image(pixels);
+    public BufferedImage getImage(final ManagedObject object) {
+        return _Images.fromPixels(unwrap(object).getImage());
+    }
+    
+    @Override
+    protected String doEncode(Image image) {
+        return _Images.toBase64(_Images.fromPixels(image.getImage()));
+    }
+    
+    @Override
+    protected Image doRestore(String base64ImageData) {
+        return new Image(_Images.toPixels(_Images.fromBase64(base64ImageData)));
+    }
+    
+    @Override
+    public ManagedObject createValue(BufferedImage image) {
+        return getObjectManager().adapt(new Image(_Images.toPixels(image)));
     }
 
     @Override
@@ -91,10 +92,12 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
     public String toString() {
         return "ImageValueSemanticsProvider: ";
     }
+    
+    // -- HELPER
 
-    @Override
-    public ManagedObject createValue(final java.awt.Image image) {
-        return getObjectManager().adapt(new Image(grabPixels(image)));
+    private Image unwrap(final ManagedObject object) {
+        return (Image) object.getPojo();
     }
+    
 
 }

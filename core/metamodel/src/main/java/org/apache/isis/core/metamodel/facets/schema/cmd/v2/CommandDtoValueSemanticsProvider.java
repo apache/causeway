@@ -94,8 +94,7 @@ implements CommandDtoValueFacet {
 
 
     @Override
-    protected String doEncode(final Object object) {
-        val commandDto = (CommandDto) object;
+    protected String doEncode(final CommandDto commandDto) {
         return CommandDtoUtils.toXml(commandDto);
     }
 
