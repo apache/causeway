@@ -21,16 +21,15 @@ package org.apache.isis.extensions.fullcalendar.ui.component;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -51,7 +50,7 @@ public abstract class EventProviderAbstract implements EventProvider {
 
     private static final long serialVersionUID = 1L;
 
-    private final Map<String, Event> eventById = Maps.newLinkedHashMap();
+    private final Map<String, Event> eventById = _Maps.newLinkedHashMap();
 
     // //////////////////////////////////////
 
@@ -60,13 +59,12 @@ public abstract class EventProviderAbstract implements EventProvider {
     }
 
     private void createEvents(final EntityCollectionModel model, final String calendarName) {
-        final Collection<ManagedObject> entityList = model.getObject();
         val commonContext = model.getCommonContext();
-        final Iterable<Event> events = Iterables.filter(
-                Iterables.transform(entityList, newEvent(commonContext, calendarName)), NOT_NULL);
-        for (final Event event : events) {
-            eventById.put(event.getId(), event);
-        }
+
+        _NullSafe.stream(model.getObject()) // entityList
+        .map(newEvent(commonContext, calendarName))
+        .filter(NOT_NULL)
+        .forEach(event->eventById.put(event.getId(), event));
     }
 
     private Object dereference(final IsisAppCommonContext commonContext, final Object domainObject) {
@@ -142,8 +140,9 @@ public abstract class EventProviderAbstract implements EventProvider {
     public Collection<Event> getEvents(final DateTime start, final DateTime end) {
         final Interval interval = new Interval(start, end);
         final Predicate<Event> withinInterval = input -> interval.contains(input.getStart());
-        final Collection<Event> values = eventById.values();
-        return Collections2.filter(values, withinInterval);
+        return eventById.values().stream()
+        .filter(withinInterval)
+        .collect(Collectors.toList());
     }
 
     public Event getEventForId(String id) throws EventNotFoundException {

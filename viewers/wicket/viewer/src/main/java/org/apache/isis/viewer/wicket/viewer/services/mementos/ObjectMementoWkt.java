@@ -23,9 +23,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
-
-import com.google.common.base.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
@@ -290,8 +289,8 @@ final class ObjectMementoWkt implements Serializable {
                     ObjectMementoWkt memento, 
                     ObjectMementoWkt otherMemento) {
                 return otherMemento.recreateStrategy == SERIALIZABLE
-                        && Objects.equal(memento.objectSpecId, otherMemento.objectSpecId)
-                        && Objects.equal(memento.serializedObject, otherMemento.serializedObject);
+                        && Objects.equals(memento.objectSpecId, otherMemento.objectSpecId)
+                        && Objects.equals(memento.serializedObject, otherMemento.serializedObject);
             }
 
             @Override

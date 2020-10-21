@@ -18,12 +18,8 @@
  */
 package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
 
-import java.io.IOException;
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
-import com.google.common.io.Resources;
-
-import org.apache.commons.io.Charsets;
 import org.apache.wicket.Component;
 import org.apache.wicket.IRequestListener;
 import org.apache.wicket.MarkupContainer;
@@ -51,6 +47,7 @@ import org.wicketstuff.pdfjs.PdfJsPanel;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
@@ -83,12 +80,8 @@ class PdfJsViewerPanel extends ScalarPanelAbstractLegacy<ScalarPropertyModel> im
     PdfJsViewerPanel(String id, ScalarModel scalarModel) {
         super(id, scalarModel);
 
-        final URL resource = Resources.getResource(PdfJsViewerPanel.class, "PdfJsViewerPanelCallbacks.template.js");
-        try {
-            pdfJsViewerPanelCallbacksTemplateJs = Resources.toString(resource, Charsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        pdfJsViewerPanelCallbacksTemplateJs = _Strings.readFromResource(
+                PdfJsViewerPanel.class, "PdfJsViewerPanelCallbacks.template.js", StandardCharsets.UTF_8); 
 
     }
 

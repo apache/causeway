@@ -18,10 +18,8 @@
  */
 package org.apache.isis.extensions.fullcalendar.applib;
 
+import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.ImmutableMap;
-
 
 public interface Calendarable {
 
@@ -42,6 +40,6 @@ public interface Calendarable {
     /**
      * The events associated with this object, keyed by their corresponding {@link #getCalendarNames() calendar name}.
      */
-	ImmutableMap<String, CalendarEventable> getCalendarEvents();
+	Map<String, CalendarEventable> getCalendarEvents();
 	
 }

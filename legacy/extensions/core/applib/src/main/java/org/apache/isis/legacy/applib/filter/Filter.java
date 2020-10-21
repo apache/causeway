@@ -19,9 +19,6 @@
 
 package org.apache.isis.legacy.applib.filter;
 
-import com.google.common.base.Predicate;
-
-
 /**
  * For use by repository implementations to allow a set of objects returned by a
  * back-end objectstore to be filtered before being returned to the caller.
@@ -34,7 +31,7 @@ import com.google.common.base.Predicate;
  * would accept a representation of a HQL query; an XML-based objectstore might
  * accept an XPath query, etc.)
  * 
- * @deprecated - use {@link Predicate} instead.
+ * @deprecated - use java's {@link Predicate} instead.
  */
 @Deprecated
 public interface Filter<T> {

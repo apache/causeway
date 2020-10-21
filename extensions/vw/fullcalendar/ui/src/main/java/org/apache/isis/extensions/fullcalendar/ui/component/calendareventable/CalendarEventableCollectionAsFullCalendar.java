@@ -19,11 +19,11 @@
 package org.apache.isis.extensions.fullcalendar.ui.component.calendareventable;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
-
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.ui.component.CalendaredCollectionAbstract;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -47,8 +47,9 @@ public class CalendarEventableCollectionAsFullCalendar extends CalendaredCollect
 
     @Override
     protected Set<String> getCalendarNames(final Collection<ManagedObject> entityList) {
-        return Sets.newLinkedHashSet(
-                Iterables.transform(entityList, CalendarEventableEventProvider.GET_CALENDAR_NAME));
+        return _NullSafe.stream(entityList)
+                .map(CalendarEventableEventProvider.GET_CALENDAR_NAME)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

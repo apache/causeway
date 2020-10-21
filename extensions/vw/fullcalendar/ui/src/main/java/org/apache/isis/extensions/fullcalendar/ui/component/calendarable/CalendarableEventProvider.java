@@ -19,8 +19,7 @@
 package org.apache.isis.extensions.fullcalendar.ui.component.calendarable;
 
 import java.util.Map;
-
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;

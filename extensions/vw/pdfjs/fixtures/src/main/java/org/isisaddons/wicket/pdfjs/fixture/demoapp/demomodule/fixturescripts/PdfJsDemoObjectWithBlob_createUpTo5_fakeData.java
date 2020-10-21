@@ -26,11 +26,6 @@ import java.util.List;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import com.google.common.io.ByteSource;
-import com.google.common.io.Resources;
-
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.value.Blob;
 

@@ -18,9 +18,11 @@
  */
 package org.apache.isis.extensions.fullcalendar.applib;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+
+import lombok.experimental.UtilityClass;
 
 public interface CalendarEventable {
 
@@ -41,24 +43,15 @@ public interface CalendarEventable {
 
     CalendarEvent toCalendarEvent();
 
+    @UtilityClass
     public static class Functions  {
-        private Functions(){}
 
         public static <T extends CalendarEventable> Function<T, String> getCalendarName() {
-            return new Function<T, String>(){
-                @Override
-                public String apply(T calendarEventable) {
-                    return calendarEventable.getCalendarName();
-                }};
+            return CalendarEventable::getCalendarName;
         }
 
         public static <T extends CalendarEventable> Function<T, CalendarEventable> cast() {
-            return new Function<T, CalendarEventable>(){
-                @Override
-                public CalendarEventable apply(CalendarEventable toDoItem) {
-                    return toDoItem;
-                }
-            };
+            return CalendarEventable.class::cast;
         }
     }
 

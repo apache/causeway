@@ -25,8 +25,6 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
-import com.google.common.collect.Ordering;
-
 import org.wicketstuff.pdfjs.Scale;
 
 import org.apache.isis.applib.annotation.Action;

@@ -18,8 +18,8 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.component.calendareventable;
 
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
+import java.util.Objects;
+import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
@@ -45,21 +45,18 @@ public class CalendarEventableEventProvider extends EventProviderAbstract {
             return null;
         }
         final CalendarEventable calendarEventable = (CalendarEventable)domainObject;
-        return Objects.equal(calendarName, calendarEventable.getCalendarName())
+        return Objects.equals(calendarName, calendarEventable.getCalendarName())
                 ? calendarEventable.toCalendarEvent()
                 : null;
     }
 
-    static final Function<ManagedObject, String> GET_CALENDAR_NAME = new Function<ManagedObject, String>() {
-        @Override
-        public String apply(final ManagedObject input) {
+    static final Function<ManagedObject, String> GET_CALENDAR_NAME = (final ManagedObject input) -> {
             final Object domainObject = input.getPojo();
             if(!(domainObject instanceof CalendarEventable)) {
                 return null;
             }
             final CalendarEventable calendarEventable = (CalendarEventable) domainObject;
             return calendarEventable.getCalendarName();
-        }
     };
 
 
