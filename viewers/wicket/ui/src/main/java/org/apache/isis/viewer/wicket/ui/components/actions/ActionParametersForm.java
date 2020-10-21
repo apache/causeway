@@ -119,7 +119,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             paramPanel.setOutputMarkupId(true);
             paramPanel.notifyOnChange(this);
         }
-        return Optional.of(paramPanel);
+        return Optional.ofNullable(paramPanel);
     }
 
     @Override

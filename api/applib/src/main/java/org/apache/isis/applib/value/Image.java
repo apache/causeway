@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._NullSafe;
 
+import lombok.val;
+
 /**
  * Represents an image.
  */
@@ -50,8 +52,8 @@ public class Image implements Serializable {
      */
     public Image(final @Nullable int[][] pixels) {
         
-        final int width = _NullSafe.size(pixels);
-        final int height = width>0
+        final int height = _NullSafe.size(pixels);
+        final int width = height>0
                 ? _NullSafe.size(pixels[0])
                 : 0;
         final int pixelCount = width * height;
@@ -59,7 +61,8 @@ public class Image implements Serializable {
         if(pixelCount>0) {
             this.width = width;
             this.height = height;
-            this.pixels = pixels; // should make a clone, but for performance reasons we just copy the reference 
+            // make a clone
+            this.pixels = clone(pixels, height);
         } else {
             this.width = 0;
             this.height = 0;
@@ -76,8 +79,8 @@ public class Image implements Serializable {
      */
     @Nullable
     public int[][] getPixels() {
-        // should return a clone, but for performance reasons we expose the internal array
-        return pixels;
+        // make a clone, don't expose the internal array
+        return clone(pixels, height);
     }
     
     /**
@@ -107,6 +110,20 @@ public class Image implements Serializable {
         return isEmpty()
                 ? "Image [empty]"
                 : String.format("Image [size=%dx%d]", width, height);
+    }
+    
+    // -- HELPER
+    
+    @Nullable
+    private static int[][] clone(final @Nullable int[][] array, final int height) {
+        if(array==null) {
+            return null;
+        }
+        val result = new int[height][];
+        for(int i=0; i<height; ++i) {
+            result[i] = array[i].clone();
+        }
+        return result;
     }
     
 }

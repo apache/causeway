@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-
 public class ImageValueSemanticsProvider 
 extends ImageValueSemanticsProviderAbstract<Image> {
 
@@ -49,8 +48,12 @@ extends ImageValueSemanticsProviderAbstract<Image> {
     
     @Override
     public void render(ManagedObject object, Graphics2D graphics) {
-        val bufferedImage = _Images.fromPixels(unwrap(object).getPixels());
-        graphics.drawImage(bufferedImage, 0, 0, null);
+        val image = unwrap(object);
+        if(image.isEmpty()) {
+            return;
+        }
+        val pixels = image.getPixels();
+        graphics.drawImage(_Images.fromPixels(pixels), 0, 0, null);
     }
     
     @Override
