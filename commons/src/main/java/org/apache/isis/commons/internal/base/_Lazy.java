@@ -80,6 +80,7 @@ public interface _Lazy<T> extends Supplier<T> {
 
     /**
      * Thread-safe variant to {@link _Lazy#of(Supplier)}.
+     * <p>
      * Concurrent calls to this lazy's get() method will never result in concurrent calls to the 
      * specified {@code supplier}. 
      * @param supplier
@@ -88,5 +89,21 @@ public interface _Lazy<T> extends Supplier<T> {
     public static <T> _Lazy<T> threadSafe(Supplier<? extends T> supplier) {
         return new _Lazy_ThreadSafe<T>(supplier);
     }
+
+    /**
+     * Weakly referenced variant to {@link _Lazy#threadSafe(Supplier)}.
+     * <p>
+     * The memoized value is held via weak reference, hence may be garbage collected any time.
+     * <p>
+     * @param supplier
+     * @return an (thread-safe and weakly referenced) instance of _Lacy that initializes with 
+     *      the specified {@code supplier}
+     * @implNoteThis This variant does not support {@link _Lazy#isMemoized()}, 
+     *      since this predicate is undecidable.
+     */
+    public static <T> _Lazy<T> threadSafeAndWeak(Supplier<? extends T> supplier) {
+        return new _Lazy_ThreadSafeAndWeak<T>(supplier);
+    }
+    
 
 }
