@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
+package org.apache.isis.viewer.wicket.ui.components.scalars.blobclob;
 
 import org.apache.wicket.Component;
 

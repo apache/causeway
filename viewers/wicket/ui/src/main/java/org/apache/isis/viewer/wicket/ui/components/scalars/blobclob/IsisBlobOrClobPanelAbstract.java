@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
+package org.apache.isis.viewer.wicket.ui.components.scalars.blobclob;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
