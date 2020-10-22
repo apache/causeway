@@ -5,4 +5,14 @@
 
 WARNING: Not released yet.
 
+== Java
 
+Some Java classes and/or packages have been renamed/moved:
+
+[source,java]
+.Applib
+----
+// org.apache.isis.applib.value.Image
+org.apache.isis.legacy.applib.value.Image // <.>
+----
+<.> only kept to ease migration, use `java.awt.image.BufferedImage` instead, which is supported by the framework as value type
