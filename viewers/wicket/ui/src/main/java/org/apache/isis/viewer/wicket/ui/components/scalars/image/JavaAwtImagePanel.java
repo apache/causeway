@@ -21,9 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -49,20 +47,21 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
         val scalarNameLabel = new Label(ID_SCALAR_NAME, scalarName);
         addOrReplace(scalarNameLabel);
 
-        val adapter = getModel().getObject();
-        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
+        val wicketImage = WicketImageUtil.asWicketImage(ID_SCALAR_VALUE, getModel())
+                .orElse(null);
+        if(wicketImage != null) {
+            addOrReplace(wicketImage);
+            
+            addOrReplace(new NotificationPanel(
+                    ID_FEEDBACK, 
+                    wicketImage,
+                    new ComponentFeedbackMessageFilter(wicketImage)));
+            
+        } else {
             permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
-            return;
         }
-                    
-        val dynamicImageResource = JavaAwtImageDynamicResource.of(getModel());
-        val wicketImageComponent = new Image(ID_SCALAR_VALUE, dynamicImageResource);
         
-        addOrReplace(wicketImageComponent);
-        addOrReplace(new NotificationPanel(
-                ID_FEEDBACK, 
-                wicketImageComponent,
-                new ComponentFeedbackMessageFilter(wicketImageComponent)));
+
         
     }
 

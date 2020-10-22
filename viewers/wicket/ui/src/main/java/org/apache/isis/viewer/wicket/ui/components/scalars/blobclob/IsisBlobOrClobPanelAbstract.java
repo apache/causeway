@@ -26,14 +26,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.image.NonCachingImage;
-import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
@@ -42,6 +39,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
@@ -88,10 +86,8 @@ extends ScalarPanelAbstract {
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
         scalarIfRegularFormGroup.add(scalarName);
 
-
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
-            wicketImage.setOutputMarkupId(true);
             scalarIfRegularFormGroup.addOrReplace(wicketImage);
         } else {
             Components.permanentlyHide(scalarIfRegularFormGroup, ID_IMAGE);
@@ -148,16 +144,8 @@ extends ScalarPanelAbstract {
         }
         
         val blob = (Blob)object;
-        val image = blob.asImage().orElse(null);
-        if(image == null) {
-            return null;
-        }
-
-        final BufferedDynamicImageResource imageResource = new BufferedDynamicImageResource();
-        imageResource.setImage(image);
-        final ThumbnailImageResource thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
-
-        return new NonCachingImage(id, thumbnailImageResource);
+        
+        return WicketImageUtil.asWicketImage(id, blob).orElse(null);
     }
 
 

@@ -19,7 +19,8 @@
 
 package org.apache.isis.legacy.metamodel.facets.value.image;
 
-import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 import org.apache.isis.commons.internal.image._Images;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -48,13 +49,13 @@ extends ImageValueSemanticsProviderAbstract<Image> {
     }
     
     @Override
-    public void render(ManagedObject object, Graphics2D graphics) {
+    public Optional<BufferedImage> getImage(ManagedObject object) {
         val image = unwrap(object);
         if(image.isEmpty()) {
-            return;
+            return Optional.empty();
         }
         val pixels = image.getPixels();
-        graphics.drawImage(_Images.fromPixels(pixels), 0, 0, null);
+        return Optional.ofNullable(_Images.fromPixels(pixels));
     }
     
     @Override

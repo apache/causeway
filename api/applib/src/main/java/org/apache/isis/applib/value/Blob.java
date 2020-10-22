@@ -204,9 +204,8 @@ public final class Blob implements NamedWithMimeType {
     }
     
     /**
-     * 
-     * @return optionally the contents as a {@link BufferedImage} based on whether 
-     * this Blob's MIME type identifies as image and whether the contents is not empty 
+     * @return optionally the payload as a {@link BufferedImage} based on whether 
+     * this Blob's MIME type identifies as image and whether the payload is not empty 
      */
     public Optional<BufferedImage> asImage() {
         
@@ -217,14 +216,14 @@ public final class Blob implements NamedWithMimeType {
         
         val mimeType = getMimeType();
         if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
-            return null;
+            return Optional.empty();
         }
         
         try {
             val img = _Images.fromBytes(getBytes());
             return Optional.ofNullable(img);
         } catch (Exception e) {
-            log.warn("failed to read image data", e);
+            log.error("failed to read image data", e);
             return Optional.empty();
         }
         

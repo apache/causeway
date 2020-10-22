@@ -19,13 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.value.imageawt;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
+import javax.annotation.Nullable;
+
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.image._Images;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class JavaAwtImageValueSemanticsProvider 
 extends ImageValueSemanticsProviderAbstract<BufferedImage> {
@@ -35,27 +39,33 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     }
 
     @Override
-    public int getWidth(final ManagedObject object) {
-        return unwrap(object).getWidth();
+    public int getWidth(final @Nullable ManagedObject object) {
+        return unwrap(object).map(BufferedImage::getWidth).orElse(0);
     }
     
     @Override
-    public int getHeight(final ManagedObject object) {
-        return unwrap(object).getHeight();
+    public int getHeight(final @Nullable ManagedObject object) {
+        return unwrap(object).map(BufferedImage::getHeight).orElse(0);
     }
     
     @Override
-    public void render(ManagedObject object, Graphics2D graphics) {
-        graphics.drawImage(unwrap(object), 0, 0, null);
+    public Optional<BufferedImage> getImage(final @Nullable ManagedObject object) {
+        return unwrap(object);
     }
-
-    @Override
-    protected String doEncode(BufferedImage image) {
+    
+    @Override @Nullable
+    protected String doEncode(final @Nullable BufferedImage image) {
+        if(image==null) {
+            return null;
+        }
         return _Images.toBase64(image);
     }
     
-    @Override
-    protected BufferedImage doRestore(String base64ImageData) {
+    @Override @Nullable    
+    protected BufferedImage doRestore(final @Nullable String base64ImageData) {
+        if(_Strings.isNullOrEmpty(base64ImageData)) {
+            return null;
+        }
         return _Images.fromBase64(base64ImageData);
     }
     
@@ -71,8 +81,12 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     
     // -- HELPER
     
-    private BufferedImage unwrap(final ManagedObject object) {
-        return (BufferedImage) object.getPojo();
+    @Nullable
+    private Optional<BufferedImage> unwrap(final @Nullable ManagedObject adapter) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable((BufferedImage) adapter.getPojo());
     }
 
 

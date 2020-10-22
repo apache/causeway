@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.value.image;
 
-import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -30,5 +31,9 @@ public interface ImageValueFacet extends Facet {
 
     int getWidth(ManagedObject object);
     
-    void render(ManagedObject object, Graphics2D graphics);
+    /**
+     * @return optionally the contents as a {@link BufferedImage} based on whether 
+     * whether the wrapped content is not empty 
+     */
+    Optional<BufferedImage> getImage(ManagedObject object);
 }
