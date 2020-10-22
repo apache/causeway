@@ -28,9 +28,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
 import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.primitives._Ints;
 
 import lombok.NonNull;
@@ -39,40 +41,6 @@ import lombok.val;
 
 public class _Images {
     
-    // -- PIXELS
-    
-    /**
-     * @return 2 dim. array of pixels defining this image, 
-     *      where each pixel is a 32 bit ARGB color value,
-     *      with {@code A} the alpha value as highest significant 8 bits
-     *      followed by {@code R} the red value and so on
-     */
-    public static int[][] toPixels(final @NonNull BufferedImage image){
-        final int width = image.getWidth();
-        final int height = image.getHeight();
-        val pixels = new int[height][width];
-        for(int lineIndex=0; lineIndex<height; ++lineIndex) {
-            image.getRGB(0, lineIndex, width, 1, pixels[lineIndex], 0, width);
-
-// debug            
-//            System.err.println(
-//                    _Ints.rowForm(pixels[lineIndex],10, Integer::toHexString));
-            
-        }
-        return pixels;
-    }
-    
-    /**
-     * @param pixels - 2 dim. array of pixels defining this image, 
-     *      where each pixel is a 32 bit ARGB color value,
-     *      with {@code A} the alpha value as highest significant 8 bits
-     *      followed by {@code R} the red value and so on
-     */
-    public static BufferedImage fromPixels(final @NonNull int[][] pixels){
-        val raster = createRasterARGB8888(pixels);
-        return createImageARGB8888(raster);
-    }
-
     // -- BYTES
     
     @SneakyThrows
@@ -104,22 +72,75 @@ public class _Images {
         return fromBytes(imageData);
     }
     
+    // -- PIXELS
+    
+    /**
+     * @return 2 dim. array of pixels defining this image, 
+     *      where each pixel is a 32 bit ARGB color value,
+     *      with {@code A} the alpha value as highest significant 8 bits
+     *      followed by {@code R} the red value and so on
+     */
+    @Nullable
+    public static int[][] toPixels(final @Nullable BufferedImage image){
+        
+        if(image==null) {
+            return null;
+        }
+        
+        final int width = image.getWidth();
+        final int height = image.getHeight();
+        val pixels = new int[height][width];
+        for(int lineIndex=0; lineIndex<height; ++lineIndex) {
+            image.getRGB(0, lineIndex, width, 1, pixels[lineIndex], 0, width);
+
+            // debug            
+            // System.err.println(
+            //           _Ints.rowForm(pixels[lineIndex],10, Integer::toHexString));
+            
+        }
+        return pixels;
+    }
+    
+    /**
+     * @param pixels - 2 dim. array of pixels defining this image, 
+     *      where each pixel is a 32 bit ARGB color value,
+     *      with {@code A} the alpha value as highest significant 8 bits
+     *      followed by {@code R} the red value and so on
+     */
+    @Nullable
+    public static BufferedImage fromPixels(final @Nullable int[][] pixels){
+        
+        final int height = _NullSafe.size(pixels);
+        final int width = height>0
+                ? _NullSafe.size(pixels[0])
+                : 0;
+        final int pixelCount = width * height;
+
+        if(pixelCount>0) {
+            // internally clones pixel data
+            val raster = createRasterARGB8888(pixels);
+            return createImageARGB8888(raster);
+        } else {
+            return null;
+        }
+    }
+    
     // -- RASTER UTILS (LOW LEVEL)
     
-    public static WritableRaster createRasterARGB8888(final int[][] pixels){
+    private static WritableRaster createRasterARGB8888(final int[][] pixels){
         final int height = pixels.length;
         final int width = pixels[0].length;
         return createRasterARGB8888(width, height, _Ints.flatten(pixels));
     }
     
-    public static WritableRaster createRasterARGB8888(final int width, final int height, final int[] dataArray){
+    private static WritableRaster createRasterARGB8888(final int width, final int height, final int[] dataArray){
         val dataBuffer = new DataBufferInt(dataArray, width * height);
         val sampleModel = new SinglePixelPackedSampleModel(
                 dataBuffer.getDataType(), width, height, BitMask8888); 
         return Raster.createWritableRaster(sampleModel, dataBuffer, null);
     }
     
-    public static BufferedImage createImageARGB8888(final WritableRaster raster){
+    private static BufferedImage createImageARGB8888(final WritableRaster raster){
         val directColorModel​ = 
                 new DirectColorModel(32, BitMask8888[0], BitMask8888[1], BitMask8888[2], BitMask8888[3]);
         return new BufferedImage(directColorModel​, raster, false, null);
