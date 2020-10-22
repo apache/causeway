@@ -23,6 +23,7 @@ import java.io.InputStream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -68,7 +69,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
      */
     @Inject
     @Named("metaInfManifest")
-    private transient InputStream metaInfManifestIs;
+    private transient Provider<InputStream> metaInfManifestProvider;
 
     private JarManifestModel jarManifestModel;
 
@@ -80,7 +81,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
         add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, getIsisConfiguration().getViewer().getWicket().getApplication().getAbout()));
 
         if(jarManifestModel == null) {
-            jarManifestModel = new JarManifestModel(super.getCommonContext(),  metaInfManifestIs);
+            jarManifestModel = new JarManifestModel(super.getCommonContext(), metaInfManifestProvider);
         }
 
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));

@@ -31,12 +31,15 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 
+import javax.inject.Provider;
+
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.metamodel.commons.CloseableExtensions;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
+
+import lombok.val;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
@@ -51,22 +54,21 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
      * @param commonContext 
      * @param metaInfManifestIs provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
      */
-    public JarManifestModel(IsisAppCommonContext commonContext, InputStream metaInfManifestIs) {
+    public JarManifestModel(
+            IsisAppCommonContext commonContext, 
+            Provider<InputStream> metaInfManifestProvider) {
 
         super(commonContext);
         
         Manifest manifest;
-        try {
+        try(val metaInfManifestIs = metaInfManifestProvider.get()) {
             manifest = new Manifest(metaInfManifestIs);
             manifests.add(JarManifestAttributes.jarName("Web archive (war file)"));
             manifests.add(JarManifestAttributes.jarUrl(null));
             addAttributes(manifest, manifests);
-
         } catch (Exception ex) {
             // ignore
-        } finally {
-            CloseableExtensions.closeSafely(metaInfManifestIs);
-        }
+        } 
 
         Enumeration<?> resEnum;
         try {
@@ -80,18 +82,15 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
             JarManifest jarManifest = new JarManifest(url);
             jarManifests.add(jarManifest);
 
-            InputStream is = null;
-            try {
-                is = url.openStream();
+            
+            try(val is = url.openStream()) {
                 if (is != null) {
                     manifest = new Manifest(is);
                     jarManifest.addAttributesFrom(manifest);
                 }
             } catch(Exception e3) {
                 // ignore
-            } finally {
-                CloseableExtensions.closeSafely(is);
-            }
+            } 
         }
 
         Collections.sort(jarManifests);

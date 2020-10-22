@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.blobclob;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +45,6 @@ import org.apache.wicket.request.resource.IResource;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.metamodel.commons.CloseableExtensions;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -178,14 +176,11 @@ extends ScalarPanelAbstract {
             return null;
         }
 
-        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        try {
+        try(val bais = new ByteArrayInputStream(bytes)) {
             return ImageIO.read(bais);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             return null;
-        } finally {
-            CloseableExtensions.closeSafely(bais);
-        }
+        } 
     }
 
 
