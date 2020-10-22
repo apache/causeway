@@ -19,10 +19,12 @@
 
 package org.apache.isis.applib.value;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -32,14 +34,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.image._Images;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 // tag::refguide[]
 // end::refguide[]
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider")
 @XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support
+@Log4j2
 public final class Blob implements NamedWithMimeType {
 
     /**
@@ -197,4 +202,32 @@ public final class Blob implements NamedWithMimeType {
         }
 
     }
+    
+    /**
+     * 
+     * @return optionally the contents as a {@link BufferedImage} based on whether 
+     * this Blob's MIME type identifies as image and whether the contents is not empty 
+     */
+    public Optional<BufferedImage> asImage() {
+        
+        val bytes = getBytes();
+        if(bytes == null) {
+            return Optional.empty();
+        }
+        
+        val mimeType = getMimeType();
+        if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
+            return null;
+        }
+        
+        try {
+            val img = _Images.fromBytes(getBytes());
+            return Optional.ofNullable(img);
+        } catch (Exception e) {
+            log.warn("failed to read image data", e);
+            return Optional.empty();
+        }
+        
+    }
+    
 }

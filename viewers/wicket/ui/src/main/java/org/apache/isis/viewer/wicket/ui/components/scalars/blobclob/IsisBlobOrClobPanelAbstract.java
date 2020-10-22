@@ -18,13 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.blobclob;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
-
-import javax.activation.MimeType;
-import javax.imageio.ImageIO;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -147,18 +142,13 @@ extends ScalarPanelAbstract {
             return null;
         }
 
-        final Object object = adapter.getPojo();
+        val object = adapter.getPojo();
         if(!(object instanceof Blob)) {
             return null;
         }
-
-        final Blob blob = (Blob)object;
-        final MimeType mimeType = blob.getMimeType();
-        if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
-            return null;
-        }
-
-        final BufferedImage image = asBufferedImage(blob);
+        
+        val blob = (Blob)object;
+        val image = blob.asImage().orElse(null);
         if(image == null) {
             return null;
         }
@@ -168,19 +158,6 @@ extends ScalarPanelAbstract {
         final ThumbnailImageResource thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
 
         return new NonCachingImage(id, thumbnailImageResource);
-    }
-
-    private BufferedImage asBufferedImage(final Blob blob) {
-        final byte[] bytes = blob.getBytes();
-        if(bytes == null) {
-            return null;
-        }
-
-        try(val bais = new ByteArrayInputStream(bytes)) {
-            return ImageIO.read(bais);
-        } catch (Exception ex) {
-            return null;
-        } 
     }
 
 
