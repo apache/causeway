@@ -127,7 +127,6 @@ import org.apache.isis.core.metamodel.facets.value.doubles.DoublePrimitiveValueF
 import org.apache.isis.core.metamodel.facets.value.doubles.DoubleWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.floats.FloatPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.floats.FloatWrapperValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.imageawt.JavaAwtImageValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.integer.IntPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.integer.IntWrapperValueFacetUsingSemanticsProviderFactory;
@@ -328,7 +327,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BlobValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ClobValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, PasswordValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ImageValueFacetUsingSemanticsProviderFactory.class);
 
         // jodatime values
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JodaLocalDateValueFacetUsingSemanticsProviderFactory.class);

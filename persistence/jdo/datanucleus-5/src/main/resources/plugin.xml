@@ -76,13 +76,6 @@
     
     <extension point="org.datanucleus.java_type">
         <java-type
-                name="org.apache.isis.applib.value.Image"
-                dfg="true" priority="10"
-                converter-name="isis.image-bytearray" />
-    </extension>
-    
-    <extension point="org.datanucleus.java_type">
-        <java-type
                 name="java.awt.image.BufferedImage"
                 dfg="true" priority="10"
                 converter-name="isis.bufferedimage-bytearray" />
@@ -170,14 +163,6 @@
                 member-type="java.awt.image.BufferedImage"
                 datastore-type="[B"
                 converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.image.JavaAwtBufferedImageByteArrayConverter"/>
-    </extension>
-    
-    <extension point="org.datanucleus.type_converter">
-        <type-converter
-                name="isis.image-bytearray"
-                member-type="org.apache.isis.applib.value.Image"
-                datastore-type="[B"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.applib.IsisImageConverter"/>
     </extension>
     
     <extension point="org.datanucleus.type_converter">

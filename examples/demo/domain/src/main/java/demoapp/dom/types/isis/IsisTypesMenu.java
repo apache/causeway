@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.isis.blobs.IsisBlobs;
 import demoapp.dom.types.isis.clobs.IsisClobs;
-import demoapp.dom.types.isis.images.IsisImages;
 import demoapp.dom.types.isis.localresourcepaths.IsisLocalResourcePaths;
 import demoapp.dom.types.isis.markups.IsisMarkups;
 import demoapp.dom.types.isis.passwords.IsisPasswords;
@@ -48,12 +47,6 @@ public class IsisTypesMenu {
     @ActionLayout(cssClassFa="fa-file-alt")
     public IsisClobs clobs(){
         return new IsisClobs();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-image")
-    public IsisImages images(){
-        return new IsisImages();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

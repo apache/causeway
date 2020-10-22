@@ -16,35 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.images.samples;
 
-import java.util.stream.Stream;
+package org.apache.isis.legacy.metamodel.facets.value.image;
 
-import javax.inject.Inject;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.legacy.applib.value.Image;
 
-import org.springframework.stereotype.Service;
+public class ImageValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Image> {
 
-import org.apache.isis.applib.value.Image;
-
-import demoapp.dom.types.Samples;
-import demoapp.dom.types.javaawt.images.samples.JavaAwtImageService;
-import demoapp.dom.types.javaawt.images.samples.JavaAwtImagesSamples;
-
-@Service
-public class IsisImagesSamples implements Samples<Image> {
-
-    @Override
-    public Stream<Image> stream() {
-        return javaAwtImagesSamples.stream()
-                .map(javaAwtImageService::javaAwtImageToPixels)
-                .map(org.apache.isis.applib.value.Image::new);
+    public ImageValueFacetUsingSemanticsProviderFactory() {
+        super();
     }
 
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        final Class<?> type = processClassContext.getCls();
+        final FacetHolder holder = processClassContext.getFacetHolder();
 
-    @Inject
-    JavaAwtImagesSamples javaAwtImagesSamples;
-
-    @Inject
-    JavaAwtImageService javaAwtImageService;
+        if (type != org.apache.isis.legacy.applib.value.Image.class) {
+            return;
+        }
+        addFacets(new ImageValueSemanticsProvider(holder));
+    }
 
 }

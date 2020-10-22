@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.value;
+package org.apache.isis.legacy.applib.value;
 
 import java.io.Serializable;
 

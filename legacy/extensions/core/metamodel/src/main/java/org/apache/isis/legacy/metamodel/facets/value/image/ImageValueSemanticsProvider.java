@@ -17,15 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.value.image;
+package org.apache.isis.legacy.metamodel.facets.value.image;
 
 import java.awt.Graphics2D;
 
-import org.apache.isis.applib.value.Image;
 import org.apache.isis.commons.internal.image._Images;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.legacy.applib.value.Image;
 
 import lombok.val;
 

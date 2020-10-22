@@ -102,7 +102,6 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>Apache Isis Core</mb3:named>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="blobs"/>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="clobs"/>
-                <mb3:serviceAction objectType="demo.IsisTypesMenu" id="images"/>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="localResourcePaths"/>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="markups"/>
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="passwords"/>

@@ -41,6 +41,12 @@ public class _Images {
     
     // -- PIXELS
     
+    /**
+     * @return 2 dim. array of pixels defining this image, 
+     *      where each pixel is a 32 bit ARGB color value,
+     *      with {@code A} the alpha value as highest significant 8 bits
+     *      followed by {@code R} the red value and so on
+     */
     public static int[][] toPixels(final @NonNull BufferedImage image){
         final int width = image.getWidth();
         final int height = image.getHeight();
@@ -56,6 +62,12 @@ public class _Images {
         return pixels;
     }
     
+    /**
+     * @param pixels - 2 dim. array of pixels defining this image, 
+     *      where each pixel is a 32 bit ARGB color value,
+     *      with {@code A} the alpha value as highest significant 8 bits
+     *      followed by {@code R} the red value and so on
+     */
     public static BufferedImage fromPixels(final @NonNull int[][] pixels){
         val raster = createRasterARGB8888(pixels);
         return createImageARGB8888(raster);

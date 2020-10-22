@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.value;
+package org.apache.isis.legacy.metamodel.facets.value;
 
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -26,11 +26,11 @@ import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-import org.apache.isis.applib.value.Image;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProvider;
+import org.apache.isis.legacy.applib.value.Image;
+import org.apache.isis.legacy.metamodel.facets.value.image.ImageValueSemanticsProvider;
 
 import lombok.val;
 

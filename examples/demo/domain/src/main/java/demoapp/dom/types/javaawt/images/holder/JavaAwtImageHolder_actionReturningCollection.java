@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javaawt.images.holder;
 
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.Image;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,12 +39,12 @@ public class JavaAwtImageHolder_actionReturningCollection {
 
     private final JavaAwtImageHolder holder;
 
-    public Collection<Image> act() {
+    public Collection<BufferedImage> act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<Image> samples;
+    Samples<BufferedImage> samples;
 }
 //end::class[]
