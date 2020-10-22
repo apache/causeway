@@ -48,9 +48,6 @@ public class WicketImageUtil {
             return Optional.empty();
         }
 
-        //val dynamicImageResource = JavaAwtImageDynamicResource.of(getModel());
-        //val wicketImage = new Image(id, dynamicImageResource);
-        
         val imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(buffImg);
 

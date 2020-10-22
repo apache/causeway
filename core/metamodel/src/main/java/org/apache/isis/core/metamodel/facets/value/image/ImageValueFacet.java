@@ -32,7 +32,7 @@ public interface ImageValueFacet extends Facet {
     int getWidth(ManagedObject object);
     
     /**
-     * @return optionally the contents as a {@link BufferedImage} based on whether 
+     * @return optionally the contents as a {@link BufferedImage} based on 
      * whether the wrapped content is not empty 
      */
     Optional<BufferedImage> getImage(ManagedObject object);
