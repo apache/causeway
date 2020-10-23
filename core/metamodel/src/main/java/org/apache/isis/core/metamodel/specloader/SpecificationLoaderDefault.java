@@ -483,16 +483,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         val substitutedType = substitute.apply(type);
         
-        final ObjectSpecification spec;
-        
-        // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
-        synchronized (cache) {
-            spec = cache.computeIfAbsent(substitutedType, __->{
-                val newSpec = createSpecification(substitutedType, beanClassifier.apply(type));
-                specIdToClassResolver.register(newSpec);
-                return newSpec;
-            });
-        }
+        val spec = cache.computeIfAbsent(substitutedType, __->{
+            val newSpec = createSpecification(substitutedType, beanClassifier.apply(type));
+            specIdToClassResolver.register(newSpec);
+            return newSpec;
+        });
 
         spec.introspectUpTo(upTo);
 

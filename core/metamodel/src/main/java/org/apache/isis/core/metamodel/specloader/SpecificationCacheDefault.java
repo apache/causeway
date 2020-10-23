@@ -38,26 +38,29 @@ import lombok.val;
 class SpecificationCacheDefault<T extends ObjectSpecification> implements SpecificationCache<T> {
 
     private final Map<Class<?>, T> specByClass = _Maps.newHashMap();
-    
+
     // optimization: specialized list to keep track of any additions to the cache fast
     private final _VersionedList<T> vList = new _VersionedList<>(); 
-    
+
     @Override
     public Optional<T> lookup(Class<?> cls) {
-        return Optional.ofNullable(specByClass.get(cls));
+        synchronized(this) {
+            return Optional.ofNullable(specByClass.get(cls));
+        }
     }
-    
+
     @Override
     public T computeIfAbsent(
             Class<?> cls, 
             Function<Class<?>, T> mappingFunction) {
-        
-        T spec = specByClass.get(cls);
-        if(spec==null) {
-            spec = mappingFunction.apply(cls);
-            internalPut(spec);
+        synchronized(this) {
+            T spec = specByClass.get(cls);
+            if(spec==null) {
+                spec = mappingFunction.apply(cls);
+                internalPut(spec);
+            }
+            return spec;
         }
-        return spec;
     }
 
     @Override
@@ -77,14 +80,16 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
 
     @Override
     public T remove(@NonNull Class<?> cls) {
-        final T removed = specByClass.remove(cls);
-        if(removed!=null) {
-            vList.clear(); // invalidate
-            vList.addAll(specByClass.values());
+        synchronized(this) {
+            final T removed = specByClass.remove(cls);
+            if(removed!=null) {
+                vList.clear(); // invalidate
+                vList.addAll(specByClass.values());
+            }
+            return removed;
         }
-        return removed;
     }
-    
+
     @Override
     public void forEach(Consumer<T> onSpec, boolean shouldRunConcurrent) {
         if(shouldRunConcurrent) {
@@ -93,26 +98,20 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
             vList.forEach(onSpec);
         }        
     }
-    
+
     // -- HELPER
-    
+
     @Nullable
     private void internalPut(@Nullable T spec) {
         if(spec==null) {
             return;
         }
         val cls = spec.getCorrespondingClass();
-        val specId = spec.getSpecId();
         val existing = specByClass.put(cls, spec);
         if(existing==null) {
             vList.add(spec); // add to vList only if we don't have it already
         }
-        if (specId == null) {
-            return;
-        }
     }
 
-
-   
 
 }

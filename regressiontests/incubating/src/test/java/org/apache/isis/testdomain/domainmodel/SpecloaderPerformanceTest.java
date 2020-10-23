@@ -35,6 +35,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -77,6 +78,9 @@ class SpecloaderPerformanceTest {
         config.getCore().getMetaModel().getIntrospector().setParallelize(false);
         referenceMetamodelSummary.get(); // memoize
         config.getCore().getMetaModel().getIntrospector().setParallelize(true);
+        
+        _Probe.errOut("========================== SETUP DONE ===================================");
+        
     }
     
     static long ITERATIONS = 100; /* should typically run in ~10s */
@@ -92,6 +96,9 @@ class SpecloaderPerformanceTest {
         val missingFeatures = _Sets.minus(referenceMetamodelSummary.get(), mmSummary);
         if(!missingFeatures.isEmpty()) {
             System.err.println(String.format("%d missing features", missingFeatures.size()));
+            missingFeatures.forEach(f->{
+                System.err.println(String.format(" - %s", f));
+            });
         }
         assertEquals(Collections.<String>emptySet(), missingFeatures);
     }
