@@ -37,7 +37,6 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.beans.IsisBeanMetaData;
 
 import lombok.Getter;
@@ -66,25 +65,9 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJdo = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> viewModelTypes = new HashSet<>();
-    private final Set<Class<?>> vetoedTypes = _Sets.newConcurrentHashSet();
     
-    
-    @Override
-    public void veto(Class<?> type) {
-        vetoedTypes.add(type);
-    }
-
     // -- LOOKUPS
     
-    @Override
-    public Optional<String> lookupManagedBeanNameForType(Class<?> type) {
-        if(vetoedTypes.contains(type)) { // vetos are coming from the spec-loader during init
-            return Optional.empty();
-        }
-        return Optional.ofNullable(managedBeansContributing.get(type))
-                .map(IsisBeanMetaData::getBeanName);
-    }
-
     @Override
     public Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type) {
         return Optional.ofNullable(introspectableTypesByClass.get(type));

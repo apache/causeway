@@ -252,7 +252,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             
             val spec = primeSpecification(cls, sort);
             if(spec==null) {
-                isisBeanTypeRegistry.veto(cls);
+                //XXX only ever happens when the class substitutor vetoes
                 return;
             } 
             

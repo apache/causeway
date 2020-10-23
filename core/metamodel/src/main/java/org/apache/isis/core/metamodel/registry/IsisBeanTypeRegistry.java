@@ -40,8 +40,6 @@ public interface IsisBeanTypeRegistry {
     Set<Class<?>> getMixinTypes();
     Set<Class<?>> getViewModelTypes();
 
-    void veto(Class<?> type);
-    
     // -- LOOKUPS
     
     /**
@@ -52,7 +50,10 @@ public interface IsisBeanTypeRegistry {
      * @param type
      * @return
      */
-    Optional<String> lookupManagedBeanNameForType(Class<?> type);
+    default Optional<String> lookupManagedBeanNameForType(Class<?> type) {
+        return Optional.ofNullable(getManagedBeansContributing().get(type))
+                .map(IsisBeanMetaData::getBeanName);
+    }
 
 
 }
