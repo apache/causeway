@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;

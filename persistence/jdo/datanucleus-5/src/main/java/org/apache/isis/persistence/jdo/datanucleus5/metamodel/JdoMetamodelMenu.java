@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 
 import lombok.val;

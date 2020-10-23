@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 
 import lombok.val;
 

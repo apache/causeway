@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.specloader;
+package org.apache.isis.core.metamodel.registry;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,7 +39,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.beans.IsisBeanMetaData;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 
 import lombok.Getter;
 import lombok.NonNull;

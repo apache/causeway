@@ -26,7 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 
 import lombok.NonNull;
 

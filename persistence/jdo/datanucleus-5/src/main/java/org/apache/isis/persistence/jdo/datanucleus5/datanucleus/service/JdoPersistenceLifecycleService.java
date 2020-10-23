@@ -32,8 +32,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtime.iactn.InteractionSession;

@@ -34,11 +34,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
-import org.apache.isis.core.metamodel.specloader.IsisBeanTypeRegistryDefault;
+import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
+import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistryDefault;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingStereotypes;
 import org.apache.isis.testdomain.model.stereotypes.MyObject;

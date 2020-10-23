@@ -16,11 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.config.beans;
+package org.apache.isis.core.metamodel.registry;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import org.apache.isis.core.config.beans.IsisBeanMetaData;
 
 /**
  * Holds the set of domain services, persistent entities and fixture scripts etc., but not values.
