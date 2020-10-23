@@ -99,8 +99,8 @@ class AutoConfigurationTest {
     void domainObjects_shouldBeDiscovered() {
 
         for(val cls : nonManaged()) {
-            val sort = isisBeanTypeRegistry.lookupBeanSortByIntrospectableType(cls);
-            assertTrue(sort.isPresent());
+            val type = isisBeanTypeRegistry.lookupIntrospectableType(cls);
+            assertTrue(type.isPresent());
         }
         
     }

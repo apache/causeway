@@ -48,6 +48,7 @@ import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.beans.IsisBeanMetaData;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
@@ -426,7 +427,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return loadSpecification(
                 type, 
                 __->isisBeanTypeRegistry
-                    .lookupBeanSortByIntrospectableType(type)
+                    .lookupIntrospectableType(type)
+                    .map(IsisBeanMetaData::getBeanSort)
                     .orElseGet(()->isisBeanTypeClassifier.classify(type).getBeanSort()), 
                 upTo);
     }

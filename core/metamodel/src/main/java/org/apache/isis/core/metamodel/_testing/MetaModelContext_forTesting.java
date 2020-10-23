@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -49,6 +50,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -233,7 +235,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     
     public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
         if(isisBeanTypeRegistry==null) {
-            isisBeanTypeRegistry = isisBeanFactoryPostProcessorForSpring.getIsisBeanTypeRegistry();
+            isisBeanTypeRegistry = new IsisBeanTypeRegistryDefault(Can.empty());
         }
         return isisBeanTypeRegistry;
     }

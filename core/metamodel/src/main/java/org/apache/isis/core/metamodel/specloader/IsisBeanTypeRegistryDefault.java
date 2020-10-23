@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.config.beans;
+package org.apache.isis.core.metamodel.specloader;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,32 +25,38 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.services.metamodel.BeanSort;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.config.beans.IsisBeanMetaData;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 import lombok.val;
 
-/**
- * Holds the set of domain services, persistent entities and fixture scripts etc.
- * @since 2.0
- */
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE) 
+@Service
+@Named("isisMetaModel.IsisBeanTypeRegistryImpl")
+@Order(OrderPrecedence.EARLY)
+@Primary
+@Qualifier("Default")
 //@Log4j2
-final class IsisBeanTypeRegistryImpl 
-implements IsisBeanTypeRegistry {
+public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
 
     /**
-     * (quasi-immutable) scan result, as used by the SpecificationLoader for introspection
-     * 
-     * @implSpec once set, expected to not being modified 
+     * (immutable) scan result, as used by the SpecificationLoader for introspection
      */
-    private Can<IsisBeanMetaData> introspectableTypes;
+    private final Can<IsisBeanMetaData> introspectableTypes;
     
     private final Map<Class<?>, IsisBeanMetaData> introspectableTypesByClass = _Maps.newHashMap();
 
@@ -96,9 +102,8 @@ implements IsisBeanTypeRegistry {
     }
 
     @Override
-    public Optional<BeanSort> lookupBeanSortByIntrospectableType(Class<?> type) {
-        return Optional.ofNullable(introspectableTypesByClass.get(type))
-                .map(IsisBeanMetaData::getBeanSort);
+    public Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type) {
+        return Optional.ofNullable(introspectableTypesByClass.get(type));
     }
     
     // -- ITERATORS
@@ -108,9 +113,10 @@ implements IsisBeanTypeRegistry {
         return _NullSafe.stream(introspectableTypes);
     }
     
-    // -- INIT
+    // -- CONSTRUCTOR
     
-    void setIntrospectableTypes(Can<IsisBeanMetaData> introspectableTypes) {
+    @Inject @Named("isis.bean-meta-data")
+    public IsisBeanTypeRegistryDefault(final @NonNull Can<IsisBeanMetaData> introspectableTypes) {
         this.introspectableTypes = introspectableTypes;
         clear();
         

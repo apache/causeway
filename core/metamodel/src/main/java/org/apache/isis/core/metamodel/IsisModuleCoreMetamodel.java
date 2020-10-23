@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
+import org.apache.isis.core.metamodel.specloader.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.ProgrammingModelServiceDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
@@ -95,6 +96,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ServiceRegistryDefault.class,
         TableColumnOrderServiceDefault.class,
         TitleServiceDefault.class,
+        IsisBeanTypeRegistryDefault.class,
         SpecificationLoaderDefault.class,
 
         // @Repository's

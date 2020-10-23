@@ -22,15 +22,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.services.metamodel.BeanSort;
-
 /**
- * Holds the set of domain services, persistent entities and fixture scripts etc.
+ * Holds the set of domain services, persistent entities and fixture scripts etc., but not values.
  * @since 2.0
  */
 public interface IsisBeanTypeRegistry {
     
-    Optional<BeanSort> lookupBeanSortByIntrospectableType(Class<?> type);
+    Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type);
     Stream<IsisBeanMetaData> streamIntrospectableTypes();
     
     Set<Class<?>> getManagedBeansContributing();
@@ -42,9 +40,12 @@ public interface IsisBeanTypeRegistry {
 
     void veto(Class<?> type);
     
+    /**
+     * clears the distinct categories of bean sorts
+     */
     void clear();
 
-    // -- FILTER
+    // -- LOOKUPS
     
     /**
      * If given type is part of the meta-model and is available for injection, 
@@ -64,12 +65,5 @@ public interface IsisBeanTypeRegistry {
     default boolean isContributingManagedBean(Class<?> type) {
         return lookupManagedBeanNameForType(type).isPresent();
     }
-    
-    // -- FACTORY
-    
-    public static IsisBeanTypeRegistry createInstance() {
-        return new IsisBeanTypeRegistryImpl();
-    }
-
 
 }

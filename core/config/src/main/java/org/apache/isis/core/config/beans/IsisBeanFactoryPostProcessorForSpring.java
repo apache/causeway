@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.commons.collections.Can;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -56,9 +57,6 @@ implements BeanFactoryPostProcessor {
     
     private final IsisComponentScanInterceptor isisComponentScanInterceptor = 
             IsisComponentScanInterceptor.createInstance(isisBeanTypeClassifier);
-    
-    private final IsisBeanTypeRegistry isisBeanTypeRegistry = 
-            IsisBeanTypeRegistry.createInstance();
     
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -100,14 +98,6 @@ implements BeanFactoryPostProcessor {
             
         }
         
-        ((IsisBeanTypeRegistryImpl)isisBeanTypeRegistry)
-            .setIntrospectableTypes(isisComponentScanInterceptor.getAndDrainIntrospectableTypes());
-        
-    }
-    
-    @Bean(destroyMethod = "clear")
-    public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
-        return isisBeanTypeRegistry;
     }
     
     @Bean
@@ -115,9 +105,9 @@ implements BeanFactoryPostProcessor {
         return isisBeanTypeClassifier;
     }
     
-    @Bean
-    public IsisComponentScanInterceptor getIsisComponentScanInterceptor() {
-        return isisComponentScanInterceptor;
+    @Bean("isis.bean-meta-data")
+    public Can<IsisBeanMetaData> getIsisComponentScanInterceptor() {
+        return isisComponentScanInterceptor.getAndDrainIntrospectableTypes();
     }
     
 
