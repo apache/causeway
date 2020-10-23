@@ -244,6 +244,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - categorizing types from class-path scan");
 
         val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
+        val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         isisBeanTypeRegistry.streamIntrospectableTypes()
         .forEach(type->{
@@ -259,13 +260,16 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             
             knownSpecs.add(spec);
 
-            if(sort.isManagedBean() || sort.isEntity() || sort.isViewModel() || sort.isMixin()) {
+            if(sort.isManagedBean() || sort.isEntity() || sort.isViewModel() ) {
                 domainObjectSpecs.add(spec);   
+            } else if(sort.isMixin()) {
+                mixinSpecs.add(spec);
             }
 
         });
 
-
+        //XXX[ISIS-2382] when parallel introspecting, make sure we have the mixins before their holders
+        
         SpecificationLoaderDefault_debug.logBefore(log, cache, knownSpecs);
 
         log.info(" - introspecting {} type hierarchies", knownSpecs.size());
@@ -274,8 +278,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
         introspect(Can.ofCollection(valueTypeSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
         log.info(" - introspecting {} mixins", isisBeanTypeRegistry.getMixinTypes().size());
+        introspect(Can.ofCollection(mixinSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
+        log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
         log.info(" - introspecting {}/{} entities (JDO/JPA)",
                 isisBeanTypeRegistry.getEntityTypesJdo().size(),
                 isisBeanTypeRegistry.getEntityTypesJpa().size());
@@ -287,7 +293,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(isFullIntrospect()) {
             val snapshot = cache.snapshotSpecs();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            introspect(snapshot, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         }
         
         log.info(" - running remaining validators");
