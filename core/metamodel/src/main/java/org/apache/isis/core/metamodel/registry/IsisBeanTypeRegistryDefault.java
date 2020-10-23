@@ -61,8 +61,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
 
     // -- DISTINCT CATEGORIES OF BEAN SORTS
     
-    private final Map<Class<?>, String> managedBeanNamesByType = new HashMap<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> managedBeansContributing = new HashSet<>();
+    @Getter(onMethod_ = {@Override}) private final Map<Class<?>, IsisBeanMetaData> managedBeansContributing = new HashMap<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJpa = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJdo = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> mixinTypes = new HashSet<>();
@@ -82,7 +81,8 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
         if(vetoedTypes.contains(type)) { // vetos are coming from the spec-loader during init
             return Optional.empty();
         }
-        return Optional.ofNullable(managedBeanNamesByType.get(type));
+        return Optional.ofNullable(managedBeansContributing.get(type))
+                .map(IsisBeanMetaData::getBeanName);
     }
 
     @Override
@@ -111,8 +111,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
             
             switch (type.getBeanSort()) {
             case MANAGED_BEAN_CONTRIBUTING:
-                managedBeansContributing.add(cls);
-                managedBeanNamesByType.put(cls, type.getBeanName());
+                managedBeansContributing.put(cls, type);
                 return;
             case MIXIN:
                 mixinTypes.add(cls);

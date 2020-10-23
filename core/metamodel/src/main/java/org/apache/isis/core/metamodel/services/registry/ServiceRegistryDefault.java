@@ -84,7 +84,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     private Map<String, _ManagedBeanAdapter> enumerateManagedBeans() {
         
         val managedBeanAdapterByName = _Maps.<String, _ManagedBeanAdapter>newHashMap();
-        val managedBeansContributing = isisBeanTypeRegistry.getManagedBeansContributing();
+        val managedBeansContributing = isisBeanTypeRegistry.getManagedBeansContributing().keySet();
         
         isisSystemEnvironment.getIocContainer().streamAllBeans()
         .filter(_NullSafe::isPresent)

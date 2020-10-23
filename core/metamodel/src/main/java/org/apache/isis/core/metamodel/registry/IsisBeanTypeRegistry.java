@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.registry;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -33,7 +34,7 @@ public interface IsisBeanTypeRegistry {
     Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type);
     Stream<IsisBeanMetaData> streamIntrospectableTypes();
     
-    Set<Class<?>> getManagedBeansContributing();
+    Map<Class<?>, IsisBeanMetaData> getManagedBeansContributing();
     Set<Class<?>> getEntityTypesJdo();
     Set<Class<?>> getEntityTypesJpa();
     Set<Class<?>> getMixinTypes();
