@@ -64,27 +64,12 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
     
     private final Map<Class<?>, String> managedBeanNamesByType = new HashMap<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> managedBeansContributing = new HashSet<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> managedBeansNotContributing = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJpa = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJdo = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> viewModelTypes = new HashSet<>();
     private final Set<Class<?>> vetoedTypes = _Sets.newConcurrentHashSet();
     
-    private final Can<Set<? extends Class<? extends Object>>> allCategorySets = Can.of(
-            entityTypesJpa,
-            entityTypesJdo,
-            mixinTypes,
-            viewModelTypes,
-            vetoedTypes
-            );
-
-    @Override
-    public void clear() {
-        managedBeanNamesByType.clear();
-        introspectableTypesByClass.clear();
-        allCategorySets.forEach(Set::clear);
-    }
     
     @Override
     public void veto(Class<?> type) {
@@ -118,7 +103,6 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
     @Inject @Named("isis.bean-meta-data")
     public IsisBeanTypeRegistryDefault(final @NonNull Can<IsisBeanMetaData> introspectableTypes) {
         this.introspectableTypes = introspectableTypes;
-        clear();
         
         introspectableTypes.forEach(type->{
             
@@ -129,10 +113,6 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
             switch (type.getBeanSort()) {
             case MANAGED_BEAN_CONTRIBUTING:
                 managedBeansContributing.add(cls);
-                managedBeanNamesByType.put(cls, type.getBeanName());
-                return;
-            case MANAGED_BEAN_NOT_CONTRIBUTING:
-                managedBeansNotContributing.add(cls);
                 managedBeanNamesByType.put(cls, type.getBeanName());
                 return;
             case MIXIN:
@@ -149,6 +129,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
                 return;
             
             // skip introspection for these
+            case MANAGED_BEAN_NOT_CONTRIBUTING:
             case COLLECTION:
             case VALUE:
             case UNKNOWN:

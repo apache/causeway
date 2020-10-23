@@ -84,10 +84,11 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     private Map<String, _ManagedBeanAdapter> enumerateManagedBeans() {
         
         val managedBeanAdapterByName = _Maps.<String, _ManagedBeanAdapter>newHashMap();
-
+        val managedBeansContributing = isisBeanTypeRegistry.getManagedBeansContributing();
+        
         isisSystemEnvironment.getIocContainer().streamAllBeans()
         .filter(_NullSafe::isPresent)
-        .filter(bean->isisBeanTypeRegistry.isContributingManagedBean(bean.getBeanClass())) // do not register unknown sort
+        .filter(bean->managedBeansContributing.contains(bean.getBeanClass())) // do not register unknown sort
         .forEach(bean->{
             val id = bean.getId();
             managedBeanAdapterByName.put(id, bean);

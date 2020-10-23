@@ -38,6 +38,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
+import org.apache.isis.core.metamodel.specloader.IsisBeanTypeRegistryDefault;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingStereotypes;
 import org.apache.isis.testdomain.model.stereotypes.MyObject;
@@ -55,6 +56,7 @@ import lombok.val;
                 IsisSystemEnvironment.class,
                 MetaModelContexts.class,
                 IsisBeanFactoryPostProcessorForSpring.class,
+                IsisBeanTypeRegistryDefault.class,
                 Configuration_usingStereotypes.class
         },
         properties = {

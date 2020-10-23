@@ -37,10 +37,12 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
+import org.apache.isis.core.metamodel.specloader.IsisBeanTypeRegistryDefault;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
         IsisModuleCoreConfig.class,
+        IsisBeanTypeRegistryDefault.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
         ServiceInjectorLegacyTest.Producers.class,

@@ -32,7 +32,6 @@ public interface IsisBeanTypeRegistry {
     Stream<IsisBeanMetaData> streamIntrospectableTypes();
     
     Set<Class<?>> getManagedBeansContributing();
-    Set<Class<?>> getManagedBeansNotContributing();
     Set<Class<?>> getEntityTypesJdo();
     Set<Class<?>> getEntityTypesJpa();
     Set<Class<?>> getMixinTypes();
@@ -40,11 +39,6 @@ public interface IsisBeanTypeRegistry {
 
     void veto(Class<?> type);
     
-    /**
-     * clears the distinct categories of bean sorts
-     */
-    void clear();
-
     // -- LOOKUPS
     
     /**
@@ -56,14 +50,6 @@ public interface IsisBeanTypeRegistry {
      * @return
      */
     Optional<String> lookupManagedBeanNameForType(Class<?> type);
-    
-    /**
-     * Whether given type is part of the meta-model and is available for injection 
-     * (is a <em>Managed Bean</em>). 
-     * @param type
-     */
-    default boolean isContributingManagedBean(Class<?> type) {
-        return lookupManagedBeanNameForType(type).isPresent();
-    }
+
 
 }
