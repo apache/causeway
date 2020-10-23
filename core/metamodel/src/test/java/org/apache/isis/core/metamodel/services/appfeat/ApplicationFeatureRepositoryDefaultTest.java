@@ -41,6 +41,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -262,7 +263,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 will(returnValue(_Lists.newArrayList().stream()));
 
                 allowing(mockSpecificationLoader).snapshotSpecifications();
-                will(returnValue(_Lists.newArrayList()));
+                will(returnValue(Can.empty()));
             }});
 
         }
@@ -304,7 +305,8 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
 
             // when
-            final ApplicationFeatureId applicationFeatureId = applicationFeatureRepository.addClassParent(classFeatureId);
+            final ApplicationFeatureId applicationFeatureId = 
+                    applicationFeatureRepository.addClassParent(classFeatureId);
 
             // then
             Assert.assertThat(applicationFeatureId, is(equalTo(packageId)));
