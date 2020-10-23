@@ -75,8 +75,6 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -306,33 +304,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return validationResult.get();
     }
 
-    private _Lazy<ValidationFailures> validationResult = 
-            _Lazy.threadSafe(this::collectFailuresFromMetaModel);
-
-    private final AtomicBoolean validationInProgress = new AtomicBoolean(false);
-    private final BlockingQueue<ObjectSpecification> validationQueue = new LinkedBlockingQueue<>();
-    
-    private ValidationFailures collectFailuresFromMetaModel() {
-        validationInProgress.set(true);               
-        val failures = new ValidationFailures();
-        programmingModel.streamValidators()
-        .map(MetaModelValidatorAbstract.class::cast)
-        .forEach(validator -> {
-            log.debug("Running validator: {}", validator);
-            try {
-                validator.collectFailuresInto(failures);
-            } catch (Throwable t) {
-                log.error(t);
-                throw t;
-            } finally {
-                log.debug("Done validator: {}", validator);
-            }
-        });
-        log.debug("Done");
-        validationInProgress.set(false);
-        return failures;
-    }
-
     @Override
     public void disposeMetaModel() {
         cache.clear();
@@ -377,53 +348,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return true;
     }
 
-    @Nullable
-    private ObjectSpecification loadSpecification(
-            final @Nullable Class<?> type,
-            final Function<Class<?>, BeanSort> beanClassifier,
-            final IntrospectionState upTo) {
-
-        if(type==null) {
-            return null;
-        }
-
-        requires(upTo, "upTo");
-        
-        val substitute = classSubstitutorRegistry.getSubstitution(type);
-        if (substitute.isNeverIntrospect()) {
-            return null; // never inspect
-        }
-        
-        val substitutedType = substitute.apply(type);
-        
-        final ObjectSpecification cachedSpec;
-        
-        // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
-        synchronized (cache) {
-            cachedSpec = cache.computeIfAbsent(substitutedType, __->
-                createSpecification(substitutedType, beanClassifier.apply(type)));
-        }
-
-        cachedSpec.introspectUpTo(upTo);
-
-        return cachedSpec;
-    }
-
-    @Nullable
-    private ObjectSpecification primeSpecification(
-            final @Nullable Class<?> type,
-            final @NonNull BeanSort sort) {
-        return loadSpecification(type, __->sort, IntrospectionState.NOT_INTROSPECTED);
-        
-    }
-
-    
     @Override @Nullable
     public ObjectSpecification loadSpecification(
             final @Nullable Class<?> type,
-            final IntrospectionState upTo) {
+            final @NonNull IntrospectionState upTo) {
 
-        return loadSpecification(
+        return _loadSpecification(
                 type, 
                 __->isisBeanTypeRegistry
                     .lookupIntrospectableType(type)
@@ -492,22 +422,78 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId) {
-        val spec = cache.getByObjectType(objectSpecId);
-        if(spec!=null) {
-            return spec;
-        }
-        // fallback
-        return loadSpecification(objectSpecId, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-    }
-    
-    @Override
     public Class<?> lookupType(ObjectSpecId objectSpecId) {
         return cache.resolveType(objectSpecId);
     }
+    
+    // -- VALIDATION STUFF
+    
+    private _Lazy<ValidationFailures> validationResult = 
+            _Lazy.threadSafe(this::collectFailuresFromMetaModel);
 
+    private final AtomicBoolean validationInProgress = new AtomicBoolean(false);
+    private final BlockingQueue<ObjectSpecification> validationQueue = new LinkedBlockingQueue<>();
+    
+    private ValidationFailures collectFailuresFromMetaModel() {
+        validationInProgress.set(true);               
+        val failures = new ValidationFailures();
+        programmingModel.streamValidators()
+        .map(MetaModelValidatorAbstract.class::cast)
+        .forEach(validator -> {
+            log.debug("Running validator: {}", validator);
+            try {
+                validator.collectFailuresInto(failures);
+            } catch (Throwable t) {
+                log.error(t);
+                throw t;
+            } finally {
+                log.debug("Done validator: {}", validator);
+            }
+        });
+        log.debug("Done");
+        validationInProgress.set(false);
+        return failures;
+    }
 
     // -- HELPER
+    
+    @Nullable
+    private ObjectSpecification primeSpecification(
+            final @Nullable Class<?> type,
+            final @NonNull BeanSort sort) {
+        return _loadSpecification(type, __->sort, IntrospectionState.NOT_INTROSPECTED);
+        
+    }
+    
+    @Nullable
+    private ObjectSpecification _loadSpecification(
+            final @Nullable Class<?> type,
+            final @NonNull Function<Class<?>, BeanSort> beanClassifier,
+            final @NonNull IntrospectionState upTo) {
+
+        if(type==null) {
+            return null;
+        }
+
+        val substitute = classSubstitutorRegistry.getSubstitution(type);
+        if (substitute.isNeverIntrospect()) {
+            return null; // never inspect
+        }
+        
+        val substitutedType = substitute.apply(type);
+        
+        final ObjectSpecification cachedSpec;
+        
+        // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
+        synchronized (cache) {
+            cachedSpec = cache.computeIfAbsent(substitutedType, __->
+                createSpecification(substitutedType, beanClassifier.apply(type)));
+        }
+
+        cachedSpec.introspectUpTo(upTo);
+
+        return cachedSpec;
+    }
     
     private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {
         if(isMetamodelFullyIntrospected() 

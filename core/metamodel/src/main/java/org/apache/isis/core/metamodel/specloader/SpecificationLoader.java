@@ -31,13 +31,14 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
  * Builds the meta-model, utilizing an instance of {@link ProgrammingModel}
  */
 public interface SpecificationLoader {
-    
+   
     /**
      * Creates the meta-model, that is the set of {@link ObjectSpecification}s.
      * @see {@link #disposeMetaModel()}
@@ -81,12 +82,6 @@ public interface SpecificationLoader {
      */
     void forEach(Consumer<ObjectSpecification> onSpec);
 
-    /**
-     * Lookup a specification that has bean loaded before.
-     * @param objectSpecId
-     */
-    ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId);
-
     void reloadSpecification(Class<?> domainType);
 
     /**
@@ -98,7 +93,8 @@ public interface SpecificationLoader {
      * 
      * @return {@code null} if {@code domainType==null}, or if the type should be ignored.
      */
-    ObjectSpecification loadSpecification(@Nullable Class<?> domainType, IntrospectionState upTo);
+    @Nullable
+    ObjectSpecification loadSpecification(@Nullable Class<?> domainType, @NonNull IntrospectionState upTo);
 
     /**
      * @param domainTypes
@@ -116,27 +112,35 @@ public interface SpecificationLoader {
 
     // -- SHORTCUTS
 
-    default ObjectSpecification loadSpecification(@Nullable final Class<?> domainType) {
+    @Nullable
+    default ObjectSpecification loadSpecification(@Nullable Class<?> domainType) {
         return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
     }
 
+    @Nullable
+    default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
+        return loadSpecification(objectSpecId, IntrospectionState.TYPE_INTROSPECTED);
+    }
+    
+    @Nullable
     default ObjectSpecification loadSpecification(
             @Nullable ObjectSpecId objectSpecId, 
-            @Nullable IntrospectionState introspectionState) {
+            @NonNull IntrospectionState introspectionState) {
 
         if(objectSpecId==null) {
             return null;
         }
         val type = lookupType(objectSpecId);
-        return introspectionState!=null 
-                ? loadSpecification(type, introspectionState)
-                : loadSpecification(type);
+        return loadSpecification(type, introspectionState);
     }
 
-    default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
-        return loadSpecification(objectSpecId, null);
+    /**
+     * Lookup a specification that has bean loaded before.
+     * @param objectSpecId
+     */
+    @Nullable
+    default ObjectSpecification lookupBySpecIdElseLoad(@Nullable ObjectSpecId objectSpecId) {
+        return loadSpecification(objectSpecId, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
-
-
     
 }
