@@ -48,8 +48,8 @@ import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -108,7 +108,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final IsisConfiguration isisConfiguration;
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final ServiceRegistry serviceRegistry;
-    private final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    private final IsisBeanTypeClassifier isisBeanTypeClassifier;
+    private final IsisBeanTypeRegistry isisBeanTypeRegistry;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final ValueTypeRegistry valueTypeRegistry;
 
@@ -122,7 +123,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final SpecificationCacheDefault<ObjectSpecification> cache = new SpecificationCacheDefault<>();
 
     /**
-     * We only ever mark the metamodel as fully introspected if in {@link #isFullIntrospect() full} introspection mode.
+     * We only ever mark the meta-model as fully introspected if in {@link #isFullIntrospect() full} 
+     * introspection mode.
      */
     @Getter @Setter
     private boolean metamodelFullyIntrospected = false;
@@ -133,7 +135,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final IsisConfiguration isisConfiguration,
             final IsisSystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
-            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder,
+            final IsisBeanTypeClassifier isisBeanTypeClassifier,
+            final IsisBeanTypeRegistry isisBeanTypeRegistry,
             final ValueTypeRegistry valueTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this(
@@ -141,7 +144,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 isisConfiguration,
                 isisSystemEnvironment,
                 serviceRegistry,
-                isisBeanTypeRegistryHolder, valueTypeRegistry, classSubstitutorRegistry);
+                isisBeanTypeClassifier,
+                isisBeanTypeRegistry, 
+                valueTypeRegistry, 
+                classSubstitutorRegistry);
     }
 
     SpecificationLoaderDefault(
@@ -149,7 +155,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final IsisConfiguration isisConfiguration,
             final IsisSystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
-            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder,
+            final IsisBeanTypeClassifier isisBeanTypeClassifier,
+            final IsisBeanTypeRegistry isisBeanTypeRegistry,
             final ValueTypeRegistry valueTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this.programmingModel = programmingModel;
@@ -157,7 +164,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         this.isisConfiguration = isisConfiguration;
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.serviceRegistry = serviceRegistry;
-        this.isisBeanTypeRegistryHolder = isisBeanTypeRegistryHolder;
+        this.isisBeanTypeClassifier = isisBeanTypeClassifier;
+        this.isisBeanTypeRegistry = isisBeanTypeRegistry;
         this.valueTypeRegistry = valueTypeRegistry;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
     }
@@ -168,11 +176,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final IsisSystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
             final ProgrammingModel programmingModel,
-            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+            final IsisBeanTypeClassifier isisBeanTypeClassifier,
+            final IsisBeanTypeRegistry isisBeanTypeRegistry) {
 
         val instance = new SpecificationLoaderDefault(
                 programmingModel, isisConfiguration, isisSystemEnvironment,
-                serviceRegistry, isisBeanTypeRegistryHolder,
+                serviceRegistry, isisBeanTypeClassifier, isisBeanTypeRegistry,
                 new ValueTypeRegistry(Collections.singletonList(new ValueTypeProviderDefault())),
                 new ClassSubstitutorRegistry(_Lists.of(
                         //new ClassSubstitutorForDomainObjects(),
@@ -210,8 +219,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         facetProcessor.init();
         postProcessor.init();
 
-        val typeRegistry = getIsisBeanTypeRegistry();
-
         val knownSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         val stopWatch = _Timing.now();
@@ -236,15 +243,15 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
 
-        typeRegistry.snapshotIntrospectableTypes().entrySet()
-        .forEach(entry->{
+        isisBeanTypeRegistry.streamIntrospectableTypes()
+        .forEach(type->{
 
-            val type = entry.getKey();
-            val sort = entry.getValue();
+            val cls = type.getCorrespondingClass();
+            val sort = type.getBeanSort();
             
-            val spec = primeSpecification(type, sort);
+            val spec = primeSpecification(cls, sort);
             if(spec==null) {
-                typeRegistry.veto(type);
+                isisBeanTypeRegistry.veto(cls);
                 return;
             } 
             
@@ -265,10 +272,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
         introspect(valueTypeSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        log.info(" - introspecting {} managed beans contributing (aka domain services)", typeRegistry.getManagedBeansContributing().size());
-        log.info(" - introspecting {} mixins", typeRegistry.getMixinTypes().size());
-        log.info(" - introspecting {} entities", typeRegistry.getEntityTypes().size());
-        log.info(" - introspecting {} view models", typeRegistry.getViewModelTypes().size());
+        log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
+        log.info(" - introspecting {} mixins", isisBeanTypeRegistry.getMixinTypes().size());
+        log.info(" - introspecting {} entities", isisBeanTypeRegistry.getEntityTypes().size());
+        log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
         introspect(domainObjectSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         SpecificationLoaderDefault_debug.logAfter(log, cache, knownSpecs);
@@ -414,13 +421,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final @Nullable Class<?> type,
             final IntrospectionState upTo) {
 
-        val typeRegistry = getIsisBeanTypeRegistry();
-        
         return loadSpecification(
                 type, 
-                __->typeRegistry
+                __->isisBeanTypeRegistry
                     .lookupBeanSortByIntrospectableType(type)
-                    .orElseGet(()->typeRegistry.quickClassify(type).getBeanSort()), 
+                    .orElseGet(()->isisBeanTypeClassifier.classify(type).getBeanSort()), 
                 upTo);
     }
 
@@ -501,16 +506,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     // -- HELPER
     
-    private IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
-        return isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-    }
-    
     private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {
         if(isMetamodelFullyIntrospected() 
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
-            val typeRegistry = getIsisBeanTypeRegistry();
-            val category = typeRegistry.quickClassify(cls);
+            val category = isisBeanTypeClassifier.classify(cls);
             val sort = category.getBeanSort();
 
 //          ISIS-2256:
@@ -546,15 +546,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         // ... and create the specs
 
-        val typeRegistry = getIsisBeanTypeRegistry();
-
-        val managedBeanNameIfAny = typeRegistry.getManagedBeanNameForType(cls);
         val objectSpec = new ObjectSpecificationDefault(
                         cls,
                         beanSort,
                         metaModelContext,
                         facetProcessor,
-                        managedBeanNameIfAny.orElse(null),
+                        isisBeanTypeRegistry.lookupManagedBeanNameForType(cls).orElse(null),
                         postProcessor,
                         classSubstitutorRegistry);
 

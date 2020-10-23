@@ -33,9 +33,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
 import org.apache.isis.testdomain.Smoketest;
@@ -70,7 +70,7 @@ class AutoConfigurationTest {
     
     @Inject private ApplicationContext applicationContext;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     //XXX for debugging and experimenting
     @Component
@@ -98,11 +98,9 @@ class AutoConfigurationTest {
     @Test
     void domainObjects_shouldBeDiscovered() {
 
-        val registry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-        val discoveredTypes = registry.snapshotIntrospectableTypes().keySet();
-        
         for(val cls : nonManaged()) {
-            assertTrue(discoveredTypes.contains(cls));
+            val sort = isisBeanTypeRegistry.lookupBeanSortByIntrospectableType(cls);
+            assertTrue(sort.isPresent());
         }
         
     }

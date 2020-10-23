@@ -39,12 +39,11 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
-import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -956,8 +955,7 @@ implements ObjectSpecification {
     
     protected IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
         return getMetaModelContext().getServiceRegistry()
-                .lookupServiceElseFail(IsisBeanTypeRegistryHolder.class)
-                .getIsisBeanTypeRegistry();
+                .lookupServiceElseFail(IsisBeanTypeRegistry.class);
     }
 
 }

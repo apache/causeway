@@ -28,7 +28,7 @@ import lombok.Value;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of")
-final class TypeMetaData {
+final class ScannedTypeMetaData {
 
     /**
      * Fully qualified name of the underlying class.
@@ -43,22 +43,22 @@ final class TypeMetaData {
     /**
      * Name override, applied only if not empty. 
      */
-    @Getter @Setter
-    private String beanNameOverride;
+    @Getter @Setter private String beanNameOverride;
     
     /**
      * Whether this type should be made available to resolve injection points.  
      */
-    @Getter @Setter
-    private boolean injectable = true;
+    @Getter @Setter private boolean injectable = true;
     
     @Getter(lazy=true)
     private final ClassOrFailure underlyingClassOrFailure = resolveClass();
     
+    // -- UTILITY
+    
     public String getEffectiveBeanName() {
         return _Strings.isNullOrEmpty(beanNameOverride)
                 ? proposedBeanName 
-                        : beanNameOverride;
+                : beanNameOverride;
     }
     
     // -- HELPER

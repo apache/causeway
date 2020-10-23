@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
@@ -54,13 +54,13 @@ public class JdoPersistenceLifecycleService {
 
     @Inject MetaModelContext metaModelContext;
     @Inject PersistenceSessionFactory persistenceSessionFactory;
-    @Inject IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     @PostConstruct
     public void postConstr() {
         if(log.isDebugEnabled()) {
             log.debug("init entity types {}", 
-                    isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry().getEntityTypes());
+                    isisBeanTypeRegistry.getEntityTypes());
         }
     }
 

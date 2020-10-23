@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 
 import lombok.NonNull;
 
@@ -39,8 +38,8 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
     private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     @Inject
-    public ClassSubstitutorForDomainObjects(IsisBeanTypeRegistryHolder beanTypeRegistryHolder) {
-        this.isisBeanTypeRegistry = beanTypeRegistryHolder.getIsisBeanTypeRegistry();
+    public ClassSubstitutorForDomainObjects(IsisBeanTypeRegistry isisBeanTypeRegistry) {
+        this.isisBeanTypeRegistry = isisBeanTypeRegistry;
     }
     
     @Override

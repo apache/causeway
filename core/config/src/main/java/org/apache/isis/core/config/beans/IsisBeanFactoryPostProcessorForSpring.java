@@ -24,13 +24,13 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.ViewModel;
 
-import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -49,16 +49,21 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisConfig.IsisBeanFactoryPostProcessorForSpring")
 @Log4j2
 public class IsisBeanFactoryPostProcessorForSpring
-implements BeanFactoryPostProcessor, IsisBeanTypeRegistryHolder {
+implements BeanFactoryPostProcessor {
 
-    @Getter(onMethod = @__(@Override))
-    private final IsisBeanTypeRegistry isisBeanTypeRegistry = new IsisBeanTypeRegistry();
+    private final IsisBeanTypeClassifier isisBeanTypeClassifier = 
+            IsisBeanTypeClassifier.createInstance();
+    
+    private final IsisComponentScanInterceptor isisComponentScanInterceptor = 
+            IsisComponentScanInterceptor.createInstance(isisBeanTypeClassifier);
+    
+    private final IsisBeanTypeRegistry isisBeanTypeRegistry = 
+            IsisBeanTypeRegistry.createInstance();
     
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         
         val registry = (BeanDefinitionRegistry) beanFactory;
-        val interceptor = isisBeanTypeRegistry;
         
         for (String beanDefinitionName : registry.getBeanDefinitionNames()) {
             
@@ -66,17 +71,17 @@ implements BeanFactoryPostProcessor, IsisBeanTypeRegistryHolder {
             
             val beanDefinition = registry.containsBeanDefinition(beanDefinitionName) 
                     ? registry.getBeanDefinition(beanDefinitionName) 
-                            : null;
+                    : null;
                     
             if(beanDefinition==null || beanDefinition.getBeanClassName() == null) {
                 continue; // check next beanDefinition
             }
             
-            val typeMetaData = TypeMetaData.of(
+            val typeMetaData = ScannedTypeMetaData.of(
                     beanDefinition.getBeanClassName(),
                     beanDefinitionName);
             
-            interceptor.intercept(typeMetaData);
+            isisComponentScanInterceptor.intercept(typeMetaData);
             
             if(typeMetaData.isInjectable()) {
                 
@@ -95,6 +100,25 @@ implements BeanFactoryPostProcessor, IsisBeanTypeRegistryHolder {
             
         }
         
+        ((IsisBeanTypeRegistryImpl)isisBeanTypeRegistry)
+            .setIntrospectableTypes(isisComponentScanInterceptor.getAndDrainIntrospectableTypes());
+        
     }
+    
+    @Bean(destroyMethod = "clear")
+    public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
+        return isisBeanTypeRegistry;
+    }
+    
+    @Bean
+    public IsisBeanTypeClassifier getIsisBeanTypeClassifier() {
+        return isisBeanTypeClassifier;
+    }
+    
+    @Bean
+    public IsisComponentScanInterceptor getIsisComponentScanInterceptor() {
+        return isisComponentScanInterceptor;
+    }
+    
 
 }

@@ -18,137 +18,32 @@
  */
 package org.apache.isis.core.config.beans;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import javax.enterprise.inject.Vetoed;
-
-import org.springframework.stereotype.Component;
-
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
-
-import static org.apache.isis.commons.internal.base._With.requires;
-import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Value;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Holds the set of domain services, persistent entities and fixture scripts etc.
  * @since 2.0
  */
-@NoArgsConstructor @Log4j2
-public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor, AutoCloseable {
-
-    /**
-     * Inbox for introspection, as used by the SpecificationLoader
-     */
-    private final Map<Class<?>, BeanSort> introspectableTypes = new HashMap<>();
-    private final Can<IsisBeanTypeClassifier> classifierPlugins = IsisBeanTypeClassifier.get();
-
-    // -- DISTINCT CATEGORIES OF BEAN SORTS
+public interface IsisBeanTypeRegistry {
     
-    private final Map<Class<?>, String> managedBeanNamesByType = new HashMap<>();
-    @Getter private final Set<Class<?>> managedBeansContributing = new HashSet<>();
-    @Getter private final Set<Class<?>> managedBeansNotContributing = new HashSet<>();
-    @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
-    @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
-    @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
-    @Getter private final Set<Class<?>> vetoedTypes = _Sets.newConcurrentHashSet();
+    Optional<BeanSort> lookupBeanSortByIntrospectableType(Class<?> type);
+    Stream<IsisBeanMetaData> streamIntrospectableTypes();
     
-    private final List<Set<? extends Class<? extends Object>>> allCategorySets = _Lists.of(
-            entityTypes,
-            mixinTypes,
-            viewModelTypes,
-            vetoedTypes
-            );
+    Set<Class<?>> getManagedBeansContributing();
+    Set<Class<?>> getManagedBeansNotContributing();
+    Set<Class<?>> getEntityTypes();
+    Set<Class<?>> getMixinTypes();
+    Set<Class<?>> getViewModelTypes();
 
-    @Override
-    public void close() {
-        managedBeanNamesByType.clear();
-        introspectableTypes.clear();
-        allCategorySets.forEach(Set::clear);
-    }
-
-    public Map<Class<?>, BeanSort> snapshotIntrospectableTypes() {
-
-        final Map<Class<?>, BeanSort> defensiveCopy;
-
-        synchronized (introspectableTypes) {
-            defensiveCopy = new HashMap<>(introspectableTypes);
-        }
-
-        if(log.isDebugEnabled()) {
-            defensiveCopy.forEach((k, v)->{
-                log.debug("to be introspected: {} [{}]", k.getName(), v.name());
-            });
-        }
-
-        return defensiveCopy;
-    }
-
-    public Optional<BeanSort> lookupBeanSortByIntrospectableType(Class<?> type) {
-        synchronized (introspectableTypes) {
-            return Optional.ofNullable(introspectableTypes.get(type));
-        }
-    }
+    void veto(Class<?> type);
     
-    public void veto(Class<?> type) {
-        vetoedTypes.add(type);
-    }
+    void clear();
 
     // -- FILTER
-    
-    @Override
-    public void intercept(TypeMetaData typeMeta) {
-        
-        val classOrFailure = typeMeta.getUnderlyingClassOrFailure();
-        
-        if(classOrFailure.isFailure()) {
-            log.warn(classOrFailure.getFailure());
-            return;
-        }
-        
-        val type = classOrFailure.getUnderlyingClass();
-        val classification = quickClassify(type);
-        
-        val delegated = classification.isDelegateLifecycleManagement();
-        typeMeta.setInjectable(delegated);
-        if(delegated) {
-            typeMeta.setBeanNameOverride(classification.getExplicitObjectType());    
-        }
-        
-        val beanSort = classification.getBeanSort();
-        
-        if(beanSort.isToBeIntrospected()) {
-            addIntrospectableType(beanSort, typeMeta);
-            
-            if(log.isDebugEnabled()) {
-                log.debug("to-be-introspected: {} [{}]",                        
-                                type,
-                                beanSort.name());
-            }
-        }
-        
-    }
-    
     
     /**
      * If given type is part of the meta-model and is available for injection, 
@@ -158,175 +53,22 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
      * @param type
      * @return
      */
-    public Optional<String> getManagedBeanNameForType(Class<?> type) {
-        if(vetoedTypes.contains(type)) { // vetos are coming from the spec-loader during init
-            return Optional.empty();
-        }
-        return Optional.ofNullable(managedBeanNamesByType.get(type));
-    }
+    Optional<String> lookupManagedBeanNameForType(Class<?> type);
     
     /**
      * Whether given type is part of the meta-model and is available for injection 
      * (is a <em>Managed Bean</em>). 
      * @param type
      */
-    public boolean isManagedBean(Class<?> type) {
-        return getManagedBeanNameForType(type).isPresent();
+    default boolean isContributingManagedBean(Class<?> type) {
+        return lookupManagedBeanNameForType(type).isPresent();
     }
     
-    // -- HELPER
-
-    private void addIntrospectableType(BeanSort sort, TypeMetaData typeMeta) {
-        val type = typeMeta.getUnderlyingClassOrFailure().getUnderlyingClass();
-        synchronized (introspectableTypes) {
-            introspectableTypes.put(type, sort);
-            
-            switch (sort) {
-            case MANAGED_BEAN_CONTRIBUTING:
-                managedBeansContributing.add(type);
-                managedBeanNamesByType.put(type, typeMeta.getEffectiveBeanName());
-                return;
-            case MANAGED_BEAN_NOT_CONTRIBUTING:
-                managedBeansNotContributing.add(type);
-                managedBeanNamesByType.put(type, typeMeta.getEffectiveBeanName());
-                return;
-            case MIXIN:
-                mixinTypes.add(type);
-                return;
-            case ENTITY:
-                entityTypes.add(type);
-                return;
-            case VIEW_MODEL:
-                viewModelTypes.add(type);
-                return;
-            
-            // skip introspection for these
-            case COLLECTION:
-            case VALUE:
-            case UNKNOWN:
-                return;
-            }
-            
-        }
-    }
+    // -- FACTORY
     
-    @Value(staticConstructor = "of")
-    public static class BeanClassification {
-        
-        BeanSort beanSort;
-        String explicitObjectType;
-        boolean delegateLifecycleManagement;
-        
-        public static BeanClassification delegated(BeanSort beanSort, String explicitObjectType) {
-            return of(beanSort, explicitObjectType, true);
-        }
-        
-        public static BeanClassification delegated(BeanSort beanSort) {
-            return delegated(beanSort, null);
-        }
-        
-        public static BeanClassification selfManaged(BeanSort beanSort, String explicitObjectType) {
-            return of(beanSort, explicitObjectType, false);
-        }
-        
-        public static BeanClassification selfManaged(BeanSort beanSort) {
-            return selfManaged(beanSort, null);
-        }
-        
+    public static IsisBeanTypeRegistry createInstance() {
+        return new IsisBeanTypeRegistryImpl();
     }
-    
-    public BeanClassification quickClassify(Class<?> type) {
-
-        requires(type, "type");
-        
-        if(findNearestAnnotation(type, Vetoed.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.UNKNOWN); // reject
-        }
-
-        val aDomainService = findNearestAnnotation(type, DomainService.class);
-        if(aDomainService.isPresent()) {
-            return BeanClassification
-                    .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING, objectType(aDomainService.get()));
-        }
-
-        // allow ServiceLoader plugins to have a say, eg. when classifying entity types
-        for(val classifier : classifierPlugins) {
-            val classification = classifier.classify(type);
-            if(classification!=null) {
-                return classification;
-            }
-        }
-
-
-        if(findNearestAnnotation(type, Mixin.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.MIXIN);
-        }
-
-        if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
-        }
-
-        if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {
-            return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
-        }
-
-        val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
-        if(aDomainObject!=null) {
-            switch (aDomainObject.nature()) {
-            case BEAN:
-                return BeanClassification.delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING, objectType(aDomainObject));
-            case MIXIN:
-                return BeanClassification.selfManaged(BeanSort.MIXIN);
-            case JDO_ENTITY:
-            case JPA_ENTITY:
-                return BeanClassification.selfManaged(BeanSort.ENTITY);
-            case EXTERNAL_ENTITY:
-            case INMEMORY_ENTITY:
-            case VIEW_MODEL:
-            case NOT_SPECIFIED:
-                //because object is not associated with a persistence context unless discovered above
-                return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
-            } 
-        }
-
-        if(findNearestAnnotation(type, Component.class).isPresent()) {
-            return BeanClassification.delegated(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING);
-        }
-        
-        if(Collection.class.isAssignableFrom(type)
-                || Can.class.isAssignableFrom(type)
-                || type.isArray()) {
-            return BeanClassification.selfManaged(BeanSort.COLLECTION);
-        }
-
-        if(Serializable.class.isAssignableFrom(type)) {
-            return BeanClassification.delegated(BeanSort.VALUE);
-        }
-
-        return BeanClassification.delegated(BeanSort.UNKNOWN);
-    }
-
-    private String objectType(DomainService aDomainService) {
-        if(aDomainService!=null) {
-            val objectType = aDomainService.objectType();
-            if(_Strings.isNotEmpty(objectType)) {
-                return objectType; 
-            }
-        }
-        return null;
-    }
-
-    private String objectType(DomainObject aDomainObject) {
-        if(aDomainObject!=null) {
-            val objectType = aDomainObject.objectType();
-            if(_Strings.isNotEmpty(objectType)) {
-                return objectType; 
-            }
-        }
-        return null;
-    }
-
-    
 
 
 }

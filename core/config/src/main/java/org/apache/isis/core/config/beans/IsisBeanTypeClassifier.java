@@ -18,14 +18,15 @@
  */
 package org.apache.isis.core.config.beans;
 
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.context._Plugin;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry.BeanClassification;
+
+import lombok.Value;
 
 /**
  * ServiceLoader SPI that allows for implementing instances to have a say during bean type scanning.
  * @since 2.0
- * @see IsisBeanTypeRegistry
  */
 public interface IsisBeanTypeClassifier {
 
@@ -38,10 +39,45 @@ public interface IsisBeanTypeClassifier {
      */
     BeanClassification classify(Class<?> type);
 
+    // -- FACTORY
+    
+    static IsisBeanTypeClassifier createInstance() {
+        return new IsisBeanTypeClassifierImpl();
+    }
+    
     // -- LOOKUP
 
     public static Can<IsisBeanTypeClassifier> get() {
         return Can.ofCollection(_Plugin.loadAll(IsisBeanTypeClassifier.class));
+    }
+    
+    // -- BEAN CLASSIFICATION RESULT
+    
+    @Value(staticConstructor = "of")
+    public static class BeanClassification {
+        
+        BeanSort beanSort;
+        String explicitObjectType;
+        boolean delegateLifecycleManagement;
+        
+        // -- FACTORIES
+        
+        public static BeanClassification delegated(BeanSort beanSort, String explicitObjectType) {
+            return of(beanSort, explicitObjectType, true);
+        }
+        
+        public static BeanClassification delegated(BeanSort beanSort) {
+            return delegated(beanSort, null);
+        }
+        
+        public static BeanClassification selfManaged(BeanSort beanSort, String explicitObjectType) {
+            return of(beanSort, explicitObjectType, false);
+        }
+        
+        public static BeanClassification selfManaged(BeanSort beanSort) {
+            return selfManaged(beanSort, null);
+        }
+        
     }
     
 }

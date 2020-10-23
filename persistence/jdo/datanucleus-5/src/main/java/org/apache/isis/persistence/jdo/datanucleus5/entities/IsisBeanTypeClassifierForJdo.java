@@ -22,7 +22,6 @@ import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry.BeanClassification;
 import org.apache.isis.core.metamodel.facets.Annotations;
 
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;

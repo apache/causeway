@@ -20,6 +20,10 @@ package org.apache.isis.core.config.beans;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.commons.collections.Can;
+
+import lombok.NonNull;
+
 /**
  * @apiNote implementing classes must not rely on IsisConfiguration or other provisioned 
  * services to be available; type classification happens before the post-construct phase
@@ -40,6 +44,15 @@ public interface IsisComponentScanInterceptor {
      * @apiNote implementing classes might have side effects, eg. intercept 
      * discovered types into a type registry
      */
-    void intercept(TypeMetaData type);
+    void intercept(ScannedTypeMetaData type);
+    
+    Can<IsisBeanMetaData> getAndDrainIntrospectableTypes();
+    
+    // -- FACTORIES
+
+    static IsisComponentScanInterceptor createInstance(
+            final @NonNull IsisBeanTypeClassifier isisBeanTypeClassifier) {
+        return new IsisComponentScanInterceptorImpl(isisBeanTypeClassifier);
+    }
     
 }

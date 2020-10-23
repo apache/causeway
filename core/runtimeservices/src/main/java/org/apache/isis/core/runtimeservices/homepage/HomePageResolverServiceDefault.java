@@ -29,9 +29,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 
 import lombok.val;
 
@@ -40,22 +40,22 @@ import lombok.val;
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private final FactoryService factoryService;
-    private final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    private final IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     private Optional<Class<?>> viewModelTypeForHomepage;
 
     @Inject
     public HomePageResolverServiceDefault(
             final FactoryService factoryService,
-            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+            final IsisBeanTypeRegistry isisBeanTypeRegistry) {
         
         this.factoryService = factoryService;
-        this.isisBeanTypeRegistryHolder = isisBeanTypeRegistryHolder;
+        this.isisBeanTypeRegistry = isisBeanTypeRegistry;
     }
 
     @PostConstruct
     public void init() {
-        val viewModelTypes = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry().getViewModelTypes();
+        val viewModelTypes = isisBeanTypeRegistry.getViewModelTypes();
         viewModelTypeForHomepage = viewModelTypes.stream()
                 .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class)) 
                 .findFirst();

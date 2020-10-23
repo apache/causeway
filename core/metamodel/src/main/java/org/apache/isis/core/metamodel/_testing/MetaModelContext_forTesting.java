@@ -39,8 +39,9 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -108,7 +109,9 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     private TransactionState transactionState;
     
-    private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    private IsisBeanTypeClassifier isisBeanTypeClassifier;
+    
+    private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     private Map<String, ManagedObject> serviceAdaptersById;
 
@@ -144,7 +147,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         val fields = _Lists.of(
                 getConfiguration(),
                 getObjectManager(),
-                getIsisBeanTypeRegistryHolder(),
+                getIsisBeanTypeClassifier(),
+                getIsisBeanTypeRegistry(),
                 systemEnvironment,
                 serviceInjector,
                 serviceRegistry,
@@ -217,20 +221,21 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return translationService;
     }
     
-    public IsisBeanTypeRegistryHolder getIsisBeanTypeRegistryHolder() {
-        if(isisBeanTypeRegistryHolder==null) {
-            /*sonar-ignore-on*/        
-            val typeRegistry = new IsisBeanTypeRegistry();
-            
-            isisBeanTypeRegistryHolder = new IsisBeanTypeRegistryHolder() {
-                @Override
-                public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
-                    return typeRegistry;
-                }
-            };
-            /*sonar-ignore-off*/
+    private final IsisBeanFactoryPostProcessorForSpring isisBeanFactoryPostProcessorForSpring = 
+            new IsisBeanFactoryPostProcessorForSpring();
+    
+    public IsisBeanTypeClassifier getIsisBeanTypeClassifier() {
+        if(isisBeanTypeClassifier==null) {
+            isisBeanTypeClassifier = isisBeanFactoryPostProcessorForSpring.getIsisBeanTypeClassifier();
         }
-        return isisBeanTypeRegistryHolder;
+        return isisBeanTypeClassifier;
+    }
+    
+    public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
+        if(isisBeanTypeRegistry==null) {
+            isisBeanTypeRegistry = isisBeanFactoryPostProcessorForSpring.getIsisBeanTypeRegistry();
+        }
+        return isisBeanTypeRegistry;
     }
     
     @Override
@@ -243,14 +248,16 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             @SuppressWarnings("unused")
             val serviceInjector = requireNonNull(getServiceInjector());
             val programmingModel = requireNonNull(getProgrammingModel());
-            val isisBeanTypeRegistryHolder = requireNonNull(getIsisBeanTypeRegistryHolder());
+            val isisBeanTypeClassifier = requireNonNull(getIsisBeanTypeClassifier());
+            val isisBeanTypeRegistry = requireNonNull(getIsisBeanTypeRegistry());
 
             specificationLoader = SpecificationLoaderDefault.getInstance(
                     configuration, 
                     environment, 
                     serviceRegistry,
                     programmingModel,
-                    isisBeanTypeRegistryHolder);
+                    isisBeanTypeClassifier,
+                    isisBeanTypeRegistry);
             
         }
         return specificationLoader;

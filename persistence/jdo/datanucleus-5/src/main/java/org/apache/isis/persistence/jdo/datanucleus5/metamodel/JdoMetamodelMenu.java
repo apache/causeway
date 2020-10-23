@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 
 import lombok.val;
@@ -47,7 +47,7 @@ import lombok.val;
         )
 public class JdoMetamodelMenu {
 
-    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
     @Inject private IsisJdoSupport jdoSupport;
     
     public static abstract class ActionDomainEvent
@@ -79,8 +79,7 @@ public class JdoMetamodelMenu {
         
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of jdo metamodels");
         
-        val registry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-        registry.getEntityTypes().stream()
+        isisBeanTypeRegistry.getEntityTypes().stream()
         .filter(JdoMetamodelUtil::isPersistenceEnhanced)
         .map(Class::getName)
         .map(pmFactory::getMetadata)

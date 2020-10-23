@@ -39,7 +39,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.val;
@@ -53,7 +53,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     
     // enforces provisioning order (this is a depends-on relationship) 
     @Inject private IsisSystemEnvironment isisSystemEnvironment; 
-    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
     
     @Override
     public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
@@ -83,12 +83,11 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     private Map<String, _ManagedBeanAdapter> enumerateManagedBeans() {
         
-        val beanTypeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
         val managedBeanAdapterByName = _Maps.<String, _ManagedBeanAdapter>newHashMap();
 
         isisSystemEnvironment.getIocContainer().streamAllBeans()
         .filter(_NullSafe::isPresent)
-        .filter(bean->beanTypeRegistry.isManagedBean(bean.getBeanClass())) // do not register unknown sort
+        .filter(bean->isisBeanTypeRegistry.isContributingManagedBean(bean.getBeanClass())) // do not register unknown sort
         .forEach(bean->{
             val id = bean.getId();
             managedBeanAdapterByName.put(id, bean);

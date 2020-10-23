@@ -18,8 +18,16 @@
  */
 package org.apache.isis.core.config.beans;
 
-public interface IsisBeanTypeRegistryHolder {
+import org.apache.isis.applib.services.metamodel.BeanSort;
 
-    IsisBeanTypeRegistry getIsisBeanTypeRegistry();
+import lombok.NonNull;
+import lombok.Value;
+
+@Value(staticConstructor = "of")
+public class IsisBeanMetaData {
+
+    private final @NonNull Class<?> correspondingClass;
+    private final @NonNull BeanSort beanSort;
+    private final @NonNull String beanName;
     
 }

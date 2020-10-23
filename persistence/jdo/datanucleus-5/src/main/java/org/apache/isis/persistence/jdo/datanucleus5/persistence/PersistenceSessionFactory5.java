@@ -39,7 +39,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledState;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
@@ -67,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
 public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     
-    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
@@ -100,8 +100,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
 
         val dnSettings = metaModelContext.getServiceRegistry().lookupServiceElseFail(DataNucleusSettings.class);
         val datanucleusProps = addDataNucleusPropertiesAsRequired(dnSettings);
-        val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(typeRegistry);
+        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(isisBeanTypeRegistry);
 
         val dataNucleusApplicationComponents = new DataNucleusApplicationComponents5(
                 configuration,
@@ -113,8 +112,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
 
     @Override
     public void catalogNamedQueries() {
-        val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(typeRegistry);
+        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(isisBeanTypeRegistry);
         
         if(log.isDebugEnabled()) {
             log.debug("Entity types discovered:");
