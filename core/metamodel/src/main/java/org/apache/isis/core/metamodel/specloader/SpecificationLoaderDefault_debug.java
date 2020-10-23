@@ -32,7 +32,7 @@ final class SpecificationLoaderDefault_debug {
 
     static void logBefore(
             Logger log, 
-            SpecificationCacheDefault<ObjectSpecification> cache, 
+            SpecificationCache<ObjectSpecification> cache, 
             List<? extends ObjectSpecification> scanned) {
         
         if(!log.isDebugEnabled()) {
@@ -59,7 +59,7 @@ final class SpecificationLoaderDefault_debug {
 
     static void logAfter(
             Logger log, 
-            SpecificationCacheDefault<ObjectSpecification> cache, 
+            SpecificationCache<ObjectSpecification> cache, 
             Collection<? extends ObjectSpecification> scanned) {
         
         if(!log.isDebugEnabled()) {

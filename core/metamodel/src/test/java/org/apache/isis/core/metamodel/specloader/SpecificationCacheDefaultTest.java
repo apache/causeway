@@ -29,6 +29,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -47,7 +48,7 @@ public class SpecificationCacheDefaultTest {
     @Mock
     private ObjectSpecification orderSpec;
 
-    private SpecificationCacheDefault<ObjectSpecification> specificationCache;
+    private SpecificationCache<ObjectSpecification> specificationCache;
 
     @Before
     public void setUp() throws Exception {
@@ -79,15 +80,16 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void get_whenNotCached() {
-        assertNull(specificationCache.get(Customer.class.getName()));
+        assertFalse(specificationCache.lookup(Customer.class).isPresent());
     }
 
     @Test
     public void get_whenCached() {
-        final String customerClassName = Customer.class.getName();
-        specificationCache.computeIfAbsent(customerClassName, __->customerSpec);
+        
+        specificationCache.computeIfAbsent(Customer.class, __->customerSpec);
 
-        final ObjectSpecification objectSpecification = specificationCache.get(customerClassName);
+        final ObjectSpecification objectSpecification = specificationCache.lookup(Customer.class)
+                .orElse(null);
 
         assertSame(objectSpecification, customerSpec);
     }
@@ -95,8 +97,8 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void allSpecs_whenCached() {
-        specificationCache.computeIfAbsent(Customer.class.getName(), __->customerSpec);
-        specificationCache.computeIfAbsent(Order.class.getName(), __->orderSpec);
+        specificationCache.computeIfAbsent(Customer.class, __->customerSpec);
+        specificationCache.computeIfAbsent(Order.class, __->orderSpec);
 
         val allSpecs = specificationCache.snapshotSpecs();
 
@@ -111,7 +113,7 @@ public class SpecificationCacheDefaultTest {
     @Test
     public void getByObjectType_whenSet() {
         
-        specificationCache.computeIfAbsent(Customer.class.getName(), __->customerSpec);
+        specificationCache.computeIfAbsent(Customer.class, __->customerSpec);
         val objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
 
         assertSame(objectSpec, customerSpec);

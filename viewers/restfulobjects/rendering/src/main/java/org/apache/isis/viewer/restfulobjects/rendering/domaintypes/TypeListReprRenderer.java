@@ -18,8 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import java.util.Collection;
-
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -29,16 +28,17 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class TypeListReprRenderer extends ReprRendererAbstract<TypeListReprRenderer, Collection<ObjectSpecification>> {
+public class TypeListReprRenderer 
+extends ReprRendererAbstract<TypeListReprRenderer, Can<ObjectSpecification>> {
 
-    private Collection<ObjectSpecification> specifications;
+    private Can<ObjectSpecification> specifications;
 
     public TypeListReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.TYPE_LIST, representation);
     }
 
     @Override
-    public TypeListReprRenderer with(final Collection<ObjectSpecification> specifications) {
+    public TypeListReprRenderer with(final Can<ObjectSpecification> specifications) {
         this.specifications = specifications;
         return this;
     }

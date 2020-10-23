@@ -60,6 +60,11 @@ final class Can_Multiple<T> implements Can<T> {
     public Stream<T> stream() {
         return elements.stream();
     }
+    
+    @Override
+    public Stream<T> parallelStream() {
+        return elements.parallelStream();
+    }
 
     @Override
     public Optional<T> getSingleton() {

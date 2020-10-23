@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.metamodel;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -36,11 +35,11 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
@@ -55,6 +54,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
+
+import lombok.val;
 
 @Service
 @Named("isisMetaModel.MetaModelServiceDefault")
@@ -108,7 +109,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public DomainModel getDomainModel() {
 
-        final Collection<ObjectSpecification> specifications = specificationLoader.snapshotSpecifications();
+        val specifications = specificationLoader.snapshotSpecifications();
 
         final List<DomainMember> rows = _Lists.newArrayList();
         for (final ObjectSpecification spec : specifications) {

@@ -16,36 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.domainmodel;
+package org.apache.isis.core.metamodel.specloader;
 
-import java.util.Set;
+import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
 
-import lombok.val;
+interface SpecificationCache<T extends ObjectSpecification> {
 
-final class MetamodelUtil {
-
-    static Set<String> featuresSummarized(Can<ObjectSpecification> allSpecs){
-        
-        val features = _Sets.<String>newHashSet();
-        
-        allSpecs.stream()
-        .forEach(spec->{
-            spec.streamObjectActions(Contributed.INCLUDED)
-            .forEach(feature->{
-                features.add(feature.getIdentifier().toString());
-            });
-            spec.streamAssociations(Contributed.INCLUDED)
-            .forEach(feature->{
-                features.add(feature.getIdentifier().toString());
-            });
-        });
-        
-        return features;
-    }
+    _VersionedList<T> getVList();
     
+    Optional<T> lookup(Class<?> cls);
+
+    T computeIfAbsent(Class<?> cls, Function<Class<?>, T> mappingFunction);
+    
+    T remove(Class<?> cls);
+
+    void clear();
+
+    /** @returns thread-safe defensive copy */
+    Can<T> snapshotSpecs();
+
+    Class<?> resolveType(ObjectSpecId objectSpecID);
+
+    T getByObjectType(ObjectSpecId objectSpecID);
+
+    void recache(T spec);
+
 }

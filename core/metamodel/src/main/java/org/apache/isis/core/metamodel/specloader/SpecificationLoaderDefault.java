@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -41,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -121,7 +121,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private FacetProcessor facetProcessor;
 
-    private final SpecificationCacheDefault<ObjectSpecification> cache = new SpecificationCacheDefault<>();
+    private final SpecificationCache<ObjectSpecification> cache = new SpecificationCacheDefault<>();
 
     /**
      * We only ever mark the meta-model as fully introspected if in {@link #isFullIntrospect() full} 
@@ -232,8 +232,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val valueTypeSpecs = _Lists.<ObjectSpecification>newArrayList();
 
-        valueTypeRegistry.streamRegisteredClasses().forEach(clazz -> {
-            val spec = loadSpecification(clazz, IntrospectionState.NOT_INTROSPECTED);
+        valueTypeRegistry.streamRegisteredClasses()
+        .forEach(cls -> {
+            val spec = loadSpecification(cls, IntrospectionState.NOT_INTROSPECTED);
             if(spec!=null) {
                 knownSpecs.add(spec);
                 valueTypeSpecs.add(spec);
@@ -268,10 +269,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         SpecificationLoaderDefault_debug.logBefore(log, cache, knownSpecs);
 
         log.info(" - introspecting {} type hierarchies", knownSpecs.size());
-        introspect(knownSpecs, IntrospectionState.TYPE_INTROSPECTED);
+        introspect(Can.ofCollection(knownSpecs), IntrospectionState.TYPE_INTROSPECTED);
 
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
-        introspect(valueTypeSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspect(Can.ofCollection(valueTypeSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
         log.info(" - introspecting {} mixins", isisBeanTypeRegistry.getMixinTypes().size());
@@ -279,7 +280,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 isisBeanTypeRegistry.getEntityTypesJdo().size(),
                 isisBeanTypeRegistry.getEntityTypesJpa().size());
         log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
-        introspect(domainObjectSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         SpecificationLoaderDefault_debug.logAfter(log, cache, knownSpecs);
 
@@ -395,13 +396,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         val substitutedType = substitute.apply(type);
         
-        val typeName = substitutedType.getName();
-        
         final ObjectSpecification cachedSpec;
         
         // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
         synchronized (cache) {
-            cachedSpec = cache.computeIfAbsent(typeName, __->
+            cachedSpec = cache.computeIfAbsent(substitutedType, __->
                 createSpecification(substitutedType, beanClassifier.apply(type)));
         }
 
@@ -476,7 +475,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     // -- LOOKUP
 
     @Override
-    public Collection<ObjectSpecification> snapshotSpecifications() {
+    public Can<ObjectSpecification> snapshotSpecifications() {
         return cache.snapshotSpecs();
     }
     
@@ -563,7 +562,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     private void introspect(
-            final Collection<ObjectSpecification> specs, 
+            final Can<ObjectSpecification> specs, 
             final IntrospectionState upTo) {
 
         val isConcurrentFromConfig = isisConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
@@ -603,7 +602,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         while(spec != null) {
             val type = spec.getCorrespondingClass();
-            cache.remove(type.getName());
+            cache.remove(type);
             spec = spec.superclass();
         }
     }

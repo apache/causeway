@@ -54,6 +54,11 @@ final class Can_Empty<T> implements Can<T> {
     public Stream<T> stream() {
         return Stream.empty();
     }
+    
+    @Override
+    public Stream<T> parallelStream() {
+        return Stream.empty();
+    }
 
     @Override
     public Optional<T> getSingleton() {

@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
@@ -31,97 +31,103 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
 
 
-class SpecificationCacheDefault<T extends ObjectSpecification> {
+class SpecificationCacheDefault<T extends ObjectSpecification> implements SpecificationCache<T> {
 
-    private final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
-    private final Map<String, T> specByClassName = _Maps.newHashMap();
+    private final Map<ObjectSpecId, Class<?>> classBySpecId = _Maps.newHashMap();
+    private final Map<Class<?>, T> specByClass = _Maps.newHashMap();
     
     
     // optimization: specialized list to keep track of any additions to the cache fast
-    @Getter(value = AccessLevel.PACKAGE)
+    @Getter(onMethod_ = {@Override})//(value = AccessLevel.PACKAGE)
     private final _VersionedList<T> vList = new _VersionedList<>(); 
     
-    public T get(String className) {
-        return specByClassName.get(className);
+    @Override
+    public Optional<T> lookup(Class<?> cls) {
+        return Optional.ofNullable(specByClass.get(cls));
     }
     
+    @Override
     public T computeIfAbsent(
-            String className, 
-            Function<? super String, T> mappingFunction) {
+            Class<?> cls, 
+            Function<Class<?>, T> mappingFunction) {
         
-        T spec = specByClassName.get(className);
+        T spec = specByClass.get(cls);
         if(spec==null) {
-            spec = mappingFunction.apply(className);
+            spec = mappingFunction.apply(cls);
             internalPut(spec);
         }
         return spec;
     }
 
+    @Override
     public void clear() {
         synchronized(this) {
-            specByClassName.clear();
-            classNameBySpecId.clear();
+            specByClass.clear();
+            classBySpecId.clear();
             vList.clear();
         }
     }
 
     /** @returns thread-safe defensive copy */
-    public Collection<T> snapshotSpecs() {
+    @Override
+    public Can<T> snapshotSpecs() {
         synchronized(this) {
-            return new ArrayList<T>(specByClassName.values());
+            return Can.ofCollection(specByClass.values());
         }
     }
     
+    @Override
     public Class<?> resolveType(final ObjectSpecId objectSpecID) {
-        val classNameFromCache = classNameBySpecId.get(objectSpecID);
-        val className = classNameFromCache != null
-                ? classNameFromCache 
-                : objectSpecID.asString();
-        return ClassUtil.forNameElseNull(className);
+        val classFromCache = classBySpecId.get(objectSpecID);
+        return classFromCache != null
+                ? classFromCache 
+                : ClassUtil.forNameElseNull(objectSpecID.asString());
     }
     
+    @Override
     public T getByObjectType(final ObjectSpecId objectSpecID) {
-        val className = classNameBySpecId.get(objectSpecID);
-        return className != null ? specByClassName.get(className) : null;
+        val className = classBySpecId.get(objectSpecID);
+        return className != null ? specByClass.get(className) : null;
     }
 
     private void internalPut(T spec) {
         if(spec==null) {
             return;
         }
-        val className = spec.getCorrespondingClass().getName();
+        val cls = spec.getCorrespondingClass();
         val specId = spec.getSpecId();
-        val existing = specByClassName.put(className, spec);
+        val existing = specByClass.put(cls, spec);
         if(existing==null) {
             vList.add(spec); // add to vList only if we don't have it already
         }
         if (specId == null) {
             return;
         }
-        classNameBySpecId.put(specId, className);
+        classBySpecId.put(specId, cls);
     }
 
-    public T remove(String typeName) {
-        final T removed = specByClassName.remove(typeName);
+    @Override
+    public T remove(Class<?> cls) {
+        final T removed = specByClass.remove(cls);
         if(removed!=null) {
             vList.clear(); // invalidate
-            vList.addAll(specByClassName.values());
+            vList.addAll(specByClass.values());
         }
         if(hasUsableSpecId(removed)) {
             val specId = removed.getSpecId();
-            classNameBySpecId.remove(specId);
+            classBySpecId.remove(specId);
         }
         return removed;
     }
 
+    @Override
     public void recache(T spec) {
         if(hasUsableSpecId(spec)) {
-            classNameBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass().getName());
+            classBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass());
         }
     }
     

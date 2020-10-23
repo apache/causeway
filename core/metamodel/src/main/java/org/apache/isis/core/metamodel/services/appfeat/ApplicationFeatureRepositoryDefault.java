@@ -37,6 +37,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -120,15 +121,16 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
         initializationState = InitializationState.INITIALIZED;
-        final Collection<ObjectSpecification> specifications = primeMetaModel();
-        for (val spec : specifications) {
+        val allSpecs = primeMetaModel();
+        for (val spec : allSpecs) {
             createApplicationFeaturesFor(spec);
         }
     }
 
-    private Collection<ObjectSpecification> primeMetaModel() {
+    private Can<ObjectSpecification> primeMetaModel() {
+        log.warn("loading service specs here might be redundant");
         serviceRegistry.streamRegisteredBeans()
-        .forEach(bean->specificationLoader.loadSpecification(bean.getBeanClass()));
+            .forEach(bean->specificationLoader.loadSpecification(bean.getBeanClass()));
         return specificationLoader.snapshotSpecifications();
     }
 

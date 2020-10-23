@@ -101,6 +101,11 @@ public interface Can<T> extends Iterable<T>, Serializable {
      * @return Stream of elements this Can contains
      */
     Stream<T> stream();
+    
+    /**
+     * @return possibly concurrent Stream of elements this Can contains
+     */
+    Stream<T> parallelStream();
 
     /**
      * @return this Can's first element or an empty Optional if no such element
@@ -577,6 +582,5 @@ public interface Can<T> extends Iterable<T>, Serializable {
      */
     T[] toArray(Class<T> elementType);
 
-    
-    
+        
 }

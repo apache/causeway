@@ -18,9 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -168,7 +168,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToDomainTypes(final Collection<ObjectSpecification> specifications) {
+    private void addLinkToDomainTypes(final Can<ObjectSpecification> specifications) {
 
         final JsonRepresentation link = 
                 LinkBuilder.newBuilder(

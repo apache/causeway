@@ -19,8 +19,6 @@
 package org.apache.isis.core.metamodel.services.layout;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,7 +37,6 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.util.ZipWriter;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -98,13 +95,10 @@ public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public byte[] toZip(final Style style) {
-        final Collection<ObjectSpecification> allSpecs = specificationLoader.snapshotSpecifications();
-        final List<ObjectSpecification> domainObjectSpecs = _Lists
-                .filter(allSpecs, spec ->
-                !spec.isAbstract() &&
-                (spec.isEntity() || spec.isViewModel())
-                        );
-
+        val domainObjectSpecs = specificationLoader.snapshotSpecifications()
+        .filter(spec ->
+                !spec.isAbstract() 
+                && (spec.isEntity() || spec.isViewModel()));
 
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of layouts");
 

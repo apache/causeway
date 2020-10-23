@@ -59,6 +59,11 @@ final class Can_Singleton<T> implements Can<T> {
     public Stream<T> stream() {
         return Stream.of(element);
     }
+    
+    @Override
+    public Stream<T> parallelStream() {
+        return Stream.of(element);
+    }
 
     @Override
     public Optional<T> getFirst() {

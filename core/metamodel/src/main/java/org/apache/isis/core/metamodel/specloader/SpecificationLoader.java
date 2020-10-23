@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
-import java.util.Collection;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -71,7 +71,7 @@ public interface SpecificationLoader {
      * 
      * @return snapshot of all the (currently) loaded specifications, a defensive-copy 
      */
-    Collection<ObjectSpecification> snapshotSpecifications();
+    Can<ObjectSpecification> snapshotSpecifications();
     
     /**
      * Similar to {@link #snapshotSpecifications()}, but also handles concurrent additions that occur 

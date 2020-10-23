@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import java.util.Collection;
-
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -38,7 +36,6 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -97,9 +94,10 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val resourceContext = createResourceContext(
                 RepresentationType.TYPE_LIST, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().snapshotSpecifications();
+        val allSpecifications = getSpecificationLoader().snapshotSpecifications();
 
-        final TypeListReprRenderer renderer = new TypeListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        final TypeListReprRenderer renderer = 
+                new TypeListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(allSpecifications).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
