@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
@@ -30,7 +31,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -40,7 +40,6 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
     private final Map<Class<?>, T> specByClass = _Maps.newHashMap();
     
     // optimization: specialized list to keep track of any additions to the cache fast
-    @Getter(onMethod_ = {@Override})//(value = AccessLevel.PACKAGE)
     private final _VersionedList<T> vList = new _VersionedList<>(); 
     
     @Override
@@ -86,6 +85,15 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
         return removed;
     }
     
+    @Override
+    public void forEach(Consumer<T> onSpec, boolean shouldRunConcurrent) {
+        if(shouldRunConcurrent) {
+            vList.forEachParallel(onSpec);    
+        } else {
+            vList.forEach(onSpec);
+        }        
+    }
+    
     // -- HELPER
     
     @Nullable
@@ -103,6 +111,8 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
             return;
         }
     }
+
+
    
 
 }

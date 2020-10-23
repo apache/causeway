@@ -19,16 +19,14 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 interface SpecificationCache<T extends ObjectSpecification> {
 
-    _VersionedList<T> getVList();
-    
     Optional<T> lookup(Class<?> cls);
 
     T computeIfAbsent(Class<?> cls, Function<Class<?>, T> mappingFunction);
@@ -39,5 +37,7 @@ interface SpecificationCache<T extends ObjectSpecification> {
 
     /** @returns thread-safe defensive copy */
     Can<T> snapshotSpecs();
+
+    void forEach(Consumer<T> onSpec, boolean shouldRunConcurrent);
 
 }

@@ -93,15 +93,16 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
         val specLoader = (SpecificationLoaderDefault)super.getMetaModelContext().getSpecificationLoader();
         
+        val isActionExplicit = getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
+        
         specLoader.forEach(spec->{
             
-            if(!getConfiguration().getApplib().getAnnotation().getAction().isExplicit()) {
-                if(spec.getBeanSort().isUnknown()) {
+            if(!isActionExplicit
+                    && spec.getBeanSort().isUnknown()) {
                     return; // in support of @Action not being forced, we need to relax 
-                }    
             }
             
-            if(! includeIf.test(spec)) {
+            if(!includeIf.test(spec)) {
                 return;
             }
             visitor.visit(spec, this);

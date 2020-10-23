@@ -415,13 +415,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Override
     public void forEach(Consumer<ObjectSpecification> onSpec) {
         val shouldRunConcurrent = isisConfiguration.getCore().getMetaModel().getValidator().isParallelize();
-        val vList = cache.getVList(); // vList is thread-safe
-        if(shouldRunConcurrent) {
-            vList.forEachParallel(onSpec);    
-        } else {
-            vList.forEach(onSpec);
-        }
-        
+        cache.forEach(onSpec, shouldRunConcurrent);
     }
 
     @Override @Nullable
