@@ -483,7 +483,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         val substitutedType = substitute.apply(type);
         
-        val spec = cache.computeIfAbsent(substitutedType, __->{
+        final ObjectSpecification spec = cache.computeIfAbsent(substitutedType, __->{
             val newSpec = createSpecification(substitutedType, beanClassifier.apply(type));
             specIdToClassResolver.register(newSpec);
             return newSpec;
@@ -546,23 +546,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return objectSpec;
     }
 
-    private void introspect(
+    private void introspectSequential(
             final Can<ObjectSpecification> specs, 
             final IntrospectionState upTo) {
-
-        val isConcurrentFromConfig = isisConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
-
-        val runSequential = !isConcurrentFromConfig;
-        
-        if(runSequential) { 
-            
-            for (val spec : specs) {
-                spec.introspectUpTo(upTo);
-            }
-            
-            return; // sequential run done
+        for (val spec : specs) {
+            spec.introspectUpTo(upTo);
         }
-        
+    }
+
+    private void introspectParallel(
+            final Can<ObjectSpecification> specs, 
+            final IntrospectionState upTo) {
         specs.parallelStream()
         .forEach(spec -> {
             try {
@@ -572,7 +566,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 throw ex;
             }
         });
-
+    }
+    
+    private void introspect(
+            final Can<ObjectSpecification> specs, 
+            final IntrospectionState upTo) {
+        val isConcurrentFromConfig = isisConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
+        if(isConcurrentFromConfig) {
+            introspectParallel(specs, upTo);
+        } else {
+            introspectSequential(specs, upTo);
+        }
     }
 
     private void invalidateCache(final Class<?> cls) {
