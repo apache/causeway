@@ -120,7 +120,7 @@ public class ObjectMemberAbstractTest {
             will(returnValue(false));
             
             allowing(mockSpecForCustomer).getBeanSort();
-            will(returnValue(BeanSort.ENTITY));
+            will(returnValue(BeanSort.ENTITY_JDO));
 
             allowing(mockSpecForCustomer).getShortIdentifier();
             will(returnValue("Customer"));

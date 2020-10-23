@@ -201,7 +201,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return BeanSort.COLLECTION;
         }
         if(objectSpec.isEntity()) {
-            return BeanSort.ENTITY;
+            return objectSpec.getBeanSort();
         }
         if(mode == Mode.RELAXED) {
             return BeanSort.UNKNOWN;

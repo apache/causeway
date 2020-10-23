@@ -41,7 +41,7 @@ public enum BeanSort {
      *
      */
     // tag::refguide[]
-    ENTITY,
+    ENTITY_JDO, ENTITY_JPA,
     // end::refguide[]
     /**
      * Injectable object, associated with a lifecycle context
@@ -104,10 +104,14 @@ public enum BeanSort {
         return this == COLLECTION;
     }
 
-    public boolean isEntity() {
-        return this == ENTITY;
+    public boolean isEntityJdo() {
+        return this == ENTITY_JDO;
     }
-
+    
+    public boolean isEntityJpa() {
+        return this == ENTITY_JPA;
+    }
+    
     public boolean isUnknown() {
         return this == UNKNOWN;
     }
@@ -124,6 +128,10 @@ public enum BeanSort {
         }
 
         return true;
+    }
+    
+    public boolean isEntity() {
+        return isEntityJdo() || isEntityJpa();
     }
 
 

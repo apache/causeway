@@ -60,7 +60,7 @@ public class JdoPersistenceLifecycleService {
     public void postConstr() {
         if(log.isDebugEnabled()) {
             log.debug("init entity types {}", 
-                    isisBeanTypeRegistry.getEntityTypes());
+                    isisBeanTypeRegistry.getEntityTypesJdo());
         }
     }
 

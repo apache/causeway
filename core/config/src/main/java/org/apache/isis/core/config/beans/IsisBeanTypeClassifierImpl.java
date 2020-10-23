@@ -91,8 +91,9 @@ implements IsisBeanTypeClassifier {
             case MIXIN:
                 return BeanClassification.selfManaged(BeanSort.MIXIN);
             case JDO_ENTITY:
+                return BeanClassification.selfManaged(BeanSort.ENTITY_JDO);
             case JPA_ENTITY:
-                return BeanClassification.selfManaged(BeanSort.ENTITY);
+                return BeanClassification.selfManaged(BeanSort.ENTITY_JPA);
             case EXTERNAL_ENTITY:
             case INMEMORY_ENTITY:
             case VIEW_MODEL:

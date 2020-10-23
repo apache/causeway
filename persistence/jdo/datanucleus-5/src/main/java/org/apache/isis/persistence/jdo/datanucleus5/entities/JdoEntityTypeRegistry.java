@@ -54,7 +54,7 @@ public class JdoEntityTypeRegistry {
 
         val entityTypes = new LinkedHashSet<String>();
 
-        Set<Class<?>> persistenceCapableTypes = isisBeanTypeRegistry.getEntityTypes();
+        Set<Class<?>> persistenceCapableTypes = isisBeanTypeRegistry.getEntityTypesJdo();
 
         val classNamesNotEnhanced = _Lists.<String>newArrayList();
         for (Class<?> persistenceCapableType : persistenceCapableTypes) {

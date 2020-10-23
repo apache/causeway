@@ -35,7 +35,8 @@ public interface IsisBeanTypeRegistry {
     
     Set<Class<?>> getManagedBeansContributing();
     Set<Class<?>> getManagedBeansNotContributing();
-    Set<Class<?>> getEntityTypes();
+    Set<Class<?>> getEntityTypesJdo();
+    Set<Class<?>> getEntityTypesJpa();
     Set<Class<?>> getMixinTypes();
     Set<Class<?>> getViewModelTypes();
 

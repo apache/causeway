@@ -59,13 +59,15 @@ implements IsisBeanTypeRegistry {
     private final Map<Class<?>, String> managedBeanNamesByType = new HashMap<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> managedBeansContributing = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> managedBeansNotContributing = new HashSet<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypes = new HashSet<>();
+    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJpa = new HashSet<>();
+    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJdo = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> viewModelTypes = new HashSet<>();
     private final Set<Class<?>> vetoedTypes = _Sets.newConcurrentHashSet();
     
     private final Can<Set<? extends Class<? extends Object>>> allCategorySets = Can.of(
-            entityTypes,
+            entityTypesJpa,
+            entityTypesJdo,
             mixinTypes,
             viewModelTypes,
             vetoedTypes
@@ -130,8 +132,11 @@ implements IsisBeanTypeRegistry {
             case MIXIN:
                 mixinTypes.add(cls);
                 return;
-            case ENTITY:
-                entityTypes.add(cls);
+            case ENTITY_JDO:
+                entityTypesJdo.add(cls);
+                return;
+            case ENTITY_JPA:
+                entityTypesJpa.add(cls);
                 return;
             case VIEW_MODEL:
                 viewModelTypes.add(cls);

@@ -48,7 +48,10 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
         if(isisBeanTypeRegistry.getViewModelTypes().contains(cls)) {
             return Substitution.neverReplaceClass();
         }
-        if(isisBeanTypeRegistry.getEntityTypes().contains(cls)) {
+        if(isisBeanTypeRegistry.getEntityTypesJdo().contains(cls)) {
+            return Substitution.neverReplaceClass();
+        }
+        if(isisBeanTypeRegistry.getEntityTypesJpa().contains(cls)) {
             return Substitution.neverReplaceClass();
         }
         return Substitution.passThrough(); // indifferent

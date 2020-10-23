@@ -79,7 +79,7 @@ public class JdoMetamodelMenu {
         
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of jdo metamodels");
         
-        isisBeanTypeRegistry.getEntityTypes().stream()
+        isisBeanTypeRegistry.getEntityTypesJdo().stream()
         .filter(JdoMetamodelUtil::isPersistenceEnhanced)
         .map(Class::getName)
         .map(pmFactory::getMetadata)
