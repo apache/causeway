@@ -27,7 +27,6 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -48,11 +47,11 @@ public class SpecificationCacheDefaultTest {
     @Mock
     private ObjectSpecification orderSpec;
 
-    private SpecificationCache<ObjectSpecification> specificationCache;
+    private SpecificationCache<ObjectSpecification> specificationCache = new SpecificationCacheDefault<>();
+    private SpecIdToClassResolver specIdToClassResolver = new SpecIdToClassResolverDefault();
 
     @Before
     public void setUp() throws Exception {
-        specificationCache = new SpecificationCacheDefault<>();
 
         context.checking(new Expectations() {{
             allowing(customerSpec).getCorrespondingClass();
@@ -107,14 +106,16 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenNotSet() {
-        assertNull(specificationCache.getByObjectType(ObjectSpecId.of("CUS")));
+        val type = specIdToClassResolver.lookup(ObjectSpecId.of("CUS"));
+        assertFalse(type.isPresent());
     }
 
     @Test
     public void getByObjectType_whenSet() {
         
         specificationCache.computeIfAbsent(Customer.class, __->customerSpec);
-        val objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
+        
+        val objectSpec = specificationCache.lookup(Customer.class).orElse(null);
 
         assertSame(objectSpec, customerSpec);
     }

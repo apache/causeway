@@ -52,6 +52,7 @@ import org.apache.isis.core.config.beans.IsisBeanMetaData;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -120,6 +121,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private FacetProcessor facetProcessor;
 
     private final SpecificationCache<ObjectSpecification> cache = new SpecificationCacheDefault<>();
+    private final SpecIdToClassResolver specIdToClassResolver = new SpecIdToClassResolverDefault();
 
     /**
      * We only ever mark the meta-model as fully introspected if in {@link #isFullIntrospect() full} 
@@ -306,6 +308,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Override
     public void disposeMetaModel() {
+        specIdToClassResolver.clear();
         cache.clear();
         validationResult.clear();
         log.info("Metamodel disposed.");
@@ -421,9 +424,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
     }
 
-    @Override
-    public Class<?> lookupType(ObjectSpecId objectSpecId) {
-        return cache.resolveType(objectSpecId);
+    @Override @Nullable
+    public Class<?> lookupType(final @NonNull ObjectSpecId objectSpecId) {
+        return specIdToClassResolver.lookup(objectSpecId)
+                //XXX falling back assuming the specId equals the fqn of the corresponding class
+                //which might not always be true
+                // (should warn log when fails with null)
+                .orElseGet(()->ClassUtil.forNameElseNull(objectSpecId.asString()));
     }
     
     // -- VALIDATION STUFF
@@ -482,17 +489,20 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         val substitutedType = substitute.apply(type);
         
-        final ObjectSpecification cachedSpec;
+        final ObjectSpecification spec;
         
         // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
         synchronized (cache) {
-            cachedSpec = cache.computeIfAbsent(substitutedType, __->
-                createSpecification(substitutedType, beanClassifier.apply(type)));
+            spec = cache.computeIfAbsent(substitutedType, __->{
+                val newSpec = createSpecification(substitutedType, beanClassifier.apply(type));
+                specIdToClassResolver.register(newSpec);
+                return newSpec;
+            });
         }
 
-        cachedSpec.introspectUpTo(upTo);
+        spec.introspectUpTo(upTo);
 
-        return cachedSpec;
+        return spec;
     }
     
     private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {

@@ -23,23 +23,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
-import org.apache.isis.core.metamodel.commons.ClassUtil;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 
 class SpecificationCacheDefault<T extends ObjectSpecification> implements SpecificationCache<T> {
 
-    private final Map<ObjectSpecId, Class<?>> classBySpecId = _Maps.newHashMap();
     private final Map<Class<?>, T> specByClass = _Maps.newHashMap();
-    
     
     // optimization: specialized list to keep track of any additions to the cache fast
     @Getter(onMethod_ = {@Override})//(value = AccessLevel.PACKAGE)
@@ -67,34 +65,31 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
     public void clear() {
         synchronized(this) {
             specByClass.clear();
-            classBySpecId.clear();
             vList.clear();
         }
     }
 
-    /** @returns thread-safe defensive copy */
     @Override
     public Can<T> snapshotSpecs() {
         synchronized(this) {
             return Can.ofCollection(specByClass.values());
         }
     }
-    
-    @Override
-    public Class<?> resolveType(final ObjectSpecId objectSpecID) {
-        val classFromCache = classBySpecId.get(objectSpecID);
-        return classFromCache != null
-                ? classFromCache 
-                : ClassUtil.forNameElseNull(objectSpecID.asString());
-    }
-    
-    @Override
-    public T getByObjectType(final ObjectSpecId objectSpecID) {
-        val className = classBySpecId.get(objectSpecID);
-        return className != null ? specByClass.get(className) : null;
-    }
 
-    private void internalPut(T spec) {
+    @Override
+    public T remove(@NonNull Class<?> cls) {
+        final T removed = specByClass.remove(cls);
+        if(removed!=null) {
+            vList.clear(); // invalidate
+            vList.addAll(specByClass.values());
+        }
+        return removed;
+    }
+    
+    // -- HELPER
+    
+    @Nullable
+    private void internalPut(@Nullable T spec) {
         if(spec==null) {
             return;
         }
@@ -107,34 +102,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
         if (specId == null) {
             return;
         }
-        classBySpecId.put(specId, cls);
     }
-
-    @Override
-    public T remove(Class<?> cls) {
-        final T removed = specByClass.remove(cls);
-        if(removed!=null) {
-            vList.clear(); // invalidate
-            vList.addAll(specByClass.values());
-        }
-        if(hasUsableSpecId(removed)) {
-            val specId = removed.getSpecId();
-            classBySpecId.remove(specId);
-        }
-        return removed;
-    }
-
-    @Override
-    public void recache(T spec) {
-        if(hasUsableSpecId(spec)) {
-            classBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass());
-        }
-    }
-    
-    private boolean hasUsableSpecId(T spec) {
-        // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
-        // don't have an ObjectSpecId; hence the guard.
-        return spec!=null && spec.containsNonFallbackFacet(ObjectSpecIdFacet.class);
-    }
+   
 
 }

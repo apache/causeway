@@ -19,25 +19,18 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Optional;
-import java.util.function.Function;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-interface SpecificationCache<T extends ObjectSpecification> {
+import lombok.NonNull;
 
-    _VersionedList<T> getVList();
+interface SpecIdToClassResolver {
+
+    Optional<Class<?>> lookup(@NonNull ObjectSpecId specId);
     
-    Optional<T> lookup(Class<?> cls);
-
-    T computeIfAbsent(Class<?> cls, Function<Class<?>, T> mappingFunction);
+    void register(@NonNull ObjectSpecification spec);
     
-    T remove(Class<?> cls);
-
     void clear();
-
-    /** @returns thread-safe defensive copy */
-    Can<T> snapshotSpecs();
 
 }
