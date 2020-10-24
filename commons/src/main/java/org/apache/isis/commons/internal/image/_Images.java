@@ -110,10 +110,13 @@ public class _Images {
     @Nullable
     public static BufferedImage fromPixels(final @Nullable int[][] pixels){
         
+        /*sonar-ignore-on*/
         final int height = _NullSafe.size(pixels);
         final int width = height>0
                 ? _NullSafe.size(pixels[0])
                 : 0;
+        /*sonar-ignore-off*/
+                
         final int pixelCount = width * height;
 
         if(pixelCount>0) {

@@ -66,7 +66,9 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
         if(_Strings.isNullOrEmpty(base64ImageData)) {
             return null;
         }
+        /*sonar-ignore-on*/
         return _Images.fromBase64(base64ImageData);
+        /*sonar-ignore-off*/
     }
     
     @Override
@@ -81,12 +83,13 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     
     // -- HELPER
     
-    @Nullable
     private Optional<BufferedImage> unwrap(final @Nullable ManagedObject adapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             return Optional.empty();
         }
+        /*sonar-ignore-on*/
         return Optional.ofNullable((BufferedImage) adapter.getPojo());
+        /*sonar-ignore-off*/
     }
 
 
