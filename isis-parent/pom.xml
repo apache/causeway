@@ -996,6 +996,7 @@ under the License.
 		<!-- END SNIPPET: release-profile -->
 
 		<!-- APACHE ISIS customisation 7/7: start -->
+		
 		<profile>
 			<id>released</id>
 			<activation>
@@ -1014,65 +1015,7 @@ under the License.
 				<module>../valuetypes</module>
 			</modules>
 		</profile>
-
-		<profile>
-			<id>all</id>
-			<activation>
-				<property>
-					<name>!apache-release</name>
-				</property>
-			</activation>
-			<modules>
-				<module>../core</module>
-				<module>../extensions</module>
-				<module>../incubator</module>
-				<module>../legacy</module>
-				<module>../mappings</module>
-				<module>../mavendeps</module>
-				<module>../starters</module>
-				<module>../subdomains</module>
-				<module>../testing</module>
-				<module>../tooling</module>
-				<module>../valuetypes</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>kroviz-module</id>
-			<activation>
-				<property>
-					<name>kroviz-module</name>
-				</property>
-			</activation>
-			<modules>
-				<module>../incubator/clients/kroviz</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>demo-app-module</id>
-			<activation>
-				<property>
-					<name>demo-app-module</name>
-				</property>
-			</activation>
-			<modules>
-				<module>../examples/demo</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>regressiontests-module</id>
-			<activation>
-				<property>
-					<name>regressiontests-module</name>
-				</property>
-			</activation>
-			<modules>
-				<module>../regressiontests</module>
-			</modules>
-		</profile>
-
+		
 		<!-- APACHE ISIS customisation 7/7: end -->
 
 	</profiles>

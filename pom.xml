@@ -18,12 +18,12 @@
 	<artifactId>isis-all</artifactId>
 	<version>2.0.0-SNAPSHOT</version>
 
-
 	<packaging>pom</packaging>
 
 	<name>Apache Isis (Aggregator)</name>
 	<description>
-        Convenience aggregator POM that references all modules.
+        Convenience aggregator POM that references all modules either explicitely 
+        or via profiles, that are not activiated per default.
         The parent POM of the core framework is isis-parent/pom.xml
     </description>
 
@@ -35,11 +35,84 @@
 	</scm>
 
 	<modules>
-		<module>antora</module>
-		<module>isis-parent</module>
-
-		<module>examples/demo</module>
-		<module>regressiontests</module>
+		<module>core</module>
 	</modules>
+
+	<profiles>
+
+		<profile>
+			<id>all</id>
+			<activation>
+				<property>
+					<name>!apache-release</name>
+				</property>
+			</activation>
+			<modules>
+				<module>antora</module>
+				<module>core</module>
+				<module>examples/demo</module>
+				<module>extensions</module>
+				<module>incubator</module>
+				<module>legacy</module>
+				<module>mappings</module>
+				<module>mavendeps</module>
+				<module>regressiontests</module>
+				<module>starters</module>
+				<module>subdomains</module>
+				<module>testing</module>
+				<module>tooling</module>
+				<module>valuetypes</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>module-antora</id>
+			<activation>
+				<property>
+					<name>module-antora</name>
+				</property>
+			</activation>
+			<modules>
+				<module>antora</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>module-demo-app</id>
+			<activation>
+				<property>
+					<name>module-demo-app</name>
+				</property>
+			</activation>
+			<modules>
+				<module>examples/demo</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>module-kroviz</id>
+			<activation>
+				<property>
+					<name>module-kroviz</name>
+				</property>
+			</activation>
+			<modules>
+				<module>incubator/clients/kroviz</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>module-regressiontests</id>
+			<activation>
+				<property>
+					<name>module-regressiontests</name>
+				</property>
+			</activation>
+			<modules>
+				<module>regressiontests</module>
+			</modules>
+		</profile>
+
+	</profiles>
 
 </project>
