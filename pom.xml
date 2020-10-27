@@ -34,17 +34,38 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<!-- ESSENTIAL MODULES -->
+
 	<modules>
+		<!-- 
+		essential modules required to run web applications and tests;
+		non-essential modules can be added to the build via profiles
+		(as defined below);
+		
+		keep module declarations in alphabetical order!
+		
+		also keep profiles in sync with the site documentation
+		https://github.com/apache/isis/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-isis.adoc 
+			-->
 		<module>core</module>
+		<module>extensions</module>
+		<module>mappings</module>
+		<module>mavendeps</module>
+		<module>starters</module>
+		<module>subdomains</module>
+		<module>testing</module>
+		<module>valuetypes</module>
 	</modules>
 
 	<profiles>
 
+		<!-- ALL MODULES -->
+		
 		<profile>
 			<id>all</id>
 			<activation>
 				<property>
-					<name>!apache-release</name>
+					<name>module-all</name>
 				</property>
 			</activation>
 			<modules>
@@ -64,6 +85,8 @@
 				<module>valuetypes</module>
 			</modules>
 		</profile>
+		
+		<!-- NON-ESSENTIAL MODULES -->
 
 		<profile>
 			<id>module-antora</id>
@@ -100,6 +123,18 @@
 				<module>incubator/clients/kroviz</module>
 			</modules>
 		</profile>
+		
+		<profile>
+			<id>module-legacy</id>
+			<activation>
+				<property>
+					<name>module-legacy</name>
+				</property>
+			</activation>
+			<modules>
+				<module>legacy</module>
+			</modules>
+		</profile>
 
 		<profile>
 			<id>module-regressiontests</id>
@@ -110,6 +145,18 @@
 			</activation>
 			<modules>
 				<module>regressiontests</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>module-tooling</id>
+			<activation>
+				<property>
+					<name>module-tooling</name>
+				</property>
+			</activation>
+			<modules>
+				<module>tooling</module>
 			</modules>
 		</profile>
 

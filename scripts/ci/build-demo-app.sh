@@ -54,7 +54,7 @@ function setRevision() {
 
 	if [ ! -z "$REVISION" ]; then
 	  cd $PROJECT_ROOT_PATH/${dir}
-	  mvn versions:set -DnewVersion=$REVISION -DprocessAllModules=true -Ddemo-app-module
+	  mvn versions:set -DnewVersion=$REVISION -DprocessAllModules=true -Dmodule-demo-app
 	fi
 }
 
@@ -63,7 +63,7 @@ function revertRevision() {
 	
 	if [ ! -z "$REVISION" ]; then
 	  cd $PROJECT_ROOT_PATH/${dir}
-	  mvn versions:revert -DnewVersion=$REVISION -DprocessAllModules=true -Ddemo-app-module
+	  mvn versions:revert -DnewVersion=$REVISION -DprocessAllModules=true -Dmodule-demo-app
 	fi
 }
 

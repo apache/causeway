@@ -44,14 +44,14 @@ sh $SCRIPT_DIR/_print-environment.sh "build-smoketests"
 #
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/isis-parent
-  mvn versions:set -DnewVersion=$REVISION -Dsmoketests-module
+  mvn versions:set -DnewVersion=$REVISION -Dmodule-regressiontests
   cd $PROJECT_ROOT_PATH
 fi
 
 #
 # now build the apps
 #
-for app in smoketests
+for app in regressiontests
 do
   cd $PROJECT_ROOT_PATH/examples/$app
 
@@ -67,6 +67,6 @@ done
 #
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/isis-parent
-  mvn versions:revert -Dsmoketests-module
+  mvn versions:revert -Dmodule-regressiontests
   cd $PROJECT_ROOT_PATH
 fi
