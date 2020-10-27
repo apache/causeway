@@ -65,9 +65,10 @@ jobs:
       shell: bash
       run: bash $CI_SCRIPTS_PATH/build-core.sh
       env:
-        # also build and run regressiontests and kroviz
-        # fail fast on convergence issues (enforcer plugin) -Denforcer.failFast=true
-        MVN_ADDITIONAL_OPTS: -Dregressiontests-module -Dkroviz-module -Denforcer.failFast=true -T 1C
+        # -Dmodule-all ... build all modules 
+        # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
+        # -T 1C ... 1 build thread per core
+        MVN_ADDITIONAL_OPTS: -Dmodule-all -Denforcer.failFast=true -T 1C
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context 
