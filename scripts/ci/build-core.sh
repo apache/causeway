@@ -52,13 +52,15 @@ if [ ! -z "$REVISION" ]; then
       | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
       | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
 
+  echo ""
+  echo ""
+  echo ">>> sed'ing version in starters and parent ..."
+  echo ""
+  echo ""
   cd $PROJECT_ROOT_PATH/starters
-  echo ""
-  echo ""
-  echo ">>> sed'ing version in starters ..."
-  echo ""
-  echo ""
   CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
+  sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
+  cd $PROJECT_ROOT_PATH/isis-parent
   sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
 fi
 
@@ -107,12 +109,15 @@ if [ ! -z "$REVISION" ]; then
       | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
       | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
 
+  
+  echo ""
+  echo ""
+  echo ">>> sed'ing to revert version in starters and parent ..."
+  echo ""
+  echo ""
   cd $PROJECT_ROOT_PATH/starters
-  echo ""
-  echo ""
-  echo ">>> sed'ing to revert version in starters ..."
-  echo ""
-  echo ""
+  sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
+  cd $PROJECT_ROOT_PATH/isis-parent
   sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
 fi
 
