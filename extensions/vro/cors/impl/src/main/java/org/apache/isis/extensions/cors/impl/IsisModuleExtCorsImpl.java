@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.cors.impl;
 
 import java.util.Collections;
+import java.util.Map;
 
 import javax.inject.Named;
 import javax.servlet.Filter;
@@ -47,29 +48,29 @@ public class IsisModuleExtCorsImpl {
 	public static final int CORS_FILTER_ORDER = OrderPrecedence.EARLY - 100;
 
     private final IsisConfiguration configuration;
-    
+
     public IsisModuleExtCorsImpl(IsisConfiguration configuration) {
 		this.configuration = configuration;
 	}
-    
+
     @Bean
-	@Order(OrderPrecedence.EARLY)
+	@Order(CORS_FILTER_ORDER)
     public FilterRegistrationBean<Filter> corsFilterRegistration() {
-        
-        val resteasyBase = configuration.getAsMap().getOrDefault("resteasy.jaxrs.defaultPath", "/restful");
+
+        final Map<String, String> cfgMap = configuration.getAsMap();
+        val resteasyBase = cfgMap.getOrDefault("resteasy.jaxrs.defaultPath", "/restful/*");
         log.info("Setting up CORS to filter resteasy-base at '{}'", resteasyBase);
-        
+
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(corsFilter());
         filterRegistrationBean.setUrlPatterns(Collections.singletonList(resteasyBase));
-        filterRegistrationBean.setOrder(CORS_FILTER_ORDER);
         return filterRegistrationBean;
     }
-	
+
 	public CorsFilter corsFilter() {
 		return new CorsFilter(corsConfigurationSource());
 	}
-	
+
 	private CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		corsConfiguration.setAllowCredentials(true);
