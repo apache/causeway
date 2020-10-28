@@ -4,9 +4,14 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+== TL'DR
 
+From the root project root run:
 
-
+[source,bash]
+----
+mvn clean install
+----
 
 == Git
 
@@ -202,7 +207,7 @@ export MAVEN_OPTS="-Xms512m -Xmx1024m"
 
 
 
-== Building all of Apache Isis
+== Building Apache Isis
 
 To build the source code from the command line, simply go to the root directory and type:
 
@@ -226,7 +231,55 @@ For the most part, though, you may want to rely on an IDE such as Eclipse to bui
 
 When using Eclipse, a Maven profile is configured such that Eclipse compiles to `target-ide` directory rather than the usual `target` directory. You can therefore switch between Eclipse and Maven command line without one interfering with the other.
 
+=== Additional Build Profiles
 
+Additional artifacts can be selected for inclusion with the build: 
+
+[source,bash]
+----
+mvn clean install -Dmodule-xxx -Dmodule-yyy ...
+----
+
+Where `module-xxx` and `module-yyy` correspond to profile names, as provided with the root `pom.xml`.  
+
+.Custom Build Profiles
+[cols="1m,2", options="header"]
+|===
+
+| Profile Name
+| Description
+
+| module-all
+| All Apache Isis Modules
+
+| module-antora
+| Offical Project Documentation
+				
+| module-examples-demo
+| Demo Application
+
+| module-incubator-all
+| All Incubation Modules 
+
+| module-incubator-javafx
+| The JavaFx Viewer
+
+| module-incubator-kroviz
+| The Kroviz Client (standalone viewer)
+
+| module-incubator-vaadin
+| The Vaadin Viewer  
+
+| module-legacy
+| Legacy Packages (to ease migration)
+
+| module-regressiontests
+| Regression Tests (for the CI pipelines)
+
+| module-tooling
+| Tooling Ecosystem (Code Mining, Atomated Docs, ...)
+
+|===
 
 == Checking for Vulnerabilities
 

@@ -62,7 +62,7 @@
 		<!-- ALL MODULES -->
 		
 		<profile>
-			<id>all</id>
+			<id>module-all</id>
 			<activation>
 				<property>
 					<name>module-all</name>
@@ -93,10 +93,10 @@
 		</profile>
 
 		<profile>
-			<id>module-demo-app</id>
+			<id>module-examples-demo</id>
 			<activation>
 				<property>
-					<name>module-demo-app</name>
+					<name>module-examples-demo</name>
 				</property>
 			</activation>
 			<modules>
@@ -108,7 +108,7 @@
 			<id>module-incubator-all</id>
 			<activation>
 				<property>
-					<name>module-incubator</name>
+					<name>module-incubator-all</name>
 				</property>
 			</activation>
 			<modules>
@@ -135,7 +135,7 @@
 			<id>module-incubator-kroviz</id>
 			<activation>
 				<property>
-					<name>module-incubator</name>
+					<name>module-incubator-kroviz</name>
 				</property>
 			</activation>
 			<modules>
