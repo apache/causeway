@@ -122,44 +122,8 @@
 
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>apache-release</id>
-			<activation>
-				<property>
-					<name>apache-release</name>
-				</property>
-			</activation>
-			<modules>
-				<module>wicket</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>released</id>
-			<activation>
-				<property>
-					<name>released</name>
-				</property>
-			</activation>
-			<modules>
-				<module>wicket</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>all</id>
-			<activation>
-				<property>
-					<name>!apache-release</name>
-				</property>
-			</activation>
-			<modules>
-				<module>vaadin</module>
-				<module>wicket</module>
-			</modules>
-		</profile>
-
-	</profiles>
+	<modules>
+		<module>wicket</module>
+	</modules>
 
 </project>

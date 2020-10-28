@@ -192,8 +192,10 @@
 
 	<modules>
 <!-- 		<module>mappings/microprofile</module> -->
+		<module>clients/kroviz</module>
 		<module>viewers/vaadin</module>
 		<module>viewers/javafx</module>
+		<module>../valuetypes/asciidoc/ui/vaadin</module>
 	</modules>
 
 </project>

@@ -70,19 +70,11 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>core</module>
 				<module>examples/demo</module>
-				<module>extensions</module>
 				<module>incubator</module>
 				<module>legacy</module>
-				<module>mappings</module>
-				<module>mavendeps</module>
 				<module>regressiontests</module>
-				<module>starters</module>
-				<module>subdomains</module>
-				<module>testing</module>
 				<module>tooling</module>
-				<module>valuetypes</module>
 			</modules>
 		</profile>
 		
@@ -113,14 +105,17 @@
 		</profile>
 
 		<profile>
-			<id>module-kroviz</id>
+			<id>module-incubator</id>
 			<activation>
 				<property>
-					<name>module-kroviz</name>
+					<name>module-incubator</name>
 				</property>
 			</activation>
 			<modules>
+				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/clients/kroviz</module>
+				<module>incubator/viewers/javafx</module>
+				<module>incubator/viewers/vaadin</module>
 			</modules>
 		</profile>
 		
