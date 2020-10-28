@@ -35,18 +35,11 @@ skinparam rectangle<<4>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<5>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 package "package-ecosystem\n[Software System]" {
-  rectangle "==Apache Isis\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
   rectangle "==Apache Isis (Aggregator)\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Antora\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
-  rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
 }
-2 .[#707070].> 4 : ""
 2 .[#707070].> 3 : ""
 @enduml
 ----
@@ -61,7 +54,8 @@ package "package-ecosystem\n[Software System]" {
 |pom
 |
 |Apache Isis (Aggregator)
-|Convenience aggregator POM that references all modules.
+|Convenience aggregator POM that references all modules either explicitely 
+        or via profiles, that are not activiated per default.
         The parent POM of the core framework is isis-parent/pom.xml
 
 
@@ -72,15 +66,6 @@ package "package-ecosystem\n[Software System]" {
 |\antora
 |Apache Isis Antora
 |
-
-|org.apache.isis
-|isis-parent
-|pom
-|\isis-parent
-|Apache Isis
-|Parent for the core framework + extensions, starter parent pom for starter apps.
-
-
 
 |org.apache.isis
 |supplemental-model
@@ -322,8 +307,7 @@ _Dependencies_
 
 * net.bytebuddy:byte-buddy:jar:<managed>
 * org.apache.isis.commons:isis-commons:jar:<managed>
-* org.jmock:jmock-junit4:jar:<managed>
-* org.objenesis:objenesis:jar:${objenesis.version}
+* org.objenesis:objenesis:jar:<managed>
 
 
 
@@ -893,8 +877,7 @@ _Dependencies_
 
 _Dependencies_
 
-* org.apache.isis.commons:isis-commons:jar:<managed>
-* org.apache.isis.core:isis-applib:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-restfulobjects-applib:jar:<managed>
 * org.springframework:spring-context:jar:<managed>
 
 
@@ -1192,12 +1175,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1325,7 +1308,6 @@ package "package-ecosystem\n[Software System]" {
 3 .[#707070].> 6 : ""
 3 .[#707070].> 4 : ""
 3 .[#707070].> 8 : ""
-8 .[#707070].> 9 : ""
 8 .[#707070].> 10 : ""
 14 .[#707070].> 15 : ""
 11 .[#707070].> 13 : ""
@@ -1431,8 +1413,8 @@ _Dependencies_
 |_Dependencies_
 
 * com.github.jnr:jnr-constants:jar:0.10.0
-* com.github.jnr:jnr-enxio:jar:0.20
-* com.github.jnr:jnr-posix:jar:3.0.49
+* com.github.jnr:jnr-enxio:jar:0.32.1
+* com.github.jnr:jnr-posix:jar:3.1.2
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
 * org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version}
@@ -1769,9 +1751,9 @@ _Dependencies_
 |_Dependencies_
 
 * com.fasterxml.jackson.core:jackson-databind:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
-* org.apache.isis.core:isis-core-metamodel:jar:<managed>
 
 
 
@@ -2138,7 +2120,7 @@ package "package-ecosystem\n[Software System]" {
 _Dependencies_
 
 * com.github.javafaker:javafaker:jar:<managed>
-* com.google.guava:guava:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
@@ -2152,7 +2134,6 @@ _Dependencies_
 |Apache Isis Tst - FakeData (fixtures)
 |_Dependencies_
 
-* com.google.guava:guava:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
 * org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
@@ -2303,12 +2284,10 @@ _Dependencies_
 |_Dependencies_
 
 * io.cucumber:cucumber-java:jar:<managed>
-* io.cucumber:cucumber-junit:jar:<managed>
 * io.cucumber:cucumber-junit-platform-engine:jar:<managed>
 * io.cucumber:cucumber-spring:jar:<managed>
 * org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
 * org.junit.jupiter:junit-jupiter-api:jar:<managed>
-* org.junit.platform:junit-platform-console:jar:<managed>
 
 
 
@@ -2329,14 +2308,13 @@ _Dependencies_
 |_Dependencies_
 
 * com.approvaltests:approvaltests:jar:<managed>
-* com.google.guava:guava:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-codegen-bytebuddy:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
 * org.jmock:jmock:jar:<managed>
 * org.jmock:jmock-junit4:jar:<managed>
 * org.picocontainer:picocontainer:jar:<managed>
-* org.slf4j:slf4j-api:jar:${slf4j-api.version}
+* org.slf4j:slf4j-api:jar:<managed>
 * org.springframework:spring-test:jar:<managed>
 * org.springframework.boot:spring-boot-starter-test:jar:<managed>
 
@@ -2405,6 +2383,8 @@ _Dependencies_
 * org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed>
 * org.apache.isis.security:isis-security-shiro:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-specsupport-applib:jar:<managed>
+* org.apache.isis.tooling:isis-tooling-model4adoc:jar:${project.version}
 * org.apache.isis.viewer:isis-viewer-common:jar:<managed>
 * org.eclipse.persistence:org.eclipse.persistence.moxy:jar:2.7.7
 * org.glassfish:javax.json:jar:1.1.4
@@ -2971,7 +2951,6 @@ _Dependencies_
 |Apache Isis Ext - Quartz Impl
 |_Dependencies_
 
-* com.google.guava:guava:jar:<managed>
 * org.apache.isis.core:isis-core-config:jar:<managed>
 * org.apache.isis.core:isis-core-security:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed>
@@ -3306,13 +3285,11 @@ _Dependencies_
 
 _Dependencies_
 
-* com.google.guava:guava:jar:<managed>
-* org.apache.commons:commons-lang3:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
-* org.reflections:reflections:jar:<managed>
 
 
 
@@ -3358,7 +3335,6 @@ _Dependencies_
 
 _Dependencies_
 
-* com.google.guava:guava:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
@@ -3519,7 +3495,6 @@ _Dependencies_
 
 _Dependencies_
 
-* com.google.guava:guava:jar:<managed>
 * fr.opensagres.xdocreport:fr.opensagres.xdocreport.converter.docx.xwpf:jar:<managed>
 * fr.opensagres.xdocreport:fr.opensagres.xdocreport.document.docx:jar:<managed>
 * fr.opensagres.xdocreport:fr.opensagres.xdocreport.template.freemarker:jar:<managed>
@@ -3551,7 +3526,7 @@ _Dependencies_
 
 _Dependencies_
 
-* com.google.guava:guava:jar:<managed>
+* org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
@@ -3879,9 +3854,6 @@ package "package-ecosystem\n[Software System]" {
 * demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities
 * demoapp.dom.types.isis.clobs.jdo.IsisClobJdoSeedService
 * demoapp.dom.types.isis.clobs.samples.IsisClobsSamples
-* demoapp.dom.types.isis.images.jdo.IsisImageJdoEntities
-* demoapp.dom.types.isis.images.jdo.IsisImageJdoSeedService
-* demoapp.dom.types.isis.images.samples.IsisImagesSamples
 * demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities
 * demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoSeedService
 * demoapp.dom.types.isis.localresourcepaths.samples.IsisLocalResourcePathsSamples
@@ -4174,6 +4146,7 @@ package "package-ecosystem\n[Software System]" {
 8 .[#707070].> 9 : ""
 8 .[#707070].> 10 : ""
 8 .[#707070].> 11 : ""
+2 .[#707070].> 3 : ""
 2 .[#707070].> 4 : ""
 2 .[#707070].> 8 : ""
 @enduml

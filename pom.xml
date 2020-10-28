@@ -105,7 +105,7 @@
 		</profile>
 
 		<profile>
-			<id>module-incubator</id>
+			<id>module-incubator-all</id>
 			<activation>
 				<property>
 					<name>module-incubator</name>
@@ -115,6 +115,43 @@
 				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/clients/kroviz</module>
 				<module>incubator/viewers/javafx</module>
+				<module>incubator/viewers/vaadin</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>module-incubator-javafx</id>
+			<activation>
+				<property>
+					<name>module-incubator-javafx</name>
+				</property>
+			</activation>
+			<modules>
+				<module>incubator/viewers/javafx</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>module-incubator-kroviz</id>
+			<activation>
+				<property>
+					<name>module-incubator</name>
+				</property>
+			</activation>
+			<modules>
+				<module>incubator/clients/kroviz</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>module-incubator-vaadin</id>
+			<activation>
+				<property>
+					<name>module-incubator-vaadin</name>
+				</property>
+			</activation>
+			<modules>
+				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/viewers/vaadin</module>
 			</modules>
 		</profile>
@@ -140,6 +177,8 @@
 			</activation>
 			<modules>
 				<module>regressiontests</module>
+				<!-- prerequisites ... -->
+				<module>tooling</module>
 			</modules>
 		</profile>
 		
