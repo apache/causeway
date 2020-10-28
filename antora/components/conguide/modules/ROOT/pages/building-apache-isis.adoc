@@ -277,7 +277,7 @@ Where `module-xxx` and `module-yyy` correspond to profile names, as provided wit
 | Regression Tests (for the CI pipelines)
 
 | module-tooling
-| Tooling Ecosystem (Code Mining, Atomated Docs, ...)
+| Tooling Ecosystem (Code Mining, Automated Docs, ...)
 
 |===
 
