@@ -93,14 +93,39 @@
 		</profile>
 
 		<profile>
-			<id>module-examples-demo</id>
+			<id>module-examples-demo-javafx</id>
 			<activation>
 				<property>
-					<name>module-examples-demo</name>
+					<name>module-examples-demo-javafx</name>
 				</property>
 			</activation>
 			<modules>
-				<module>examples/demo</module>
+				<module>examples/demo/javafx</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>module-examples-demo-wicket</id>
+			<activation>
+				<property>
+					<name>module-examples-demo-wicket</name>
+				</property>
+			</activation>
+			<modules>
+				<module>examples/demo/wicket</module>
+			</modules>
+		</profile>
+		
+		
+		<profile>
+			<id>module-examples-demo-vaadin</id>
+			<activation>
+				<property>
+					<name>module-examples-demo-vaadin</name>
+				</property>
+			</activation>
+			<modules>
+				<module>examples/demo/vaadin</module>
 			</modules>
 		</profile>
 

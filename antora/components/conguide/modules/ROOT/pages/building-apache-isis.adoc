@@ -253,10 +253,16 @@ Where `module-xxx` and `module-yyy` correspond to profile names, as provided wit
 | All Apache Isis Modules
 
 | module-antora
-| Offical Project Documentation
+| Official Project Documentation
+
+| module-examples-demo-javafx
+| Demo Application (JavaFx)
+
+| module-examples-demo-vaadin
+| Demo Application (Vaadin)
 				
-| module-examples-demo
-| Demo Application
+| module-examples-demo-wicket
+| Demo Application (Wicket)
 
 | module-incubator-all
 | All Incubation Modules 
