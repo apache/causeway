@@ -101,6 +101,8 @@
 			</activation>
 			<modules>
 				<module>examples/demo/javafx</module>
+				<!-- prerequisites ... -->
+				<module>incubator/viewers/javafx</module>
 			</modules>
 		</profile>
 		
@@ -113,6 +115,8 @@
 			</activation>
 			<modules>
 				<module>examples/demo/wicket</module>
+				<!-- prerequisites ... -->
+				<module>examples/demo/web</module>
 			</modules>
 		</profile>
 		
@@ -126,6 +130,10 @@
 			</activation>
 			<modules>
 				<module>examples/demo/vaadin</module>
+				<!-- prerequisites ... -->
+				<module>incubator/viewers/vaadin</module>
+				<module>examples/demo/web</module>
+				<module>examples/demo/wicket</module>
 			</modules>
 		</profile>
 
