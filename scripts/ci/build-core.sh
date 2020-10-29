@@ -38,21 +38,21 @@ sh $SCRIPT_DIR/_print-environment.sh "build-core"
 
 if [ ! -z "$REVISION" ]; then
 
-  cd $PROJECT_ROOT_PATH
   echo ""
   echo ""
   echo ">>> mvn versions:set -DnewVersion=$REVISION ..."
   echo ""
   echo ""
+  cd $PROJECT_ROOT_PATH
   mvn versions:set \
-      -Pmodule-all \
+      -DprocessAllModules \
       -DnewVersion=$REVISION \
       | fgrep --line-buffered -v "^Progress (1)" \
       | fgrep --line-buffered -v "Downloading from central" \
       | fgrep --line-buffered -v "Downloaded from central" \
       | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
       | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
-
+      
   echo ""
   echo ""
   echo ">>> sed'ing version in starters and parent ..."
@@ -61,8 +61,10 @@ if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/starters
   CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
   sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
-  cd $PROJECT_ROOT_PATH/isis-parent
-  sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
+
+  # to debug the version rewriting result, one can inspect the pom files with following command
+  # find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
+
 fi
 
 cd $PROJECT_ROOT_PATH
@@ -104,7 +106,7 @@ if [ ! -z "$REVISION" ]; then
   echo ""
   echo ""
   mvn versions:revert \
-      -Pmodule-all \
+      -DprocessAllModules \
       | fgrep --line-buffered -v "^Progress (1)" \
       | fgrep --line-buffered -v "Downloading from central" \
       | fgrep --line-buffered -v "Downloaded from central" \
@@ -118,8 +120,6 @@ if [ ! -z "$REVISION" ]; then
   echo ""
   echo ""
   cd $PROJECT_ROOT_PATH/starters
-  sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
-  cd $PROJECT_ROOT_PATH/isis-parent
   sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
 fi
 

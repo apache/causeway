@@ -49,6 +49,7 @@
 			-->
 		<module>core</module>
 		<module>extensions</module>
+		<module>isis-parent</module>
 		<module>mappings</module>
 		<module>mavendeps</module>
 		<module>starters</module>
