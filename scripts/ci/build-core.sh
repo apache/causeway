@@ -62,7 +62,12 @@ if [ ! -z "$REVISION" ]; then
   CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
   sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
 
-  # to debug the version rewriting result, one can inspect the pom files with following command
+  # -- debug the version rewriting -- 
+  # 1) add an exit statement after the fi below
+  # exit 0
+  # 2) run this script from project root via:
+  # export REVISION=1.9.0-SNAPSHOT ; bash scripts/ci/build-core.sh
+  # 3) then inspect the pom files with following command:
   # find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
 
 fi
