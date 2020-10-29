@@ -178,17 +178,6 @@
 					<version>${jaxws-ri.version}</version>
 					<exclusions>
 						<exclusion>
-							<groupId>com.sun.xml.ws</groupId>
-							<artifactId>jaxws-rt</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>com.sun.xml.ws</groupId>
-					<artifactId>jaxws-rt</artifactId>
-					<version>${jaxws-ri.version}</version>
-					<exclusions>
-						<exclusion>
 							<groupId>com.fasterxml.woodstox</groupId>
 							<artifactId>woodstox-core</artifactId>
 						</exclusion>

@@ -45,6 +45,7 @@ if [ ! -z "$REVISION" ]; then
   echo ""
   echo ""
   mvn versions:set \
+      -Pmodule-all \
       -DnewVersion=$REVISION \
       | fgrep --line-buffered -v "^Progress (1)" \
       | fgrep --line-buffered -v "Downloading from central" \
@@ -103,6 +104,7 @@ if [ ! -z "$REVISION" ]; then
   echo ""
   echo ""
   mvn versions:revert \
+      -Pmodule-all \
       | fgrep --line-buffered -v "^Progress (1)" \
       | fgrep --line-buffered -v "Downloading from central" \
       | fgrep --line-buffered -v "Downloaded from central" \
