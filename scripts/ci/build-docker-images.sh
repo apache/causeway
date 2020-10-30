@@ -44,11 +44,6 @@ echo ""
 echo "\$Isis Version: ${ISIS_VERSION}"
 echo ""
 
-function chdir() {
-	local dir=${1}
-	cd $PROJECT_ROOT_PATH/${dir}
-}
-
 function setRevision() {
 	local dir=${1}
 
@@ -67,27 +62,10 @@ function revertRevision() {
 	fi
 }
 
-setRevision
-
-#
-# now build the apps
-#
-for app in demo
-do
-  
-  chdir examples/$app
- 
-  mvn clean install \
-      $BATCH_MODE \
-      -Dmaven.source.skip=true \
-      -Dskip.git \
-      -Dskip.arch \
-      -DskipTests
-
-  for variant in wicket vaadin
-  do
-
-	chdir examples/$app/$variant
+function buildDockerImage() {
+	local dir=${1}
+	
+	cd $PROJECT_ROOT_PATH/${dir}
 	
 	mvn --batch-mode \
 	    compile jib:build \
@@ -96,11 +74,22 @@ do
 	    -Dskip.git \
 	    -Dskip.arch \
 	    -DskipTests
-	
-  done
-  
+}
 
-done
+setRevision
+
+# -- debug the version rewriting -- 
+# 1) add an exit statement after the comments below
+# exit 0
+# 2) run this script from project root via:
+# export REVISION=1.9.0-SNAPSHOT ; bash scripts/ci/build-docker-images.sh
+# 3) then inspect the pom files with following command:
+# find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
+
+
+# now build the individual docker images
+buildDockerImage examples/demo/wicket 
+buildDockerImage examples/demo/vaadin
 
 revertRevision
 
