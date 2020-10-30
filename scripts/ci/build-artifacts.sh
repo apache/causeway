@@ -169,12 +169,9 @@ mvn -s $SETTINGS_XML \
 
 # now build the individual docker images
 if [ "$JIB_CMD" != "skip"  ]; then
-# buildDependency examples/demo
   buildDockerImage examples/demo/wicket 
   buildDockerImage examples/demo/vaadin
 fi
-
-exit 0
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH
