@@ -75,7 +75,7 @@ fi
 cd $PROJECT_ROOT_PATH
 echo ""
 echo ""
-echo ">>> mvn $MVN_STAGES $* $MVN_ADDITIONAL_OPTS"
+echo ">>> ${PROJECT_ROOT_PATH}: mvn -s $SETTINGS_XML $MVN_STAGES $* $MVN_ADDITIONAL_OPTS"
 echo ""
 echo ""
 mvn -s $SETTINGS_XML \

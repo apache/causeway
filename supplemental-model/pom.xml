@@ -26,6 +26,10 @@
   	be invalid.
 	To compensate for incomplete dependency POMs, we use the supplemental models support.
   	</description>
+  	
+  	<properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 	<build>
 		<plugins>
