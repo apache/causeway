@@ -67,8 +67,8 @@ function buildDependency() {
 	
 	cd $PROJECT_ROOT_PATH/${dir}
 
-	mvn clean install \
-      --batch-mode \
+	mvn --batch-mode \
+	  install \
       -Dmaven.source.skip=true \
       -Dskip.git \
       -Dskip.arch \

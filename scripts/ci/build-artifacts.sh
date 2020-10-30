@@ -22,13 +22,11 @@ if [ -z "$BATCH_MODE_FLAG" ] || [ "$BATCH_MODE_FLAG" != "off" ]; then
   BATCH_MODE=--batch-mode
 fi
 
-if [ -z "$JIB_PUSH_FLAG" ] || [ "$JIB_PUSH_FLAG" != "on" ]; then
-  #DRYRUN
-  JIB_MODE=buildTar
-else
-  #PUSH (JIB_PUSH_FLAG = on)
-  JIB_MODE=build
-fi
+case $JIB_MODE in
+  "push") JIB_CMD="build" ;;
+  "tar") JIB_CMD="buildTar" ;;
+  *) JIB_CMD="skip" ;;
+esac
 
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
@@ -46,6 +44,38 @@ sh $SCRIPT_DIR/_print-environment.sh "build-artifacts"
 
 ### FUNCTIONS
 
+function buildDependency() {
+	local dir=${1}
+	
+	cd $PROJECT_ROOT_PATH/${dir}
+
+	mvn --batch-mode \
+	  install \
+      -Dmaven.source.skip=true \
+      -Dskip.git \
+      -Dskip.arch \
+      -DskipTests \
+      | fgrep --line-buffered -v "CP: " \
+      | fgrep --line-buffered -v "^Progress (1)" \
+      | fgrep --line-buffered -v "Downloading from central" \
+      | fgrep --line-buffered -v "Downloaded from central" \
+      | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
+      | fgrep --line-buffered -v "Downloaded from DataNucleus_2" \
+      | fgrep --line-buffered -v "Uploading from gcpappenginerepo" \
+      | fgrep --line-buffered -v "Uploaded from gcpappenginerepo" \
+      | fgrep --line-buffered -v "Downloading from gcpappenginerepo" \
+      | fgrep --line-buffered -v "Downloaded from gcpappenginerepo" \
+      | fgrep --line-buffered -v "[INFO] --- maven-enforcer-plugin" \
+      | fgrep --line-buffered -v "[INFO] --- maven-site-plugin" \
+      | fgrep --line-buffered -v "[INFO] <<< maven-source-plugin:" \
+      | fgrep --line-buffered -v "[INFO] >>> maven-source-plugin" \
+      | fgrep --line-buffered -v "[INFO] Installing" \
+      | fgrep --line-buffered -v "[INFO] Copying" \
+      | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
+      | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
+      | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
+}
+
 function buildDockerImage() {
 	local dir=${1}
 	
@@ -53,12 +83,12 @@ function buildDockerImage() {
 	
 	echo ""
 	echo ""
-	echo ">>> $PROJECT_ROOT_PATH/${dir}: mvn compile jib:$JIB_MODE ..."
+	echo ">>> $PROJECT_ROOT_PATH/${dir}: mvn compile jib:$JIB_CMD ..."
 	echo ""
 	echo ""
 	
 	mvn --batch-mode \
-    	compile jib:$JIB_MODE \
+    	compile jib:$JIB_CMD \
     	-Dmaven.source.skip=true \
     	-Dskip.git \
     	-Dskip.arch \
@@ -99,7 +129,7 @@ if [ ! -z "$REVISION" ]; then
   # 1) add an exit statement after the fi below
   # exit 0
   # 2) run this script from project root via:
-  # export REVISION=1.9.0-SNAPSHOT ; bash scripts/ci/build-artifacts.sh
+  # export REVISION=1.9.0-SNAPSHOT ; export JIB_MODE=tar ; bash scripts/ci/build-artifacts.sh
   # 3) then inspect the pom files with following command:
   # find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
 
@@ -137,9 +167,13 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 
 # now build the individual docker images
-# yet does not work when push flag is on
-#buildDockerImage examples/demo/wicket 
-#buildDockerImage examples/demo/vaadin
+if [ "$JIB_CMD" != "skip"  ]; then
+  buildDependency examples/demo
+  buildDockerImage examples/demo/wicket 
+  buildDockerImage examples/demo/vaadin
+fi
+
+exit 0
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH
