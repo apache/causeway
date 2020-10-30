@@ -81,13 +81,10 @@
 				<module>examples/demo/vaadin</module>
 				<module>examples/demo/web</module>
 				<module>examples/demo/wicket</module>
-				<module>incubator/clients/kroviz</module>
-				<module>incubator/viewers/javafx</module>
-				<module>incubator/viewers/vaadin</module>
+				<module>incubator</module>
 				<module>legacy</module>
 				<module>regressiontests</module>
 				<module>tooling</module>
-				<module>valuetypes/asciidoc/ui/vaadin</module>
 			</modules>
 		</profile>
 		
