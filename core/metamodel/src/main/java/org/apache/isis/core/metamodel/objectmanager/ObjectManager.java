@@ -33,6 +33,8 @@ import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 /**
  * Bundles all domain object state related responsibilities:<br>
  * - object creation ... init defaults <br>
@@ -112,7 +114,12 @@ public interface ObjectManager {
         if(pojo==null) {
             return ManagedObject.unspecified(); 
         }
-        return ManagedObject.of(this::loadSpecification, pojo);
+        // could be any pojo, even of a type, that is vetoed for introspection (spec==null)
+        val spec = loadSpecification(pojo.getClass());
+        if(spec==null) {
+            return ManagedObject.unspecified();
+        }
+        return ManagedObject.of(spec, pojo);
     }
     
     

@@ -30,10 +30,11 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
@@ -41,26 +42,27 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class TitleServiceDefault implements TitleService {
 
     private final WrapperFactory wrapperFactory;
-    private final SpecificationLoader specificationLoader;
+    private final ObjectManager objectManager;
     
-    @Inject
-    public TitleServiceDefault(WrapperFactory wrapperFactory, SpecificationLoader specificationLoader) {
-        this.wrapperFactory = wrapperFactory;
-        this.specificationLoader = specificationLoader;
-    }
 
     @Override
     public String titleOf(final Object domainObject) {
         
-        if(specificationLoader == null) { // simplified JUnit test support
+        if(objectManager == null) { // simplified JUnit test support
             return "" + domainObject;
         }
         
         val pojo = unwrapped(domainObject);
-        val objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, pojo);
+        val objectAdapter = objectManager.adapt(pojo);
+        
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
+            return "[UNSPECIFIED]";
+        }
+        
         if(EntityUtil.isDestroyed(objectAdapter)) {
             return "[DELETED]";
         } else {
@@ -71,12 +73,17 @@ public class TitleServiceDefault implements TitleService {
     @Override
     public String iconNameOf(final Object domainObject) {
         
-        if(specificationLoader == null) { // simplified JUnit test support 
+        if(objectManager == null) { // simplified JUnit test support 
             return domainObject!=null ? domainObject.getClass().getSimpleName() : "null";
         }
         
         val pojo = unwrapped(domainObject);
-        val objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, pojo);
+        val objectAdapter = objectManager.adapt(pojo);
+        
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
+            return "unspecified";
+        }        
+        
         return objectAdapter.getSpecification().getIconName(objectAdapter);
     }
 
@@ -85,5 +92,5 @@ public class TitleServiceDefault implements TitleService {
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
-
+    
 }

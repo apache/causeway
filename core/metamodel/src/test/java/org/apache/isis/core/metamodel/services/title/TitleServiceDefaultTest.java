@@ -60,7 +60,7 @@ class TitleServiceDefaultTest {
         
         metaModelContext.getSpecificationLoader().createMetaModel();
         
-        titleService = new TitleServiceDefault(null, metaModelContext.getSpecificationLoader());
+        titleService = new TitleServiceDefault(null, metaModelContext.getObjectManager());
 
     }
 
