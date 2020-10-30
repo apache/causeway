@@ -54,7 +54,7 @@ function setRevision() {
 
 	if [ ! -z "$REVISION" ]; then
 	  cd $PROJECT_ROOT_PATH/${dir}
-	  mvn versions:set -DnewVersion=$REVISION -DprocessAllModules=true -Dmodule-demo-app
+	  mvn versions:set -DnewVersion=$REVISION -DprocessAllModules=true -Dmodule-all
 	fi
 }
 
@@ -63,11 +63,11 @@ function revertRevision() {
 	
 	if [ ! -z "$REVISION" ]; then
 	  cd $PROJECT_ROOT_PATH/${dir}
-	  mvn versions:revert -DnewVersion=$REVISION -DprocessAllModules=true -Dmodule-demo-app
+	  mvn versions:revert -DnewVersion=$REVISION -DprocessAllModules=true -Dmodule-all 
 	fi
 }
 
-setRevision isis-parent
+setRevision
 
 #
 # now build the apps
@@ -79,6 +79,7 @@ do
  
   mvn clean install \
       $BATCH_MODE \
+      -Dmaven.source.skip=true \
       -Dskip.git \
       -Dskip.arch \
       -DskipTests
@@ -90,6 +91,7 @@ do
 	
 	mvn --batch-mode \
 	    compile jib:build \
+	    -Dmaven.source.skip=true \
 	    -Djib.httpTimeout=60000 \
 	    -Dskip.git \
 	    -Dskip.arch \
@@ -100,6 +102,6 @@ do
 
 done
 
-revertRevision isis-parent
+revertRevision
 
 
