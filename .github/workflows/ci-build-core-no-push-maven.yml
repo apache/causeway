@@ -67,8 +67,9 @@ jobs:
       env:
         # -Dmodule-all ... build all modules 
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
+        # -Dmaven.source.skip=true ... no need for the CI build to pull sources
         # -T 1C ... 1 build thread per core
-        MVN_ADDITIONAL_OPTS: -Dmodule-all -Denforcer.failFast=true -T 1C
+        MVN_ADDITIONAL_OPTS: -Dmodule-all -Dmaven.source.skip=true -Denforcer.failFast=true -T 1C
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context 

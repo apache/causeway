@@ -22,10 +22,14 @@
 
 	<name>Apache Isis (Aggregator)</name>
 	<description>
-        Convenience aggregator POM that references all modules either explicitely 
-        or via profiles, that are not activiated per default.
-        The parent POM of the core framework is isis-parent/pom.xml
+        Convenience aggregator POM that references all modules, some explicitely, 
+        others via profiles, that are not activiated per default.
+        The parent POM of the core framework is isis-parent/pom.xml.
     </description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 	<scm>
 		<connection>scm:git:https://github.com/apache/isis.git</connection>
