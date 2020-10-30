@@ -22,6 +22,14 @@ if [ -z "$BATCH_MODE_FLAG" ] || [ "$BATCH_MODE_FLAG" != "off" ]; then
   BATCH_MODE=--batch-mode
 fi
 
+if [ -z "$JIB_PUSH_FLAG" ] || [ "$JIB_PUSH_FLAG" != "on" ]; then
+  #DRYRUN
+  JIB_MODE=buildTar
+else
+  #PUSH (JIB_PUSH_FLAG = on)
+  JIB_MODE=build
+fi
+
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
   PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
@@ -35,6 +43,24 @@ if [ -z "$SETTINGS_XML" ]; then
 fi
 
 sh $SCRIPT_DIR/_print-environment.sh "build-artifacts"
+
+### FUNCTIONS
+
+function buildDockerImage() {
+	local dir=${1}
+	
+	cd $PROJECT_ROOT_PATH/${dir}
+	
+	mvn --batch-mode \
+    	compile jib:$JIB_MODE \
+    	-Dmaven.source.skip=true \
+    	-Dskip.git \
+    	-Dskip.arch \
+    	-DskipTests
+		    
+}
+
+### MAIN
 
 if [ ! -z "$REVISION" ]; then
 
@@ -103,6 +129,10 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
     | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
+
+# now build the individual docker images
+buildDockerImage examples/demo/wicket 
+buildDockerImage examples/demo/vaadin
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH
