@@ -23,7 +23,7 @@ if [ -z "$PROJECT_ROOT_PATH" ]; then
   PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
 fi
 
-sh $SCRIPT_DIR/_print-environment.sh "build-core-using-gradle"
+sh $SCRIPT_DIR/_print-environment.sh "build-artifacts-using-gradle"
 
 ##un-comment if we want maven to run the JAXB Java Source Generator
 ##cd $PROJECT_ROOT_PATH/api/schema

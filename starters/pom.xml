@@ -17,7 +17,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- this must come before <parent> because the version is manually updated 
-		in build-core.sh -->
+		in build-artifacts.sh -->
 	<groupId>org.apache.isis.app</groupId>
 	<artifactId>isis-app-starter-parent</artifactId>
 	<version>2.0.0-SNAPSHOT</version>

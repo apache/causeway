@@ -34,7 +34,7 @@ if [ -z "$SETTINGS_XML" ]; then
   SETTINGS_XML=$PROJECT_ROOT_PATH/.m2/settings.xml
 fi
 
-sh $SCRIPT_DIR/_print-environment.sh "build-core"
+sh $SCRIPT_DIR/_print-environment.sh "build-artifacts"
 
 if [ ! -z "$REVISION" ]; then
 
@@ -47,6 +47,7 @@ if [ ! -z "$REVISION" ]; then
   mvn versions:set \
       -DprocessAllModules \
       -DnewVersion=$REVISION \
+      -Dmodule-all \
       | fgrep --line-buffered -v "^Progress (1)" \
       | fgrep --line-buffered -v "Downloading from central" \
       | fgrep --line-buffered -v "Downloaded from central" \
@@ -66,7 +67,7 @@ if [ ! -z "$REVISION" ]; then
   # 1) add an exit statement after the fi below
   # exit 0
   # 2) run this script from project root via:
-  # export REVISION=1.9.0-SNAPSHOT ; bash scripts/ci/build-core.sh
+  # export REVISION=1.9.0-SNAPSHOT ; bash scripts/ci/build-artifacts.sh
   # 3) then inspect the pom files with following command:
   # find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
 
@@ -112,6 +113,7 @@ if [ ! -z "$REVISION" ]; then
   echo ""
   mvn versions:revert \
       -DprocessAllModules \
+      -Dmodule-all \
       | fgrep --line-buffered -v "^Progress (1)" \
       | fgrep --line-buffered -v "Downloading from central" \
       | fgrep --line-buffered -v "Downloaded from central" \

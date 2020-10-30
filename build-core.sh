@@ -5,4 +5,4 @@ if [ -z "$MVN_STAGES" ]; then
 fi
 
 export BATCH_MODE_FLAG=off
-sh scripts/ci/build-core.sh $*
+sh scripts/ci/build-artifacts.sh $*

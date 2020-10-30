@@ -67,14 +67,28 @@ function buildDockerImage() {
 	
 	cd $PROJECT_ROOT_PATH/${dir}
 	
-	mvn --batch-mode \
-	    compile jib:build \
-	    -Dmaven.source.skip=true \
-	    -Djib.httpTimeout=60000 \
-	    -Dskip.git \
-	    -Dskip.arch \
-	    -DskipTests
+	if [ -z "$DRYRUN" ]; then
+	
+		mvn --batch-mode \
+	    	compile jib:build \
+	    	-Dmaven.source.skip=true \
+	    	-Dskip.git \
+	    	-Dskip.arch \
+	    	-DskipTests
+	
+	else
+		#DRYRUN
+		mvn --batch-mode \
+	    	compile jib:buildTar \
+	    	-Dmaven.source.skip=true \
+	    	-Dskip.git \
+	    	-Dskip.arch \
+	    	-DskipTests
+	fi
+	    
+    # -s ../m2-settings.xml -DaltDeploymentRepository=${DEPLOY_TARGET}
 }
+
 
 setRevision
 
@@ -82,7 +96,7 @@ setRevision
 # 1) add an exit statement after the comments below
 # exit 0
 # 2) run this script from project root via:
-# export REVISION=1.9.0-SNAPSHOT ; bash scripts/ci/build-docker-images.sh
+# export REVISION=1.9.0-SNAPSHOT ; export DRYRUN=true ; bash scripts/ci/build-docker-images.sh
 # 3) then inspect the pom files with following command:
 # find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
 
@@ -92,5 +106,4 @@ buildDockerImage examples/demo/wicket
 buildDockerImage examples/demo/vaadin
 
 revertRevision
-
 

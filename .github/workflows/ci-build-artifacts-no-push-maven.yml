@@ -1,20 +1,16 @@
-name: Build and Test (w/ Gradle)
+name: Build and Test (w/ Maven)
 
 on:
-#disable gradle build until ISIS-2437 is resolved
-  schedule:
-    # * dummy, such that virtually never runs
-    - cron:  '0 0 1 1 0'
-#  push:
-#    branches:
-#      - master
-#  pull_request:
-#    branches:
-#      - master
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
-    name: build-local-no-push-gradle
+    name: build-local-no-push
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
@@ -26,6 +22,10 @@ jobs:
       # variable here, but it seems github not yet has any string expression manipulation 
       # operators other than concatination   
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
+      
+      # set this to 'deploy' when intent is to push the built packages to a repo
+      # requires 'secrets' which we don't have yet 
+      MVN_STAGES: install
 
     steps:
     - uses: actions/checkout@v2.3.3
@@ -35,13 +35,20 @@ jobs:
       with:
         java-version: 11
     
-    - name: Set up Gradle and print Version
-      uses: eskatos/gradle-command-action@v1
+    - name: Print Maven Version
+      run: mvn --version
+      
+    - name: Activate Cache for Maven Downloads
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-maven-modules
       with:
-        gradle-version: 6.5.1
-        wrapper-cache-enabled: true
-        dependencies-cache-enabled: true
-        arguments: --version
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
     
     - name: Setup Script Environment
       shell: bash
@@ -54,12 +61,15 @@ jobs:
         echo MVN_STAGES       \: $MVN_STAGES
         echo ======================================
     
-    - name: Build Core (w/ Gradle)
+    - name: Build Artifacts
       shell: bash
-      run: bash $CI_SCRIPTS_PATH/build-core-using-gradle.sh
-#      env:
-#        # also build and run regressiontests and kroviz
-#        MVN_ADDITIONAL_OPTS: -Dregressiontests-module -Dkroviz-module
+      run: bash $CI_SCRIPTS_PATH/build-artifacts.sh
+      env:
+        # -Dmodule-all ... build all modules 
+        # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
+        # -Dmaven.source.skip=true ... no need for the CI build to pull sources
+        # -T 1C ... 1 build thread per core
+        MVN_ADDITIONAL_OPTS: -Dmodule-all -Dmaven.source.skip=true -Denforcer.failFast=true -T 1C
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context 
