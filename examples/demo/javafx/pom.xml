@@ -125,7 +125,6 @@
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-ui</artifactId>
 			<type>pom</type>
-			<scope>import</scope>
 			<version>${project.version}</version>
 		</dependency>
 		
@@ -138,7 +137,6 @@
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-markdown-ui</artifactId>
 			<type>pom</type>
-			<scope>import</scope>
 			<version>${project.version}</version>
 		</dependency>
 

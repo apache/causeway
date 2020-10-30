@@ -59,6 +59,7 @@ function buildDockerImage() {
 	
 	mvn --batch-mode \
     	compile jib:$JIB_MODE \
+    	-o \
     	-Dmaven.source.skip=true \
     	-Dskip.git \
     	-Dskip.arch \
