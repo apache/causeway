@@ -62,6 +62,19 @@ function revertRevision() {
 	fi
 }
 
+function buildDependency() {
+	local dir=${1}
+	
+	cd $PROJECT_ROOT_PATH/${dir}
+
+	mvn clean install \
+      --batch-mode \
+      -Dmaven.source.skip=true \
+      -Dskip.git \
+      -Dskip.arch \
+      -DskipTests
+}
+
 function buildDockerImage() {
 	local dir=${1}
 	
@@ -100,6 +113,8 @@ setRevision
 # 3) then inspect the pom files with following command:
 # find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
 
+
+buildDependency examples/demo
 
 # now build the individual docker images
 buildDockerImage examples/demo/wicket 
