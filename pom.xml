@@ -76,11 +76,7 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>examples/demo/domain</module>
-				<module>examples/demo/javafx</module>
-				<module>examples/demo/vaadin</module>
-				<module>examples/demo/web</module>
-				<module>examples/demo/wicket</module>
+				<module>examples/demo</module>
 				<module>incubator</module>
 				<module>legacy</module>
 				<module>regressiontests</module>
