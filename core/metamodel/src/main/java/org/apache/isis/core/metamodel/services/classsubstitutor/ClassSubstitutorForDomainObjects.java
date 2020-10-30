@@ -26,9 +26,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.config.beans.IsisBeanMetaData;
 import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 
 import lombok.NonNull;
+import lombok.val;
 
 @Component
 @Named("isisMetaModel.ClassSubstitutorForDomainObjects")
@@ -45,15 +47,18 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
     @Override
     public Substitution getSubstitution(@NonNull Class<?> cls) {
         
-        if(isisBeanTypeRegistry.getViewModelTypes().contains(cls)) {
-            return Substitution.neverReplaceClass();
+        val beanSort = isisBeanTypeRegistry.lookupIntrospectableType(cls)
+        .map(IsisBeanMetaData::getBeanSort)
+        .orElse(null);
+        
+        if(beanSort!=null) {
+            if(beanSort.isEntity() 
+                    || beanSort.isViewModel()
+                    || beanSort.isManagedBean()) {
+                return Substitution.neverReplaceClass();
+            }    
         }
-        if(isisBeanTypeRegistry.getEntityTypesJdo().contains(cls)) {
-            return Substitution.neverReplaceClass();
-        }
-        if(isisBeanTypeRegistry.getEntityTypesJpa().contains(cls)) {
-            return Substitution.neverReplaceClass();
-        }
+        
         return Substitution.passThrough(); // indifferent
     }
     

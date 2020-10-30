@@ -130,8 +130,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         try{
             return classesToIgnore.contains(cls)
                     || classNamesToIgnore.contains(cls.getCanonicalName())
-                    || packageNamesToIgnore.stream().anyMatch(className::startsWith)
-                    ;
+                    || packageNamesToIgnore.stream().anyMatch(className::startsWith);
 
         } catch(NoClassDefFoundError e) {
 
