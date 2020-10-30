@@ -244,7 +244,7 @@
 						<artifactId>jib-maven-plugin</artifactId>
 						<configuration>
 							<from>
-								<image>openjdk:13-alpine</image>
+								<image>openjdk:15-alpine</image>
 							</from>
 							<container>
 								<jvmFlags>
