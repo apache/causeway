@@ -147,6 +147,7 @@ mvn -s $SETTINGS_XML \
     $MVN_STAGES \
     $MVN_ADDITIONAL_OPTS \
     $* \
+    -Dmodule-all \
     | fgrep --line-buffered -v "^Progress (1)" \
     | fgrep --line-buffered -v "Downloading from central" \
     | fgrep --line-buffered -v "Downloaded from central" \
@@ -168,7 +169,7 @@ mvn -s $SETTINGS_XML \
 
 # now build the individual docker images
 if [ "$JIB_CMD" != "skip"  ]; then
-  buildDependency examples/demo
+# buildDependency examples/demo
   buildDockerImage examples/demo/wicket 
   buildDockerImage examples/demo/vaadin
 fi
