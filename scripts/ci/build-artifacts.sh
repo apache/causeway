@@ -46,7 +46,7 @@ sh $SCRIPT_DIR/_print-environment.sh "build-artifacts"
 
 function buildDependency() {
 	local dir=${1}
-	
+
 	cd $PROJECT_ROOT_PATH/${dir}
 
 	mvn --batch-mode \
@@ -65,6 +65,10 @@ function buildDependency() {
       | fgrep --line-buffered -v "Uploaded from gcpappenginerepo" \
       | fgrep --line-buffered -v "Downloading from gcpappenginerepo" \
       | fgrep --line-buffered -v "Downloaded from gcpappenginerepo" \
+      | fgrep --line-buffered -v "Uploading from nexusincodework" \
+      | fgrep --line-buffered -v "Uploaded from nexusincodework" \
+      | fgrep --line-buffered -v "Downloading from nexusincodework" \
+      | fgrep --line-buffered -v "Downloaded from nexusincodework" \
       | fgrep --line-buffered -v "[INFO] --- maven-enforcer-plugin" \
       | fgrep --line-buffered -v "[INFO] --- maven-site-plugin" \
       | fgrep --line-buffered -v "[INFO] <<< maven-source-plugin:" \
@@ -72,28 +76,29 @@ function buildDependency() {
       | fgrep --line-buffered -v "[INFO] Installing" \
       | fgrep --line-buffered -v "[INFO] Copying" \
       | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
+      | fgrep --line-buffered -v "[INFO] Using alternate deployment repository nexusincodework" \
       | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
       | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 }
 
 function buildDockerImage() {
 	local dir=${1}
-	
+
 	cd $PROJECT_ROOT_PATH/${dir}
-	
+
 	echo ""
 	echo ""
 	echo ">>> $PROJECT_ROOT_PATH/${dir}: mvn compile jib:$JIB_CMD ..."
 	echo ""
 	echo ""
-	
+
 	mvn --batch-mode \
     	compile jib:$JIB_CMD \
     	-Dmaven.source.skip=true \
     	-Dskip.git \
     	-Dskip.arch \
     	-DskipTests
-		    
+
 }
 
 ### MAIN
@@ -115,7 +120,7 @@ if [ ! -z "$REVISION" ]; then
       | fgrep --line-buffered -v "Downloaded from central" \
       | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
       | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
-      
+
   echo ""
   echo ""
   echo ">>> sed'ing version in starters and parent ..."
@@ -125,7 +130,7 @@ if [ ! -z "$REVISION" ]; then
   CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
   sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
 
-  # -- debug the version rewriting -- 
+  # -- debug the version rewriting --
   # 1) add an exit statement after the fi below
   # exit 0
   # 2) run this script from project root via:
@@ -157,6 +162,10 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "Uploaded from gcpappenginerepo" \
     | fgrep --line-buffered -v "Downloading from gcpappenginerepo" \
     | fgrep --line-buffered -v "Downloaded from gcpappenginerepo" \
+    | fgrep --line-buffered -v "Uploading from nexusincodework" \
+    | fgrep --line-buffered -v "Uploaded from nexusincodework" \
+    | fgrep --line-buffered -v "Downloading from nexusincodework" \
+    | fgrep --line-buffered -v "Downloaded from nexusincodework" \
     | fgrep --line-buffered -v "[INFO] --- maven-enforcer-plugin" \
     | fgrep --line-buffered -v "[INFO] --- maven-site-plugin" \
     | fgrep --line-buffered -v "[INFO] <<< maven-source-plugin:" \
@@ -164,12 +173,13 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "[INFO] Installing" \
     | fgrep --line-buffered -v "[INFO] Copying" \
     | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
+    | fgrep --line-buffered -v "[INFO] Using alternate deployment repository nexusincodework" \
     | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 
 # now build the individual docker images
 if [ "$JIB_CMD" != "skip"  ]; then
-  buildDockerImage examples/demo/wicket 
+  buildDockerImage examples/demo/wicket
   buildDockerImage examples/demo/vaadin
 fi
 
@@ -189,7 +199,7 @@ if [ ! -z "$REVISION" ]; then
       | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
       | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
 
-  
+
   echo ""
   echo ""
   echo ">>> sed'ing to revert version in starters and parent ..."
