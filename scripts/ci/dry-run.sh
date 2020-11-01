@@ -21,7 +21,6 @@
 set -e
 
 export BASELINE=2.0.0-M2
-export GCPAPPENGINEREPO_URL=https://repo.incode.work
 export NEXUSINCODEWORK_URL=https://nexus.incode.work
 export SHARED_VARS_FILE=~/ci-env.txt
 

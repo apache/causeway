@@ -61,22 +61,17 @@ function buildDependency() {
       | fgrep --line-buffered -v "Downloaded from central" \
       | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
       | fgrep --line-buffered -v "Downloaded from DataNucleus_2" \
-      | fgrep --line-buffered -v "Uploading from gcpappenginerepo" \
-      | fgrep --line-buffered -v "Uploaded from gcpappenginerepo" \
-      | fgrep --line-buffered -v "Downloading from gcpappenginerepo" \
-      | fgrep --line-buffered -v "Downloaded from gcpappenginerepo" \
-      | fgrep --line-buffered -v "Uploading from nexusincodework" \
-      | fgrep --line-buffered -v "Uploaded from nexusincodework" \
-      | fgrep --line-buffered -v "Downloading from nexusincodework" \
-      | fgrep --line-buffered -v "Downloaded from nexusincodework" \
+      | fgrep --line-buffered -v "Uploading from nexus_incode_work" \
+      | fgrep --line-buffered -v "Uploaded from nexus_incode_work" \
+      | fgrep --line-buffered -v "Downloading from nexus_incode_work" \
+      | fgrep --line-buffered -v "Downloaded from nexus_incode_work" \
       | fgrep --line-buffered -v "[INFO] --- maven-enforcer-plugin" \
       | fgrep --line-buffered -v "[INFO] --- maven-site-plugin" \
       | fgrep --line-buffered -v "[INFO] <<< maven-source-plugin:" \
       | fgrep --line-buffered -v "[INFO] >>> maven-source-plugin" \
       | fgrep --line-buffered -v "[INFO] Installing" \
       | fgrep --line-buffered -v "[INFO] Copying" \
-      | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
-      | fgrep --line-buffered -v "[INFO] Using alternate deployment repository nexusincodework" \
+      | fgrep --line-buffered -v "[INFO] Using alternate deployment repository nexus_incode_work" \
       | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
       | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 }
@@ -158,22 +153,17 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "Downloaded from central" \
     | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
     | fgrep --line-buffered -v "Downloaded from DataNucleus_2" \
-    | fgrep --line-buffered -v "Uploading from gcpappenginerepo" \
-    | fgrep --line-buffered -v "Uploaded from gcpappenginerepo" \
-    | fgrep --line-buffered -v "Downloading from gcpappenginerepo" \
-    | fgrep --line-buffered -v "Downloaded from gcpappenginerepo" \
-    | fgrep --line-buffered -v "Uploading from nexusincodework" \
-    | fgrep --line-buffered -v "Uploaded from nexusincodework" \
-    | fgrep --line-buffered -v "Downloading from nexusincodework" \
-    | fgrep --line-buffered -v "Downloaded from nexusincodework" \
+    | fgrep --line-buffered -v "Uploading from nexus_incode_work" \
+    | fgrep --line-buffered -v "Uploaded from nexus_incode_work" \
+    | fgrep --line-buffered -v "Downloading from nexus_incode_work" \
+    | fgrep --line-buffered -v "Downloaded from nexus_incode_work" \
     | fgrep --line-buffered -v "[INFO] --- maven-enforcer-plugin" \
     | fgrep --line-buffered -v "[INFO] --- maven-site-plugin" \
     | fgrep --line-buffered -v "[INFO] <<< maven-source-plugin:" \
     | fgrep --line-buffered -v "[INFO] >>> maven-source-plugin" \
     | fgrep --line-buffered -v "[INFO] Installing" \
     | fgrep --line-buffered -v "[INFO] Copying" \
-    | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
-    | fgrep --line-buffered -v "[INFO] Using alternate deployment repository nexusincodework" \
+    | fgrep --line-buffered -v "[INFO] Using alternate deployment repository nexus_incode_work" \
     | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 
