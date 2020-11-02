@@ -66,16 +66,7 @@
         </testResources>
 	</build>
 
-<!-- temp. master build of datanucleus-core, used until DN-core 5.2.5 gets released -->
-	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
-
 
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
@@ -87,17 +78,10 @@
 			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
-		<!-- 		<dependency> -->
-		<!-- 			<groupId>org.datanucleus</groupId> -->
-		<!-- 			<artifactId>datanucleus-core</artifactId> -->
-		<!-- 		</dependency> -->
-		<!-- temp. master build of datanucleus-core, used until DN-core 5.2.5 gets released -->
 		<dependency>
-		    <groupId>com.github.datanucleus</groupId>
-		    <artifactId>datanucleus-core</artifactId>
-		    <version>54313ef1a8</version>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-core</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-api-jdo</artifactId>

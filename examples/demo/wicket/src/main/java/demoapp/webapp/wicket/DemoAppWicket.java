@@ -18,23 +18,24 @@
  */
 package demoapp.webapp.wicket;
 
+import org.datanucleus.store.types.TypeManagerImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.quartz.IsisModuleExtQuartzImpl;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
-import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMarkdownPersistenceJdoDn5;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
+import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMarkdownPersistenceJdoDn5;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
+import lombok.val;
+
 import demoapp.web.DemoAppManifest;
-import demoapp.web._infra.utils.ThereCanBeOnlyOne;
 
 /**
  * Bootstrap the application.
@@ -71,6 +72,8 @@ public class DemoAppWicket extends SpringBootServletInitializer {
         //IsisPresets.prototyping();
         //DebugLoggingPreset.PERSISTENCE.apply();
         //DebugLoggingPreset.ISIS_SESSION.apply();
+        
+        val monkeyPatch = TypeManagerImpl.class;
 
         SpringApplication.run(new Class[] { DemoAppWicket.class }, args);
     }
