@@ -37,6 +37,17 @@
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-rs-client</artifactId>
+			<exclusions>
+				<exclusion>
+          			<groupId>com.fasterxml.woodstox</groupId>
+          			<artifactId>woodstox-core</artifactId>
+       			</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.woodstox</groupId>
+          	<artifactId>woodstox-core</artifactId>
+          	<version>6.2.3</version>
 		</dependency>
 
 	</dependencies>
