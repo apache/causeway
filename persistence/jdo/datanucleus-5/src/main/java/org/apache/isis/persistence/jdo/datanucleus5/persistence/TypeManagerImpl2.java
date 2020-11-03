@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.datanucleus.store.types;
+package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -81,6 +81,10 @@ import org.datanucleus.plugin.ConfigurationElement;
 import org.datanucleus.plugin.PluginManager;
 import org.datanucleus.state.ObjectProvider;
 import org.datanucleus.store.StoreManager;
+import org.datanucleus.store.types.ContainerAdapter;
+import org.datanucleus.store.types.ContainerHandler;
+import org.datanucleus.store.types.SCO;
+import org.datanucleus.store.types.TypeManager;
 import org.datanucleus.store.types.containers.ArrayHandler;
 import org.datanucleus.store.types.containers.ArrayListHandler;
 import org.datanucleus.store.types.containers.HashMapHandler;
@@ -113,6 +117,7 @@ import org.datanucleus.util.StringUtils;
  * See also
  * https://github.com/datanucleus/datanucleus-core/pull/360
  */
+@Deprecated
 public class TypeManagerImpl2 implements TypeManager, Serializable
 {
     private static final long serialVersionUID = 8217508318434539002L;

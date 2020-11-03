@@ -26,7 +26,6 @@ import javax.jdo.PersistenceManagerFactory;
 import org.datanucleus.AbstractNucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
-import org.datanucleus.store.types.TypeManagerImpl2;
 
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.runtime.context.IsisContext;
