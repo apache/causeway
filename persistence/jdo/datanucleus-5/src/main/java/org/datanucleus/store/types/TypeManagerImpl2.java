@@ -107,13 +107,13 @@ import org.datanucleus.util.StringUtils;
 /**
  * TODO remove once fixed upstream!
  * <p>
- * Monkey patched from DN original in support of priority based type registration.
+ * Patched from DN original in support of priority based type registration.
  * While documented, was never implemented.
  * <p>
  * See also
  * https://github.com/datanucleus/datanucleus-core/pull/360
  */
-public class TypeManagerImpl implements TypeManager, Serializable
+public class TypeManagerImpl2 implements TypeManager, Serializable
 {
     private static final long serialVersionUID = 8217508318434539002L;
 
@@ -146,7 +146,7 @@ public class TypeManagerImpl implements TypeManager, Serializable
      * Constructor, loading support for type mappings using the plugin mechanism.
      * @param nucCtx NucleusContext
      */
-    public TypeManagerImpl(NucleusContext nucCtx)
+    public TypeManagerImpl2(NucleusContext nucCtx)
     {
         this.nucCtx = nucCtx;
         this.clr = nucCtx.getClassLoaderResolver(null);

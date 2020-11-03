@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.enterprise.inject.Vetoed;
-import javax.jdo.JDOHelper;
 import javax.jdo.JDOUserException;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -47,8 +46,6 @@ import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.quer
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.query.JdoQueryFacet;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
-import org.apache.isis.core.runtime.context.IsisContext;
 
 import lombok.Getter;
 import lombok.val;
@@ -94,7 +91,9 @@ public class DataNucleusApplicationComponents5 {
         try {
             // this is where DN will throw an exception if we pass it any config props it doesn't like the look of.
             // we want to fail, but let's make sure that the error is visible to help the developer
-            return JDOHelper.getPersistenceManagerFactory(datanucleusProps, IsisContext.getClassLoader());
+            
+            return _DNTypeManagerPatch.newPersistenceManagerFactory(datanucleusProps);
+            //return JDOHelper.getPersistenceManagerFactory(datanucleusProps, IsisContext.getClassLoader());
         } catch(JDOUserException ex) {
             log.fatal(ex);
             throw ex;

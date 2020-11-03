@@ -18,7 +18,6 @@
  */
 package demoapp.webapp.wicket;
 
-import org.datanucleus.store.types.TypeManagerImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -32,8 +31,6 @@ import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMark
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
-
-import lombok.val;
 
 import demoapp.web.DemoAppManifest;
 
@@ -73,9 +70,8 @@ public class DemoAppWicket extends SpringBootServletInitializer {
         //DebugLoggingPreset.PERSISTENCE.apply();
         //DebugLoggingPreset.ISIS_SESSION.apply();
         
-        val monkeyPatch = TypeManagerImpl.class;
-
         SpringApplication.run(new Class[] { DemoAppWicket.class }, args);
+        
     }
 
 
