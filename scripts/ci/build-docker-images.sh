@@ -18,6 +18,22 @@
 
 set -e
 
+# example usage from project root:
+# 1) build all modules
+# mvn install -Dmodule-all
+# 2) build the docker images as tar files
+# export JIB_MODE=tar ; bash scripts/ci/build-docker-images.sh
+#
+# possible modes are
+# push ... push docker images to dockerhub
+# tar  ... build docker images and save them locally as tar files
+# skip ... skip docker image build steps
+case $JIB_MODE in
+  "push") JIB_CMD="build" ;;
+  "tar") JIB_CMD="buildTar" ;;
+  *) JIB_CMD="skip" ;;
+esac
+
 if [ -z "$BATCH_MODE_FLAG" ] || [ "$BATCH_MODE_FLAG" != "off" ]; then
   BATCH_MODE=--batch-mode
 fi
@@ -62,44 +78,24 @@ function revertRevision() {
 	fi
 }
 
-function buildDependency() {
-	local dir=${1}
-	
-	cd $PROJECT_ROOT_PATH/${dir}
-
-	mvn --batch-mode \
-	  install \
-      -Dmaven.source.skip=true \
-      -Dskip.git \
-      -Dskip.arch \
-      -DskipTests
-}
-
 function buildDockerImage() {
 	local dir=${1}
-	
+
 	cd $PROJECT_ROOT_PATH/${dir}
-	
-	if [ -z "$DRYRUN" ]; then
-	
-		mvn --batch-mode \
-	    	compile jib:build \
-	    	-Dmaven.source.skip=true \
-	    	-Dskip.git \
-	    	-Dskip.arch \
-	    	-DskipTests
-	
-	else
-		#DRYRUN
-		mvn --batch-mode \
-	    	compile jib:buildTar \
-	    	-Dmaven.source.skip=true \
-	    	-Dskip.git \
-	    	-Dskip.arch \
-	    	-DskipTests
-	fi
-	    
-    # -s ../m2-settings.xml -DaltDeploymentRepository=${DEPLOY_TARGET}
+
+	echo ""
+	echo ""
+	echo ">>> $PROJECT_ROOT_PATH/${dir}: mvn compile jib:$JIB_CMD ..."
+	echo ""
+	echo ""
+
+	mvn --batch-mode \
+    	compile jib:$JIB_CMD \
+    	-Dmaven.source.skip=true \
+    	-Dskip.git \
+    	-Dskip.arch \
+    	-DskipTests
+
 }
 
 
@@ -109,16 +105,16 @@ setRevision
 # 1) add an exit statement after the comments below
 # exit 0
 # 2) run this script from project root via:
-# export REVISION=1.9.0-SNAPSHOT ; export DRYRUN=true ; bash scripts/ci/build-docker-images.sh
+# export REVISION=1.9.0-SNAPSHOT ; export JIB_MODE=skip ; bash scripts/ci/build-docker-images.sh
 # 3) then inspect the pom files with following command:
 # find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
 
 
-buildDependency examples/demo
-
 # now build the individual docker images
-buildDockerImage examples/demo/wicket 
-buildDockerImage examples/demo/vaadin
+if [ "$JIB_CMD" != "skip"  ]; then
+  buildDockerImage examples/demo/wicket
+  buildDockerImage examples/demo/vaadin
+fi
 
 revertRevision
 

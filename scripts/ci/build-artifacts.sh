@@ -22,6 +22,10 @@ if [ -z "$BATCH_MODE_FLAG" ] || [ "$BATCH_MODE_FLAG" != "off" ]; then
   BATCH_MODE=--batch-mode
 fi
 
+# possible modes are
+# push ... push docker images to dockerhub
+# tar  ... build docker images and save them locally as tar files
+# skip ... skip docker image build steps
 case $JIB_MODE in
   "push") JIB_CMD="build" ;;
   "tar") JIB_CMD="buildTar" ;;
