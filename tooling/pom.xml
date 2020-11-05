@@ -43,7 +43,7 @@
 		<asciidoctorj.version>2.4.1</asciidoctorj.version>
 		<gradle-tooling.version>6.6.1</gradle-tooling.version>
 		<maven-model-builder.version>3.6.3</maven-model-builder.version>
-		<picocli.version>4.5.1</picocli.version>
+		<picocli.version>4.5.2</picocli.version>
 		<structurizr.version>1.5.0</structurizr.version>
 
 	</properties>
