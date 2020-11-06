@@ -83,7 +83,38 @@ For each project, open its _Properties_ page and then _Java Compiler > Annotatio
 
 image::2017-oxygen/060-enable-annotation-processor.png[width="600px"]
 
-Eclipse should automatically add this directory as a source path; at this point all remaining compiler errors should disappear.
+If your eclipse version also requires you to enter a generated test source directory, specify the following directory: `target/generated-test-sources/test-annotations`.
+
+Then under _Java Compiler > Annotation Processing > Factory Path_ add the following external JARs (for instance from your local `.m2` maven repository)
+
+* `datanucleus-jdo-query-5.0.9.jar` (under `.m2/repository/org/datanucleus/datanucleus-jdo-query/5.0.9`)
+* `javax.jdo-3.2.0-m13.jar` (under `.m2/repository/org/datanucleus/javax.jdo/3.2.0-m13`)
+
+The specific versions depend on the DataNucleus version used in your project. You can easily check this in the Dependency Hierarchy tab of the POM.xml viewer in eclipse.
+
+Eclipse should automatically add these directories as a source path; at this point all remaining compiler errors should disappear.
+
+If the JDO Q-files are not generated automatically into the specified source directory then check the `.log` file in your eclipse workspace to see if there are any `ClassNotFoundException`s that could indicate why the DataNucleus annotation processor is failing.
+
+A healthy DataNucleus Annotation Process execution in your eclipse `.log` file should look like this:
+
+[source]
+----
+!ENTRY org.eclipse.jdt.apt.pluggable.core 1 1 2020-11-06 19:28:41.948
+!MESSAGE DataNucleus JDO AnnotationProcessor for generating JDOQLTypedQuery Q classes
+----
+
+An error might look like this:
+
+[source]
+----
+!ENTRY org.eclipse.jdt.apt.pluggable.core 4 1 2020-11-06 18:52:30.688
+!MESSAGE Exception thrown by Java annotation processor org.datanucleus.jdo.query.JDOQueryProcessor@60e3ac5d
+!STACK 0
+java.lang.Exception: java.lang.NoClassDefFoundError: javax/jdo/query/PersistableExpression
+----
+
+If you see this specific error message then check that you added the `javax.jdo` JAR that matches the version of DataNucleus used in your project (see _Factory Path_ configuration above).
 
 == Configure DataNucleus
 
