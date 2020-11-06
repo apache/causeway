@@ -141,7 +141,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         val interaction = interactionContextProvider.get().getInteraction();
         val command = interaction.getCommand();
         if(command.getCommandDto() != dto) {
-            command.updater().setCommandDto(dto, 0);
+            command.updater().setCommandDto(dto);
         }
 
         copyStartedAtFromInteractionExecution(commandUpdater);

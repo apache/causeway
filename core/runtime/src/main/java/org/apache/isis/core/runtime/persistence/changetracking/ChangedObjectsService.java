@@ -25,6 +25,7 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -38,10 +39,12 @@ import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
@@ -78,12 +81,18 @@ import lombok.extern.log4j.Log4j2;
 @IsisInteractionScope
 @Log4j2
 public class ChangedObjectsService 
-implements TransactionScopeListener,
-MetricsService,
-EntityChangeTracker,
-HasEnlistedForAuditing, HasEnlistedForPublishing {
+implements 
+    TransactionScopeListener,
+    MetricsService,
+    EntityChangeTracker,
+    HasEnlistedForAuditing, 
+    HasEnlistedForPublishing {
 
     // end::refguide[]
+    
+    @Inject private EventBusService eventBusService;
+    @Inject private Provider<InteractionContext> interactionContextProvider;
+    
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
      * <p>
@@ -163,9 +172,20 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
     @Override
     public void onTransactionEnding() {
         log.debug("purging data");
+        
+        _Probe.errOut("clearing change data");
+        
         enlistedObjectProperties.clear();
         changeKindByEnlistedAdapter.clear();
         changedObjectPropertiesRef.clear();
+    }
+    
+    @Override
+    public void preparePublishing() {
+        val command = interactionContextProvider.get().getInteraction().getCommand();
+        command.updater().setSystemStateChanged(
+                command.isSystemStateChanged() 
+                || numberObjectsDirtied() > 0);
     }
 
     // -- HELPER
@@ -352,8 +372,6 @@ HasEnlistedForAuditing, HasEnlistedForPublishing {
         postEvent(eventInstance, pojo);
 
     }
-
-    @Inject private EventBusService eventBusService;
 
     private void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
         if(eventBusService!=null) {

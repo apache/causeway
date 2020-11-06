@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +43,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -65,7 +65,6 @@ import lombok.val;
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG"
         })
 @TestPropertySource({
-    IsisPresets.SilenceWicket, // just to have any config properties at all
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -95,7 +94,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
-    @Test @Order(1) @Tag("Incubating")
+    @Test @Order(1)
     void publisherService_shouldBeAwareOfInventoryChanges() {
 
         // given
@@ -104,6 +103,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         val latch = kvStore.latch(PublisherServiceForTesting.class);
         
+        _Probe.errOut("(1) BEFORE BOOK UPDATED");
         
         // when - running within its own transactional boundary
         val transactionTemplate = new TransactionTemplate(txMan);
@@ -120,19 +120,18 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         
         latch.await(2, TimeUnit.SECONDS);
         
-        System.err.println("!!! after sync writes");
-        
+        _Probe.errOut("(1) AFTER BOOK UPDATED");
         
         // then - after the commit
-        assertEquals(0, getValue("created"));
-        assertEquals(0, getValue("deleted"));
-        assertEquals(0, getValue("loaded"));
-        assertEquals(1, getValue("updated"));
-        assertEquals(1, getValue("modified"));
+        assertEquals(0, getInt("created"));
+        assertEquals(0, getInt("deleted"));
+        assertEquals(0, getInt("loaded"));
+        assertEquals(1, getInt("updated"));
+        assertEquals(1, getInt("modified"));
 
     }
 
-    @Test @Order(2) @Tag("Incubating")
+    @Test @Order(2)
     void publisherService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
             throws InterruptedException, ExecutionException, TimeoutException {
 
@@ -141,6 +140,8 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         kvStore.clear(PublisherServiceForTesting.class);
         val latch = kvStore.latch(PublisherServiceForTesting.class);
 
+        _Probe.errOut("(2) BEFORE BOOK UPDATED");
+        
         // when - running within its own background task
         AsyncControl<Void> control = returningVoid().withSkipRules();
         wrapper.asyncWrap(book, control).setName("Book #2"); // don't enforce rules for this test
@@ -149,19 +150,19 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         latch.await(2, TimeUnit.SECONDS);
         
-        System.err.println("!!! after wait");
+        _Probe.errOut("(2) AFTER BOOK UPDATED");
 
         // then - after the commit
-        assertEquals(0, getValue("created"));
-        assertEquals(0, getValue("deleted"));
+        assertEquals(0, getInt("created"));
+        assertEquals(0, getInt("deleted"));
         //assertEquals(0, getValue("loaded"));
-        assertEquals(1, getValue("updated"));
-        assertEquals(1, getValue("modified"));
+        assertEquals(1, getInt("updated"));
+        assertEquals(1, getInt("modified"));
 
     }
     
     
-    @Test @Order(3) @Tag("Incubating")
+    @Test @Order(3)
     void publisherService_shouldNotBeAwareOfInventoryChanges_whenUsingAsyncExecutionFails() 
             throws InterruptedException, ExecutionException, TimeoutException {
 
@@ -179,18 +180,20 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         });
 
         // then - after the commit
-        assertEquals(null, getValue("created"));
-        assertEquals(null, getValue("deleted"));
-        assertEquals(null, getValue("loaded"));
-        assertEquals(null, getValue("updated"));
-        assertEquals(null, getValue("modified"));
+        assertEquals(0, getInt("created"));
+        assertEquals(0, getInt("deleted"));
+        assertEquals(0, getInt("loaded"));
+        assertEquals(0, getInt("updated"));
+        assertEquals(0, getInt("modified"));
 
     }
 
     // -- HELPER
     
-    private Object getValue(String keyStr) {
-        return kvStore.get(PublisherServiceForTesting.class, keyStr).orElse(null);
+    private int getInt(String keyStr) {
+        return kvStore.get(PublisherServiceForTesting.class, keyStr)
+                .map(int.class::cast)
+                .orElse(0);
     }
 
 }

@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.services.command;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;

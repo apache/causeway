@@ -30,12 +30,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.TransactionScopeListener;
-import org.apache.isis.applib.services.metrics.MetricsService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Interaction}.
@@ -53,11 +50,9 @@ import lombok.val;
 @IsisInteractionScope
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
-public class InteractionContext implements TransactionScopeListener, DisposableBean {
+public class InteractionContext implements DisposableBean {
 
     // end::refguide[]
-
-    private final MetricsService metricsService;
 
     /**
      * The currently active {@link Interaction} for this thread.
@@ -72,15 +67,6 @@ public class InteractionContext implements TransactionScopeListener, DisposableB
      */
     public void setInteraction(final Interaction interaction) {
         this.interaction = interaction;
-    }
-
-
-    @Override
-    public void onTransactionEnding() {
-        val command = getInteraction().getCommand();
-        command.updater().setSystemStateChanged(
-                command.isSystemStateChanged() 
-                || metricsService.numberObjectsDirtied() > 0);
     }
 
     @Override

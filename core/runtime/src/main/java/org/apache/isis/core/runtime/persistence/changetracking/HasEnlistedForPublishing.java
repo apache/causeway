@@ -30,4 +30,6 @@ public interface HasEnlistedForPublishing {
 
     int numberObjectPropertiesModified();
 
+    void preparePublishing();
+
 }

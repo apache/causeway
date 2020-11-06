@@ -326,7 +326,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             // trampling over the command's DTO
         } else {
             val dto = commandDtoSupplier.get();
-            command.updater().setCommandDto(dto, 0);
+            command.updater().setCommandDto(dto);
         }
 
     }

@@ -63,6 +63,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.NonNull;
 import lombok.val;
@@ -579,20 +580,8 @@ implements ObjectAction {
             final ManagedObject targetAdapter,
             final Can<ManagedObject> argumentAdapters) {
 
-        setupCommand(targetAdapter, () -> {
-
-            final List<ManagedObject> commandTargetAdapters =
-                    commandTargetAdaptersHolder.get() != null
-                    ? commandTargetAdaptersHolder.get()
-                            : Collections.singletonList(targetAdapter);
-
-            return getCommandDtoServiceInternal().asCommandDto(
-                    commandTargetAdapters, this, argumentAdapters);
-        });
+        setupCommand(targetAdapter, ()->commandDtoFor(targetAdapter, argumentAdapters));
     }
-
-
-    // -- toString
 
     @Override
     public ManagedObject realTargetAdapter(final ManagedObject targetAdapter) {
@@ -619,10 +608,24 @@ implements ObjectAction {
         return sb.toString();
     }
 
-
     @Override
     public FacetHolder getFacetHolder() {
         return super.getFacetedMethod();
     }
 
+    // -- HELPER
+    
+    private CommandDto commandDtoFor(
+            final ManagedObject targetAdapter,
+            final Can<ManagedObject> argumentAdapters) {
+        
+        final List<ManagedObject> commandTargetAdapters =
+                commandTargetAdaptersHolder.get() != null
+                    ? commandTargetAdaptersHolder.get()
+                    : Collections.singletonList(targetAdapter);
+
+        return getCommandDtoServiceInternal()
+                .asCommandDto(commandTargetAdapters, this, argumentAdapters);
+    }
+    
 }

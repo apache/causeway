@@ -79,6 +79,10 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
         if(isSuppressed()) {
             return;
         }
+        
+        val changedObjectsService = changedObjectsProvider.get();
+        changedObjectsService.preparePublishing();
+        
 
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted; 
@@ -86,7 +90,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
         val changeKindByPublishedAdapter =
                 _Maps.filterKeys(
-                        changedObjectsProvider.get().getChangeKindByEnlistedAdapter(),
+                        changedObjectsService.getChangeKindByEnlistedAdapter(),
                         this::isPublished,
                         HashMap::new);
 
@@ -96,7 +100,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
         val publishedObjects = newPublishedObjects(
                         metricsServiceProvider.get().numberObjectsLoaded(), 
-                        changedObjectsProvider.get().numberObjectPropertiesModified(),
+                        changedObjectsService.numberObjectPropertiesModified(),
                         changeKindByPublishedAdapter);
 
         if(publishedObjects == null) {
