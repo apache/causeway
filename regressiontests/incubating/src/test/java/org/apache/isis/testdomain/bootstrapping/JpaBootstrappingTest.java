@@ -46,7 +46,6 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
@@ -61,7 +60,7 @@ import lombok.val;
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Incubating("JPA support is under construction")
+//XXX JPA support is under construction
 class JpaBootstrappingTest /*extends IsisIntegrationTestAbstract*/ {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 

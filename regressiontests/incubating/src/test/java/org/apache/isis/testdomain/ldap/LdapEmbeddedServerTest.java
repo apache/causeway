@@ -25,7 +25,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runners.model.InitializationError;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,17 +34,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Incubating;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = {LdapServerService.class}
 )
-@Disabled // not sure why...
-@Incubating("teardown issues?")
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-class UnstableLdapEmbeddedServerTest {
+class LdapEmbeddedServerTest {
 
     @Inject LdapServerService ldapServerService;
 

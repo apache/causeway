@@ -39,7 +39,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
@@ -55,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
     LdapServerService.class,
 })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Incubating("inconsistent state when run in a test batch")
+//XXX inconsistent state when run in a test batch
 @Log4j2
 class ShiroLdapTest extends AbstractShiroTest {
 

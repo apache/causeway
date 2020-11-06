@@ -47,7 +47,6 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanE
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapConstants;
@@ -77,7 +76,6 @@ import lombok.val;
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
-@Incubating("does not work with surefire")
 class ShiroSecmanLdapTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;

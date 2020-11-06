@@ -37,14 +37,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
@@ -81,14 +78,14 @@ import lombok.val;
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
-@Incubating("does not work, when executed in sequence with other smoketests")
+//XXX "does not work, when executed in sequence with other smoketests
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
     @Inject RestEndpointService restService;
     @Inject LdapServerService ldapServerService;
-    @Inject ApplicationUserRepository applicationUserRepository;
-    @Inject ApplicationRoleRepository applicationRoleRepository;
+//    @Inject ApplicationUserRepository applicationUserRepository;
+//    @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecurityModuleConfig securityConfig;
     @Inject ServiceInjector serviceInjector;
     

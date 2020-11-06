@@ -40,7 +40,6 @@ import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 
@@ -61,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
     IsisPresets.SilenceProgrammingModel,
     //IsisPresets.DebugProgrammingModel,
 })
-@Incubating("not a real test, just for performance tuning")
+//XXX not a real test, just for performance tuning
 @Log4j2
 class SpecloaderPerformanceTest {
     

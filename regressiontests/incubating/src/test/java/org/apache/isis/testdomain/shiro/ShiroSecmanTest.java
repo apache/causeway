@@ -43,7 +43,6 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanE
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 
 import lombok.val;
@@ -60,7 +59,6 @@ import lombok.val;
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Incubating("does not work with surefire")
 class ShiroSecmanTest extends AbstractShiroTest {
 
     @Inject SecurityModuleConfig securityConfig;
