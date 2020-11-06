@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -619,10 +618,10 @@ implements ObjectAction {
             final ManagedObject targetAdapter,
             final Can<ManagedObject> argumentAdapters) {
         
-        final List<ManagedObject> commandTargetAdapters =
+        val commandTargetAdapters =
                 commandTargetAdaptersHolder.get() != null
-                    ? commandTargetAdaptersHolder.get()
-                    : Collections.singletonList(targetAdapter);
+                    ? Can.ofCollection(commandTargetAdaptersHolder.get())
+                    : Can.ofSingleton(targetAdapter);
 
         return getCommandDtoServiceInternal()
                 .asCommandDto(commandTargetAdapters, this, argumentAdapters);

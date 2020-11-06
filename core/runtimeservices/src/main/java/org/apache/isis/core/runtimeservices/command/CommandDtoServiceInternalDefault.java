@@ -68,7 +68,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     @Override
     public CommandDto asCommandDto(
-            final List<ManagedObject> targetAdapters,
+            final Can<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
@@ -85,7 +85,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     @Override
     public CommandDto asCommandDto(
-            final List<ManagedObject> targetAdapters,
+            final Can<ManagedObject> targetAdapters,
             final OneToOneAssociation property,
             final ManagedObject valueAdapterOrNull) {
 
@@ -97,24 +97,6 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
         addPropertyValue(property, propertyDto, valueAdapterOrNull);
 
-        return dto;
-    }
-
-    private CommandDto asCommandDto(final List<ManagedObject> targetAdapters) {
-
-        val dto = new CommandDto();
-        dto.setMajorVersion("2");
-        dto.setMinorVersion("0");
-
-        dto.setTransactionId(UUID.randomUUID().toString());
-        dto.setUser(userService.getUser().getName());
-        dto.setTimestamp(clockService.nowAsXMLGregorianCalendar());
-
-        for (val targetAdapter : targetAdapters) {
-            final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
-            final OidsDto targets = CommandDtoUtils.targetsFor(dto);
-            targets.getOid().add(bookmark.toOidDto());
-        }
         return dto;
     }
 
@@ -160,5 +142,25 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         propertyDto.setNewValue(newValue);
     }
 
+    // -- HELPER
+    
+    private CommandDto asCommandDto(final Can<ManagedObject> targetAdapters) {
+
+        val dto = new CommandDto();
+        dto.setMajorVersion("2");
+        dto.setMinorVersion("0");
+
+        dto.setTransactionId(UUID.randomUUID().toString());
+        dto.setUser(userService.getUser().getName());
+        dto.setTimestamp(clockService.nowAsXMLGregorianCalendar());
+
+        for (val targetAdapter : targetAdapters) {
+            final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
+            final OidsDto targets = CommandDtoUtils.targetsFor(dto);
+            targets.getOid().add(bookmark.toOidDto());
+        }
+        return dto;
+    }
+    
 
 }

@@ -312,7 +312,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val method = memberAndTarget.getMethod();
 
         val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
-        val targetList = Collections.singletonList(targetAdapter);
+        val targetList = Can.ofSingleton(targetAdapter);
 
         CommandDto commandDto;
         switch (memberAndTarget.getType()) {

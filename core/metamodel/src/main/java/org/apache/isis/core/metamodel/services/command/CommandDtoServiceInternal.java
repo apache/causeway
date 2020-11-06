@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.command;
 
-import java.util.List;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -41,7 +39,7 @@ public interface CommandDtoServiceInternal {
      *         mixin action or a contributed action.
      */
     CommandDto asCommandDto(
-            final List<ManagedObject> targetAdapters,
+            final Can<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters);
 
@@ -51,7 +49,7 @@ public interface CommandDtoServiceInternal {
      *         with actions).
      */
     CommandDto asCommandDto(
-            final List<ManagedObject> targetAdapters,
+            final Can<ManagedObject> targetAdapters,
             final OneToOneAssociation association,
             final ManagedObject valueAdapterOrNull);
 

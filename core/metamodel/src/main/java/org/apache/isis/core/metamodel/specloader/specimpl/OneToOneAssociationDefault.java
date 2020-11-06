@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Collections;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
@@ -298,8 +296,8 @@ implements OneToOneAssociation {
             final ManagedObject targetAdapter,
             final ManagedObject valueAdapterOrNull) {
 
-        setupCommand(targetAdapter, () -> getCommandDtoServiceInternal().asCommandDto(
-                        Collections.singletonList(targetAdapter), this, valueAdapterOrNull));
+        setupCommand(targetAdapter, () -> getCommandDtoServiceInternal()
+                .asCommandDto(Can.ofSingleton(targetAdapter), this, valueAdapterOrNull));
     }
 
 
