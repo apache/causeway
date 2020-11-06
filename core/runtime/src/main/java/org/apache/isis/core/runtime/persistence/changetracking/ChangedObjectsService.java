@@ -44,7 +44,6 @@ import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
@@ -172,9 +171,6 @@ implements
     @Override
     public void onTransactionEnding() {
         log.debug("purging data");
-        
-        _Probe.errOut("clearing change data");
-        
         enlistedObjectProperties.clear();
         changeKindByEnlistedAdapter.clear();
         changedObjectPropertiesRef.clear();

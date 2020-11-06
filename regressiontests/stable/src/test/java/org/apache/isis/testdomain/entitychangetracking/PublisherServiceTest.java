@@ -93,7 +93,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         // given
         val book = repository.allInstances(JdoBook.class).listIterator().next();
-        kvStore.clear(PublisherServiceForTesting.class);
+        PublisherServiceForTesting.clearPublishedEntries(kvStore);
         
         _Probe.errOut("(1) BEFORE BOOK UPDATED");
         
@@ -114,8 +114,8 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         
         // this test does not trigger publishing 
         // because invocation happens directly rather than through the means of
-        // of an ActionInvocationFacet, which is required to creates CommandDtos 
-        // executions  
+        // of an ActionInvocationFacet, which is required to create a CommandDto 
+        // for each execution  
         
         // then - after the commit
         assertEquals(0, getCreated());
@@ -131,12 +131,12 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         // given
         val book = repository.allInstances(JdoBook.class).listIterator().next();
-        kvStore.clear(PublisherServiceForTesting.class);
+        PublisherServiceForTesting.clearPublishedEntries(kvStore);
 
         _Probe.errOut("(2) BEFORE BOOK UPDATED");
         
-        SyncControl syncControl = SyncControl.control().withSkipRules();
-        // when - running within its own background task
+        // when - running synchronous
+        val syncControl = SyncControl.control().withSkipRules();
         wrapper.wrap(book, syncControl).setName("Book #2"); // don't enforce rules for this test
 
         _Probe.errOut("(2) AFTER BOOK UPDATED");
@@ -157,7 +157,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         // given
         val book = repository.allInstances(JdoBook.class).listIterator().next();
-        kvStore.clear(PublisherServiceForTesting.class);
+        PublisherServiceForTesting.clearPublishedEntries(kvStore);
         val latch = kvStore.latch(PublisherServiceForTesting.class);
 
         _Probe.errOut("(3) BEFORE BOOK UPDATED");
@@ -188,7 +188,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         // given
         val book = repository.allInstances(JdoBook.class).listIterator().next();
-        kvStore.clear(PublisherServiceForTesting.class);
+        PublisherServiceForTesting.clearPublishedEntries(kvStore);
 
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
