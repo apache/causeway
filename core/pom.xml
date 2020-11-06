@@ -108,7 +108,7 @@
 
 		<findbugs-annotations.version>3.0.1u2</findbugs-annotations.version>
 
-		<git-commit-id-plugin.version>4.0.2</git-commit-id-plugin.version>
+		<git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
 		<guava.version>30.0-jre</guava.version>
 
 		<htmlparser.version>2.1</htmlparser.version>
