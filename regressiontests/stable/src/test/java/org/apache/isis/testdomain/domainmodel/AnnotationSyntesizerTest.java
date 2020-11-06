@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
@@ -43,7 +42,6 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,

@@ -48,15 +48,11 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 
 import lombok.Getter;
 import lombok.val;
 
-//import org.apache.isis.testdomain.Incubating;
-
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,

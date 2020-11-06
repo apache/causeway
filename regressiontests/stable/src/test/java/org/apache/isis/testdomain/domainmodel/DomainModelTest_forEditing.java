@@ -38,7 +38,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
@@ -46,7 +45,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,

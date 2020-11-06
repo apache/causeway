@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.commons.InteractionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -39,7 +38,6 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Pa
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,

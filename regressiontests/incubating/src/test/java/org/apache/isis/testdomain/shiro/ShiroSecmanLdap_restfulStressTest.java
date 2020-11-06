@@ -45,7 +45,6 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
 import org.apache.isis.testdomain.Incubating;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
@@ -55,7 +54,6 @@ import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjec
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class

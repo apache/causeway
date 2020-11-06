@@ -40,7 +40,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
@@ -48,7 +47,6 @@ import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class,

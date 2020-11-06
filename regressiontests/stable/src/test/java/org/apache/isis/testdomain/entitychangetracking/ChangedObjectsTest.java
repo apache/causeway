@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.auditing.AuditerServiceForTesting;
 import org.apache.isis.testdomain.auditing.Configuration_usingAuditing;
 import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
@@ -45,7 +44,6 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,

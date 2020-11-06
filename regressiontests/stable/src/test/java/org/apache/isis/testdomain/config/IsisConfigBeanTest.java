@@ -30,9 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Smoketest;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 IsisModuleCoreConfig.class

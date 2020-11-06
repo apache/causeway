@@ -34,11 +34,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.testdomain.Smoketest;
 
 import lombok.val;
 
-@Smoketest
 class ShiroSimpleTest extends AbstractShiroTest {
     
     

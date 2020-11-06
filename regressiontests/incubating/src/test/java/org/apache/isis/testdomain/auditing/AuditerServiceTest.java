@@ -45,7 +45,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
@@ -53,11 +52,10 @@ import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import static org.apache.isis.applib.services.wrapper.control.AsyncControl.*;
+import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,

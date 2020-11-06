@@ -34,7 +34,6 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.commons.InteractionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -44,7 +43,6 @@ import org.apache.isis.testdomain.model.interaction.InteractionNpmDemo_biArgEnab
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,

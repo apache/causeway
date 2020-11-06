@@ -36,11 +36,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
-import org.apache.isis.testdomain.Smoketest;
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = {LdapServerService.class}
 )

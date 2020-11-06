@@ -18,9 +18,6 @@
  */
 package org.apache.isis.testdomain.rest;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -29,12 +26,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.model.actnsemantics.Configuration_usingActionSemantics;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -45,7 +44,6 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.Seri
 
 import lombok.val;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class,

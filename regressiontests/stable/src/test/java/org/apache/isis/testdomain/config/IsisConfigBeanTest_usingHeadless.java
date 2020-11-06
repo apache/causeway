@@ -29,10 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 
-@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class
