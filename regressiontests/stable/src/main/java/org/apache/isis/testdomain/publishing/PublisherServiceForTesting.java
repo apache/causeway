@@ -29,6 +29,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
+import org.apache.isis.applib.util.schema.ChangesDtoUtils;
+import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -48,21 +50,19 @@ public class PublisherServiceForTesting implements PublisherService {
 
     @Override
     public void publish(Execution<?, ?> execution) {
-        //_Probe.errOut("PUBLISH EXECUTION %s", MemberExecutionDtoUtils.toXml(execution.getDto()));
-        
+
         @SuppressWarnings("unchecked")
         val publishedEntries = 
-            (List<Execution<?, ?>>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
+            (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
         
         publishedEntries.add(execution);
         
-        kvStore.put(this, "published", publishedEntries);
-        log.debug("publish execution {}", execution);
+        kvStore.put(this, "publishedExecutions", publishedEntries);
+        log.debug("publish execution {}", ()->MemberExecutionDtoUtils.toXml(execution.getDto()));
     }
 
     @Override
     public void publish(PublishedObjects publishedObjects) {
-        //_Probe.errOut("PUBLISH OBJECTS %s", ChangesDtoUtils.toXml(publishedObjects.getDto()));
         
         @SuppressWarnings("unchecked")
         val publishedEntries = 
@@ -70,8 +70,8 @@ public class PublisherServiceForTesting implements PublisherService {
         
         publishedEntries.add(publishedObjects);
         
-        kvStore.put(this, "published", publishedEntries);
-        log.debug("publish objects {}", publishedObjects);
+        kvStore.put(this, "publishedObjects", publishedEntries);
+        log.debug("publish objects {}", ()->ChangesDtoUtils.toXml(publishedObjects.getDto()));
         
     }
     

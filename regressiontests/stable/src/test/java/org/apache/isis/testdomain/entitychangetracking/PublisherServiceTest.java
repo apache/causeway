@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.publishing;
+package org.apache.isis.testdomain.entitychangetracking;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -30,8 +30,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -39,6 +37,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -49,6 +48,8 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
+import org.apache.isis.testdomain.publishing.Configuration_usingPublishing;
+import org.apache.isis.testdomain.publishing.PublisherServiceForTesting;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -69,7 +70,6 @@ import lombok.val;
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext // because of the temporary installed PublisherServiceProbe
 class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
@@ -77,13 +77,6 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
     @Inject private WrapperFactory wrapper;
     @Inject private PlatformTransactionManager txMan; 
     @Inject private KVStoreForTesting kvStore;
-    //@Inject private javax.inject.Provider<PublisherDispatchService> publisherDispatchServiceProvider;
-    //@Inject private List<PublisherService> publisherServices;
-    
-    @Configuration
-    public class Config {
-        // so that we get a new ApplicationContext.
-    }
     
     @BeforeEach
     void setUp() {
@@ -119,13 +112,17 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         
         _Probe.errOut("(1) AFTER BOOK UPDATED");
         
+        // this test does not trigger publishing 
+        // because invocation happens directly rather than through the means of
+        // of an ActionInvocationFacet, which is required to creates CommandDtos 
+        // executions  
+        
         // then - after the commit
-        assertEquals(0, getInt("created"));
-        assertEquals(0, getInt("deleted"));
-        assertEquals(0, getInt("loaded"));
-        assertEquals(1, getInt("updated"));
-        assertEquals(1, getInt("modified"));
-
+        assertEquals(0, getCreated());
+        assertEquals(0, getDeleted());
+        assertEquals(0, getLoaded());
+        assertEquals(0, getUpdated());
+        assertEquals(0, getModified());
     }
     
     @Test @Order(2)
@@ -144,12 +141,13 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         _Probe.errOut("(2) AFTER BOOK UPDATED");
 
+        
         // then - after the commit
-        assertEquals(0, getInt("created"));
-        assertEquals(0, getInt("deleted"));
-        //assertEquals(0, getValue("loaded"));
-        assertEquals(1, getInt("updated"));
-        assertEquals(1, getInt("modified"));
+        assertEquals(0, getCreated());
+        assertEquals(0, getDeleted());
+        //assertEquals(1, getLoaded()); // not reproducible
+        assertEquals(1, getUpdated());
+        assertEquals(1, getModified());
 
     }
 
@@ -175,11 +173,11 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         _Probe.errOut("(3) AFTER BOOK UPDATED");
 
         // then - after the commit
-        assertEquals(0, getInt("created"));
-        assertEquals(0, getInt("deleted"));
-        //assertEquals(0, getValue("loaded"));
-        assertEquals(1, getInt("updated"));
-        assertEquals(1, getInt("modified"));
+        assertEquals(0, getCreated());
+        assertEquals(0, getDeleted());
+        //assertEquals(1, getLoaded()); // not reproducible
+        assertEquals(1, getUpdated());
+        assertEquals(1, getModified());
 
     }
     
@@ -202,20 +200,40 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         });
 
         // then - after the commit
-        assertEquals(0, getInt("created"));
-        assertEquals(0, getInt("deleted"));
-        assertEquals(0, getInt("loaded"));
-        assertEquals(0, getInt("updated"));
-        assertEquals(0, getInt("modified"));
+        assertEquals(0, getCreated());
+        assertEquals(0, getDeleted());
+        assertEquals(0, getLoaded());
+        assertEquals(0, getUpdated());
+        assertEquals(0, getModified());
 
     }
 
     // -- HELPER
     
-    private int getInt(String keyStr) {
-        return kvStore.get(PublisherServiceForTesting.class, keyStr)
-                .map(int.class::cast)
-                .orElse(0);
+    private int getCreated() {
+        val publishedObjects = PublisherServiceForTesting.getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberCreated).sum();
     }
+    
+    private int getDeleted() {
+        val publishedObjects = PublisherServiceForTesting.getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberDeleted).sum();
+    }
+    
+    private int getLoaded() {
+        val publishedObjects = PublisherServiceForTesting.getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberLoaded).sum();
+    }
+    
+    private int getUpdated() {
+        val publishedObjects = PublisherServiceForTesting.getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberUpdated).sum();
+    }
+    
+    private int getModified() {
+        val publishedObjects = PublisherServiceForTesting.getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberPropertiesModified).sum();
+    }
+
 
 }
