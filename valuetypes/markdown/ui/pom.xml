@@ -53,11 +53,10 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- convergence issue with com.vaadin:flow-server -->
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<!-- mitigates version conflict with com.vaadin:flow-server -->
-			<version>1.13.1</version> 
 		</dependency>
 
 	</dependencies>
