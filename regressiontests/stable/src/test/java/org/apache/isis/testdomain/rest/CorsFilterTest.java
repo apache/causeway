@@ -42,8 +42,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(
         classes = RestEndpointService.class,
         properties = {
-                "sven = pass, admin_role",
-                "admin_role = *"
+//                "sven = pass, admin_role",
+//                "admin_role = *"
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
@@ -61,8 +61,8 @@ class CorsFilterTest {
         final String url = "http://localhost:" + port + "/restful/user";
         final TestRestTemplate testRestTemplate = new TestRestTemplate();
         final ResponseEntity<String> response = testRestTemplate
-                //TODO sven/pass not enforced due to usage of IsisModuleCoreSecurity _headlessButSecure
-                .withBasicAuth("user", "passwd")
+                //TODO sven/pass not enforced. Credentials are not checked, only occurrence of HTTPBA field in request header
+                .withBasicAuth("any", "any")
                 .getForEntity(url, String.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
