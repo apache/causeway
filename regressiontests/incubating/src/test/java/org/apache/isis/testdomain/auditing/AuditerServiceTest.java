@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.entitychangetracking;
+package org.apache.isis.testdomain.auditing;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;

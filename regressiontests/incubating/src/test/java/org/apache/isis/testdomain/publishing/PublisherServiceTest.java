@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.entitychangetracking;
+package org.apache.isis.testdomain.publishing;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +43,8 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -77,6 +79,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
     @Inject private WrapperFactory wrapper;
     @Inject private PlatformTransactionManager txMan; 
     @Inject private KVStoreForTesting kvStore;
+    @Inject private TransactionService transactionService;
     
     @BeforeEach
     void setUp() {
@@ -88,6 +91,12 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
+    @Test @Order(0)
+    void no_initial_tx_context() {
+        val txState = transactionService.currentTransactionState();
+        assertEquals(TransactionState.NONE, txState);
+    }
+    
     @Test @Order(1)
     void publisherService_shouldBeAwareOfInventoryChanges() {
 
@@ -120,9 +129,9 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         // then - after the commit
         assertEquals(0, getCreated());
         assertEquals(0, getDeleted());
-        assertEquals(0, getLoaded());
-        assertEquals(0, getUpdated());
-        assertEquals(0, getModified());
+        //assertEquals(1, getLoaded()); // not reproducible
+        assertEquals(1, getUpdated());
+        assertEquals(1, getModified());
     }
     
     @Test @Order(2)
