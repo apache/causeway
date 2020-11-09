@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.rest;
 
+import org.apache.isis.extensions.cors.impl.IsisModuleExtCorsImpl;
 import org.apache.isis.testdomain.conf.Configuration_headlessButSecure;
 import org.apache.isis.testdomain.rospec.Configuration_usingRoSpec;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
@@ -47,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
+        IsisModuleExtCorsImpl.class,
         Configuration_headlessButSecure.class,
         Configuration_usingRoSpec.class,
         IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
