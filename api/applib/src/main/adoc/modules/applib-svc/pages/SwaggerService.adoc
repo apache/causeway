@@ -27,16 +27,29 @@ include::refguide:applib-svc:example$services/swagger/SwaggerService.java[tags="
 ----
 <.> Generate a Swagger spec with the specified visibility and format (discussed below).
 
-<.> Produces a limited spec for use by third-party clients, ie public use.
+<.> `PUBLIC` Produces a limited spec for use by third-party clients, ie public use.
 This specification is restricted only to
 xref:userguide:fun:overview.adoc#view-models[view model]s and to domain services with a xref:refguide:applib-ant:DomainService.adoc#nature[nature] of `VIEW_REST_ONLY`.
-<.> Produces a more complete spec, for internally-managed clients, ie private internal use.
+<.> `PRIVATE` Produces a more complete spec, for internally-managed clients, ie private internal use.
 This specification includes domain entities and all menu domain services (as well as any view models).
-<.> Ditto, but also including any xref:refguide:applib-ant:Action.adoc#restrictTo[prototype] actions.
+<.> `PRIVATE_WITH_PROTOTYPING` Ditto, but also including any xref:refguide:applib-ant:Action.adoc#restrictTo[prototype] actions.
 
 <.> Generate as JSON...
 <.> \... or as YAML.
 
+=== _PUBLIC_ vs _PRIVATE_ vs _PROTOTYPING_ 
+
+`PUBLIC` only exposes actions which return _view models_, not _entities_.
+  
+That's because exposing entities would couple the REST client too deeply to the server implementation.
+The idea here is that the REST client of a public API is 3rd party, in other words not under the control 
+of the author of the Apache Isis application.
+
+The `PRIVATE` option removes this constraint, and does expose entities as well as view models.
+This is for cases where the team developing the REST client is the same as the team developing 
+the backend isis service ... in other words its a private implementation detail of an application.
+
+`PRIVATE_WITH_PROTOTYPING` is same as `PRIVATE`, but also exposes any prototype actions.
 
 
 == Implementation
