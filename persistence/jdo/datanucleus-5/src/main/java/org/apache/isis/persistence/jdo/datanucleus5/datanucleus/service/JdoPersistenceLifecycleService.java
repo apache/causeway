@@ -114,10 +114,11 @@ public class JdoPersistenceLifecycleService {
 
     // -- HELPER
 
-    private void openInteraction(InteractionSession isisInteraction) {
+    private void openInteraction(InteractionSession interactionSession) {
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
-        isisInteraction.putUserData(IsisPersistenceSessionJdo.class, persistenceSession);
+        log.debug("store IsisPersistenceSessionJdo instance on current InteractionSession");
+        interactionSession.putAttribute(IsisPersistenceSessionJdo.class, persistenceSession);
         persistenceSession.open();
     }
 
@@ -131,9 +132,9 @@ public class JdoPersistenceLifecycleService {
         .ifPresent(PersistenceSession::flush);
     }
 
-    private Optional<IsisPersistenceSessionJdo> currentSession(InteractionSession isisInteraction) {
-        return Optional.ofNullable(isisInteraction)
-                .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class));
+    private Optional<IsisPersistenceSessionJdo> currentSession(InteractionSession interactionSession) {
+        return Optional.ofNullable(interactionSession)
+                .map(session->session.getAttribute(IsisPersistenceSessionJdo.class));
     }
     
     private void create() {

@@ -153,7 +153,8 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
 
     }
 
-    private final ThreadLocal<Stack<InteractionSession>> interactionSessionStack = ThreadLocal.withInitial(Stack::new);
+    private final ThreadLocal<Stack<InteractionSession>> interactionSessionStack = 
+            ThreadLocal.withInitial(Stack::new);
     
     @Override
     public InteractionSession openInteraction(@NonNull final AuthenticationSession authenticationSession) {
@@ -162,16 +163,24 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
                 .orElse(authenticationSession);
         val newIsisInteraction = new InteractionSession(metaModelContext, authSessionToUse);
         
+        if(!interactionSessionStack.get().isEmpty()) {
+            // when ever we push onto a non empty session stack, make sure the new session
+            // inherits all attributes from that, that sits on top of the stack
+            interactionSessionStack.get().peek().copyAttributesTo(newIsisInteraction);
+        }
+        
         interactionSessionStack.get().push(newIsisInteraction);
 
         initializeApplibCommandAndInteraction();
 
         postOpen(interactionSessionStack.get().size(), newIsisInteraction);
         
-        log.debug("new IsisInteraction created (conversation-id={}, total-sessions-on-stack={}, {})", 
-                conversationId.get(), 
-                interactionSessionStack.get().size(),
-                _Probe.currentThreadId());
+        if(log.isDebugEnabled()) {
+            log.debug("new InteractionSession created (conversation-id={}, total-sessions-on-stack={}, {})", 
+                    conversationId.get(), 
+                    interactionSessionStack.get().size(),
+                    _Probe.currentThreadId());
+        }
         
         return newIsisInteraction;
     }

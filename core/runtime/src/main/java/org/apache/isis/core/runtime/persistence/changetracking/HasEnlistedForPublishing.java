@@ -23,13 +23,16 @@ import java.util.Map;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-//TODO[ISIS-2441] intermediate for refactoring keep?
+//TODO[ISIS-2441] intermediate for refactoring, keep?
 public interface HasEnlistedForPublishing {
 
     Map<ManagedObject, PublishingChangeKind> getChangeKindByEnlistedAdapter();
 
     int numberObjectPropertiesModified();
 
+    /**
+     * prepare commands for publishing
+     */
     void preparePublishing();
 
 }

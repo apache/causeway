@@ -26,6 +26,7 @@ import java.util.function.Function;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -84,32 +85,32 @@ public class InteractionSession extends RuntimeContextBase {
     
     @Setter private Runnable onClose;
     
-    // -- INTERACTION SCOPED USER DATA
+    // -- INTERACTION SCOPED SESSION ATTRIBUTE
     
-    private Map<Class<?>, Object> userData = null;
+    private Map<Class<?>, Object> attributes = null;
     private boolean closed = false;
 
-    /** add type specific user data */
-    public <T> T putUserData(Class<? super T> type, T value) {
-        return _Casts.uncheckedCast(userData().put(type, value));
+    /** add type specific session data */
+    public <T> T putAttribute(Class<? super T> type, T value) {
+        return _Casts.uncheckedCast(attributes().put(type, value));
     }
     
-    /** conditionally add type specific user data */
-    public <T> T computeUserDataIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) {
-        return _Casts.uncheckedCast(userData().computeIfAbsent(type, mappingFunction));
+    /** conditionally add type specific session data */
+    public <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) {
+        return _Casts.uncheckedCast(attributes().computeIfAbsent(type, mappingFunction));
     }
 
-    /** get type specific user data */
-    public <T> T getUserData(Class<T> type) {
-        return (userData!=null)
-                ? _Casts.uncheckedCast(userData.get(type))
+    /** get type specific session data */
+    public <T> T getAttribute(Class<T> type) {
+        return (attributes!=null)
+                ? _Casts.uncheckedCast(attributes.get(type))
                 : null;
     }
     
-    /** remove type specific user data */
+    /** remove type specific session data */
     public void removeUserData(Class<?> type) {
-        if(userData!=null) {
-            userData.remove(type);
+        if(attributes!=null) {
+            attributes.remove(type);
         }
     }
     
@@ -119,18 +120,29 @@ public class InteractionSession extends RuntimeContextBase {
             onClose.run();
             onClose = null;
         }
-        userData = null;
+        attributes = null;
         closed = true;
     }
     
-    private Map<Class<?>, Object> userData() {
+    /**
+     * Copies all attributes to the target session.
+     * @param target
+     */
+    public void copyAttributesTo(final @NonNull InteractionSession target) {
+        if(_NullSafe.isEmpty(attributes)) {
+            return;
+        }
+        target.attributes().putAll(attributes);
+    }
+    
+    private Map<Class<?>, Object> attributes() {
         if(closed) {
             throw _Exceptions.illegalState(
                     "IsisInteraction was already closed, cannot access UserData any longer.");
         }
-        return (userData==null) 
-                ? userData = new HashMap<>() 
-                : userData;
+        return (attributes==null) 
+                ? attributes = new HashMap<>() 
+                : attributes;
     }
     
     // -- TO STRING
@@ -141,6 +153,8 @@ public class InteractionSession extends RuntimeContextBase {
         asString.append("transaction", getCurrentTransactionId());
         return asString.toString();
     }
+
+
 
 
 }
