@@ -74,6 +74,8 @@ isis:
         brand-logo-header: images/gift_48.png
         brand-logo-signin: images/gift_256.png
         name: Apache Isis Demo App
+        # https://stackoverflow.com/a/38983935/56880
+        version: @project.version@
         css: css/application.css
         js: scripts/application.js
         about: Apache Isis Hello World

@@ -166,7 +166,6 @@
 							<to>
 								<image>docker.io/apacheisis/demo-wicket</image>
 								<tags>
-									<tag>nightly</tag>
 									<tag>${env.REVISION}</tag>
 								</tags>
 								<auth>
