@@ -68,12 +68,13 @@ public class IsisModuleExtCorsImpl {
     }
 
     private CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedHeaders(configuration.getExtensions().getCors().getAllowedHeaders());
-        corsConfiguration.setAllowedMethods(configuration.getExtensions().getCors().getAllowedMethods());
-        corsConfiguration.setAllowedOrigins(configuration.getExtensions().getCors().getAllowedOrigins());
-        corsConfiguration.setExposedHeaders(configuration.getExtensions().getCors().getExposedHeaders());
+        final IsisConfiguration.Extensions.Cors iec = configuration.getExtensions().getCors();
+        corsConfiguration.setAllowedHeaders(iec.getAllowedHeaders());
+        corsConfiguration.setAllowedMethods(iec.getAllowedMethods());
+        corsConfiguration.setAllowedOrigins(iec.getAllowedOrigins());
+        corsConfiguration.setExposedHeaders(iec.getExposedHeaders());
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
