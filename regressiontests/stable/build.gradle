@@ -15,8 +15,8 @@
 //  specific language governing permissions and limitations
 //  under the License.
 
-description = 'Apache Isis - Regression Tests'
-group = 'org.apache.isis.regressiontests'
+//description = 'Apache Isis - Regression Tests'
+//group = 'org.apache.isis.regressiontests'
 
 plugins {
   id 'java'
@@ -53,7 +53,7 @@ dependencies {
     compile project(':org.apache.isis.viewer:isis-viewer-restfulobjects-viewer')
     compile project(':org.apache.isis.viewer:isis-viewer-restfulobjects-jaxrsresteasy4')
     compile project(':org.apache.isis.testing:isis-testing-fixtures-applib')
-    compile project(':org.apache.isis.mappings:isis-mappings-restclient-api')
+//    compile project(':org.apache.isis.mappings:isis-mappings-restclient-api')
     compile project(':org.apache.isis.extensions:isis-extensions-modelannotation')
     compile project(':org.apache.isis.extensions:isis-extensions-secman-model')
     compile project(':org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt')
@@ -83,26 +83,26 @@ datanucleus {
 test {
 	// enable JUnit Platform (a.k.a. JUnit 5) support
 	useJUnitPlatform()
-	
+
 	// explicitly include or exclude tests
 	//  include 'org/foo/**'
 	//  exclude 'org/boo/**'
-	
+
 	// show standard out and standard error of the test JVM(s) on the console
 	testLogging.showStandardStreams = false
-	
+
 	// set heap size for the test JVM(s)
 	minHeapSize = "128m"
 	maxHeapSize = "512m"
-	
+
 	// set JVM arguments for the test JVM(s)
 	jvmArgs '-XX:MaxPermSize=256m'
-	
+
 	// listen to events in the test execution lifecycle
 	beforeTest { descriptor ->
 	   logger.lifecycle("Running test: " + descriptor)
 	}
-	
+
 	// Fail the 'test' task on the first test failure
 	failFast = true
 }
