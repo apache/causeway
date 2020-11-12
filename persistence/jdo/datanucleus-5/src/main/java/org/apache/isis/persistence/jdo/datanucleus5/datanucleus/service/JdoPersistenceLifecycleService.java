@@ -97,13 +97,13 @@ public class JdoPersistenceLifecycleService {
 
         switch (eventType) {
         case HAS_STARTED:
-            openInteraction(interactionSession);
+            onInteractionStarted(interactionSession);
             break;
         case IS_ENDING:
-            closeInteraction(interactionSession);
+            onInteractionEnding(interactionSession);
             break;
         case FLUSH_REQUEST:
-            flushInteraction(interactionSession);
+            onInteractionFlushRequest(interactionSession);
             break;
 
         default:
@@ -114,25 +114,24 @@ public class JdoPersistenceLifecycleService {
 
     // -- HELPER
 
-    private void openInteraction(InteractionSession interactionSession) {
+    private void onInteractionStarted(final InteractionSession interactionSession) {
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
-        log.debug("store IsisPersistenceSessionJdo instance on current InteractionSession");
         interactionSession.putAttribute(IsisPersistenceSessionJdo.class, persistenceSession);
         persistenceSession.open();
     }
 
-    private void closeInteraction(InteractionSession isisInteraction) {
-        currentSession(isisInteraction)
+    private void onInteractionEnding(final InteractionSession interactionSession) {
+        currentSession(interactionSession)
         .ifPresent(PersistenceSession::close);
     }
 
-    private void flushInteraction(InteractionSession isisInteraction) {
-        currentSession(isisInteraction)
+    private void onInteractionFlushRequest(final InteractionSession interactionSession) {
+        currentSession(interactionSession)
         .ifPresent(PersistenceSession::flush);
     }
 
-    private Optional<IsisPersistenceSessionJdo> currentSession(InteractionSession interactionSession) {
+    private Optional<IsisPersistenceSessionJdo> currentSession(final InteractionSession interactionSession) {
         return Optional.ofNullable(interactionSession)
                 .map(session->session.getAttribute(IsisPersistenceSessionJdo.class));
     }
