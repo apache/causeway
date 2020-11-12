@@ -97,7 +97,7 @@ class CorsFilterTest {
         assertHttpResponse200(digest);
     }
 
-    @Test @Order(4) //@Disabled("not sure why the ")
+    @Test @Order(4)
     void requestWithInvalidMethod_shouldFail() {
         val digest = digestUsingGet("stringSafe", String.class, builder->builder
                 .header("Origin", validOrigin()));
