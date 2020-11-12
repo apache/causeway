@@ -18,38 +18,37 @@
  */
 package org.apache.isis.extensions.cors.impl;
 
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.core.env.ConfigurableEnvironment;
-
-import javax.servlet.Filter;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+
+import lombok.val;
+
 class IsisModuleExtCorsImplTest {
 
+    private IsisConfiguration isisDefaultConfiguration;
+    
+    @BeforeEach
+    void setUp() {
+        isisDefaultConfiguration = MetaModelContext_forTesting
+                .buildDefault()
+                .getConfiguration();
+    }
+    
     @Test
-    void ensureUrlPatternsContainRestfulAndWildcard() {
+    void defaultIsisConfiguration_shouldYieldCorsUrlPatternWithWildcard() {
         // given
-        final MetaModelContext metaModelContext = MetaModelContext_forTesting.buildDefault();
-        final ConfigurableEnvironment environment = metaModelContext.getConfiguration().getEnvironment();
-        final IsisConfiguration configuration = new IsisConfiguration(environment);
-        final Map<String, String> map = new HashMap<>();
-
-        configuration.setIsisSettings(map);
-        final IsisModuleExtCorsImpl classUnderTest = new IsisModuleExtCorsImpl(configuration);
-        final FilterRegistrationBean<Filter> filterRegistration = classUnderTest.corsFilterRegistration();
+        val isisModuleExtCorsImpl = new IsisModuleExtCorsImpl(isisDefaultConfiguration);
+        
         // when
-        final Collection<String> urlPatterns = filterRegistration.getUrlPatterns();
+        val filterRegistration = isisModuleExtCorsImpl.corsFilterRegistration();
+        
         // then
-        assertTrue(urlPatterns.contains("/restful/*"));
+        assertTrue(filterRegistration.getUrlPatterns().contains("/restful/*"));
     }
 
 }

@@ -46,18 +46,12 @@
 		    <artifactId>spring-web</artifactId>
 		</dependency>
 
-        <!-- TESTS -->
+        <!-- TESTING -->
+        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-internaltestsupport</artifactId>
             <scope>test</scope>
-            <!-- provided by Spring Boot -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
 	</dependencies>
