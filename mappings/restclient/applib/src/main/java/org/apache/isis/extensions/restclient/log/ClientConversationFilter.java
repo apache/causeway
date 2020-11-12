@@ -62,7 +62,7 @@ extends ClientRequestFilter, ClientResponseFilter {
                 ? "Failed to parse accept header, cause: " + acceptableMediaTypeParsingFailure.getMessage()
                 : "OK";
 
-        final String requestBody = requestContext.getEntity().toString();
+        final String requestBody = "" + requestContext.getEntity();
 
         onRequest(
                 endpoint, method, acceptHeaderParsing,

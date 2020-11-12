@@ -42,10 +42,10 @@ class IsisModuleExtCorsImplTest {
     @Test
     void defaultIsisConfiguration_shouldYieldCorsUrlPatternWithWildcard() {
         // given
-        val isisModuleExtCorsImpl = new IsisModuleExtCorsImpl(isisDefaultConfiguration);
+        val isisModuleExtCorsImpl = new IsisModuleExtCorsImpl();
         
         // when
-        val filterRegistration = isisModuleExtCorsImpl.corsFilterRegistration();
+        val filterRegistration = isisModuleExtCorsImpl.createCorsFilterRegistration(isisDefaultConfiguration);
         
         // then
         assertTrue(filterRegistration.getUrlPatterns().contains("/restful/*"));

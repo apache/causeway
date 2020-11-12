@@ -21,7 +21,6 @@ package org.apache.isis.extensions.cors.impl;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.Filter;
 
@@ -36,39 +35,37 @@ import org.springframework.web.filter.CorsFilter;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Configuration
 @Named("isisMapCors.WebModuleServerCors")
 @Qualifier("CORS")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class IsisModuleExtCorsImpl {
     
-    private final IsisConfiguration configuration;
-
     @Bean
-    public FilterRegistrationBean<Filter> corsFilterRegistration() {
+    public FilterRegistrationBean<Filter> createCorsFilterRegistration(IsisConfiguration configuration) {
 
         final Map<String, String> cfgMap = configuration.getAsMap();
         final String resteasyBase = cfgMap.getOrDefault("resteasy.jaxrs.defaultPath", "/restful/*");
-        log.info("Setting up CORS to filter resteasy-base at '{}'", resteasyBase);
+        log.info("Setting up CORS to filter resteasy-base at '{}' with {}", 
+                resteasyBase, 
+                configuration.getExtensions().getCors());
 
         final FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(createCorsFilter());
+        filterRegistrationBean.setFilter(createCorsFilter(configuration));
         filterRegistrationBean.setUrlPatterns(Collections.singletonList(resteasyBase));
         filterRegistrationBean.setOrder(OrderPrecedence.EARLY - 100);
         return filterRegistrationBean;
     }
 
-    public CorsFilter createCorsFilter() {
+    private CorsFilter createCorsFilter(IsisConfiguration configuration) {
+        
+        val isisCorsConfig = configuration.getExtensions().getCors();
         
         val corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        
-        val isisCorsConfig = configuration.getExtensions().getCors();
         corsConfiguration.setAllowedHeaders(isisCorsConfig.getAllowedHeaders());
         corsConfiguration.setAllowedMethods(isisCorsConfig.getAllowedMethods());
         corsConfiguration.setAllowedOrigins(isisCorsConfig.getAllowedOrigins());
