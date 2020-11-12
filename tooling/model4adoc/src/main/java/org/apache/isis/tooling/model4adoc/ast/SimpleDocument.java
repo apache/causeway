@@ -21,6 +21,7 @@ package org.apache.isis.tooling.model4adoc.ast;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.asciidoctor.ast.Catalog;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Title;
 
@@ -57,6 +58,11 @@ public class SimpleDocument extends SimpleStructuralNode implements Document {
     @Override
     public int getAndIncrementCounter(String name, int initialValue) {
         return 0;
+    }
+
+    @Override
+    public Catalog getCatalog() {
+        return null;
     }
 
 
