@@ -36,5 +36,9 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-cors-impl</artifactId>
+        </dependency>
 	</dependencies>
 </project>

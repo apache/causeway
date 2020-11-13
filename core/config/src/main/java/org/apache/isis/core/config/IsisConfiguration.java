@@ -108,7 +108,11 @@ public class IsisConfiguration {
     /**
      * All of the isis configuration properties, gathered together as an immutable map.
      */
-    public Map<String, String> getAsMap() { return Collections.unmodifiableMap(isisSettings); }
+    public Map<String, String> getAsMap() {
+        return isisSettings!=null
+                ? Collections.unmodifiableMap(isisSettings)
+                : Collections.emptyMap();
+    }
 
 
     private final Security security = new Security();

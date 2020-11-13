@@ -109,7 +109,7 @@ class RestServiceSimpifiedRepresentationTest {
         System.out.println("==================================================================");
     }
 
-    // -- STRING
+    // -- VOID
 
     @Test @Order(1) 
     void voidResult() {
@@ -125,6 +125,14 @@ class RestServiceSimpifiedRepresentationTest {
         val digest = digest("string", String.class);
         val returnValue = digest.getEntities().getSingletonOrFail();
         assertEquals(refSampler.string(), returnValue);
+        filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUE);
+    }
+    
+    @Test @Order(2) 
+    void stringUsingGet() {
+        val digest = digestUsingGet("stringSafe", String.class);
+        val returnValue = digest.getEntities().getSingletonOrFail();
+        assertEquals(refSampler.stringSafe(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUE);
     }
 
@@ -356,6 +364,32 @@ class RestServiceSimpifiedRepresentationTest {
 
         return digest;
 
+    }
+    
+    <T> ResponseDigest<T> digestUsingGet(String actionName, Class<T> entityType) {
+
+        _Probe.errOut("");
+        _Probe.errOut("=== %s", actionName);
+        _Probe.errOut("");
+        
+        assertTrue(restService.getPort()>0);
+
+        val useRequestDebugLogging = false;
+        val client = restService.newClient(useRequestDebugLogging, conversationFilters);
+
+        val request = restService.newInvocationBuilder(client, 
+                String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName)); 
+
+        filter4Reporting.next(String.format("@Action\n%s %s {\n    /*...*/\n}", entityType.getSimpleName(), actionName));
+
+        val response = request.get();
+        val digest = client.digest(response, entityType);
+
+        if(!digest.isSuccess()) {
+            fail(digest.getFailureCause());
+        }
+
+        return digest;
     }
 
     <T> ResponseDigest<T> digestArray(

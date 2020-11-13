@@ -28,9 +28,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
@@ -45,42 +43,39 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("CORS")
 @Log4j2
 public class IsisModuleExtCorsImpl {
-	public static final int CORS_FILTER_ORDER = OrderPrecedence.EARLY - 100;
-
-    private final IsisConfiguration configuration;
-
-    public IsisModuleExtCorsImpl(IsisConfiguration configuration) {
-		this.configuration = configuration;
-	}
-
+    
     @Bean
-	@Order(CORS_FILTER_ORDER)
-    public FilterRegistrationBean<Filter> corsFilterRegistration() {
+    public FilterRegistrationBean<Filter> createCorsFilterRegistration(IsisConfiguration configuration) {
 
         final Map<String, String> cfgMap = configuration.getAsMap();
-        val resteasyBase = cfgMap.getOrDefault("resteasy.jaxrs.defaultPath", "/restful/*");
-        log.info("Setting up CORS to filter resteasy-base at '{}'", resteasyBase);
+        final String resteasyBase = cfgMap.getOrDefault("resteasy.jaxrs.defaultPath", "/restful/*");
+        log.info("Setting up CORS to filter resteasy-base at '{}' with {}", 
+                resteasyBase, 
+                configuration.getExtensions().getCors());
 
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(corsFilter());
+        final FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(createCorsFilter(configuration));
         filterRegistrationBean.setUrlPatterns(Collections.singletonList(resteasyBase));
+        filterRegistrationBean.setOrder(OrderPrecedence.EARLY - 100);
         return filterRegistrationBean;
     }
 
-	public CorsFilter corsFilter() {
-		return new CorsFilter(corsConfigurationSource());
-	}
-
-	private CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.setAllowCredentials(true);
-		corsConfiguration.setAllowedHeaders(configuration.getExtensions().getCors().getAllowedHeaders());
-		corsConfiguration.setAllowedMethods(configuration.getExtensions().getCors().getAllowedMethods());
-		corsConfiguration.setAllowedOrigins(configuration.getExtensions().getCors().getAllowedOrigins());
-		corsConfiguration.setExposedHeaders(configuration.getExtensions().getCors().getExposedHeaders());
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", corsConfiguration);
-		return source;
-	}
+    private CorsFilter createCorsFilter(IsisConfiguration configuration) {
+        
+        val isisCorsConfig = configuration.getExtensions().getCors();
+        
+        val corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(isisCorsConfig.getAllowedHeaders());
+        corsConfiguration.setAllowedMethods(isisCorsConfig.getAllowedMethods());
+        corsConfiguration.setAllowedOrigins(isisCorsConfig.getAllowedOrigins());
+        corsConfiguration.setExposedHeaders(isisCorsConfig.getExposedHeaders());
+        
+        val source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        
+        return new CorsFilter(source);
+    }
+    
 
 }

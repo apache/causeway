@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
@@ -35,7 +36,6 @@ public class RoSpecSampler {
     
     @Action 
     public void voidResult() {
-        
     }
     
     // -- STRING
@@ -43,6 +43,11 @@ public class RoSpecSampler {
     @Action 
     public String string() {
         return "aString";
+    }
+    
+    @Action(semantics = SemanticsOf.SAFE) 
+    public String stringSafe() {
+        return "aSafeString";
     }
     
     @Action 
