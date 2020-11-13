@@ -113,7 +113,7 @@ class CorsFilterTest {
 
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = true;
+        val useRequestDebugLogging = false;
         val client = restService.newClient(useRequestDebugLogging, conversationFilters);
 
         val request = onRequestBuilder.apply( 
@@ -137,7 +137,7 @@ class CorsFilterTest {
 
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = true;
+        val useRequestDebugLogging = false;
         val client = restService.newClient(useRequestDebugLogging, conversationFilters);
 
         val request = onRequestBuilder.apply( 
