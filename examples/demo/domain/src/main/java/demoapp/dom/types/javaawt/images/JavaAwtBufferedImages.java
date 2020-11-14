@@ -48,9 +48,9 @@ import demoapp.dom.types.javaawt.images.vm.JavaAwtImageVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaAwtImages", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaAwtBufferedImages", editing=Editing.ENABLED)
 @Log4j2
-public class JavaAwtImages implements HasAsciiDocDescription {
+public class JavaAwtBufferedImages implements HasAsciiDocDescription {
 
     public String title() {
         return "Image data type";

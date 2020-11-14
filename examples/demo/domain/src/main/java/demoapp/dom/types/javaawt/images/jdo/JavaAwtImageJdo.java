@@ -47,38 +47,54 @@ import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder2;
         objectType = "demo.JavaAwtImageJdo"
 )
 public class JavaAwtImageJdo                                          // <.>
-        implements HasAsciiDocDescription, JavaAwtImageHolder2 {
+        implements HasAsciiDocDescription
+//end::class[]
+// label positions not yet supported
+//        , JavaAwtImageHolder2
+//tag::class[]
+{
 
 //end::class[]
     public JavaAwtImageJdo(BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
+//        this.readWriteProperty = initialValue;    // editable properties not yet supported
     }
 
+    // @Title not yet supported
+    public String title() {
+        return "Image JDO entity";
+    }
+
+    // @Title(prepend = "Image JDO entity: ")  // not yet supported
 //tag::class[]
-    @Title(prepend = "Image JDO entity: ")
     @MemberOrder(name = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                               // <.>
+    @Column(allowsNull = "false")                                   // <.>
     @Getter @Setter
     private BufferedImage readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                        // <.>
-    @MemberOrder(name = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false")
-    @Getter @Setter
-    private BufferedImage readWriteProperty;
+//end::class[]
+// editable properties not yet supported:
+//    @Property(editing = Editing.ENABLED)                          // <.>
+//    @MemberOrder(name = "editable-properties", sequence = "1")
+//    @Column(allowsNull = "false")
+//    @Getter @Setter
+//    private BufferedImage readWriteProperty;
 
-    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+//tag::class[]
+    @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @MemberOrder(name = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                                // <.>
+    @Column(allowsNull = "true")                                    // <.>
     @Getter @Setter
     private BufferedImage readOnlyOptionalProperty;
 
-    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "optional-properties", sequence = "2")
-    @Column(allowsNull = "true")
-    @Getter @Setter
-    private BufferedImage readWriteOptionalProperty;
+//end::class[]
+// editable properties not yet supported:
+//    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+//    @MemberOrder(name = "optional-properties", sequence = "2")
+//    @Column(allowsNull = "true")
+//    @Getter @Setter
+//    private BufferedImage readWriteOptionalProperty;
 
+//tag::class[]
 }
 //end::class[]

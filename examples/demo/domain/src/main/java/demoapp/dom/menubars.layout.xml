@@ -83,7 +83,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>More Types</mb3:named>
             <mb3:section>
                 <mb3:named>java.awt</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaAwtTypesMenu" id="images"/>
+                <mb3:serviceAction objectType="demo.JavaAwtTypesMenu" id="bufferedImages"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>java.math</mb3:named>
@@ -234,7 +234,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo" />
             </mb3:section>
         </mb3:menu>
-        
+
         <mb3:menu unreferencedActions="true">
             <mb3:named>Other</mb3:named>
         </mb3:menu>
@@ -311,7 +311,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
-        
+
         <mb3:menu>
             <mb3:named>Activity</mb3:named>
             <mb3:section>
