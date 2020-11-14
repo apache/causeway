@@ -78,7 +78,7 @@ isis:
         version: @project.version@
         css: css/application.css
         js: scripts/application.js
-        about: Apache Isis Hello World
+        about: This application demonstrates many aspects of the Apache Isis programming model, as well as some of the most significant domain services and extensions such as the WrapperFactory, security, commands and publishing.
 
       credit:
         - url:  http://isis.apache.org

@@ -24,12 +24,16 @@ import java.io.InputStream;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import javax.servlet.ServletContext;
 
 import org.apache.wicket.markup.html.basic.Label;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on
@@ -60,27 +64,25 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
         }
     }
 
-    /**
-     * We take care to read this only once.
-     *
-     * <p>
-     *     Is <code>transient</code> because
-     * </p>
-     */
     @Inject
-    @Named("metaInfManifest")
-    private transient Provider<InputStream> metaInfManifestProvider;
+    private ServletContext servletContext;
+
+    @Inject
+    private IsisConfiguration isisConfiguration;
 
     private JarManifestModel jarManifestModel;
 
     public AboutPanel(final String id) {
         super(id);
 
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, getIsisConfiguration().getViewer().getWicket().getApplication().getVersion()));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, getIsisConfiguration().getViewer().getWicket().getApplication().getAbout()));
+        val config = isisConfiguration.getViewer().getWicket().getApplication();
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, config.getName()));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, config.getVersion()));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, config.getAbout()));
 
         if(jarManifestModel == null) {
+            Provider<InputStream> metaInfManifestProvider =
+                    () -> servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
             jarManifestModel = new JarManifestModel(super.getCommonContext(), metaInfManifestProvider);
         }
 
