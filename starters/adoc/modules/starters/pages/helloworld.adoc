@@ -4,9 +4,8 @@
 
 
 The quickest way to start learning about Apache Isis is to use the `helloworld` starter app.
-You can see a preview of this application running link:https://helloworld.isis.incode.work[here].
 
-This will download a tiny Apache Isis app, consisting of a simple one-class domain model, namely the `HelloWorldObject` entity and a supporting `HelloWorldObjects` repository domain service.
+Using the instructions <<Downloading & Running,below>>, you can  download a tiny Apache Isis app, consisting of a simple one-class domain model, namely the `HelloWorldObject` entity and a supporting `HelloWorldObjects` repository domain service.
 Both the business logic and supporting bootstrapping classes are in a single Maven module (in different Java packages).
 
 [TIP]
@@ -16,6 +15,7 @@ Instead, use the xref:docs:starters:simpleapp.adoc[SimpleApp starter app].
 It also creates a minimal application, but provides more structure and example tests, useful as you build out your own app.
 ====
 
+You can also try out this application online, running link:https://helloworld.isis.incode.work[here].
 
 == Prerequisites
 
