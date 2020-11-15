@@ -279,7 +279,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
          * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
          * @param commandDto
          */
-        public void setCommandDto(final CommandDto commandDto, final int targetIdx) {
+        public void setCommandDto(final CommandDto commandDto) {
             Command.this.commandDto = commandDto;
         }
         /**

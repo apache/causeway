@@ -126,7 +126,7 @@ public interface JaxbService {
             try {
                 return internalFromXml(jaxbContext, xml, unmarshallerProperties);
             } catch (Exception e) {
-                throw _Xml.verbose("unmarshalling XML", null, e);
+                throw _Xml.verboseException("unmarshalling XML", null, e);
             }
         }
 
@@ -140,7 +140,7 @@ public interface JaxbService {
                 val jaxbContext = jaxbContextForClass(domainClass);
                 return _Casts.uncheckedCast(internalFromXml(jaxbContext, xml, unmarshallerProperties));
             } catch (Exception e) {
-                throw _Xml.verbose("unmarshalling XML", domainClass, e);
+                throw _Xml.verboseException("unmarshalling XML", domainClass, e);
             }
         }
 
@@ -153,12 +153,10 @@ public interface JaxbService {
             val jaxbContext = jaxbContextForObject(domainObject);
             try {
                 val marshaller = jaxbContext.createMarshaller();
-
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                if(!_NullSafe.isEmpty(marshallerProperties)) {
-                    for (val entry : marshallerProperties.entrySet()) {
-                        marshaller.setProperty(entry.getKey(), entry.getValue());
-                    }
+                
+                for (val entry : _NullSafe.entrySet(marshallerProperties)) {
+                    marshaller.setProperty(entry.getKey(), entry.getValue());
                 }
 
                 configure(marshaller);
@@ -170,7 +168,7 @@ public interface JaxbService {
                 return xml;
 
             } catch (Exception e) {
-                throw _Xml.verbose("marshalling domain object to XML", domainClass, e);
+                throw _Xml.verboseException("marshalling domain object to XML", domainClass, e);
             }
         }
 
@@ -213,11 +211,11 @@ public interface JaxbService {
             }
             
             val unmarshaller = jaxbContext.createUnmarshaller();
-            if(!_NullSafe.isEmpty(unmarshallerProperties)) {
-                for (val entry : unmarshallerProperties.entrySet()) {
-                    unmarshaller.setProperty(entry.getKey(), entry.getValue());
-                }
+            
+            for (val entry : _NullSafe.entrySet(unmarshallerProperties)) {
+                unmarshaller.setProperty(entry.getKey(), entry.getValue());
             }
+            
             configure(unmarshaller);
 
             val pojo = unmarshaller.unmarshal(new StringReader(xml));

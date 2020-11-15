@@ -38,7 +38,7 @@ import org.apache.isis.commons.internal.base._Strings;
 @Value(semanticsProviderName = 
         "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
-public class Markup implements HasHtml, Serializable {   // TODO: should be final
+public final class Markup implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
     private final String html;
@@ -108,6 +108,11 @@ public class Markup implements HasHtml, Serializable {   // TODO: should be fina
                     ? encoder.encodeToString(_Strings.toBytes(v.asHtml(), StandardCharsets.UTF_8))
                     : null;
         }
+    }
+
+    /** syntactic sugar */
+    public static Markup valueOfHtml(String html) {
+        return new Markup(html);
     }
 
 }
