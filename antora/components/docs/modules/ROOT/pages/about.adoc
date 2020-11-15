@@ -24,9 +24,9 @@
 
 _Starter Apps_
 
-* xref:docs:starters:helloworld.adoc[HelloWorld] +
+* xref:docs:starters:helloworld.adoc[HelloWorld]
 (link:https://helloworld.isis.incode.work[preview])
-* xref:docs:starters:simpleapp.adoc[SimpleApp] +
+* xref:docs:starters:simpleapp.adoc[SimpleApp]
 (link:https://simpleapp.isis.incode.work[preview])
 
 _POMs_
@@ -38,7 +38,7 @@ _POMs_
 [discrete]
 == Demos & Tutorial
 
-* xref:docs:demo:about.adoc[Demo App] +
+* xref:docs:demo:about.adoc[Demo App]
 (link:https://demo-wicket.isis.incode.work[preview])
 * link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (v1.16.2)]
 
