@@ -21,11 +21,6 @@ package org.apache.isis.core.runtime.events;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
@@ -34,6 +29,10 @@ import org.apache.isis.core.runtime.events.persistence.PostStoreEvent;
 import org.apache.isis.core.runtime.events.persistence.PreStoreEvent;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import lombok.val;
 
@@ -56,11 +55,11 @@ public class RuntimeEventService {
    // -- APP
 
     public void fireAppPreMetamodel() {
-        eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
+        eventBusService.post(AppLifecycleEvent.PRE_METAMODEL);
     }
 
     public void fireAppPostMetamodel() {
-        eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
+        eventBusService.post(AppLifecycleEvent.POST_METAMODEL);
     }
 
     // -- INTERACTION

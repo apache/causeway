@@ -38,7 +38,7 @@ public class JavaTimeOffsetTimeJdoSeedService {
     @EventListener(AppLifecycleEvent.class)
     public void onAppLifecycleEvent(AppLifecycleEvent event) {
 
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
+    	if (event.isPostMetamodel()) {
             fixtureScripts.run(new TemporalJavaTimeOffsetTimeJdoEntityFixture());
         }
     }

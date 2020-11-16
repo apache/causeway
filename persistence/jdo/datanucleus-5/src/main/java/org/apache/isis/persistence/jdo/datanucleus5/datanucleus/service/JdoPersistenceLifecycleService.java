@@ -67,20 +67,18 @@ public class JdoPersistenceLifecycleService {
     @EventListener(AppLifecycleEvent.class)
     public void onAppLifecycleEvent(AppLifecycleEvent event) {
 
-        val eventType = event.getEventType(); 
+        log.debug("received app lifecycle event {}", event);
 
-        log.debug("received app lifecycle event {}", eventType);
-
-        switch (eventType) {
-        case appPreMetamodel:
+        switch (event) {
+        case PRE_METAMODEL:
             create();
             break;
-        case appPostMetamodel:
+        case POST_METAMODEL:
             init();
             break;
 
         default:
-            throw _Exceptions.unmatchedCase(eventType);
+            throw _Exceptions.unmatchedCase(event);
         }
 
     }

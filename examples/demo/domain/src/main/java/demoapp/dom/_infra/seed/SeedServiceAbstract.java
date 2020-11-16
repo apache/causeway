@@ -22,16 +22,10 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.springframework.context.event.EventListener;
-
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
-
-import demoapp.dom._infra.seed.SeedService;
-import demoapp.dom.types.Samples;
+import org.springframework.context.event.EventListener;
 
 public abstract class SeedServiceAbstract implements SeedService {
 
@@ -43,7 +37,7 @@ public abstract class SeedServiceAbstract implements SeedService {
 
     @EventListener(AppLifecycleEvent.class)
     public void onAppLifecycleEvent(AppLifecycleEvent event) {
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
+        if (event.isPostMetamodel()) {
             fixtureScripts.run(fixtureScriptSupplier.get());
         }
     }

@@ -21,17 +21,14 @@ package org.apache.isis.extensions.secman.jdo.seed;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -49,25 +46,16 @@ public class SeedSecurityModuleService {
     }
 
     @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
+    public void onAppLifecycleEvent(final AppLifecycleEvent event) {
 
-        val eventType = event.getEventType(); 
+        log.debug("received app lifecycle event {}", event);
 
-        log.debug("received app lifecycle event {}", eventType);
-
-        switch (eventType) {
-        case appPreMetamodel:
-            break;
-        case appPostMetamodel:
-
-            log.info("SEED");
+        if (event.isPostMetamodel()) {
+        	log.info("SEED");
 
             fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
-            break;
-
-        default:
-            throw _Exceptions.unmatchedCase(eventType);
         }
+        
     }
 
     

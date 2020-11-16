@@ -18,18 +18,18 @@
  */
 package org.apache.isis.core.runtime.events.app;
 
-import lombok.Getter;
-import lombok.Value;
-
-@Value(staticConstructor="of")
-public class AppLifecycleEvent {
-
-    public static enum EventType {
-        appPreMetamodel,
-        appPostMetamodel,
-//        appPreDestroy,
-    }
-
-    @Getter AppLifecycleEvent.EventType eventType;
-
+public enum AppLifecycleEvent {
+        PRE_METAMODEL,
+        POST_METAMODEL,
+        //APP_PRE_DESTROY,
+        ;
+	
+	public boolean isPreMetamodel() {
+		return this == PRE_METAMODEL;
+	}
+	
+	public boolean isPostMetamodel() {
+		return this == POST_METAMODEL;
+	}
+	
 }
