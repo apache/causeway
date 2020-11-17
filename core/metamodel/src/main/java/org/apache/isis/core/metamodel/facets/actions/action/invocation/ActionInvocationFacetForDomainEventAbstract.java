@@ -158,7 +158,7 @@ implements ImperativeFacet {
         // similar code in PropertySetterOrClearFacetFDEA
         
         val interactionContext = getInteractionContext();
-        val interaction = interactionContext.getInteraction();
+        val interaction = interactionContext.getInteractionElseFail();
         val command = interaction.getCommand();
         val commandFacet = getFacetHolder().getFacet(CommandFacet.class);
         command.updater().setReified(commandFacet != null);

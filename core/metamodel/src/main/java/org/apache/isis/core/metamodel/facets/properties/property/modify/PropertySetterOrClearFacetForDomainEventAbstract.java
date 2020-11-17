@@ -254,7 +254,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         }
 
         val interactionContext = getInteractionContext();
-        val interaction = interactionContext.getInteraction();
+        val interaction = interactionContext.getInteractionElseFail();
         val command = interaction.getCommand();
         if( command==null ) {
             return head.getTarget();

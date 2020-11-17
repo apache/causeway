@@ -178,7 +178,7 @@ implements
     
     @Override
     public void preparePublishing() {
-        val command = interactionContextProvider.get().getInteraction().getCommand();
+        val command = interactionContextProvider.get().getInteractionElseFail().getCommand();
         command.updater().setSystemStateChanged(
                 command.isSystemStateChanged() 
                 || numberObjectsDirtied() > 0);

@@ -315,7 +315,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             final ManagedObject managedObject,
             final Supplier<CommandDto> commandDtoSupplier) {
 
-        val command = getInteractionContext().getInteraction().getCommand();
+        val command = getInteractionContext().getInteractionElseFail().getCommand();
 
         _Assert.assertNotNull(command,
             "No command available with current thread, "

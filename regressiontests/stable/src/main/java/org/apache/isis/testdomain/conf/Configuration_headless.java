@@ -132,15 +132,15 @@ public class Configuration_headless {
         
         public void setupCommandCreateIfMissing() {
             
-            val interactionContext = interactionContextProvider.get();
-            @SuppressWarnings("unused")
-            final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
-                    .orElseGet(()->{
-                        val newCommand = new Command();
-                        val newInteraction = new Interaction(newCommand);
-                        interactionContext.setInteraction(newInteraction);
-                        return newInteraction;
-                    });
+//            val interactionContext = interactionContextProvider.get();
+//            @SuppressWarnings("unused")
+//            final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
+//                    .orElseGet(()->{
+//                        val newCommand = new Command();
+//                        val newInteraction = new Interaction(newCommand);
+//                        interactionContext.setInteraction(newInteraction);
+//                        return newInteraction;
+//                    });
         }
         
     }

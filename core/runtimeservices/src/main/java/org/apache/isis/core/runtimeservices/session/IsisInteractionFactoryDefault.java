@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtimeservices.session;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.File;
 import java.util.Optional;
 import java.util.Stack;
@@ -28,19 +30,8 @@ import java.util.concurrent.Callable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
@@ -67,8 +58,12 @@ import org.apache.isis.core.runtimeservices.user.UserServiceDefault.UserAndRoleO
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-
-import static org.apache.isis.commons.internal.base._With.requires;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -99,7 +94,6 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     @Inject MetaModelContext metaModelContext;
     @Inject IsisConfiguration configuration;
     @Inject ServiceInjector serviceInjector;
-    @Inject Provider<InteractionContext> interactionContextProvider;
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
@@ -168,8 +162,6 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         
         interactionClosureStack.get().push(newInteractionClosure);
 
-        initializeApplibCommandAndInteraction();
-
         if(isInTopLevelClosure()) {
         	postSessionOpened(interactionSession);
         }
@@ -190,15 +182,6 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     	return interactionClosureStack.get().isEmpty()
     			? new InteractionSession(metaModelContext, authSessionToUse)
 				: interactionClosureStack.get().firstElement().getInteractionSession();
-    }
-    
-
-    private void initializeApplibCommandAndInteraction() {
-
-        val command = new Command();
-        val interaction = new Interaction(command);
-
-        interactionContextProvider.get().setInteraction(interaction);
     }
 
     @Override

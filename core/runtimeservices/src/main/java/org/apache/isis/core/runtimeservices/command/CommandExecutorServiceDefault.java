@@ -138,7 +138,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandDto dto,
             final CommandOutcomeHandler commandUpdater) {
 
-        val interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().getInteractionElseFail();
         val command = interaction.getCommand();
         if(command.getCommandDto() != dto) {
             command.updater().setCommandDto(dto);
@@ -168,7 +168,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private void copyStartedAtFromInteractionExecution(
             final CommandOutcomeHandler commandOutcomeHandler) {
 
-        val interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().getInteractionElseFail();
         val currentExecution = interaction.getCurrentExecution();
 
         val startedAt = currentExecution != null
@@ -271,7 +271,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // there was an exception when performing the action invocation/property
         // edit.  We therefore need to guard that case.
         //
-        val interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().getInteractionElseFail();
 
         final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
         if(priorExecution != null) {

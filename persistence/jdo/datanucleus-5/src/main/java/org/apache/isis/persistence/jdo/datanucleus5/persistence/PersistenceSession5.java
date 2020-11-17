@@ -199,7 +199,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private void completeCommandFromInteractionAndClearDomainEvents() {
 
-        val interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().getInteractionElseFail();
         val command = interaction.getCommand();
 
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {

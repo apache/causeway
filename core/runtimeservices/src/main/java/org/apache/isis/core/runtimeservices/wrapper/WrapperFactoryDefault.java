@@ -306,7 +306,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         val interactionSession = currentInteractionSession();
         val asyncAuthSession = authSessionFrom(asyncControl, interactionSession.getAuthenticationSession());
-        val command = interactionContextProvider.get().getInteraction().getCommand();
+        val command = interactionContextProvider.get().getInteractionElseFail().getCommand();
 
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
@@ -516,7 +516,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             serviceInjector.injectServicesInto(this);
 
             return isisInteractionFactory.callAuthenticated(authenticationSession, () -> {
-                val childCommand = interactionContextProvider.get().getInteraction().getCommand();
+                val childCommand = interactionContextProvider.get().getInteractionElseFail().getCommand();
                 childCommand.updater().setParent(parentCommand);
                 return transactionService.executeWithinTransaction(() -> {
                         val bookmark = commandExecutorService.executeCommand(commandDto, CommandOutcomeHandler.NULL);

@@ -18,63 +18,38 @@
  */
 package org.apache.isis.applib.services.iactn;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.Optional;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.IsisInteractionScope;
-import org.apache.isis.applib.annotation.OrderPrecedence;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
- * This service (API and implementation) provides access to context information about any {@link Interaction}.
+ * Provides the current thread's {@link Interaction}.
  *
- * This implementation has no UI and there is only one implementation (this class) in applib, so it is annotated with
- * {@link DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
  */
 // tag::refguide[]
-@Service
-@Named("isisApplib.InteractionContext")
-@Order(OrderPrecedence.EARLY - 10) // before ChangedObjectService
-@Primary
-@Qualifier("Default")
-@IsisInteractionScope
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
-public class InteractionContext implements DisposableBean {
+public interface InteractionContext {
 
     // end::refguide[]
 
     /**
-     * The currently active {@link Interaction} for this thread.
+     * Optionally, the currently active {@link Interaction} for the calling thread.
      */
     // tag::refguide[]
-    @Getter
-    private Interaction interaction;    // <1>
+    Optional<Interaction> getInteraction();    // <.>
     // end::refguide[]
 
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     */
-    public void setInteraction(final Interaction interaction) {
-        this.interaction = interaction;
+    // -- SHORTCUTS
+    
+    default Interaction getInteractionIfAny() {
+    	return getInteraction().orElse(null);
     }
-
-    @Override
-    public void destroy() throws Exception {
-        setInteraction(null);
+    
+    default Interaction getInteractionElseFail() {
+    	return getInteraction().orElseThrow(()->_Exceptions
+    			.unrecoverable("needs an InteractionSession on current thread"));
     }
-
+    
     // tag::refguide[]
-    // ...
+
 }
 // end::refguide[]

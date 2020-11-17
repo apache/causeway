@@ -20,6 +20,8 @@ package org.apache.isis.core.runtime.iactn;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.MessageBroker;
@@ -29,7 +31,10 @@ import org.apache.isis.core.security.authentication.MessageBroker;
  * @since 2.0
  *
  */
-public interface IsisInteractionTracker extends AuthenticationSessionTracker {
+public interface IsisInteractionTracker 
+extends 
+	AuthenticationSessionTracker, 
+	InteractionContext {
 
     boolean isInInteractionSession();
     
@@ -55,6 +60,11 @@ public interface IsisInteractionTracker extends AuthenticationSessionTracker {
     /** @return the unique id of the current top-level request- or test-scoped IsisInteraction*/
     public Optional<String> getConversationId();
 
-	
+    // -- INTERACTION CONTEXT
+    
+    @Override
+    default Optional<Interaction> getInteraction(){
+    	return currentInteractionSession().map(InteractionSession::getInteraction);
+    }
     
 }

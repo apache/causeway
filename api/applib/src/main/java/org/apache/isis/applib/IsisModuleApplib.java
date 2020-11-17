@@ -18,9 +18,6 @@
  */
 package org.apache.isis.applib;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
 import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
@@ -38,12 +35,13 @@ import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceFo
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
 import org.apache.isis.applib.services.confview.ConfigurationMenu;
-import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.services.publish.PublisherServiceLogging;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.schema.IsisModuleSchema;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
@@ -74,7 +72,6 @@ import org.apache.isis.schema.IsisModuleSchema;
         CommandServiceListener.Null.class,
         ContentMappingServiceForCommandDto.class,
         ContentMappingServiceForCommandsDto.class,
-        InteractionContext.class,
         PublisherServiceLogging.class,
         SessionLoggingServiceLogging.class,
 

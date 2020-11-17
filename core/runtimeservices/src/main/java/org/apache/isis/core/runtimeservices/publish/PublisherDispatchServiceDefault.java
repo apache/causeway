@@ -116,7 +116,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
             final int numberObjectPropertiesModified,
             final Map<ManagedObject, PublishingChangeKind> changeKindByPublishedAdapter) {
 
-        val interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().getInteractionElseFail();
         val uniqueId = interaction.getUniqueId();
 
         if(uniqueId == null) {
