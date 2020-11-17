@@ -392,7 +392,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private boolean isInInteraction() {
-        return commonContext.getIsisInteractionTracker().isInInteraction();
+        return commonContext.getIsisInteractionTracker().isInInteractionSession();
     }
 
     private Optional<AuthenticationSession> getAuthenticationSession() {

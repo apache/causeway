@@ -31,14 +31,20 @@ import org.apache.isis.core.security.authentication.MessageBroker;
  */
 public interface IsisInteractionTracker extends AuthenticationSessionTracker {
 
-    boolean isInInteraction();
+    boolean isInInteractionSession();
     
-    /** @return the current request- or test-scoped IsisInteraction*/
-    Optional<InteractionSession> currentInteractionSession();
+    /** @return the InteractionClosure that sits on top of the current 
+     * request- or test-scoped InteractionSession*/
+    Optional<InteractionClosure> currentInteractionClosure();
+    
+    /** @return the current request- or test-scoped InteractionSession*/
+    default Optional<InteractionSession> currentInteractionSession() {
+    	return currentInteractionClosure().map(InteractionClosure::getInteractionSession);
+    }
     
     @Override
     default Optional<AuthenticationSession> currentAuthenticationSession() {
-        return currentInteractionSession().map(InteractionSession::getAuthenticationSession);
+        return currentInteractionClosure().map(InteractionClosure::getAuthenticationSession);
     }
     
     @Override
@@ -48,5 +54,7 @@ public interface IsisInteractionTracker extends AuthenticationSessionTracker {
     
     /** @return the unique id of the current top-level request- or test-scoped IsisInteraction*/
     public Optional<String> getConversationId();
+
+	
     
 }

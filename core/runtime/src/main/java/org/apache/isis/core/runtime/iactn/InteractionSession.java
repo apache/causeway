@@ -26,7 +26,6 @@ import java.util.function.Function;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -108,7 +107,7 @@ public class InteractionSession extends RuntimeContextBase {
     }
     
     /** remove type specific session data */
-    public void removeUserData(Class<?> type) {
+    public void removeAttribute(Class<?> type) {
         if(attributes!=null) {
             attributes.remove(type);
         }
@@ -124,16 +123,16 @@ public class InteractionSession extends RuntimeContextBase {
         closed = true;
     }
     
-    /**
-     * Copies all attributes to the target session.
-     * @param target
-     */
-    public void copyAttributesTo(final @NonNull InteractionSession target) {
-        if(_NullSafe.isEmpty(attributes)) {
-            return;
-        }
-        target.attributes().putAll(attributes);
-    }
+//    /**
+//     * Copies all attributes to the target session.
+//     * @param target
+//     */
+//    public void copyAttributesTo(final @NonNull InteractionSession target) {
+//        if(_NullSafe.isEmpty(attributes)) {
+//            return;
+//        }
+//        target.attributes().putAll(attributes);
+//    }
     
     private Map<Class<?>, Object> attributes() {
         if(closed) {

@@ -56,15 +56,15 @@ public interface IsisInteractionFactory {
      * @param authenticationSession
      * @return
      */
-    public InteractionSession openInteraction(AuthenticationSession authenticationSession);
+    public InteractionClosure openInteraction(AuthenticationSession authenticationSession);
 
     /**
-     * @return whether the calling thread is within the context of an open IsisInteraction
+     * @return whether the calling thread is within the context of an open IsisInteractionSession
      */
-    public boolean isInInteraction();
+    public boolean isInInteractionSession();
 
     /**
-     * @return whether the calling thread is within the context of an open IsisTransaction
+     * @return whether the calling thread is within the context of an open IsisTransactionSession
      */
     public boolean isInTransaction();
 
@@ -104,7 +104,7 @@ public interface IsisInteractionFactory {
     public void runAnonymous(ThrowingRunnable runnable);
 
     /**
-     * closes all open IsisInteractions as stacked on the current thread
+     * closes all open InteractionClosures as stacked on the current thread
      */
     public void closeSessionStack();
 
