@@ -18,28 +18,30 @@
  */
 package org.apache.isis.testdomain.applayer.publishing;
 
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.clearPublishedEntries;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getCreated;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getDeleted;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getLoaded;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getModified;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getUpdated;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.List;
 
 import javax.inject.Inject;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+
+import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.clearPublishedEntries;
+import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getCreated;
+import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getDeleted;
+import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getLoaded;
+import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getModified;
+import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getUpdated;
 
 @SpringBootTest(
         classes = {
@@ -57,18 +59,18 @@ import org.springframework.test.context.TestPropertySource;
 })
 class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
-	@Inject private ApplicationLayerTestFactory testFactory;
+    @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
-    
+
     @TestFactory @DisplayName("Application Layer")
     List<DynamicTest> generateTests() {
-    	return testFactory.generateTests(this::given, this::thenHappyCase, this::thenFailureCase);
+        return testFactory.generateTests(this::given, this::thenHappyCase, this::thenFailureCase);
     }
 
     private void given() {
         clearPublishedEntries(kvStore);
     }
-    
+
     private void thenHappyCase() {
         assertEquals(0, getCreated(kvStore));
         assertEquals(0, getDeleted(kvStore));

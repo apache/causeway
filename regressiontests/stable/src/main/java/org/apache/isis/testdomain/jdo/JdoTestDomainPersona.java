@@ -23,10 +23,6 @@ import java.util.HashSet;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithResult;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithoutResult;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
@@ -37,6 +33,10 @@ import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.ldap.LdapConstants;
+import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithResult;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithoutResult;
 
 import lombok.val;
 

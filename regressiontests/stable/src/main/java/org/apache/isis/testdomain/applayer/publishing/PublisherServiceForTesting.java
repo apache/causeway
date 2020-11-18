@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 public class PublisherServiceForTesting implements PublisherService {
 
     @Inject private KVStoreForTesting kvStore;
-    
+
     @PostConstruct
     public void init() {
         log.info("about to initialize");
@@ -53,72 +53,72 @@ public class PublisherServiceForTesting implements PublisherService {
 
         @SuppressWarnings("unchecked")
         val publishedEntries = 
-            (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
-        
+        (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
+
         publishedEntries.add(execution);
-        
+
         kvStore.put(this, "publishedExecutions", publishedEntries);
         log.debug("publish execution {}", ()->MemberExecutionDtoUtils.toXml(execution.getDto()));
     }
 
     @Override
     public void publish(PublishedObjects publishedObjects) {
-        
+
         @SuppressWarnings("unchecked")
         val publishedEntries = 
-            (List<PublishedObjects>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
-        
+        (List<PublishedObjects>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
+
         publishedEntries.add(publishedObjects);
-        
+
         kvStore.put(this, "publishedObjects", publishedEntries);
         log.debug("publish objects {}", ()->ChangesDtoUtils.toXml(publishedObjects.getDto()));
-        
+
     }
-    
+
     // -- UTILITIES
-    
+
     @SuppressWarnings("unchecked")
     public static Can<PublishedObjects> getPublishedObjects(KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<PublishedObjects>) kvStore.get(PublisherServiceForTesting.class, "publishedObjects")
                 .orElse(null));
     }
-    
+
     @SuppressWarnings("unchecked")
     public static Can<Execution<?, ?>> getPublishedExecutions(KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<Execution<?, ?>>) kvStore.get(PublisherServiceForTesting.class, "publishedExecutions")
                 .orElse(null));
     }
-    
+
     public static void clearPublishedEntries(KVStoreForTesting kvStore) {
         kvStore.clear(PublisherServiceForTesting.class);
     }
-    
+
     public static int getCreated(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(PublishedObjects::getNumberCreated).sum();
     }
-    
+
     public static int getDeleted(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(PublishedObjects::getNumberDeleted).sum();
     }
-    
+
     public static int getLoaded(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(PublishedObjects::getNumberLoaded).sum();
     }
-    
+
     public static int getUpdated(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(PublishedObjects::getNumberUpdated).sum();
     }
-    
+
     public static int getModified(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(PublishedObjects::getNumberPropertiesModified).sum();
     }
-    
-    
+
+
 }
