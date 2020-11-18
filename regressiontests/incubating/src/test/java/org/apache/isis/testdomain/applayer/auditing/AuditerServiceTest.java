@@ -33,6 +33,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
+import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -60,20 +61,26 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
 
     @TestFactory @DisplayName("Application Layer")
     List<DynamicTest> generateTests() {
-        return testFactory.generateTests(this::given, this::thenHappyCase, this::thenFailureCase);
+        return testFactory.generateTests(this::given, this::verify);
     }
 
     private void given() {
         AuditerServiceForTesting.clearAuditEntries(kvStore);
     }
 
-    private void thenHappyCase() {
-        assertHasAuditEntries(Can.of(
-                "Jdo Book/name: 'Sample Book' -> 'Book #2'"));
-    }
-
-    private void thenFailureCase() {
-        assertHasAuditEntries(Can.empty());
+    private void verify(VerificationStage verificationStage) {
+        switch(verificationStage) {
+        case PRE_COMMIT:
+        case FAILURE_CASE:
+            assertHasAuditEntries(Can.empty());
+            break;
+        case POST_COMMIT:
+            assertHasAuditEntries(Can.of(
+                    "Jdo Book/name: 'Sample Book' -> 'Book #2'"));
+            break;
+        default:
+            // ignore ... no checks
+        }
     }
 
     // -- HELPER

@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
+import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -64,27 +65,33 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
     @TestFactory @DisplayName("Application Layer")
     List<DynamicTest> generateTests() {
-        return testFactory.generateTests(this::given, this::thenHappyCase, this::thenFailureCase);
+        return testFactory.generateTests(this::given, this::verify);
     }
 
     private void given() {
         clearPublishedEntries(kvStore);
     }
-
-    private void thenHappyCase() {
-        assertEquals(0, getCreated(kvStore));
-        assertEquals(0, getDeleted(kvStore));
-        //assertEquals(1, getLoaded()); // not reproducible
-        assertEquals(1, getUpdated(kvStore));
-        assertEquals(1, getModified(kvStore));
-    }
-
-    private void thenFailureCase() {
-        assertEquals(0, getCreated(kvStore));
-        assertEquals(0, getDeleted(kvStore));
-        assertEquals(0, getLoaded(kvStore));
-        assertEquals(0, getUpdated(kvStore));
-        assertEquals(0, getModified(kvStore));
+    
+    private void verify(VerificationStage verificationStage) {
+        switch(verificationStage) {
+        case PRE_COMMIT:
+        case FAILURE_CASE:
+            assertEquals(0, getCreated(kvStore));
+            assertEquals(0, getDeleted(kvStore));
+            assertEquals(0, getLoaded(kvStore));
+            assertEquals(0, getUpdated(kvStore));
+            assertEquals(0, getModified(kvStore));
+            break;
+        case POST_COMMIT:
+            assertEquals(0, getCreated(kvStore));
+            assertEquals(0, getDeleted(kvStore));
+            //assertEquals(1, getLoaded()); // not reproducible
+            assertEquals(1, getUpdated(kvStore));
+            assertEquals(1, getModified(kvStore));
+            break;
+        default:
+            // ignore ... no checks
+        }
     }
 
 }

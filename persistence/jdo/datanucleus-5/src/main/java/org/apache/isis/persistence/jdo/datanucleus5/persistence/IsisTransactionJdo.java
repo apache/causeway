@@ -26,19 +26,19 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.TransactionScopeListener;
+import org.apache.isis.applib.services.TransactionScopeListener.PreCommitPhase;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Inbox;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
-import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.runtime.persistence.changetracking.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionFlushException;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
@@ -155,8 +155,6 @@ public class IsisTransactionJdo implements Transaction {
 
     private final _Inbox<PersistenceCommand> persistenceCommands = new _Inbox<>();
 
-    private final PublisherDispatchService publisherDispatchService;
-    private final AuditerDispatchService auditerDispatchService;
     private final IsisInteractionTracker isisInteractionTracker;
 
     private final Can<TransactionScopeListener> transactionScopeListeners;
@@ -170,10 +168,7 @@ public class IsisTransactionJdo implements Transaction {
 
         id = TransactionId.of(interactionId, sequence);
         
-        this.publisherDispatchService = serviceRegistry.lookupServiceElseFail(PublisherDispatchService.class);
-        this.auditerDispatchService = serviceRegistry.lookupServiceElseFail(AuditerDispatchService.class);
         this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(IsisInteractionTracker.class);
-        
         this.transactionScopeListeners = serviceRegistry.select(TransactionScopeListener.class);
 
         this.state = State.IN_PROGRESS;
@@ -344,7 +339,7 @@ public class IsisTransactionJdo implements Transaction {
                     
                     getPersistenceSession().execute(pc_snapshot);
                     
-                } catch (final RuntimeException ex) {
+                } catch (RuntimeException ex) {
                     // if there's an exception, we want to make sure that
                     // all commands are cleared and propagate
                     persistenceCommands.clear();
@@ -369,8 +364,8 @@ public class IsisTransactionJdo implements Transaction {
     // -- preCommit, commit
 
     void preCommit() {
-        assert getState().canCommit();
-        assert abortCause == null;
+        _Assert.assertTrue(getState().canCommit());
+        _Assert.assertTrue(abortCause == null);
 
         log.debug("preCommit transaction {}", this);
 
@@ -384,19 +379,22 @@ public class IsisTransactionJdo implements Transaction {
             flushCommands();
             flushTransaction();
             
-            auditerDispatchService.audit();
-            publisherDispatchService.publishObjects();
+            notifyPreCommit(PreCommitPhase.PRE_AUDITING);
+            notifyPreCommit(PreCommitPhase.AUDITING);
 
-        } catch (final RuntimeException ex) {
+        } catch (RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
         } finally {
-            for (TransactionScopeListener listener : transactionScopeListeners) {
-                listener.onTransactionEnding();
-            }
+            notifyPreCommit(PreCommitPhase.POST_AUDITING);
         }
     }
 
+    private void notifyPreCommit(PreCommitPhase preCommitPhase) {
+        for (val listener : transactionScopeListeners) {
+            listener.onPreCommit(preCommitPhase);
+        }
+    }
 
     void commit() {
         assert getState().canCommit();

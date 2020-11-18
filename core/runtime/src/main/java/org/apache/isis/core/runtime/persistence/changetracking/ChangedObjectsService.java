@@ -60,6 +60,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -89,6 +90,8 @@ implements
 
     // end::refguide[]
     
+    @Inject private AuditerDispatchService auditerDispatchService;
+    @Inject private PublisherDispatchService publisherDispatchService;
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionContext> interactionContextProvider;
     
@@ -166,14 +169,24 @@ implements
     // end::refguide[]
 
     /**
-     * @apiNote intended to be called at the end of a transaction by the framework internally
+     * @apiNote intended to be called during pre-commit of a transaction by the framework internally
      */
     @Override
-    public void onTransactionEnding() {
-        log.debug("purging data");
-        enlistedObjectProperties.clear();
-        changeKindByEnlistedAdapter.clear();
-        changedObjectPropertiesRef.clear();
+    public void onPreCommit(PreCommitPhase preCommitPhase) {
+        switch (preCommitPhase) {
+        case AUDITING:
+            auditerDispatchService.audit();
+            publisherDispatchService.publishObjects();
+            break;
+        case POST_AUDITING:
+            log.debug("purging data");
+            enlistedObjectProperties.clear();
+            changeKindByEnlistedAdapter.clear();
+            changedObjectPropertiesRef.clear();
+            break;
+        default:
+            break;
+        }
     }
     
     @Override

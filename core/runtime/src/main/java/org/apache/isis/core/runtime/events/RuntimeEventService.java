@@ -64,25 +64,25 @@ public class RuntimeEventService {
 
     // -- INTERACTION
 
-    public void fireInteractionHasStarted(InteractionSession interaction) {
+    public void fireInteractionHasStarted(InteractionSession interactionSession) {
         val conversationId = interactionTracker.getConversationId().orElse(null);
         eventBusService.post(
                 IsisInteractionLifecycleEvent
-                .of(conversationId, interaction, IsisInteractionLifecycleEvent.EventType.HAS_STARTED));
+                .of(conversationId, interactionSession, IsisInteractionLifecycleEvent.EventType.HAS_STARTED));
     }
 
-    public void fireInteractionIsEnding(InteractionSession interaction) {
+    public void fireInteractionIsEnding(InteractionSession interactionSession) {
         val conversationId = interactionTracker.getConversationId().orElse(null);
         eventBusService.post(
                 IsisInteractionLifecycleEvent
-                .of(conversationId, interaction, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
+                .of(conversationId, interactionSession, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
     }
 
-	public void fireInteractionFlushRequest(InteractionSession interaction) {
+	public void fireInteractionFlushRequest(InteractionSession interactionSession) {
 	    val conversationId = interactionTracker.getConversationId().orElse(null);
 	    eventBusService.post(
 	            IsisInteractionLifecycleEvent
-	            .of(conversationId, interaction, IsisInteractionLifecycleEvent.EventType.FLUSH_REQUEST));
+	            .of(conversationId, interactionSession, IsisInteractionLifecycleEvent.EventType.FLUSH_REQUEST));
 	}
 	
     // -- PERSISTENT OBJECT EVENTS
@@ -94,6 +94,6 @@ public class RuntimeEventService {
     public void firePostStoreEvent(Object persistableObject) {
         eventBusService.post(PostStoreEvent.of(persistableObject));
     }
-
+    
 
 }

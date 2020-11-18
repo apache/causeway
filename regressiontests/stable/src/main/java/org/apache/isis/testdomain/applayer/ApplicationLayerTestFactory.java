@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.applayer;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -28,8 +29,10 @@ import org.springframework.stereotype.Component;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -37,6 +40,10 @@ import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -53,19 +60,27 @@ public class ApplicationLayerTestFactory {
     private final RepositoryService repository;
     private final WrapperFactory wrapper;
     private final TransactionService transactionService;
+    private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
+    
+    
+    public static enum VerificationStage {
+        PRE_COMMIT,
+        POST_COMMIT,
+        FAILURE_CASE,
+    }
 
     public List<DynamicTest> generateTests(
             final Runnable given,
-            final Runnable thenHappyCase,
-            final Runnable thenFailureCase) {
+            final Consumer<VerificationStage> verifier) {
         return _Lists.of(
                 dynamicTest("No initial Transaction with Test Execution", this::no_initial_tx_context),
-                programmaticExecution(given, thenFailureCase),
-                wrapperSyncExecution(given, thenHappyCase),
-                wrapperSyncExecutionWithFailure(given, thenFailureCase),
-                wrapperAsyncExecution(given, thenHappyCase),
-                wrapperAsyncExecutionWithFailure(given, thenFailureCase)
+                programmaticExecution(given, verifier),
+                interactionApiExecution(given, verifier),
+                wrapperSyncExecution(given, verifier),
+                wrapperSyncExecutionWithFailure(given, verifier),
+                wrapperAsyncExecution(given, verifier),
+                wrapperAsyncExecutionWithFailure(given, verifier)
                 );
     }
 
@@ -74,9 +89,10 @@ public class ApplicationLayerTestFactory {
     private JdoBook setupForJdo() {
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-        // given
+        
+        // given Inventory with 1 Book
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-
+        
         return repository.allInstances(JdoBook.class).listIterator().next();
     }
 
@@ -91,7 +107,7 @@ public class ApplicationLayerTestFactory {
 
     private DynamicTest programmaticExecution(
             final Runnable given,
-            final Runnable then) {
+            final Consumer<VerificationStage> verifier) {
         return dynamicTest("Programmatic Execution", ()->{
             // given
             val book = setupForJdo();
@@ -110,7 +126,31 @@ public class ApplicationLayerTestFactory {
             // even though Commands don't have CommandDTOs
 
             // then
-            then.run();
+            verifier.accept(VerificationStage.FAILURE_CASE);
+        });
+    }
+    
+    // -- TESTS - INTERACTION API
+
+    private DynamicTest interactionApiExecution(
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) {
+        return dynamicTest("Interaction Api Execution", ()->{
+            // given
+            val book = setupForJdo();
+            given.run();
+
+            // when
+            val managedObject = objectManager.adapt(book);
+            val propertyInteraction = PropertyInteraction.start(managedObject, "name", Where.OBJECT_FORMS);
+            val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+            val propertyModel = managedProperty.startNegotiation();
+            val propertySpec = managedProperty.getSpecification();
+            propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
+            propertyModel.submit();
+
+            // then
+            verifier.accept(VerificationStage.POST_COMMIT);
         });
     }
 
@@ -118,7 +158,7 @@ public class ApplicationLayerTestFactory {
 
     private DynamicTest wrapperSyncExecution(
             final Runnable given,
-            final Runnable then) {
+            final Consumer<VerificationStage> verifier) {
         return dynamicTest("Wrapper Sync Execution w/o Rules", ()->{
             // given
             val book = setupForJdo();
@@ -129,13 +169,13 @@ public class ApplicationLayerTestFactory {
             wrapper.wrap(book, syncControl).setName("Book #2"); 
 
             // then
-            then.run();
+            verifier.accept(VerificationStage.POST_COMMIT);
         });
     }
 
     private DynamicTest wrapperSyncExecutionWithFailure(
             final Runnable given,
-            final Runnable then) {
+            final Consumer<VerificationStage> verifier) {
         return dynamicTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)", ()->{
             // given
             val book = setupForJdo();
@@ -149,7 +189,7 @@ public class ApplicationLayerTestFactory {
             });
 
             // then
-            then.run();
+            verifier.accept(VerificationStage.FAILURE_CASE);
         });
     }
 
@@ -157,7 +197,7 @@ public class ApplicationLayerTestFactory {
 
     private DynamicTest wrapperAsyncExecution(
             final Runnable given,
-            final Runnable then) {
+            final Consumer<VerificationStage> verifier) {
         return dynamicTest("Wrapper Async Execution w/o Rules", ()->{
             // given
             val book = setupForJdo();
@@ -170,13 +210,13 @@ public class ApplicationLayerTestFactory {
             asyncControl.getFuture().get(10, TimeUnit.SECONDS);
 
             // then
-            then.run();
+            verifier.accept(VerificationStage.POST_COMMIT);
         });
     }
 
     private DynamicTest wrapperAsyncExecutionWithFailure(
             final Runnable given,
-            final Runnable then) {
+            final Consumer<VerificationStage> verifier) {
         return dynamicTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", ()->{
             // given
             val book = setupForJdo();
@@ -186,13 +226,14 @@ public class ApplicationLayerTestFactory {
             val asyncControl = returningVoid().withCheckRules(); // enforce rules 
 
             assertThrows(DisabledException.class, ()->{
-                wrapper.asyncWrap(book, asyncControl).setName("Book #2"); // should fail with DisabledException
+                // should fail with DisabledException (synchronous) within the calling Thread
+                wrapper.asyncWrap(book, asyncControl).setName("Book #2"); 
 
-                asyncControl.getFuture().get(10, TimeUnit.SECONDS);
+                fail("unexpected code reach");
             });
 
             // then
-            then.run();
+            verifier.accept(VerificationStage.FAILURE_CASE);
         });
     }
 

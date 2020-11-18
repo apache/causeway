@@ -30,7 +30,7 @@ public class IsisInteractionLifecycleEvent {
     public enum EventType {
         HAS_STARTED,
         IS_ENDING,
-        FLUSH_REQUEST
+        FLUSH_REQUEST, 
     }
 
     @Getter String conversationId;
