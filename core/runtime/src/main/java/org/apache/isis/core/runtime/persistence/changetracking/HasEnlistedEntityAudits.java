@@ -16,26 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.types;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
-import java.sql.Timestamp;
-import java.util.UUID;
+import java.util.Set;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.Command;
+//TODO[ISIS-2441] intermediate for refactoring keep?
+public interface HasEnlistedEntityAudits {
 
-import lombok.experimental.UtilityClass;
+    Set<AuditEntry> getChangedObjectProperties();
 
-/**
- * As per {@link Command#getMemberIdentifier()} and {@link org.apache.isis.applib.services.audit.EntityAuditListener#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
- */
-public class MemberIdentifierType {
-
-    private MemberIdentifierType() {
-    }
-
-    @UtilityClass
-    public static class Meta {
-        public static final int MAX_LEN = 255;
-    }
 }

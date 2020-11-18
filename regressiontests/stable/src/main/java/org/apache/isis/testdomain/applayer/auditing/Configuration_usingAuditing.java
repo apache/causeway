@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    AuditerServiceForTesting.class
+    EntityAuditListenerForTesting.class
 })
 public class Configuration_usingAuditing {
 

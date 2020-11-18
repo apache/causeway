@@ -30,18 +30,18 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.spi.CommandServiceListener;
+import org.apache.isis.applib.services.command.spi.CommandListener;
 
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisMetaModel.CommandServiceInternal")
+@Named("isisMetaModel.CommandDispatcher")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Internal")
 @Log4j2
 // tag::refguide[]
-public class CommandServiceInternal {
+public class CommandDispatcher {
 
     // end::refguide[]
     /**
@@ -71,10 +71,10 @@ public class CommandServiceInternal {
                 command.isSystemStateChanged());
 
     // tag::refguide[]
-        commandServiceListeners.forEach(x -> x.onComplete(command));
+        commandListeners.forEach(x -> x.onComplete(command));
     }
 
-    @Inject List<CommandServiceListener> commandServiceListeners;
+    @Inject List<CommandListener> commandListeners;
 
 }
 // end::refguide[]

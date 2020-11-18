@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.spi.CommandServiceListener;
+import org.apache.isis.applib.services.command.spi.CommandListener;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Jdo")
 @Log4j2
 @RequiredArgsConstructor
-public class CommandServiceListenerForJdo implements CommandServiceListener {
+public class CommandServiceListenerForJdo implements CommandListener {
 
     @Inject final CommandJdoRepository commandJdoRepository;
 

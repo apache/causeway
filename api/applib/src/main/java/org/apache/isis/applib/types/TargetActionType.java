@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.command.Command;
 import lombok.experimental.UtilityClass;
 
 /**
- * A user-friendly name of an action, as per {@link Command#getTargetAction()}, {@link org.apache.isis.applib.services.audit.AuditerService#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
+ * A user-friendly name of an action, as per {@link Command#getTargetAction()}, {@link org.apache.isis.applib.services.audit.EntityAuditListener#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
  */
 @UtilityClass
 public class TargetActionType {

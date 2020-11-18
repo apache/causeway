@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
-import org.apache.isis.applib.services.publish.PublishedObjects;
+import org.apache.isis.applib.services.publish.ChangingEntities;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -47,7 +47,7 @@ import lombok.val;
  * Captures which objects were created, updated or deleted in the course of a transaction.
  */
 @ToString
-public class PublishedObjectsDefault implements PublishedObjects, RepresentsInteractionMemberExecution {
+public class SimpleChangingEntities implements ChangingEntities, RepresentsInteractionMemberExecution {
 
     // -- constructor, fields
     private UUID transactionUuid;
@@ -58,7 +58,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     private final int numberObjectPropertiesModified;
     private final Map<ManagedObject, PublishingChangeKind> changesByAdapter;
 
-    public PublishedObjectsDefault(
+    public SimpleChangingEntities(
             final @lombok.NonNull UUID transactionUuid,
             final int sequence,
             final @lombok.NonNull String userName,

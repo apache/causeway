@@ -58,10 +58,10 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.audit.AuditerService;
+import org.apache.isis.applib.services.audit.EntityAuditListener;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.PublishedObjects;
+import org.apache.isis.applib.services.publish.ChangingEntities;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.commons.internal.context._Context;
@@ -161,7 +161,7 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
-                 * sent through to the {@link AuditerService}.
+                 * sent through to the {@link EntityAuditListener}.
                  *
                  * <p>
                  * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#auditing()} DomainObject#getAuditing()}
@@ -185,11 +185,11 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether the identities of changed objects should be sent through to the
-                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
+                 * {@link org.apache.isis.applib.services.publish.ExecutionListener} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(PublishedObjects) publish}
-                 *     method is called only once per transaction, with {@link PublishedObjects} collecting details of
+                 *     The service's {@link org.apache.isis.applib.services.publish.ExecutionListener#publish(ChangingEntities) publish}
+                 *     method is called only once per transaction, with {@link ChangingEntities} collecting details of
                  *     all changed domain objects.
                  * </p>
                  *
@@ -654,7 +654,7 @@ public class IsisConfiguration {
                  * The default for whether action invocations should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.isis.applib.services.command.spi.CommandServiceListener}s,
+                 * {@link org.apache.isis.applib.services.command.spi.CommandListener}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
@@ -714,10 +714,10 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether action invocations should be sent through to the
-                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
+                 * {@link org.apache.isis.applib.services.publish.ExecutionListener} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish}
+                 *     The service's {@link org.apache.isis.applib.services.publish.ExecutionListener#publish(Interaction.Execution) publish}
                  *     method is called only once per transaction, with
                  *     {@link Interaction.Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
@@ -835,7 +835,7 @@ public class IsisConfiguration {
                  * The default for whether property edits should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.isis.applib.services.command.spi.CommandServiceListener}s,
+                 * {@link org.apache.isis.applib.services.command.spi.CommandListener}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
@@ -848,10 +848,10 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether property edits should be sent through to the
-                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
+                 * {@link org.apache.isis.applib.services.publish.ExecutionListener} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish}
+                 *     The service's {@link org.apache.isis.applib.services.publish.ExecutionListener#publish(Interaction.Execution) publish}
                  *     method is called only once per transaction, with
                  *     {@link Interaction.Execution} collecting details of
                  *     the identity of the target object, the property edited, and the new value of the property.

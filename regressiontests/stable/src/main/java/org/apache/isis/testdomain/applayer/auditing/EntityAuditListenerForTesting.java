@@ -28,7 +28,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.audit.AuditerService;
+import org.apache.isis.applib.services.audit.EntityAuditListener;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -37,7 +37,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service @Log4j2
-public class AuditerServiceForTesting implements AuditerService {
+public class EntityAuditListenerForTesting implements EntityAuditListener {
 
     @Inject private KVStoreForTesting kvStore;
     
@@ -73,12 +73,12 @@ public class AuditerServiceForTesting implements AuditerService {
     @SuppressWarnings("unchecked")
     public static Can<String> getAuditEntries(KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<String>) kvStore.get(AuditerServiceForTesting.class, "audit")
+                (List<String>) kvStore.get(EntityAuditListenerForTesting.class, "audit")
                 .orElse(null));
     }
     
     public static void clearAuditEntries(KVStoreForTesting kvStore) {
-        kvStore.clear(AuditerServiceForTesting.class);
+        kvStore.clear(EntityAuditListenerForTesting.class);
     }
 
 }

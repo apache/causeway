@@ -16,51 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain._interactions;
+package org.apache.isis.applib.services.publish;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
+import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.PublishedObjects;
-import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
-import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-//tag::class[]
 @Service
-public class PublisherServiceToCaptureInteractionsInMemory implements PublisherService {
-
-    private final List<InteractionDto> executions = new ArrayList<>();
-
-    @Override
-    public void publish(Interaction.Execution<?, ?> execution) {
-        val dto = InteractionDtoUtils.newInteractionDto(            // <.>
-                    execution, InteractionDtoUtils.Strategy.DEEP);
-        executions.add(dto);
-    }
-    // ...
-//end::class[]
-
-//tag::demo[]
-    public Stream<InteractionDto> streamInteractionDtos() {
-        return executions.stream();
-    }
-
-    public void clear() {
-        executions.clear();
-    }
-//end::demo[]
+@Named("isisApplib.ExecutionLogging")
+@Order(OrderPrecedence.LATE)
+@Primary
+@Qualifier("Logging")
+@Log4j2
+public class ExecutionLogging implements ExecutionListener {
 
     @Override
-    public void publish(PublishedObjects publishedObjects) {
+    public void onExecution(final Interaction.Execution<?, ?> execution) {
+
+        if(!log.isDebugEnabled()) {
+            return;
+        }
+
+        final InteractionDto interactionDto =
+                InteractionDtoUtils.newInteractionDto(execution, InteractionDtoUtils.Strategy.DEEP);
+
+        log.debug(InteractionDtoUtils.toXml(interactionDto));
+
     }
 
-//tag::class[]
 }
-//end::class[]
+

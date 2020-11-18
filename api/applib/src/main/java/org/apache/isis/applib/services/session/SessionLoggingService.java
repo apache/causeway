@@ -23,7 +23,7 @@ import java.util.Date;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Similar to the {@link org.apache.isis.applib.services.audit.AuditerService}, this defines an API to track
+ * Similar to the {@link org.apache.isis.applib.services.audit.EntityAuditListener}, this defines an API to track
  * the status of the current sessions (&quot;users logged on&quot;) on the system.
  */
 // tag::refguide[]

@@ -65,7 +65,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
     }
 
     private void given() {
-        AuditerServiceForTesting.clearAuditEntries(kvStore);
+        EntityAuditListenerForTesting.clearAuditEntries(kvStore);
     }
 
     private void verify(VerificationStage verificationStage) {
@@ -86,7 +86,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
     // -- HELPER
 
     private void assertHasAuditEntries(Can<String> expectedAuditEntries) {
-        val actualAuditEntries = AuditerServiceForTesting.getAuditEntries(kvStore);
+        val actualAuditEntries = EntityAuditListenerForTesting.getAuditEntries(kvStore);
         CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
     }
 

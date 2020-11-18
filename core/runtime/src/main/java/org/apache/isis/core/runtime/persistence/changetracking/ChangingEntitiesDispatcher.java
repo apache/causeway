@@ -18,11 +18,8 @@
  */
 package org.apache.isis.core.runtime.persistence.changetracking;
 
-import java.util.Set;
+public interface ChangingEntitiesDispatcher {
 
-//TODO[ISIS-2441] intermediate for refactoring keep?
-public interface HasEnlistedForAuditing {
-
-    Set<AuditEntry> getChangedObjectProperties();
+    void dispatchChangingEntities(HasEnlistedChangingEntities hasEnlistedChangingEntities);
 
 }

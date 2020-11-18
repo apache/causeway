@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.events.persistence.TimestampService;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
-import org.apache.isis.core.runtime.persistence.changetracking.AuditerDispatchService;
+import org.apache.isis.core.runtime.persistence.changetracking.EntityAuditDispatcher;
 import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsService;
 
 @Configuration
@@ -38,7 +38,7 @@ import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsSer
         // @Service's
         RuntimeEventService.class,
         TimestampService.class,
-        AuditerDispatchService.class,
+        EntityAuditDispatcher.class,
         ChangedObjectsService.class,
 
         // @Configuration's

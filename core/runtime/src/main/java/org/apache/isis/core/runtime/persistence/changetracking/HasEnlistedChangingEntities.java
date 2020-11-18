@@ -16,23 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.publishing;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
-import java.util.function.Supplier;
+import java.util.Map;
 
+import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public interface PublisherDispatchService {
+//TODO[ISIS-2441] intermediate for refactoring, keep?
+public interface HasEnlistedChangingEntities {
 
-    void publishObjects();
+    Map<ManagedObject, PublishingChangeKind> getChangeKindByEnlistedAdapter();
 
-    void publishAction(Interaction.Execution<?,?> execution);
-
-    void publishProperty(Interaction.Execution<?,?> execution);
+    int numberObjectsLoaded();
+    int numberObjectPropertiesModified();
+    
+    Interaction currentInteraction();
 
     /**
-     * Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.
+     * prepare commands for publishing
      */
-    <T> T withPublishingSuppressed(Supplier<T> block);
+    void preparePublishing();
 
 }

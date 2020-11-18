@@ -24,42 +24,37 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.PublishedObjects;
-import org.apache.isis.applib.services.publish.PublisherService;
+import org.apache.isis.applib.services.publish.ChangingEntities;
+import org.apache.isis.applib.services.publish.ChangingEntitiesListener;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.val;
 
 //tag::class[]
 @Service
-public class PublisherServiceToCaptureChangesInMemory implements PublisherService {
+public class ChangingEntitiesListenerToCaptureChangesInMemory implements ChangingEntitiesListener {
 
-    private final List<ChangesDto> publishedObjects = new ArrayList<>();
+    private final List<ChangesDto> changedEntities = new ArrayList<>();
 
     @Override
-    public void publish(
-            PublishedObjects publishedObjects       // <.>
+    public void onEntitiesChanging(
+            ChangingEntities changingEntities       // <.>
     ) {
-        val dto = publishedObjects.getDto();
-        this.publishedObjects.add(dto);
+        val dto = changingEntities.getDto();
+        this.changedEntities.add(dto);
     }
     // ...
 //end::class[]
 
 //tag::demo[]
-    public Stream<ChangesDto> streamPublishedObjects() {
-        return publishedObjects.stream();
+    public Stream<ChangesDto> streamChangedEntities() {
+        return changedEntities.stream();
     }
 
     public void clear() {
-        publishedObjects.clear();
+        changedEntities.clear();
     }
 //end::demo[]
-
-    @Override
-    public void publish(Interaction.Execution<?, ?> execution) {
-    }
 
 //tag::class[]
 }

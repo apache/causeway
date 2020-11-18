@@ -66,7 +66,7 @@ public @interface DomainObject {
      * Whether the entity should be audited (note: does not apply to view models or other recreatable objects.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.audit.AuditerService} is
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.audit.EntityAuditListener} is
      * registered with the framework.
      * </p>
      */
@@ -173,7 +173,7 @@ public @interface DomainObject {
      * Whether changes to the object should be published.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService} is
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.ExecutionListener} is
      * registered with the framework.
      * </p>
      */

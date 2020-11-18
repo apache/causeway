@@ -27,8 +27,9 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
-import org.apache.isis.applib.services.publish.PublishedObjects;
-import org.apache.isis.applib.services.publish.PublisherService;
+import org.apache.isis.applib.services.publish.ChangingEntities;
+import org.apache.isis.applib.services.publish.ChangingEntitiesListener;
+import org.apache.isis.applib.services.publish.ExecutionListener;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
@@ -39,7 +40,10 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class PublisherServiceForTesting implements PublisherService {
+public class PublisherServiceForTesting 
+implements 
+    ExecutionListener,
+    ChangingEntitiesListener {
 
     @Inject private KVStoreForTesting kvStore;
 
@@ -49,7 +53,7 @@ public class PublisherServiceForTesting implements PublisherService {
     }
 
     @Override
-    public void publish(Execution<?, ?> execution) {
+    public void onExecution(Execution<?, ?> execution) {
 
         @SuppressWarnings("unchecked")
         val publishedEntries = 
@@ -62,11 +66,11 @@ public class PublisherServiceForTesting implements PublisherService {
     }
 
     @Override
-    public void publish(PublishedObjects publishedObjects) {
+    public void onEntitiesChanging(ChangingEntities publishedObjects) {
 
         @SuppressWarnings("unchecked")
         val publishedEntries = 
-        (List<PublishedObjects>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
+        (List<ChangingEntities>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
 
         publishedEntries.add(publishedObjects);
 
@@ -78,9 +82,9 @@ public class PublisherServiceForTesting implements PublisherService {
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<PublishedObjects> getPublishedObjects(KVStoreForTesting kvStore) {
+    public static Can<ChangingEntities> getPublishedObjects(KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<PublishedObjects>) kvStore.get(PublisherServiceForTesting.class, "publishedObjects")
+                (List<ChangingEntities>) kvStore.get(PublisherServiceForTesting.class, "publishedObjects")
                 .orElse(null));
     }
 
@@ -97,27 +101,27 @@ public class PublisherServiceForTesting implements PublisherService {
 
     public static int getCreated(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberCreated).sum();
+        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberCreated).sum();
     }
 
     public static int getDeleted(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberDeleted).sum();
+        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberDeleted).sum();
     }
 
     public static int getLoaded(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberLoaded).sum();
+        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberLoaded).sum();
     }
 
     public static int getUpdated(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberUpdated).sum();
+        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberUpdated).sum();
     }
 
     public static int getModified(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberPropertiesModified).sum();
+        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberPropertiesModified).sum();
     }
 
 

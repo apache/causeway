@@ -31,7 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.audit.AuditerService;
+import org.apache.isis.applib.services.audit.EntityAuditListener;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
@@ -40,44 +40,43 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
+ * Wrapper around {@link org.apache.isis.applib.services.audit.EntityAuditListener}.
  */
 @Service
-@Named("isisRuntime.AuditerDispatchService")
+@Named("isisRuntime.EntityAuditDispatcher")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class AuditerDispatchService {
+public class EntityAuditDispatcher {
     
-    @Inject private List<AuditerService> auditerServices;
-    @Inject private javax.inject.Provider<HasEnlistedForAuditing> changedObjectsProvider;
-    @Inject private UserService userService;
-    @Inject private ClockService clockService;
-    @Inject private TransactionService transactionService;
+    private final List<EntityAuditListener> auditerServices;
+    private final UserService userService;
+    private final ClockService clockService;
+    private final TransactionService transactionService;
     
-    private Can<AuditerService> enabledAuditerServices;
+    private Can<EntityAuditListener> enabledAuditerServices;
     
     @PostConstruct
     public void init() {
         enabledAuditerServices = Can.ofCollection(auditerServices)
-                .filter(AuditerService::isEnabled);
+                .filter(EntityAuditListener::isEnabled);
     }
 
-    private boolean canAudit() {
-        return enabledAuditerServices.isNotEmpty();
-    }
-
-    public void audit() {
-        if(!canAudit()) { return; }
+    public void dispatchEntityAudits(HasEnlistedEntityAudits hasEnlistedForAuditing) {
+        if(!canDispatch()) { 
+            return; 
+        }
         
         val currentUser = userService.getUser().getName();
         val currentTime = clockService.nowAsJavaSqlTimestamp();
-        val changedObjectProperties = changedObjectsProvider.get().getChangedObjectProperties();
+        val changedObjectProperties = hasEnlistedForAuditing.getChangedObjectProperties();
     
         log.debug("about to process {} audits", ()->changedObjectProperties.size());
         
@@ -86,6 +85,12 @@ public class AuditerDispatchService {
         }
     }
 
+    // -- HELPER
+    
+    private boolean canDispatch() {
+        return enabledAuditerServices.isNotEmpty();
+    }
+    
     private void auditChangedProperty(
             final java.sql.Timestamp timestamp,
             final String user,

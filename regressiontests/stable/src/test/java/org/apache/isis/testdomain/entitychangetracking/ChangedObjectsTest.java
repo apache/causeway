@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.applayer.auditing.AuditerServiceForTesting;
+import org.apache.isis.testdomain.applayer.auditing.EntityAuditListenerForTesting;
 import org.apache.isis.testdomain.applayer.auditing.Configuration_usingAuditing;
 import org.apache.isis.testdomain.applayer.publishing.Configuration_usingPublishing;
 import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
@@ -68,7 +68,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         System.err.println("===BEFORE SETUP");
 
         // cleanup
-        AuditerServiceForTesting.clearAuditEntries(kvStoreForTesting);
+        EntityAuditListenerForTesting.clearAuditEntries(kvStoreForTesting);
 
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);

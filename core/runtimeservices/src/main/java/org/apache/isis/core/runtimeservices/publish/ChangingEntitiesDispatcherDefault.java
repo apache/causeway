@@ -16,73 +16,68 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.runtimeservices.publish;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.LongAdder;
-import java.util.function.Supplier;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.applib.services.publish.PublishedObjects;
-import org.apache.isis.applib.services.publish.PublisherService;
+import org.apache.isis.applib.services.publish.ChangingEntities;
+import org.apache.isis.applib.services.publish.ChangingEntitiesListener;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedForPublishing;
+import org.apache.isis.core.runtime.persistence.changetracking.ChangingEntitiesDispatcher;
+import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedChangingEntities;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
+ * Wrapper around {@link org.apache.isis.applib.services.audit.EntityAuditListener}.
  */
 @Service
-@Named("isisRuntimeServices.PublisherDispatchServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@Named("isisRuntime.ChangingEntitiesDispatcher")
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@IsisInteractionScope
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
-public class PublisherDispatchServiceDefault implements PublisherDispatchService {
-
-    @Inject final List<PublisherService> publisherServices;
-    @Inject final ClockService clockService;
-    @Inject final UserService userService;
-    @Inject final Provider<HasEnlistedForPublishing> changedObjectsProvider;
-    @Inject final Provider<InteractionContext> interactionContextProvider;
-    @Inject final Provider<MetricsService> metricsServiceProvider;
+public class ChangingEntitiesDispatcherDefault implements ChangingEntitiesDispatcher {
     
-    @Override
-    public void publishObjects() {
+    private final List<ChangingEntitiesListener> changingEntitiesListenersNullable;
+    private final ClockService clockService;
+    private final UserService userService;
+    
+    private Can<ChangingEntitiesListener> changingEntitiesListeners;
+    
+    @PostConstruct
+    public void init() {
+        changingEntitiesListeners = Can.ofCollection(changingEntitiesListenersNullable);
+    }
 
-        if(isSuppressed()) {
+    public void dispatchChangingEntities(HasEnlistedChangingEntities hasEnlistedChangingEntities) {
+
+        if(!canDispatch()) {
             return;
         }
         
-        val changedObjectsService = changedObjectsProvider.get();
-        changedObjectsService.preparePublishing();
-        
+        hasEnlistedChangingEntities.preparePublishing();
 
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted; 
@@ -90,33 +85,40 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
         val changeKindByPublishedAdapter =
                 _Maps.filterKeys(
-                        changedObjectsService.getChangeKindByEnlistedAdapter(),
-                        this::isPublished,
+                        hasEnlistedChangingEntities.getChangeKindByEnlistedAdapter(),
+                        this::isPublishingEnabled,
                         HashMap::new);
 
         if(changeKindByPublishedAdapter.isEmpty()) {
             return;
         }
 
-        val publishedObjects = newPublishedObjects(
-                        metricsServiceProvider.get().numberObjectsLoaded(), 
-                        changedObjectsService.numberObjectPropertiesModified(),
+        val changingEntities = newChangingEntities(
+                        hasEnlistedChangingEntities.currentInteraction(),
+                        hasEnlistedChangingEntities.numberObjectsLoaded(), 
+                        hasEnlistedChangingEntities.numberObjectPropertiesModified(),
                         changeKindByPublishedAdapter);
 
-        if(publishedObjects == null) {
+        if(changingEntities == null) {
             return;
         }
-        for (val publisherService : publisherServices) {
-            publisherService.publish(publishedObjects);
+        for (val changingEntitiesListener : changingEntitiesListeners) {
+            changingEntitiesListener.onEntitiesChanging(changingEntities);
         }
     }
+    
+    // -- HELPER
+    
+    private boolean canDispatch() {
+        return changingEntitiesListeners.isNotEmpty();
+    }
 
-    private PublishedObjects newPublishedObjects(
+    private ChangingEntities newChangingEntities(
+            final Interaction interaction,
             final int numberLoaded,
             final int numberObjectPropertiesModified,
             final Map<ManagedObject, PublishingChangeKind> changeKindByPublishedAdapter) {
 
-        val interaction = interactionContextProvider.get().getInteractionElseFail();
         val uniqueId = interaction.getUniqueId();
 
         if(uniqueId == null) {
@@ -128,53 +130,13 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
         val userName = userService.getUser().getName();
         val timestamp = clockService.nowAsJavaSqlTimestamp();
 
-        return new PublishedObjectsDefault(
+        return new SimpleChangingEntities(
                     uniqueId, nextEventSequence,
                     userName, timestamp,
                     numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
     }
 
-
-    @Override
-    public void publishAction(final Interaction.Execution<?,?> execution) {
-        publishToPublisherServices(execution);
-    }
-
-
-    @Override
-    public void publishProperty(final Interaction.Execution<?,?> execution) {
-        publishToPublisherServices(execution);
-    }
-
-
-    private void publishToPublisherServices(final Interaction.Execution<?,?> execution) {
-        if(isSuppressed()) {
-            return;
-        }
-        for (val publisherService : publisherServices) {
-            publisherService.publish(execution);
-        }
-    }
-
-    private final LongAdder suppressionRequestCounter = new LongAdder();
-    
-    private boolean isSuppressed() {
-        return publisherServices == null 
-                || publisherServices.isEmpty() 
-                || suppressionRequestCounter.intValue() > 0;
-    }
-    
-    @Override
-    public <T> T withPublishingSuppressed(final Supplier<T> block) {
-        try {
-            suppressionRequestCounter.increment();
-            return block.get();
-        } finally {
-            suppressionRequestCounter.decrement();
-        }
-    }
-
-    private boolean isPublished(ManagedObject objectAdapter) {
+    private boolean isPublishingEnabled(ManagedObject objectAdapter) {
         val publishedObjectFacet = objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
         return publishedObjectFacet != null;
     }

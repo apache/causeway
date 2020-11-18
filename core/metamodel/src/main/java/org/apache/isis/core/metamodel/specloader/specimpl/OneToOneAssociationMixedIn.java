@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForCo
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
+import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -174,8 +174,8 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         return this.mixinAction == mixinAction;
     }
 
-    private PublisherDispatchService getPublisherDispatchService() {
-        return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
+    private ExecutionDispatcher getPublisherDispatchService() {
+        return getServiceRegistry().lookupServiceElseFail(ExecutionDispatcher.class);
     }
 
 

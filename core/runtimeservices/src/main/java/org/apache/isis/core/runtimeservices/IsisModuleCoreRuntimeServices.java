@@ -26,8 +26,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import org.apache.isis.core.metamodel.services.command.CommandServiceInternal;
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
+import org.apache.isis.core.metamodel.services.command.CommandDispatcher;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
@@ -45,7 +45,8 @@ import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
-import org.apache.isis.core.runtimeservices.publish.PublisherDispatchServiceDefault;
+import org.apache.isis.core.runtimeservices.publish.ChangingEntitiesDispatcherDefault;
+import org.apache.isis.core.runtimeservices.publish.ExecutionDispatcherDefault;
 import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
@@ -69,13 +70,15 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
         // @Service's
         BookmarkServiceDefault.class,
+        ChangingEntitiesDispatcherDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
-        CommandServiceInternal.class,
+        CommandDispatcher.class,
         ConfigurationViewServiceDefault.class,
         EmailNotificationServiceDefault.class,
         EmailServiceDefault.class,
         ExceptionRecognizerServiceDefault.class,
+        ExecutionDispatcherDefault.class,
         EventBusServiceSpring.class,
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
@@ -86,7 +89,6 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,
         MessageServiceDefault.class,
-        PublisherDispatchServiceDefault.class,
         QueryResultsCacheDefault.class,
         ScratchpadDefault.class,
         SudoServiceDefault.class,
@@ -98,7 +100,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
-
+        
         // @Controller
         RoutingServiceDefault.class,
 

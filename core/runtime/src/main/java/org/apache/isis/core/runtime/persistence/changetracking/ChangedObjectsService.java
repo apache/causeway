@@ -39,6 +39,7 @@ import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -60,7 +61,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -85,13 +85,13 @@ implements
     TransactionScopeListener,
     MetricsService,
     EntityChangeTracker,
-    HasEnlistedForAuditing, 
-    HasEnlistedForPublishing {
+    HasEnlistedEntityAudits, 
+    HasEnlistedChangingEntities {
 
     // end::refguide[]
     
-    @Inject private AuditerDispatchService auditerDispatchService;
-    @Inject private PublisherDispatchService publisherDispatchService;
+    @Inject private EntityAuditDispatcher entityAuditDispatcher;
+    @Inject private ChangingEntitiesDispatcher changingEntitiesDispatcher;
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionContext> interactionContextProvider;
     
@@ -175,11 +175,12 @@ implements
     public void onPreCommit(PreCommitPhase preCommitPhase) {
         switch (preCommitPhase) {
         case AUDITING:
-            auditerDispatchService.audit();
-            publisherDispatchService.publishObjects();
+            log.debug("about to dispatch audit entries and entity changes");
+            entityAuditDispatcher.dispatchEntityAudits(this);
+            changingEntitiesDispatcher.dispatchChangingEntities(this);
             break;
         case POST_AUDITING:
-            log.debug("purging data");
+            log.debug("purging auditing data");
             enlistedObjectProperties.clear();
             changeKindByEnlistedAdapter.clear();
             changedObjectPropertiesRef.clear();
@@ -191,12 +192,17 @@ implements
     
     @Override
     public void preparePublishing() {
-        val command = interactionContextProvider.get().getInteractionElseFail().getCommand();
+        val command = currentInteraction().getCommand();
         command.updater().setSystemStateChanged(
                 command.isSystemStateChanged() 
                 || numberObjectsDirtied() > 0);
     }
 
+    @Override
+    public Interaction currentInteraction() {
+        return interactionContextProvider.get().getInteractionElseFail();
+    }
+    
     // -- HELPER
 
     static String asString(Object object) {
@@ -388,6 +394,8 @@ implements
             eventBusService.post(event);
         }
     }
+
+
 
 
 }

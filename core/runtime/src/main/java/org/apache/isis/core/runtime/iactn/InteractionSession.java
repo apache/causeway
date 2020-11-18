@@ -48,7 +48,7 @@ import lombok.Setter;
  *     captures the details of an action invocation or property edit (along
  *     with any nested calls to other actions through wrapper factory) for
  *     the purpose of publishing using
- *     {@link org.apache.isis.applib.services.publish.PublisherService}.
+ *     {@link org.apache.isis.applib.services.publish.ExecutionListener}.
  * </p>
  *
  * @see IsisInteractionFactory

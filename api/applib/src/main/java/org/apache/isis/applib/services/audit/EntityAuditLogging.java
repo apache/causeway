@@ -16,8 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.publish;
+package org.apache.isis.applib.services.audit;
 
+import java.sql.Timestamp;
+import java.util.UUID;
+
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,47 +30,41 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.PublisherServiceLogging")
+@Named("isisApplib.EntityAuditLogging")
 @Order(OrderPrecedence.LATE)
 @Primary
-@Qualifier("Logging")
+@Qualifier("logging")
 @Log4j2
-public class PublisherServiceLogging implements PublisherService {
+public class EntityAuditLogging implements EntityAuditListener {
 
-    @Override
-    public void publish(final Interaction.Execution<?, ?> execution) {
-
-        if(!log.isDebugEnabled()) {
-            return;
-        }
-
-        final InteractionDto interactionDto =
-                InteractionDtoUtils.newInteractionDto(execution, InteractionDtoUtils.Strategy.DEEP);
-
-        log.debug(InteractionDtoUtils.toXml(interactionDto));
-
+    @PostConstruct
+    public void init() {
     }
 
     @Override
-    public void publish(final PublishedObjects publishedObjects) {
+    public boolean isEnabled() {
+        return log.isDebugEnabled();
+    }
 
-        if(!log.isDebugEnabled()) {
-            return;
+    @Override
+    public void audit(
+            final UUID interactionId, int sequence,
+            final String targetClassName, final Bookmark target,
+            final String memberId, final String propertyName,
+            final String preValue, final String postValue,
+            final String user, final Timestamp timestamp) {
+
+        if(log.isDebugEnabled()) {
+            String auditMessage =
+                    interactionId + "," + sequence + ": " +
+                            target.toString() + " by " + user + ", " + propertyName + ": " + preValue + " -> " + postValue;
+            log.debug(auditMessage);
         }
-
-        final ChangesDto changesDto = publishedObjects.getDto();
-
-        log.debug(ChangesDtoUtils.toXml(changesDto));
     }
 
 }
-

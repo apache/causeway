@@ -212,8 +212,8 @@ public @interface Property {
      * Whether the property edit should be published.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService}
-     * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.ExecutionListener}
+     * or {@link org.apache.isis.applib.services.publish.ExecutionListener} is registered with the framework.
      * </p>
      */
     // tag::refguide[]

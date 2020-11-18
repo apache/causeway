@@ -18,36 +18,44 @@
  */
 package demoapp.dom.annotDomain._interactions;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publish.ExecutionListener;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 //tag::class[]
-@Collection
-@RequiredArgsConstructor
-public class ExposeCapturedInteractions_interactions {
+@Service
+public class ExecutionListenerToCaptureInteractionsInMemory implements ExecutionListener {
+
+    private final List<InteractionDto> executions = new ArrayList<>();
+
+    @Override
+    public void onExecution(Interaction.Execution<?, ?> execution) {
+        val dto = InteractionDtoUtils.newInteractionDto(            // <.>
+                    execution, InteractionDtoUtils.Strategy.DEEP);
+        executions.add(dto);
+    }
     // ...
 //end::class[]
 
-    private final ExposeCapturedInteractions exposeCapturedInteractions;
-
-//tag::class[]
-    public List<InteractionDtoVm> coll() {
-        val list = new LinkedList<InteractionDtoVm>();
-        executionListenerToCaptureInteractionsInMemory
-                .streamInteractionDtos()
-                .map(InteractionDtoVm::new)
-                .forEach(list::push);   // reverse order
-        return list;
+//tag::demo[]
+    public Stream<InteractionDto> streamInteractionDtos() {
+        return executions.stream();
     }
 
-    @Inject
-    ExecutionListenerToCaptureInteractionsInMemory executionListenerToCaptureInteractionsInMemory;
+    public void clear() {
+        executions.clear();
+    }
+//end::demo[]
+
+//tag::class[]
 }
 //end::class[]

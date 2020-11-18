@@ -19,7 +19,6 @@
 package org.apache.isis.testdomain.conf;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
@@ -36,11 +35,9 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.services.command.CommandServiceInternal;
 import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
@@ -106,8 +103,8 @@ public class Configuration_headless {
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class HeadlessCommandSupport {
 
-        private final Provider<InteractionContext> interactionContextProvider;
-        private final CommandServiceInternal commandService;
+//        private final Provider<InteractionContext> interactionContextProvider;
+//        private final CommandDispatcher commandDispatcher;
 
 
         @EventListener(IsisInteractionLifecycleEvent.class)

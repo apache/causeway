@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
@@ -26,22 +29,21 @@ import org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_objectType;
-import org.apache.isis.applib.services.audit.AuditerServiceLogging;
+import org.apache.isis.applib.services.audit.EntityAuditLogging;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.spi.CommandServiceListener;
+import org.apache.isis.applib.services.command.spi.CommandListener;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
 import org.apache.isis.applib.services.confview.ConfigurationMenu;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
-import org.apache.isis.applib.services.publish.PublisherServiceLogging;
+import org.apache.isis.applib.services.publish.ChangingEntitiesLogging;
+import org.apache.isis.applib.services.publish.ExecutionLogging;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.schema.IsisModuleSchema;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
@@ -66,13 +68,14 @@ import org.springframework.context.annotation.Import;
         MetaModelServiceMenu.class,
 
         // @Service's
-        AuditerServiceLogging.class,
+        EntityAuditLogging.class,
         ClockService.class,
         CommandDtoProcessorServiceIdentity.class,
-        CommandServiceListener.Null.class,
+        CommandListener.Null.class,
         ContentMappingServiceForCommandDto.class,
         ContentMappingServiceForCommandsDto.class,
-        PublisherServiceLogging.class,
+        ExecutionLogging.class,
+        ChangingEntitiesLogging.class,
         SessionLoggingServiceLogging.class,
 
 })

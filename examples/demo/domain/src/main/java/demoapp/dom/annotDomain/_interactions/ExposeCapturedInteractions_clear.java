@@ -39,11 +39,11 @@ public class ExposeCapturedInteractions_clear {
 
 //tag::class[]
     public ExposeCapturedInteractions act() {
-        publisherServiceToCaptureInteractionsInMemory.clear();
+        executionListenerToCaptureInteractionsInMemory.clear();
         return exposeCapturedInteractions;
     }
 
     @Inject
-    PublisherServiceToCaptureInteractionsInMemory publisherServiceToCaptureInteractionsInMemory;
+    ExecutionListenerToCaptureInteractionsInMemory executionListenerToCaptureInteractionsInMemory;
 }
 //end::class[]

@@ -43,11 +43,11 @@ public class ExposeCapturedChanges_clear {
 
     //tag::class[]
     public DomainObjectPublishingVm act() {
-        publisherServiceToCaptureChangesInMemory.clear();
+        changingEntitiesListenerToCaptureChangesInMemory.clear();
         return domainObjectPublishingVm;
     }
 
     @Inject
-    PublisherServiceToCaptureChangesInMemory publisherServiceToCaptureChangesInMemory;
+    ChangingEntitiesListenerToCaptureChangesInMemory changingEntitiesListenerToCaptureChangesInMemory;
 }
 //end::class[]

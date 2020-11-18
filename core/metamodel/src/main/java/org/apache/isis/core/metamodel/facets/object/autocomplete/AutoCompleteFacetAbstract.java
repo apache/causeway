@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
-import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
+import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
@@ -91,8 +91,8 @@ implements AutoCompleteFacet {
         return getServiceRegistry().lookupService(repositoryClass).orElse(null);
     }
 
-    private PublisherDispatchService getPublisherDispatchService() {
-        return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
+    private ExecutionDispatcher getPublisherDispatchService() {
+        return getServiceRegistry().lookupServiceElseFail(ExecutionDispatcher.class);
     }
 
 
