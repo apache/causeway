@@ -65,6 +65,10 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<forkMode>always</forkMode>
+					<systemPropertyVariables>
+						<!-- allows regression tests to reduce verbosity when run with surefire  -->
+						<isRunningWithSurefire>true</isRunningWithSurefire>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 		

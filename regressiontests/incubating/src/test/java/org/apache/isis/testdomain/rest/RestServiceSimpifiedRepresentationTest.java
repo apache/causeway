@@ -57,6 +57,7 @@ import org.apache.isis.testdomain.rospec.BigComplex;
 import org.apache.isis.testdomain.rospec.Configuration_usingRoSpec;
 import org.apache.isis.testdomain.rospec.Customer;
 import org.apache.isis.testdomain.rospec.RoSpecSampler;
+import org.apache.isis.testdomain.util.UtilSurefire;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
@@ -104,6 +105,10 @@ class RestServiceSimpifiedRepresentationTest {
     
     @AfterAll
     static void tearDown() throws IOException {
+    	if(UtilSurefire.isRunningWithSurefire()) {
+    		return;
+    	}
+    	// copy paste output to docs
         System.out.println("=========================== ASCII DOC ============================");
         System.out.println(Filter4Reporting.print());
         System.out.println("==================================================================");
