@@ -43,7 +43,7 @@ public interface TransactionScopeListener {
         // default: do nothing
     }
 
-    /** triggered during the pre-commit phase in a transaction after auditing*/
+    /** triggered during the pre-commit phase in a transaction*/
     default void onPreCommit(PreCommitPhase preCommitPhase) {
         // default: do nothing
     }

@@ -25,7 +25,9 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.DynamicTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -51,9 +54,13 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.val;
 
 @Component
+@Import({
+    ApplicationLayerTestFactory.PreAuditHook.class
+})
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationLayerTestFactory {
 
@@ -62,12 +69,31 @@ public class ApplicationLayerTestFactory {
     private final TransactionService transactionService;
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
-    
+    private final PreAuditHook preAuditHook;
     
     public static enum VerificationStage {
         PRE_COMMIT,
         POST_COMMIT,
         FAILURE_CASE,
+    }
+    
+    @Service
+    public static class PreAuditHook implements TransactionScopeListener {
+        
+        @Setter private Consumer<VerificationStage> verifier;
+        
+        @Override
+        public void onPreCommit(PreCommitPhase preCommitPhase) {
+            switch (preCommitPhase) {
+            case PRE_AUDITING:
+                if(verifier!=null) {
+                    verifier.accept(VerificationStage.PRE_COMMIT);
+                }
+                break;
+            default:
+                break;
+            }
+        }
     }
 
     public List<DynamicTest> generateTests(
@@ -113,9 +139,13 @@ public class ApplicationLayerTestFactory {
             val book = setupForJdo();
             given.run();
 
+            preAuditHook.setVerifier(verifier);
+            
             // when - direct change (circumventing the framework)
             book.setName("Book #2");
             repository.persist(book);
+            
+            preAuditHook.setVerifier(null);
 
             // this test does not trigger publishing 
             // because invocation happens directly rather than through the means of
@@ -140,6 +170,8 @@ public class ApplicationLayerTestFactory {
             val book = setupForJdo();
             given.run();
 
+            preAuditHook.setVerifier(verifier);
+            
             // when
             val managedObject = objectManager.adapt(book);
             val propertyInteraction = PropertyInteraction.start(managedObject, "name", Where.OBJECT_FORMS);
@@ -148,6 +180,8 @@ public class ApplicationLayerTestFactory {
             val propertySpec = managedProperty.getSpecification();
             propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
             propertyModel.submit();
+            
+            preAuditHook.setVerifier(null);
 
             // then
             verifier.accept(VerificationStage.POST_COMMIT);
@@ -163,10 +197,14 @@ public class ApplicationLayerTestFactory {
             // given
             val book = setupForJdo();
             given.run();
+            
+            preAuditHook.setVerifier(verifier);
 
             // when - running synchronous
             val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
-            wrapper.wrap(book, syncControl).setName("Book #2"); 
+            wrapper.wrap(book, syncControl).setName("Book #2");
+            
+            preAuditHook.setVerifier(null);
 
             // then
             verifier.accept(VerificationStage.POST_COMMIT);
@@ -181,12 +219,16 @@ public class ApplicationLayerTestFactory {
             val book = setupForJdo();
             given.run();
 
+            preAuditHook.setVerifier(verifier);
+            
             // when - running synchronous
             val syncControl = SyncControl.control().withCheckRules(); // enforce rules 
 
             assertThrows(DisabledException.class, ()->{
                 wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
             });
+            
+            preAuditHook.setVerifier(null);
 
             // then
             verifier.accept(VerificationStage.FAILURE_CASE);
@@ -202,12 +244,16 @@ public class ApplicationLayerTestFactory {
             // given
             val book = setupForJdo();
             given.run();
+            
+            preAuditHook.setVerifier(verifier);
 
             // when - running asynchronous
             val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
             wrapper.asyncWrap(book, asyncControl).setName("Book #2");
 
             asyncControl.getFuture().get(10, TimeUnit.SECONDS);
+            
+            preAuditHook.setVerifier(null);
 
             // then
             verifier.accept(VerificationStage.POST_COMMIT);
@@ -221,6 +267,8 @@ public class ApplicationLayerTestFactory {
             // given
             val book = setupForJdo();
             given.run();
+            
+            preAuditHook.setVerifier(verifier);
 
             // when - running synchronous
             val asyncControl = returningVoid().withCheckRules(); // enforce rules 
@@ -231,6 +279,8 @@ public class ApplicationLayerTestFactory {
 
                 fail("unexpected code reach");
             });
+            
+            preAuditHook.setVerifier(null);
 
             // then
             verifier.accept(VerificationStage.FAILURE_CASE);
