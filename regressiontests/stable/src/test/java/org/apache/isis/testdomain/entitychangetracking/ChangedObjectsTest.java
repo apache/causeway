@@ -30,8 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.auditing.AuditerServiceForTesting;
-import org.apache.isis.testdomain.auditing.Configuration_usingAuditing;
+import org.apache.isis.testdomain.applayer.auditing.AuditerServiceForTesting;
+import org.apache.isis.testdomain.applayer.auditing.Configuration_usingAuditing;
+import org.apache.isis.testdomain.applayer.publishing.Configuration_usingPublishing;
 import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.commons.InteractionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -39,7 +40,6 @@ import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
-import org.apache.isis.testdomain.publishing.Configuration_usingPublishing;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;

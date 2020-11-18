@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.publishing;
+package org.apache.isis.testdomain.applayer.publishing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,5 +94,31 @@ public class PublisherServiceForTesting implements PublisherService {
     public static void clearPublishedEntries(KVStoreForTesting kvStore) {
         kvStore.clear(PublisherServiceForTesting.class);
     }
+    
+    public static int getCreated(KVStoreForTesting kvStore) {
+        val publishedObjects = getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberCreated).sum();
+    }
+    
+    public static int getDeleted(KVStoreForTesting kvStore) {
+        val publishedObjects = getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberDeleted).sum();
+    }
+    
+    public static int getLoaded(KVStoreForTesting kvStore) {
+        val publishedObjects = getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberLoaded).sum();
+    }
+    
+    public static int getUpdated(KVStoreForTesting kvStore) {
+        val publishedObjects = getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberUpdated).sum();
+    }
+    
+    public static int getModified(KVStoreForTesting kvStore) {
+        val publishedObjects = getPublishedObjects(kvStore);
+        return publishedObjects.stream().mapToInt(PublishedObjects::getNumberPropertiesModified).sum();
+    }
+    
     
 }

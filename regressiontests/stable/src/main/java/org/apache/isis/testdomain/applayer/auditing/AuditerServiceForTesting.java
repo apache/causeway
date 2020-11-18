@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.auditing;
+package org.apache.isis.testdomain.applayer.auditing;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
