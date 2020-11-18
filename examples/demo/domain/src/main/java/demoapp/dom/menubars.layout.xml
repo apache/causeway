@@ -126,6 +126,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="publishing"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="restrictTo"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
             </mb3:section>
             <mb3:section>

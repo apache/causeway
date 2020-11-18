@@ -103,7 +103,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(hidden = Where.OBJECT_FORMS)"
+            "@Action(hidden = Where.NOWHERE)"
     )
     public ActionHiddenVm updateTextAndHiddenNowhere(final String text) {
         setText(text);
@@ -143,7 +143,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(hidden = Where.OBJECT_FORMS)"
+            "@Action(hidden = Where.EVERYWHERE)"
     )
     public ActionHiddenVm updateTextButHiddenEverywhere(final String text) {
         setText(text);

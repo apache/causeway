@@ -39,6 +39,7 @@ import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.annotDomain.Action.hidden.ActionHiddenVm;
 import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdo;
 import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdoEntities;
+import demoapp.dom.annotDomain.Action.restrictTo.ActionRestrictToVm;
 import demoapp.dom.annotDomain.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.annotDomain.Action.typeOf.child.ActionTypeOfChildVm;
 
@@ -92,6 +93,12 @@ public class ActionMenu {
     @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
     public ActionPublishingJdo publishing(){
         return actionPublishingJdoEntities.first();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-paper-plane", describedAs = "Availability of actions per environment")
+    public ActionRestrictToVm restrictTo(){
+        return new ActionRestrictToVm("value");
     }
 
     @Action(semantics = SemanticsOf.SAFE)

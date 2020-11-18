@@ -24,7 +24,7 @@ The fallback domain event can be suppressed using the `isis.applib.annotation.ac
 
 The demo defines two actions that are annotated using `domainEvent` semantic:
 
-* in the `ActionHiddenVm` is a regular action, "updateText":
+* in the `ActionRestrictToVm` is a regular action, "updateText":
 +
 [source,java]
 ----
@@ -33,7 +33,7 @@ include::ActionDomainEventVm.java[tags=class]
 <.> the event class to emit; genericised by the target type
 <.> indicates that the framework should emit this type
 
-* The `ActionHiddenVm_mixinUpdateTextNoAnnotation` defines a mixin action, also annotated:
+* The `ActionRestrictToVm_mixinUpdateNoAnnotation` defines a mixin action, also annotated:
 +
 [source,java]
 ----

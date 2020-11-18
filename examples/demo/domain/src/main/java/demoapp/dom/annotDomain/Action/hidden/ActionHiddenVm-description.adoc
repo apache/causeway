@@ -8,7 +8,9 @@ The `hidden` semantic specifies whether the action should be visible in the UI o
 include::ActionHiddenVm.java[tags=class]
 ----
 
-Three actions:
+== Regular Actions
+
+Four actions:
 
 * `updateTextNoAnnotation` does not specify whether it is hidden or not.
 The fallback is that actions are not hidden:
@@ -25,3 +27,23 @@ include::ActionHiddenVm.java[tags=action-no-annotation]
 include::ActionHiddenVm.java[tags=action-hidden-nowhere]
 ----
 
+* `updateTextButHiddenEverywhere` action is explicitly annotated as hidden everywhere.
+It therefore should not be visible in the UI:
++
+[source,java]
+----
+include::ActionHiddenVm.java[tags=action-but-hidden-everywhere]
+----
+
+* `updateTextAndHiddenOnForm` action is explicitly annotated as hidden on an object form.
+It therefore should not be visible in the UI:
++
+[source,java]
+----
+include::ActionHiddenVm.java[tags=action-but-hidden-on-forms]
+----
+
+
+== Mixin actions
+
+TODO
