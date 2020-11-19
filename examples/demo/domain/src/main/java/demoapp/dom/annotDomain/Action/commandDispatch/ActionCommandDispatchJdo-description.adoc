@@ -1,0 +1,168 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+WARNING: TODO command was renamed to commandDispatch
+
+The `command` semantic is used to allow or suppress the reification of an action invocation into a `Command`.
+
+When allowed (the default), then the `Command` is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandServiceListener.html#section-top[`CommandServiceListener`] SPI, _after_ the interaction has completed.
+One use case is to replicate and replay commands to a secondary system, for example for regression testing.
+For more on this, see the "Command Replay" section below.
+
+Commands are also used under the covers to allow actions invocations to be made asynchronously using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[`WrapperFactory`].
+This can be useful for long-running actions.
+
+[NOTE]
+====
+The list of persisted ``Command``s can be viewed in a collection on the left bottom of this page.
+``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
+
+If running in prototype mode, the list of persisted ``Command``s can also be truncated from the activity menu.
+====
+
+== Annotated
+
+The `command` semantic can be specified explicitly using an annotation through `@Action#command()`:
+
+* it can be applied to an action:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo.java[tags=annotation]
+----
+<.> explicitly specifies that invoking the action should be reified .
+
+* or to a mixin:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo_mixinUpdateProperty.java[tags=class]
+----
+<.> explicitly specifies that invoking the mixin action should be reified.
+
+The command reification can also be disabled:
+
+* for an action:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo.java[tags=annotation-2]
+----
+<.> explicitly specifies that invoking the action should not be reified.
+
+* or to a mixin:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo_mixinUpdatePropertyCommandDisabled.java[tags=class]
+----
+<.> explicitly specifies that invoking the mixin action should not be reified.
+
+
+== Meta-annotated
+
+The `command` semantic can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java,indent=0]
+----
+include::ActionCommandEnabledMetaAnnotation.java[tags=class]
+----
+<.> annotated for an action
+<.> annotation can be applied to an action method or to a mixin
+
+* and can be applied to an action:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo.java[tags=meta-annotation]
+----
+<.> semantic is inherited from the meta-annotation
+
+* or to a mixin:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+----
+<.> semantic is inherited from the meta-annotation
+
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* for an action:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo.java[tags=meta-annotation-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Action` annotation
+
+* or on a mixin:
++
+[source,java,indent=0]
+----
+include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Action` annotation
+
+
+== CommandServiceListener
+
+The demo includes the link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Command Log] extension, so every command is persisted.
+These can be viewed in the collection at the left bottom of the page.
+``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
+
+
+== Configuration
+
+By default, reification of commands for action invocations is enabled.
+This can be configured globally:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  applib:
+    annotation:
+      action:
+        command: none   # or 'all', or 'ignore_safe'
+----
+
+In addition to globally enabling or disabling command reification, it is also possible to specify `ignore_safe`.
+This enables commands for all actions except those that have safe (that is, query-only) semantics.
+In other words actions are reified to commands except for those that don't change (aren't declared as changing) the state of the system.
+
+== Command Replay
+
+The link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow ``Command``s to be persisted.
+It also provides a RESTful endpoint to allow ``Command``s to be queried.
+This is used by the link:https://isis.apache.org/extensions/2.0.0-M3/command-replay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
+
+The associated `commandDtoProcessor()` semantic allows the `Command` XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
+One use case is to allow data to be obfuscated for security, or to replace large payloads (such as Blobs) with a smaller dummy payload.
+As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[`CommandDtoProcessorService`] SPI.
+
+The command replay can be demonstrated by running a second instance of the demo app, using the "secondary" Spring Boot profile.
+This is most easily done by specifying a system property:
+
+    -Dspring.profiles.active=secondary
+
+This activates the `application-secondary.properties` configuration file:
+
+[source,properties]
+----
+isis.extensions.command-replay.primary-access.base-url-restful=http://localhost:8080/restful/
+isis.extensions.command-replay.primary-access.user=sven
+isis.extensions.command-replay.primary-access.password=pass
+isis.extensions.command-replay.primary-access.base-url-wicket=http://localhost:8080/wicket/
+
+server.port=9090
+----
+
+The secondary instance of demoapp is accessible at link:http://localhost:9090[].
+Since both primary and secondary start with the same initial state, any commands executed on the primary are replicated to the secondary and result in the same changes of state.

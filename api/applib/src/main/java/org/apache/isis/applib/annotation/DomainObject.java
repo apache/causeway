@@ -64,7 +64,9 @@ public @interface DomainObject {
     // end::refguide-domain-events[]
     /**
      * Whether entity changes should be dispatched to 
-     * {@link org.apache.isis.applib.services.audit.EntityAuditListener}s.
+     * {@link org.apache.isis.applib.services.audit.EntityAuditListener}s
+     * and whether entity changes, captured as {@link org.apache.isis.applib.services.publish.ChangingEntities}, 
+     * should be dispatched to {@link org.apache.isis.applib.services.publish.ChangingEntitiesListener}s.
      * @apiNote does only apply to entity objects
      */
     // tag::refguide[]
@@ -111,16 +113,6 @@ public @interface DomainObject {
     Bounding bounding()                             // <.>
             default Bounding.NOT_SPECIFIED;
 
-    // end::refguide[]
-    /**
-     * Whether entity changes, captured as {@link org.apache.isis.applib.services.publish.ChangingEntities}, 
-     * should be dispatched to {@link org.apache.isis.applib.services.publish.ChangingEntitiesListener}s.
-     * @apiNote does only apply to entity objects
-     */
-    // tag::refguide[]
-    Dispatching changingEntitiesDispatch()          // <.>
-            default Dispatching.NOT_SPECIFIED;
-    
     // end::refguide[]
     /**
      * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.

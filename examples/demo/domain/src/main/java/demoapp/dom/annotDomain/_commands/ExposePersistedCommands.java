@@ -37,7 +37,7 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom.annotDomain.Action.command.ActionCommandJdo;
+import demoapp.dom.annotDomain.Action.commandDispatch.ActionCommandDispatchJdo;
 
 /**
  * Marker interface for mixins to contribute to.

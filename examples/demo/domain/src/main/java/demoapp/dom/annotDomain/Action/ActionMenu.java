@@ -28,28 +28,27 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.annotDomain.Action.associateWith.child.ActionAssociateWithChildVm;
-import demoapp.dom.annotDomain.Action.command.ActionCommandJdo;
-import demoapp.dom.annotDomain.Action.command.ActionCommandJdoEntities;
+import demoapp.dom.annotDomain.Action.commandDispatch.ActionCommandDispatchJdo;
+import demoapp.dom.annotDomain.Action.commandDispatch.ActionCommandDispatchJdoEntities;
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
+import demoapp.dom.annotDomain.Action.executionDispatch.ActionExecutionDispatchJdo;
+import demoapp.dom.annotDomain.Action.executionDispatch.ActionExecutionDispatchJdoEntities;
 import demoapp.dom.annotDomain.Action.hidden.ActionHiddenVm;
-import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdo;
-import demoapp.dom.annotDomain.Action.publishing.ActionPublishingJdoEntities;
 import demoapp.dom.annotDomain.Action.restrictTo.ActionRestrictToVm;
 import demoapp.dom.annotDomain.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.annotDomain.Action.typeOf.child.ActionTypeOfChildVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
-@Log4j2
+//@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 
-    final ActionCommandJdoEntities actionCommandJdoEntities;
-    final ActionPublishingJdoEntities actionPublishingJdoEntities;
+    final ActionCommandDispatchJdoEntities actionCommandJdoEntities;
+    final ActionExecutionDispatchJdoEntities actionPublishingJdoEntities;
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -72,7 +71,7 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public ActionCommandJdo command(){
+    public ActionCommandDispatchJdo commandDispatch(){
         return actionCommandJdoEntities.first();
     }
 
@@ -84,15 +83,15 @@ public class ActionMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
+    public ActionExecutionDispatchJdo executionDispatch(){
+        return actionPublishingJdoEntities.first();
+    }
+    
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions")
     public ActionHiddenVm hidden(){
         return new ActionHiddenVm("value");
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
-    public ActionPublishingJdo publishing(){
-        return actionPublishingJdoEntities.first();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingVm;
+import demoapp.dom.annotDomain.DomainObject.auditing.DomainObjectAuditingVm;
 
 //tag::class[]
 @Action(
@@ -34,17 +34,17 @@ public class ExposeCapturedChanges_clear {
     // ...
 //end::class[]
 
-    private final DomainObjectPublishingVm domainObjectPublishingVm;
+    private final DomainObjectAuditingVm domainObjectAuditingVm;
 
-    public ExposeCapturedChanges_clear(DomainObjectPublishingVm domainObjectPublishingVm) {
-        this.domainObjectPublishingVm = domainObjectPublishingVm;
+    public ExposeCapturedChanges_clear(DomainObjectAuditingVm domainObjectAuditingVm) {
+        this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
 
     //tag::class[]
-    public DomainObjectPublishingVm act() {
+    public DomainObjectAuditingVm act() {
         changingEntitiesListenerToCaptureChangesInMemory.clear();
-        return domainObjectPublishingVm;
+        return domainObjectAuditingVm;
     }
 
     @Inject

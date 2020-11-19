@@ -698,8 +698,8 @@ public class Interaction implements HasUniqueId {
                 final Timestamp timestamp,
                 final MetricsService metricsService) {
 
-            final int numberObjectsLoaded = metricsService.numberObjectsLoaded();
-            final int numberObjectsDirtied = metricsService.numberObjectsDirtied();
+            final int numberObjectsLoaded = metricsService.numberEntitiesLoaded();
+            final int numberObjectsDirtied = metricsService.numberEntitiesDirtied();
 
             when.syncMetrics(this, timestamp, numberObjectsLoaded, numberObjectsDirtied);
         }

@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.ChangingEntities;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ class ChangingEntitiesFactory {
         val changeKindByPublishedAdapter =
                 _Maps.filterKeys(
                         entityChangeTracker.getChangeKindByEnlistedAdapter(),
-                        this::isPublishingEnabled,
+                        this::isAuditingEnabled,
                         HashMap::new);
 
         if(changeKindByPublishedAdapter.isEmpty()) {
@@ -86,8 +86,8 @@ class ChangingEntitiesFactory {
                     changeKindByPublishedAdapter);
     }
 
-    private boolean isPublishingEnabled(ManagedObject objectAdapter) {
-        return PublishedObjectFacet.isChangingEntitiesDispatchingEnabled(objectAdapter.getSpecification());
+    private boolean isAuditingEnabled(ManagedObject objectAdapter) {
+        return AuditableFacet.isAuditingEnabled(objectAdapter.getSpecification());
     }
     
 }

@@ -66,7 +66,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Pr
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.EditingEnabledFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
@@ -114,7 +113,6 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     public void process(final ProcessClassContext processClassContext) {
         
         processAuditing(processClassContext);
-        processPublishing(processClassContext);
         processAutoComplete(processClassContext);
         processBounded(processClassContext);
         processEditing(processClassContext);
@@ -146,30 +144,6 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
         // then add
         super.addFacet(auditableFacet);
-    }
-
-
-    void processPublishing(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-
-        //
-        // this rule inspired by a similar rule for auditing, see above
-        //
-        if(HasUniqueId.class.isAssignableFrom(cls)) {
-            // do not install on any implementation of HasUniqueId
-            // (ie commands, audit entries, published events).
-            return;
-        }
-
-        // check from @DomainObject(changingEntitiesDispatch=...)
-        val publishing = processClassContext.synthesizeOnType(DomainObject.class)
-                .map(DomainObject::changingEntitiesDispatch);
-        val publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
-                .create(publishing, getConfiguration(), facetHolder);
-
-        // then add
-        super.addFacet(publishedObjectFacet);
     }
     
     // -- AUTO COMPLETE

@@ -53,12 +53,9 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -242,152 +239,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
         }
 
-    }
-
-    public static class Publishing extends DomainObjectAnnotationFacetFactoryTest {
-
-        @DomainObject(changingEntitiesDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED)
-        class CustomerWithDomainObjectAndPublishingSetToAsConfigured {
-        }
-
-        @DomainObject(changingEntitiesDispatch = org.apache.isis.applib.annotation.Dispatching.DISABLED)
-        class CustomerWithDomainObjectAndPublishingSetToDisabled {
-        }
-
-        @DomainObject(changingEntitiesDispatch = org.apache.isis.applib.annotation.Dispatching.ENABLED)
-        class CustomerWithDomainObjectAndPublishingSetToEnabled {
-        }
-
-        @Test
-        public void ignore_HasUniqueId() {
-
-            allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
-
-            facetFactory.process(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
-
-            final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-            Assert.assertNull(facet);
-
-            expectNoMethodsRemoved();
-        }
-
-        public static class WhenNotAnnotatedAndDefaultsFromConfiguration extends Publishing {
-
-            @Test
-            public void configured_value_set_to_all() {
-                allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
-
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof PublishedObjectFacetFromConfiguration);
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void configured_value_set_to_none() {
-                allowingPublishObjectsToReturn(PublishObjectsConfiguration.NONE);
-
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void configured_value_set_to_default() {
-                allowingPublishObjectsToReturn(null);
-
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-        }
-
-
-        public static class WithDomainObjectAnnotationWithPublishingSetToAsConfigured extends Publishing {
-
-            @Test
-            public void configured_value_set_to_all() {
-                
-                allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
-
-                facetFactory.process(new ProcessClassContext(
-                        CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
-
-                final PublishedObjectFacet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNotNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void configured_value_set_to_none() {
-                allowingPublishObjectsToReturn(PublishObjectsConfiguration.NONE);
-
-                facetFactory.process(new ProcessClassContext(
-                        CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void configured_value_set_to_default() {
-                allowingPublishObjectsToReturn(null);
-
-                facetFactory.process(new ProcessClassContext(
-                        CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
-
-                final PublishedObjectFacet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet); 
-
-                expectNoMethodsRemoved();
-            }
-
-        }
-
-        public static class WithDomainObjectAnnotationWithPublishingSetToEnabled extends Publishing {
-
-            @Test
-            public void irrespective_of_configured_value() {
-                allowingPublishObjectsToReturn(null);
-
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToEnabled.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof PublishedObjectFacetForDomainObjectAnnotation);
-
-                expectNoMethodsRemoved();
-            }
-
-        }
-
-        public static class WithDomainObjectAnnotationWithPublishingSetToDisabled extends Publishing {
-
-            @Test
-            public void irrespective_of_configured_value() {
-                allowingPublishObjectsToReturn(null);
-
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToDisabled.class, mockMethodRemover, facetHolder));
-
-                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNull(facet);
-
-                expectNoMethodsRemoved();
-                
-            }
-        }
     }
 
     public static class AutoComplete extends DomainObjectAnnotationFacetFactoryTest {

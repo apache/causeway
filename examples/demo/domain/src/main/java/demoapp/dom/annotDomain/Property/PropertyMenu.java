@@ -32,36 +32,35 @@ import org.apache.isis.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.annotDomain.Property.command.PropertyCommandJdo;
-import demoapp.dom.annotDomain.Property.command.PropertyCommandJdoEntities;
+import demoapp.dom.annotDomain.Property.commandDispatch.PropertyCommandDispatchJdo;
+import demoapp.dom.annotDomain.Property.commandDispatch.PropertyCommandDispatchJdoEntities;
 import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 import demoapp.dom.annotDomain.Property.editing.PropertyEditingVm;
+import demoapp.dom.annotDomain.Property.executionDispatch.PropertyExecutionDispatchJdo;
+import demoapp.dom.annotDomain.Property.executionDispatch.PropertyExecutionDispatchJdoEntities;
 import demoapp.dom.annotDomain.Property.fileAccept.PropertyFileAcceptVm;
 import demoapp.dom.annotDomain.Property.hidden.PropertyHiddenVm;
 import demoapp.dom.annotDomain.Property.hidden.child.PropertyHiddenChildVm;
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
 import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
 import demoapp.dom.annotDomain.Property.optionality.PropertyOptionalityVm;
-import demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdo;
-import demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoEntities;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
 import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
-@Log4j2
+//@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
 
-    final PropertyCommandJdoEntities propertyCommandJdoEntities;
-    final PropertyPublishingJdoEntities propertyPublishingJdoEntities;
+    final PropertyCommandDispatchJdoEntities propertyCommandJdoEntities;
+    final PropertyExecutionDispatchJdoEntities propertyPublishingJdoEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public PropertyCommandJdo command(){
+    public PropertyCommandDispatchJdo commandDispatch(){
         return propertyCommandJdoEntities.first();
     }
 
@@ -81,6 +80,12 @@ public class PropertyMenu {
         vm.setPropertyUsingMetaAnnotation("this property is also editable");
         vm.setPropertyUsingMetaAnnotationButOverridden("this property is NOT editable");
         return vm;
+    }
+    
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
+    public PropertyExecutionDispatchJdo executionDispatch(){
+        return propertyPublishingJdoEntities.first();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -142,12 +147,6 @@ public class PropertyMenu {
         vm.setPropertyUsingMetaAnnotation(null);
         vm.setPropertyUsingMetaAnnotationButOverridden("mandatory");
         return vm;
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
-    public PropertyPublishingJdo publishing(){
-        return propertyPublishingJdoEntities.first();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

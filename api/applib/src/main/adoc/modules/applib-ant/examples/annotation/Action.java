@@ -95,8 +95,8 @@ public @interface Action {
      * should be dispatched to {@link CommandListener}s.
      */
     // tag::refguide[]
-    CommandDispatch commandDispatch()                               // <.>
-            default CommandDispatch.NOT_SPECIFIED;
+    Dispatching commandDispatch()                               // <.>
+            default Dispatching.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -144,8 +144,8 @@ public @interface Action {
      * be dispatched to {@link ExecutionListener}s.
      */
     // tag::refguide[]
-    ExecutionDispatch executionDispatch()                           // <.>
-            default ExecutionDispatch.NOT_SPECIFIED;
+    Dispatching executionDispatch()                           // <.>
+            default Dispatching.NOT_SPECIFIED;
     
     // end::refguide[]
     /**

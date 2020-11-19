@@ -16,7 +16,8 @@ include::refguide:applib-ant:example$annotation/DomainObject.java[tags="refguide
 <.> xref:refguide:applib-ant:DomainObject.adoc#auditing[`auditing()`]
 +
 Indicates whether each of the changed properties of an object should be submitted to the registered
-xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s) (Does only apply to entity objects.)
+xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s) and
+whether entity changes, captured as `ChangingEntities` should be dispatched to xref:refguide:applib-svc:ChangingEntitiesListener.adoc[`ChangingEntitiesListener`](s). (Does only apply to entity objects.)
 
 <.> xref:refguide:applib-ant:DomainObject.adoc#autoCompleteRepository[`autoCompleteRepository()`]
 +
@@ -29,10 +30,6 @@ Override the method name to use on the auto-complete repository
 <.> xref:refguide:applib-ant:DomainObject.adoc#bounding[`bounding()`]
 +
 Whether the number of instances of this domain class is relatively small (a "bounded" set), such that instances could be selected from a drop-down list box or similar.
-
-<.> xref:refguide:applib-ant:DomainObject.adoc#changingEntitiesDispatch[`changingEntitiesDispatch()`]
-+
-Whether entity changes, captured as `ChangingEntities` should be dispatched to xref:refguide:applib-svc:ChangingEntitiesListener.adoc[`ChangingEntitiesListener`](s). (Does only apply to entity objects.)
 
 <.> xref:refguide:applib-ant:DomainObject.adoc#editing[`editing()`]
 +

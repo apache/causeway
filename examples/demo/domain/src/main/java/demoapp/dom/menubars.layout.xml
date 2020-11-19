@@ -117,29 +117,29 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>Domain Annot</mb3:named>
             <mb3:section>
                 <mb3:named>@DomainObject</mb3:named>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="publishing"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="auditing"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>@Action</mb3:named>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="command"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="commandDispatch"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="executionDispatch"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="publishing"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="restrictTo"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>@Property</mb3:named>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="command"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="commandDispatch"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="domainEvent"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="editing"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="executionDispatch"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="optionality"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="publishing"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="regexPattern"/>
             </mb3:section>
         </mb3:menu>
