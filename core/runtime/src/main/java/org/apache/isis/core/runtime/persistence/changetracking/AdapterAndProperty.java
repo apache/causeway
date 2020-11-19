@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.runtime.persistence.changetracking;
 
-import java.util.Map;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -42,22 +40,19 @@ final class AdapterAndProperty {
     @Getter private final ObjectAssociation property;
     @Getter private final Bookmark bookmark;
     @Getter private final String propertyId;
-    @Getter private final boolean auditDispatchEnabled;
     
     private final String bookmarkStr;
 
     public static AdapterAndProperty of(
             final @NonNull ManagedObject adapter, 
-            final @NonNull ObjectAssociation property,
-            final boolean auditDispatchEnabled) {
-        return new AdapterAndProperty(adapter, property, auditDispatchEnabled);
+            final @NonNull ObjectAssociation property) {
+        return new AdapterAndProperty(adapter, property);
     }
 
-    private AdapterAndProperty(ManagedObject adapter, ObjectAssociation property, boolean auditDispatchEnabled) {
+    private AdapterAndProperty(ManagedObject adapter, ObjectAssociation property) {
         
         this.adapter = adapter;
         this.property = property;
-        this.auditDispatchEnabled = auditDispatchEnabled;
         this.propertyId = property.getId();
 
         this.bookmark = ManagedObjects.bookmarkElseFail(adapter);
@@ -74,9 +69,5 @@ final class AdapterAndProperty {
         return referencedAdapter == null ? null : referencedAdapter.getPojo();
     }
 
-    public static boolean isAuditDispatchEnabled(final Map.Entry<AdapterAndProperty, ?> enlistedEntry) {
-        val adapterAndProperty = enlistedEntry.getKey();
-        return adapterAndProperty.isAuditDispatchEnabled();
-    }
     
 }

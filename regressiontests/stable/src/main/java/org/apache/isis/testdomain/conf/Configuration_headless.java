@@ -171,11 +171,6 @@ public class Configuration_headless {
                 return 0;
             }
 
-            @Override
-            public int numberEntityPropertiesModified() {
-                return 0;
-            }
-
         };
     }
 

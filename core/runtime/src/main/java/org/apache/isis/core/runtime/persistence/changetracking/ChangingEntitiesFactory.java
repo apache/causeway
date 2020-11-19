@@ -59,7 +59,7 @@ class ChangingEntitiesFactory {
         val changingEntities = newChangingEntities(
                         entityChangeTracker.currentInteraction(),
                         entityChangeTracker.numberEntitiesLoaded(), 
-                        entityChangeTracker.numberEntityPropertiesModified(),
+                        entityChangeTracker.numberAuditedEntityPropertiesModified(),
                         changeKindByPublishedAdapter);
         
         return changingEntities;

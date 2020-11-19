@@ -256,7 +256,9 @@ implements
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
         
-        val auditDispatchEnabled = AuditableFacet.isAuditingEnabled(entity.getSpecification());
+        if(!AuditableFacet.isAuditingEnabled(entity.getSpecification())) {
+            return; // ignore entities that are not enabled for auditing
+        }
 
         log.debug("enlist entity's property changes for auditing {}", entity);
 
@@ -264,11 +266,10 @@ implements
         .streamAssociations(Contributed.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
         .filter(property->!property.isNotPersisted())
-        .map(property->AdapterAndProperty.of(entity, property, auditDispatchEnabled))
+        .map(property->AdapterAndProperty.of(entity, property))
         .filter(aap->!enlistedEntityPropertiesForAuditing.containsKey(aap)) // already enlisted, so ignore
         .forEach(aap->{
             enlistedEntityPropertiesForAuditing.put(aap, pre.apply(aap));
-            numberEntityPropertiesModified.increment();
         });
     }
 
@@ -280,7 +281,6 @@ implements
 
         val postValues = enlistedEntityPropertiesForAuditing.entrySet().stream()
                 .peek(this::updatePostOn) // set post values of audits, which have been left empty up to now
-                .filter(AdapterAndProperty::isAuditDispatchEnabled)
                 .filter(PreAndPostValues::shouldAudit)
                 .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
                 .collect(_Sets.toUnmodifiable());
@@ -316,9 +316,8 @@ implements
         return changeKindByEnlistedAdapter.size();
     }
     
-    @Override
-    public int numberEntityPropertiesModified() {
-        return Math.toIntExact(numberEntityPropertiesModified.longValue());
+    int numberAuditedEntityPropertiesModified() {
+        return getEntityAuditEntries().size();
     }
 
     // -- ENTITY CHANGE TRACKING
@@ -374,7 +373,6 @@ implements
     }
     
     private final LongAdder numberEntitiesLoaded = new LongAdder();
-    private final LongAdder numberEntityPropertiesModified = new LongAdder();
     
     @Override
     public void incrementLoaded() {

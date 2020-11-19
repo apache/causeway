@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -71,7 +70,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
 
     protected final Supplier<EntityChangeTracker> entityChangeTrackerProvider;
     protected final Supplier<InteractionContext> interactionContextProvider;
-    protected final Supplier<MetricsService> metricsServiceProvider;
 
     /**
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
@@ -122,8 +120,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         
         this.interactionContextProvider = ()->lookupService(InteractionContext.class);
         this.entityChangeTrackerProvider = ()->lookupService(EntityChangeTracker.class);
-        this.metricsServiceProvider = ()->lookupService(MetricsService.class);
-        
 
         // sub-components
         this.persistenceQueryFactory = PersistenceQueryFactory.of(

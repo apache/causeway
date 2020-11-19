@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Wrapper around {@link org.apache.isis.applib.services.audit.EntityAuditListener}.
+ * Wrapper around {@link org.apache.isis.applib.services.audit.ChangingEntitiesListener}.
  */
 @Service
 @Named("isisRuntime.ChangingEntitiesDispatcher")

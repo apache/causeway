@@ -46,8 +46,6 @@ public interface MetricsService {
      */
     // tag::refguide[]
     int numberEntitiesDirtied();     // <.>
-    
-    int numberEntityPropertiesModified();
 
 }
 // end::refguide[]
