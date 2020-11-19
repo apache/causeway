@@ -20,7 +20,7 @@ associates an action with another property or collection of the action.
 the ordering of multiple actions associated with another property/collection.
 
 <.> xref:refguide:applib-ant:Action.adoc#command[`command()`]
-whether the action invocation should be reified into a `Command`, typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension  (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
+Whether the action invocation should be dispatched to registered xref:refguide:applib-svc:ExecutionListener.adoc[`CommandListener`]s as a `Command` object, that captures the details of this edit. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
 
 <.> `commandDtoProcessor()`
 +
@@ -30,13 +30,13 @@ If the xref:extensions:command-replay:about.adoc[Command Replay] extension is be
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execute).
 
+<.> xref:refguide:applib-ant:Action.adoc#executionDispach[`executionDispach()`]
++
+Whether the action invocation should be dispatched to registered xref:refguide:applib-svc:ExecutionListener.adoc[`ExecutionListener`]s as an `Execution` object, that captures the details of this invocation.
+
 <.> xref:refguide:applib-ant:Action.adoc#hidden[`hidden()`]
 +
 Indicates where (in the UI) the action should be hidden from the user.
-
-<.> xref:refguide:applib-ant:Action.adoc#publishing[`publishing()`]
-+
-Whether the action invocation should be published to the registered xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 
 <.> xref:refguide:applib-ant:Action.adoc#restrictTo[`restrictTo()`]
 +
@@ -80,10 +80,10 @@ public class ToDoItem {
 
 
 include::Action/associateWith.adoc[leveloffset=+1]
-include::Action/command.adoc[leveloffset=+1]
+include::Action/commandDispatch.adoc[leveloffset=+1]
 include::Action/domainEvent.adoc[leveloffset=+1]
+include::Action/executionDispatch.adoc[leveloffset=+1]
 include::Action/hidden.adoc[leveloffset=+1]
-include::Action/publishing.adoc[leveloffset=+1]
 include::Action/restrictTo.adoc[leveloffset=+1]
 include::Action/semantics.adoc[leveloffset=+1]
 include::Action/typeOf.adoc[leveloffset=+1]
