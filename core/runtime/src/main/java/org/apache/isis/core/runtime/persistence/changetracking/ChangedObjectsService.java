@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
-import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -47,6 +46,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
@@ -98,16 +98,16 @@ implements
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
      * <p>
-     * When {@link #getChangedObjectProperties()} is called, then this is cleared out and 
+     * When {@link #getEntityAuditEntries()} is called, then this is cleared out and 
      * {@link #changedObjectProperties} is non-null, containing the actual differences.
      */
     // tag::refguide[]
-    private final Map<AdapterAndProperty, PreAndPostValues> enlistedObjectProperties = _Maps.newLinkedHashMap();
+    private final Map<AdapterAndProperty, PreAndPostValues> enlistedEntityPropertiesForAuditing = _Maps.newLinkedHashMap();
 
     /**
      * Used for auditing; contains the pre- and post- values of every property of every object that actually changed.
      * <p>
-     * Will be null until {@link #getChangedObjectProperties()} is called, thereafter contains the actual changes.
+     * Will be null until {@link #getEntityAuditEntries()} is called, thereafter contains the actual changes.
      */
     private final _Lazy<Set<AuditEntry>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
@@ -150,7 +150,7 @@ implements
 
 
     @Override
-    public Set<AuditEntry> getChangedObjectProperties() {
+    public Set<AuditEntry> getEntityAuditEntries() {
         // this code path has side-effects, it locks the result for this transaction, 
         // such that cannot enlist on top of it
         return changedObjectPropertiesRef.get();
@@ -158,12 +158,12 @@ implements
 
     @Override
     public int numberObjectPropertiesModified() {
-        return getChangedObjectProperties().size();
+        return getEntityAuditEntries().size();
     }
 
     protected boolean shouldIgnore(final @NonNull ManagedObject adapter) {
         val spec = adapter.getSpecification();
-        return HasUniqueId.class.isAssignableFrom(spec.getCorrespondingClass());
+        return !spec.isEntity();
     }
 
     // end::refguide[]
@@ -181,7 +181,7 @@ implements
             break;
         case POST_AUDITING:
             log.debug("purging auditing data");
-            enlistedObjectProperties.clear();
+            enlistedEntityPropertiesForAuditing.clear();
             changeKindByEnlistedAdapter.clear();
             changedObjectPropertiesRef.clear();
             break;
@@ -247,24 +247,28 @@ implements
     }
 
     private void enlistForAuditing(
-            final ManagedObject adapter, 
+            final ManagedObject entity, 
             final Function<AdapterAndProperty, PreAndPostValues> pre) {
+        
+        if(!AuditableFacet.isEnabled(entity.getSpecification())){
+            return; // don't enlist if entity auditing is disabled
+        }
 
         if(changedObjectPropertiesRef.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
 
-        log.debug("enlist property changes for auditing {}", adapter);
+        log.debug("enlist entity's property changes for auditing {}", entity);
 
-        adapter.getSpecification()
+        entity.getSpecification()
         .streamAssociations(Contributed.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
         .filter(property->!property.isNotPersisted())
-        .map(property->AdapterAndProperty.of(adapter, property))
-        .filter(aap->!enlistedObjectProperties.containsKey(aap)) // already enlisted, so ignore
+        .map(property->AdapterAndProperty.of(entity, property))
+        .filter(aap->!enlistedEntityPropertiesForAuditing.containsKey(aap)) // already enlisted, so ignore
         .forEach(aap->{
-            enlistedObjectProperties.put(aap, pre.apply(aap));
+            enlistedEntityPropertiesForAuditing.put(aap, pre.apply(aap));
         });
     }
 
@@ -274,13 +278,13 @@ implements
      */
     private Set<AuditEntry> capturePostValuesAndDrain() {
 
-        val postValues = enlistedObjectProperties.entrySet().stream()
+        val postValues = enlistedEntityPropertiesForAuditing.entrySet().stream()
                 .peek(this::updatePostOn) // set post values of audits, which have been left empty up to now
                 .filter(PreAndPostValues::shouldAudit)
                 .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
                 .collect(_Sets.toUnmodifiable());
 
-        enlistedObjectProperties.clear();
+        enlistedEntityPropertiesForAuditing.clear();
 
         return postValues;
 

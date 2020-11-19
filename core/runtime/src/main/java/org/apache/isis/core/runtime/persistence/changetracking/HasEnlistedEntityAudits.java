@@ -23,6 +23,6 @@ import java.util.Set;
 //TODO[ISIS-2441] intermediate for refactoring keep?
 public interface HasEnlistedEntityAudits {
 
-    Set<AuditEntry> getChangedObjectProperties();
+    Set<AuditEntry> getEntityAuditEntries();
 
 }

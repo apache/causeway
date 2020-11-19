@@ -61,26 +61,26 @@ public class EntityAuditDispatcher {
     private final ClockService clockService;
     private final TransactionService transactionService;
     
-    private Can<EntityAuditListener> enabledAuditerServices;
+    private Can<EntityAuditListener> enabledAuditListeners;
     
     @PostConstruct
     public void init() {
-        enabledAuditerServices = Can.ofCollection(auditerServices)
+        enabledAuditListeners = Can.ofCollection(auditerServices)
                 .filter(EntityAuditListener::isEnabled);
     }
 
-    public void dispatchEntityAudits(HasEnlistedEntityAudits hasEnlistedForAuditing) {
+    public void dispatchEntityAudits(final HasEnlistedEntityAudits hasEnlistedForAuditing) {
         if(!canDispatch()) { 
             return; 
         }
         
         val currentUser = userService.getUser().getName();
         val currentTime = clockService.nowAsJavaSqlTimestamp();
-        val changedObjectProperties = hasEnlistedForAuditing.getChangedObjectProperties();
+        val auditEntries = hasEnlistedForAuditing.getEntityAuditEntries();
     
-        log.debug("about to process {} audits", ()->changedObjectProperties.size());
+        log.debug("about to process {} audits", ()->auditEntries.size());
         
-        for (val auditEntry : changedObjectProperties) {
+        for (val auditEntry : auditEntries) {
             auditChangedProperty(currentTime, currentUser, auditEntry);
         }
     }
@@ -88,7 +88,7 @@ public class EntityAuditDispatcher {
     // -- HELPER
     
     private boolean canDispatch() {
-        return enabledAuditerServices.isNotEmpty();
+        return enabledAuditListeners.isNotEmpty();
     }
     
     private void auditChangedProperty(
@@ -98,11 +98,6 @@ public class EntityAuditDispatcher {
 
         val adapterAndProperty = auditEntry.getAdapterAndProperty();
         val spec = adapterAndProperty.getAdapter().getSpecification();
-
-        final AuditableFacet auditableFacet = spec.getFacet(AuditableFacet.class);
-        if(auditableFacet == null || auditableFacet.isDisabled()) {
-            return;
-        }
 
         final Bookmark target = adapterAndProperty.getBookmark();
         final String propertyId = adapterAndProperty.getPropertyId();
@@ -119,8 +114,8 @@ public class EntityAuditDispatcher {
         final UUID transactionId = txId.getUniqueId();
         final int sequence = txId.getSequence();
 
-        for (val auditerService : enabledAuditerServices) {
-            auditerService
+        for (val auditListener : enabledAuditListeners) {
+            auditListener
             .audit(transactionId, sequence, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
         }
     }

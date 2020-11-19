@@ -20,6 +20,9 @@ package org.apache.isis.core.metamodel.facets.object.audit;
 
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+import lombok.val;
 
 
 /**
@@ -36,5 +39,16 @@ public interface AuditableFacet extends Facet {
      * can then be disabled for selected objects (eg using {@link Audited#disabled()} ).
      */
     public boolean isDisabled();
+    
+    public static boolean isEnabled(final FacetHolder facetHolder) {
+        if(facetHolder==null) {
+            return false;
+        }
+        val auditableFacet = facetHolder.getFacet(AuditableFacet.class);
+        if(auditableFacet == null || auditableFacet.isDisabled()) {
+            return false;
+        }
+        return true;
+    }
 
 }
