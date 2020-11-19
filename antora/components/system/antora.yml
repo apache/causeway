@@ -18,6 +18,6 @@
 name: system
 title: "System Overview"
 version: latest
-start_page: ROOT:about.adoc
+start_page: ROOT:system-overview.adoc
 nav:
 - modules/ROOT/nav.adoc

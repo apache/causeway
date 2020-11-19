@@ -35,11 +35,18 @@ skinparam rectangle<<4>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
   rectangle "==Apache Isis (Aggregator)\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Antora\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
-  rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
 }
+2 .[#707070].> 4 : ""
 2 .[#707070].> 3 : ""
 @enduml
 ----
@@ -54,9 +61,9 @@ package "package-ecosystem\n[Software System]" {
 |pom
 |
 |Apache Isis (Aggregator)
-|Convenience aggregator POM that references all modules either explicitely 
-        or via profiles, that are not activiated per default.
-        The parent POM of the core framework is isis-parent/pom.xml
+|Convenience aggregator POM that references all modules, some explicitely, 
+        others via profiles, that are not activiated per default.
+        The parent POM of the core framework is isis-parent/pom.xml.
 
 
 
@@ -66,6 +73,15 @@ package "package-ecosystem\n[Software System]" {
 |\antora
 |Apache Isis Antora
 |
+
+|org.apache.isis
+|isis-parent
+|pom
+|\isis-parent
+|Apache Isis
+|Parent for the core framework + extensions, starter parent pom for starter apps.
+
+
 
 |org.apache.isis
 |supplemental-model
@@ -1175,12 +1191,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1270,12 +1286,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1531,7 +1547,7 @@ _Dependencies_
 * com.vladsch.flexmark:flexmark-all:jar:${flexmark.version}
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
-* org.jsoup:jsoup:jar:1.12.1
+* org.jsoup:jsoup:jar:<managed>
 
 
 
@@ -2400,14 +2416,17 @@ _Dependencies_
 |Apache Isis - Regression Tests (stable)
 |_Components_
 
-* org.apache.isis.testdomain.auditing.AuditerServiceForTesting
+* org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory
+* org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory$PreAuditHook
+* org.apache.isis.testdomain.applayer.auditing.EntityAuditListenerForTesting
+* org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting
 * org.apache.isis.testdomain.conf.Configuration_headless$HeadlessCommandSupport
-* org.apache.isis.testdomain.publishing.PublisherServiceForTesting
 * org.apache.isis.testdomain.util.kv.KVStoreForTesting
 * org.apache.isis.testdomain.util.rest.RestEndpointService
 
 _Dependencies_
 
+* org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed>
 * org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
 
 
@@ -2772,6 +2791,7 @@ _Dependencies_
 |Apache Isis Ext - CORS (impl)
 |_Dependencies_
 
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
 * org.springframework:spring-web:jar:<managed>
@@ -3088,12 +3108,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3615,7 +3635,7 @@ _Dependencies_
 * org.junit.jupiter:junit-jupiter-api:jar:<managed>
 * org.junit.jupiter:junit-jupiter-engine:jar:<managed>
 * org.junit.vintage:junit-vintage-engine:jar:<managed>
-* org.mapstruct:mapstruct-processor:jar:1.3.1.Final
+* org.mapstruct:mapstruct-processor:jar:1.4.1.Final
 * org.projectlombok:lombok:jar:<managed>
 * org.slf4j:slf4j-api:jar:<managed>
 * org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
@@ -3833,9 +3853,9 @@ package "package-ecosystem\n[Software System]" {
 * demoapp.dom.annotDomain.Property.command.PropertyCommandJdoSeedService
 * demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoEntities
 * demoapp.dom.annotDomain.Property.publishing.PropertyPublishingJdoSeedService
-* demoapp.dom.annotDomain._changes.PublisherServiceToCaptureChangesInMemory
+* demoapp.dom.annotDomain._changes.ChangingEntitiesListenerToCaptureChangesInMemory
 * demoapp.dom.annotDomain._commands.ExposePersistedCommands$TableColumnOrderDefault
-* demoapp.dom.annotDomain._interactions.PublisherServiceToCaptureInteractionsInMemory
+* demoapp.dom.annotDomain._interactions.ExecutionListenerToCaptureInteractionsInMemory
 * demoapp.dom.annotLayout.PropertyLayout.navigable.FileTreeNodeService
 * demoapp.dom.annotLayout.PropertyLayout.repainting.PdfJsViewerAdvisorFallback
 * demoapp.dom.error.service.DemoErrorReportingService
@@ -4041,7 +4061,9 @@ _Dependencies_
 * org.apache.isis.extensions:isis-extensions-command-replay-secondary:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed>
 * org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed>
-* org.springframework.boot:spring-boot-starter-actuator:jar:${spring-boot.version}
+* org.springframework.boot:spring-boot-starter:jar:<managed>
+* org.springframework.boot:spring-boot-starter-actuator:jar:<managed>
+* org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
 
 
 
@@ -4146,7 +4168,6 @@ package "package-ecosystem\n[Software System]" {
 8 .[#707070].> 9 : ""
 8 .[#707070].> 10 : ""
 8 .[#707070].> 11 : ""
-2 .[#707070].> 3 : ""
 2 .[#707070].> 4 : ""
 2 .[#707070].> 8 : ""
 @enduml
