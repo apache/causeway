@@ -6,3 +6,10 @@
 
 The `CommandServiceInternal` service is an internal service whose responsibility is simply to notify all known xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`] when the `Command` has completed.
 
+== Related Classes
+
+In total there are 4 sorts of data the framework has dispatchers for ...
+. *EntityAudit*: dispatched via `EntityAuditDispatcher` and subscribed to via `EntityAuditListener` (SPI)
+. *ChangingEntities*: dispatched via `ChangingEntitiesDispatcher` and subscribed to via `ChangingEntitiesListener` (SPI)
+. *Execution*: dispatched via `ExecutionDispatcher` and subscribed to via `ExecutionListener` (SPI)
+. *Command*: dispatched via `CommandDispatcher` and subscribed to via `CommandListener` (SPI)

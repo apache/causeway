@@ -218,7 +218,7 @@ implements ImperativeFacet {
         // publish (if not a contributed association, query-only mixin)
         val publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
         if (publishedActionFacet != null) {
-            getExecutionDispatcher().dispatchActionExecution(priorExecution);
+            getExecutionDispatcher().dispatchActionInvoking(priorExecution);
         }
 
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);

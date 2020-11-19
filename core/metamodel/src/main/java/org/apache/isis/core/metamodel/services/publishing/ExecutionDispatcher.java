@@ -24,13 +24,13 @@ import org.apache.isis.applib.services.iactn.Interaction;
 
 public interface ExecutionDispatcher {
 
-    void dispatchActionExecution(Interaction.Execution<?,?> execution);
+    void dispatchActionInvoking(Interaction.Execution<?,?> execution);
 
-    void dispatchPropertyChangeExecution(Interaction.Execution<?,?> execution);
+    void dispatchPropertyChanging(Interaction.Execution<?,?> execution);
 
     /**
      * Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.
      */
-    <T> T withPublishingSuppressed(Supplier<T> block);
+    <T> T withDispatchSuppressed(Supplier<T> block);
 
 }

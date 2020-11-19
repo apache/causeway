@@ -153,7 +153,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        return getPublishingServiceInternal().withPublishingSuppressed(
+        return getPublishingServiceInternal().withDispatchSuppressed(
                 () -> mixinAction.executeInternal(
                         headFor(ownerAdapter), Can.empty(), interactionInitiatedBy));
     }

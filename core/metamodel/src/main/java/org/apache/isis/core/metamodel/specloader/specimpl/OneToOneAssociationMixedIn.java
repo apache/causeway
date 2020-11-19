@@ -139,7 +139,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         val head = headFor(mixedInAdapter);
         
-        return getPublisherDispatchService().withPublishingSuppressed(
+        return getPublisherDispatchService().withDispatchSuppressed(
                 () -> mixinAction.executeInternal(head, Can.empty(), interactionInitiatedBy)
         );
     }

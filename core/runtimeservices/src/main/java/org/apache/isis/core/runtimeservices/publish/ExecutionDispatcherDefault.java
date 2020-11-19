@@ -57,17 +57,17 @@ implements ExecutionDispatcher {
     private final List<ExecutionListener> executionListeners;
 
     @Override
-    public void dispatchActionExecution(final Interaction.Execution<?,?> execution) {
+    public void dispatchActionInvoking(final Interaction.Execution<?,?> execution) {
         notifyListeners(execution);
     }
 
     @Override
-    public void dispatchPropertyChangeExecution(final Interaction.Execution<?,?> execution) {
+    public void dispatchPropertyChanging(final Interaction.Execution<?,?> execution) {
         notifyListeners(execution);
     }
     
     @Override
-    public <T> T withPublishingSuppressed(final Supplier<T> block) {
+    public <T> T withDispatchSuppressed(final Supplier<T> block) {
         try {
             suppressionRequestCounter.increment();
             return block.get();

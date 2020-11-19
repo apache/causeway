@@ -293,7 +293,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         // publish (if not a contributed association, query-only mixin)
         val publishedPropertyFacet = getIdentified().getFacet(ExecutionDispatchPropertyFacet.class);
         if (publishedPropertyFacet != null) {
-            getExecutionDispatcher().dispatchPropertyChangeExecution(priorExecution);
+            getExecutionDispatcher().dispatchPropertyChanging(priorExecution);
         }
 
         return getObjectManager().adapt(targetPojo);
