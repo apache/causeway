@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.spi.CommandListener;
 
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -54,11 +55,11 @@ public class CommandDispatcher {
      * </p>
      */
     // tag::refguide[]
-    public void complete(final Command command) {   // <.>
+    public void complete(final @NonNull Command command) {   // <.>
         // ...
     // end::refguide[]
 
-        if(! command.isReified()) {
+        if(!command.isDispatchingEnabled()) {
             return;
         }
         if(command.getLogicalMemberIdentifier() == null) {
@@ -71,7 +72,7 @@ public class CommandDispatcher {
                 command.isSystemStateChanged());
 
     // tag::refguide[]
-        commandListeners.forEach(x -> x.onComplete(command));
+        commandListeners.forEach(commandListener -> commandListener.onComplete(command));
     }
 
     @Inject List<CommandListener> commandListeners;

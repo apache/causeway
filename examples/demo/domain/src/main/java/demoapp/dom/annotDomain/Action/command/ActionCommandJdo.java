@@ -26,7 +26,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.CommandDispatch;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -90,7 +90,7 @@ public class ActionCommandJdo
 
 //tag::annotation[]
     @Action(
-        command = CommandReification.ENABLED        // <.>
+        commandDispatch = CommandDispatch.ENABLED        // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
         , associateWithSequence = "1"
@@ -113,7 +113,7 @@ public class ActionCommandJdo
 
 //tag::annotation-2[]
     @Action(
-        command = CommandReification.DISABLED           // <.>
+        commandDispatch = CommandDispatch.DISABLED           // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyCommandDisabled"
         , associateWithSequence = "1"
@@ -161,7 +161,7 @@ public class ActionCommandJdo
     @ActionCommandDisabledMetaAnnotation        // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , command = CommandReification.ENABLED  // <.>
+        , commandDispatch = CommandDispatch.ENABLED  // <.>
         , associateWith = "propertyMetaAnnotatedOverridden"
         , associateWithSequence = "1"
     )

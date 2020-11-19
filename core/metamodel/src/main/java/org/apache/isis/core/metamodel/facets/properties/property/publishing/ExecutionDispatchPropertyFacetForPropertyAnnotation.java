@@ -22,57 +22,59 @@ package org.apache.isis.core.metamodel.facets.properties.property.publishing;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishPropertiesConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PropertyExecutionDispatchConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
-import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacet;
+import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacetAbstract;
 
-public class PublishedPropertyFacetForPropertyAnnotation extends PublishedPropertyFacetAbstract {
+public class ExecutionDispatchPropertyFacetForPropertyAnnotation 
+extends ExecutionDispatchPropertyFacetAbstract {
 
-    public static PublishedPropertyFacet create(
+    public static ExecutionDispatchPropertyFacet create(
             final Optional<Property> propertyIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final PublishPropertiesConfiguration setting = configuration.getApplib().getAnnotation().getProperty().getPublishing();
+        final PropertyExecutionDispatchConfiguration executionDispatchSetting = 
+                configuration.getApplib().getAnnotation().getProperty().getExecutionDispatch();
 
         return propertyIfAny
-                .map(Property::publishing)
-                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+                .map(Property::executionDispatch)
+                .filter(publishing -> publishing != ExecutionDispatch.NOT_SPECIFIED)
                 .map(publishing -> {
 
                     switch (publishing) {
                     case AS_CONFIGURED:
-                        switch (setting) {
+                        switch (executionDispatchSetting) {
                         case NONE:
                             return null;
                         default:
-                            return (PublishedPropertyFacet)
+                            return (ExecutionDispatchPropertyFacet)
                                     new PublishedPropertyFacetForPropertyAnnotationAsConfigured(holder);
                         }
                     case DISABLED:
                         return null;
                     case ENABLED:
-                        return new PublishedPropertyFacetForPropertyAnnotation(holder);
+                        return new ExecutionDispatchPropertyFacetForPropertyAnnotation(holder);
                     default:
                     }
                     return null;
 
                 })
                 .orElseGet(() -> {
-                    switch (setting) {
+                    switch (executionDispatchSetting) {
                     case NONE:
                         return null;
                     default:
-                        return new PublishedPropertyFacetFromConfiguration(holder);
+                        return new ExecutionDispatchPropertyFacetFromConfiguration(holder);
                     }
                 });
 
     }
 
-    public PublishedPropertyFacetForPropertyAnnotation(final FacetHolder holder) {
+    public ExecutionDispatchPropertyFacetForPropertyAnnotation(final FacetHolder holder) {
         super(holder);
     }
 

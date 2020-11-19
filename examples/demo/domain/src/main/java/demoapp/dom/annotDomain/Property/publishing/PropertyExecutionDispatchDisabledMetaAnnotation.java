@@ -16,23 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package demoapp.dom.annotDomain.Property.publishing;
 
-package org.apache.isis.core.metamodel.facets.properties.publish;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 
-public abstract class PublishedPropertyFacetAbstract 
-extends FacetAbstract
-implements PublishedPropertyFacet {
+//tag::class[]
+@Property(executionDispatch = ExecutionDispatch.DISABLED)         // <.>
+@Inherited
+@Target({
+        ElementType.METHOD, ElementType.FIELD       // <.>
+})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PropertyExecutionDispatchDisabledMetaAnnotation {
 
-    public static Class<? extends Facet> type() {
-        return PublishedPropertyFacet.class;
-    }
-
-    public PublishedPropertyFacetAbstract(final FacetHolder holder) {
-        super(  type(),
-                holder);
-    }
 }
+//end::class[]

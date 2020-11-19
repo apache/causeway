@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.config.metamodel.facets;
 
-public enum PublishPropertiesConfiguration {
+public enum PropertyExecutionDispatchConfiguration {
     ALL,
     NONE;
 }

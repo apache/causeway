@@ -20,12 +20,12 @@ package demoapp.dom.annotDomain.Action.publishing;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
 @Action(
-    publishing = Publishing.ENABLED         // <.>
+    publishing = ExecutionDispatch.ENABLED         // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "property"
     , associateWithSequence = "2"

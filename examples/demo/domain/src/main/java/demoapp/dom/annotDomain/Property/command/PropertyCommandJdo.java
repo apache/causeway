@@ -23,16 +23,13 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.CommandDispatch;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -55,7 +52,7 @@ public class PropertyCommandJdo
 
     public PropertyCommandJdo(String initialValue) {
         this.property = initialValue;
-        this.propertyCommandDisabled = initialValue;
+        this.propertyCommandDispatchDisabled = initialValue;
         this.propertyMetaAnnotated = initialValue;
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
@@ -66,7 +63,7 @@ public class PropertyCommandJdo
 
 //tag::annotation[]
     @Property(
-        command = CommandReification.ENABLED             // <.>
+        commandDispatch = CommandDispatch.ENABLED             // <.>
     )
     @PropertyLayout(
         describedAs = "@Property(command = ENABLED)"
@@ -78,18 +75,18 @@ public class PropertyCommandJdo
 
 //tag::annotation-2[]
     @Property(
-        command = CommandReification.DISABLED           // <.>
+        commandDispatch = CommandDispatch.DISABLED           // <.>
     )
     @PropertyLayout(
         describedAs = "@Property(command = DISABLED)"
     )
     @MemberOrder(name = "annotation", sequence = "2")
     @Getter @Setter
-    private String propertyCommandDisabled;
+    private String propertyCommandDispatchDisabled;
 //end::annotation-2[]
 
 //tag::meta-annotation[]
-    @PropertyCommandEnabledMetaAnnotation               // <.>
+    @PropertyCommandDispatchEnabledMetaAnnotation               // <.>
     @PropertyLayout(
             describedAs = "@PropertyCommandEnabledMetaAnnotation"
     )
@@ -99,8 +96,8 @@ public class PropertyCommandJdo
 //end::meta-annotation[]
 
 //tag::meta-annotation-overridden[]
-    @PropertyCommandDisabledMetaAnnotation              // <.>
-    @Property(command = CommandReification.ENABLED)     // <.>
+    @PropertyCommandDispatchDisabledMetaAnnotation              // <.>
+    @Property(commandDispatch = CommandDispatch.ENABLED)     // <.>
     @PropertyLayout(
         describedAs =
             "@PropertyCommandDisabledMetaAnnotation " +

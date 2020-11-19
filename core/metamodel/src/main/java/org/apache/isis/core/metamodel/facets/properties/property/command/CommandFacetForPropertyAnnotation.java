@@ -20,19 +20,16 @@ package org.apache.isis.core.metamodel.facets.properties.property.command;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.CommandDispatch;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PropertyCommandDispatchConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
-
-import lombok.val;
 
 public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
@@ -42,23 +39,24 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
 
-        final CommandPropertiesConfiguration setting = configuration.getApplib().getAnnotation().getProperty().getCommand();
+        final PropertyCommandDispatchConfiguration commandDispatchSetting = 
+                configuration.getApplib().getAnnotation().getProperty().getCommandDispatch();
 
         return propertyIfAny
-                .filter(property -> property.command() != CommandReification.NOT_SPECIFIED)
+                .filter(property -> property.commandDispatch() != CommandDispatch.NOT_SPECIFIED)
                 .map(property -> {
-                    CommandReification commandReification = property.command();
+                    CommandDispatch commandReification = property.commandDispatch();
 
                     final Class<? extends CommandDtoProcessor> processorClass =
                             property.commandDtoProcessor();
                     final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
                     if(processor != null) {
-                        commandReification = CommandReification.ENABLED;
+                        commandReification = CommandDispatch.ENABLED;
                     }
                     switch (commandReification) {
                     case AS_CONFIGURED:
-                        switch (setting) {
+                        switch (commandDispatchSetting) {
                         case NONE:
                             return null;
                         default:
@@ -73,7 +71,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
                     throw new IllegalStateException("command '" + commandReification + "' not recognised");
                 })
                 .orElseGet(() -> {
-                    switch (setting) {
+                    switch (commandDispatchSetting) {
                     case NONE:
                         return null;
                     default:

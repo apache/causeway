@@ -18,30 +18,38 @@
  */
 package org.apache.isis.applib.annotation;
 
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.spi.CommandListener;
+
 /**
- * The available policies as to whether action invocations are reified into commands.
+ * The available policies as to whether action invocations and property edits, 
+ * captured as {@link Command}s, should
+ * be dispatched to {@link CommandListener}s.
  */
 // tag::refguide[]
-public enum CommandReification {
+public enum CommandDispatch {
     // end::refguide[]
     /**
-     * Whether the action should be handled as a command as per the default command configured in <tt>applicationp.properties</tt>.
+     * Dispatching of {@link Command}s (either action invocations or property edits) 
+     * for this object should be as per the default dispatching policy 
+     * configured in <tt>application.properties</tt>.
      *
      * <p>
-     *     If no command policy is configured, then the action is <i>not</i> treated as a command.
+     *     If no dispatching policy is configured, then dispatching is disabled.
      * </p>
      */
     // tag::refguide[]
     AS_CONFIGURED,
     // end::refguide[]
     /**
-     * Handle the action as a command, irrespective of any configuration settings.
+     * Do dispatch {@link Command}s (either action invocations or property edits) for this object.
      */
     // tag::refguide[]
     ENABLED,
     // end::refguide[]
     /**
-     * Do not handle the action as a command, irrespective of any configuration settings.
+     * Do <b>not</b> dispatch {@link Command}s (either action invocations or property edits)
+     * for this object (even if otherwise configured to enable dispatching).
      */
     // tag::refguide[]
     DISABLED,

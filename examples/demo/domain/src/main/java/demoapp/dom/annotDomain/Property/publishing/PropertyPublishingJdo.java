@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -63,7 +63,7 @@ public class PropertyPublishingJdo
 
 //tag::annotation[]
     @Property(
-        publishing = Publishing.ENABLED             // <.>
+        executionDispatch = ExecutionDispatch.ENABLED             // <.>
     )
     @PropertyLayout(
         describedAs =
@@ -75,7 +75,7 @@ public class PropertyPublishingJdo
 //end::annotation[]
 
 //tag::meta-annotated[]
-    @PropertyPublishingEnabledMetaAnnotation                // <.>
+    @PropertyExecutionDispatchEnabledMetaAnnotation                // <.>
     @Property()
     @PropertyLayout(
         describedAs = "@PropertyPublishingEnabledMetaAnnotation"
@@ -87,9 +87,9 @@ public class PropertyPublishingJdo
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @PropertyPublishingDisabledMetaAnnotation   // <.>
+    @PropertyExecutionDispatchDisabledMetaAnnotation   // <.>
     @Property(
-        publishing = Publishing.ENABLED         // <.>
+        executionDispatch = ExecutionDispatch.ENABLED         // <.>
     )
     @PropertyLayout(
         describedAs =

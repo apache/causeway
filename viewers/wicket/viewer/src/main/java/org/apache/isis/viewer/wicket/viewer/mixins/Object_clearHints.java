@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.CommandDispatch;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -36,7 +36,7 @@ import lombok.val;
 @Action(
         domainEvent = Object_clearHints.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,
-        command = CommandReification.DISABLED
+        commandDispatch = CommandDispatch.DISABLED
 )
 @ActionLayout(
         contributed = Contributed.AS_ACTION,

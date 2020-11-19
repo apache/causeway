@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;

@@ -28,7 +28,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 @Discriminator(value="Book")
 @DomainObject(
         objectType = "testdomain.jdo.Book",
-        publishing=Publishing.ENABLED, 
+        publishing=ExecutionDispatch.ENABLED, 
         auditing = Auditing.ENABLED)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)

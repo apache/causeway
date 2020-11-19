@@ -26,10 +26,10 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 
 //tag::class[]
-@DomainObject(publishing = Publishing.DISABLED)         // <.>
+@DomainObject(publishing = ExecutionDispatch.DISABLED)         // <.>
 @Inherited
 @Target({
         ElementType.TYPE, ElementType.ANNOTATION_TYPE   // <.>

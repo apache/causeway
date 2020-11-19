@@ -24,19 +24,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.CommandDispatch;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@Property(command = CommandReification.ENABLED) // <.>
+@Property(commandDispatch = CommandDispatch.ENABLED) // <.>
 @Inherited
 @Target({
         ElementType.FIELD, ElementType.METHOD   // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PropertyCommandEnabledMetaAnnotation {
+public @interface PropertyCommandDispatchEnabledMetaAnnotation {
 
 }
 //end::class[]

@@ -27,6 +27,10 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publish.ExecutionListener;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.spi.CommandListener;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.spec.Specification;
@@ -50,12 +54,12 @@ public @interface Property {
 
     // end::refguide[]
     /**
-     * Whether the property edit should be reified into a
-     * {@link org.apache.isis.applib.services.command.Command} object.
+     * Whether property edits, captured as {@link Command}s, 
+     * should be dispatched to {@link CommandListener}s.
      */
     // tag::refguide[]
-    CommandReification command()                                // <.>
-            default CommandReification.NOT_SPECIFIED;
+    CommandDispatch commandDispatch()                                // <.>
+            default CommandDispatch.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -209,16 +213,13 @@ public @interface Property {
 
     // end::refguide[]
     /**
-     * Whether the property edit should be published.
-     *
-     * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.ExecutionListener}
-     * or {@link org.apache.isis.applib.services.publish.ExecutionListener} is registered with the framework.
-     * </p>
+     * Whether {@link Interaction.Execution}s 
+     * (triggered property edits), should be dispatched to 
+     * {@link ExecutionListener}s.
      */
     // tag::refguide[]
-    Publishing publishing()                                     // <.>
-            default Publishing.NOT_SPECIFIED;
+    ExecutionDispatch executionDispatch()                                     // <.>
+            default ExecutionDispatch.NOT_SPECIFIED;
 
     // end::refguide[]
     /**

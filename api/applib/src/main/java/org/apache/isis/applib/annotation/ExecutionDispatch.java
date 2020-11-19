@@ -18,18 +18,26 @@
  */
 package org.apache.isis.applib.annotation;
 
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publish.ExecutionListener;
+
 /**
- * The available policies for publishing changes to the properties of the object.
+ * The available policies as to whether {@link Interaction.Execution}s
+ * (triggered either by action invocations or property edits), should
+ * be dispatched to {@link ExecutionListener}s.
  */
 // tag::refguide[]
-public enum Publishing {
+public enum ExecutionDispatch {
 
     // end::refguide[]
     /**
-     * The publishing of the object should be as per the default publishing policy configured in <tt>application.properties</tt>.
+     * Dispatching of 
+     * {@link Interaction.Execution}s (triggered either by action invocations or property edits) 
+     * for this object should be as per the default dispatching policy 
+     * configured in <tt>application.properties</tt>.
      *
      * <p>
-     *     If no publishing policy is configured, then the publishing is disabled.
+     *     If no dispatching policy is configured, then dispatching is disabled.
      * </p>
      */
     // tag::refguide[]
@@ -37,14 +45,17 @@ public enum Publishing {
 
     // end::refguide[]
     /**
-     * Publish changes to this object.
+     * Do dispatch {@link Interaction.Execution}s (triggered either by action invocations or property edits) 
+     * for this object.
      */
     // tag::refguide[]
     ENABLED,
 
     // end::refguide[]
     /**
-     * Do not publish changes to this object (even if otherwise configured to enable publishing).
+     * Do <b>not</b> dispatch {@link Interaction.Execution}s 
+     * (triggered either by action invocations or property edits)
+     * for this object (even if otherwise configured to enable dispatching).
      */
     // tag::refguide[]
     DISABLED,

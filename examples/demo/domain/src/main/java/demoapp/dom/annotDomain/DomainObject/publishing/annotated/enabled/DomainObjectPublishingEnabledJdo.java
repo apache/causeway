@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
@@ -47,7 +47,7 @@ import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo
 @DomainObject(
     nature=Nature.JDO_ENTITY
     , objectType = "demo.DomainObjectPublishingEnabledJdo"
-    , publishing = Publishing.ENABLED                           // <.>
+    , publishing = ExecutionDispatch.ENABLED                           // <.>
     , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(

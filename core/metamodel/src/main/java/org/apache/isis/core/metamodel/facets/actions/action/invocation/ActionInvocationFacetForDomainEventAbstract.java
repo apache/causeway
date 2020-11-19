@@ -160,8 +160,9 @@ implements ImperativeFacet {
         val interactionContext = getInteractionContext();
         val interaction = interactionContext.getInteractionElseFail();
         val command = interaction.getCommand();
-        val commandFacet = getFacetHolder().getFacet(CommandFacet.class);
-        command.updater().setReified(commandFacet != null);
+        
+        command.updater().setDispatchingEnabled(
+                CommandFacet.isDispatchingEnabled(getFacetHolder()));
 
         val actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
         log.debug("about to invoke action {}", actionId);

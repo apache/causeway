@@ -67,12 +67,12 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PropertyCommandDispatchConfiguration;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishPropertiesConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PropertyExecutionDispatchConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
@@ -660,7 +660,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Action#command()}.
+                 *  {@link org.apache.isis.applib.annotation.Action#commandDispatch()}.
                  * </p>
                  */
                 private CommandActionsConfiguration command = CommandActionsConfiguration.NONE;
@@ -841,10 +841,10 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Property#command()}.
+                 *  {@link org.apache.isis.applib.annotation.Property#commandDispatch()}.
                  * </p>
                  */
-                private CommandPropertiesConfiguration command = CommandPropertiesConfiguration.NONE;
+                private PropertyCommandDispatchConfiguration commandDispatch = PropertyCommandDispatchConfiguration.NONE;
 
                 /**
                  * The default for whether property edits should be sent through to the
@@ -862,7 +862,7 @@ public class IsisConfiguration {
                  *  @link org.apache.isis.applib.annotation.Property#publishing()}.
                  * </p>
                  */
-                private PublishPropertiesConfiguration publishing = PublishPropertiesConfiguration.NONE;
+                private PropertyExecutionDispatchConfiguration executionDispatch = PropertyExecutionDispatchConfiguration.NONE;
 
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data

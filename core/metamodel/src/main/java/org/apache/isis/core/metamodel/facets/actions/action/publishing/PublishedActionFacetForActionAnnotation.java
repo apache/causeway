@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,7 +41,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
 
         return actionsIfAny
                 .map(Action::publishing)
-                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+                .filter(publishing -> publishing != ExecutionDispatch.NOT_SPECIFIED)
                 .map(publishing -> {
                     switch (publishing) {
                     case AS_CONFIGURED:

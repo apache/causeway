@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.actions.command;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * Indicates that details of the action should be available as a
@@ -34,4 +38,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 public interface CommandFacet extends Facet {
 
     public CommandDtoProcessor getProcessor();
+
+    public static boolean isDispatchingEnabled(final @NonNull FacetHolder facetHolder) {
+        
+        val commandFacet = facetHolder.getFacet(CommandFacet.class);
+        if(commandFacet!=null) {
+            return true;
+        }
+        return false;
+    }
 }

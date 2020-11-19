@@ -20,8 +20,8 @@ package demoapp.dom.annotDomain.Action.command;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @ActionCommandDisabledMetaAnnotation        // <.>
 @Action(
-    command = CommandReification.ENABLED    // <.>
+    commandDispatch = CommandDispatch.ENABLED    // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyMetaAnnotatedOverridden"
     , associateWithSequence = "2"

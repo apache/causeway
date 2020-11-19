@@ -16,14 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package demoapp.dom.annotDomain.Property.command;
 
-package org.apache.isis.core.metamodel.facets.properties.publish;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Property;
 
-/**
- * Indicates that the editing of the property should be published.
- */
-public interface PublishedPropertyFacet extends Facet {
+//tag::class[]
+@Property(commandDispatch = CommandDispatch.DISABLED)    // <.>
+@Inherited
+@Target({
+        ElementType.FIELD, ElementType.METHOD       // <.>
+})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PropertyCommandDispatchDisabledMetaAnnotation {
 
 }
+//end::class[]

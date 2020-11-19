@@ -25,11 +25,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 
 //tag::class[]
-@Action(command = CommandReification.ENABLED)   // <.>
+@Action(commandDispatch = CommandDispatch.ENABLED)   // <.>
 @Inherited
 @Target({
         ElementType.TYPE, ElementType.METHOD    // <.>

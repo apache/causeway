@@ -16,10 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.config.metamodel.facets;
 
-public enum CommandPropertiesConfiguration {
-    ALL,
-    NONE;
+package org.apache.isis.core.metamodel.facets.properties.property.publishing;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacetAbstract;
+
+public class ExecutionDispatchPropertyFacetFromConfiguration 
+extends ExecutionDispatchPropertyFacetAbstract {
+
+    public ExecutionDispatchPropertyFacetFromConfiguration(final FacetHolder holder) {
+        super(holder);
+    }
 
 }

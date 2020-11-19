@@ -23,7 +23,7 @@ import java.util.Set;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class ProperMemberSupport_action2 {
     private final ProperMemberSupport holder;
 
     // proper mix-in action
-    @Action(publishing = Publishing.ENABLED) 
+    @Action(publishing = ExecutionDispatch.ENABLED) 
     public ProperMemberSupport $$(String p0, String p1) {
         return holder;
     }

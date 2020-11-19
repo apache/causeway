@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
@@ -44,7 +44,7 @@ import demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.Domai
 @DomainObject(
         nature=Nature.JDO_ENTITY
         , objectType = "demo.DomainObjectPublishingEnabledMetaAnnotOverriddenJdo"
-        , publishing = Publishing.ENABLED                       // <.>
+        , publishing = ExecutionDispatch.ENABLED                       // <.>
         , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(

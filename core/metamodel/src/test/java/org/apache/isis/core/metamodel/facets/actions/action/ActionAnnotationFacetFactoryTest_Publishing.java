@@ -152,7 +152,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         class Customer {
-            @Action(publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
+            @Action(publishing = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -176,7 +176,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
+                    publishing = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED
                     )
             public void someAction() {
             }
@@ -203,7 +203,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         class Customer {
-            @Action(publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
+            @Action(publishing = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -218,7 +218,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToNone_thenNone() {
 
         class Customer {
-            @Action(publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
+            @Action(publishing = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -241,7 +241,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
+                    publishing = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED
                     )
             public void someAction() {
             }
@@ -267,7 +267,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    publishing = org.apache.isis.applib.annotation.Publishing.ENABLED
+                    publishing = org.apache.isis.applib.annotation.ExecutionDispatch.ENABLED
                     )
             public void someAction() {
             }
@@ -292,7 +292,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    publishing = org.apache.isis.applib.annotation.Publishing.DISABLED
+                    publishing = org.apache.isis.applib.annotation.ExecutionDispatch.DISABLED
                     )
             public void someAction() {
             }

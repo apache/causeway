@@ -265,11 +265,12 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
 
 
     /**
-     * Whether this command has been reified
+     * Whether this command has been enabled for dispatching, 
+     * that is {@link CommandListener}s will be notified when this Command completes.
      */
     // tag::refguide[]
     @Getter
-    private boolean reified;
+    private boolean dispatchingEnabled;
     // end::refguide[]
 
     private final Updater UPDATER = new Updater();
@@ -358,14 +359,9 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
-         *
-         * <p>
-         * Hint that this {@link Command} has resulted in a change of state to the system.
-         * Implementations can use this to persist the command, for example.
-         * </p>
          */
-        public void setReified(boolean reified) {
-            Command.this.reified = reified;
+        public void setDispatchingEnabled(boolean dispatchingEnabled) {
+            Command.this.dispatchingEnabled = dispatchingEnabled;
         }
 
     };

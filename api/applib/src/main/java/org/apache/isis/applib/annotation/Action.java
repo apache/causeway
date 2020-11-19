@@ -26,6 +26,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.spi.CommandListener;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
@@ -89,11 +91,12 @@ public @interface Action {
 
     // end::refguide[]
     /**
-     * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
+     * Whether action invocations, captured as {@link Command}s, 
+     * should be dispatched to {@link CommandListener}s.
      */
     // tag::refguide[]
-    CommandReification command()                                    // <.>
-            default CommandReification.NOT_SPECIFIED;
+    CommandDispatch commandDispatch()                                    // <.>
+            default CommandDispatch.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -163,8 +166,8 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    Publishing publishing()                                         // <.>
-            default Publishing.NOT_SPECIFIED;
+    ExecutionDispatch publishing()                                         // <.>
+            default ExecutionDispatch.NOT_SPECIFIED;
 
     // end::refguide[]
     /**

@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
+import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -259,8 +259,9 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         if( command==null ) {
             return head.getTarget();
         }
-        val commandFacet = getFacetHolder().getFacet(CommandFacet.class);
-        command.updater().setReified(commandFacet != null);
+        
+        command.updater().setDispatchingEnabled(
+                CommandFacet.isDispatchingEnabled(getFacetHolder()));
 
         val propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
 
@@ -290,7 +291,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         }
 
         // publish (if not a contributed association, query-only mixin)
-        val publishedPropertyFacet = getIdentified().getFacet(PublishedPropertyFacet.class);
+        val publishedPropertyFacet = getIdentified().getFacet(ExecutionDispatchPropertyFacet.class);
         if (publishedPropertyFacet != null) {
             getExecutionDispatcher().dispatchPropertyChangeExecution(priorExecution);
         }

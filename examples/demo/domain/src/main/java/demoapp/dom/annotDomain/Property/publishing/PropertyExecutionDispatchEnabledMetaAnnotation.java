@@ -24,17 +24,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@Property(publishing = Publishing.DISABLED)         // <.>
+@Property(executionDispatch = ExecutionDispatch.ENABLED)          // <.>
 @Inherited
 @Target({
         ElementType.METHOD, ElementType.FIELD       // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PropertyPublishingDisabledMetaAnnotation {
+public @interface PropertyExecutionDispatchEnabledMetaAnnotation {
 
 }
 //end::class[]

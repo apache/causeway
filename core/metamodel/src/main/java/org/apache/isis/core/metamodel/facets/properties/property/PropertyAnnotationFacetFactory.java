@@ -55,7 +55,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.publishing.PublishedPropertyFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.publishing.ExecutionDispatchPropertyFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -280,7 +280,7 @@ implements MetaModelRefiner {
         }
 
         // check for @Property(publishing=...)
-        val facet = PublishedPropertyFacetForPropertyAnnotation
+        val facet = ExecutionDispatchPropertyFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder);
 
         super.addFacet(facet);

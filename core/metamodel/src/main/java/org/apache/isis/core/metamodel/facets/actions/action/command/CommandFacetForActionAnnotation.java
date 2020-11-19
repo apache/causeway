@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.command;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.CommandDispatch;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -42,15 +42,15 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
         final CommandActionsConfiguration setting = CommandActionsConfiguration.from(configuration);
 
         return actionsIfAny
-                .filter(action -> action.command() != CommandReification.NOT_SPECIFIED)
+                .filter(action -> action.commandDispatch() != CommandDispatch.NOT_SPECIFIED)
                 .map(action -> {
 
-                    CommandReification command = action.command();
+                    CommandDispatch command = action.commandDispatch();
                     final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
                     final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
                     if(processor != null) {
-                        command = CommandReification.ENABLED;
+                        command = CommandDispatch.ENABLED;
                     }
 
                     switch (command) {

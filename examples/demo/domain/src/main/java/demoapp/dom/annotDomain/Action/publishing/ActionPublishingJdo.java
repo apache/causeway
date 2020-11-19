@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.Getter;
@@ -81,7 +81,7 @@ public class ActionPublishingJdo
 
 //tag::annotation[]
     @Action(
-        publishing = Publishing.ENABLED         // <.>
+        publishing = ExecutionDispatch.ENABLED         // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
         , associateWithSequence = "1"
@@ -123,7 +123,7 @@ public class ActionPublishingJdo
 //tag::meta-annotation-overridden[]
     @ActionPublishingDisabledMetaAnnotation     // <.>
     @Action(
-        publishing = Publishing.ENABLED         // <.>
+        publishing = ExecutionDispatch.ENABLED         // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotatedOverridden"
         , associateWithSequence = "1"

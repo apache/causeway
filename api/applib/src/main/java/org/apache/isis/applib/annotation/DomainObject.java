@@ -178,8 +178,8 @@ public @interface DomainObject {
      * </p>
      */
     // tag::refguide[]
-    Publishing publishing()                         // <.>
-            default Publishing.NOT_SPECIFIED;
+    ExecutionDispatch publishing()                         // <.>
+            default ExecutionDispatch.NOT_SPECIFIED;
 
     // end::refguide[]
 
