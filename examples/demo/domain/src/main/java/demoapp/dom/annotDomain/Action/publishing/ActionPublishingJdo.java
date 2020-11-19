@@ -81,7 +81,7 @@ public class ActionPublishingJdo
 
 //tag::annotation[]
     @Action(
-        publishing = ExecutionDispatch.ENABLED         // <.>
+        executionDispatch = ExecutionDispatch.ENABLED         // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
         , associateWithSequence = "1"
@@ -123,7 +123,7 @@ public class ActionPublishingJdo
 //tag::meta-annotation-overridden[]
     @ActionPublishingDisabledMetaAnnotation     // <.>
     @Action(
-        publishing = ExecutionDispatch.ENABLED         // <.>
+        executionDispatch = ExecutionDispatch.ENABLED         // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotatedOverridden"
         , associateWithSequence = "1"

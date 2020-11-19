@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 //tag::class[]
 @ActionPublishingDisabledMetaAnnotation     // <.>
 @Action(
-    publishing = ExecutionDispatch.ENABLED         // <.>
+    executionDispatch = ExecutionDispatch.ENABLED         // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyMetaAnnotatedOverridden"
     , associateWithSequence = "2"

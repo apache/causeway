@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
 @Action(
-    publishing = ExecutionDispatch.ENABLED         // <.>
+    executionDispatch = ExecutionDispatch.ENABLED         // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "property"
     , associateWithSequence = "2"

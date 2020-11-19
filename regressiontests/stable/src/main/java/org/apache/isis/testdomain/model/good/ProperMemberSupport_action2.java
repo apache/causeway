@@ -34,7 +34,7 @@ public class ProperMemberSupport_action2 {
     private final ProperMemberSupport holder;
 
     // proper mix-in action
-    @Action(publishing = ExecutionDispatch.ENABLED) 
+    @Action(executionDispatch = ExecutionDispatch.ENABLED) 
     public ProperMemberSupport $$(String p0, String p1) {
         return holder;
     }

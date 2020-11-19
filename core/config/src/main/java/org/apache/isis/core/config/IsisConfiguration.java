@@ -725,7 +725,7 @@ public class IsisConfiguration {
                  * </p>
                  *
                  * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#publishing()}.
+                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionDispatch()}.
                  * </p>
                  */
                 private PublishActionsConfiguration publishing = PublishActionsConfiguration.NONE;

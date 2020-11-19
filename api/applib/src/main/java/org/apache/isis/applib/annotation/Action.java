@@ -31,6 +31,8 @@ import org.apache.isis.applib.services.command.spi.CommandListener;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publish.ExecutionListener;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
@@ -158,15 +160,11 @@ public @interface Action {
 
     // end::refguide[]
     /**
-     * Whether the action invocation should be published.
-     *
-     * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.ExecutionListener}
-     * or {@link org.apache.isis.applib.services.publish.ExecutionListener} is registered with the framework.
-     * </p>
+     * Whether {@link Interaction.Execution}s (triggered by action invocations), should
+     * be dispatched to {@link ExecutionListener}s.
      */
     // tag::refguide[]
-    ExecutionDispatch publishing()                                         // <.>
+    ExecutionDispatch executionDispatch()                                         // <.>
             default ExecutionDispatch.NOT_SPECIFIED;
 
     // end::refguide[]

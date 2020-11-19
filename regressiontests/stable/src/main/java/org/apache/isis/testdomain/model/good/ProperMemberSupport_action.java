@@ -28,7 +28,7 @@ import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(publishing = ExecutionDispatch.ENABLED) 
+@Action(executionDispatch = ExecutionDispatch.ENABLED) 
 @ActionLayout(named = "foo", describedAs = "bar")  
 @RequiredArgsConstructor
 public class ProperMemberSupport_action {

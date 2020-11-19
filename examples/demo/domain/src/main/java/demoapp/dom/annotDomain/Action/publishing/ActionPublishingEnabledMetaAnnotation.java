@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.ExecutionDispatch;
 
 //tag::class[]
-@Action(publishing = ExecutionDispatch.ENABLED)        // <.>
+@Action(executionDispatch = ExecutionDispatch.ENABLED)        // <.>
 @Inherited
 @Target({
         ElementType.TYPE, ElementType.METHOD    // <.>

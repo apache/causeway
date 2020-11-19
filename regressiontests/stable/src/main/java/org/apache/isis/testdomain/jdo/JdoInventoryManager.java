@@ -38,7 +38,7 @@ public class JdoInventoryManager {
 
     public static class UpdateProductPriceEvent extends ActionDomainEvent {}
 
-    @Action(domainEvent = UpdateProductPriceEvent.class, publishing = ExecutionDispatch.ENABLED)
+    @Action(domainEvent = UpdateProductPriceEvent.class, executionDispatch = ExecutionDispatch.ENABLED)
     public JdoProduct updateProductPrice(JdoProduct product, double newPrice) {
         product.setPrice(newPrice);
         return product;

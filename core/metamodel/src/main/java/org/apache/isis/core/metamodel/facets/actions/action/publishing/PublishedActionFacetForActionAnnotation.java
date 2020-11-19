@@ -40,7 +40,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
         final PublishActionsConfiguration setting = PublishActionsConfiguration.from(configuration);
 
         return actionsIfAny
-                .map(Action::publishing)
+                .map(Action::executionDispatch)
                 .filter(publishing -> publishing != ExecutionDispatch.NOT_SPECIFIED)
                 .map(publishing -> {
                     switch (publishing) {
