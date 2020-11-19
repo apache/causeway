@@ -160,16 +160,22 @@ public class Configuration_headless {
     @Bean @Singleton
     public MetricsService metricsService() {
         return new MetricsService() {
-            
+
             @Override
-            public int numberObjectsLoaded() {
+            public int numberEntitiesLoaded() {
                 return 0;
             }
-            
+
             @Override
-            public int numberObjectsDirtied() {
+            public int numberEntitiesDirtied() {
                 return 0;
             }
+
+            @Override
+            public int numberEntityPropertiesModified() {
+                return 0;
+            }
+
         };
     }
 

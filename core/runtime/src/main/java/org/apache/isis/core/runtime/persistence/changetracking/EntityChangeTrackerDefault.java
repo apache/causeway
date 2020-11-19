@@ -157,10 +157,6 @@ implements
         return changedObjectPropertiesRef.get();
     }
 
-    int numberObjectPropertiesModified() {
-        return getEntityAuditEntries().size();
-    }
-
     private boolean shouldIgnore(final @NonNull ManagedObject adapter) {
         val spec = adapter.getSpecification();
         return !spec.isEntity();
@@ -195,9 +191,13 @@ implements
         val command = currentInteraction().getCommand();
         command.updater().setSystemStateChanged(
                 command.isSystemStateChanged() 
-                || numberObjectsDirtied() > 0);
+                || numberEntitiesDirtied() > 0);
     }
 
+    @Override
+    public ChangingEntities getChangingEntities(ClockService clockService, UserService userService) {
+        return ChangingEntitiesFactory.of(clockService, userService).createChangingEntities(this);
+    }
     
     Interaction currentInteraction() {
         return interactionContextProvider.get().getInteractionElseFail();
@@ -251,14 +251,12 @@ implements
             final ManagedObject entity, 
             final Function<AdapterAndProperty, PreAndPostValues> pre) {
         
-        if(!AuditableFacet.isAuditingEnabled(entity.getSpecification())){
-            return; // don't enlist if entity auditing is disabled
-        }
-
         if(changedObjectPropertiesRef.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
+        
+        val auditDispatchEnabled = AuditableFacet.isAuditingEnabled(entity.getSpecification());
 
         log.debug("enlist entity's property changes for auditing {}", entity);
 
@@ -266,10 +264,11 @@ implements
         .streamAssociations(Contributed.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
         .filter(property->!property.isNotPersisted())
-        .map(property->AdapterAndProperty.of(entity, property))
+        .map(property->AdapterAndProperty.of(entity, property, auditDispatchEnabled))
         .filter(aap->!enlistedEntityPropertiesForAuditing.containsKey(aap)) // already enlisted, so ignore
         .forEach(aap->{
             enlistedEntityPropertiesForAuditing.put(aap, pre.apply(aap));
+            numberEntityPropertiesModified.increment();
         });
     }
 
@@ -281,6 +280,7 @@ implements
 
         val postValues = enlistedEntityPropertiesForAuditing.entrySet().stream()
                 .peek(this::updatePostOn) // set post values of audits, which have been left empty up to now
+                .filter(AdapterAndProperty::isAuditDispatchEnabled)
                 .filter(PreAndPostValues::shouldAudit)
                 .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
                 .collect(_Sets.toUnmodifiable());
@@ -307,13 +307,18 @@ implements
     // -- METRICS SERVICE
     
     @Override
-    public int numberObjectsLoaded() {
-        return Math.toIntExact(numberLoaded.longValue());
+    public int numberEntitiesLoaded() {
+        return Math.toIntExact(numberEntitiesLoaded.longValue());
     }
     
     @Override
-    public int numberObjectsDirtied() {
+    public int numberEntitiesDirtied() {
         return changeKindByEnlistedAdapter.size();
+    }
+    
+    @Override
+    public int numberEntityPropertiesModified() {
+        return Math.toIntExact(numberEntityPropertiesModified.longValue());
     }
 
     // -- ENTITY CHANGE TRACKING
@@ -368,11 +373,12 @@ implements
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
     }
     
-    private final LongAdder numberLoaded = new LongAdder();
+    private final LongAdder numberEntitiesLoaded = new LongAdder();
+    private final LongAdder numberEntityPropertiesModified = new LongAdder();
     
     @Override
     public void incrementLoaded() {
-        numberLoaded.increment();
+        numberEntitiesLoaded.increment();
     }
 
     //  -- HELPER
@@ -400,9 +406,6 @@ implements
         }
     }
 
-    @Override
-    public ChangingEntities getChangingEntities(ClockService clockService, UserService userService) {
-        return ChangingEntitiesFactory.of(clockService, userService).createChangingEntities(this);
-    }
+
 
 }

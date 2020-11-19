@@ -58,8 +58,8 @@ class ChangingEntitiesFactory {
 
         val changingEntities = newChangingEntities(
                         entityChangeTracker.currentInteraction(),
-                        entityChangeTracker.numberObjectsLoaded(), 
-                        entityChangeTracker.numberObjectPropertiesModified(),
+                        entityChangeTracker.numberEntitiesLoaded(), 
+                        entityChangeTracker.numberEntityPropertiesModified(),
                         changeKindByPublishedAdapter);
         
         return changingEntities;
@@ -69,8 +69,8 @@ class ChangingEntitiesFactory {
     
     private ChangingEntities newChangingEntities(
             final Interaction interaction,
-            final int numberLoaded,
-            final int numberObjectPropertiesModified,
+            final int numberEntitiesLoaded,
+            final int numberEntityPropertiesModified,
             final Map<ManagedObject, EntityChangeKind> changeKindByPublishedAdapter) {
 
         val uniqueId = interaction.getUniqueId();
@@ -81,7 +81,9 @@ class ChangingEntitiesFactory {
         return new SimpleChangingEntities(
                     uniqueId, nextEventSequence,
                     userName, timestamp,
-                    numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
+                    numberEntitiesLoaded, 
+                    numberEntityPropertiesModified, 
+                    changeKindByPublishedAdapter);
     }
 
     private boolean isPublishingEnabled(ManagedObject objectAdapter) {

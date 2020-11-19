@@ -26,14 +26,14 @@ public interface MetricsService {
 
     // end::refguide[]
     /**
-     * The number of objects that have, so far in this request, been loaded from the database.
+     * The number of entities that have, so far in this request, been loaded from the database.
      * <p>
      * Corresponds to the number of times that <code>javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)</code> (or equivalent) is fired.
      * <p>
      * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteractionIfAny()}).
      */
     // tag::refguide[]
-    int numberObjectsLoaded();      // <.>
+    int numberEntitiesLoaded();      // <.>
 
     // end::refguide[]
     /**
@@ -45,7 +45,9 @@ public interface MetricsService {
      * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteractionIfAny()}).
      */
     // tag::refguide[]
-    int numberObjectsDirtied();     // <.>
+    int numberEntitiesDirtied();     // <.>
+    
+    int numberEntityPropertiesModified();
 
 }
 // end::refguide[]

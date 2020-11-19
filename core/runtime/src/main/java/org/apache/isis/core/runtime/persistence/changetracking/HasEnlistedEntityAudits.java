@@ -20,7 +20,6 @@ package org.apache.isis.core.runtime.persistence.changetracking;
 
 import java.util.Set;
 
-//TODO[ISIS-2441] intermediate for refactoring keep?
 public interface HasEnlistedEntityAudits {
 
     Set<AuditEntry> getEntityAuditEntries();

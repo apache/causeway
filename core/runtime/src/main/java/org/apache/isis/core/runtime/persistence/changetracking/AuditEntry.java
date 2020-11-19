@@ -26,7 +26,7 @@ import lombok.experimental.PackagePrivate;
 @PackagePrivate
 final class AuditEntry {
 
-    @NonNull private final AdapterAndProperty adapterAndProperty;
-    @NonNull private final PreAndPostValues preAndPostValues;
+    private final @NonNull AdapterAndProperty adapterAndProperty;
+    private final @NonNull PreAndPostValues preAndPostValues;
     
 }

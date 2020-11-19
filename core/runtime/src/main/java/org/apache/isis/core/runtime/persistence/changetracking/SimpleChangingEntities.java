@@ -55,8 +55,8 @@ class SimpleChangingEntities implements ChangingEntities, RepresentsInteractionM
     private final int sequence;
     private final String userName;
     private final Timestamp completedAt;
-    private final int numberLoaded;
-    private final int numberObjectPropertiesModified;
+    private final int numberEntitiesLoaded;
+    private final int numberEntityPropertiesModified;
     private final Map<ManagedObject, EntityChangeKind> changesByAdapter;
 
     public SimpleChangingEntities(
@@ -64,16 +64,16 @@ class SimpleChangingEntities implements ChangingEntities, RepresentsInteractionM
             final int sequence,
             final @NonNull String userName,
             final @NonNull Timestamp completedAt,
-            final int numberLoaded,
-            final int numberObjectPropertiesModified,
+            final int numberEntitiesLoaded,
+            final int numberEntityPropertiesModified,
             final @NonNull Map<ManagedObject, EntityChangeKind> changesByAdapter) {
 
         this.transactionUuid = transactionUuid;
         this.sequence = sequence;
         this.userName = userName;
         this.completedAt = completedAt;
-        this.numberLoaded = numberLoaded;
-        this.numberObjectPropertiesModified = numberObjectPropertiesModified;
+        this.numberEntitiesLoaded = numberEntitiesLoaded;
+        this.numberEntityPropertiesModified = numberEntityPropertiesModified;
         this.changesByAdapter = changesByAdapter;
     }
 
@@ -125,7 +125,7 @@ class SimpleChangingEntities implements ChangingEntities, RepresentsInteractionM
 
     @Override
     public int getNumberLoaded() {
-        return numberLoaded;
+        return numberEntitiesLoaded;
     }
 
     @Override
@@ -145,7 +145,7 @@ class SimpleChangingEntities implements ChangingEntities, RepresentsInteractionM
 
     @Override
     public int getNumberPropertiesModified() {
-        return numberObjectPropertiesModified;
+        return numberEntityPropertiesModified;
     }
 
     private int numAdaptersOfKind(final EntityChangeKind kind) {
