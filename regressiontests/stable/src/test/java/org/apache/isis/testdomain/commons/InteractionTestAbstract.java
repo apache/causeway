@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTrackerDefault;
 import org.apache.isis.testdomain.applayer.auditing.EntityAuditListenerForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -56,9 +56,9 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
     @Inject protected IsisInteractionFactory interactionFactory;
     @Inject protected WrapperFactory wrapper;
     @Inject protected KVStoreForTesting kvStoreForTesting;
-    @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsServiceProvider;
+    @Inject private javax.inject.Provider<EntityChangeTrackerDefault> changedObjectsServiceProvider;
     
-    protected ChangedObjectsService getChangedObjectsService() {
+    protected EntityChangeTrackerDefault getChangedObjectsService() {
         return changedObjectsServiceProvider.get();
     }
     

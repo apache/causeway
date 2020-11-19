@@ -17,15 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtimeservices.publish;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
 import org.apache.isis.applib.services.publish.ChangingEntities;
@@ -40,6 +40,7 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.chg.v2.ObjectsDto;
 import org.apache.isis.schema.common.v2.OidsDto;
 
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
 
@@ -47,7 +48,7 @@ import lombok.val;
  * Captures which objects were created, updated or deleted in the course of a transaction.
  */
 @ToString
-public class SimpleChangingEntities implements ChangingEntities, RepresentsInteractionMemberExecution {
+class SimpleChangingEntities implements ChangingEntities, RepresentsInteractionMemberExecution {
 
     // -- constructor, fields
     private UUID transactionUuid;
@@ -56,16 +57,16 @@ public class SimpleChangingEntities implements ChangingEntities, RepresentsInter
     private final Timestamp completedAt;
     private final int numberLoaded;
     private final int numberObjectPropertiesModified;
-    private final Map<ManagedObject, PublishingChangeKind> changesByAdapter;
+    private final Map<ManagedObject, EntityChangeKind> changesByAdapter;
 
     public SimpleChangingEntities(
-            final @lombok.NonNull UUID transactionUuid,
+            final @NonNull UUID transactionUuid,
             final int sequence,
-            final @lombok.NonNull String userName,
-            final @lombok.NonNull Timestamp completedAt,
+            final @NonNull String userName,
+            final @NonNull Timestamp completedAt,
             final int numberLoaded,
             final int numberObjectPropertiesModified,
-            final @lombok.NonNull Map<ManagedObject, PublishingChangeKind> changesByAdapter) {
+            final @NonNull Map<ManagedObject, EntityChangeKind> changesByAdapter) {
 
         this.transactionUuid = transactionUuid;
         this.sequence = sequence;
@@ -129,17 +130,17 @@ public class SimpleChangingEntities implements ChangingEntities, RepresentsInter
 
     @Override
     public int getNumberCreated() {
-        return numAdaptersOfKind(PublishingChangeKind.CREATE);
+        return numAdaptersOfKind(EntityChangeKind.CREATE);
     }
 
     @Override
     public int getNumberUpdated() {
-        return numAdaptersOfKind(PublishingChangeKind.UPDATE);
+        return numAdaptersOfKind(EntityChangeKind.UPDATE);
     }
 
     @Override
     public int getNumberDeleted() {
-        return numAdaptersOfKind(PublishingChangeKind.DELETE);
+        return numAdaptersOfKind(EntityChangeKind.DELETE);
     }
 
     @Override
@@ -147,7 +148,7 @@ public class SimpleChangingEntities implements ChangingEntities, RepresentsInter
         return numberObjectPropertiesModified;
     }
 
-    private int numAdaptersOfKind(final PublishingChangeKind kind) {
+    private int numAdaptersOfKind(final EntityChangeKind kind) {
         return _NullSafe.size(adaptersByChange.get().get(kind));
     }
 
@@ -155,10 +156,10 @@ public class SimpleChangingEntities implements ChangingEntities, RepresentsInter
     /**
      * Lazily calculate the inverse of 'changesByAdapter'
      */
-    private _Lazy<ListMultimap<PublishingChangeKind, ManagedObject>> adaptersByChange = 
+    private _Lazy<ListMultimap<EntityChangeKind, ManagedObject>> adaptersByChange = 
             _Lazy.of(this::initAdaptersByChange);
 
-    private ListMultimap<PublishingChangeKind, ManagedObject> initAdaptersByChange(){
+    private ListMultimap<EntityChangeKind, ManagedObject> initAdaptersByChange(){
         return _Maps.invertToListMultimap(changesByAdapter);
     }
 
@@ -173,9 +174,9 @@ public class SimpleChangingEntities implements ChangingEntities, RepresentsInter
 
         final ObjectsDto objectsDto = new ObjectsDto();
 
-        objectsDto.setCreated(oidsDtoFor(PublishingChangeKind.CREATE));
-        objectsDto.setUpdated(oidsDtoFor(PublishingChangeKind.UPDATE));
-        objectsDto.setDeleted(oidsDtoFor(PublishingChangeKind.DELETE));
+        objectsDto.setCreated(oidsDtoFor(EntityChangeKind.CREATE));
+        objectsDto.setUpdated(oidsDtoFor(EntityChangeKind.UPDATE));
+        objectsDto.setDeleted(oidsDtoFor(EntityChangeKind.DELETE));
 
         objectsDto.setLoaded(getNumberLoaded());
         objectsDto.setPropertiesModified(getNumberPropertiesModified());
@@ -183,7 +184,7 @@ public class SimpleChangingEntities implements ChangingEntities, RepresentsInter
         return objectsDto;
     }
 
-    private OidsDto oidsDtoFor(final PublishingChangeKind kind) {
+    private OidsDto oidsDtoFor(final EntityChangeKind kind) {
         val oidsDto = new OidsDto();
 
         _NullSafe.stream(adaptersByChange.get().get(kind))
@@ -199,7 +200,7 @@ public class SimpleChangingEntities implements ChangingEntities, RepresentsInter
     }
 
     protected ChangesDto newChangesDto(final ObjectsDto objectsDto) {
-        final ChangesDto changesDto = new ChangesDto();
+        val changesDto = new ChangesDto();
 
         changesDto.setMajorVersion("2");
         changesDto.setMinorVersion("0");

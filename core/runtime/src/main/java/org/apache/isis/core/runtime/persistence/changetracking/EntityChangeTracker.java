@@ -23,12 +23,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public interface EntityChangeTracker {
 
     /**
-     * @param adapter
-     * @return whether given {@code entity} has already been enlisted.
-     */
-    boolean isEnlisted(ManagedObject entity);
-    
-    /**
      * Auditing and publishing support: for object stores to enlist an object that has just been created,
      * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value.
      * <p>

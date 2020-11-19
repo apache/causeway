@@ -26,7 +26,7 @@ import lombok.val;
 
 
 /**
- * Corresponds to annotating the class with the {@link Auditable} annotation.
+ * Corresponds to annotating the class with the {@Code @DomainObject(auditing=ENABLED)} annotation.
  */
 public interface AuditableFacet extends Facet {
 
@@ -40,7 +40,7 @@ public interface AuditableFacet extends Facet {
      */
     public boolean isDisabled();
     
-    public static boolean isEnabled(final FacetHolder facetHolder) {
+    public static boolean isAuditingEnabled(final FacetHolder facetHolder) {
         if(facetHolder==null) {
             return false;
         }

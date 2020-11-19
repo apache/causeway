@@ -18,9 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -32,16 +30,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.ChangingEntities;
 import org.apache.isis.applib.services.publish.ChangingEntitiesListener;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.persistence.changetracking.ChangingEntitiesDispatcher;
 import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedChangingEntities;
 
@@ -77,31 +69,12 @@ public class ChangingEntitiesDispatcherDefault implements ChangingEntitiesDispat
             return;
         }
         
-        hasEnlistedChangingEntities.preparePublishing();
-
-        // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
-        // creates further entities which would be enlisted; 
-        // taking copy of the map avoids ConcurrentModificationException
-
-        val changeKindByPublishedAdapter =
-                _Maps.filterKeys(
-                        hasEnlistedChangingEntities.getChangeKindByEnlistedAdapter(),
-                        this::isPublishingEnabled,
-                        HashMap::new);
-
-        if(changeKindByPublishedAdapter.isEmpty()) {
-            return;
-        }
-
-        val changingEntities = newChangingEntities(
-                        hasEnlistedChangingEntities.currentInteraction(),
-                        hasEnlistedChangingEntities.numberObjectsLoaded(), 
-                        hasEnlistedChangingEntities.numberObjectPropertiesModified(),
-                        changeKindByPublishedAdapter);
-
+        val changingEntities = hasEnlistedChangingEntities.getChangingEntities(clockService, userService);
+        
         if(changingEntities == null) {
             return;
         }
+        
         for (val changingEntitiesListener : changingEntitiesListeners) {
             changingEntitiesListener.onEntitiesChanging(changingEntities);
         }
@@ -113,33 +86,7 @@ public class ChangingEntitiesDispatcherDefault implements ChangingEntitiesDispat
         return changingEntitiesListeners.isNotEmpty();
     }
 
-    private ChangingEntities newChangingEntities(
-            final Interaction interaction,
-            final int numberLoaded,
-            final int numberObjectPropertiesModified,
-            final Map<ManagedObject, PublishingChangeKind> changeKindByPublishedAdapter) {
 
-        val uniqueId = interaction.getUniqueId();
-
-        if(uniqueId == null) {
-            // there was no interaction... eg fixture scripts
-            return null;
-        }
-
-        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
-        val userName = userService.getUser().getName();
-        val timestamp = clockService.nowAsJavaSqlTimestamp();
-
-        return new SimpleChangingEntities(
-                    uniqueId, nextEventSequence,
-                    userName, timestamp,
-                    numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
-    }
-
-    private boolean isPublishingEnabled(ManagedObject objectAdapter) {
-        val publishedObjectFacet = objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
-        return publishedObjectFacet != null;
-    }
 
 
 }

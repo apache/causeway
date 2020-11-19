@@ -32,15 +32,18 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.TransactionScopeListener;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
+import org.apache.isis.applib.services.publish.ChangingEntities;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -67,6 +70,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
@@ -74,13 +78,13 @@ import lombok.extern.log4j.Log4j2;
 
 // tag::refguide[]
 @Service
-@Named("isisRuntime.ChangedObjectsService")
+@Named("isisRuntime.EntityChangeTrackerDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
 @Log4j2
-public class ChangedObjectsService 
+public class EntityChangeTrackerDefault 
 implements 
     TransactionScopeListener,
     MetricsService,
@@ -111,13 +115,10 @@ implements
      */
     private final _Lazy<Set<AuditEntry>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
+    @Getter(AccessLevel.PACKAGE)
+    private final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
 
-    // used for publishing
-    @Getter(onMethod_ = {@Override})
-    private final Map<ManagedObject, PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
-
-    @Override
-    public boolean isEnlisted(final @NonNull ManagedObject adapter) {
+    private boolean isEnlisted(final @NonNull ManagedObject adapter) {
         return changeKindByEnlistedAdapter.containsKey(adapter);
     }
 
@@ -125,7 +126,7 @@ implements
         if(shouldIgnore(adapter)) {
             return;
         }
-        enlistForPublishing(adapter, PublishingChangeKind.CREATE);
+        enlistForPublishing(adapter, EntityChangeKind.CREATE);
         enlistForAuditing(adapter, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
     }
 
@@ -133,7 +134,7 @@ implements
         if(shouldIgnore(adapter)) {
             return;
         }
-        enlistForPublishing(adapter, PublishingChangeKind.UPDATE);
+        enlistForPublishing(adapter, EntityChangeKind.UPDATE);
         enlistForAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
@@ -141,7 +142,7 @@ implements
         if(shouldIgnore(adapter)) {
             return;
         }
-        final boolean enlisted = enlistForPublishing(adapter, PublishingChangeKind.DELETE);
+        final boolean enlisted = enlistForPublishing(adapter, EntityChangeKind.DELETE);
         if(!enlisted) {
             return;
         }
@@ -156,12 +157,11 @@ implements
         return changedObjectPropertiesRef.get();
     }
 
-    @Override
-    public int numberObjectPropertiesModified() {
+    int numberObjectPropertiesModified() {
         return getEntityAuditEntries().size();
     }
 
-    protected boolean shouldIgnore(final @NonNull ManagedObject adapter) {
+    private boolean shouldIgnore(final @NonNull ManagedObject adapter) {
         val spec = adapter.getSpecification();
         return !spec.isEntity();
     }
@@ -176,6 +176,7 @@ implements
         switch (preCommitPhase) {
         case AUDITING:
             log.debug("about to dispatch audit entries and entity changes");
+            prepareAuditing();
             entityAuditDispatcher.dispatchEntityAudits(this);
             changingEntitiesDispatcher.dispatchChangingEntities(this);
             break;
@@ -190,16 +191,15 @@ implements
         }
     }
     
-    @Override
-    public void preparePublishing() {
+    private void prepareAuditing() {
         val command = currentInteraction().getCommand();
         command.updater().setSystemStateChanged(
                 command.isSystemStateChanged() 
                 || numberObjectsDirtied() > 0);
     }
 
-    @Override
-    public Interaction currentInteraction() {
+    
+    Interaction currentInteraction() {
         return interactionContextProvider.get().getInteractionElseFail();
     }
     
@@ -213,27 +213,28 @@ implements
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
     private boolean enlistForPublishing(
-            final @NonNull ManagedObject adapter, 
-            final @NonNull PublishingChangeKind current) {
-        final PublishingChangeKind previous = changeKindByEnlistedAdapter.get(adapter);
-        if(previous == null) {
-            changeKindByEnlistedAdapter.put(adapter, current);
+            final @NonNull ManagedObject entity, 
+            final @NonNull EntityChangeKind changeKind) {
+        
+        val previousChangeKind = changeKindByEnlistedAdapter.get(entity);
+        if(previousChangeKind == null) {
+            changeKindByEnlistedAdapter.put(entity, changeKind);
             return true;
         }
-        switch (previous) {
+        switch (previousChangeKind) {
         case CREATE:
-            switch (current) {
+            switch (changeKind) {
             case DELETE:
-                changeKindByEnlistedAdapter.remove(adapter);
+                changeKindByEnlistedAdapter.remove(entity);
             case CREATE:
             case UPDATE:
                 return false;
             }
             break;
         case UPDATE:
-            switch (current) {
+            switch (changeKind) {
             case DELETE:
-                changeKindByEnlistedAdapter.put(adapter, current);
+                changeKindByEnlistedAdapter.put(entity, changeKind);
                 return true;
             case CREATE:
             case UPDATE:
@@ -243,14 +244,14 @@ implements
         case DELETE:
             return false;
         }
-        return previous == null;
+        return previousChangeKind == null;
     }
 
     private void enlistForAuditing(
             final ManagedObject entity, 
             final Function<AdapterAndProperty, PreAndPostValues> pre) {
         
-        if(!AuditableFacet.isEnabled(entity.getSpecification())){
+        if(!AuditableFacet.isAuditingEnabled(entity.getSpecification())){
             return; // don't enlist if entity auditing is disabled
         }
 
@@ -399,7 +400,9 @@ implements
         }
     }
 
-
-
+    @Override
+    public ChangingEntities getChangingEntities(ClockService clockService, UserService userService) {
+        return ChangingEntitiesFactory.of(clockService, userService).createChangingEntities(this);
+    }
 
 }

@@ -18,25 +18,12 @@
  */
 package org.apache.isis.core.runtime.persistence.changetracking;
 
-import java.util.Map;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.publish.ChangingEntities;
+import org.apache.isis.applib.services.user.UserService;
 
-import org.apache.isis.applib.annotation.PublishingChangeKind;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-//TODO[ISIS-2441] intermediate for refactoring, keep?
 public interface HasEnlistedChangingEntities {
 
-    Map<ManagedObject, PublishingChangeKind> getChangeKindByEnlistedAdapter();
-
-    int numberObjectsLoaded();
-    int numberObjectPropertiesModified();
+    ChangingEntities getChangingEntities(ClockService clockService, UserService userService);
     
-    Interaction currentInteraction();
-
-    /**
-     * prepare commands for publishing
-     */
-    void preparePublishing();
-
 }

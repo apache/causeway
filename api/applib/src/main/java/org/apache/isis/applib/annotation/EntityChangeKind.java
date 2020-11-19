@@ -19,7 +19,7 @@
 package org.apache.isis.applib.annotation;
 
 // tag::refguide[]
-public enum PublishingChangeKind {
+public enum EntityChangeKind {
 
     CREATE,
 

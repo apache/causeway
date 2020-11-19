@@ -38,7 +38,6 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

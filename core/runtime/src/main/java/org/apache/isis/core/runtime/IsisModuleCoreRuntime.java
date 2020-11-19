@@ -28,7 +28,7 @@ import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.events.persistence.TimestampService;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.runtime.persistence.changetracking.EntityAuditDispatcher;
-import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTrackerDefault;
 
 @Configuration
 @Import({
@@ -39,7 +39,7 @@ import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsSer
         RuntimeEventService.class,
         TimestampService.class,
         EntityAuditDispatcher.class,
-        ChangedObjectsService.class,
+        EntityChangeTrackerDefault.class,
 
         // @Configuration's
 

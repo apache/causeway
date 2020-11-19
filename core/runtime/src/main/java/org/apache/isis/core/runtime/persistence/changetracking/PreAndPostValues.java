@@ -51,7 +51,7 @@ final class PreAndPostValues {
     private PreAndPostValues(Object pre, Object post) {
         this.pre = pre;
         this.post = post;
-        this.preString = ChangedObjectsService.asString(pre);
+        this.preString = EntityChangeTrackerDefault.asString(pre);
     }
 
     /**
@@ -79,7 +79,7 @@ final class PreAndPostValues {
 
     public void setPost(Object post) {
         this.post = post;
-        this.postString = ChangedObjectsService.asString(post);
+        this.postString = EntityChangeTrackerDefault.asString(post);
     }
 
     @Override

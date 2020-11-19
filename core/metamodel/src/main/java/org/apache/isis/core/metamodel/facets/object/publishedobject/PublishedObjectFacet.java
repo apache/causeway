@@ -20,6 +20,9 @@
 package org.apache.isis.core.metamodel.facets.object.publishedobject;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+import lombok.val;
 
 /**
  * Indicates that changes to an object's properties are to be published has, specifying the means by which
@@ -27,4 +30,12 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface PublishedObjectFacet extends Facet {
 
+    public static boolean isChangingEntitiesDispatchingEnabled(final FacetHolder facetHolder) {
+        if(facetHolder==null) {
+            return false;
+        }
+        val publishedObjectFacet = facetHolder.getFacet(PublishedObjectFacet.class);
+        return publishedObjectFacet!=null;
+    }
+    
 }
