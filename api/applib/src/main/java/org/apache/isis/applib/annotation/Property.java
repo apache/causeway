@@ -58,7 +58,7 @@ public @interface Property {
      * should be dispatched to {@link CommandListener}s.
      */
     // tag::refguide[]
-    CommandDispatch commandDispatch()                                // <.>
+    CommandDispatch commandDispatch()                           // <.>
             default CommandDispatch.NOT_SPECIFIED;
 
     // end::refguide[]
