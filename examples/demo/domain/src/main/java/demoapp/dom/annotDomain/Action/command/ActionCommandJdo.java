@@ -18,7 +18,6 @@
  */
 package demoapp.dom.annotDomain.Action.command;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -26,15 +25,13 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -90,7 +87,7 @@ public class ActionCommandJdo
 
 //tag::annotation[]
     @Action(
-        commandDispatch = CommandDispatch.ENABLED        // <.>
+        commandDispatch = Dispatching.ENABLED                   // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
         , associateWithSequence = "1"
@@ -113,7 +110,7 @@ public class ActionCommandJdo
 
 //tag::annotation-2[]
     @Action(
-        commandDispatch = CommandDispatch.DISABLED           // <.>
+        commandDispatch = Dispatching.DISABLED                  // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyCommandDisabled"
         , associateWithSequence = "1"
@@ -135,7 +132,7 @@ public class ActionCommandJdo
 //end::annotation-2[]
 
 //tag::meta-annotation[]
-    @ActionCommandEnabledMetaAnnotation      // <.>
+    @ActionCommandEnabledMetaAnnotation                         // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotated"
@@ -158,10 +155,10 @@ public class ActionCommandJdo
 //end::meta-annotation[]
 
 //tag::meta-annotation-overridden[]
-    @ActionCommandDisabledMetaAnnotation        // <.>
+    @ActionCommandDisabledMetaAnnotation                        // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , commandDispatch = CommandDispatch.ENABLED  // <.>
+        , commandDispatch = Dispatching.ENABLED                 // <.>
         , associateWith = "propertyMetaAnnotatedOverridden"
         , associateWithSequence = "1"
     )

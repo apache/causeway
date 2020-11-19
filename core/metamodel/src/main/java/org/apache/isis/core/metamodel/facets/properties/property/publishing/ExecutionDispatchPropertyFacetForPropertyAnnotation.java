@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.property.publishing;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PropertyExecutionDispatchConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -42,7 +42,7 @@ extends ExecutionDispatchPropertyFacetAbstract {
 
         return propertyIfAny
                 .map(Property::executionDispatch)
-                .filter(publishing -> publishing != ExecutionDispatch.NOT_SPECIFIED)
+                .filter(publishing -> publishing != Dispatching.NOT_SPECIFIED)
                 .map(publishing -> {
 
                     switch (publishing) {

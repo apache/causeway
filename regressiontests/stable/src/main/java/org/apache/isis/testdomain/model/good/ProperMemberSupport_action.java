@@ -23,12 +23,12 @@ import java.util.Set;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(executionDispatch = ExecutionDispatch.ENABLED) 
+@Action(executionDispatch = Dispatching.ENABLED) 
 @ActionLayout(named = "foo", describedAs = "bar")  
 @RequiredArgsConstructor
 public class ProperMemberSupport_action {

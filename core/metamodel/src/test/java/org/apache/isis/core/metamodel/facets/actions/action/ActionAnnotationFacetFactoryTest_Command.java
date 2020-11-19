@@ -27,7 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
@@ -80,7 +80,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
 
         // given
         class Customer {
-            @Action(commandDispatch = CommandDispatch.ENABLED)
+            @Action(commandDispatch = Dispatching.ENABLED)
             public void someAction() {
             }
         }
@@ -101,7 +101,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
 
         // given
         class Customer {
-            @Action(commandDispatch = CommandDispatch.DISABLED)
+            @Action(commandDispatch = Dispatching.DISABLED)
             public void someAction() {
             }
         }

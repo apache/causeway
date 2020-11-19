@@ -20,14 +20,14 @@ package demoapp.dom.annotDomain.Action.command;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-    commandDispatch = CommandDispatch.DISABLED       // <.>
+    commandDispatch = Dispatching.DISABLED       // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyCommandDisabled"
     , associateWithSequence = "2"

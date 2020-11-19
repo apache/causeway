@@ -23,7 +23,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class PublishedObjectFacetAbstract extends FacetAbstract implements PublishedObjectFacet {
+public abstract class PublishedObjectFacetAbstract 
+extends FacetAbstract 
+implements PublishedObjectFacet {
 
     public static Class<? extends Facet> type() {
         return PublishedObjectFacet.class;

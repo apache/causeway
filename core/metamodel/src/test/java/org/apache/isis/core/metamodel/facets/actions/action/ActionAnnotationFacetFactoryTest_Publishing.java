@@ -152,7 +152,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         class Customer {
-            @Action(executionDispatch = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED)
+            @Action(executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -176,7 +176,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    executionDispatch = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED
+                    executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED
                     )
             public void someAction() {
             }
@@ -203,7 +203,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         class Customer {
-            @Action(executionDispatch = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED)
+            @Action(executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -218,7 +218,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToNone_thenNone() {
 
         class Customer {
-            @Action(executionDispatch = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED)
+            @Action(executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -241,7 +241,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    executionDispatch = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED
+                    executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED
                     )
             public void someAction() {
             }
@@ -267,7 +267,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    executionDispatch = org.apache.isis.applib.annotation.ExecutionDispatch.ENABLED
+                    executionDispatch = org.apache.isis.applib.annotation.Dispatching.ENABLED
                     )
             public void someAction() {
             }
@@ -292,7 +292,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    executionDispatch = org.apache.isis.applib.annotation.ExecutionDispatch.DISABLED
+                    executionDispatch = org.apache.isis.applib.annotation.Dispatching.DISABLED
                     )
             public void someAction() {
             }

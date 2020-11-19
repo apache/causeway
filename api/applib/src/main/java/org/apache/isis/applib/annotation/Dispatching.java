@@ -18,44 +18,42 @@
  */
 package org.apache.isis.applib.annotation;
 
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.ExecutionListener;
-
 /**
- * The available policies as to whether {@link Interaction.Execution}s
- * (triggered either by action invocations or property edits), should
- * be dispatched to {@link ExecutionListener}s.
+ * The available policies as to whether data should be dispatched to  
+ * corresponding listeners. The framework supports several kinds of data 
+ * that are available for dispatching:
+ * <ul>
+ * <li><b>EntityAudit</b> ... dispatched via EntityAuditDispatcher and subscribed to via EntityAuditListener (SPI)</li>
+ * <li><b>ChangingEntities</b> ... dispatched via ChangingEntitiesDispatcher and subscribed to via ChangingEntitiesListener (SPI)</li>
+ * <li><b>Execution</b> ... dispatched via ExecutionDispatcher and subscribed to via ExecutionListener (SPI)</li>
+ * <li><b>Command</b> ... dispatched via CommandDispatcher and subscribed to via CommandListener (SPI)</li>
+ * </ul>
  */
 // tag::refguide[]
-public enum ExecutionDispatch {
+public enum Dispatching {
 
     // end::refguide[]
     /**
-     * Dispatching of 
-     * {@link Interaction.Execution}s (triggered either by action invocations or property edits) 
-     * for this object should be as per the default dispatching policy 
+     * Dispatching of data triggered by interaction with this object 
+     * should be handled as per the default dispatching policy 
      * configured in <tt>application.properties</tt>.
-     *
      * <p>
-     *     If no dispatching policy is configured, then dispatching is disabled.
-     * </p>
+     * If no dispatching policy is configured, then dispatching is disabled.
      */
     // tag::refguide[]
     AS_CONFIGURED,
 
     // end::refguide[]
     /**
-     * Do dispatch {@link Interaction.Execution}s (triggered either by action invocations or property edits) 
-     * for this object.
+     * Do dispatch data triggered by interaction with this object.
      */
     // tag::refguide[]
     ENABLED,
 
     // end::refguide[]
     /**
-     * Do <b>not</b> dispatch {@link Interaction.Execution}s 
-     * (triggered either by action invocations or property edits)
-     * for this object (even if otherwise configured to enable dispatching).
+     * Do <b>not</b> dispatch data triggered by interaction with this object
+     * (even if otherwise configured to enable dispatching).
      */
     // tag::refguide[]
     DISABLED,

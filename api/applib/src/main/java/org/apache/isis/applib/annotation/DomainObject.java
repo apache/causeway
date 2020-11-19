@@ -63,12 +63,9 @@ public @interface DomainObject {
     // end::refguide-lifecycle-events[]
     // end::refguide-domain-events[]
     /**
-     * Whether the entity should be audited (note: does not apply to view models or other recreatable objects.
-     *
-     * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.audit.EntityAuditListener} is
-     * registered with the framework.
-     * </p>
+     * Whether entity changes should be dispatched to 
+     * {@link org.apache.isis.applib.services.audit.EntityAuditListener}s.
+     * @apiNote does only apply to entity objects
      */
     // tag::refguide[]
     Auditing auditing()                             // <.>
@@ -114,6 +111,16 @@ public @interface DomainObject {
     Bounding bounding()                             // <.>
             default Bounding.NOT_SPECIFIED;
 
+    // end::refguide[]
+    /**
+     * Whether entity changes, captured as {@link org.apache.isis.applib.services.publish.ChangingEntities}, 
+     * should be dispatched to {@link org.apache.isis.applib.services.publish.ChangingEntitiesListener}s.
+     * @apiNote does only apply to entity objects
+     */
+    // tag::refguide[]
+    Dispatching changingEntitiesDispatch()          // <.>
+            default Dispatching.NOT_SPECIFIED;
+    
     // end::refguide[]
     /**
      * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
@@ -167,19 +174,6 @@ public @interface DomainObject {
     // tag::refguide[]
     String objectType()                             // <.>
             default "";
-
-    // end::refguide[]
-    /**
-     * Whether changes to the object should be published.
-     *
-     * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.ExecutionListener} is
-     * registered with the framework.
-     * </p>
-     */
-    // tag::refguide[]
-    ExecutionDispatch publishing()                         // <.>
-            default ExecutionDispatch.NOT_SPECIFIED;
 
     // end::refguide[]
 

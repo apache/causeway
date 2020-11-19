@@ -24,11 +24,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.ExecutionDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.Property;
 
 //tag::class[]
-@Property(executionDispatch = ExecutionDispatch.ENABLED)          // <.>
+@Property(executionDispatch = Dispatching.ENABLED)          // <.>
 @Inherited
 @Target({
         ElementType.METHOD, ElementType.FIELD       // <.>

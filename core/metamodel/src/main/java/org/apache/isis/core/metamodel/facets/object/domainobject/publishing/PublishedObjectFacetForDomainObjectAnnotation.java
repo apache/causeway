@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.publishing;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.ExecutionDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishObjectsConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObjectFacetAbstract {
 
     public static PublishedObjectFacet create(
-            final Optional<ExecutionDispatch> publishingIfAny,
+            final Optional<Dispatching> publishingIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 

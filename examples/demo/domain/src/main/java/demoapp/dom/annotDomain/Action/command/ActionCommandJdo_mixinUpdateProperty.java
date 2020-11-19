@@ -20,13 +20,12 @@ package demoapp.dom.annotDomain.Action.command;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandDispatch;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
 @Action(
-    commandDispatch = CommandDispatch.ENABLED        // <.>
+    commandDispatch = Dispatching.ENABLED        // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "property"
     , associateWithSequence = "2"

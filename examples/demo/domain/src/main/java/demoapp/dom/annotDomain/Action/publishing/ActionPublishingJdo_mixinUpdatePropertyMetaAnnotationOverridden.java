@@ -20,13 +20,13 @@ package demoapp.dom.annotDomain.Action.publishing;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 //tag::class[]
 @ActionPublishingDisabledMetaAnnotation     // <.>
 @Action(
-    executionDispatch = ExecutionDispatch.ENABLED         // <.>
+    executionDispatch = Dispatching.ENABLED         // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyMetaAnnotatedOverridden"
     , associateWithSequence = "2"

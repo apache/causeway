@@ -31,7 +31,7 @@ import lombok.Setter;
 
 public class Order {
 
-    @Property(executionDispatch=ExecutionDispatch.ENABLED)    // <.>
+    @Property(executionDispatch=Dispatch.ENABLED)    // <.>
     @Getter @Setter
     private int quantity;
 

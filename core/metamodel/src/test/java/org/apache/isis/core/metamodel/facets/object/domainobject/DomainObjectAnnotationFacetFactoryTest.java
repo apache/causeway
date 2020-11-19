@@ -246,15 +246,15 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     public static class Publishing extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(publishing = org.apache.isis.applib.annotation.ExecutionDispatch.AS_CONFIGURED)
+        @DomainObject(changingEntitiesDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED)
         class CustomerWithDomainObjectAndPublishingSetToAsConfigured {
         }
 
-        @DomainObject(publishing = org.apache.isis.applib.annotation.ExecutionDispatch.DISABLED)
+        @DomainObject(changingEntitiesDispatch = org.apache.isis.applib.annotation.Dispatching.DISABLED)
         class CustomerWithDomainObjectAndPublishingSetToDisabled {
         }
 
-        @DomainObject(publishing = org.apache.isis.applib.annotation.ExecutionDispatch.ENABLED)
+        @DomainObject(changingEntitiesDispatch = org.apache.isis.applib.annotation.Dispatching.ENABLED)
         class CustomerWithDomainObjectAndPublishingSetToEnabled {
         }
 

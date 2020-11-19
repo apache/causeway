@@ -24,15 +24,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
 
 //tag::class[]
-@DomainObject(publishing = ExecutionDispatch.ENABLED)          // <.>
+@DomainObject(changingEntitiesDispatch = Dispatching.ENABLED) // <.>
 @Inherited
 @Target({
-        ElementType.TYPE, ElementType.ANNOTATION_TYPE   // <.>
+        ElementType.TYPE, ElementType.ANNOTATION_TYPE         // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainObjectPublishingEnabledMetaAnnotation {

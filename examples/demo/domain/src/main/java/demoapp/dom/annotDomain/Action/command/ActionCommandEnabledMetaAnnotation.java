@@ -25,14 +25,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandDispatch;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 
 //tag::class[]
-@Action(commandDispatch = CommandDispatch.ENABLED)   // <.>
+@Action(commandDispatch = Dispatching.ENABLED)   // <.>
 @Inherited
 @Target({
-        ElementType.TYPE, ElementType.METHOD    // <.>
+        ElementType.TYPE, ElementType.METHOD     // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ActionCommandEnabledMetaAnnotation {

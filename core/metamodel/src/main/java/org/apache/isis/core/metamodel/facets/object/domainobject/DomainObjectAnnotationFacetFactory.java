@@ -162,8 +162,9 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
             return;
         }
 
-        // check from @DomainObject(publishing=...)
-        val publishing = processClassContext.synthesizeOnType(DomainObject.class).map(DomainObject::publishing);
+        // check from @DomainObject(changingEntitiesDispatch=...)
+        val publishing = processClassContext.synthesizeOnType(DomainObject.class)
+                .map(DomainObject::changingEntitiesDispatch);
         val publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
                 .create(publishing, getConfiguration(), facetHolder);
 

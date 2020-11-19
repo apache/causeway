@@ -26,13 +26,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.ExecutionListener;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.spi.CommandListener;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publish.ExecutionListener;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -58,8 +58,8 @@ public @interface Property {
      * should be dispatched to {@link CommandListener}s.
      */
     // tag::refguide[]
-    CommandDispatch commandDispatch()                           // <.>
-            default CommandDispatch.NOT_SPECIFIED;
+    Dispatching commandDispatch()                               // <.>
+            default Dispatching.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -126,8 +126,8 @@ public @interface Property {
      * {@link ExecutionListener}s.
      */
     // tag::refguide[]
-    ExecutionDispatch executionDispatch()                       // <.>
-            default ExecutionDispatch.NOT_SPECIFIED;
+    Dispatching executionDispatch()                             // <.>
+            default Dispatching.NOT_SPECIFIED;
     
     // end::refguide[]
     /**

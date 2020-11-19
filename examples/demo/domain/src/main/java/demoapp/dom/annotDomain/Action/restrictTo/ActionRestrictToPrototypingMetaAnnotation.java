@@ -25,7 +25,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandDispatch;
 import org.apache.isis.applib.annotation.RestrictTo;
 
 //tag::class[]

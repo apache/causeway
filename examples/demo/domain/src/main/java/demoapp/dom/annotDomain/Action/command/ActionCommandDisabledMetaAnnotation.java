@@ -25,10 +25,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 
 //tag::class[]
-@Action(commandDispatch = CommandDispatch.DISABLED)  // <.>
+@Action(commandDispatch = Dispatching.DISABLED)  // <.>
 @Inherited
 @Target({
         ElementType.TYPE, ElementType.METHOD    // <.>

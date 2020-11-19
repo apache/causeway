@@ -21,7 +21,7 @@ package org.apache.isis.extensions.commandlog.impl.jdo;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -35,7 +35,7 @@ import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
     domainEvent = CommandJdo_retry.ActionDomainEvent.class,
-    commandDispatch = CommandDispatch.DISABLED
+    commandDispatch = Dispatching.DISABLED
 )
 public class CommandJdo_retry {
 

@@ -24,14 +24,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.Property;
 
 //tag::class[]
-@Property(commandDispatch = CommandDispatch.ENABLED) // <.>
+@Property(commandDispatch = Dispatching.ENABLED) // <.>
 @Inherited
 @Target({
-        ElementType.FIELD, ElementType.METHOD   // <.>
+        ElementType.FIELD, ElementType.METHOD    // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PropertyCommandDispatchEnabledMetaAnnotation {

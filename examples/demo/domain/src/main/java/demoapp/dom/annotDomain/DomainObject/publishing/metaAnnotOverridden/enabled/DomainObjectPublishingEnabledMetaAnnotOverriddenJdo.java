@@ -24,17 +24,16 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.Bounding;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo;
-import demoapp.dom.annotDomain.DomainObject.publishing.metaAnnot.DomainObjectPublishingEnabledMetaAnnotation;
 import demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.DomainObjectPublishingDisabledMetaAnnotation;
 
 //tag::class[]
@@ -44,7 +43,7 @@ import demoapp.dom.annotDomain.DomainObject.publishing.metaAnnotOverridden.Domai
 @DomainObject(
         nature=Nature.JDO_ENTITY
         , objectType = "demo.DomainObjectPublishingEnabledMetaAnnotOverriddenJdo"
-        , publishing = ExecutionDispatch.ENABLED                       // <.>
+        , changingEntitiesDispatch = Dispatching.ENABLED        // <.>
         , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(

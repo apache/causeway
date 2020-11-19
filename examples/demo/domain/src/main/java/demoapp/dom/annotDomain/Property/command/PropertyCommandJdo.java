@@ -23,7 +23,7 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -63,7 +63,7 @@ public class PropertyCommandJdo
 
 //tag::annotation[]
     @Property(
-        commandDispatch = CommandDispatch.ENABLED             // <.>
+        commandDispatch = Dispatching.ENABLED                   // <.>
     )
     @PropertyLayout(
         describedAs = "@Property(command = ENABLED)"
@@ -75,7 +75,7 @@ public class PropertyCommandJdo
 
 //tag::annotation-2[]
     @Property(
-        commandDispatch = CommandDispatch.DISABLED           // <.>
+        commandDispatch = Dispatching.DISABLED                  // <.>
     )
     @PropertyLayout(
         describedAs = "@Property(command = DISABLED)"
@@ -97,7 +97,7 @@ public class PropertyCommandJdo
 
 //tag::meta-annotation-overridden[]
     @PropertyCommandDispatchDisabledMetaAnnotation              // <.>
-    @Property(commandDispatch = CommandDispatch.ENABLED)     // <.>
+    @Property(commandDispatch = Dispatching.ENABLED)            // <.>
     @PropertyLayout(
         describedAs =
             "@PropertyCommandDisabledMetaAnnotation " +

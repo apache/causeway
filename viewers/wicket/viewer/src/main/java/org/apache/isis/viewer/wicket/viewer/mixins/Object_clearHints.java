@@ -22,8 +22,8 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandDispatch;
 import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -36,7 +36,7 @@ import lombok.val;
 @Action(
         domainEvent = Object_clearHints.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,
-        commandDispatch = CommandDispatch.DISABLED
+        commandDispatch = Dispatching.DISABLED
 )
 @ActionLayout(
         contributed = Contributed.AS_ACTION,

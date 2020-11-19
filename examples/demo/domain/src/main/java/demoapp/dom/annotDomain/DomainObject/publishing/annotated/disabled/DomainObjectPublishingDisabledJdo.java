@@ -23,22 +23,16 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Bounding;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo;
 
 //tag::class[]
@@ -47,7 +41,7 @@ import demoapp.dom.annotDomain.DomainObject.publishing.DomainObjectPublishingJdo
 @DomainObject(
     nature=Nature.JDO_ENTITY
     , objectType = "demo.DomainObjectPublishingDisabledJdo"
-    , publishing = ExecutionDispatch.DISABLED                          // <.>
+    , changingEntitiesDispatch = Dispatching.DISABLED           // <.>
     , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(

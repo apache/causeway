@@ -1,12 +1,12 @@
-[#publishing]
-= `publishing()`
+[#changingEntitiesDispatch]
+= `changingEntitiesDispatch()`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
 
-The `publishing` attribute determines whether and how a modified object instance is published via the registered implementation of xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
+The `changingEntitiesDispatch` attribute determines whether and how a modified object instance is published via the registered implementation of xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 
 A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
 
@@ -14,28 +14,28 @@ The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:re
 
 * `all`
 +
-all changed objects are published
+all changed entities are published
 
 * `none`
 +
-no changed objects are published
+no changed entities are published
 
 If there is no configuration property in `application.properties` then publishing is automatically disabled for domain objects.
 
-This default can be overridden on an object-by-object basis; if `publishing()` is set to `ENABLED` then changed instances of the domain class are published irrespective of the configured value; if set to `DISABLED` then the changed instances are _not_ published, again irrespective of the configured value.
+This default can be overridden on an object-by-object basis; if `changingEntitiesDispatch()` is set to `ENABLED` then changed instances of the domain class are published irrespective of the configured value; if set to `DISABLED` then the changed instances are _not_ published, again irrespective of the configured value.
 
 For example:
 
 [source,java]
 ----
 @DomainObject(
-    publishing=Publishing.ENABLED   // <.>
+    changingEntitiesDispatch=Dispatching.ENABLED   // <.>
 )
-public class InterestRate {
+public class InterestRate { // <-- only applies if this is an entity
     ...
 }
 ----
-<.> because set to enabled, will be published irrespective of the configured value.
+<.> because set to enabled, will be dispatched irrespective of the configured value.
 
 == See also
 

@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.properties.property.command;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.CommandDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -43,16 +43,16 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
                 configuration.getApplib().getAnnotation().getProperty().getCommandDispatch();
 
         return propertyIfAny
-                .filter(property -> property.commandDispatch() != CommandDispatch.NOT_SPECIFIED)
+                .filter(property -> property.commandDispatch() != Dispatching.NOT_SPECIFIED)
                 .map(property -> {
-                    CommandDispatch commandReification = property.commandDispatch();
+                    Dispatching commandReification = property.commandDispatch();
 
                     final Class<? extends CommandDtoProcessor> processorClass =
                             property.commandDtoProcessor();
                     final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
                     if(processor != null) {
-                        commandReification = CommandDispatch.ENABLED;
+                        commandReification = Dispatching.ENABLED;
                     }
                     switch (commandReification) {
                     case AS_CONFIGURED:

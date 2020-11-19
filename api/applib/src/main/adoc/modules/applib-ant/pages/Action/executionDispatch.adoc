@@ -31,7 +31,7 @@ For example:
 [source,java]
 ----
 public class Order {
-    @Action(executionDispatch=ExecutionDispatch.ENABLED)    // <.>
+    @Action(executionDispatch=Dispatching.ENABLED)    // <.>
     public Invoice generateInvoice(...) {
         // ...
     }

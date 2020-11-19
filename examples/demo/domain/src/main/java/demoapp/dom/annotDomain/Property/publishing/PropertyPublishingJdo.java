@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.ExecutionDispatch;
+import org.apache.isis.applib.annotation.Dispatching;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -63,7 +63,7 @@ public class PropertyPublishingJdo
 
 //tag::annotation[]
     @Property(
-        executionDispatch = ExecutionDispatch.ENABLED             // <.>
+        executionDispatch = Dispatching.ENABLED             // <.>
     )
     @PropertyLayout(
         describedAs =
@@ -89,7 +89,7 @@ public class PropertyPublishingJdo
 //tag::meta-annotated-overridden[]
     @PropertyExecutionDispatchDisabledMetaAnnotation   // <.>
     @Property(
-        executionDispatch = ExecutionDispatch.ENABLED         // <.>
+        executionDispatch = Dispatching.ENABLED         // <.>
     )
     @PropertyLayout(
         describedAs =
