@@ -33,15 +33,20 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 // tag::refguide[]
 public interface TransactionScopeListener {
     
+    enum PreCommitPhase {
+        PRE_AUDITING,
+        AUDITING,
+        POST_AUDITING
+    }
+    
     default void onTransactionStarted() {
         // default: do nothing
     }
 
     /** triggered during the pre-commit phase in a transaction*/
-    default void onTransactionEnding() {
+    default void onPreCommit(PreCommitPhase preCommitPhase) {
         // default: do nothing
     }
-    
     
 }
 // end::refguide[]

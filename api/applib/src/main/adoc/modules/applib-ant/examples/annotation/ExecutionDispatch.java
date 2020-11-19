@@ -18,33 +18,48 @@
  */
 package org.apache.isis.applib.annotation;
 
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publish.ExecutionListener;
+
 /**
- * The available policies as to whether action invocations are reified into commands.
+ * The available policies as to whether {@link Interaction.Execution}s
+ * (triggered either by action invocations or property edits), should
+ * be dispatched to {@link ExecutionListener}s.
  */
 // tag::refguide[]
-public enum CommandReification {
+public enum ExecutionDispatch {
+
     // end::refguide[]
     /**
-     * Whether the action should be handled as a command as per the default command configured in <tt>applicationp.properties</tt>.
+     * Dispatching of 
+     * {@link Interaction.Execution}s (triggered either by action invocations or property edits) 
+     * for this object should be as per the default dispatching policy 
+     * configured in <tt>application.properties</tt>.
      *
      * <p>
-     *     If no command policy is configured, then the action is <i>not</i> treated as a command.
+     *     If no dispatching policy is configured, then dispatching is disabled.
      * </p>
      */
     // tag::refguide[]
     AS_CONFIGURED,
+
     // end::refguide[]
     /**
-     * Handle the action as a command, irrespective of any configuration settings.
+     * Do dispatch {@link Interaction.Execution}s (triggered either by action invocations or property edits) 
+     * for this object.
      */
     // tag::refguide[]
     ENABLED,
+
     // end::refguide[]
     /**
-     * Do not handle the action as a command, irrespective of any configuration settings.
+     * Do <b>not</b> dispatch {@link Interaction.Execution}s 
+     * (triggered either by action invocations or property edits)
+     * for this object (even if otherwise configured to enable dispatching).
      */
     // tag::refguide[]
     DISABLED,
+
     // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
@@ -52,5 +67,6 @@ public enum CommandReification {
      */
     // tag::refguide[]
     NOT_SPECIFIED
+
 }
 // end::refguide[]

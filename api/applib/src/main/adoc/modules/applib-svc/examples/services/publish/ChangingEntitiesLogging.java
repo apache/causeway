@@ -16,12 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.audit;
+package org.apache.isis.applib.services.publish;
 
-import java.sql.Timestamp;
-import java.util.UUID;
-
-import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,41 +26,31 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.util.schema.ChangesDtoUtils;
+import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.AuditerServiceLogging")
+@Named("isisApplib.ChangingEntitiesLogging")
 @Order(OrderPrecedence.LATE)
 @Primary
-@Qualifier("logging")
+@Qualifier("Logging")
 @Log4j2
-public class AuditerServiceLogging implements AuditerService {
-
-    @PostConstruct
-    public void init() {
-    }
+public class ChangingEntitiesLogging implements ChangingEntitiesListener {
 
     @Override
-    public boolean isEnabled() {
-        return log.isDebugEnabled();
-    }
+    public void onEntitiesChanging(final ChangingEntities changingEntities) {
 
-    @Override
-    public void audit(
-            final UUID interactionId, int sequence,
-            final String targetClassName, final Bookmark target,
-            final String memberId, final String propertyName,
-            final String preValue, final String postValue,
-            final String user, final Timestamp timestamp) {
-
-        if(log.isDebugEnabled()) {
-            String auditMessage =
-                    interactionId + "," + sequence + ": " +
-                            target.toString() + " by " + user + ", " + propertyName + ": " + preValue + " -> " + postValue;
-            log.debug(auditMessage);
+        if(!log.isDebugEnabled()) {
+            return;
         }
+
+        final ChangesDto changesDto = changingEntities.getDto();
+
+        log.debug(ChangesDtoUtils.toXml(changesDto));
     }
+
 
 }
+

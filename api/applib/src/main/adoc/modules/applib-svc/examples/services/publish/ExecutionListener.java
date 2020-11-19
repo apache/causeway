@@ -16,46 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.annotation;
+package org.apache.isis.applib.services.publish;
+
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 
 /**
- * The available policies for publishing changes to the properties of the object.
+ * SPI that allows individual interactions (action invocations or property edits) to be
+ * {@link #publish(Interaction.Execution) published}.
+ * Note that re-publishing is not part of this SPI.
  */
 // tag::refguide[]
-public enum Publishing {
+public interface ExecutionListener {
 
     // end::refguide[]
     /**
-     * The publishing of the object should be as per the default publishing policy configured in <tt>application.properties</tt>.
-     *
+     * Publish each {@link Interaction.Execution} immediately after it completes.
      * <p>
-     *     If no publishing policy is configured, then the publishing is disabled.
-     * </p>
+     * Most implementations are expected to use {@link Interaction.Execution#getDto()} to create a serializable
+     * XML representation of the execution. The easiest way to do this is using {@link InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
+     * some flexibility here, though.
      */
     // tag::refguide[]
-    AS_CONFIGURED,
-
-    // end::refguide[]
-    /**
-     * Publish changes to this object.
-     */
-    // tag::refguide[]
-    ENABLED,
-
-    // end::refguide[]
-    /**
-     * Do not publish changes to this object (even if otherwise configured to enable publishing).
-     */
-    // tag::refguide[]
-    DISABLED,
-
-    // end::refguide[]
-    /**
-     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
-     * annotations or superclasses/interfaces).
-     */
-    // tag::refguide[]
-    NOT_SPECIFIED
-
+    void onExecution(Interaction.Execution<?, ?> execution);  // <.>
+    
 }
 // end::refguide[]

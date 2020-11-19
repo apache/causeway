@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 // tag::refguide[]
-public interface PublishedObjects
+public interface ChangingEntities
         extends HasUniqueId,            // <.>
                 HasUsername {           // <.>
 
