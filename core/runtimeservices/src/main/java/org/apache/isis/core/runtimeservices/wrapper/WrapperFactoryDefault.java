@@ -83,7 +83,7 @@ import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -131,7 +131,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject Provider<InteractionContext> interactionContextProvider;
     @Inject ServiceInjector serviceInjector;
     @Inject _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
-    @Inject CommandDtoServiceInternal commandDtoServiceInternal;
+    @Inject CommandDtoFactory commandDtoFactory;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -307,6 +307,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val interactionSession = currentInteractionSession();
         val asyncAuthSession = authSessionFrom(asyncControl, interactionSession.getAuthenticationSession());
         val command = interactionContextProvider.get().getInteractionElseFail().getCommand();
+        val commandUniqueId = command.getUniqueId();
 
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
@@ -318,11 +319,13 @@ public class WrapperFactoryDefault implements WrapperFactory {
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
-                commandDto = commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+                commandDto = commandDtoFactory
+                        .asCommandDto(commandUniqueId, targetList, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
-                commandDto = commandDtoServiceInternal.asCommandDto(targetList, property, argAdapters.getElseFail(0));
+                commandDto = commandDtoFactory
+                        .asCommandDto(commandUniqueId, targetList, property, argAdapters.getElseFail(0));
                 break;
             default:
                 // shouldn't happen, already catered for this case previously

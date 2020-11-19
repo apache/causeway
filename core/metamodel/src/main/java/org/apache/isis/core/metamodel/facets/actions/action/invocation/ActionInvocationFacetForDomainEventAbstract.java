@@ -217,7 +217,7 @@ implements ImperativeFacet {
         // publish (if not a contributed association, query-only mixin)
         val publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
         if (publishedActionFacet != null) {
-            getPublishingServiceInternal().dispatchActionExecution(priorExecution);
+            getExecutionDispatcher().dispatchActionExecution(priorExecution);
         }
 
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
@@ -371,7 +371,7 @@ implements ImperativeFacet {
         return serviceRegistry.lookupServiceElseFail(MetricsService.class);
     }
 
-    private ExecutionDispatcher getPublishingServiceInternal() {
+    private ExecutionDispatcher getExecutionDispatcher() {
         return serviceRegistry.lookupServiceElseFail(ExecutionDispatcher.class);
     }
 

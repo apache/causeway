@@ -292,7 +292,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         // publish (if not a contributed association, query-only mixin)
         val publishedPropertyFacet = getIdentified().getFacet(PublishedPropertyFacet.class);
         if (publishedPropertyFacet != null) {
-            getPublishingServiceInternal().dispatchPropertyChangeExecution(priorExecution);
+            getExecutionDispatcher().dispatchPropertyChangeExecution(priorExecution);
         }
 
         return getObjectManager().adapt(targetPojo);
@@ -330,7 +330,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         return getServiceRegistry().lookupServiceElseFail(MetricsService.class);
     }
 
-    private ExecutionDispatcher getPublishingServiceInternal() {
+    private ExecutionDispatcher getExecutionDispatcher() {
         return getServiceRegistry().lookupServiceElseFail(ExecutionDispatcher.class);
     }
 

@@ -33,6 +33,9 @@ import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents the <i>intention to</i> invoke either an action or modify a property.  There can be only one such
@@ -66,6 +69,8 @@ import lombok.Getter;
  *     {@link Command#getParent() parent}.
  * </p>
  */
+@RequiredArgsConstructor
+@Log4j2
 // tag::refguide[]
 public class Command implements HasUniqueId, HasUsername, HasCommandDto {
 
@@ -77,15 +82,14 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getTransactionId()}
      * </p>
      */
-    @Override
     // tag::refguide[]
-    public UUID getUniqueId() {                 // <.>
-        // ...
-        // end::refguide[]
-        return commandDto != null
-                ? UUID.fromString(commandDto.getTransactionId())
-                : null;
-    }
+    @Getter
+    // end::refguide[]
+        (onMethod_ = {@Override})
+    // tag::refguide[]
+    private final UUID uniqueId;              // <.>
+    // end::refguide[]
+    
     /**
      * The user that created the command.
      *
@@ -281,6 +285,17 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
          */
         public void setCommandDto(final CommandDto commandDto) {
             Command.this.commandDto = commandDto;
+            
+            // even though redundant, but must ensure commandUniqueId == dtoUniqueId
+            val commandUniqueId = Command.this.getUniqueId().toString(); 
+            val dtoUniqueId = commandDto.getTransactionId();
+            
+            if(!commandUniqueId.equals(dtoUniqueId)) {
+                log.warn("setting CommandDto on a Command has side-effects when "
+                        + "both their UniqueIds don't match"); 
+                commandDto.setTransactionId(commandUniqueId);    
+            }
+            
         }
         /**
          * <b>NOT API</b>: intended to be called only by the framework.

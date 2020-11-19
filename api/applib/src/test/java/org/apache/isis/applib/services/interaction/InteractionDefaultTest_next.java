@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.services.interaction;
 
+import java.util.UUID;
+
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,11 +28,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 
+import lombok.val;
+
 public class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-        final Interaction interaction = new Interaction(null);
+        val interaction = new Interaction(UUID.randomUUID());
 
         assertThat(interaction.next("foo"), is(0));
         assertThat(interaction.next("foo"), is(1));

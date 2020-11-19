@@ -21,9 +21,9 @@ package org.apache.isis.core.runtime.iactn;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
@@ -65,10 +65,7 @@ public class InteractionSession extends RuntimeContextBase {
         super(mmc);
         this.authenticationSession = authenticationSession; // binds this session to given authenticationSession
         this.lifecycleStartedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
-        
-        this.command = new Command();
-        this.interaction = new Interaction(this.command);
-        
+        this.interaction = new Interaction(UUID.randomUUID());
     }
 
     // -- FLUSH
@@ -94,7 +91,7 @@ public class InteractionSession extends RuntimeContextBase {
     
     private Map<Class<?>, Object> attributes = null;
     private boolean closed = false;
-	private Command command;
+	
 	@Getter private Interaction interaction;
 
     /** add type specific session data */

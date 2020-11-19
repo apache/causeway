@@ -38,7 +38,7 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
@@ -60,7 +60,7 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
+public class CommandDtoServiceInternalDefault implements CommandDtoFactory {
 
     @Inject BookmarkService bookmarkService;
     @Inject ClockService clockService;
@@ -68,11 +68,12 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     @Override
     public CommandDto asCommandDto(
+            final UUID uniqueId,
             final Can<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        final CommandDto dto = asCommandDto(targetAdapters);
+        final CommandDto dto = asCommandDto(uniqueId, targetAdapters);
 
         final ActionDto actionDto = new ActionDto();
         actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
@@ -85,11 +86,12 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     @Override
     public CommandDto asCommandDto(
+            final UUID uniqueId,
             final Can<ManagedObject> targetAdapters,
             final OneToOneAssociation property,
             final ManagedObject valueAdapterOrNull) {
 
-        final CommandDto dto = asCommandDto(targetAdapters);
+        final CommandDto dto = asCommandDto(uniqueId, targetAdapters);
 
         final PropertyDto propertyDto = new PropertyDto();
         propertyDto.setInteractionType(InteractionType.PROPERTY_EDIT);
@@ -144,13 +146,13 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     // -- HELPER
     
-    private CommandDto asCommandDto(final Can<ManagedObject> targetAdapters) {
+    private CommandDto asCommandDto(final UUID uniqueId, final Can<ManagedObject> targetAdapters) {
 
         val dto = new CommandDto();
         dto.setMajorVersion("2");
         dto.setMinorVersion("0");
 
-        dto.setTransactionId(UUID.randomUUID().toString());
+        dto.setTransactionId(uniqueId.toString());
         dto.setUser(userService.getUser().getName());
         dto.setTimestamp(clockService.nowAsXMLGregorianCalendar());
 

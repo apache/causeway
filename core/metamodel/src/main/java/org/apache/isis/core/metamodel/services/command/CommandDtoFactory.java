@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.command;
 
+import java.util.UUID;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -27,10 +29,10 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 
 /**
- * Used to create mementos of a command, such that it can be persisted and then executed either immediately (ie invoke
- * in the foreground) or deferred (ie invoke in the background at some later time).
+ * Used to serialize a command, eg. such that it can be persisted and then executed 
+ * at some later time or even at some external system.
  */
-public interface CommandDtoServiceInternal {
+public interface CommandDtoFactory {
 
     /**
      * @return a DTO that represents the intention to invoke an action on a
@@ -39,6 +41,7 @@ public interface CommandDtoServiceInternal {
      *         mixin action or a contributed action.
      */
     CommandDto asCommandDto(
+            final UUID uniqueId,
             final Can<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters);
@@ -49,6 +52,7 @@ public interface CommandDtoServiceInternal {
      *         with actions).
      */
     CommandDto asCommandDto(
+            final UUID uniqueId,
             final Can<ManagedObject> targetAdapters,
             final OneToOneAssociation association,
             final ManagedObject valueAdapterOrNull);

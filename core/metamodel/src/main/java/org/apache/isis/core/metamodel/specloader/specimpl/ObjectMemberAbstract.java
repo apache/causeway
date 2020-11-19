@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
@@ -45,7 +47,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -305,15 +307,15 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
         return getServiceRegistry().lookupServiceElseFail(org.apache.isis.applib.services.iactn.InteractionContext.class);
     }
 
-    protected CommandDtoServiceInternal getCommandDtoServiceInternal() {
-        return getServiceRegistry().lookupServiceElseFail(CommandDtoServiceInternal.class);
+    protected CommandDtoFactory getCommandDtoFactory() {
+        return getServiceRegistry().lookupServiceElseFail(CommandDtoFactory.class);
     }
 
     // -- command (setup)
 
     protected void setupCommand(
             final ManagedObject managedObject,
-            final Supplier<CommandDto> commandDtoSupplier) {
+            final Function<UUID, CommandDto> commandDtoFactory) {
 
         val command = getInteractionContext().getInteractionElseFail().getCommand();
 
@@ -325,7 +327,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             // guard here to prevent subsequent contributed/mixin actions from
             // trampling over the command's DTO
         } else {
-            val dto = commandDtoSupplier.get();
+            val dto = commandDtoFactory.apply(command.getUniqueId());
             command.updater().setCommandDto(dto);
         }
 

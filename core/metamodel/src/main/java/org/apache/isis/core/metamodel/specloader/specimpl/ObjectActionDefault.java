@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
@@ -579,7 +580,7 @@ implements ObjectAction {
             final ManagedObject targetAdapter,
             final Can<ManagedObject> argumentAdapters) {
 
-        setupCommand(targetAdapter, ()->commandDtoFor(targetAdapter, argumentAdapters));
+        setupCommand(targetAdapter, uniqueId->commandDtoFor(uniqueId, targetAdapter, argumentAdapters));
     }
 
     @Override
@@ -615,6 +616,7 @@ implements ObjectAction {
     // -- HELPER
     
     private CommandDto commandDtoFor(
+            final UUID uniqueId,
             final ManagedObject targetAdapter,
             final Can<ManagedObject> argumentAdapters) {
         
@@ -623,8 +625,8 @@ implements ObjectAction {
                     ? Can.ofCollection(commandTargetAdaptersHolder.get())
                     : Can.ofSingleton(targetAdapter);
 
-        return getCommandDtoServiceInternal()
-                .asCommandDto(commandTargetAdapters, this, argumentAdapters);
+        return getCommandDtoFactory()
+                .asCommandDto(uniqueId, commandTargetAdapters, this, argumentAdapters);
     }
     
 }

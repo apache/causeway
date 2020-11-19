@@ -50,6 +50,7 @@ import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -82,8 +83,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Interaction implements HasUniqueId {
 
-    public Interaction(final Command command) {
-        this.command = command;
+    public Interaction(final @NonNull UUID uniqueId) {
+        this.command = new Command(uniqueId);
     }
 
     @Getter

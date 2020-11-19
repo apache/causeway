@@ -41,7 +41,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -61,7 +61,7 @@ import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 @Qualifier("Default")
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
-    @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
+    @Inject private CommandDtoFactory commandDtoServiceInternal;
     @Inject private BookmarkService bookmarkService;
     @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
     @Inject private UserService userService;
