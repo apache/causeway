@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.publish.ChangingEntities;
-import org.apache.isis.applib.services.publish.ChangingEntitiesListener;
+import org.apache.isis.applib.services.audit.spi.ChangingEntities;
+import org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.val;

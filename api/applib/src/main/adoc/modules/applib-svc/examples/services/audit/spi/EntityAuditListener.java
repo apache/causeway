@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.audit;
+package org.apache.isis.applib.services.audit.spi;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import org.apache.isis.applib.services.audit.EntityAuditLogging;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
 /**

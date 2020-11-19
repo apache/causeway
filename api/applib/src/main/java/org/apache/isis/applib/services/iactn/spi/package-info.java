@@ -16,29 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.publish;
 
-import java.sql.Timestamp;
-
-import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.applib.services.HasUsername;
-import org.apache.isis.schema.chg.v2.ChangesDto;
-
-// tag::refguide[]
-public interface ChangingEntities
-        extends HasUniqueId,            // <.>
-                HasUsername {           // <.>
-
-    Timestamp getCompletedAt();         // <.>
-
-    int getNumberLoaded();              // <.>
-    int getNumberCreated();             // <.>
-    int getNumberUpdated();             // <.>
-    int getNumberDeleted();             // <.>
-
-    int getNumberPropertiesModified();  // <.>
-
-    ChangesDto getDto();                // <.>
-
-}
-// end::refguide[]
+/**
+ * The {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener} API is intended for coarse-grained
+ * publish/subscribe for system-to-system interactions, from Apache Isis to some other system. Events that can be
+ * published are action invocations/property edits, and changed objects. A typical use case is to publish onto a
+ * pub/sub bus such as ActiveMQ with Camel to keep other systems up to date.
+ *
+ *
+ */
+package org.apache.isis.applib.services.iactn.spi;

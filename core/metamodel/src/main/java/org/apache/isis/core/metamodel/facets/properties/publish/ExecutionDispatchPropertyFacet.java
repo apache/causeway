@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.publish;
 
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.ExecutionListener;
+import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;

@@ -27,9 +27,9 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.isis.applib.services.audit.spi.ChangingEntities;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.ChangingEntities;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;

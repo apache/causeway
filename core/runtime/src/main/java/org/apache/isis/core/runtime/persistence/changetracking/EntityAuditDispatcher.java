@@ -31,7 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.audit.EntityAuditListener;
+import org.apache.isis.applib.services.audit.spi.EntityAuditListener;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
@@ -44,7 +44,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Wrapper around {@link org.apache.isis.applib.services.audit.EntityAuditListener}.
+ * Wrapper around {@link org.apache.isis.applib.services.audit.spi.EntityAuditListener}.
  */
 @Service
 @Named("isisRuntime.EntityAuditDispatcher")

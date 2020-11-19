@@ -64,9 +64,9 @@ public @interface DomainObject {
     // end::refguide-domain-events[]
     /**
      * Whether entity changes should be dispatched to 
-     * {@link org.apache.isis.applib.services.audit.EntityAuditListener}s
-     * and whether entity changes, captured as {@link org.apache.isis.applib.services.publish.ChangingEntities}, 
-     * should be dispatched to {@link org.apache.isis.applib.services.publish.ChangingEntitiesListener}s.
+     * {@link org.apache.isis.applib.services.audit.spi.EntityAuditListener}s
+     * and whether entity changes, captured as {@link org.apache.isis.applib.services.audit.spi.ChangingEntities}, 
+     * should be dispatched to {@link org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener}s.
      * @apiNote does only apply to entity objects
      */
     // tag::refguide[]

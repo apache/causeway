@@ -24,7 +24,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
-import org.apache.isis.applib.services.publish.ChangingEntities;
+import org.apache.isis.applib.services.audit.spi.ChangingEntities;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.NonNull;

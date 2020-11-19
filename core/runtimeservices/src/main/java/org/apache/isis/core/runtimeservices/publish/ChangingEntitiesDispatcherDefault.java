@@ -30,8 +30,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.publish.ChangingEntitiesListener;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.runtime.persistence.changetracking.ChangingEntitiesDispatcher;
@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Wrapper around {@link org.apache.isis.applib.services.audit.ChangingEntitiesListener}.
+ * Wrapper around {@link org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener}.
  */
 @Service
 @Named("isisRuntime.ChangingEntitiesDispatcher")

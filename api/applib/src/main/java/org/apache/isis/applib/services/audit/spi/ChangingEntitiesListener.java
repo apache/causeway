@@ -1,4 +1,4 @@
-package org.apache.isis.applib.services.publish;
+package org.apache.isis.applib.services.audit.spi;
 
 public interface ChangingEntitiesListener {
 

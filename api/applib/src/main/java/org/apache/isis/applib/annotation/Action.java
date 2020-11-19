@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceFo
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.ExecutionListener;
+import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
 
 /**
  * Domain semantics for domain object collection.

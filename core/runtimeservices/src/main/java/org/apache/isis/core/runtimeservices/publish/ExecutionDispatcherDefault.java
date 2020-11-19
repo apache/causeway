@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.ExecutionListener;
+import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
 
 import lombok.RequiredArgsConstructor;

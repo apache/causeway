@@ -30,6 +30,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.audit.spi.EntityAuditListener;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
 import lombok.extern.log4j.Log4j2;

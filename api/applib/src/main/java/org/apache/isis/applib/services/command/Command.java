@@ -252,7 +252,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * <p>
      *     This can be used as a hint to decide whether to persist the command
      *     to a datastore, for example for auditing (though
-     *     {@link org.apache.isis.applib.services.publish.ExecutionListener} is
+     *     {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener} is
      *     an alternative for that use case) or so that it can be retrieved
      *     and replayed on another system, eg for regression testing.
      * </p>

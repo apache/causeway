@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.runtime.persistence.changetracking;
 
+import org.apache.isis.applib.services.audit.spi.ChangingEntities;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.publish.ChangingEntities;
 import org.apache.isis.applib.services.user.UserService;
 
 public interface HasEnlistedChangingEntities {

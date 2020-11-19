@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.publish;
+package org.apache.isis.applib.services.audit;
 
 import javax.inject.Named;
 
@@ -26,6 +26,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.audit.spi.ChangingEntities;
+import org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 

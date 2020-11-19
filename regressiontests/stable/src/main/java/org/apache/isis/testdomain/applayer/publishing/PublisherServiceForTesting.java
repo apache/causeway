@@ -26,10 +26,10 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.audit.spi.ChangingEntities;
+import org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
-import org.apache.isis.applib.services.publish.ChangingEntities;
-import org.apache.isis.applib.services.publish.ChangingEntitiesListener;
-import org.apache.isis.applib.services.publish.ExecutionListener;
+import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
