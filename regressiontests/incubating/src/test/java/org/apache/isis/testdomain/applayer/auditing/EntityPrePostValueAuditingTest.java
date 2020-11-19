@@ -44,7 +44,7 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingAuditing.class,
+                Configuration_usingEntityPrePostValueAuditing.class,
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
@@ -54,7 +54,7 @@ import lombok.val;
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class AuditerServiceTest extends IsisIntegrationTestAbstract {
+class EntityPrePostValueAuditingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;

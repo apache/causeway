@@ -141,22 +141,21 @@ public class ApplicationLayerTestFactory {
 
             preAuditHook.setVerifier(verifier);
             
-            // when - direct change (circumventing the framework)
-            book.setName("Book #2");
-            repository.persist(book);
+            transactionService.executeWithinTransaction(()->{
+
+                // when - direct change (circumventing the framework)
+                book.setName("Book #2");
+                repository.persist(book);
+                
+            });
             
             preAuditHook.setVerifier(null);
 
-            // this test does not trigger publishing 
-            // because invocation happens directly rather than through the means of
-            // an implementation of ObjectMemberAbstract, which has the meta-data
-            // required to generate the associated CommandDTO
-
-            //TODO however, we should still be able to receive valid metrics 
-            // even though Commands don't have CommandDTOs
+            // This test does not trigger command or execution dispatching, however it does trigger
+            // auditing.
 
             // then
-            verifier.accept(VerificationStage.FAILURE_CASE);
+            verifier.accept(VerificationStage.POST_COMMIT);
         });
     }
     

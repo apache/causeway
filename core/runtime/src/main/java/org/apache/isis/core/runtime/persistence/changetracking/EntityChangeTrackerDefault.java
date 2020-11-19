@@ -123,30 +123,30 @@ implements
     }
 
     private void enlistCreatedInternal(final @NonNull ManagedObject adapter) {
-        if(shouldIgnore(adapter)) {
+        if(!isEntityEnabledForAuditing(adapter)) {
             return;
         }
-        enlistForPublishing(adapter, EntityChangeKind.CREATE);
-        enlistForAuditing(adapter, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
+        enlistForChangeKindAuditing(adapter, EntityChangeKind.CREATE);
+        enlistForPreAndPostValueAuditing(adapter, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
     }
 
     private void enlistUpdatingInternal(final @NonNull ManagedObject adapter) {
-        if(shouldIgnore(adapter)) {
+        if(!isEntityEnabledForAuditing(adapter)) {
             return;
         }
-        enlistForPublishing(adapter, EntityChangeKind.UPDATE);
-        enlistForAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
+        enlistForChangeKindAuditing(adapter, EntityChangeKind.UPDATE);
+        enlistForPreAndPostValueAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
     private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
-        if(shouldIgnore(adapter)) {
+        if(!isEntityEnabledForAuditing(adapter)) {
             return;
         }
-        final boolean enlisted = enlistForPublishing(adapter, EntityChangeKind.DELETE);
+        final boolean enlisted = enlistForChangeKindAuditing(adapter, EntityChangeKind.DELETE);
         if(!enlisted) {
             return;
         }
-        enlistForAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
+        enlistForPreAndPostValueAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
 
@@ -157,9 +157,22 @@ implements
         return changedObjectPropertiesRef.get();
     }
 
-    private boolean shouldIgnore(final @NonNull ManagedObject adapter) {
+    private boolean isEntityEnabledForAuditing(final @NonNull ManagedObject adapter) {
+
+        if(changedObjectPropertiesRef.isMemoized()) {
+            throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
+                    + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
+        }
+        
         val spec = adapter.getSpecification();
-        return !spec.isEntity();
+        if(!spec.isEntity()) {
+            return false;
+        }
+        if(!AuditableFacet.isAuditingEnabled(spec)) {
+            return false; // ignore entities that are not enabled for auditing
+        }
+        
+        return true;
     }
 
     // end::refguide[]
@@ -172,7 +185,7 @@ implements
         switch (preCommitPhase) {
         case AUDITING:
             log.debug("about to dispatch audit entries and entity changes");
-            prepareAuditing();
+            prepareAuditDispatching();
             entityAuditDispatcher.dispatchEntityAudits(this);
             changingEntitiesDispatcher.dispatchChangingEntities(this);
             break;
@@ -187,7 +200,7 @@ implements
         }
     }
     
-    private void prepareAuditing() {
+    private void prepareAuditDispatching() {
         val command = currentInteraction().getCommand();
         command.updater().setSystemStateChanged(
                 command.isSystemStateChanged() 
@@ -212,7 +225,7 @@ implements
     /**
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
-    private boolean enlistForPublishing(
+    private boolean enlistForChangeKindAuditing(
             final @NonNull ManagedObject entity, 
             final @NonNull EntityChangeKind changeKind) {
         
@@ -247,18 +260,9 @@ implements
         return previousChangeKind == null;
     }
 
-    private void enlistForAuditing(
+    private void enlistForPreAndPostValueAuditing(
             final ManagedObject entity, 
             final Function<AdapterAndProperty, PreAndPostValues> pre) {
-        
-        if(changedObjectPropertiesRef.isMemoized()) {
-            throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
-                    + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
-        }
-        
-        if(!AuditableFacet.isAuditingEnabled(entity.getSpecification())) {
-            return; // ignore entities that are not enabled for auditing
-        }
 
         log.debug("enlist entity's property changes for auditing {}", entity);
 

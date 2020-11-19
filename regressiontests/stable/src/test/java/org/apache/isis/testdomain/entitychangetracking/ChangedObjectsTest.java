@@ -31,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.auditing.EntityAuditListenerForTesting;
-import org.apache.isis.testdomain.applayer.auditing.Configuration_usingAuditing;
-import org.apache.isis.testdomain.applayer.publishing.Configuration_usingPublishing;
+import org.apache.isis.testdomain.applayer.auditing.Configuration_usingEntityPrePostValueAuditing;
+import org.apache.isis.testdomain.applayer.publishing.Configuration_usingEntityChangeKindAuditing;
 import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.commons.InteractionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -47,8 +47,8 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingAuditing.class,
-                Configuration_usingPublishing.class,
+                Configuration_usingEntityPrePostValueAuditing.class,
+                Configuration_usingEntityChangeKindAuditing.class,
                 InteractionBoundaryProbe.class,
         }, 
         properties = {

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing;
+package org.apache.isis.testdomain.applayer.auditing;
 
 import java.util.List;
 
@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
+import org.apache.isis.testdomain.applayer.publishing.Configuration_usingEntityChangeKindAuditing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -47,7 +48,7 @@ import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceFor
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingPublishing.class,
+                Configuration_usingEntityChangeKindAuditing.class,
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
@@ -58,7 +59,7 @@ import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceFor
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class PublisherServiceTest extends IsisIntegrationTestAbstract {
+class EntityChangeKindAuditingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;

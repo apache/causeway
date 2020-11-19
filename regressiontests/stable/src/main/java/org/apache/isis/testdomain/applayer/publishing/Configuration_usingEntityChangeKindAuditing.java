@@ -16,15 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.auditing;
+package org.apache.isis.testdomain.applayer.publishing;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
+
 @Configuration
 @Import({
-    EntityAuditListenerForTesting.class
+    KVStoreForTesting.class,
+    PublisherServiceForTesting.class
 })
-public class Configuration_usingAuditing {
+public class Configuration_usingEntityChangeKindAuditing {
 
 }

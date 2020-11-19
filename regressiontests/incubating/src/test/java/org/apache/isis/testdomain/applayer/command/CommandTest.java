@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.applayer.auditing.Configuration_usingAuditing;
+import org.apache.isis.testdomain.applayer.auditing.Configuration_usingEntityPrePostValueAuditing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -45,7 +45,7 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingAuditing.class
+                Configuration_usingEntityPrePostValueAuditing.class
         }, 
         properties = {
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG"
