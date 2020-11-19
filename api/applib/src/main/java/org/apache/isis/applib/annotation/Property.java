@@ -121,6 +121,16 @@ public @interface Property {
 
     // end::refguide[]
     /**
+     * Whether {@link Interaction.Execution}s 
+     * (triggered property edits), should be dispatched to 
+     * {@link ExecutionListener}s.
+     */
+    // tag::refguide[]
+    ExecutionDispatch executionDispatch()                       // <.>
+            default ExecutionDispatch.NOT_SPECIFIED;
+    
+    // end::refguide[]
+    /**
      * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
      *
      * <p>
@@ -210,16 +220,6 @@ public @interface Property {
     // tag::refguide[]
     Projecting projecting()                                     // <.>
             default Projecting.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * Whether {@link Interaction.Execution}s 
-     * (triggered property edits), should be dispatched to 
-     * {@link ExecutionListener}s.
-     */
-    // tag::refguide[]
-    ExecutionDispatch executionDispatch()                                     // <.>
-            default ExecutionDispatch.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
