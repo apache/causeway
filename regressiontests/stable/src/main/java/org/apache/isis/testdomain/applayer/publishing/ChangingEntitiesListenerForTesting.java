@@ -40,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class PublisherServiceForTesting 
+public class ChangingEntitiesListenerForTesting 
 implements 
     ExecutionListener,
     ChangingEntitiesListener {
@@ -84,19 +84,19 @@ implements
     @SuppressWarnings("unchecked")
     public static Can<ChangingEntities> getPublishedObjects(KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<ChangingEntities>) kvStore.get(PublisherServiceForTesting.class, "publishedObjects")
+                (List<ChangingEntities>) kvStore.get(ChangingEntitiesListenerForTesting.class, "publishedObjects")
                 .orElse(null));
     }
 
     @SuppressWarnings("unchecked")
     public static Can<Execution<?, ?>> getPublishedExecutions(KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<Execution<?, ?>>) kvStore.get(PublisherServiceForTesting.class, "publishedExecutions")
+                (List<Execution<?, ?>>) kvStore.get(ChangingEntitiesListenerForTesting.class, "publishedExecutions")
                 .orElse(null));
     }
 
     public static void clearPublishedEntries(KVStoreForTesting kvStore) {
-        kvStore.clear(PublisherServiceForTesting.class);
+        kvStore.clear(ChangingEntitiesListenerForTesting.class);
     }
 
     public static int getCreated(KVStoreForTesting kvStore) {

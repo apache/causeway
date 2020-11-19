@@ -26,7 +26,7 @@ import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 @Configuration
 @Import({
     KVStoreForTesting.class,
-    PublisherServiceForTesting.class
+    ChangingEntitiesListenerForTesting.class
 })
 public class Configuration_usingEntityChangeKindAuditing {
 

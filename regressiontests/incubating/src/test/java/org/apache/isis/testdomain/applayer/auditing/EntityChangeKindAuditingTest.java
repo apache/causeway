@@ -38,12 +38,12 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.clearPublishedEntries;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getCreated;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getDeleted;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getLoaded;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getModified;
-import static org.apache.isis.testdomain.applayer.publishing.PublisherServiceForTesting.getUpdated;
+import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.clearPublishedEntries;
+import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getCreated;
+import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getDeleted;
+import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getLoaded;
+import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getModified;
+import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getUpdated;
 
 @SpringBootTest(
         classes = {
