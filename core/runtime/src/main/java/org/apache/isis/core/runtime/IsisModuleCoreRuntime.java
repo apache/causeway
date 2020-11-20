@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.events.persistence.TimestampService;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
-import org.apache.isis.core.runtime.persistence.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTrackerDefault;
 
 @Configuration
@@ -38,7 +37,6 @@ import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTrack
         // @Service's
         RuntimeEventService.class,
         TimestampService.class,
-        EntityPropertyChangePublisher.class,
         EntityChangeTrackerDefault.class,
 
         // @Configuration's

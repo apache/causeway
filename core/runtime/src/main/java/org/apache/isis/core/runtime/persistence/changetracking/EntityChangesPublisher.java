@@ -18,6 +18,12 @@
  */
 package org.apache.isis.core.runtime.persistence.changetracking;
 
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
+
+/**
+ * Notifies {@link EntityChangesSubscriber}s.
+ * @since 2.0
+ */
 public interface EntityChangesPublisher {
 
     void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges);

@@ -27,7 +27,6 @@ import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
-import org.apache.isis.core.metamodel.services.command.CommandPublisherDefault;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
@@ -45,8 +44,10 @@ import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
+import org.apache.isis.core.runtimeservices.publish.CommandPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefault;
-import org.apache.isis.core.runtimeservices.publish.ExecutionDispatcherDefault;
+import org.apache.isis.core.runtimeservices.publish.EntityPropertyChangePublisherDefault;
+import org.apache.isis.core.runtimeservices.publish.ExecutionPublisherDefault;
 import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
@@ -71,6 +72,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         // @Service's
         BookmarkServiceDefault.class,
         EntityChangesPublisherDefault.class,
+        EntityPropertyChangePublisherDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
         CommandPublisherDefault.class,
@@ -78,7 +80,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         EmailNotificationServiceDefault.class,
         EmailServiceDefault.class,
         ExceptionRecognizerServiceDefault.class,
-        ExecutionDispatcherDefault.class,
+        ExecutionPublisherDefault.class,
         EventBusServiceSpring.class,
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,

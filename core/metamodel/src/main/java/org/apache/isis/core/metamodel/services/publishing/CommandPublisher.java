@@ -16,42 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.publishing.log;
+package org.apache.isis.core.metamodel.services.publishing;
 
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.NonNull;
 
-@Service
-@Named("isisApplib.CommandLogger")
-@Order(OrderPrecedence.LATE)
-@Primary
-@Qualifier("Logging")
-@Log4j2
-public class CommandLogger implements CommandSubscriber {
+/**
+ * Notifies {@link CommandSubscriber}s.
+ * @since 2.0
+ */
+//tag::refguide[]
+public interface CommandPublisher {
 
-    @Override
-    public boolean isEnabled() {
-        return log.isDebugEnabled();
-    }
-
-    @Override
-    public void onCompleted(Command command) {
-        
-        log.debug("completed: {}, systemStateChanged {}",
-                command.getLogicalMemberIdentifier(),
-                command.isSystemStateChanged());
-        
-        //log.debug("completed: {}", command);
-    }
-
+    /**
+     * &quot;Complete&quot; the command, providing an opportunity ot persist
+     * a memento of the command if the
+     * {@link Command#isSystemStateChanged() system state has changed}.
+     *
+     * <p>
+     *     The framework will automatically have set the {@link Command#getCompletedAt()} property.
+     * </p>
+     */
+    // end::refguide[]
+    void complete(@NonNull Command command); // <.>
+    //tag::refguide[]
+    
 }
+// end::refguide[]

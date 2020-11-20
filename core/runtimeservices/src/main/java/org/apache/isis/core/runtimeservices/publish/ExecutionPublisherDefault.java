@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -35,39 +36,46 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
-import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-/**
- * Wrapper around {@link ExecutionSubscriber}.  Is a no-op if there is no injected service.
- */
 @Service
-@Named("isisRuntimeServices.ExecutionDispatcherDefault")
+@Named("isisRuntimeServices.ExecutionPublisherDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
-public class ExecutionDispatcherDefault 
-implements ExecutionDispatcher {
+public class ExecutionPublisherDefault 
+implements ExecutionPublisher {
 
-    private final List<ExecutionSubscriber> executionListeners;
-
-    @Override
-    public void dispatchActionInvoking(final Interaction.Execution<?,?> execution) {
-        notifyListeners(execution);
+    private final List<ExecutionSubscriber> subscribers;
+    
+    private Can<ExecutionSubscriber> enabledSubscribers;
+    
+    @PostConstruct
+    public void init() {
+        enabledSubscribers = Can.ofCollection(subscribers)
+                .filter(HasEnabling::isEnabled);
     }
 
     @Override
-    public void dispatchPropertyChanging(final Interaction.Execution<?,?> execution) {
-        notifyListeners(execution);
+    public void publishActionInvocation(final Interaction.Execution<?,?> execution) {
+        notifySubscribers(execution);
+    }
+
+    @Override
+    public void publishPropertyEdit(final Interaction.Execution<?,?> execution) {
+        notifySubscribers(execution);
     }
     
     @Override
-    public <T> T withDispatchSuppressed(final Supplier<T> block) {
+    public <T> T withPublishingSuppressed(final Supplier<T> block) {
         try {
             suppressionRequestCounter.increment();
             return block.get();
@@ -78,20 +86,20 @@ implements ExecutionDispatcher {
 
     // -- HELPERS
 
-    private void notifyListeners(final Interaction.Execution<?,?> execution) {
+    private void notifySubscribers(final Interaction.Execution<?,?> execution) {
         if(isSuppressed()) {
             return;
         }
-        for (val executionListener : executionListeners) {
-            executionListener.onExecution(execution);
+        for (val subscriber : enabledSubscribers) {
+            subscriber.onExecution(execution);
         }
     }
 
     private final LongAdder suppressionRequestCounter = new LongAdder();
     
     private boolean isSuppressed() {
-        return executionListeners == null 
-                || executionListeners.isEmpty() 
+        return enabledSubscribers == null 
+                || enabledSubscribers.isEmpty() 
                 || suppressionRequestCounter.intValue() > 0;
     }
     

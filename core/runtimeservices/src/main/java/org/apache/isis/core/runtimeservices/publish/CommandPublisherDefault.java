@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.command;
+package org.apache.isis.core.runtimeservices.publish;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,34 +32,38 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isisMetaModel.CommandPublisher")
+@Named("isisRuntimeServices.CommandPublisherDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Internal")
-@Log4j2
-// tag::refguide[]
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+//@Log4j2
 public class CommandPublisherDefault implements CommandPublisher {
+    
+    private final List<CommandSubscriber> subscribers;
+    
+    private Can<CommandSubscriber> enabledSubscribers;
+    
+    @PostConstruct
+    public void init() {
+        enabledSubscribers = Can.ofCollection(subscribers)
+                .filter(HasEnabling::isEnabled);
+    }
 
-    // end::refguide[]
-    /**
-     * &quot;Complete&quot; the command, providing an opportunity ot persist
-     * a memento of the command if the
-     * {@link Command#isSystemStateChanged() system state has changed}.
-     *
-     * <p>
-     *     The framework will automatically have set the {@link Command#getCompletedAt()} property.
-     * </p>
-     */
-    // tag::refguide[]
     @Override
-    public void complete(final @NonNull Command command) {   // <.>
-        // ...
-    // end::refguide[]
+    public void complete(final @NonNull Command command) { 
+        
+        if(!canPublish()) {
+            return;
+        }
 
         if(!command.isDispatchingEnabled()) {
             return;
@@ -68,15 +73,15 @@ public class CommandPublisherDefault implements CommandPublisher {
             return;
         }
 
-        log.debug("completed: {}, systemStateChanged {}",
-                command.getLogicalMemberIdentifier(),
-                command.isSystemStateChanged());
-
-    // tag::refguide[]
-        subscribers.forEach(commandListener -> commandListener.onCompleted(command));
+        subscribers.forEach(subscriber -> subscriber.onCompleted(command));
     }
-
-    @Inject List<CommandSubscriber> subscribers;
+    
+    // -- HELPER
+    
+    private boolean canPublish() {
+        return enabledSubscribers.isNotEmpty();
+    }
+    
 
 }
-// end::refguide[]
+

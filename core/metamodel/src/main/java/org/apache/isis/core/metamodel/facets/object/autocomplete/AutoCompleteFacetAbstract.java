@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
-import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
+import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
@@ -75,7 +75,7 @@ implements AutoCompleteFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val resultAdapter = getPublisherDispatchService()
-        .withDispatchSuppressed(()->{
+        .withPublishingSuppressed(()->{
                 final Object list = _Reflect.invokeMethodOn(repositoryMethod, getRepository(), search)
                         .onFailure(e->log.warn("failure while executing auto-complete", e))
                         .getOrElse(Collections::emptyList);
@@ -91,8 +91,8 @@ implements AutoCompleteFacet {
         return getServiceRegistry().lookupService(repositoryClass).orElse(null);
     }
 
-    private ExecutionDispatcher getPublisherDispatchService() {
-        return getServiceRegistry().lookupServiceElseFail(ExecutionDispatcher.class);
+    private ExecutionPublisher getPublisherDispatchService() {
+        return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 
 

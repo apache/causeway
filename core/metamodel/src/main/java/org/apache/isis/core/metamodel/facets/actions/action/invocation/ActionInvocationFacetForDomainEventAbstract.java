@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
-import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
+import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
@@ -218,7 +218,7 @@ implements ImperativeFacet {
         // publish (if not a contributed association, query-only mixin)
         val publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
         if (publishedActionFacet != null) {
-            getExecutionDispatcher().dispatchActionInvoking(priorExecution);
+            getExecutionDispatcher().publishActionInvocation(priorExecution);
         }
 
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
@@ -372,8 +372,8 @@ implements ImperativeFacet {
         return serviceRegistry.lookupServiceElseFail(MetricsService.class);
     }
 
-    private ExecutionDispatcher getExecutionDispatcher() {
-        return serviceRegistry.lookupServiceElseFail(ExecutionDispatcher.class);
+    private ExecutionPublisher getExecutionDispatcher() {
+        return serviceRegistry.lookupServiceElseFail(ExecutionPublisher.class);
     }
 
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {

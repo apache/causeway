@@ -21,16 +21,21 @@ package org.apache.isis.core.metamodel.services.publishing;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 
-public interface ExecutionDispatcher {
+/**
+ * Notifies {@link ExecutionSubscriber}s.
+ * @since 2.0
+ */
+public interface ExecutionPublisher {
 
-    void dispatchActionInvoking(Interaction.Execution<?,?> execution);
+    void publishActionInvocation(Interaction.Execution<?,?> execution);
 
-    void dispatchPropertyChanging(Interaction.Execution<?,?> execution);
+    void publishPropertyEdit(Interaction.Execution<?,?> execution);
 
     /**
      * Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.
      */
-    <T> T withDispatchSuppressed(Supplier<T> block);
+    <T> T withPublishingSuppressed(Supplier<T> block);
 
 }

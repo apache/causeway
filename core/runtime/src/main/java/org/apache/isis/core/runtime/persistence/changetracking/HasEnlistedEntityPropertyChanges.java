@@ -18,10 +18,14 @@
  */
 package org.apache.isis.core.runtime.persistence.changetracking;
 
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.stream.Stream;
 
-interface HasEnlistedEntityPropertyChangeRecords {
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.applib.services.xactn.TransactionId;
 
-    Set<PropertyChangeRecord> getPropertyChangeRecords();
+public interface HasEnlistedEntityPropertyChanges {
+
+    Stream<EntityPropertyChange> streamPropertyChanges(Timestamp timestamp, String user, TransactionId txId);
 
 }

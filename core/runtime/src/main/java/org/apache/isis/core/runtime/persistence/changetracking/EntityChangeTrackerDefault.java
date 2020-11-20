@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,7 +44,9 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -89,13 +92,13 @@ implements
     TransactionScopeListener,
     MetricsService,
     EntityChangeTracker,
-    HasEnlistedEntityPropertyChangeRecords, 
+    HasEnlistedEntityPropertyChanges, 
     HasEnlistedEntityChanges {
 
     // end::refguide[]
     
-    @Inject private EntityPropertyChangePublisher entityAuditDispatcher;
-    @Inject private EntityChangesPublisher changingEntitiesDispatcher;
+    @Inject private EntityPropertyChangePublisher entityPropertyChangePublisher;
+    @Inject private EntityChangesPublisher entityChangesPublisher;
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionContext> interactionContextProvider;
     
@@ -149,9 +152,7 @@ implements
         enlistForPreAndPostValueAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
-
-    @Override
-    public Set<PropertyChangeRecord> getPropertyChangeRecords() {
+    private Set<PropertyChangeRecord> getPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction, 
         // such that cannot enlist on top of it
         return changedObjectPropertiesRef.get();
@@ -186,8 +187,8 @@ implements
         case AUDITING:
             log.debug("about to dispatch audit entries and entity changes");
             prepareAuditDispatching();
-            entityAuditDispatcher.publishEntityAudits(this);
-            changingEntitiesDispatcher.publishChangingEntities(this);
+            entityPropertyChangePublisher.publishChangedProperties(this);
+            entityChangesPublisher.publishChangingEntities(this);
             break;
         case POST_AUDITING:
             log.debug("purging auditing data");
@@ -406,6 +407,17 @@ implements
             event.initSource(pojo);
             eventBusService.post(event);
         }
+    }
+
+    @Override
+    public Stream<EntityPropertyChange> streamPropertyChanges(
+            final java.sql.Timestamp timestamp,
+            final String user,
+            final TransactionId txId) {
+        
+        return getPropertyChangeRecords().stream()
+        .map(propertyChangeRecord->EntityPropertyChangeFactory
+                .createEntityPropertyChange(timestamp, user, txId, propertyChangeRecord));
     }
 
 

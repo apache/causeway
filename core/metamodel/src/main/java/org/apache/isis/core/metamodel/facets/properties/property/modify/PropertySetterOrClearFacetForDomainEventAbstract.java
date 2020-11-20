@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
-import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
+import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -293,7 +293,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         // publish (if not a contributed association, query-only mixin)
         val publishedPropertyFacet = getIdentified().getFacet(ExecutionDispatchPropertyFacet.class);
         if (publishedPropertyFacet != null) {
-            getExecutionDispatcher().dispatchPropertyChanging(priorExecution);
+            getExecutionDispatcher().publishPropertyEdit(priorExecution);
         }
 
         return getObjectManager().adapt(targetPojo);
@@ -331,8 +331,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         return getServiceRegistry().lookupServiceElseFail(MetricsService.class);
     }
 
-    private ExecutionDispatcher getExecutionDispatcher() {
-        return getServiceRegistry().lookupServiceElseFail(ExecutionDispatcher.class);
+    private ExecutionPublisher getExecutionDispatcher() {
+        return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

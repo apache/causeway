@@ -31,30 +31,32 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.core.runtime.persistence.changetracking.EntityChangesPublisher;
-import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedEntityChanges;
+import org.apache.isis.core.runtime.persistence.changetracking.EntityPropertyChangePublisher;
+import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedEntityPropertyChanges;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.EntityChangesPublisherDefault")
+@Named("isisRuntimeServices.EntityPropertyChangePublisherDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
-public class EntityChangesPublisherDefault implements EntityChangesPublisher {
+public class EntityPropertyChangePublisherDefault implements EntityPropertyChangePublisher {
     
-    private final List<EntityChangesSubscriber> subscribers;
-    private final ClockService clockService;
+    private final List<EntityPropertyChangeSubscriber> subscribers;
     private final UserService userService;
+    private final ClockService clockService;
+    private final TransactionService transactionService;
     
-    private Can<EntityChangesSubscriber> enabledSubscribers;
+    private Can<EntityPropertyChangeSubscriber> enabledSubscribers;
     
     @PostConstruct
     public void init() {
@@ -62,27 +64,34 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
                 .filter(HasEnabling::isEnabled);
     }
 
-    public void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
-
-        if(!canPublish()) {
-            return;
+    @Override
+    public void publishChangedProperties(
+            final HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
+        
+        if(!canPublish()) { 
+            return; 
         }
         
-        val entityChanges = hasEnlistedEntityChanges.getEntityChanges(clockService, userService);
+        val currentTime = clockService.nowAsJavaSqlTimestamp();
+        val currentUser = userService.getUser().getName();
+        val currentTransactionId = transactionService.currentTransactionId();
         
-        if(entityChanges == null) {
-            return;
-        }
-        
-        for (val subscriber : enabledSubscribers) {
-            subscriber.onChanging(entityChanges);
-        }
+        hasEnlistedEntityPropertyChanges.streamPropertyChanges(
+                currentTime, 
+                currentUser,
+                currentTransactionId)
+        .forEach(propertyChange->{
+            for (val subscriber : enabledSubscribers) {
+                subscriber.onChanging(propertyChange);
+            }
+        });
     }
-    
+
     // -- HELPER
     
     private boolean canPublish() {
         return enabledSubscribers.isNotEmpty();
     }
+
 
 }
