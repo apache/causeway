@@ -28,10 +28,10 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@Property(executionDispatch = Publishing.DISABLED)         // <.>
+@Property(executionPublishing = Publishing.DISABLED) // <.>
 @Inherited
 @Target({
-        ElementType.METHOD, ElementType.FIELD       // <.>
+        ElementType.METHOD, ElementType.FIELD        // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PropertyExecutionDispatchDisabledMetaAnnotation {

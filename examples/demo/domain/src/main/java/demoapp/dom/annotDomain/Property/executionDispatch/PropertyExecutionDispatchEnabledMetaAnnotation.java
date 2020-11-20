@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Property;
 
 //tag::class[]
-@Property(executionDispatch = Publishing.ENABLED)          // <.>
+@Property(executionPublishing = Publishing.ENABLED) // <.>
 @Inherited
 @Target({
         ElementType.METHOD, ElementType.FIELD       // <.>

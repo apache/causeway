@@ -126,7 +126,7 @@ public @interface Property {
      * {@link ExecutionSubscriber}s.
      */
     // tag::refguide[]
-    Publishing executionDispatch()                             // <.>
+    Publishing executionPublishing()                             // <.>
             default Publishing.NOT_SPECIFIED;
     
     // end::refguide[]

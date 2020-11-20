@@ -39,14 +39,14 @@ import lombok.val;
 public class Annotations_getAnnotations_on_Field_Test {
 
 
-    @Property(executionDispatch = Publishing.ENABLED)
+    @Property(executionPublishing = Publishing.ENABLED)
     @Inherited
     @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Published {
     }
 
-    @Property(executionDispatch = Publishing.DISABLED)
+    @Property(executionPublishing = Publishing.DISABLED)
     @Inherited
     @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -64,7 +64,7 @@ public class Annotations_getAnnotations_on_Field_Test {
     public void direct() throws Exception {
 
         class SomeDomainObject {
-            @Property(executionDispatch = Publishing.ENABLED)
+            @Property(executionPublishing = Publishing.ENABLED)
             private String name;
 
             public String getName() {
@@ -76,13 +76,13 @@ public class Annotations_getAnnotations_on_Field_Test {
         val nearestF = _Annotations.synthesizeInherited(field, Property.class);
         
         assertThat(nearestF.isPresent(), is(true));
-        assertThat(nearestF.get().executionDispatch(), is(Publishing.ENABLED));
+        assertThat(nearestF.get().executionPublishing(), is(Publishing.ENABLED));
         
         val method = SomeDomainObject.class.getMethod("getName");
         val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
-        assertThat(nearestM.get().executionDispatch(), is(Publishing.ENABLED));
+        assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
-        assertThat(nearestM.get().executionDispatch(), is(Publishing.ENABLED));
+        assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
-        assertThat(nearestM.get().executionDispatch(), is(Publishing.ENABLED));
+        assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -137,7 +137,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
-        assertThat(nearestM.get().executionDispatch(), is(Publishing.ENABLED));
+        assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -156,7 +156,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
-        assertThat(nearestM.get().executionDispatch(), is(Publishing.DISABLED));
+        assertThat(nearestM.get().executionPublishing(), is(Publishing.DISABLED));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         class SomeDomainObject {
             @MetaPublished
             @Published
-            @Property(executionDispatch = Publishing.DISABLED)
+            @Property(executionPublishing = Publishing.DISABLED)
             private String name;
             public String getName() {
                 return name;
@@ -176,7 +176,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
-        assertThat(nearestM.get().executionDispatch(), is(Publishing.DISABLED));
+        assertThat(nearestM.get().executionPublishing(), is(Publishing.DISABLED));
     }
 
 
@@ -186,7 +186,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         class SomeDomainObject {
             @MetaPublished
             @NotPublished
-            @Property(executionDispatch = Publishing.ENABLED)
+            @Property(executionPublishing = Publishing.ENABLED)
             private String name;
             public String getName() {
                 return name;
@@ -197,7 +197,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
-        assertThat(nearestM.get().executionDispatch(), is(Publishing.ENABLED));
+        assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
     }
 
 }

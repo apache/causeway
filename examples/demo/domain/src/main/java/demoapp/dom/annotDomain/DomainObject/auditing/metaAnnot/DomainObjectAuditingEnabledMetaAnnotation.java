@@ -24,11 +24,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@DomainObject(auditing = Auditing.ENABLED) // <.>
+@DomainObject(entityChangePublishing = Publishing.ENABLED)    // <.>
 @Inherited
 @Target({
         ElementType.TYPE, ElementType.ANNOTATION_TYPE         // <.>

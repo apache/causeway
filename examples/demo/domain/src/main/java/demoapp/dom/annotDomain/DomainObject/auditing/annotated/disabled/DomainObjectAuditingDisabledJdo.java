@@ -23,11 +23,11 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
@@ -41,7 +41,7 @@ import demoapp.dom.annotDomain.DomainObject.auditing.DomainObjectAuditingJdo;
 @DomainObject(
     nature=Nature.JDO_ENTITY
     , objectType = "demo.DomainObjectAuditingDisabledJdo"
-    , auditing = Auditing.DISABLED           // <.>
+    , entityChangePublishing = Publishing.DISABLED           // <.>
     , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(

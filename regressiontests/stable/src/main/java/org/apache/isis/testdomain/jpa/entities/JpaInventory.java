@@ -23,11 +23,11 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,7 +43,7 @@ import lombok.ToString;
 @DomainObject(
         objectType = "testdomain.jdo.Inventory",
         nature = Nature.JPA_ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
-        auditing = Auditing.ENABLED)
+        entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()  // causes UI events to be triggered
 @NoArgsConstructor(access = AccessLevel.PROTECTED) 
 @AllArgsConstructor(staticName = "of") 

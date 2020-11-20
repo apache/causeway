@@ -110,15 +110,15 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     public static class Auditing extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(auditing = org.apache.isis.applib.annotation.Auditing.AS_CONFIGURED)
+        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
         class CustomerWithDomainObjectAndAuditingSetToAsConfigured {
         }
 
-        @DomainObject(auditing = org.apache.isis.applib.annotation.Auditing.DISABLED)
+        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotation.Publishing.DISABLED)
         class CustomerWithDomainObjectAndAuditingSetToDisabled {
         }
 
-        @DomainObject(auditing = org.apache.isis.applib.annotation.Auditing.ENABLED)
+        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotation.Publishing.ENABLED)
         class CustomerWithDomainObjectAndAuditingSetToEnabled {
         }
 

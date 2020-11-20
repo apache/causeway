@@ -21,10 +21,10 @@ package org.apache.isis.testdomain.jpa.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,7 +38,7 @@ import lombok.ToString;
 @DomainObject(
         objectType = "testdomain.jpa.Book",
         nature = Nature.JPA_ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI 
-        auditing = Auditing.ENABLED)
+        entityChangePublishing = Publishing.ENABLED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class JpaBook extends JpaProduct {

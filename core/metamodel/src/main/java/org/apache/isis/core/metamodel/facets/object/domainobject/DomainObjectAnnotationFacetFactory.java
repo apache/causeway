@@ -138,7 +138,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         }
 
         // check for @DomainObject(auditing=....)
-        val auditing = processClassContext.synthesizeOnType(DomainObject.class).map(DomainObject::auditing);
+        val auditing = processClassContext.synthesizeOnType(DomainObject.class).map(DomainObject::entityChangePublishing);
         val auditableFacet = AuditableFacetForDomainObjectAnnotation
                 .create(auditing, getConfiguration(), facetHolder);
 

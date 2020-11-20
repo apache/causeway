@@ -63,7 +63,7 @@ public class PropertyExecutionDispatchJdo
 
 //tag::annotation[]
     @Property(
-        executionDispatch = Publishing.ENABLED             // <.>
+            executionPublishing = Publishing.ENABLED             // <.>
     )
     @PropertyLayout(
         describedAs =
@@ -89,7 +89,7 @@ public class PropertyExecutionDispatchJdo
 //tag::meta-annotated-overridden[]
     @PropertyExecutionDispatchDisabledMetaAnnotation   // <.>
     @Property(
-        executionDispatch = Publishing.ENABLED         // <.>
+            executionPublishing = Publishing.ENABLED   // <.>
     )
     @PropertyLayout(
         describedAs =

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.auditing;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Auditing;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
@@ -34,13 +34,13 @@ import lombok.val;
 public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {
 
     public static AuditableFacet create(
-            Optional<Auditing> auditingIfAny,
+            Optional<Publishing> entityChangePublishingIfAny,
             IsisConfiguration configuration,
             FacetHolder holder) {
 
-        val auditing = auditingIfAny.orElse(Auditing.AS_CONFIGURED); 
+        val publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED); 
                 
-        switch (auditing) {
+        switch (publish) {
         case NOT_SPECIFIED:
         case AS_CONFIGURED:
 
@@ -49,7 +49,7 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
             case NONE:
                 return null;
             default:
-                return auditingIfAny.isPresent()
+                return entityChangePublishingIfAny.isPresent()
                         ? new AuditableFacetForDomainObjectAnnotationAsConfigured(holder)
                         : new AuditableFacetFromConfiguration(holder);
             }
@@ -60,7 +60,7 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
             return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
             
         default:
-            throw _Exceptions.unmatchedCase(auditing);
+            throw _Exceptions.unmatchedCase(publish);
         }
     }
 

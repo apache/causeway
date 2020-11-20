@@ -42,7 +42,7 @@ extends ExecutionDispatchPropertyFacetAbstract {
         val publishingPolicy = PublishingPolicies.propertyExecutionPublishingPolicy(configuration);
 
         return propertyIfAny
-                .map(Property::executionDispatch)
+                .map(Property::executionPublishing)
                 .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
                 .map(publishing -> {
 
