@@ -16,12 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.changetracking;
+package org.apache.isis.testdomain.conf;
 
-import java.util.Set;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public interface HasEnlistedEntityAudits {
+import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
 
-    Set<AuditEntry> getEntityAuditEntries();
+@Configuration
+@Import({
+    EntityPropertyChangeSubscriberForTesting.class
+})
+public class Configuration_usingEntityPropertyChangePublishing {
 
 }

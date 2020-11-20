@@ -45,7 +45,7 @@ import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
-import org.apache.isis.core.runtimeservices.publish.ChangingEntitiesDispatcherDefault;
+import org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.ExecutionDispatcherDefault;
 import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
@@ -70,7 +70,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
         // @Service's
         BookmarkServiceDefault.class,
-        ChangingEntitiesDispatcherDefault.class,
+        EntityChangesPublisherDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
         CommandDispatcher.class,

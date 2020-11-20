@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.auditing;
+package org.apache.isis.testdomain.applayer.publishing;
 
 import java.util.List;
 
@@ -33,22 +33,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.Configuration_usingEntityChangeKindAuditing;
+import org.apache.isis.testdomain.conf.Configuration_usingEntityChangesPublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.clearPublishedEntries;
-import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getCreated;
-import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getDeleted;
-import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getLoaded;
-import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getModified;
-import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesListenerForTesting.getUpdated;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.clearPublishedEntries;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getCreated;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getDeleted;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getLoaded;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getModified;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getUpdated;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingEntityChangeKindAuditing.class,
+                Configuration_usingEntityChangesPublishing.class,
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
@@ -59,7 +59,7 @@ import static org.apache.isis.testdomain.applayer.publishing.ChangingEntitiesLis
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class EntityChangeKindAuditingTest extends IsisIntegrationTestAbstract {
+class EntityChangesPublishingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;

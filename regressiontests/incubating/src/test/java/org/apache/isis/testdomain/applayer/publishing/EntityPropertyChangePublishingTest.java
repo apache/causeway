@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.auditing;
+package org.apache.isis.testdomain.applayer.publishing;
 
 import java.util.List;
 
@@ -34,6 +34,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
+import org.apache.isis.testdomain.conf.Configuration_usingEntityPropertyChangePublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -44,7 +45,7 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingEntityPrePostValueAuditing.class,
+                Configuration_usingEntityPropertyChangePublishing.class,
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
@@ -54,7 +55,7 @@ import lombok.val;
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class EntityPrePostValueAuditingTest extends IsisIntegrationTestAbstract {
+class EntityPropertyChangePublishingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
@@ -65,17 +66,17 @@ class EntityPrePostValueAuditingTest extends IsisIntegrationTestAbstract {
     }
 
     private void given() {
-        EntityPropertyChangeSubscriberForTesting.clearAuditEntries(kvStore);
+        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
     }
 
     private void verify(VerificationStage verificationStage) {
         switch(verificationStage) {
         case PRE_COMMIT:
         case FAILURE_CASE:
-            assertHasAuditEntries(Can.empty());
+            assertHasPropertyChangeEntries(Can.empty());
             break;
         case POST_COMMIT:
-            assertHasAuditEntries(Can.of(
+            assertHasPropertyChangeEntries(Can.of(
                     "Jdo Book/name: 'Sample Book' -> 'Book #2'"));
             break;
         default:
@@ -85,8 +86,8 @@ class EntityPrePostValueAuditingTest extends IsisIntegrationTestAbstract {
 
     // -- HELPER
 
-    private void assertHasAuditEntries(Can<String> expectedAuditEntries) {
-        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getAuditEntries(kvStore);
+    private void assertHasPropertyChangeEntries(Can<String> expectedAuditEntries) {
+        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
         CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
     }
 

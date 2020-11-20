@@ -89,13 +89,13 @@ implements
     TransactionScopeListener,
     MetricsService,
     EntityChangeTracker,
-    HasEnlistedEntityAudits, 
-    HasEnlistedChangingEntities {
+    HasEnlistedEntityPropertyChangeRecords, 
+    HasEnlistedEntityChanges {
 
     // end::refguide[]
     
     @Inject private EntityPropertyChangePublisher entityAuditDispatcher;
-    @Inject private ChangingEntitiesDispatcher changingEntitiesDispatcher;
+    @Inject private EntityChangesPublisher changingEntitiesDispatcher;
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionContext> interactionContextProvider;
     
@@ -113,7 +113,7 @@ implements
      * <p>
      * Will be null until {@link #getEntityAuditEntries()} is called, thereafter contains the actual changes.
      */
-    private final _Lazy<Set<AuditEntry>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
+    private final _Lazy<Set<PropertyChangeRecord>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
     @Getter(AccessLevel.PACKAGE)
     private final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
@@ -151,7 +151,7 @@ implements
 
 
     @Override
-    public Set<AuditEntry> getEntityAuditEntries() {
+    public Set<PropertyChangeRecord> getPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction, 
         // such that cannot enlist on top of it
         return changedObjectPropertiesRef.get();
@@ -187,7 +187,7 @@ implements
             log.debug("about to dispatch audit entries and entity changes");
             prepareAuditDispatching();
             entityAuditDispatcher.dispatchEntityAudits(this);
-            changingEntitiesDispatcher.dispatchChangingEntities(this);
+            changingEntitiesDispatcher.publishChangingEntities(this);
             break;
         case POST_AUDITING:
             log.debug("purging auditing data");
@@ -208,7 +208,7 @@ implements
     }
 
     @Override
-    public EntityChanges getChangingEntities(ClockService clockService, UserService userService) {
+    public EntityChanges getEntityChanges(ClockService clockService, UserService userService) {
         return ChangingEntitiesFactory.of(clockService, userService).createChangingEntities(this);
     }
     
@@ -281,12 +281,12 @@ implements
      * For any enlisted Object Properties collects those, that are meant for auditing, 
      * then clears enlisted objects.
      */
-    private Set<AuditEntry> capturePostValuesAndDrain() {
+    private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
 
         val postValues = enlistedEntityPropertiesForAuditing.entrySet().stream()
                 .peek(this::updatePostOn) // set post values of audits, which have been left empty up to now
                 .filter(PreAndPostValues::shouldAudit)
-                .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
+                .map(entry->PropertyChangeRecord.of(entry.getKey(), entry.getValue()))
                 .collect(_Sets.toUnmodifiable());
 
         enlistedEntityPropertiesForAuditing.clear();
@@ -321,7 +321,7 @@ implements
     }
     
     int numberAuditedEntityPropertiesModified() {
-        return getEntityAuditEntries().size();
+        return getPropertyChangeRecords().size();
     }
 
     // -- ENTITY CHANGE TRACKING

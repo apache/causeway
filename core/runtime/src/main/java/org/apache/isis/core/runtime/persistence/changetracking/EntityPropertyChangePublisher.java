@@ -38,6 +38,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscr
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.having.HasEnabling;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -66,22 +67,22 @@ public class EntityPropertyChangePublisher {
     @PostConstruct
     public void init() {
         enabledSubscribers = Can.ofCollection(subscribers)
-                .filter(EntityPropertyChangeSubscriber::isEnabled);
+                .filter(HasEnabling::isEnabled);
     }
 
-    public void dispatchEntityAudits(final HasEnlistedEntityAudits hasEnlistedForAuditing) {
+    public void dispatchEntityAudits(final HasEnlistedEntityPropertyChangeRecords hasEnlistedForAuditing) {
         if(!canDispatch()) { 
             return; 
         }
         
         val currentUser = userService.getUser().getName();
         val currentTime = clockService.nowAsJavaSqlTimestamp();
-        val auditEntries = hasEnlistedForAuditing.getEntityAuditEntries();
+        val propertyChangeRecords = hasEnlistedForAuditing.getPropertyChangeRecords();
     
-        log.debug("about to process {} audits", ()->auditEntries.size());
+        log.debug("about to process {} property changes", ()->propertyChangeRecords.size());
         
-        for (val auditEntry : auditEntries) {
-            publishChangedProperty(currentTime, currentUser, auditEntry);
+        for (val propertyChangeRecord : propertyChangeRecords) {
+            publishChangedProperty(currentTime, currentUser, propertyChangeRecord);
         }
     }
 
@@ -94,16 +95,16 @@ public class EntityPropertyChangePublisher {
     private void publishChangedProperty(
             final java.sql.Timestamp timestamp,
             final String user,
-            final AuditEntry auditEntry) {
+            final PropertyChangeRecord propertyChangeRecord) {
 
-        val adapterAndProperty = auditEntry.getAdapterAndProperty();
+        val adapterAndProperty = propertyChangeRecord.getAdapterAndProperty();
         val spec = adapterAndProperty.getAdapter().getSpecification();
 
         final Bookmark target = adapterAndProperty.getBookmark();
         final String propertyId = adapterAndProperty.getPropertyId();
         final String memberId = adapterAndProperty.getMemberId();
 
-        final PreAndPostValues papv = auditEntry.getPreAndPostValues();
+        final PreAndPostValues papv = propertyChangeRecord.getPreAndPostValues();
         final String preValue = papv.getPreString();
         final String postValue = papv.getPostString();
 

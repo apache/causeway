@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.auditing;
+package org.apache.isis.testdomain.applayer.publishing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,36 +43,37 @@ public class EntityPropertyChangeSubscriberForTesting implements EntityPropertyC
     public void init() {
         log.info("about to initialize");
     }
-    
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
     @Override
     public void onChanging(final EntityPropertyChange entityPropertyChange) {
 
-        val auditEntry = entityPropertyChange.toString();
+        val propertyChangeEntry = String.format("%s/%s: '%s' -> '%s'", 
+                entityPropertyChange.getTargetClassName(), 
+                entityPropertyChange.getPropertyName(), 
+                entityPropertyChange.getPreValue(), 
+                entityPropertyChange.getPostValue());
 
         @SuppressWarnings("unchecked")
-        val auditEntries = (List<String>) kvStore.get(this, "audit").orElseGet(ArrayList::new);
+        val propertyChangeEntries = (List<String>) kvStore.get(this, "propertyChangeEntries")
+            .orElseGet(ArrayList::new);
+        kvStore.put(this, "propertyChangeEntries", propertyChangeEntries);
         
-        auditEntries.add(auditEntry);
+        propertyChangeEntries.add(propertyChangeEntry);
         
-        kvStore.put(this, "audit", auditEntries);
-        log.debug("audit {}", auditEntry);
+        log.debug("property changes {}", propertyChangeEntry);
     }
     
     // -- UTILITIES
     
     @SuppressWarnings("unchecked")
-    public static Can<String> getAuditEntries(KVStoreForTesting kvStore) {
+    public static Can<String> getPropertyChangeEntries(KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<String>) kvStore.get(EntityPropertyChangeSubscriberForTesting.class, "audit")
+                (List<String>) kvStore
+                .get(EntityPropertyChangeSubscriberForTesting.class, "propertyChangeEntries")
                 .orElse(null));
     }
     
-    public static void clearAuditEntries(KVStoreForTesting kvStore) {
+    public static void clearPropertyChangeEntries(KVStoreForTesting kvStore) {
         kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
     }
 

@@ -16,18 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.PackagePrivate;
 
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
+@Value(staticConstructor = "of")
+@PackagePrivate
+final class PropertyChangeRecord {
 
-@Configuration
-@Import({
-    KVStoreForTesting.class,
-    ChangingEntitiesListenerForTesting.class
-})
-public class Configuration_usingEntityChangeKindAuditing {
-
+    private final @NonNull AdapterAndProperty adapterAndProperty;
+    private final @NonNull PreAndPostValues preAndPostValues;
+    
 }

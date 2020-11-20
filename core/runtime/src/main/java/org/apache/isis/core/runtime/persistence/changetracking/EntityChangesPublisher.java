@@ -16,15 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.auditing;
+package org.apache.isis.core.runtime.persistence.changetracking;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+public interface EntityChangesPublisher {
 
-@Configuration
-@Import({
-    EntityPropertyChangeSubscriberForTesting.class
-})
-public class Configuration_usingEntityPrePostValueAuditing {
+    void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges);
 
 }

@@ -30,11 +30,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.applayer.auditing.EntityPropertyChangeSubscriberForTesting;
-import org.apache.isis.testdomain.applayer.auditing.Configuration_usingEntityPrePostValueAuditing;
-import org.apache.isis.testdomain.applayer.publishing.Configuration_usingEntityChangeKindAuditing;
+import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.commons.InteractionTestAbstract;
+import org.apache.isis.testdomain.conf.Configuration_usingEntityChangesPublishing;
+import org.apache.isis.testdomain.conf.Configuration_usingEntityPropertyChangePublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -47,8 +47,8 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingEntityPrePostValueAuditing.class,
-                Configuration_usingEntityChangeKindAuditing.class,
+                Configuration_usingEntityPropertyChangePublishing.class,
+                Configuration_usingEntityChangesPublishing.class,
                 InteractionBoundaryProbe.class,
         }, 
         properties = {
@@ -59,7 +59,7 @@ import lombok.val;
     IsisPresets.SilenceWicket
     ,IsisPresets.UseLog4j2Test
 })
-class ChangedObjectsTest extends InteractionTestAbstract {
+class EntityChangePublishingTest extends InteractionTestAbstract {
 
     @Inject protected FixtureScripts fixtureScripts;
 
@@ -68,16 +68,16 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         System.err.println("===BEFORE SETUP");
 
         // cleanup
-        EntityPropertyChangeSubscriberForTesting.clearAuditEntries(kvStoreForTesting);
+        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStoreForTesting);
 
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
         // each test runs in its own interaction context (check)
-        val testRunNr = (long)kvStoreForTesting.incrementCounter(ChangedObjectsTest.class, "test-run");
+        val testRunNr = (long)kvStoreForTesting.incrementCounter(EntityChangePublishingTest.class, "test-run");
         assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
 
-        assertJdoBookCreateAudits();
+        assertJdoBookCreatePropertyChanges();
 
         System.err.println("===AFTER SETUP");
     }
@@ -89,7 +89,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
-        assertJdoBookDeleteAudits();
+        assertJdoBookDeletePropertyChanges();
 
         System.err.println("===AFTER TEARDOWN");
     }
@@ -114,7 +114,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         assertEquals(12., product.getPrice(), 1E-3);
 
         assertNoChangedObjectsPending();
-        assertJdoBookPriceChangeAudit();
+        assertJdoBookPriceChangePropertyChanges();
         
     }
 
@@ -137,7 +137,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         assertEquals(12., product.getPrice(), 1E-3);                
 
         assertNoChangedObjectsPending();
-        assertJdoBookPriceChangeAudit();
+        assertJdoBookPriceChangePropertyChanges();
         
     }
 
@@ -152,7 +152,7 @@ class ChangedObjectsTest extends InteractionTestAbstract {
         assertEquals(1, books.size());
         val book = books.listIterator().next();
 
-        assertEmptyAudits(); // query only, no entity changes expected
+        assertNoPropertyChanges(); // query only, no entity changes expected
 
         System.err.println("===AFTER BOOK");
         return book;

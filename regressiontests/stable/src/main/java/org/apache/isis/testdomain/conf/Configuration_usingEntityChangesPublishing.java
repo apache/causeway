@@ -16,17 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.changetracking;
+package org.apache.isis.testdomain.conf;
 
-import lombok.NonNull;
-import lombok.Value;
-import lombok.experimental.PackagePrivate;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-@Value(staticConstructor = "of")
-@PackagePrivate
-final class AuditEntry {
+import org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
-    private final @NonNull AdapterAndProperty adapterAndProperty;
-    private final @NonNull PreAndPostValues preAndPostValues;
-    
+@Configuration
+@Import({
+    KVStoreForTesting.class,
+    EntityChangesSubscriberForTesting.class
+})
+public class Configuration_usingEntityChangesPublishing {
+
 }

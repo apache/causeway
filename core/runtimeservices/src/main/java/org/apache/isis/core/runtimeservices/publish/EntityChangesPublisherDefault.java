@@ -34,8 +34,9 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.runtime.persistence.changetracking.ChangingEntitiesDispatcher;
-import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedChangingEntities;
+import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.runtime.persistence.changetracking.EntityChangesPublisher;
+import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedEntityChanges;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -44,46 +45,47 @@ import lombok.val;
  * Wrapper around {@link org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber}.
  */
 @Service
-@Named("isisRuntime.ChangingEntitiesDispatcher")
+@Named("isisRuntime.EntityChangesPublisherDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
-public class ChangingEntitiesDispatcherDefault implements ChangingEntitiesDispatcher {
+public class EntityChangesPublisherDefault implements EntityChangesPublisher {
     
-    private final List<EntityChangesSubscriber> changingEntitiesListenersNullable;
+    private final List<EntityChangesSubscriber> subscribers;
     private final ClockService clockService;
     private final UserService userService;
     
-    private Can<EntityChangesSubscriber> changingEntitiesListeners;
+    private Can<EntityChangesSubscriber> enabledSubscribers;
     
     @PostConstruct
     public void init() {
-        changingEntitiesListeners = Can.ofCollection(changingEntitiesListenersNullable);
+        enabledSubscribers = Can.ofCollection(subscribers)
+                .filter(HasEnabling::isEnabled);
     }
 
-    public void dispatchChangingEntities(HasEnlistedChangingEntities hasEnlistedChangingEntities) {
+    public void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
 
-        if(!canDispatch()) {
+        if(!canPublish()) {
             return;
         }
         
-        val changingEntities = hasEnlistedChangingEntities.getChangingEntities(clockService, userService);
+        val entityChanges = hasEnlistedEntityChanges.getEntityChanges(clockService, userService);
         
-        if(changingEntities == null) {
+        if(entityChanges == null) {
             return;
         }
         
-        for (val changingEntitiesListener : changingEntitiesListeners) {
-            changingEntitiesListener.onChanging(changingEntities);
+        for (val subscriber : enabledSubscribers) {
+            subscriber.onChanging(entityChanges);
         }
     }
     
     // -- HELPER
     
-    private boolean canDispatch() {
-        return changingEntitiesListeners.isNotEmpty();
+    private boolean canPublish() {
+        return enabledSubscribers.isNotEmpty();
     }
 
 

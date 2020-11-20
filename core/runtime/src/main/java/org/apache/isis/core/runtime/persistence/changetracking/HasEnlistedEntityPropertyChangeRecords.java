@@ -18,8 +18,10 @@
  */
 package org.apache.isis.core.runtime.persistence.changetracking;
 
-public interface ChangingEntitiesDispatcher {
+import java.util.Set;
 
-    void dispatchChangingEntities(HasEnlistedChangingEntities hasEnlistedChangingEntities);
+interface HasEnlistedEntityPropertyChangeRecords {
+
+    Set<PropertyChangeRecord> getPropertyChangeRecords();
 
 }

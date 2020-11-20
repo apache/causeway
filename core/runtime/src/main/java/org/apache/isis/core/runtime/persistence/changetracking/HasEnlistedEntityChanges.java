@@ -22,8 +22,8 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.user.UserService;
 
-public interface HasEnlistedChangingEntities {
+public interface HasEnlistedEntityChanges {
 
-    EntityChanges getChangingEntities(ClockService clockService, UserService userService);
+    EntityChanges getEntityChanges(ClockService clockService, UserService userService);
     
 }

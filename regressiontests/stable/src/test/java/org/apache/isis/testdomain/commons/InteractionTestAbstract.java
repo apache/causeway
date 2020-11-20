@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTrackerDefault;
-import org.apache.isis.testdomain.applayer.auditing.EntityPropertyChangeSubscriberForTesting;
+import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -163,9 +163,9 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
     
     // -- ASSERTIONS (AUDITING)
     
-    protected void assertEmptyAudits() {
-        val audits = EntityPropertyChangeSubscriberForTesting.getAuditEntries(kvStoreForTesting);
-        assertTrue(audits.isEmpty());
+    protected void assertNoPropertyChanges() {
+        val changes = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting);
+        assertTrue(changes.isEmpty());
     }
 
     protected void assertNoChangedObjectsPending() {
@@ -175,7 +175,7 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
         // assertTrue(getChangedObjectsService().getChangedObjectProperties().isEmpty());
     }
     
-    protected void assertJdoBookCreateAudits() {
+    protected void assertJdoBookCreatePropertyChanges() {
 
         val expectedAudits = _Sets.ofSorted(
                 "Jdo Book/author: '[NEW]' -> 'Sample Author'",
@@ -186,17 +186,17 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
                 "Jdo Book/name: '[NEW]' -> 'Sample Book'",
                 "Jdo Inventory/name: '[NEW]' -> 'Sample Inventory'");
 
-        val actualAudits = EntityPropertyChangeSubscriberForTesting.getAuditEntries(kvStoreForTesting)
+        val actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
                 .stream()
                 .collect(Collectors.toCollection(TreeSet::new));
 
         assertEquals(expectedAudits, actualAudits);
 
-        EntityPropertyChangeSubscriberForTesting.clearAuditEntries(kvStoreForTesting);
+        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStoreForTesting);
 
     }
 
-    protected void assertJdoBookDeleteAudits() {
+    protected void assertJdoBookDeletePropertyChanges() {
 
         val expectedAudits = _Sets.ofSorted(
                 "Jdo Book/author: 'Sample Author' -> '[DELETED]'", 
@@ -207,35 +207,35 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
                 "Jdo Book/publisher: 'Sample Publisher' -> '[DELETED]'",
                 "Jdo Inventory/name: 'Sample Inventory' -> '[DELETED]'");
 
-        val actualAudits = EntityPropertyChangeSubscriberForTesting.getAuditEntries(kvStoreForTesting)
+        val actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
                 .stream()
                 .collect(Collectors.toCollection(TreeSet::new));
 
         assertEquals(expectedAudits, actualAudits);
 
-        EntityPropertyChangeSubscriberForTesting.clearAuditEntries(kvStoreForTesting);
+        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStoreForTesting);
 
     }
 
-    protected void assertJdoBookPriceChangeAudit() {
+    protected void assertJdoBookPriceChangePropertyChanges() {
 
         val expectedAudits = _Sets.ofSorted(
                 "Jdo Book/price: '99.0' -> '12.0'");
 
-        val actualAudits = EntityPropertyChangeSubscriberForTesting.getAuditEntries(kvStoreForTesting)
+        val actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
                 .stream()
                 .collect(Collectors.toCollection(TreeSet::new));
 
         assertEquals(expectedAudits, actualAudits);
 
-        EntityPropertyChangeSubscriberForTesting.clearAuditEntries(kvStoreForTesting);
+        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStoreForTesting);
     }
 
     // -- UTILTITIES 
     
-    protected void dumpAudits() {
-        val audits = EntityPropertyChangeSubscriberForTesting.getAuditEntries(kvStoreForTesting);
-        System.err.println("==AUDITS==");
+    protected void dumpPropertyChanges() {
+        val audits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting);
+        System.err.println("==PROPERTY CHANGES==");
         audits.forEach(System.err::println);
         System.err.println("==========");
     }
