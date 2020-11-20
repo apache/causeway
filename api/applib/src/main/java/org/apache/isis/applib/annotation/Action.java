@@ -91,15 +91,6 @@ public @interface Action {
 
     // end::refguide[]
     /**
-     * Whether action invocations, captured as {@link Command}s, 
-     * should be published to {@link CommandSubscriber}s.
-     */
-    // tag::refguide[]
-    Publishing commandPublishing()                               // <.>
-            default Publishing.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
      * The {@link CommandDtoProcessor} to process this command's DTO.
      *
      * <p>
@@ -110,6 +101,15 @@ public @interface Action {
     // tag::refguide[]
     Class<? extends CommandDtoProcessor> commandDtoProcessor()      // <.>
             default CommandDtoProcessor.class;
+
+    // end::refguide[]
+    /**
+     * Whether action invocations, captured as {@link Command}s,
+     * should be published to {@link CommandSubscriber}s.
+     */
+    // tag::refguide[]
+    Publishing commandPublishing()                                  // <.>
+            default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**

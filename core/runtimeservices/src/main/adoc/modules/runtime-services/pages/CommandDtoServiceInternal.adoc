@@ -6,7 +6,7 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `CommandDtoServiceInternal` is responsible for creating an memento of the current action invocation or property edit, to store in the `Command` object.
 This memento is a JAXB DTO being an instance of the
-xref:refguide:schema:cmd.adoc["cmd" schema], so can be reified either for persistence (through xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`]) or async execution (through xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`].)
+xref:refguide:schema:cmd.adoc["cmd" schema], so can be reified either for persistence (through xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandServiceListener`]) or async execution (through xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`].)
 
 
 

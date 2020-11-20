@@ -47,7 +47,7 @@ xref:refguide:applib-ant:Property.adoc#command[`@Property#commandExecuteIn()`].
 
 |xref:core:runtime-services:InteractionDtoServiceInternal.adoc[`o.a.i.c.m.s.ixn` +
 `InteractionDtoServiceInternal`]
-|Creates DTO for the current execution of an action invocation or property edit, for use either as a reified command or for implementations of the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
+|Creates DTO for the current execution of an action invocation or property edit, for use either as a reified command or for implementations of the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
 |`CommandDtoService-` +
 `InternalServiceDefault` +
 ``isis-core-metamodel``

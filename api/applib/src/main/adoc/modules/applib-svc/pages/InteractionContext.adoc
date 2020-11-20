@@ -59,7 +59,7 @@ Generally there will be just one entry in this list, but additional entries may 
 <.> The current execution.
 <.> The member `Execution` (action invocation or property edit) that preceded the current one.
 <.> Generates numbers in a named sequence.
-Used by the framework both to number successive interaction ``Execution``s and for events published by the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
+Used by the framework both to number successive interaction ``Execution``s and for events published by the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
 
 This class is concrete (is also the implementation).
 
@@ -143,6 +143,6 @@ This class (`o.a.i.applib.services.iactn.InteractionContext`) is also the defaul
 
 Typically domain objects will have little need to interact with the `InteractionContext` and `Interaction` directly.
 The services are used within the framework however, primarily to support the
-xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] SPI, and to emit domain events over the
+xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] SPI, and to emit domain events over the
 xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
 

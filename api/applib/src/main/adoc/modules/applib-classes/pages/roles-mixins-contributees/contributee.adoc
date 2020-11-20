@@ -47,7 +47,7 @@ If the interaction (almost certainly an action) calls other actions by way of xr
 
 The purpose of this interface is to allow mixins to be defined, though the framework itself defines none.
 
-Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
+Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
 
 [[HasUserName]]
 == `HasUsername`

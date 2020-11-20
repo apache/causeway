@@ -52,7 +52,7 @@ In such cases there is still only a single physical datastore, and so transactio
 If you want to go all-in with CQRS with separate databases for the write and read model, then this could still be implemented with Apache Isis without pulling the framework apart too much.
 Here, Apache Isis would be used to provide the UI for the _read_ model, with the entities being truly immutable.
 Mixins would decorate these entities, but would act upon a write model whose persistence is handled outside of Apache Isis, probably using Spring Boot directly to provide a datasource.
-To synchronise the write- and read- model, the events emitted by xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] could be used.
+To synchronise the write- and read- model, the events emitted by xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] could be used.
 
 With respect to commands, Apache Isis provides the xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] which allows each business action to be reified into a `Command`.
 However, names are misleading here: Apache Isis' commands are relatively passive, merely recording the intent of the user to invoke some operation.
@@ -87,7 +87,7 @@ But in any case the roadmap is to support JPA as well as JDO, indeed as you read
 
 As with a CQRS architecture, Apache xref:userguide:fun:mixins.adoc[mixins] would be the obvious way to associate behaviour with an event sourced entity.
 These mixins would most likely delegate to an event sourcing framework such as link:https://axoniq.io/[Axon] to do the work.
-Also, in Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`], and can optionally also be published through the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
+Also, in Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`], and can optionally also be published through the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
 These features could also have a role to play in an event sourced system.
 
 

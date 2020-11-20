@@ -13,13 +13,13 @@ It is also possible to apply the annotation to actions of domain services that a
 ----
 include::refguide:applib-ant:example$annotation/Property.java[tags="refguide"]
 ----
-<.> xref:refguide:applib-ant:Property.adoc#commandPublishing[`commandPublishing()`]
-+
-Whether the editing of a property should be published to registered xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandSubscriber`]s as a `Command` object, that captures the details of this edit. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
-
 <.> `commandDtoProcessor()`
 +
 If the xref:extensions:command-replay:about.adoc[Command Replay] extension is being used (for regression testing), provides a mechanism to process the `CommandDto` before being replicated from primary to secondary system
+
+<.> xref:refguide:applib-ant:Property.adoc#commandPublishing[`commandPublishing()`]
++
+Whether the editing of a property should be published to registered xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandSubscriber`]s as a `Command` object, that captures the details of this edit. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
 
 <.> xref:refguide:applib-ant:Property.adoc#domainEvent[`domainEvent()`]
 +

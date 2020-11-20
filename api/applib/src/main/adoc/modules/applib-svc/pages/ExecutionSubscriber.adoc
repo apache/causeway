@@ -1,4 +1,4 @@
-= `PublisherService`
+= `ExecutionSubscriber`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -126,9 +126,9 @@ To support these use cases several other services are involved:
 * the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
 
 
-The services provided by this module combine very well with the xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`] and with xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`].
+The services provided by this module combine very well with the xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandServiceListener`] and with xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`].
 The ``Command`` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `PublisherService` captures the __effect__ of that interaction in terms of events, and the `AuditerService` captures the effect of the interaction in terms of changed state.
-You may also want to configure the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], which also captures the effect of the interaction but as an event.
+You may also want to configure the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`], which also captures the effect of the interaction but as an event.
 All three of these services collaborate implicitly by way of the xref:applib-classes:roles-mixins-contributees/contributee.adoc#HasUniqueId[`HasUniqueId`] interface.
 
 The xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] differs from the `PublisherService` in that it is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model.

@@ -39,7 +39,7 @@ The xref:extensions:command-log:about.adoc[Command Log] extension implements the
 * xref:core:runtime-services:about.adoc[Core Runtime Services]
 
 
-|xref:refguide:applib-svc:PublisherService.adoc[PublisherService]
+|xref:refguide:applib-svc:ExecutionSubscriber.adoc[PublisherService]
 |Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
 |
 * `PublisherServiceLogging` (in applib)

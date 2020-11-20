@@ -1,4 +1,3 @@
-[#commandPublishing]
 = Command Processing
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -12,18 +11,18 @@ The main uses cases are:
 
 * as a means to allow asynchronous child commands to be executed, using the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] service;
 
-* as a means to audit (persist) commands, by implementing the xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`] SPI.
+* as a means to audit (persist) commands, by implementing the xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandServiceListener`] SPI.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension _does_ provide such an implementation.
 +
-TIP: Another option to achieve this is to use the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] SPI.
+TIP: Another option to achieve this is to use the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] SPI.
 
 * to replay commands onto a secondary system, for regression testing.
 +
 This is implemented by the xref:extensions:command-replay:about.adoc[Command Replay] extension, working in conjunction with the xref:extensions:command-log:about.adoc[Command Log] extension.
 
 
-
+[#commandPublishing]
 == `commandPublishing`
 
 The `commandPublishing()` attribute can be used to explicitly enable or disable command publishing for the action.

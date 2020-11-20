@@ -26,12 +26,12 @@ include::refguide:applib-svc:example$services/metrics/MetricsService.java[tags="
 == Implementation
 
 The framework provides persistence layer specific implementations of this API:
- 
-- `o.a.i.**.MetricsServiceForJdo` 
+
+- `o.a.i.**.MetricsServiceForJdo`
 - `o.a.i.**.MetricsServiceForJpa`
 
 
 
 == Related Services
 
-The xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] also captures the metrics gathered by the `MetricsService` and publishes them as part of the `PublishedObjects` class (part of its SPI).
+The xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] also captures the metrics gathered by the `MetricsService` and publishes them as part of the `PublishedObjects` class (part of its SPI).

@@ -169,9 +169,9 @@ Metrics as to which objects are merely loaded into memory are also captured usin
 xref:core:runtime-services:ExecutionPublisher.adoc[`ExecutionPublisher`] domain service.
 This is only done for actions/properties annotated appropriate (with xref:refguide:applib-ant:Action.adoc#exectionPublishing[`@Action#exectionPublishing()`] or xref:refguide:applib-ant:Property.adoc#exectionPublishing[`@Property#exectionPublishing()`]).
 +
-The internal service delegates in turn to any registered xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`]s (there may be more than one).
+The internal service delegates in turn to any registered xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`]s (there may be more than one).
 
-* At the end of each transaction, details of all changed objects are published, through the (internal) xref:core:runtime-services:EntityChangesPublisher.adoc[`EntityChangesPublisher`] to any registered `EntityChangesSubscriber` implementations and 
+* At the end of each transaction, details of all changed objects are published, through the (internal) xref:core:runtime-services:EntityChangesPublisher.adoc[`EntityChangesPublisher`] to any registered `EntityChangesSubscriber` implementations and
 through the (internal) xref:core:runtime-services:EntityPropertyChangePublisher.adoc[`EntityPropertyChangePublisher`] to any registered `EntityPropertyChangeSubscriber` implementations.
 Only domain objects specified to be published with xref:refguide:applib-ant:DomainObject.adoc#entityChangePublishing[`@DomainObject#entityChangePublishing()`] are published. +
 +
@@ -180,7 +180,7 @@ Only domain objects specified to be published with xref:refguide:applib-ant:Doma
 Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`].
 ====
 
-* At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`].
+* At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandServiceListener`].
 This captures whether the command succeeded or failed.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:extensions:command-replay:about.adoc[Command Replay] extension.
@@ -189,13 +189,13 @@ The xref:extensions:command-log:about.adoc[Command Log] extension uses this to p
 Implementations of xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
 
-Similarly, implementations of xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.
+Similarly, implementations of xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.
 This can be converted into XML in a similar fashion.
 
 Likewise, the `PublishedObjects` class passed to the `PublisherService` at the end of the interaction provides the `PublishedObjects#getDto()` method which returns a `ChangesDto` instance.
 This can be converted into XML using the `ChangesDtoUtils` utility class.
 
-One final point: multiple xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] implementations are supported because different implementations may have different responsibilities.
+One final point: multiple xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] implementations are supported because different implementations may have different responsibilities.
 
 However, the SPI can also be used for profiling; each execution within the call-graph contains metrics of the number of objects loaded or modified as a result of that execution, and thus could be used for application profiling.
 The framework provides a default `PublisherServiceLogging` implementation that logs this using LOG4J2.

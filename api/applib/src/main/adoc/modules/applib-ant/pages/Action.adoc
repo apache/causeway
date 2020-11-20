@@ -19,19 +19,19 @@ associates an action with another property or collection of the action.
 +
 the ordering of multiple actions associated with another property/collection.
 
-<.> xref:refguide:applib-ant:Action.adoc#commandPublishing[`commandPublishing()`]
-+
-Whether the action invocation should be published to registered xref:refguide:applib-svc:ExecutionListener.adoc[`CommandSubscriber`]s as a `Command` object, that captures the details of this invocation. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
-
 <.> `commandDtoProcessor()`
 +
 If the xref:extensions:command-replay:about.adoc[Command Replay] extension is being used (for regression testing), provides a mechanism to process the `CommandDto` before being replicated from primary to secondary system
+
+<.> xref:refguide:applib-ant:Action.adoc#commandPublishing[`commandPublishing()`]
++
+Whether the action invocation should be published to registered xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandSubscriber`]s as a `Command` object, that captures the details of this invocation. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
 
 <.> xref:refguide:applib-ant:Action.adoc#domainEvent[`domainEvent()`]
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execute).
 
-<.> xref:refguide:applib-ant:Action.adoc#executionDispach[`executionDispach()`]
+<.> xref:refguide:applib-ant:Action.adoc#executionPublishing[`executionPublishing()`]
 +
 Whether the action invocation should be published to registered xref:refguide:applib-svc:ExecutionSubscriber.adoc[`ExecutionSubscriber`]s as an `Execution` object, that captures the details of this invocation.
 

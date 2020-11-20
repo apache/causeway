@@ -12,11 +12,11 @@ The main uses cases are:
 
 * as a means to allow asynchronous child commands to be executed, using the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] service;
 
-* as a means to audit (persist) commands, by implementing the xref:refguide:applib-svc:CommandServiceListener.adoc[`CommandServiceListener`] SPI.
+* as a means to audit (persist) commands, by implementing the xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandServiceListener`] SPI.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension _does_ provide such an implementation.
 +
-TIP: Another option to achieve this is to use the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] SPI.
+TIP: Another option to achieve this is to use the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] SPI.
 
 * to replay commands onto a secondary system, for regression testing.
 +

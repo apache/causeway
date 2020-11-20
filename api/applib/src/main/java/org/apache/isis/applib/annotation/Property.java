@@ -54,15 +54,6 @@ public @interface Property {
 
     // end::refguide[]
     /**
-     * Whether property edits, captured as {@link Command}s, 
-     * should be published to {@link CommandSubscriber}s.
-     */
-    // tag::refguide[]
-    Publishing commandPublishing()                               // <.>
-            default Publishing.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
      * The {@link CommandDtoProcessor} to process this command's DTO.
      *
      * <p>
@@ -73,6 +64,15 @@ public @interface Property {
     // tag::refguide[]
     Class<? extends CommandDtoProcessor> commandDtoProcessor()  // <.>
             default CommandDtoProcessor.class;
+
+    // end::refguide[]
+    /**
+     * Whether property edits, captured as {@link Command}s,
+     * should be published to {@link CommandSubscriber}s.
+     */
+    // tag::refguide[]
+    Publishing commandPublishing()                              // <.>
+            default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -126,7 +126,7 @@ public @interface Property {
      * {@link ExecutionSubscriber}s.
      */
     // tag::refguide[]
-    Publishing executionPublishing()                             // <.>
+    Publishing executionPublishing()                            // <.>
             default Publishing.NOT_SPECIFIED;
     
     // end::refguide[]
