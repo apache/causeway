@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.iactn.spi;
+package org.apache.isis.applib.services.publishing.log;
 
 import javax.inject.Named;
 
@@ -26,33 +26,32 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.ExecutionLogging")
+@Named("isisApplib.CommandLogger")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Logging")
 @Log4j2
-public class ExecutionLogging implements ExecutionListener {
+public class CommandLogger implements CommandSubscriber {
 
     @Override
-    public void onExecution(final Interaction.Execution<?, ?> execution) {
+    public boolean isEnabled() {
+        return log.isDebugEnabled();
+    }
 
-        if(!log.isDebugEnabled()) {
-            return;
-        }
-
-        final InteractionDto interactionDto =
-                InteractionDtoUtils.newInteractionDto(execution, InteractionDtoUtils.Strategy.DEEP);
-
-        log.debug(InteractionDtoUtils.toXml(interactionDto));
-
+    @Override
+    public void onCompleted(Command command) {
+        
+        log.debug("completed: {}, systemStateChanged {}",
+                command.getLogicalMemberIdentifier(),
+                command.isSystemStateChanged());
+        
+        //log.debug("completed: {}", command);
     }
 
 }
-

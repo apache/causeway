@@ -37,6 +37,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.commons.having.HasUsername;
 
 import lombok.Getter;
 import lombok.Setter;

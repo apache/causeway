@@ -27,12 +27,12 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.spi.CommandListener;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -55,11 +55,11 @@ public @interface Property {
     // end::refguide[]
     /**
      * Whether property edits, captured as {@link Command}s, 
-     * should be dispatched to {@link CommandListener}s.
+     * should be published to {@link CommandSubscriber}s.
      */
     // tag::refguide[]
-    Dispatching commandDispatch()                               // <.>
-            default Dispatching.NOT_SPECIFIED;
+    Publishing commandPublishing()                               // <.>
+            default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -123,11 +123,11 @@ public @interface Property {
     /**
      * Whether {@link Interaction.Execution}s 
      * (triggered property edits), should be dispatched to 
-     * {@link ExecutionListener}s.
+     * {@link ExecutionSubscriber}s.
      */
     // tag::refguide[]
-    Dispatching executionDispatch()                             // <.>
-            default Dispatching.NOT_SPECIFIED;
+    Publishing executionPublishing()                             // <.>
+            default Publishing.NOT_SPECIFIED;
     
     // end::refguide[]
     /**

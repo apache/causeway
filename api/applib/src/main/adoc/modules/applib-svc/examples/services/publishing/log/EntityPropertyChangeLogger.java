@@ -16,48 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.command.spi;
+package org.apache.isis.applib.services.publishing.log;
 
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 
-/**
- * SPI
- */
-// tag::refguide[]
-public interface CommandListener {
+import lombok.extern.log4j.Log4j2;
 
-    /**
-     * Notifies that the command has completed.
-     *
-     * <p>
-     *     This is an opportunity for implementations to process the command,
-     *     for example to persist a representation of it.
-     * </p>
-     */
-    // tag::refguide[]
-    void onComplete(final Command command);           // <.>
+@Service
+@Named("isisApplib.EntityPropertyChangeLogger")
+@Order(OrderPrecedence.LATE)
+@Primary
+@Qualifier("logging")
+@Log4j2
+public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscriber {
 
-    /**
-     * At least one implementation is required to satisfy injection point
-     * internal to the framework.
-     */
-    @Service
-    @Named("isisApplib.CommandServiceListenerNull")
-    @Order(OrderPrecedence.LATE)
-    @Qualifier("Null")
-    public static class Null implements CommandListener {
-
-        @Override
-        public void onComplete(Command command) {
-
-        }
+    @Override
+    public boolean isEnabled() {
+        return log.isDebugEnabled();
     }
+
+    @Override
+    public void onChanging(final EntityPropertyChange entityPropertyChange) {
+        log.debug(entityPropertyChange.toString());
+    }
+
 }
-// end::refguide[]

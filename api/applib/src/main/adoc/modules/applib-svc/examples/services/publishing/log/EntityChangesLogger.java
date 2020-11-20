@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.audit;
+package org.apache.isis.applib.services.publishing.log;
 
 import javax.inject.Named;
 
@@ -26,27 +26,28 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.audit.spi.ChangingEntities;
-import org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.ChangingEntitiesLogging")
+@Named("isisApplib.EntityChangesLogger")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Logging")
 @Log4j2
-public class ChangingEntitiesLogging implements ChangingEntitiesListener {
+public class EntityChangesLogger implements EntityChangesSubscriber {
 
     @Override
-    public void onEntitiesChanging(final ChangingEntities changingEntities) {
-
-        if(!log.isDebugEnabled()) {
-            return;
-        }
+    public boolean isEnabled() {
+        return log.isDebugEnabled();
+    }
+    
+    @Override
+    public void onChanging(final EntityChanges changingEntities) {
 
         final ChangesDto changesDto = changingEntities.getDto();
 

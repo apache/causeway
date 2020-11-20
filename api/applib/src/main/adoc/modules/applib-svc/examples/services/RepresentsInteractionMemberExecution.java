@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 /**

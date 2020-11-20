@@ -16,24 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services;
+package org.apache.isis.applib.services.publishing.spi;
+
+import org.apache.isis.commons.having.HasEnabling;
 
 /**
- * Mix-in interface for objects (usually created by service implementations) that are be persistable,
- * and so can be associated with a username, usually of the user that has performed some operation.
- *
- * <p>
- * Other services can then use this username as a means to contributed actions/collections to render such additional
- * information relating to the activities of the user.
+ * Part of the <i>Publishing SPI</i>. A component to receive the entire set of entities 
+ * (with publishing enabled) that are about to change, serializable as ChangesDto.
+ *  
+ * @since 2.0
  */
-// tag::refguide[]
-public interface HasUsername {
+public interface EntityChangesSubscriber extends HasEnabling {
 
     /**
-     * The user that created this object.
-     * @return
+     * Receives all changing entities (with publishing enabled) at then end of the a 
+     * transaction during the pre-commit phase.
      */
-    String getUsername();
-
+    void onChanging(EntityChanges entityChanges);      // <.>
 }
-// end::refguide[]

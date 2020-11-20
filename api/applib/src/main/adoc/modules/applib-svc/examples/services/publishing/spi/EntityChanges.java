@@ -16,25 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services;
+package org.apache.isis.applib.services.publishing.spi;
 
-import java.util.UUID;
+import java.sql.Timestamp;
 
+import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.commons.having.HasUsername;
+import org.apache.isis.schema.chg.v2.ChangesDto;
 
-/**
- * Mix-in interface for objects (usually created by service implementations) that are be persistable,
- * and so can be associated together using a unique identifier.
- *
- */
 // tag::refguide[]
-public interface HasUniqueId {
+public interface EntityChanges
+        extends HasUniqueId,            // <.>
+                HasUsername {           // <.>
 
-    // end::refguide[]
-    /**
-     * The unique identifier (a GUID) of the request/interaction/transaction.
-     */
-    // tag::refguide[]
-    UUID getUniqueId();
+    Timestamp getCompletedAt();         // <.>
+
+    int getNumberLoaded();              // <.>
+    int getNumberCreated();             // <.>
+    int getNumberUpdated();             // <.>
+    int getNumberDeleted();             // <.>
+
+    int getNumberPropertiesModified();  // <.>
+
+    ChangesDto getDto();                // <.>
 
 }
 // end::refguide[]

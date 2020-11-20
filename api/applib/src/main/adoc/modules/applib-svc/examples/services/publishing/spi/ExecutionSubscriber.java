@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.iactn.spi;
+package org.apache.isis.applib.services.publishing.spi;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.commons.having.HasEnabling;
 
 /**
  * SPI that allows individual interactions (action invocations or property edits) to be
@@ -27,7 +28,7 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
  * Note that re-publishing is not part of this SPI.
  */
 // tag::refguide[]
-public interface ExecutionListener {
+public interface ExecutionSubscriber extends HasEnabling {
 
     // end::refguide[]
     /**

@@ -16,46 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.annotation;
+package org.apache.isis.applib.services.publishing.spi;
+
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.commons.having.HasEnabling;
 
 /**
- * The available policies for auditing changes to the properties of the object.
+ * Part of the <i>Publishing SPI</i>. A component to receive {@link Command}s 
+ * (with publishing enabled) that just completed.
+ *  
+ * @since 2.0
  */
 // tag::refguide[]
-public enum Auditing {
+public interface CommandSubscriber extends HasEnabling {
 
-    // end::refguide[]
     /**
-     * The auditing of the object should be as per the default auditing policy configured in <tt>application.properties</tt>.
+     * Notifies that the command has completed.
      *
      * <p>
-     *     If no auditing policy is configured, then the auditing is disabled.
+     *     This is an opportunity for implementations to process the command,
+     *     for example to persist a representation of it.
      * </p>
      */
     // tag::refguide[]
-    AS_CONFIGURED,
-
-    // end::refguide[]
-    /**
-     * Audit changes to this object.
-     */
-    // tag::refguide[]
-    ENABLED,
-
-    // end::refguide[]
-    /**
-     * Do not audit changes to this object (even if otherwise configured to enable auditing).
-     */
-    // tag::refguide[]
-    DISABLED,
-
-    // end::refguide[]
-    /**
-     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
-     * annotations or superclasses/interfaces).
-     */
-    // tag::refguide[]
-    NOT_SPECIFIED
+    void onCompleted(Command command);           // <.>
 
 }
 // end::refguide[]
