@@ -18,12 +18,13 @@
  */
 package org.apache.isis.core.runtime.persistence.changetracking;
 
-import org.apache.isis.applib.services.clock.ClockService;
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
-import org.apache.isis.applib.services.user.UserService;
 
 public interface HasEnlistedEntityChanges {
 
-    EntityChanges getEntityChanges(ClockService clockService, UserService userService);
+    @Nullable
+    EntityChanges getEntityChanges(java.sql.Timestamp timestamp, String userName);
     
 }

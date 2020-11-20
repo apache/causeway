@@ -27,10 +27,8 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
@@ -41,17 +39,16 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.chg.v2.ObjectsDto;
 import org.apache.isis.schema.common.v2.OidsDto;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-@RequiredArgsConstructor(staticName = "of")
+@UtilityClass
 class ChangingEntitiesFactory {
     
-    private final ClockService clockService;
-    private final UserService userService;
-
     @Nullable
-    public EntityChanges createChangingEntities(
+    public static EntityChanges createChangingEntities(
+            final java.sql.Timestamp completedAt,
+            final String userName,
             final EntityChangeTrackerDefault entityChangeTracker) {
         
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
@@ -66,25 +63,27 @@ class ChangingEntitiesFactory {
         }
 
         val changingEntities = newChangingEntities(
-                        entityChangeTracker.currentInteraction(),
-                        entityChangeTracker.numberEntitiesLoaded(), 
-                        entityChangeTracker.numberAuditedEntityPropertiesModified(),
-                        changeKindByEnlistedAdapter);
+                completedAt,
+                userName,
+                entityChangeTracker.currentInteraction(),
+                entityChangeTracker.numberEntitiesLoaded(), 
+                entityChangeTracker.numberAuditedEntityPropertiesModified(),
+                changeKindByEnlistedAdapter);
         
         return changingEntities;
     }
     
     // -- HELPER
     
-    private EntityChanges newChangingEntities(
+    private static EntityChanges newChangingEntities(
+            final java.sql.Timestamp completedAt,
+            final String userName,
             final Interaction interaction,
             final int numberEntitiesLoaded,
             final int numberEntityPropertiesModified,
             final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter) {
 
         val uniqueId = interaction.getUniqueId();
-        val userName = userService.getUser().getName();
-        val completedAt = clockService.nowAsJavaSqlTimestamp();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
         return new SimpleChangingEntities(
@@ -100,7 +99,7 @@ class ChangingEntitiesFactory {
                             changeKindByEnlistedAdapter));
     }
 
-    private ChangesDto newDto(
+    private static ChangesDto newDto(
             final UUID uniqueId, final int nextEventSequence,
             final String userName, final java.sql.Timestamp completedAt,
             final int numberEntitiesLoaded,
@@ -135,7 +134,7 @@ class ChangingEntitiesFactory {
         return changesDto;
     }
 
-    private OidsDto oidsDtoFor(
+    private static OidsDto oidsDtoFor(
             final ListMultimap<EntityChangeKind, ManagedObject> adaptersByChange, 
             final EntityChangeKind kind) {
         val oidsDto = new OidsDto();

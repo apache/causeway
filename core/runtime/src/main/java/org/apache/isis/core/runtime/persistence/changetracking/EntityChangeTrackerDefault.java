@@ -38,14 +38,12 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.TransactionScopeListener;
-import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -209,8 +207,10 @@ implements
     }
 
     @Override
-    public EntityChanges getEntityChanges(ClockService clockService, UserService userService) {
-        return ChangingEntitiesFactory.of(clockService, userService).createChangingEntities(this);
+    public EntityChanges getEntityChanges(
+            final java.sql.Timestamp timestamp,
+            final String userName) {
+        return ChangingEntitiesFactory.createChangingEntities(timestamp, userName, this);
     }
     
     Interaction currentInteraction() {
@@ -412,12 +412,12 @@ implements
     @Override
     public Stream<EntityPropertyChange> streamPropertyChanges(
             final java.sql.Timestamp timestamp,
-            final String user,
+            final String userName,
             final TransactionId txId) {
         
         return getPropertyChangeRecords().stream()
         .map(propertyChangeRecord->EntityPropertyChangeFactory
-                .createEntityPropertyChange(timestamp, user, txId, propertyChangeRecord));
+                .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord));
     }
 
 
