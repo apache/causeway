@@ -35,9 +35,8 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishObjectsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -91,17 +90,10 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     }
     
-    void allowingAuditObjectsToReturn(AuditObjectsConfiguration value) {
+    void allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy value) {
         if(value!=null) {
             val config = super.metaModelContext.getConfiguration();
-            config.getApplib().getAnnotation().getDomainObject().setAuditing(value);
-        }
-    }
-    
-    void allowingPublishObjectsToReturn(PublishObjectsConfiguration value) {
-        if(value!=null) {
-            val config = super.metaModelContext.getConfiguration();
-            config.getApplib().getAnnotation().getDomainObject().setPublishing(value);
+            config.getApplib().getAnnotation().getDomainObject().setEntityChangePublishing(value);
         }
     }
     
@@ -133,7 +125,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void ignore_HasUniqueId() {
 
-            allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
+            allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
             facetFactory.processAuditing(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
 
@@ -147,7 +139,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_all() {
-                allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
+                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
                 facetFactory.processAuditing(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -160,7 +152,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_none() {
-                allowingAuditObjectsToReturn(AuditObjectsConfiguration.NONE);
+                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.NONE);
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -176,7 +168,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_all() {
-                allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
+                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -189,7 +181,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_none() {
-                allowingAuditObjectsToReturn(AuditObjectsConfiguration.NONE);
+                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.NONE);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -205,7 +197,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingAuditObjectsToReturn(null);
+                allowingEntityChangePublishingToReturn(null);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
@@ -222,17 +214,17 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
+                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
                 final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
                 Assert.assertNotNull(facet);
 
-                Assert.assertThat(facet.isDisabled(), is(true));
-                Assert.assertThat(facet.alwaysReplace(), is(true));
-                Assert.assertThat(facet.isFallback(), is(false));
-                Assert.assertThat(facet.isDerived(), is(false));
+                Assert.assertEquals(true, facet.isDisabled());
+                Assert.assertEquals(true, facet.alwaysReplace());
+                Assert.assertEquals(false, facet.isFallback());
+                Assert.assertEquals(false, facet.isDerived());
 
                 expectNoMethodsRemoved();
             }

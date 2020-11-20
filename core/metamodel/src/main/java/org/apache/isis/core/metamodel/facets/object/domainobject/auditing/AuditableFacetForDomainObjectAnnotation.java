@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
@@ -44,13 +44,13 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
         case NOT_SPECIFIED:
         case AS_CONFIGURED:
 
-            val auditObjects = AuditObjectsConfiguration.from(configuration);
-            switch (auditObjects) {
+            val publishingPolicy = PublishingPolicies.entityChangePublishingPolicy(configuration);
+            switch (publishingPolicy) {
             case NONE:
                 return null;
             default:
                 return auditingIfAny.isPresent()
-                ? new AuditableFacetForDomainObjectAnnotationAsConfigured(holder)
+                        ? new AuditableFacetForDomainObjectAnnotationAsConfigured(holder)
                         : new AuditableFacetFromConfiguration(holder);
             }
         case DISABLED:

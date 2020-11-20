@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._Blackhole;
-import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
@@ -64,7 +64,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         // given
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
@@ -82,7 +82,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
 
         // given
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
@@ -102,7 +102,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         // given
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
@@ -115,7 +115,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_noAnnotation_and_configurationSetToNone_thenNone() {
 
         // given
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.NONE);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
@@ -136,7 +136,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.ALL);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.ALL);
 
         // when
         processPublishing(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
@@ -152,12 +152,12 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         class Customer {
-            @Action(executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED)
+            @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
             public void someAction() {
             }
         }
 
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
@@ -176,13 +176,13 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED
+                    executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
                     )
             public void someAction() {
             }
         }
 
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
@@ -203,12 +203,12 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         class Customer {
-            @Action(executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED)
+            @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
             public void someAction() {
             }
         }
 
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -218,12 +218,12 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     public void given_asConfigured_and_configurationSetToNone_thenNone() {
 
         class Customer {
-            @Action(executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED)
+            @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
             public void someAction() {
             }
         }
 
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.NONE);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -241,14 +241,14 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    executionDispatch = org.apache.isis.applib.annotation.Dispatching.AS_CONFIGURED
+                    executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
                     )
             public void someAction() {
             }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.ALL);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.ALL);
 
         // when
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -267,7 +267,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    executionDispatch = org.apache.isis.applib.annotation.Dispatching.ENABLED
+                    executionPublishing = org.apache.isis.applib.annotation.Publishing.ENABLED
                     )
             public void someAction() {
             }
@@ -275,7 +275,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // even though configuration is disabled
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.NONE);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
 
         // when
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -292,7 +292,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         // given
         class Customer {
             @Action(
-                    executionDispatch = org.apache.isis.applib.annotation.Dispatching.DISABLED
+                    executionPublishing = org.apache.isis.applib.annotation.Publishing.DISABLED
                     )
             public void someAction() {
             }
@@ -300,7 +300,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // even though configuration is disabled
-        allowingPublishingConfigurationToReturn(PublishActionsConfiguration.NONE);
+        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
 
         // when
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));

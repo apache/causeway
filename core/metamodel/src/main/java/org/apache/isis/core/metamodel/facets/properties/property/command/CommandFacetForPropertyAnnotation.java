@@ -20,16 +20,18 @@ package org.apache.isis.core.metamodel.facets.properties.property.command;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PropertyCommandDispatchConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
+
+import lombok.val;
 
 public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
@@ -39,24 +41,23 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
 
-        final PropertyCommandDispatchConfiguration commandDispatchSetting = 
-                configuration.getApplib().getAnnotation().getProperty().getCommandDispatch();
+        val publishingPolicy = PublishingPolicies.propertyCommandPublishingPolicy(configuration);
 
         return propertyIfAny
-                .filter(property -> property.commandDispatch() != Dispatching.NOT_SPECIFIED)
+                .filter(property -> property.commandPublishing() != Publishing.NOT_SPECIFIED)
                 .map(property -> {
-                    Dispatching commandReification = property.commandDispatch();
+                    Publishing commandReification = property.commandPublishing();
 
                     final Class<? extends CommandDtoProcessor> processorClass =
                             property.commandDtoProcessor();
                     final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
                     if(processor != null) {
-                        commandReification = Dispatching.ENABLED;
+                        commandReification = Publishing.ENABLED;
                     }
                     switch (commandReification) {
                     case AS_CONFIGURED:
-                        switch (commandDispatchSetting) {
+                        switch (publishingPolicy) {
                         case NONE:
                             return null;
                         default:
@@ -71,7 +72,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
                     throw new IllegalStateException("command '" + commandReification + "' not recognised");
                 })
                 .orElseGet(() -> {
-                    switch (commandDispatchSetting) {
+                    switch (publishingPolicy) {
                     case NONE:
                         return null;
                     default:

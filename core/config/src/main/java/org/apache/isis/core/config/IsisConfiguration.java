@@ -60,19 +60,16 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PropertyCommandDispatchConfiguration;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PropertyExecutionDispatchConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.EntityChangePublishingPolicy;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyPublishingPolicy;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
@@ -160,8 +157,10 @@ public class IsisConfiguration {
             public static class DomainObject {
 
                 /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
-                 * sent through to the {@link EntityPropertyChangeSubscriber}.
+                 * sent through to {@link EntityChangesSubscriber}s and 
+                 * sent through to {@link EntityPropertyChangeSubscriber}.
                  *
                  * <p>
                  * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#auditing()} DomainObject#getAuditing()}
@@ -171,7 +170,7 @@ public class IsisConfiguration {
                  *     Note: this applies only to domain entities, not view models.
                  * </p>
                  */
-                private AuditObjectsConfiguration auditing = AuditObjectsConfiguration.NONE;
+                private EntityChangePublishingPolicy entityChangePublishing = EntityChangePublishingPolicy.NONE;
 
                 /**
                  * The default for whether the properties of domain objects can be edited, or whether instead they
@@ -182,22 +181,6 @@ public class IsisConfiguration {
                  * </p>
                  */
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.FALSE;
-
-                /**
-                 * The default for whether the identities of changed objects should be sent through to the
-                 * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
-                 *
-                 * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(EntityChanges) publish}
-                 *     method is called only once per transaction, with {@link EntityChanges} collecting details of
-                 *     all changed domain objects.
-                 * </p>
-                 *
-                 * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#publishing()}.
-                 * </p>
-                 */
-                private PublishObjectsConfiguration publishing = PublishObjectsConfiguration.NONE;
 
                 private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
                 @Data
@@ -651,6 +634,7 @@ public class IsisConfiguration {
             public static class Action {
 
                 /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether action invocations should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
@@ -660,10 +644,29 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Action#commandDispatch()}.
+                 *  {@link org.apache.isis.applib.annotation.Action#commandPublishing()}.
                  * </p>
                  */
-                private CommandActionsConfiguration command = CommandActionsConfiguration.NONE;
+                private ActionPublishingPolicy commandPublishing = ActionPublishingPolicy.NONE;
+                
+                /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
+                 * The default for whether action invocations should be sent through to the
+                 * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
+                 *
+                 * <p>
+                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Interaction.Execution) publish}
+                 *     method is called only once per transaction, with
+                 *     {@link Interaction.Execution} collecting details of
+                 *     the identity of the target object, the action invoked, the action arguments and the returned
+                 *     object (if any).
+                 * </p>
+                 *
+                 * <p>
+                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionDispatch()}.
+                 * </p>
+                 */
+                private ActionPublishingPolicy executionPublishing = ActionPublishingPolicy.NONE;
 
                 /**
                  * Whether or not a public method needs to be annotated with
@@ -712,23 +715,8 @@ public class IsisConfiguration {
                     private boolean postForDefault = true;
                 }
 
-                /**
-                 * The default for whether action invocations should be sent through to the
-                 * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
-                 *
-                 * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Interaction.Execution) publish}
-                 *     method is called only once per transaction, with
-                 *     {@link Interaction.Execution} collecting details of
-                 *     the identity of the target object, the action invoked, the action arguments and the returned
-                 *     object (if any).
-                 * </p>
-                 *
-                 * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionDispatch()}.
-                 * </p>
-                 */
-                private PublishActionsConfiguration publishing = PublishActionsConfiguration.NONE;
+
+                
 
             }
 
@@ -832,6 +820,7 @@ public class IsisConfiguration {
             public static class Property {
 
                 /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether property edits should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
@@ -844,9 +833,10 @@ public class IsisConfiguration {
                  *  {@link org.apache.isis.applib.annotation.Property#commandDispatch()}.
                  * </p>
                  */
-                private PropertyCommandDispatchConfiguration commandDispatch = PropertyCommandDispatchConfiguration.NONE;
+                private PropertyPublishingPolicy commandPublishing = PropertyPublishingPolicy.NONE;
 
                 /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether property edits should be sent through to the
                  * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
@@ -862,7 +852,7 @@ public class IsisConfiguration {
                  *  @link org.apache.isis.applib.annotation.Property#publishing()}.
                  * </p>
                  */
-                private PropertyExecutionDispatchConfiguration executionDispatch = PropertyExecutionDispatchConfiguration.NONE;
+                private PropertyPublishingPolicy executionPublishing = PropertyPublishingPolicy.NONE;
 
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data

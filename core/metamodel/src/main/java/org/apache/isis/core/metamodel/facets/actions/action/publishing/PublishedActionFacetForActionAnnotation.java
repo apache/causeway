@@ -22,13 +22,15 @@ package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Dispatching;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+
+import lombok.val;
 
 public class PublishedActionFacetForActionAnnotation extends PublishedActionFacetAbstract {
 
@@ -37,16 +39,16 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final PublishActionsConfiguration setting = PublishActionsConfiguration.from(configuration);
+        val publishingPolicy = PublishingPolicies.actionExecutionPublishingPolicy(configuration);
 
         return actionsIfAny
-                .map(Action::executionDispatch)
-                .filter(publishing -> publishing != Dispatching.NOT_SPECIFIED)
+                .map(Action::executionPublishing)
+                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
                 .map(publishing -> {
                     switch (publishing) {
                     case AS_CONFIGURED:
 
-                        switch (setting) {
+                        switch (publishingPolicy) {
                         case NONE:
                             return null;
                         case IGNORE_QUERY_ONLY:
@@ -67,7 +69,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                     throw new IllegalStateException("publishing '" + publishing + "' not recognised");
                 })
                 .orElseGet(() -> {
-                    switch (setting) {
+                    switch (publishingPolicy) {
                     case NONE:
                         return null;
                     case IGNORE_QUERY_ONLY:

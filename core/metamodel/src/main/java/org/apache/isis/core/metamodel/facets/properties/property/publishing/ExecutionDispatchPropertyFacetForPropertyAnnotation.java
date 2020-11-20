@@ -22,12 +22,14 @@ package org.apache.isis.core.metamodel.facets.properties.property.publishing;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Dispatching;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PropertyExecutionDispatchConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacetAbstract;
+
+import lombok.val;
 
 public class ExecutionDispatchPropertyFacetForPropertyAnnotation 
 extends ExecutionDispatchPropertyFacetAbstract {
@@ -37,17 +39,16 @@ extends ExecutionDispatchPropertyFacetAbstract {
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final PropertyExecutionDispatchConfiguration executionDispatchSetting = 
-                configuration.getApplib().getAnnotation().getProperty().getExecutionDispatch();
+        val publishingPolicy = PublishingPolicies.propertyExecutionPublishingPolicy(configuration);
 
         return propertyIfAny
                 .map(Property::executionDispatch)
-                .filter(publishing -> publishing != Dispatching.NOT_SPECIFIED)
+                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
                 .map(publishing -> {
 
                     switch (publishing) {
                     case AS_CONFIGURED:
-                        switch (executionDispatchSetting) {
+                        switch (publishingPolicy) {
                         case NONE:
                             return null;
                         default:
@@ -64,7 +65,7 @@ extends ExecutionDispatchPropertyFacetAbstract {
 
                 })
                 .orElseGet(() -> {
-                    switch (executionDispatchSetting) {
+                    switch (publishingPolicy) {
                     case NONE:
                         return null;
                     default:

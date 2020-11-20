@@ -25,10 +25,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Dispatching;
+import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@Property(executionDispatch = Dispatching.DISABLED)         // <.>
+@Property(executionDispatch = Publishing.DISABLED)         // <.>
 @Inherited
 @Target({
         ElementType.METHOD, ElementType.FIELD       // <.>

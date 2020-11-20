@@ -28,7 +28,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import org.apache.isis.commons.having.HasUniqueId;
-import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -103,10 +103,10 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
 
     }
-
-    void allowingPublishingConfigurationToReturn(PublishActionsConfiguration value) {
+    
+    void allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy value) {
         val config = metaModelContext.getConfiguration();
-        config.getApplib().getAnnotation().getAction().setPublishing(value);
+        config.getApplib().getAnnotation().getAction().setExecutionPublishing(value);
     }
 
 }

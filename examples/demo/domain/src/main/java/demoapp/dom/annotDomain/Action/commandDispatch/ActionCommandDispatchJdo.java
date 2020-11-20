@@ -25,7 +25,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Dispatching;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -87,7 +87,7 @@ public class ActionCommandDispatchJdo
 
 //tag::annotation[]
     @Action(
-        commandDispatch = Dispatching.ENABLED                   // <.>
+        commandPublishing = Publishing.ENABLED                  // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
         , associateWithSequence = "1"
@@ -110,7 +110,7 @@ public class ActionCommandDispatchJdo
 
 //tag::annotation-2[]
     @Action(
-        commandDispatch = Dispatching.DISABLED                  // <.>
+        commandPublishing = Publishing.DISABLED                 // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyCommandDisabled"
         , associateWithSequence = "1"
@@ -132,7 +132,7 @@ public class ActionCommandDispatchJdo
 //end::annotation-2[]
 
 //tag::meta-annotation[]
-    @ActionCommandDispatchEnabledMetaAnnotation                         // <.>
+    @ActionCommandDispatchEnabledMetaAnnotation                 // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotated"
@@ -155,10 +155,10 @@ public class ActionCommandDispatchJdo
 //end::meta-annotation[]
 
 //tag::meta-annotation-overridden[]
-    @ActionCommandDispatchDisabledMetaAnnotation                        // <.>
+    @ActionCommandDispatchDisabledMetaAnnotation                // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , commandDispatch = Dispatching.ENABLED                 // <.>
+        , commandPublishing = Publishing.ENABLED                // <.>
         , associateWith = "propertyMetaAnnotatedOverridden"
         , associateWithSequence = "1"
     )

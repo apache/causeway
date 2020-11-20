@@ -23,7 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Dispatching;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.domain.DomainObjectList.ActionDomainEvent;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -38,7 +38,7 @@ public class JdoInventoryManager {
 
     public static class UpdateProductPriceEvent extends ActionDomainEvent {}
 
-    @Action(domainEvent = UpdateProductPriceEvent.class, executionDispatch = Dispatching.ENABLED)
+    @Action(domainEvent = UpdateProductPriceEvent.class, executionPublishing = Publishing.ENABLED)
     public JdoProduct updateProductPrice(JdoProduct product, double newPrice) {
         product.setPrice(newPrice);
         return product;

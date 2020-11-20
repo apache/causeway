@@ -55,11 +55,11 @@ public @interface Property {
     // end::refguide[]
     /**
      * Whether property edits, captured as {@link Command}s, 
-     * should be dispatched to {@link CommandSubscriber}s.
+     * should be published to {@link CommandSubscriber}s.
      */
     // tag::refguide[]
-    Dispatching commandDispatch()                               // <.>
-            default Dispatching.NOT_SPECIFIED;
+    Publishing commandPublishing()                               // <.>
+            default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -126,8 +126,8 @@ public @interface Property {
      * {@link ExecutionSubscriber}s.
      */
     // tag::refguide[]
-    Dispatching executionDispatch()                             // <.>
-            default Dispatching.NOT_SPECIFIED;
+    Publishing executionDispatch()                             // <.>
+            default Publishing.NOT_SPECIFIED;
     
     // end::refguide[]
     /**

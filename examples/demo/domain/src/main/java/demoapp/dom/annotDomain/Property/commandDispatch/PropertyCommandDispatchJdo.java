@@ -23,13 +23,13 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.Dispatching;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -63,7 +63,7 @@ public class PropertyCommandDispatchJdo
 
 //tag::annotation[]
     @Property(
-        commandDispatch = Dispatching.ENABLED                   // <.>
+        commandPublishing = Publishing.ENABLED                  // <.>
     )
     @PropertyLayout(
         describedAs = "@Property(command = ENABLED)"
@@ -75,7 +75,7 @@ public class PropertyCommandDispatchJdo
 
 //tag::annotation-2[]
     @Property(
-        commandDispatch = Dispatching.DISABLED                  // <.>
+        commandPublishing = Publishing.DISABLED                 // <.>
     )
     @PropertyLayout(
         describedAs = "@Property(command = DISABLED)"
@@ -97,7 +97,7 @@ public class PropertyCommandDispatchJdo
 
 //tag::meta-annotation-overridden[]
     @PropertyCommandDispatchDisabledMetaAnnotation              // <.>
-    @Property(commandDispatch = Dispatching.ENABLED)            // <.>
+    @Property(commandPublishing = Publishing.ENABLED)           // <.>
     @PropertyLayout(
         describedAs =
             "@PropertyCommandDisabledMetaAnnotation " +

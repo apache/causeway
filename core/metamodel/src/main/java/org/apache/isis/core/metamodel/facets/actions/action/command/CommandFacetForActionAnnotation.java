@@ -21,15 +21,17 @@ package org.apache.isis.core.metamodel.facets.actions.action.command;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Dispatching;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+
+import lombok.val;
 
 public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
 
@@ -39,23 +41,23 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
             final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 
-        final CommandActionsConfiguration setting = CommandActionsConfiguration.from(configuration);
+        val publishingPolicy = PublishingPolicies.actionCommandPublishingPolicy(configuration); 
 
         return actionsIfAny
-                .filter(action -> action.commandDispatch() != Dispatching.NOT_SPECIFIED)
+                .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
                 .map(action -> {
 
-                    Dispatching command = action.commandDispatch();
+                    Publishing commandPublishing = action.commandPublishing();
                     final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
                     final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
                     if(processor != null) {
-                        command = Dispatching.ENABLED;
+                        commandPublishing = Publishing.ENABLED;
                     }
 
-                    switch (command) {
+                    switch (commandPublishing) {
                     case AS_CONFIGURED:
-                        switch (setting) {
+                        switch (publishingPolicy) {
                         case NONE:
                             return null;
                         case IGNORE_QUERY_ONLY:
@@ -75,10 +77,10 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                                 processor, holder, servicesInjector);
                     default:
                     }
-                    throw new IllegalStateException("command '" + command + "' not recognised");
+                    throw new IllegalStateException("command '" + commandPublishing + "' not recognised");
                 })
                 .orElseGet(() -> {
-                    switch (setting) {
+                    switch (publishingPolicy) {
                     case NONE:
                         return null;
                     case IGNORE_QUERY_ONLY:

@@ -92,11 +92,11 @@ public @interface Action {
     // end::refguide[]
     /**
      * Whether action invocations, captured as {@link Command}s, 
-     * should be dispatched to {@link CommandSubscriber}s.
+     * should be published to {@link CommandSubscriber}s.
      */
     // tag::refguide[]
-    Dispatching commandDispatch()                               // <.>
-            default Dispatching.NOT_SPECIFIED;
+    Publishing commandPublishing()                               // <.>
+            default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -141,11 +141,11 @@ public @interface Action {
     // end::refguide[]
     /**
      * Whether {@link Interaction.Execution}s (triggered by action invocations), should
-     * be dispatched to {@link ExecutionSubscriber}s.
+     * be published to {@link ExecutionSubscriber}s.
      */
     // tag::refguide[]
-    Dispatching executionDispatch()                           // <.>
-            default Dispatching.NOT_SPECIFIED;
+    Publishing executionPublishing()                                // <.>
+            default Publishing.NOT_SPECIFIED;
     
     // end::refguide[]
     /**
