@@ -27,9 +27,9 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.audit.spi.ChangingEntities;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -51,7 +51,7 @@ class ChangingEntitiesFactory {
     private final UserService userService;
 
     @Nullable
-    public ChangingEntities createChangingEntities(
+    public EntityChanges createChangingEntities(
             final EntityChangeTrackerDefault entityChangeTracker) {
         
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
@@ -76,7 +76,7 @@ class ChangingEntitiesFactory {
     
     // -- HELPER
     
-    private ChangingEntities newChangingEntities(
+    private EntityChanges newChangingEntities(
             final Interaction interaction,
             final int numberEntitiesLoaded,
             final int numberEntityPropertiesModified,

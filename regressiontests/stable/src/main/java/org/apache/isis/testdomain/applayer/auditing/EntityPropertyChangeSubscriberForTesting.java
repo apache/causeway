@@ -18,18 +18,16 @@
  */
 package org.apache.isis.testdomain.applayer.auditing;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.audit.spi.EntityAuditListener;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -37,7 +35,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service @Log4j2
-public class EntityAuditListenerForTesting implements EntityAuditListener {
+public class EntityPropertyChangeSubscriberForTesting implements EntityPropertyChangeSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
     
@@ -52,12 +50,9 @@ public class EntityAuditListenerForTesting implements EntityAuditListener {
     }
 
     @Override
-    public void audit(UUID interactionId, int sequence, String targetClassName, Bookmark target,
-            String memberIdentifier, String propertyName, String preValue, String postValue, String user,
-            Timestamp timestamp) {
+    public void onChanging(final EntityPropertyChange entityPropertyChange) {
 
-        val auditEntry = String.format("%s/%s: '%s' -> '%s'", 
-                targetClassName, propertyName, preValue, postValue);
+        val auditEntry = entityPropertyChange.toString();
 
         @SuppressWarnings("unchecked")
         val auditEntries = (List<String>) kvStore.get(this, "audit").orElseGet(ArrayList::new);
@@ -73,12 +68,14 @@ public class EntityAuditListenerForTesting implements EntityAuditListener {
     @SuppressWarnings("unchecked")
     public static Can<String> getAuditEntries(KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<String>) kvStore.get(EntityAuditListenerForTesting.class, "audit")
+                (List<String>) kvStore.get(EntityPropertyChangeSubscriberForTesting.class, "audit")
                 .orElse(null));
     }
     
     public static void clearAuditEntries(KVStoreForTesting kvStore) {
-        kvStore.clear(EntityAuditListenerForTesting.class);
+        kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
     }
+
+   
 
 }

@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.xactn;
 
 import java.util.UUID;
 
-import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.commons.having.HasUniqueId;
 
 import lombok.Data;
 

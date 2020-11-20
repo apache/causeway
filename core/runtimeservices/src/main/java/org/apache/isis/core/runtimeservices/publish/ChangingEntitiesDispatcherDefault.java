@@ -30,8 +30,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.runtime.persistence.changetracking.ChangingEntitiesDispatcher;
@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Wrapper around {@link org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener}.
+ * Wrapper around {@link org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber}.
  */
 @Service
 @Named("isisRuntime.ChangingEntitiesDispatcher")
@@ -52,11 +52,11 @@ import lombok.val;
 //@Log4j2
 public class ChangingEntitiesDispatcherDefault implements ChangingEntitiesDispatcher {
     
-    private final List<ChangingEntitiesListener> changingEntitiesListenersNullable;
+    private final List<EntityChangesSubscriber> changingEntitiesListenersNullable;
     private final ClockService clockService;
     private final UserService userService;
     
-    private Can<ChangingEntitiesListener> changingEntitiesListeners;
+    private Can<EntityChangesSubscriber> changingEntitiesListeners;
     
     @PostConstruct
     public void init() {
@@ -76,7 +76,7 @@ public class ChangingEntitiesDispatcherDefault implements ChangingEntitiesDispat
         }
         
         for (val changingEntitiesListener : changingEntitiesListeners) {
-            changingEntitiesListener.onEntitiesChanging(changingEntities);
+            changingEntitiesListener.onChanging(changingEntities);
         }
     }
     

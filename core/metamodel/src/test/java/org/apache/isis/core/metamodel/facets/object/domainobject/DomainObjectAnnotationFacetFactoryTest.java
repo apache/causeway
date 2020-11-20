@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;

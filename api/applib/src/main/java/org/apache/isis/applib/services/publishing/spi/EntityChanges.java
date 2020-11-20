@@ -16,18 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.audit;
+package org.apache.isis.applib.services.publishing.spi;
 
-public class AuditEntryPropertyValueType {
+import java.sql.Timestamp;
 
-    private AuditEntryPropertyValueType() {}
+import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.commons.having.HasUsername;
+import org.apache.isis.schema.chg.v2.ChangesDto;
 
-    public static class Meta {
+// tag::refguide[]
+public interface EntityChanges
+        extends HasUniqueId,            // <.>
+                HasUsername {           // <.>
 
-        public static final int MAX_LEN = 255;
+    Timestamp getCompletedAt();         // <.>
 
-        private Meta() {}
+    int getNumberLoaded();              // <.>
+    int getNumberCreated();             // <.>
+    int getNumberUpdated();             // <.>
+    int getNumberDeleted();             // <.>
 
-    }
+    int getNumberPropertiesModified();  // <.>
+
+    ChangesDto getDto();                // <.>
 
 }
+// end::refguide[]

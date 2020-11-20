@@ -29,8 +29,6 @@ import org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_objectType;
-import org.apache.isis.applib.services.audit.ChangingEntitiesLogging;
-import org.apache.isis.applib.services.audit.EntityAuditLogging;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -42,6 +40,8 @@ import org.apache.isis.applib.services.confview.ConfigurationMenu;
 import org.apache.isis.applib.services.iactn.spi.ExecutionLogging;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
+import org.apache.isis.applib.services.publishing.logging.EntityChangesLogging;
+import org.apache.isis.applib.services.publishing.logging.EntityPropertyChangeLogging;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.schema.IsisModuleSchema;
 
@@ -68,14 +68,14 @@ import org.apache.isis.schema.IsisModuleSchema;
         MetaModelServiceMenu.class,
 
         // @Service's
-        EntityAuditLogging.class,
         ClockService.class,
         CommandDtoProcessorServiceIdentity.class,
         CommandListener.Null.class,
         ContentMappingServiceForCommandDto.class,
         ContentMappingServiceForCommandsDto.class,
+        EntityChangesLogging.class,
+        EntityPropertyChangeLogging.class,
         ExecutionLogging.class,
-        ChangingEntitiesLogging.class,
         SessionLoggingServiceLogging.class,
 
 })

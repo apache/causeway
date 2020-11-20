@@ -16,18 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.audit;
+package org.apache.isis.commons.having;
 
-public class AuditEntryPropertyIdType {
+import java.util.UUID;
 
-    private AuditEntryPropertyIdType() {}
 
-    public static class Meta {
+/**
+ * Mix-in interface for objects (usually created by service implementations) that are be persistable,
+ * and so can be associated together using a unique identifier.
+ *
+ */
+// tag::refguide[]
+public interface HasUniqueId {
 
-        public static final int MAX_LEN = 50;
-
-        private Meta() {}
-
-    }
+    // end::refguide[]
+    /**
+     * The unique identifier (a GUID) of the request/interaction/transaction.
+     */
+    // tag::refguide[]
+    UUID getUniqueId();
 
 }
+// end::refguide[]

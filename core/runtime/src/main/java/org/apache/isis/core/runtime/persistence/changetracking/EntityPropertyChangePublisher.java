@@ -31,9 +31,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.audit.spi.EntityAuditListener;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
@@ -44,28 +45,28 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Wrapper around {@link org.apache.isis.applib.services.audit.spi.EntityAuditListener}.
+ * Notifies {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}s.
  */
 @Service
-@Named("isisRuntime.EntityAuditDispatcher")
+@Named("isisRuntime.EntityPropertyChangePublisher")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class EntityAuditDispatcher {
+public class EntityPropertyChangePublisher {
     
-    private final List<EntityAuditListener> auditerServices;
+    private final List<EntityPropertyChangeSubscriber> subscribers;
     private final UserService userService;
     private final ClockService clockService;
     private final TransactionService transactionService;
     
-    private Can<EntityAuditListener> enabledAuditListeners;
+    private Can<EntityPropertyChangeSubscriber> enabledSubscribers;
     
     @PostConstruct
     public void init() {
-        enabledAuditListeners = Can.ofCollection(auditerServices)
-                .filter(EntityAuditListener::isEnabled);
+        enabledSubscribers = Can.ofCollection(subscribers)
+                .filter(EntityPropertyChangeSubscriber::isEnabled);
     }
 
     public void dispatchEntityAudits(final HasEnlistedEntityAudits hasEnlistedForAuditing) {
@@ -80,17 +81,17 @@ public class EntityAuditDispatcher {
         log.debug("about to process {} audits", ()->auditEntries.size());
         
         for (val auditEntry : auditEntries) {
-            auditChangedProperty(currentTime, currentUser, auditEntry);
+            publishChangedProperty(currentTime, currentUser, auditEntry);
         }
     }
 
     // -- HELPER
     
     private boolean canDispatch() {
-        return enabledAuditListeners.isNotEmpty();
+        return enabledSubscribers.isNotEmpty();
     }
     
-    private void auditChangedProperty(
+    private void publishChangedProperty(
             final java.sql.Timestamp timestamp,
             final String user,
             final AuditEntry auditEntry) {
@@ -113,9 +114,11 @@ public class EntityAuditDispatcher {
         final UUID transactionId = txId.getUniqueId();
         final int sequence = txId.getSequence();
 
-        for (val auditListener : enabledAuditListeners) {
-            auditListener
-            .audit(transactionId, sequence, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
+        for (val subscriber : enabledSubscribers) {
+            subscriber.onChanging(
+                    EntityPropertyChange
+                        .of(transactionId, sequence, targetClass, target, 
+                                memberId, propertyId, preValue, postValue, user, timestamp));
         }
     }
 

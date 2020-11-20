@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    EntityAuditListenerForTesting.class
+    EntityPropertyChangeSubscriberForTesting.class
 })
 public class Configuration_usingEntityPrePostValueAuditing {
 

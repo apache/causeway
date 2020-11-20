@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

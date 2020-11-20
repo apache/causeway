@@ -16,11 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.commons.having;
 
-/**
- * The {@link org.apache.isis.applib.services.audit.spi.EntityAuditListener} auditing service provides a simple mechanism to
- * capture changes to data. It is called for each property that has changed on any domain object, as a set of pre- and post-values.
- *
- *
- */
-package org.apache.isis.applib.services.audit;
+public interface HasEnabling {
+
+    default boolean isEnabled() {
+        // enabled by default
+        return true;
+    }
+    
+}

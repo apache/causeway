@@ -24,21 +24,21 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.audit.spi.ChangingEntities;
-import org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.val;
 
 //tag::class[]
 @Service
-public class ChangingEntitiesListenerToCaptureChangesInMemory implements ChangingEntitiesListener {
+public class EntityChangesSubscriberToCaptureChangesInMemory implements EntityChangesSubscriber {
 
     private final List<ChangesDto> changedEntities = new ArrayList<>();
 
     @Override
-    public void onEntitiesChanging(
-            ChangingEntities changingEntities       // <.>
+    public void onChanging(
+            EntityChanges changingEntities       // <.>
     ) {
         val dto = changingEntities.getDto();
         this.changedEntities.add(dto);

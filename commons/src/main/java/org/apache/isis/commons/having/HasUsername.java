@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services;
-
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.commons.having.HasUniqueId;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
+package org.apache.isis.commons.having;
 
 /**
- * Extends {@link HasUniqueId}, where the {@link HasUniqueId#getUniqueId()} is interpreted as an
- * interaction (cf {@link InteractionDto}) that has at least one member execution (cf
- * {@link org.apache.isis.schema.ixn.v1.MemberExecutionDto}) and may (by way of {@link WrapperFactory}) contain
- * several.
+ * Mix-in interface for objects (usually created by service implementations) that are be persistable,
+ * and so can be associated with a username, usually of the user that has performed some operation.
  *
  * <p>
- *     Examples could include SPI services that persist published events and status messages.
- * </p>
+ * Other services can then use this username as a means to contributed actions/collections to render such additional
+ * information relating to the activities of the user.
  */
-public interface RepresentsInteractionMemberExecution extends HasUniqueId {
+// tag::refguide[]
+public interface HasUsername {
 
-    int getSequence();
+    /**
+     * The user that created this object.
+     * @return
+     */
+    String getUsername();
+
 }
+// end::refguide[]

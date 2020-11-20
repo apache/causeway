@@ -16,12 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.audit;
+package org.apache.isis.applib.services.publishing.logging;
 
-import java.sql.Timestamp;
-import java.util.UUID;
-
-import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,22 +26,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.audit.spi.EntityAuditListener;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.EntityAuditLogging")
+@Named("isisApplib.EntityPropertyChangeLogging")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("logging")
 @Log4j2
-public class EntityAuditLogging implements EntityAuditListener {
-
-    @PostConstruct
-    public void init() {
-    }
+public class EntityPropertyChangeLogging implements EntityPropertyChangeSubscriber {
 
     @Override
     public boolean isEnabled() {
@@ -53,19 +45,8 @@ public class EntityAuditLogging implements EntityAuditListener {
     }
 
     @Override
-    public void audit(
-            final UUID interactionId, int sequence,
-            final String targetClassName, final Bookmark target,
-            final String memberId, final String propertyName,
-            final String preValue, final String postValue,
-            final String user, final Timestamp timestamp) {
-
-        if(log.isDebugEnabled()) {
-            String auditMessage =
-                    interactionId + "," + sequence + ": " +
-                            target.toString() + " by " + user + ", " + propertyName + ": " + preValue + " -> " + postValue;
-            log.debug(auditMessage);
-        }
+    public void onChanging(final EntityPropertyChange entityPropertyChange) {
+        log.debug(entityPropertyChange.toString());
     }
 
 }

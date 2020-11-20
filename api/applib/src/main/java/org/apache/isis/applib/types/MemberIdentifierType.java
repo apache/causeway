@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.command.Command;
 import lombok.experimental.UtilityClass;
 
 /**
- * As per {@link Command#getMemberIdentifier()} and {@link org.apache.isis.applib.services.audit.spi.EntityAuditListener#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
+ * As per {@link Command#getMemberIdentifier()} and {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
  */
 public class MemberIdentifierType {
 

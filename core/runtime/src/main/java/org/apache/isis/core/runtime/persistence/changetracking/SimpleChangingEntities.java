@@ -24,7 +24,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
-import org.apache.isis.applib.services.audit.spi.ChangingEntities;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.NonNull;
@@ -34,7 +34,7 @@ import lombok.ToString;
  * Captures which objects were created, updated or deleted in the course of a transaction.
  */
 @ToString
-class SimpleChangingEntities implements ChangingEntities, RepresentsInteractionMemberExecution {
+class SimpleChangingEntities implements EntityChanges, RepresentsInteractionMemberExecution {
 
     private UUID transactionUuid;
     private final int sequence;

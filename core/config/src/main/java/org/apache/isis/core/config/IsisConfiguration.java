@@ -58,10 +58,10 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.audit.spi.ChangingEntities;
-import org.apache.isis.applib.services.audit.spi.EntityAuditListener;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.commons.internal.context._Context;
@@ -161,7 +161,7 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
-                 * sent through to the {@link EntityAuditListener}.
+                 * sent through to the {@link EntityPropertyChangeSubscriber}.
                  *
                  * <p>
                  * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#auditing()} DomainObject#getAuditing()}
@@ -188,8 +188,8 @@ public class IsisConfiguration {
                  * {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener#publish(ChangingEntities) publish}
-                 *     method is called only once per transaction, with {@link ChangingEntities} collecting details of
+                 *     The service's {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener#publish(EntityChanges) publish}
+                 *     method is called only once per transaction, with {@link EntityChanges} collecting details of
                  *     all changed domain objects.
                  * </p>
                  *

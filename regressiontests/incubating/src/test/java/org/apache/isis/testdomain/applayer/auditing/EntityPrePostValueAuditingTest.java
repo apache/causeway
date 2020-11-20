@@ -65,7 +65,7 @@ class EntityPrePostValueAuditingTest extends IsisIntegrationTestAbstract {
     }
 
     private void given() {
-        EntityAuditListenerForTesting.clearAuditEntries(kvStore);
+        EntityPropertyChangeSubscriberForTesting.clearAuditEntries(kvStore);
     }
 
     private void verify(VerificationStage verificationStage) {
@@ -86,7 +86,7 @@ class EntityPrePostValueAuditingTest extends IsisIntegrationTestAbstract {
     // -- HELPER
 
     private void assertHasAuditEntries(Can<String> expectedAuditEntries) {
-        val actualAuditEntries = EntityAuditListenerForTesting.getAuditEntries(kvStore);
+        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getAuditEntries(kvStore);
         CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
     }
 

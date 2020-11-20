@@ -25,9 +25,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.command.Command;
-
+import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
@@ -35,7 +34,7 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 
 /**
  * This mixin contributes a <tt>command</tt> action to any (non-command) implementation of
- * {@link org.apache.isis.applib.services.HasUniqueId}; that is: audit entries, and published events.  Thus, it
+ * {@link org.apache.isis.commons.having.HasUniqueId}; that is: audit entries, and published events.  Thus, it
  * is possible to navigate from the effect back to the cause.
  */
 @Action(

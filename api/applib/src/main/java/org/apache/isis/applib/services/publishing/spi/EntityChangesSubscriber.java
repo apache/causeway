@@ -16,29 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.audit.spi;
+package org.apache.isis.applib.services.publishing.spi;
 
-import java.sql.Timestamp;
+import org.apache.isis.commons.having.HasEnabling;
 
-import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.applib.services.HasUsername;
-import org.apache.isis.schema.chg.v2.ChangesDto;
+/**
+ * Part of the <i>Publishing SPI</i>. A component to receive the entire set of entities 
+ * (with publishing enabled) that are about to change, serializable as ChangesDto.
+ *  
+ * @since 2.0
+ */
+public interface EntityChangesSubscriber extends HasEnabling {
 
-// tag::refguide[]
-public interface ChangingEntities
-        extends HasUniqueId,            // <.>
-                HasUsername {           // <.>
-
-    Timestamp getCompletedAt();         // <.>
-
-    int getNumberLoaded();              // <.>
-    int getNumberCreated();             // <.>
-    int getNumberUpdated();             // <.>
-    int getNumberDeleted();             // <.>
-
-    int getNumberPropertiesModified();  // <.>
-
-    ChangesDto getDto();                // <.>
-
+    /**
+     * Receives all changing entities (with publishing enabled) at then end of the a 
+     * transaction during the pre-commit phase.
+     */
+    void onChanging(EntityChanges entityChanges);      // <.>
 }
-// end::refguide[]

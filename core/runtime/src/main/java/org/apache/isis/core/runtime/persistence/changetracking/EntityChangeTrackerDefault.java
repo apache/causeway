@@ -37,12 +37,12 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.TransactionScopeListener;
-import org.apache.isis.applib.services.audit.spi.ChangingEntities;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -94,7 +94,7 @@ implements
 
     // end::refguide[]
     
-    @Inject private EntityAuditDispatcher entityAuditDispatcher;
+    @Inject private EntityPropertyChangePublisher entityAuditDispatcher;
     @Inject private ChangingEntitiesDispatcher changingEntitiesDispatcher;
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionContext> interactionContextProvider;
@@ -208,7 +208,7 @@ implements
     }
 
     @Override
-    public ChangingEntities getChangingEntities(ClockService clockService, UserService userService) {
+    public EntityChanges getChangingEntities(ClockService clockService, UserService userService) {
         return ChangingEntitiesFactory.of(clockService, userService).createChangingEntities(this);
     }
     

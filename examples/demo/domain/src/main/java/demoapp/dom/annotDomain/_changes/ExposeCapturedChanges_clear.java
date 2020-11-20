@@ -43,11 +43,11 @@ public class ExposeCapturedChanges_clear {
 
     //tag::class[]
     public DomainObjectAuditingVm act() {
-        changingEntitiesListenerToCaptureChangesInMemory.clear();
+        entityChangesSubscriberToCaptureChangesInMemory.clear();
         return domainObjectAuditingVm;
     }
 
     @Inject
-    ChangingEntitiesListenerToCaptureChangesInMemory changingEntitiesListenerToCaptureChangesInMemory;
+    EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;;
 }
 //end::class[]

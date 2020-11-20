@@ -41,13 +41,13 @@ public class ExposeCapturedChanges_changes {
 //tag::class[]
     public List<ChangesDto> coll() {
         val list = new LinkedList<ChangesDto>();
-        changingEntitiesListenerToCaptureChangesInMemory
+        entityChangesSubscriberToCaptureChangesInMemory
                 .streamChangedEntities()
                 .forEach(list::push);   // reverse order
         return list;
     }
 
     @Inject
-    ChangingEntitiesListenerToCaptureChangesInMemory changingEntitiesListenerToCaptureChangesInMemory;
+    EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;
 }
 //end::class[]

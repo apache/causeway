@@ -16,24 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services;
 
 /**
- * Mix-in interface for objects (usually created by service implementations) that are be persistable,
- * and so can be associated with a username, usually of the user that has performed some operation.
+ * The {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber} auditing service provides a simple mechanism to
+ * capture changes to data. It is called for each property that has changed on any domain object, as a set of pre- and post-values.
  *
- * <p>
- * Other services can then use this username as a means to contributed actions/collections to render such additional
- * information relating to the activities of the user.
+ *
  */
-// tag::refguide[]
-public interface HasUsername {
-
-    /**
-     * The user that created this object.
-     * @return
-     */
-    String getUsername();
-
-}
-// end::refguide[]
+package org.apache.isis.applib.services.publishing;

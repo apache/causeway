@@ -16,25 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services;
+package org.apache.isis.applib.services.publishing.spi;
 
-import java.util.UUID;
-
+import org.apache.isis.commons.having.HasEnabling;
 
 /**
- * Mix-in interface for objects (usually created by service implementations) that are be persistable,
- * and so can be associated together using a unique identifier.
- *
+ * Part of the <i>Publishing SPI</i>. A component to receive pre-post property values 
+ * for each changed entity (with publishing enabled).
+ *  
+ * @since 2.0
  */
 // tag::refguide[]
-public interface HasUniqueId {
+public interface EntityPropertyChangeSubscriber extends HasEnabling {
 
-    // end::refguide[]
     /**
-     * The unique identifier (a GUID) of the request/interaction/transaction.
+     * Receives all pre-post property values for entities (with publishing enabled) 
+     * at then end of the transaction during the pre-commit phase.
      */
-    // tag::refguide[]
-    UUID getUniqueId();
+    void onChanging(EntityPropertyChange entityPropertyChange);     // <.>
 
 }
 // end::refguide[]

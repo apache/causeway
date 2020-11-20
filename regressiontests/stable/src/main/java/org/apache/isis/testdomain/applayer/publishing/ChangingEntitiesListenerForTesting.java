@@ -26,10 +26,10 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.audit.spi.ChangingEntities;
-import org.apache.isis.applib.services.audit.spi.ChangingEntitiesListener;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 public class ChangingEntitiesListenerForTesting 
 implements 
     ExecutionListener,
-    ChangingEntitiesListener {
+    EntityChangesSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
 
@@ -66,11 +66,11 @@ implements
     }
 
     @Override
-    public void onEntitiesChanging(ChangingEntities publishedObjects) {
+    public void onChanging(EntityChanges publishedObjects) {
 
         @SuppressWarnings("unchecked")
         val publishedEntries = 
-        (List<ChangingEntities>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
+        (List<EntityChanges>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
 
         publishedEntries.add(publishedObjects);
 
@@ -82,9 +82,9 @@ implements
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<ChangingEntities> getPublishedObjects(KVStoreForTesting kvStore) {
+    public static Can<EntityChanges> getPublishedObjects(KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<ChangingEntities>) kvStore.get(ChangingEntitiesListenerForTesting.class, "publishedObjects")
+                (List<EntityChanges>) kvStore.get(ChangingEntitiesListenerForTesting.class, "publishedObjects")
                 .orElse(null));
     }
 
@@ -101,27 +101,27 @@ implements
 
     public static int getCreated(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberCreated).sum();
+        return publishedObjects.stream().mapToInt(EntityChanges::getNumberCreated).sum();
     }
 
     public static int getDeleted(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberDeleted).sum();
+        return publishedObjects.stream().mapToInt(EntityChanges::getNumberDeleted).sum();
     }
 
     public static int getLoaded(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberLoaded).sum();
+        return publishedObjects.stream().mapToInt(EntityChanges::getNumberLoaded).sum();
     }
 
     public static int getUpdated(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberUpdated).sum();
+        return publishedObjects.stream().mapToInt(EntityChanges::getNumberUpdated).sum();
     }
 
     public static int getModified(KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
-        return publishedObjects.stream().mapToInt(ChangingEntities::getNumberPropertiesModified).sum();
+        return publishedObjects.stream().mapToInt(EntityChanges::getNumberPropertiesModified).sum();
     }
 
 

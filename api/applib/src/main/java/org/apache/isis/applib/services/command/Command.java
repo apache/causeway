@@ -23,13 +23,13 @@ import java.util.UUID;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.commons.having.HasUsername;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
