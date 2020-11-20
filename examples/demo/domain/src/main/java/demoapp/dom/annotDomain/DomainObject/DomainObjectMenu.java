@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.annotDomain.DomainObject.auditing.DomainObjectAuditingVm;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectAuditingVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DomainObjectMenu")
 //@Log4j2

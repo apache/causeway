@@ -33,12 +33,12 @@ import org.apache.isis.applib.value.Clob;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom.annotDomain.Property.commandDispatch.PropertyCommandDispatchJdo;
-import demoapp.dom.annotDomain.Property.commandDispatch.PropertyCommandDispatchJdoEntities;
+import demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdo;
+import demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoEntities;
 import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
 import demoapp.dom.annotDomain.Property.editing.PropertyEditingVm;
-import demoapp.dom.annotDomain.Property.executionDispatch.PropertyExecutionDispatchJdo;
-import demoapp.dom.annotDomain.Property.executionDispatch.PropertyExecutionDispatchJdoEntities;
+import demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdo;
+import demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdoEntities;
 import demoapp.dom.annotDomain.Property.fileAccept.PropertyFileAcceptVm;
 import demoapp.dom.annotDomain.Property.hidden.PropertyHiddenVm;
 import demoapp.dom.annotDomain.Property.hidden.child.PropertyHiddenChildVm;
@@ -53,14 +53,14 @@ import demoapp.dom.types.Samples;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
 
-    final PropertyCommandDispatchJdoEntities propertyCommandJdoEntities;
-    final PropertyExecutionDispatchJdoEntities propertyPublishingJdoEntities;
+    final PropertyCommandPublishingJdoEntities propertyCommandJdoEntities;
+    final PropertyExecutionPublishingJdoEntities propertyPublishingJdoEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public PropertyCommandDispatchJdo commandDispatch(){
+    public PropertyCommandPublishingJdo commandDispatch(){
         return propertyCommandJdoEntities.first();
     }
 
@@ -84,7 +84,7 @@ public class PropertyMenu {
     
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
-    public PropertyExecutionDispatchJdo executionDispatch(){
+    public PropertyExecutionPublishingJdo executionDispatch(){
         return propertyPublishingJdoEntities.first();
     }
 

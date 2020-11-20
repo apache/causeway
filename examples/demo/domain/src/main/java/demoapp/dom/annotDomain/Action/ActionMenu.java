@@ -32,11 +32,11 @@ import lombok.val;
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.annotDomain.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.annotDomain.Action.associateWith.child.ActionAssociateWithChildVm;
-import demoapp.dom.annotDomain.Action.commandDispatch.ActionCommandDispatchJdo;
-import demoapp.dom.annotDomain.Action.commandDispatch.ActionCommandDispatchJdoEntities;
+import demoapp.dom.annotDomain.Action.commandPublishing.ActionCommandPublishingJdo;
+import demoapp.dom.annotDomain.Action.commandPublishing.ActionCommandPublishingJdoEntities;
 import demoapp.dom.annotDomain.Action.domainEvent.ActionDomainEventVm;
-import demoapp.dom.annotDomain.Action.executionDispatch.ActionExecutionDispatchJdo;
-import demoapp.dom.annotDomain.Action.executionDispatch.ActionExecutionDispatchJdoEntities;
+import demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdo;
+import demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdoEntities;
 import demoapp.dom.annotDomain.Action.hidden.ActionHiddenVm;
 import demoapp.dom.annotDomain.Action.restrictTo.ActionRestrictToVm;
 import demoapp.dom.annotDomain.Action.typeOf.ActionTypeOfVm;
@@ -47,8 +47,8 @@ import demoapp.dom.annotDomain.Action.typeOf.child.ActionTypeOfChildVm;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 
-    final ActionCommandDispatchJdoEntities actionCommandJdoEntities;
-    final ActionExecutionDispatchJdoEntities actionPublishingJdoEntities;
+    final ActionCommandPublishingJdoEntities actionCommandJdoEntities;
+    final ActionExecutionPublishingJdoEntities actionPublishingJdoEntities;
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -71,7 +71,7 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public ActionCommandDispatchJdo commandDispatch(){
+    public ActionCommandPublishingJdo commandDispatch(){
         return actionCommandJdoEntities.first();
     }
 
@@ -84,7 +84,7 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
-    public ActionExecutionDispatchJdo executionDispatch(){
+    public ActionExecutionPublishingJdo executionDispatch(){
         return actionPublishingJdoEntities.first();
     }
     

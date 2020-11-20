@@ -284,16 +284,14 @@ _Components_
 * org.apache.isis.applib.annotation.DomainService
 * org.apache.isis.applib.annotation.Mixin
 * org.apache.isis.applib.annotation.ViewModel
-* org.apache.isis.applib.services.audit.AuditerServiceLogging
 * org.apache.isis.applib.services.clock.ClockService
-* org.apache.isis.applib.services.command.CommandService
-* org.apache.isis.applib.services.command.spi.CommandServiceListener$Null
 * org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto
 * org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto
 * org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity
-* org.apache.isis.applib.services.iactn.InteractionContext
-* org.apache.isis.applib.services.jaxb.JaxbServiceDefault
-* org.apache.isis.applib.services.publish.PublisherServiceLogging
+* org.apache.isis.applib.services.publishing.log.CommandLogger
+* org.apache.isis.applib.services.publishing.log.EntityChangesLogger
+* org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger
+* org.apache.isis.applib.services.publishing.log.ExecutionLogger
 * org.apache.isis.applib.services.session.SessionLoggingServiceLogging
 
 _Dependencies_
@@ -391,6 +389,7 @@ _Dependencies_
 * org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider
 * org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault
 * org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault
+* org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistryDefault
 * org.apache.isis.core.metamodel.services.ServiceInjectorDefault
 * org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory
 * org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault
@@ -438,8 +437,7 @@ _Dependencies_
 
 * org.apache.isis.core.runtime.events.RuntimeEventService
 * org.apache.isis.core.runtime.events.persistence.TimestampService
-* org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService
-* org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService
+* org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTrackerDefault
 
 _Dependencies_
 
@@ -468,10 +466,14 @@ _Components_
 * org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault
 * org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo
 * org.apache.isis.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault
+* org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault
 * org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault
 * org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3
 * org.apache.isis.core.runtimeservices.message.MessageServiceDefault
-* org.apache.isis.core.runtimeservices.publish.PublisherDispatchServiceDefault
+* org.apache.isis.core.runtimeservices.publish.CommandPublisherDefault
+* org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefault
+* org.apache.isis.core.runtimeservices.publish.EntityPropertyChangePublisherDefault
+* org.apache.isis.core.runtimeservices.publish.ExecutionPublisherDefault
 * org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault
 * org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault
 * org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault
@@ -1007,7 +1009,6 @@ _Components_
 * org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 * org.apache.isis.persistence.jdo.datanucleus5.jdosupport.IsisJdoSupportDN5
 * org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingModelPlugin
-* org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault
 * org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo
 * org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5
 
@@ -1810,6 +1811,7 @@ _Dependencies_
 * org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$ResponseFilter
 * org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0
 * org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1
+* org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV2
 * org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType
 * org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault
 * org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault
@@ -2697,7 +2699,7 @@ _Dependencies_
 |Apache Isis Ext - Command Log Implementation (JDO)
 |_Components_
 
-* org.apache.isis.extensions.commandlog.impl.CommandServiceListenerForJdo
+* org.apache.isis.extensions.commandlog.impl.CommandSubscriberForJdo
 * org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo$TableColumnOrderDefault
 * org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo$TitleProvider
 * org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository
@@ -2731,6 +2733,7 @@ _Dependencies_
 
 _Components_
 
+* org.apache.isis.extensions.commandreplay.primary.config.PrimaryConfig
 * org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand
 
 _Dependencies_
@@ -3837,22 +3840,22 @@ package "package-ecosystem\n[Software System]" {
 * demoapp.dom._infra.resources.ResourceReaderService
 * demoapp.dom._infra.samples.NameSamples
 * demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory
-* demoapp.dom.annotDomain.Action.commandDispatch.ActionCommandDispatchJdoEntities
-* demoapp.dom.annotDomain.Action.commandDispatch.ActionCommandDispatchJdoSeedService
-* demoapp.dom.annotDomain.Action.executionDispatch.ActionExecutionDispatchJdoEntities
-* demoapp.dom.annotDomain.Action.executionDispatch.ActionExecutionDispatchJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.auditing.annotated.disabled.DomainObjectAuditingDisabledJdoEntities
-* demoapp.dom.annotDomain.DomainObject.auditing.annotated.disabled.DomainObjectAuditingDisabledJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.auditing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities
-* demoapp.dom.annotDomain.DomainObject.auditing.annotated.enabled.DomainObjectAuditingEnabledJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.auditing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoEntities
-* demoapp.dom.annotDomain.DomainObject.auditing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.auditing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities
-* demoapp.dom.annotDomain.DomainObject.auditing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoSeedService
-* demoapp.dom.annotDomain.Property.commandDispatch.PropertyCommandDispatchJdoEntities
-* demoapp.dom.annotDomain.Property.commandDispatch.PropertyCommandDispatchJdoSeedService
-* demoapp.dom.annotDomain.Property.executionDispatch.PropertyExecutionDispatchJdoEntities
-* demoapp.dom.annotDomain.Property.executionDispatch.PropertyExecutionDispatchJdoSeedService
+* demoapp.dom.annotDomain.Action.commandPublishing.ActionCommandPublishingJdoEntities
+* demoapp.dom.annotDomain.Action.commandPublishing.ActionCommandPublishingJdoSeedService
+* demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdoEntities
+* demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdoEntities
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoEntities
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoSeedService
+* demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoEntities
+* demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoSeedService
+* demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdoEntities
+* demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdoSeedService
 * demoapp.dom.annotDomain._changes.EntityChangesSubscriberToCaptureChangesInMemory
 * demoapp.dom.annotDomain._commands.ExposePersistedCommands$TableColumnOrderDefault
 * demoapp.dom.annotDomain._interactions.ExecutionListenerToCaptureInteractionsInMemory

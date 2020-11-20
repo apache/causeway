@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.annotDomain.DomainObject.auditing.DomainObjectAuditingVm;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectAuditingVm;
 
 //tag::class[]
 @Action(

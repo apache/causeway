@@ -21,13 +21,13 @@ public class EntityChangesPublisher {
 	
 }
 ----
-<1> to dispatch all changing entities that are to be published (with the xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing`] annotation attribute or equivalent).
+<1> to published all changing entities that are to be published (with the xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing`] annotation attribute or equivalent).
 
 == Related Classes
 
 In total there are 4 sorts of data the framework has publishers for ...
-. *EntityPropertyChanges*: dispatched via `EntityPropertyChangePublisher` and subscribed to via `EntityPropertyChangeSubscriber` (SPI)
-. *EntityChanges*: dispatched via `EntityChangesPublisher` and subscribed to via `EntityChangesSubscriber` (SPI)
-. *Execution*: dispatched via `ExecutionPublisher` and subscribed to via `ExecutionSubscriber` (SPI)
-. *Command*: dispatched via `CommandPublisher` and subscribed to via `CommandSubscriber` (SPI)
+. *EntityPropertyChanges*: published via `EntityPropertyChangePublisher` and subscribed to via `EntityPropertyChangeSubscriber` (SPI)
+. *EntityChanges*: published via `EntityChangesPublisher` and subscribed to via `EntityChangesSubscriber` (SPI)
+. *Execution*: published via `ExecutionPublisher` and subscribed to via `ExecutionSubscriber` (SPI)
+. *Command*: published via `CommandPublisher` and subscribed to via `CommandSubscriber` (SPI)
 

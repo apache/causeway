@@ -25,15 +25,15 @@ public interface ExecutionPublisher {
     
 }
 ----
-<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Action.adoc#publishing[`@Action#executionDispatch`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
+<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Action.adoc#publishing[`@Action#executionPublishing`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 The `Execution` object will be an instance of `ActionInvocation` (see xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] for details).
-<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Property.adoc#publishing[`@Property#executionDispatch`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
+<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Property.adoc#publishing[`@Property#executionPublishing`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 The `Execution` object will be an instance of `PropertyEdit` (see xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] for details).
 
 == Related Classes
 
 In total there are 4 sorts of data the framework has publishers for ...
-. *EntityPropertyChanges*: dispatched via `EntityPropertyChangePublisher` and subscribed to via `EntityPropertyChangeSubscriber` (SPI)
-. *EntityChanges*: dispatched via `EntityChangesPublisher` and subscribed to via `EntityChangesSubscriber` (SPI)
-. *Execution*: dispatched via `ExecutionPublisher` and subscribed to via `ExecutionSubscriber` (SPI)
-. *Command*: dispatched via `CommandPublisher` and subscribed to via `CommandSubscriber` (SPI)
+. *EntityPropertyChanges*: published via `EntityPropertyChangePublisher` and subscribed to via `EntityPropertyChangeSubscriber` (SPI)
+. *EntityChanges*: published via `EntityChangesPublisher` and subscribed to via `EntityChangesSubscriber` (SPI)
+. *Execution*: published via `ExecutionPublisher` and subscribed to via `ExecutionSubscriber` (SPI)
+. *Command*: published via `CommandPublisher` and subscribed to via `CommandSubscriber` (SPI)

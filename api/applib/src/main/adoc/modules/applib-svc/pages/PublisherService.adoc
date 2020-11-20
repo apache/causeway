@@ -121,7 +121,7 @@ To support these use cases several other services are involved:
 
 * the (internal) xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsService`] domain service is used to obtain the set of objects modified throughout the transaction
 
-* the (internal) xref:core:runtime-services:PublisherDispatchService.adoc[`PublisherDispatchService`] domain service filters these down to those changed objects that are also published (as per xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
+* the (internal) xref:core:runtime-services:EntityChangesPublisher.adoc[`EntityChangesPublisher`] domain service filters these down to those changed entities that have `entityChangePublishing` enabled (as per xref:refguide:applib-ant:DomainObject.adoc#entityChangePublishing[`@DomainObject#entityChangePublishing()`]) and publishes to any `EntityChangesSubscriber`.
 
 * the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
 

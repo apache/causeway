@@ -8,7 +8,7 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `MetricsService` is an xref:refguide:applib-ant:IsisSessionScope.adoc[`IsisSessionScope`]d domain service that hooks into the JDO/DataNucleus ObjectStore to provide a number of counters relating to numbers of object loaded, dirtied etc.
 
-The service is used by the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] domain service (to populate the DTO held by the `Interaction.Execution`) and also by the (internal) xref:core:runtime-services:PublisherDispatchService.adoc[`PublisherDispatchService`] domain service (to populate the `PublishedObjects` class.
+The service tracks entity change metrics for those entities that have `entityChangePublishing` enabled.
 
 
 == API

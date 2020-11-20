@@ -13,9 +13,9 @@ It is also possible to apply the annotation to actions of domain services that a
 ----
 include::refguide:applib-ant:example$annotation/Property.java[tags="refguide"]
 ----
-<.> xref:refguide:applib-ant:Property.adoc#commandDispatch[`commandDispatch()`]
+<.> xref:refguide:applib-ant:Property.adoc#commandPublishing[`commandPublishing()`]
 +
-Whether the editing of a property should be dispatched to registered xref:refguide:applib-svc:ExecutionListener.adoc[`CommandListener`]s as a `Command` object, that captures the details of this edit. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
+Whether the editing of a property should be published to registered xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandSubscriber`]s as a `Command` object, that captures the details of this edit. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
 
 <.> `commandDtoProcessor()`
 +
@@ -33,9 +33,9 @@ Whether a property can be modified or cleared from within the UI
 +
 The reason that this property cannot be modified.
 
-<.> xref:refguide:applib-ant:Property.adoc#executionDispatch[`executionDispatch()`]
+<.> xref:refguide:applib-ant:Property.adoc#executionPublishing[`executionPublishing()`]
 +
-Whether the editing of a property should be dispatched to registered xref:refguide:applib-svc:ExecutionListener.adoc[`ExecutionListener`]s as an `Execution` object, that captures the details of this edit.
+Whether the editing of a property should be published to registered xref:refguide:applib-svc:ExecutionSubscriber.adoc[`ExecutionSubscriber`]s as an `Execution` object, that captures the details of this edit.
 
 <.> xref:refguide:applib-ant:Property.adoc#fileAccept[`fileAccept()`]
 +
@@ -126,10 +126,10 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 
-include::Property/commandDispatch.adoc[leveloffset=+1]
+include::Property/commandPublishing.adoc[leveloffset=+1]
 include::Property/domainEvent.adoc[leveloffset=+1]
 include::Property/editing.adoc[leveloffset=+1]
-include::Property/executionDispatch.adoc[leveloffset=+1]
+include::Property/executionPublishing.adoc[leveloffset=+1]
 include::Property/fileAccept.adoc[leveloffset=+1]
 include::Property/hidden.adoc[leveloffset=+1]
 include::Property/maxLength.adoc[leveloffset=+1]
