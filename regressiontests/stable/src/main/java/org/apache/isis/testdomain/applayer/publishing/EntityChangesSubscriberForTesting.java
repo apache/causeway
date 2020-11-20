@@ -27,9 +27,9 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
-import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class EntityChangesSubscriberForTesting 
 implements 
-    ExecutionListener,
+    ExecutionSubscriber,
     EntityChangesSubscriber {
 
     @Inject private KVStoreForTesting kvStore;

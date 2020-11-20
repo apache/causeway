@@ -34,14 +34,14 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Wrapper around {@link ExecutionListener}.  Is a no-op if there is no injected service.
+ * Wrapper around {@link ExecutionSubscriber}.  Is a no-op if there is no injected service.
  */
 @Service
 @Named("isisRuntimeServices.ExecutionDispatcherDefault")
@@ -54,7 +54,7 @@ import lombok.val;
 public class ExecutionDispatcherDefault 
 implements ExecutionDispatcher {
 
-    private final List<ExecutionListener> executionListeners;
+    private final List<ExecutionSubscriber> executionListeners;
 
     @Override
     public void dispatchActionInvoking(final Interaction.Execution<?,?> execution) {

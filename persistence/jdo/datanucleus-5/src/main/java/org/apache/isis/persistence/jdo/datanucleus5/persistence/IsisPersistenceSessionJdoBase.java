@@ -36,7 +36,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.services.command.CommandDispatcher;
+import org.apache.isis.core.metamodel.services.command.CommandPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -62,7 +62,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     @Getter protected final MetaModelContext metaModelContext;
     protected final ServiceInjector serviceInjector;
     protected final ServiceRegistry serviceRegistry;
-    protected final CommandDispatcher commandDispatcher;
+    protected final CommandPublisher commandPublisher;
     protected final FactoryService factoryService;
     protected final ClockService clockService;
     protected final UserService userService;
@@ -113,7 +113,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.configuration = metaModelContext.getConfiguration();
         this.specificationLoader = metaModelContext.getSpecificationLoader();
 
-        this.commandDispatcher = lookupService(CommandDispatcher.class);
+        this.commandPublisher = lookupService(CommandPublisher.class);
         this.factoryService = lookupService(FactoryService.class);
         this.clockService = lookupService(ClockService.class);
         this.userService = lookupService(UserService.class);

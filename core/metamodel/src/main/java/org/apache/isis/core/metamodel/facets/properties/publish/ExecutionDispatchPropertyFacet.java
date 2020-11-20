@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.publish;
 
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.spi.ExecutionListener;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionDispatcher;
@@ -31,7 +31,7 @@ import lombok.val;
 /**
  * Indicates that editing of the property, captured by an {@link Interaction.Execution},
  * should be dispatched via {@link ExecutionDispatcher} to all subscribed 
- * {@link ExecutionListener}s.
+ * {@link ExecutionSubscriber}s.
  */
 public interface ExecutionDispatchPropertyFacet extends Facet {
     

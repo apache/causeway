@@ -30,19 +30,19 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.spi.CommandListener;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisMetaModel.CommandDispatcher")
+@Named("isisMetaModel.CommandPublisher")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Internal")
 @Log4j2
 // tag::refguide[]
-public class CommandDispatcher {
+public class CommandPublisherDefault implements CommandPublisher {
 
     // end::refguide[]
     /**
@@ -55,6 +55,7 @@ public class CommandDispatcher {
      * </p>
      */
     // tag::refguide[]
+    @Override
     public void complete(final @NonNull Command command) {   // <.>
         // ...
     // end::refguide[]
@@ -67,15 +68,15 @@ public class CommandDispatcher {
             return;
         }
 
-        log.debug("complete: {}, systemStateChanged {}",
+        log.debug("completed: {}, systemStateChanged {}",
                 command.getLogicalMemberIdentifier(),
                 command.isSystemStateChanged());
 
     // tag::refguide[]
-        commandListeners.forEach(commandListener -> commandListener.onComplete(command));
+        subscribers.forEach(commandListener -> commandListener.onCompleted(command));
     }
 
-    @Inject List<CommandListener> commandListeners;
+    @Inject List<CommandSubscriber> subscribers;
 
 }
 // end::refguide[]

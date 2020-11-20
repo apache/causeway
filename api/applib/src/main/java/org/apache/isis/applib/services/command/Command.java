@@ -34,6 +34,7 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -70,6 +71,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  */
 @RequiredArgsConstructor
+@ToString
 @Log4j2
 // tag::refguide[]
 public class Command implements HasUniqueId, HasUsername, HasCommandDto {
@@ -136,6 +138,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *     from the provided {@link CommandDto}.
      * </p>
      */
+    @ToString.Exclude
     // tag::refguide[]
     @Getter
     private CommandDto commandDto;              // <.>
@@ -177,6 +180,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * @see WrapperFactory#asyncWrapMixin(Class, Object, AsyncControl)
      *
      */
+    @ToString.Exclude
     // tag::refguide[]
     @Getter
     private Command parent;                     // <.>
@@ -252,7 +256,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * <p>
      *     This can be used as a hint to decide whether to persist the command
      *     to a datastore, for example for auditing (though
-     *     {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener} is
+     *     {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} is
      *     an alternative for that use case) or so that it can be retrieved
      *     and replayed on another system, eg for regression testing.
      * </p>
@@ -266,7 +270,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
 
     /**
      * Whether this command has been enabled for dispatching, 
-     * that is {@link CommandListener}s will be notified when this Command completes.
+     * that is {@link CommandSubscriber}s will be notified when this Command completes.
      */
     // tag::refguide[]
     @Getter

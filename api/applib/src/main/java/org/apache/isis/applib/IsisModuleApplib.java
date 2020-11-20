@@ -32,16 +32,16 @@ import org.apache.isis.applib.mixins.metamodel.Object_objectType;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.spi.CommandListener;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
 import org.apache.isis.applib.services.confview.ConfigurationMenu;
-import org.apache.isis.applib.services.iactn.spi.ExecutionLogging;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
-import org.apache.isis.applib.services.publishing.logging.EntityChangesLogging;
-import org.apache.isis.applib.services.publishing.logging.EntityPropertyChangeLogging;
+import org.apache.isis.applib.services.publishing.log.CommandLogger;
+import org.apache.isis.applib.services.publishing.log.EntityChangesLogger;
+import org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger;
+import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.schema.IsisModuleSchema;
 
@@ -70,12 +70,12 @@ import org.apache.isis.schema.IsisModuleSchema;
         // @Service's
         ClockService.class,
         CommandDtoProcessorServiceIdentity.class,
-        CommandListener.Null.class,
+        CommandLogger.class,
         ContentMappingServiceForCommandDto.class,
         ContentMappingServiceForCommandsDto.class,
-        EntityChangesLogging.class,
-        EntityPropertyChangeLogging.class,
-        ExecutionLogging.class,
+        EntityChangesLogger.class,
+        EntityPropertyChangeLogger.class,
+        ExecutionLogger.class,
         SessionLoggingServiceLogging.class,
 
 })

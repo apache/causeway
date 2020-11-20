@@ -197,6 +197,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         this.state = State.CLOSED;
     }
 
+    @Deprecated //TODO[2464] should be the responsibility of the internal Interaction lifecycle handler 
     private void completeCommandFromInteractionAndClearDomainEvents() {
 
         val interaction = interactionContextProvider.get().getInteractionElseFail();
@@ -221,7 +222,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             command.updater().setCompletedAt(completedAt);
         }
 
-        commandDispatcher.complete(command);
+        commandPublisher.complete(command);
 
         interaction.clear();
     }

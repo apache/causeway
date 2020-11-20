@@ -27,7 +27,7 @@ import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
-import org.apache.isis.core.metamodel.services.command.CommandDispatcher;
+import org.apache.isis.core.metamodel.services.command.CommandPublisherDefault;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
@@ -73,7 +73,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         EntityChangesPublisherDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
-        CommandDispatcher.class,
+        CommandPublisherDefault.class,
         ConfigurationViewServiceDefault.class,
         EmailNotificationServiceDefault.class,
         EmailServiceDefault.class,

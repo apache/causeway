@@ -185,10 +185,10 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether the identities of changed objects should be sent through to the
-                 * {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener} for publishing.
+                 * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener#publish(EntityChanges) publish}
+                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(EntityChanges) publish}
                  *     method is called only once per transaction, with {@link EntityChanges} collecting details of
                  *     all changed domain objects.
                  * </p>
@@ -654,7 +654,7 @@ public class IsisConfiguration {
                  * The default for whether action invocations should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.isis.applib.services.command.spi.CommandListener}s,
+                 * {@link org.apache.isis.applib.services.publishing.spi.CommandSubscriber}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
@@ -714,10 +714,10 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether action invocations should be sent through to the
-                 * {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener} for publishing.
+                 * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener#publish(Interaction.Execution) publish}
+                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Interaction.Execution) publish}
                  *     method is called only once per transaction, with
                  *     {@link Interaction.Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
@@ -835,7 +835,7 @@ public class IsisConfiguration {
                  * The default for whether property edits should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.isis.applib.services.command.spi.CommandListener}s,
+                 * {@link org.apache.isis.applib.services.publishing.spi.CommandSubscriber}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
@@ -848,10 +848,10 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether property edits should be sent through to the
-                 * {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener} for publishing.
+                 * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.iactn.spi.ExecutionListener#publish(Interaction.Execution) publish}
+                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Interaction.Execution) publish}
                  *     method is called only once per transaction, with
                  *     {@link Interaction.Execution} collecting details of
                  *     the identity of the target object, the property edited, and the new value of the property.

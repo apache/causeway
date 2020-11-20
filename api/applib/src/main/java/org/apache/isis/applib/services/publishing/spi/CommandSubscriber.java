@@ -16,29 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.iactn.spi;
+package org.apache.isis.applib.services.publishing.spi;
 
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.commons.having.HasEnabling;
 
 /**
- * SPI that allows individual interactions (action invocations or property edits) to be
- * {@link #publish(Interaction.Execution) published}.
- * Note that re-publishing is not part of this SPI.
+ * Part of the <i>Publishing SPI</i>. A component to receive {@link Command}s 
+ * (with publishing enabled) that just completed.
+ *  
+ * @since 2.0
  */
 // tag::refguide[]
-public interface ExecutionListener {
+public interface CommandSubscriber extends HasEnabling {
 
-    // end::refguide[]
     /**
-     * Publish each {@link Interaction.Execution} immediately after it completes.
+     * Notifies that the command has completed.
+     *
      * <p>
-     * Most implementations are expected to use {@link Interaction.Execution#getDto()} to create a serializable
-     * XML representation of the execution. The easiest way to do this is using {@link InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
-     * some flexibility here, though.
+     *     This is an opportunity for implementations to process the command,
+     *     for example to persist a representation of it.
+     * </p>
      */
     // tag::refguide[]
-    void onExecution(Interaction.Execution<?, ?> execution);  // <.>
-    
+    void onCompleted(Command command);           // <.>
+
 }
 // end::refguide[]

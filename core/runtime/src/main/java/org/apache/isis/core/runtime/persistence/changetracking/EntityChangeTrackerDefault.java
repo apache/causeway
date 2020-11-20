@@ -186,7 +186,7 @@ implements
         case AUDITING:
             log.debug("about to dispatch audit entries and entity changes");
             prepareAuditDispatching();
-            entityAuditDispatcher.dispatchEntityAudits(this);
+            entityAuditDispatcher.publishEntityAudits(this);
             changingEntitiesDispatcher.publishChangingEntities(this);
             break;
         case POST_AUDITING:

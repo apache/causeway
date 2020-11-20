@@ -70,14 +70,16 @@ public class EntityPropertyChangePublisher {
                 .filter(HasEnabling::isEnabled);
     }
 
-    public void dispatchEntityAudits(final HasEnlistedEntityPropertyChangeRecords hasEnlistedForAuditing) {
-        if(!canDispatch()) { 
+    public void publishEntityAudits(
+            final HasEnlistedEntityPropertyChangeRecords hasEnlistedEntityPropertyChangeRecords) {
+        
+        if(!canPublish()) { 
             return; 
         }
         
         val currentUser = userService.getUser().getName();
         val currentTime = clockService.nowAsJavaSqlTimestamp();
-        val propertyChangeRecords = hasEnlistedForAuditing.getPropertyChangeRecords();
+        val propertyChangeRecords = hasEnlistedEntityPropertyChangeRecords.getPropertyChangeRecords();
     
         log.debug("about to process {} property changes", ()->propertyChangeRecords.size());
         
@@ -88,7 +90,7 @@ public class EntityPropertyChangePublisher {
 
     // -- HELPER
     
-    private boolean canDispatch() {
+    private boolean canPublish() {
         return enabledSubscribers.isNotEmpty();
     }
     

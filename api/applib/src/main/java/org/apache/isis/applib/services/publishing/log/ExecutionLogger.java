@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.publishing.logging;
+package org.apache.isis.applib.services.publishing.log;
 
 import javax.inject.Named;
 
@@ -26,20 +26,20 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.publishing.spi.EntityChanges;
-import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.EntityChangesLogging")
+@Named("isisApplib.ExecutionLogger")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Logging")
 @Log4j2
-public class EntityChangesLogging implements EntityChangesSubscriber {
+public class ExecutionLogger implements ExecutionSubscriber {
 
     @Override
     public boolean isEnabled() {
@@ -47,13 +47,14 @@ public class EntityChangesLogging implements EntityChangesSubscriber {
     }
     
     @Override
-    public void onChanging(final EntityChanges changingEntities) {
+    public void onExecution(final Interaction.Execution<?, ?> execution) {
 
-        final ChangesDto changesDto = changingEntities.getDto();
+        final InteractionDto interactionDto =
+                InteractionDtoUtils.newInteractionDto(execution, InteractionDtoUtils.Strategy.DEEP);
 
-        log.debug(ChangesDtoUtils.toXml(changesDto));
+        log.debug(InteractionDtoUtils.toXml(interactionDto));
+
     }
-
 
 }
 

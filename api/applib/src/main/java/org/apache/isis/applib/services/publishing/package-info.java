@@ -18,9 +18,17 @@
  */
 
 /**
- * The {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber} auditing service provides a simple mechanism to
- * capture changes to data. It is called for each property that has changed on any domain object, as a set of pre- and post-values.
- *
- *
+ * The {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber} 
+ * service provides a simple mechanism to capture changes to data. 
+ * It is called for each property that has changed on any entity object 
+ * (when enabled for publishing), as a set of pre- and post-values.
+ * 
+ * The {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} API is intended 
+ * for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis 
+ * to some other system. Events that can be published are action invocations/property edits, 
+ * and changed objects. A typical use case is to publish onto a pub/sub bus such as 
+ * ActiveMQ with Camel to keep other systems up to date.
+ * 
+ * TODO v2 publishing/subscribing now has even more participants
  */
 package org.apache.isis.applib.services.publishing;

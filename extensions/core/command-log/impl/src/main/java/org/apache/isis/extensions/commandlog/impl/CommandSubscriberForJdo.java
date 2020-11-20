@@ -18,8 +18,6 @@
  */
 package org.apache.isis.extensions.commandlog.impl;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,11 +27,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.spi.CommandListener;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
-import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -45,12 +42,12 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Jdo")
 @Log4j2
 @RequiredArgsConstructor
-public class CommandServiceListenerForJdo implements CommandListener {
+public class CommandSubscriberForJdo implements CommandSubscriber {
 
     @Inject final CommandJdoRepository commandJdoRepository;
 
     @Override
-    public void onComplete(Command command) {
+    public void onCompleted(Command command) {
 
         if(!command.isSystemStateChanged()) {
             return;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.publishing.logging;
+package org.apache.isis.applib.services.publishing.log;
 
 import javax.inject.Named;
 
@@ -32,12 +32,12 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscr
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.EntityPropertyChangeLogging")
+@Named("isisApplib.EntityPropertyChangeLogger")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("logging")
 @Log4j2
-public class EntityPropertyChangeLogging implements EntityPropertyChangeSubscriber {
+public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscriber {
 
     @Override
     public boolean isEnabled() {
