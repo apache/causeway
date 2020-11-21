@@ -16,38 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain._changes;
-
-import javax.inject.Inject;
+package demoapp.dom.annotDomain.DomainObject.entityChangePublishing;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "changes"
+    , associateWith = "propertyUpdatedByAction"
 )
-public class ExposeCapturedChanges_clear {
+public class DomainObjectEntityChangePublishingJdo_updatePropertyUsingAction implements HasAsciiDocDescription {
     // ...
 //end::class[]
+    private final DomainObjectEntityChangePublishingJdo domainObjectAuditingJdo;
 
-    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-
-    public ExposeCapturedChanges_clear(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
-        this.domainObjectAuditingVm = domainObjectAuditingVm;
+    public DomainObjectEntityChangePublishingJdo_updatePropertyUsingAction(DomainObjectEntityChangePublishingJdo domainObjectAuditingJdo) {
+        this.domainObjectAuditingJdo = domainObjectAuditingJdo;
     }
 
-
-    //tag::class[]
-    public DomainObjectEntityChangePublishingVm act() {
-        entityChangesSubscriberToCaptureChangesInMemory.clear();
-        return domainObjectAuditingVm;
+//tag::class[]
+    public DomainObjectEntityChangePublishingJdo_updatePropertyUsingAction updateProperty(final String value) {
+        domainObjectAuditingJdo.setPropertyUpdatedByAction(value);
+        return this;
+    }
+    public String default0UpdateProperty() {
+        return domainObjectAuditingJdo.getPropertyUpdatedByAction();
     }
 
-    @Inject
-    EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;;
 }
 //end::class[]

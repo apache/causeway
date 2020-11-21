@@ -71,7 +71,7 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public ActionCommandPublishingJdo commandDispatch(){
+    public ActionCommandPublishingJdo commandPublishing(){
         return actionCommandJdoEntities.first();
     }
 
@@ -84,7 +84,7 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
-    public ActionExecutionPublishingJdo executionDispatch(){
+    public ActionExecutionPublishingJdo executionPublishing(){
         return actionPublishingJdoEntities.first();
     }
     

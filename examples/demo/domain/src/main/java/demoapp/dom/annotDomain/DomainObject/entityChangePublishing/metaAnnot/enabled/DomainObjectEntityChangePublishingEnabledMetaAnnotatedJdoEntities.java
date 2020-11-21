@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled;
+package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,25 +29,25 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 @Service
-public class DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities {
+public class DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities {
 
-    public Optional<DomainObjectAuditingEnabledMetaAnnotOverriddenJdo> find(final String value) {
-        return repositoryService.firstMatch(DomainObjectAuditingEnabledMetaAnnotOverriddenJdo.class, x -> Objects.equals(x.getProperty(), value));
+    public Optional<DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo> find(final String value) {
+        return repositoryService.firstMatch(DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo.class, x -> Objects.equals(x.getProperty(), value));
     }
 
-    public List<DomainObjectAuditingEnabledMetaAnnotOverriddenJdo> all() {
-        return repositoryService.allInstances(DomainObjectAuditingEnabledMetaAnnotOverriddenJdo.class);
+    public List<DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo> all() {
+        return repositoryService.allInstances(DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo.class);
     }
 
-    public Optional<DomainObjectAuditingEnabledMetaAnnotOverriddenJdo> first() {
+    public Optional<DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo> first() {
         return all().stream().findFirst();
     }
 
-    public DomainObjectAuditingEnabledMetaAnnotOverriddenJdo create(String newValue) {
-        return repositoryService.persistAndFlush(new DomainObjectAuditingEnabledMetaAnnotOverriddenJdo(newValue));
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo create(String newValue) {
+        return repositoryService.persistAndFlush(new DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo(newValue));
     }
 
-    public void remove(DomainObjectAuditingEnabledMetaAnnotOverriddenJdo enabledJdo) {
+    public void remove(DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo enabledJdo) {
         repositoryService.removeAndFlush(enabledJdo);
     }
 

@@ -27,29 +27,29 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdo;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdoEntities;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledJdo;
 import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdo;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoEntities;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdo;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
 @ActionLayout(
         describedAs = "Creates one publishing enabled entity and one publishing disabled entity"
 )
-public class DomainObjectAuditingVm_create {
+public class DomainObjectEntityChangePublishingVm_create {
 
-    private final DomainObjectAuditingVm domainObjectAuditingVm;
-    public DomainObjectAuditingVm_create(DomainObjectAuditingVm domainObjectAuditingVm) {
+    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
+    public DomainObjectEntityChangePublishingVm_create(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
     @MemberOrder(sequence = "1.0")
-    public DomainObjectAuditingVm act(
+    public DomainObjectEntityChangePublishingVm act(
             String newValue
             , boolean publishingEnabled
             , boolean publishingDisabled
@@ -90,13 +90,13 @@ public class DomainObjectAuditingVm_create {
     DomainObjectAuditingEnabledJdoEntities publishingEnabledJdoEntities;
 
     @Inject
-    DomainObjectAuditingDisabledJdoEntities publishingDisabledJdoEntities;
+    DomainObjectEntityChangePublishingDisabledJdoEntities publishingDisabledJdoEntities;
 
     @Inject
-    DomainObjectAuditingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
+    DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
 
     @Inject
-    DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
+    DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
 
     @Inject
     NameSamples nameSamples;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled;
+package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -33,26 +33,27 @@ import org.apache.isis.applib.annotation.Title;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectAuditingJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.DomainObjectEntityChangePublishingEnabledMetaAnnotation;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObjectEntityChangePublishingEnabledMetaAnnotation                    // <.>
 @DomainObject(
     nature=Nature.JDO_ENTITY
-    , objectType = "demo.DomainObjectAuditingEnabledJdo"
-    , entityChangePublishing = Publishing.ENABLED            // <.>
+    , objectType = "demo.DomainObjectAuditingEnabledMetaAnnotatedJdo"
     , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(
-    describedAs = "@DomainObject(publishing=ENABLED)"
+    describedAs = "@DomainObjectAuditingEnabledMetaAnnotation"
 )
-public class DomainObjectAuditingEnabledJdo
-                implements DomainObjectAuditingJdo {
+public class DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo
+                implements DomainObjectEntityChangePublishingJdo {
     // ...
 //end::class[]
 
-    public DomainObjectAuditingEnabledJdo(String initialValue) {
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo(String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }

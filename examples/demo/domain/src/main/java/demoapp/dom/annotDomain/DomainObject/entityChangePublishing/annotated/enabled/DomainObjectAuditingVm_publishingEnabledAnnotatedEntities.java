@@ -24,20 +24,20 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectAuditingVm;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledJdo;
 import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
 
 @Collection()
 public class DomainObjectAuditingVm_publishingEnabledAnnotatedEntities {
 
-    private final DomainObjectAuditingVm domainObjectAuditingVm;
+    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
 
-    public DomainObjectAuditingVm_publishingEnabledAnnotatedEntities(DomainObjectAuditingVm domainObjectAuditingVm) {
+    public DomainObjectAuditingVm_publishingEnabledAnnotatedEntities(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
-    public List<DomainObjectAuditingEnabledJdo> coll() {
+    public List<DomainObjectEntityChangePublishingEnabledJdo> coll() {
         return publishingEnabledJdoEntities.all();
     }
 

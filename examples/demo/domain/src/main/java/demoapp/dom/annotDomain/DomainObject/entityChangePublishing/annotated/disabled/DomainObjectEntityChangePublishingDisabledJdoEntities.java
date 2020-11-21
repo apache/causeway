@@ -29,25 +29,25 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 @Service
-public class DomainObjectAuditingDisabledJdoEntities {
+public class DomainObjectEntityChangePublishingDisabledJdoEntities {
 
-    public Optional<DomainObjectAuditingDisabledJdo> find(final String value) {
-        return repositoryService.firstMatch(DomainObjectAuditingDisabledJdo.class, x -> Objects.equals(x.getProperty(), value));
+    public Optional<DomainObjectEntityChangePublishingDisabledJdo> find(final String value) {
+        return repositoryService.firstMatch(DomainObjectEntityChangePublishingDisabledJdo.class, x -> Objects.equals(x.getProperty(), value));
     }
 
-    public List<DomainObjectAuditingDisabledJdo> all() {
-        return repositoryService.allInstances(DomainObjectAuditingDisabledJdo.class);
+    public List<DomainObjectEntityChangePublishingDisabledJdo> all() {
+        return repositoryService.allInstances(DomainObjectEntityChangePublishingDisabledJdo.class);
     }
 
-    public Optional<DomainObjectAuditingDisabledJdo> first() {
+    public Optional<DomainObjectEntityChangePublishingDisabledJdo> first() {
         return all().stream().findFirst();
     }
 
-    public DomainObjectAuditingDisabledJdo create(String newValue) {
-        return repositoryService.persistAndFlush(new DomainObjectAuditingDisabledJdo(newValue));
+    public DomainObjectEntityChangePublishingDisabledJdo create(String newValue) {
+        return repositoryService.persistAndFlush(new DomainObjectEntityChangePublishingDisabledJdo(newValue));
     }
 
-    public void remove(DomainObjectAuditingDisabledJdo disabledJdo) {
+    public void remove(DomainObjectEntityChangePublishingDisabledJdo disabledJdo) {
         repositoryService.removeAndFlush(disabledJdo);
     }
 

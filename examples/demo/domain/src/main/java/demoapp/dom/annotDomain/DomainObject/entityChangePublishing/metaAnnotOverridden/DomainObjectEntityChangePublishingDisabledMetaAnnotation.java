@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot;
+package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -28,13 +28,13 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-@DomainObject(entityChangePublishing = Publishing.ENABLED)    // <.>
+@DomainObject(entityChangePublishing = Publishing.DISABLED)    // <.>
 @Inherited
 @Target({
-        ElementType.TYPE, ElementType.ANNOTATION_TYPE         // <.>
+        ElementType.TYPE, ElementType.ANNOTATION_TYPE          // <.>
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DomainObjectAuditingEnabledMetaAnnotation {
+public @interface DomainObjectEntityChangePublishingDisabledMetaAnnotation {
 
 }
 //end::class[]

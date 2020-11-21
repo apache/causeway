@@ -40,7 +40,7 @@ public class DomainObjectAuditingEnabledJdoSeedService extends SeedServiceAbstra
         @Override
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
-                    .map(DomainObjectAuditingEnabledJdo::new)
+                    .map(DomainObjectEntityChangePublishingEnabledJdo::new)
                     .forEach(domainObject -> {
                         repositoryService.persist(domainObject);
                         executionContext.addResult(this, domainObject);

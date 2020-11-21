@@ -18,34 +18,40 @@
  */
 package demoapp.dom.annotDomain.DomainObject.entityChangePublishing;
 
-import org.apache.isis.applib.annotation.Action;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.annotLayout.PropertyLayout.cssClass.CssClassRedMetaAnnotation;
 
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyUpdatedByAction"
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.DomainObjectAuditingVm"
 )
-public class DomainObjectAuditingJdo_updatePropertyUsingAction implements HasAsciiDocDescription {
-    // ...
-//end::class[]
-    private final DomainObjectAuditingJdo domainObjectAuditingJdo;
+public class DomainObjectEntityChangePublishingVm implements HasAsciiDocDescription {
 
-    public DomainObjectAuditingJdo_updatePropertyUsingAction(DomainObjectAuditingJdo domainObjectAuditingJdo) {
-        this.domainObjectAuditingJdo = domainObjectAuditingJdo;
+    public String title() {
+        return "DomainObject#publishing";
     }
 
-//tag::class[]
-    public DomainObjectAuditingJdo_updatePropertyUsingAction updateProperty(final String value) {
-        domainObjectAuditingJdo.setPropertyUpdatedByAction(value);
-        return this;
-    }
-    public String default0UpdateProperty() {
-        return domainObjectAuditingJdo.getPropertyUpdatedByAction();
-    }
 
 }
 //end::class[]

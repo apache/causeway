@@ -26,33 +26,33 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdo;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdoEntities;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledJdo;
 import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdo;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoEntities;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdo;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
     describedAs = "Deletes one publishing enabled entity and one publishing disabled entity"
 )
-public class DomainObjectAuditingVm_delete {
+public class DomainObjectEntityChangePublishingVm_delete {
 
-    private final DomainObjectAuditingVm domainObjectAuditingVm;
-    public DomainObjectAuditingVm_delete(DomainObjectAuditingVm domainObjectAuditingVm) {
+    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
+    public DomainObjectEntityChangePublishingVm_delete(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
     @MemberOrder(sequence = "3.0")
-    public DomainObjectAuditingVm act(
-            @Nullable DomainObjectAuditingEnabledJdo enabledJdo
-            , @Nullable DomainObjectAuditingDisabledJdo disabledJdo
-            , @Nullable DomainObjectAuditingEnabledMetaAnnotatedJdo metaAnnotatedJdo
-            , @Nullable DomainObjectAuditingEnabledMetaAnnotOverriddenJdo metaAnnotOverriddenJdo
+    public DomainObjectEntityChangePublishingVm act(
+            @Nullable DomainObjectEntityChangePublishingEnabledJdo enabledJdo
+            , @Nullable DomainObjectEntityChangePublishingDisabledJdo disabledJdo
+            , @Nullable DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo metaAnnotatedJdo
+            , @Nullable DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo metaAnnotOverriddenJdo
             ) {
         if(enabledJdo != null) {
             publishingEnabledJdoEntities.remove(enabledJdo);
@@ -68,16 +68,16 @@ public class DomainObjectAuditingVm_delete {
         }
         return domainObjectAuditingVm;
     }
-    public DomainObjectAuditingEnabledJdo default0Act() {
+    public DomainObjectEntityChangePublishingEnabledJdo default0Act() {
         return publishingEnabledJdoEntities.first().get();
     }
-    public DomainObjectAuditingDisabledJdo default1Act() {
+    public DomainObjectEntityChangePublishingDisabledJdo default1Act() {
         return publishingDisabledJdoEntities.first().get();
     }
-    public DomainObjectAuditingEnabledMetaAnnotatedJdo default2Act() {
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo default2Act() {
         return publishingEnabledMetaAnnotatedJdoEntities.first().get();
     }
-    public DomainObjectAuditingEnabledMetaAnnotOverriddenJdo default3Act() {
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo default3Act() {
         return publishingEnabledMetaAnnotOverriddenJdoEntities.first().get();
     }
     public String disableAct() {
@@ -89,8 +89,8 @@ public class DomainObjectAuditingVm_delete {
     }
 
     @Inject DomainObjectAuditingEnabledJdoEntities publishingEnabledJdoEntities;
-    @Inject DomainObjectAuditingDisabledJdoEntities publishingDisabledJdoEntities;
-    @Inject DomainObjectAuditingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
-    @Inject DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
+    @Inject DomainObjectEntityChangePublishingDisabledJdoEntities publishingDisabledJdoEntities;
+    @Inject DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
+    @Inject DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
 }
 //end::class[]

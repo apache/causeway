@@ -31,23 +31,23 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @Service
 public class DomainObjectAuditingEnabledJdoEntities {
 
-    public Optional<DomainObjectAuditingEnabledJdo> find(final String value) {
-        return repositoryService.firstMatch(DomainObjectAuditingEnabledJdo.class, x -> Objects.equals(x.getProperty(), value));
+    public Optional<DomainObjectEntityChangePublishingEnabledJdo> find(final String value) {
+        return repositoryService.firstMatch(DomainObjectEntityChangePublishingEnabledJdo.class, x -> Objects.equals(x.getProperty(), value));
     }
 
-    public List<DomainObjectAuditingEnabledJdo> all() {
-        return repositoryService.allInstances(DomainObjectAuditingEnabledJdo.class);
+    public List<DomainObjectEntityChangePublishingEnabledJdo> all() {
+        return repositoryService.allInstances(DomainObjectEntityChangePublishingEnabledJdo.class);
     }
 
-    public Optional<DomainObjectAuditingEnabledJdo> first() {
+    public Optional<DomainObjectEntityChangePublishingEnabledJdo> first() {
         return all().stream().findFirst();
     }
 
-    public DomainObjectAuditingEnabledJdo create(String newValue) {
-        return repositoryService.persistAndFlush(new DomainObjectAuditingEnabledJdo(newValue));
+    public DomainObjectEntityChangePublishingEnabledJdo create(String newValue) {
+        return repositoryService.persistAndFlush(new DomainObjectEntityChangePublishingEnabledJdo(newValue));
     }
 
-    public void remove(DomainObjectAuditingEnabledJdo enabledJdo) {
+    public void remove(DomainObjectEntityChangePublishingEnabledJdo enabledJdo) {
         repositoryService.removeAndFlush(enabledJdo);
     }
 

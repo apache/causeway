@@ -60,7 +60,7 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public PropertyCommandPublishingJdo commandDispatch(){
+    public PropertyCommandPublishingJdo commandPublishing(){
         return propertyCommandJdoEntities.first();
     }
 
@@ -84,7 +84,7 @@ public class PropertyMenu {
     
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
-    public PropertyExecutionPublishingJdo executionDispatch(){
+    public PropertyExecutionPublishingJdo executionPublishing(){
         return propertyPublishingJdoEntities.first();
     }
 

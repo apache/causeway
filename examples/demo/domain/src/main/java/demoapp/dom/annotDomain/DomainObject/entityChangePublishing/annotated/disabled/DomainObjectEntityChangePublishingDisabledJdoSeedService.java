@@ -29,9 +29,9 @@ import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom.types.Samples;
 
 @Service
-public class DomainObjectAuditingDisabledJdoSeedService extends SeedServiceAbstract {
+public class DomainObjectEntityChangePublishingDisabledJdoSeedService extends SeedServiceAbstract {
 
-    public DomainObjectAuditingDisabledJdoSeedService() {
+    public DomainObjectEntityChangePublishingDisabledJdoSeedService() {
         super(PropertyPublishingNotJdoEntityFixture::new);
     }
 
@@ -40,7 +40,7 @@ public class DomainObjectAuditingDisabledJdoSeedService extends SeedServiceAbstr
         @Override
         protected void execute(ExecutionContext executionContext) {
             samples.stream()
-                    .map(DomainObjectAuditingDisabledJdo::new)
+                    .map(DomainObjectEntityChangePublishingDisabledJdo::new)
                     .forEach(domainObject -> {
                         repositoryService.persist(domainObject);
                         executionContext.addResult(this, domainObject);

@@ -16,28 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.DomainObject.entityChangePublishing;
+package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot;
 
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.annotDomain._changes.ExposeCapturedChanges;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Publishing;
 
 //tag::class[]
-public interface DomainObjectAuditingJdo
-        extends HasAsciiDocDescription, ExposeCapturedChanges {
-
-    @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "property", sequence = "1")
-    String getProperty();
-    void setProperty(String value);
-
-    @Property(editing = Editing.DISABLED)
-    @MemberOrder(name = "action", sequence = "1")
-    String getPropertyUpdatedByAction();
-    void setPropertyUpdatedByAction(String value);
+@DomainObject(entityChangePublishing = Publishing.ENABLED)    // <.>
+@Inherited
+@Target({
+        ElementType.TYPE, ElementType.ANNOTATION_TYPE         // <.>
+})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface DomainObjectEntityChangePublishingEnabledMetaAnnotation {
 
 }
 //end::class[]

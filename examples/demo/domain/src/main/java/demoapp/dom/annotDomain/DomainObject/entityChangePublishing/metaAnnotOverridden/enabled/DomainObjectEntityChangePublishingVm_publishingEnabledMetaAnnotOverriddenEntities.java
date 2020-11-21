@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled;
+package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled;
 
 import java.util.List;
 
@@ -24,23 +24,21 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectAuditingVm;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdo;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
 
 @Collection()
-public class DomainObjectAuditingVm_publishingDisabledAnnotatedEntities {
+public class DomainObjectEntityChangePublishingVm_publishingEnabledMetaAnnotOverriddenEntities {
 
-    private final DomainObjectAuditingVm domainObjectAuditingVm;
+    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
 
-    public DomainObjectAuditingVm_publishingDisabledAnnotatedEntities(DomainObjectAuditingVm domainObjectAuditingVm) {
+    public DomainObjectEntityChangePublishingVm_publishingEnabledMetaAnnotOverriddenEntities(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
-    public List<DomainObjectAuditingDisabledJdo> coll() {
-        return publishingDisabledJdoEntities.all();
+    public List<DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo> coll() {
+        return publishingEnabledJdoEntities.all();
     }
 
     @Inject
-    DomainObjectAuditingDisabledJdoEntities publishingDisabledJdoEntities;
+    DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledJdoEntities;
 }

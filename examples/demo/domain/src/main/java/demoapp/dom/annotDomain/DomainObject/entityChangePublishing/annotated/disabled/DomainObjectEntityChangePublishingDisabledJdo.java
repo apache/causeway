@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled;
+package demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -33,29 +33,26 @@ import org.apache.isis.applib.annotation.Title;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectAuditingJdo;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.DomainObjectAuditingDisabledMetaAnnotation;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingJdo;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObjectAuditingDisabledMetaAnnotation                   // <.>
 @DomainObject(
-        nature=Nature.JDO_ENTITY
-        , objectType = "demo.DomainObjectAuditingEnabledMetaAnnotOverriddenJdo"
-        , entityChangePublishing = Publishing.ENABLED         // <.>
-        , bounding = Bounding.BOUNDED
+    nature=Nature.JDO_ENTITY
+    , objectType = "demo.DomainObjectAuditingDisabledJdo"
+    , entityChangePublishing = Publishing.DISABLED           // <.>
+    , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(
-    describedAs =
-        "@DomainObjectAuditingDisabledMetaAnnotation " +
-        "@DomainObject(publishing=ENABLED)"
+    describedAs = "@DomainObject(publishing=DISABLED)"
 )
-public class DomainObjectAuditingEnabledMetaAnnotOverriddenJdo implements DomainObjectAuditingJdo {
+public class DomainObjectEntityChangePublishingDisabledJdo
+                implements DomainObjectEntityChangePublishingJdo {
     // ...
 //end::class[]
 
-    public DomainObjectAuditingEnabledMetaAnnotOverriddenJdo(String initialValue) {
+    public DomainObjectEntityChangePublishingDisabledJdo(String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }

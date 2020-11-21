@@ -30,25 +30,25 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.val;
 
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
 import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoEntities;
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
     describedAs = "Updates all publishing enabled entities and all publishing disabled entities"
 )
-public class DomainObjectAuditingVm_updateAll {
+public class DomainObjectEntityChangePublishingVm_updateAll {
 
-    private final DomainObjectAuditingVm domainObjectAuditingVm;
-    public DomainObjectAuditingVm_updateAll(DomainObjectAuditingVm domainObjectAuditingVm) {
+    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
+    public DomainObjectEntityChangePublishingVm_updateAll(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
     @MemberOrder(sequence = "2.0")
-    public DomainObjectAuditingVm act(
+    public DomainObjectEntityChangePublishingVm act(
             boolean publishingEnabled
             , boolean publishingDisabled
             , boolean publishingEnabledMetaAnnotated
@@ -83,7 +83,7 @@ public class DomainObjectAuditingVm_updateAll {
         return true;
     }
 
-    private static void renumber(List<DomainObjectAuditingJdo> all) {
+    private static void renumber(List<DomainObjectEntityChangePublishingJdo> all) {
         val ai = new AtomicInteger(0);
         all.forEach(x -> x.setPropertyUpdatedByAction("Object #" + ai.incrementAndGet()));
     }
@@ -92,12 +92,12 @@ public class DomainObjectAuditingVm_updateAll {
     DomainObjectAuditingEnabledJdoEntities publishingEnabledJdoEntities;
 
     @Inject
-    DomainObjectAuditingDisabledJdoEntities publishingDisabledJdoEntities;
+    DomainObjectEntityChangePublishingDisabledJdoEntities publishingDisabledJdoEntities;
 
     @Inject
-    DomainObjectAuditingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
+    DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
 
     @Inject
-    DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
+    DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
 }
 //end::class[]

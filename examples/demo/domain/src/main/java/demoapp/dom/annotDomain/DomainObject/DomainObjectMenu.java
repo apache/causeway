@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectAuditingVm;
+import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DomainObjectMenu")
 //@Log4j2
@@ -36,9 +36,9 @@ import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectA
 public class DomainObjectMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-book", describedAs = "Object changed events as XML")
-    public DomainObjectAuditingVm auditing(){
-        return new DomainObjectAuditingVm();
+    @ActionLayout(cssClassFa="fa-book", describedAs = "Entity changed events as XML")
+    public DomainObjectEntityChangePublishingVm entityChangePublishing(){
+        return new DomainObjectEntityChangePublishingVm();
     }
 
 }
