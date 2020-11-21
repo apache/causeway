@@ -23,5 +23,6 @@ import org.apache.isis.client.kroviz.to.TransferObject
 
 @Serializable
 data class Section(
+        val named: String? = null,
         val serviceAction: List<ServiceAction> = emptyList()
 ) : TransferObject
