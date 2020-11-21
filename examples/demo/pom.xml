@@ -207,7 +207,7 @@
 	
 	<modules>
 		<module>domain</module>
-		<!--module>javafx</module-->
+		<module>javafx</module>
 		<module>web</module>
 		<module>wicket</module>
 		<module>vaadin</module>
