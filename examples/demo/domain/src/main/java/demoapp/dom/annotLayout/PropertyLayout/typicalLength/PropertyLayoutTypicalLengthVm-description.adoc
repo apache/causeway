@@ -15,7 +15,7 @@ In other words, providing this hint has no impact on the UI (as rendered by the 
 
 [NOTE]
 ====
-`@Property#maxLength()` and `@PropertyLayout#typicalLength()` are not related - the first is a semantic that prevents the property from holding more than the specified number of characters, the latter is a layout hint relating to the size of the textfield.
+`@Property#maxLength()` and `@PropertyLayout#typicalLength()` are not related - the first prevents the property from holding more than the specified number of characters, the latter is a layout hint relating to the size of the textfield.
 ====
 
 == Annotated

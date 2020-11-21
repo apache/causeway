@@ -16,5 +16,4 @@ Apache Isis assumes properties are mandatory, so no additional annotation is req
 <.> optional property as defined to JDO/DataNucleus
 
 
-// not yet supported
-// include::../JavaAwtImages-common.adoc[]
+include::../JavaAwtBufferedImages-common.adoc[]

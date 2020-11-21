@@ -2,7 +2,7 @@
 
 WARNING: TODO: was renamed/moved from auditing+publishing to entityChangePublishing
 
-The `entityChangePublishing` semantic can also be specified using a custom meta-annotation:
+The `entityChangePublishing` element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +

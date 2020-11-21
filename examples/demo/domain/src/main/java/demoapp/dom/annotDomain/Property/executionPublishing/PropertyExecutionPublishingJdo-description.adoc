@@ -2,25 +2,26 @@
 
 WARNING: TODO publishing was renamed to executionPublishing
 
-The `publishing` semantic specifies that the editing of an object property should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI].
+The `publishing` element specifies that the editing of an object property should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI].
+
 This is performed _after_ the property has been changed.
 
 The publishing from the framework to the SPI is in-memory.
 A typical SPI implementation would then publish over the network, or perhaps store in a database.
 (Note that the framework provides an link:https://isis.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern]).
 
-The semantic can be specified using either the `@Property` annotation, or through a meta-annotation.
+The element can be specified using either the `@Property` annotation, or through a meta-annotation.
 
 NOTE: The demo shows publishing of entities, as this is much more common use case than publishing a view model.
 
 
 == Annotated
 
-The `publisher` semantic can be specified explicitly using an annotation through `@Property#publishing()`:
+The `publisher` element can be specified explicitly using an annotation through `@Property#publishing()`:
 
 [source,java,indent=0]
 ----
-include::PropertyPublishingJdo.java[tags=annotation]
+include::PropertyExecutionPublishingJdo.java[tags=annotation]
 ----
 <.> explicitly specifies that modifying the property should be published.
 
@@ -28,13 +29,13 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 == Meta-annotated
 
-The `publishing` semantic can also be specified using a custom meta-annotation:
+The `publishing` element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
 [source,java]
 ----
-include::PropertyPublishingEnabledMetaAnnotation.java[tags=class]
+include::PropertyExecutionPublishingEnabledMetaAnnotation.java[tags=class]
 ----
 <.> annotated for a property
 <.> annotation can be applied to a property (either its getter or the field directly)
@@ -43,7 +44,7 @@ include::PropertyPublishingEnabledMetaAnnotation.java[tags=class]
 +
 [source,java,indent=0]
 ----
-include::PropertyPublishingJdo.java[tags=meta-annotated]
+include::PropertyExecutionPublishingJdo.java[tags=meta-annotated]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -57,7 +58,7 @@ The meta-annotation can itself be overridden:
 +
 [source,java,indent=0]
 ----
-include::PropertyPublishingJdo.java[tags=meta-annotated-overridden]
+include::PropertyExecutionPublishingJdo.java[tags=meta-annotated-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Property` annotation

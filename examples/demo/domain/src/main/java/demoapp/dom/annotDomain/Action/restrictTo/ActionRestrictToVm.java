@@ -185,7 +185,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     @ActionLayout(
         describedAs =
             "@ActionRestrictToNoRestrictionsMetaAnnotation " +
-                    "@Action(restrictTo = RestrictTo.PROTOTYPING"
+            "@Action(restrictTo = RestrictTo.PROTOTYPING)"
     )
     public ActionRestrictToVm updateMetaAnnotatedOverridden(final String text) {
         setPropertyForMetaAnnotationsOverridden(text);

@@ -10,7 +10,7 @@ Domain service subscribers can influence this interaction, either by:
 * performing arbitrary operations after the action has been modified (including changing the apparent return value of the action)
 
 
-The `domainEvent` semantic specifies the class to be emitted; this must be a subclass of the abstract `org.apache.isis.applib.events.domain.ActionDomainEvent` class.
+The `domainEvent` element specifies the class to be emitted; this must be a subclass of the abstract `org.apache.isis.applib.events.domain.ActionDomainEvent` class.
 
 If no `domainEvent` is specified on the action itself, then the domain event class can be specified at the class level using `@DomainObject#actionDomainEvent`.
 And if not specified at the class level, then an instance of `org.apache.isis.applib.events.domain.ActionDomainEvent.Default` is emitted as the fallback.
@@ -22,9 +22,9 @@ The fallback domain event can be suppressed using the `isis.applib.annotation.ac
 
 == Annotated Actions
 
-The demo defines two actions that are annotated using `domainEvent` semantic:
+The demo defines two actions that are annotated using `domainEvent` element:
 
-* in the `ActionRestrictToVm` is a regular action, "updateText":
+* in the `ActionSemanticsVm` is a regular action, "updateText":
 +
 [source,java]
 ----
@@ -33,7 +33,7 @@ include::ActionDomainEventVm.java[tags=class]
 <.> the event class to emit; genericised by the target type
 <.> indicates that the framework should emit this type
 
-* The `ActionRestrictToVm_mixinUpdateNoAnnotation` defines a mixin action, also annotated:
+* The `ActionSemanticsVm_mixinIncrementByAmountNonIdempotent` defines a mixin action, also annotated:
 +
 [source,java]
 ----

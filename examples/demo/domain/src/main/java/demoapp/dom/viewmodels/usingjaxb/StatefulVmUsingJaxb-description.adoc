@@ -28,14 +28,14 @@ JAXB also handles serializing graphs of data, which means that view models can a
 
 [source,java,indent=0]
 ----
-include::StatefulViewModelUsingJaxb.java[tags=child]
+include::StatefulVmUsingJaxb.java[tags=child]
 ----
 
 The demo provides a couple of actions to allow objects to be added and removed.
 
 [source,java,indent=0]
 ----
-include::StatefulViewModelUsingJaxb.java[tags=addChild]
+include::StatefulVmUsingJaxb.java[tags=addChild]
 ----
 
 NOTE: the child object has value-type semantics (is annotated with `@lombok.Data`).

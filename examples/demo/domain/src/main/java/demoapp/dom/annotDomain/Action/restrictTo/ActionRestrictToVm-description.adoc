@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `restrictTo` semantic specifies whether the action should be available only in prototype mode, or at all times.
+The `restrictTo` element specifies whether the action should be available only in prototype mode, or at all times.
 
 Prototype actions are useful in the early stages of development, typically  make it easier to explore the domain objects and their relationships.
 For example (when using a test database with a small amount of data), an action could return all instances of a domain object such as `Customer`.
@@ -22,7 +22,7 @@ include::ActionRestrictToVm.java[tags=class]
 
 == No annotations
 
-If the `restrictTo` semantic is omitted completely, then the action is made available in both prototyping and production modes:
+If the `restrictTo` element is omitted completely, then the action is made available in both prototyping and production modes:
 
 * on a regular action, `updateNoAnnotation`:
 +
@@ -30,7 +30,7 @@ If the `restrictTo` semantic is omitted completely, then the action is made avai
 ----
 include::ActionRestrictToVm.java[tags=action-no-annotation]
 ----
-<.> does not indicate any `restrictTo` semantic; will be available in both prototype and production mode
+<.> does not indicate any `restrictTo` element; will be available in both prototype and production mode
 
 * on a mixin action, `mixinUpdateNoAnnotation`:
 +
@@ -38,12 +38,12 @@ include::ActionRestrictToVm.java[tags=action-no-annotation]
 ----
 include::ActionRestrictToVm_mixinUpdateNoAnnotation.java[tags=class]
 ----
-<.> does not indicate any `restrictTo` semantic; will be available in production mode
+<.> does not indicate any `restrictTo` element; will be available in production mode
 
 
 == Annotated
 
-The `restrictTo` semantic can be specified explicitly using the `@Action` annotation:
+The `restrictTo` element can be specified explicitly using the `@Action` annotation:
 
 * on regular actions; the `updateRestrictToPrototyping` action is annotated as a prototype action:
 +
@@ -81,13 +81,13 @@ include::ActionRestrictToVm_mixinUpdateRestrictToNoRestrictions.java[tags=class]
 <.> available in both prototype and production mode
 
 
-The attribute can also be set to `NOT_SPECIFIED`.
-This is useful to allow inheritance of the semantic from a meta-annotation.
+The element can also be set to `NOT_SPECIFIED`.
+This is useful to allow inheritance of the element from a meta-annotation.
 
 
 == Meta-annotated
 
-The `restrictTo` semantic can also specified through a meta-annotation.
+The `restrictTo` element can also specified through a meta-annotation.
 For example:
 
 [source,java,indent=0]
@@ -115,19 +115,17 @@ include::ActionRestrictToVm_mixinUpdateMetaAnnotated.java[tags=class]
 ----
 <.> available only in prototype mode
 
-Similarly, we can explicit state that there are no restrictions.
-This is equivalent to not annotating at all:
 
 
 == Meta-annotated Overridden
 
-While the `restrictTo` semantic can be specified on a meta-annotation, it can still be overridden more locally.
+While the `restrictTo` element can be specified on a meta-annotation, it can still be overridden more locally.
 
 Here we have the meta-annotation:
 
 [source,java]
 ----
-include::ActionRestrictToNoRestrictionsMetaAnnotation.java[]
+include::ActionRestrictToNoRestrictionsMetaAnnotation.java[tags=class]
 ----
 
 This semantic can be overridden:
@@ -152,5 +150,5 @@ include::ActionRestrictToVm_mixinUpdateMetaAnnotatedOverridden.java[tags=class]
 
 
 The attribute can also be set to `NOT_SPECIFIED`.
-This is useful to allow inheritance of the semantic from a meta-annotation.
+This is useful to allow inheritance of the element from a meta-annotation.
 

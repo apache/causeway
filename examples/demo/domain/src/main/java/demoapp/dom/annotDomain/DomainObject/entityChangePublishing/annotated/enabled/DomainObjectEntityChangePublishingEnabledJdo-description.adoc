@@ -2,7 +2,7 @@
 
 WARNING: TODO: was renamed/moved from auditing+publishing to entityChangePublishing
 
-The `entityChangePublishing` semantic can be specified explicitly using an annotation through `@DomainObject#entityChangePublishing()`:
+The `entityChangePublishing` element can be specified explicitly using an annotation through `@DomainObject#entityChangePublishing()`:
 
 [source,java,indent=0]
 ----

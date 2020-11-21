@@ -2,26 +2,27 @@
 
 WARNING: TODO publishing was renamed to executionPublishing
 
-The `publishing` semantic specifies that the invocation of an object action should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI].
+The `publishing` element specifies that the invocation of an object action should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI].
+
 This is performed _after_ the action has been invoked.
 
 The publishing from the framework to the SPI is in-memory.
 A typical SPI implementation would then publish over the network, or perhaps store in a database.
 (Note that the framework provides an link:https://isis.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern]).
 
-The semantic can be specified using either the `@Action` annotation, or through a meta-annotation.
+The element can be specified using either the `@Action` annotation, or through a meta-annotation.
 
 NOTE: The demo shows publishing of entities, as this is much more common use case than publishing a view model.
 
 == Annotated
 
-The `publisher` semantic can be specified explicitly using an annotation through `@Action#publishing()`:
+The `publisher` element can be specified explicitly using an annotation through `@Action#publishing()`:
 
 * it can be applied to an action:
 +
 [source,java,indent=0]
 ----
-include::ActionPublishingJdo.java[tags=annotation]
+include::ActionExecutionPublishingJdo.java[tags=annotation]
 ----
 <.> explicitly specifies that invoking the action should be published.
 
@@ -29,20 +30,20 @@ include::ActionPublishingJdo.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::ActionPublishingJdo_mixinUpdateProperty.java[tags=class]
+include::ActionExecutionPublishingJdo_mixinUpdateProperty.java[tags=class]
 ----
 <.> explicitly specifies that invoking the mixin action should be published.
 
 
 == Meta-annotated
 
-The `publishing` semantic can also be specified using a custom meta-annotation:
+The `publishing` element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
 [source,java,indent=0]
 ----
-include::ActionPublishingEnabledMetaAnnotation.java[tags=class]
+include::ActionExecutionPublishingEnabledMetaAnnotation.java[tags=class]
 ----
 <.> annotated for an action
 <.> annotation can be applied to an action method or to a mixin
@@ -51,7 +52,7 @@ include::ActionPublishingEnabledMetaAnnotation.java[tags=class]
 +
 [source,java,indent=0]
 ----
-include::ActionPublishingJdo.java[tags=meta-annotation]
+include::ActionExecutionPublishingJdo.java[tags=meta-annotation]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -59,7 +60,7 @@ include::ActionPublishingJdo.java[tags=meta-annotation]
 +
 [source,java,indent=0]
 ----
-include::ActionPublishingJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+include::ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -72,7 +73,7 @@ The meta-annotation can itself be overridden:
 +
 [source,java,indent=0]
 ----
-include::ActionPublishingJdo.java[tags=meta-annotation-overridden]
+include::ActionExecutionPublishingJdo.java[tags=meta-annotation-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Action` annotation
@@ -81,7 +82,7 @@ include::ActionPublishingJdo.java[tags=meta-annotation-overridden]
 +
 [source,java,indent=0]
 ----
-include::ActionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
+include::ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Action` annotation
@@ -110,14 +111,14 @@ Supporting mixins surface this list as contributions on the object:
 +
 [source,java,indent=0]
 ----
-include::spiimpl/ActionPublishingJdo_interactionExecutions.java[tags=class]
+include::spiimpl/ActionExecutionPublishingJdo_interactionExecutions.java[tags=class]
 ----
 
 * `clearInteractionExecutions` action:
 +
 [source,java,indent=0]
 ----
-include::spiimpl/ActionPublishingJdo_clearInteractionExecutions.java[tags=class]
+include::spiimpl/ActionExecutionPublishingJdo_clearInteractionExecutions.java[tags=class]
 ----
 
 

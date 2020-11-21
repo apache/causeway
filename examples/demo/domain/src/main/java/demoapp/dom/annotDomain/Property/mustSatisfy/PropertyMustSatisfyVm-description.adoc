@@ -1,10 +1,10 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `mustSatisfy` semantic specifies an arbitrary constraint that the value entered into the property must satisfy:
+The `mustSatisfy` element specifies an arbitrary constraint that the value entered into the property must satisfy:
 
-* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
+* for properties, the element can be specified using either the `@Property` annotation, or a meta-annotation
 
-* for parameters, the semantic can be specified using either the `@Parameter` annotation, or a meta-annotation.
+* for parameters, the element can be specified using either the `@Parameter` annotation, or a meta-annotation.
 
 The constraint is provided as a concrete class that implements the `org.apache.isis.applib.spec.Specification` interface.
 This is usually done by subclassing `AbstractSpecification` or `AbstractSpecification2`:
@@ -21,7 +21,7 @@ This semantic can apply to all types, although the provided `Specification` must
 
 == Annotated
 
-The `mustSatisfy` semantic can be specified explicitly using an annotation:
+The `mustSatisfy` element can be specified explicitly using an annotation:
 
 * for properties, using `@Property#mustSatisfy()`:
 +
@@ -52,7 +52,7 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 CAUTION: this feature is currently broken, see link:https://issues.apache.org/jira/browse/ISIS-2415[ISIS-2415].
 
-The `mustSatisfy` semantic can also be specified using a custom meta-annotation:
+The `mustSatisfy` element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +

@@ -2,11 +2,11 @@
 
 CAUTION: TODO: can also use `@Nullable`, for parameters at least.
 
-The `optionality` semantic specifies that a property or parameter is either optional or mandatory:
+The `optionality` element specifies that a property or parameter is either optional or mandatory:
 
-* for properties, the semantic can be specified using either the `@Property` annotation, or a meta-annotation
+* for properties, the element can be specified using either the `@Property` annotation, or a meta-annotation
 
-* for parameters, the semantic can be specified using either the `@Parameter` annotation, or a meta-annotation
+* for parameters, the element can be specified using either the `@Parameter` annotation, or a meta-annotation
 
 Without an annotation, the framework assumes that the property or parameter is mandatory, ie required.
 
@@ -23,7 +23,7 @@ Also note that JDO and JAXB assume a property is not required by default, wherea
 
 == Annotated
 
-The `optionality` semantic can be specified explicitly using an annotation:
+The `optionality` element can be specified explicitly using an annotation:
 
 * for properties, using `@Property#optionality()`:
 +
@@ -45,7 +45,7 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 == Meta-annotated
 
-The `optionality` semantic can also be specified using a custom meta-annotation:
+The `optionality` element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +

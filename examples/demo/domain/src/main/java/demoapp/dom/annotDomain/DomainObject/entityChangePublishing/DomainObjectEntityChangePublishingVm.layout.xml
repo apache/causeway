@@ -46,11 +46,12 @@
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >
-				<cpt:action id="rebuildMetamodel" position="PANEL"/>
 				<cpt:action id="clearHints" position="PANEL" />
 				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="rebuildMetamodel" position="PANEL"/>
 				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="downloadJdoMetadata"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>

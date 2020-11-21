@@ -1,0 +1,158 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `semantics` element specifies whether invoking the action will change the state of the system, and if so, how:
+
+* `SAFE` (sometimes also called "query-only") means no side-effects, that is, no permanent change in state of the system
+* `IDEMPOTENT` means that the state of the system will change, but invoking the action again (with the same arguments) will not change the state; in other words re-runnable
+* `NON_IDEMPOTENT` means that the state will change, and subsequent invocations will change the state again.
+
+If the action is not annotated, then non-idempotent is assumed.
+
+The REST API interprets these semantics by mapping to different HTTP verbs: GET, PUT and POST, respectively.
+
+Each of these three basic `semantics` element have a variant:
+
+* `SAFE_AND_REQUEST_CACHEABLE` means that the framework will automatically cache the result of a first invocation and use the `QueryResultsCache` to return the result subsequently.
++
+Note this does require that the action is invoked "through" the framework, in other words using the `WrapperFactory`.
+
+* `IDEMPOTENT_ARE_YOU_SURE` will cause the viewer to display an "are you sure" prompt so that the end-user can choose to not invoke the action after all
+
+* `NON_IDEMPOTENT_ARE_YOU_SURE` similarly displays an "are you sure" prompt, but for non-idempotent actions.
+
+
+The demo project uses this view model:
+
+[source,java]
+----
+include::ActionSemanticsVm.java[tags=class]
+----
+
+== No annotations
+
+If the `semantics` element is omitted completely, then the action is assumed to be non-idempotent:
+
+* on a regular action, `incrementByAmountNoAnnotation`:
++
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-no-annotation]
+----
+<.> does not indicate any `semantic` element; non-idempotent is assumed
+
+* on a mixin action, `mixinIncrementNoAnnotation`:
++
+[source,java]
+----
+include::ActionSemanticsVm_mixinIncrementNoAnnotation.java[tags=class]
+----
+<.> does not indicate any `semantics` element; non-idempotent is assumed
+
+
+== Annotated as Safe
+
+The `semantics` element can be specified explicitly using the `@Action` annotation.
+One option is with safe semantics, meaning the action has no side-effects; it does not change the state of the system.
+This is also sometimes called _query-only_.
+
+[IMPORTANT]
+====
+The framework does not verify or ensure that the action results in no side-effects; the annotation is taken "on trust".
+====
+
+Both regular and mixin actions can be annotated:
+
+* on regular actions; the `reportPropertyForSafe` action is annotated as having safe semantics:
++
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-semantics-safe]
+----
+<.> safe semantics, meaning that invoking the action results in no permanent change of state
+
+* on mixin actions; `reportPropertyForSafe` is annotated with safe sematics
++
+[source,java]
+----
+include::ActionSemanticsVm_mixinReportPropertyForSemanticsSafe.java[tags=class]
+----
+<.> safe semantics, meaning that invoking the action results in no permanent change of state
+
+*TODO: safe and request cacheable*
+
+== Annotated as Idempotent
+
+*TODO: idempotent*
+*TODO: idempotent are you sure*
+
+== Annotated as Not Idempotent
+
+*TODO: non idempotent*
+*TODO: non idempotent are you sure*
+
+
+== Meta-annotated
+
+The `semantics` element can also specified through a meta-annotation.
+For example:
+
+[source,java,indent=0]
+----
+include::ActionSemanticsIdempotentMetaAnnotation.java[tags=class]
+----
+<.> indicates idempotent semantics
+<.> apply either to a regular action or a mixin type
+
+For example:
+
+* on regular actions; the `updateMetaAnnotated` action is meta-annotated to only be available in prototype mode:
++
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-meta-annotated]
+----
+<.> indicates idempotent semantics
+
+* on mixin actions; `mixinSetToValueForPropertyMetaAnnotated` is meta-annotated to indicate it has idempotent semantics:
++
+[source,java]
+----
+include::ActionSemanticsVm_mixinSetToValueForPropertyMetaAnnotated.java[tags=class]
+----
+<.> indicates idempotent semantics
+
+
+== Meta-annotated Overridden
+
+While the `semantics` element can be specified on a meta-annotation, it can still be overridden more locally.
+
+Here we have the meta-annotation:
+
+[source,java]
+----
+include::ActionSemanticsSafeMetaAnnotation.java[tags=class]
+----
+
+This element can be overridden:
+
+* for regular actions, `setToValueMetaAnnotatedOverridden`:
++
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-meta-annotated-overridden]
+----
+<.> meta-annotation indicates safe semantics
+<.> overrides to indicate instead idempotent semantics
+
+* on mixin actions, `mixinSetToValueForPropertyMetaAnnotatedOverridden`:
++
+[source,java]
+----
+include::ActionSemanticsVm_mixinSetToValueForPropertyMetaAnnotatedOverridden.java[tags=class]
+----
+<.> meta-annotation indicates safe semantics
+<.> overrides to indicate instead idempotent semantics
+
+The attribute can also be set to `NOT_SPECIFIED`.
+This is useful to allow inheritance of the semantic from a meta-annotation.
+

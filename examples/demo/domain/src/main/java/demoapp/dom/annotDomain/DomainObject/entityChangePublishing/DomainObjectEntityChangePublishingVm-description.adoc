@@ -2,7 +2,9 @@
 
 WARNING: TODO: was renamed/moved from auditing+publishing to entityChangePublishing
 
-The `entityChangePublishing` semantic for a domain object means that all registered implementation(s) of the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI] will be notified of the identity and nature of the change (created/updated/deleted) to the domain object.
+The `entityChangePublishing` element for a domain object means that all registered implementation(s) of the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI] will be notified of the identity and nature of the change (created/updated/deleted) to the domain object.
+
+:examples/demo/domain/src/main/java/demoapp/dom/annotDomain/DomainObject/publishing/DomainObjectPublishingVm-description.adoc
 This is done _after_ the interaction in which the object(s) was changed has completed.
 
 This notification is done only once per interaction, so will include _all_ domain objects that were changed.
@@ -12,7 +14,7 @@ Common use cases are to replicate data to another system, or for gathering metri
 A typical SPI implementation could publish the event over the network, or perhaps store in a database.
 (Note that the framework provides an link:https://isis.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern]).
 
-The semantic can be specified using either the `@DomainObject` annotation, or through a meta-annotation.
+The element can be specified using either the `@DomainObject` annotation, or through a meta-annotation.
 
 NOTE: Publishing of domain objects is only supported for domain entities, not view models.
 

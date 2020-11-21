@@ -39,6 +39,7 @@ import demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublish
 import demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdoEntities;
 import demoapp.dom.annotDomain.Action.hidden.ActionHiddenVm;
 import demoapp.dom.annotDomain.Action.restrictTo.ActionRestrictToVm;
+import demoapp.dom.annotDomain.Action.semantics.ActionSemanticsVm;
 import demoapp.dom.annotDomain.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.annotDomain.Action.typeOf.child.ActionTypeOfChildVm;
 
@@ -98,6 +99,12 @@ public class ActionMenu {
     @ActionLayout(cssClassFa="fa-paper-plane", describedAs = "Availability of actions per environment")
     public ActionRestrictToVm restrictTo(){
         return new ActionRestrictToVm("value");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-skull-crossbones", describedAs = "Whether the action has side-effects")
+    public ActionSemanticsVm semantics(){
+        return new ActionSemanticsVm(123);
     }
 
     @Action(semantics = SemanticsOf.SAFE)

@@ -2,7 +2,7 @@
 
 WARNING: TODO command was renamed to commandPublishing
 
-The `command` semantic is used to allow or suppress the reification of an action invocation into a `Command`.
+The `command` element is used to allow or suppress the reification of an action invocation into a `Command`.
 
 When allowed (the default), then the `Command` is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandServiceListener.html#section-top[`CommandServiceListener`] SPI, _after_ the interaction has completed.
 One use case is to replicate and replay commands to a secondary system, for example for regression testing.
@@ -21,13 +21,13 @@ If running in prototype mode, the list of persisted ``Command``s can also be tru
 
 == Annotated
 
-The `command` semantic can be specified explicitly using an annotation through `@Action#command()`:
+The `command` element can be specified explicitly using an annotation through `@Action#command()`:
 
 * it can be applied to an action:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo.java[tags=annotation]
+include::ActionCommandPublishingJdo.java[tags=annotation]
 ----
 <.> explicitly specifies that invoking the action should be reified .
 
@@ -35,7 +35,7 @@ include::ActionCommandJdo.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo_mixinUpdateProperty.java[tags=class]
+include::ActionCommandPublishingJdo_mixinUpdateProperty.java[tags=class]
 ----
 <.> explicitly specifies that invoking the mixin action should be reified.
 
@@ -45,7 +45,7 @@ The command reification can also be disabled:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo.java[tags=annotation-2]
+include::ActionCommandPublishingJdo.java[tags=annotation-2]
 ----
 <.> explicitly specifies that invoking the action should not be reified.
 
@@ -53,20 +53,20 @@ include::ActionCommandJdo.java[tags=annotation-2]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo_mixinUpdatePropertyCommandDisabled.java[tags=class]
+include::ActionCommandPublishingJdo_mixinUpdatePropertyCommandDisabled.java[tags=class]
 ----
 <.> explicitly specifies that invoking the mixin action should not be reified.
 
 
 == Meta-annotated
 
-The `command` semantic can also be specified using a custom meta-annotation:
+The `command` element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandEnabledMetaAnnotation.java[tags=class]
+include::ActionCommandPublishingEnabledMetaAnnotation.java[tags=class]
 ----
 <.> annotated for an action
 <.> annotation can be applied to an action method or to a mixin
@@ -75,7 +75,7 @@ include::ActionCommandEnabledMetaAnnotation.java[tags=class]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo.java[tags=meta-annotation]
+include::ActionCommandPublishingJdo.java[tags=meta-annotation]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -83,7 +83,7 @@ include::ActionCommandJdo.java[tags=meta-annotation]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+include::ActionCommandPublishingJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -96,7 +96,7 @@ The meta-annotation can itself be overridden:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo.java[tags=meta-annotation-overridden]
+include::ActionCommandPublishingJdo.java[tags=meta-annotation-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Action` annotation
@@ -105,7 +105,7 @@ include::ActionCommandJdo.java[tags=meta-annotation-overridden]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
+include::ActionCommandPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Action` annotation
@@ -143,7 +143,7 @@ The link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Comm
 It also provides a RESTful endpoint to allow ``Command``s to be queried.
 This is used by the link:https://isis.apache.org/extensions/2.0.0-M3/command-replay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
 
-The associated `commandDtoProcessor()` semantic allows the `Command` XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
+The associated `commandDtoProcessor()` element allows the `Command` XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
 One use case is to allow data to be obfuscated for security, or to replace large payloads (such as Blobs) with a smaller dummy payload.
 As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[`CommandDtoProcessorService`] SPI.
 

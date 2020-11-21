@@ -14,5 +14,4 @@ include::JavaAwtImageVm.java[tags=class]
 +
 This is the default for JAXB so no additional annotation required.
 
-// not yet supported
-//include::../JavaAwtImages-common.adoc[]
+include::../JavaAwtBufferedImages-common.adoc[]

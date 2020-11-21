@@ -36,6 +36,7 @@
 				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>
 			</cpt:fieldSet>

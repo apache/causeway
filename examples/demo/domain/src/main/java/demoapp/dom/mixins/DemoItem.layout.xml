@@ -34,16 +34,16 @@
                             <bs3:row>
                                 <bs3:col span="12">
                                     <cpt:fieldSet name="Other" id="other" unreferencedProperties="true">
-                                        
+
                                         <cpt:property id="name" typicalLength="25">
                                             <cpt:named>Name</cpt:named>
                                             <cpt:describedAs>The name of this 'DemoItem'.</cpt:describedAs>
                                         </cpt:property>
-                                        
+
                                         <cpt:property id="friend">
                                             <cpt:named>Friend</cpt:named>
                                         </cpt:property>
-                                        
+
                                     </cpt:fieldSet>
                                 </bs3:col>
                             </bs3:row>
@@ -56,7 +56,7 @@
                                         <cpt:action id="downloadMetamodelXml" position="PANEL_DROPDOWN"/>
                                         <cpt:action id="inspectMetamodel" position="PANEL_DROPDOWN"/>
                                         <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
-                                        <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
+                                        <cpt:action id="rebuildMetamodel" position="PANEL"/>
                                         <cpt:property hidden="ALL_TABLES" id="objectType" typicalLength="25">
                                             <cpt:named>Object Type</cpt:named>
                                         </cpt:property>
