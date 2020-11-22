@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The "renderDay" hint applies to date fields, and indicates that the date rendered should be one day before the day actually held in the property.
+The `renderDay` element applies to date fields, and indicates that the date rendered should be one day before the day actually held in the property.
 
 The typical use case for this is when two date properties together model an interval, namely a "startDate" and an "endDate".
 
@@ -14,13 +14,13 @@ For example,  ['Mon 1 Jan', 'Mon 8 Jan'), then ['Mon 8 Jan', 'Mon 15 Jan')`.
 
 This UI hint therefore allows the domain object to use an exclusive end date, thus simplifying business logic, but to be rendered the day before, as if with an inclusive end date.
 
-The hint applies to both properties and parameters:
+The element applies to both properties and parameters:
 
-* for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the element can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
-* for parameters, the hint can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
+* for parameters, the element can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
 
-The hint is supported only for properties and parameters representing dates/times.
+The element is supported only for properties and parameters representing dates/times.
 
 // TODO: java.time datatypes not yet supported.
 
@@ -28,7 +28,7 @@ TIP: You can inspect the "raw" data of the domain object, using the "download as
 
 == Annotated
 
-The renderDay hint can be specified explicitly using an annotation:
+The `renderDay` element can be specified explicitly using an annotation:
 
 * for properties, using `@PropertyLayout#renderDay()`:
 +
@@ -48,7 +48,7 @@ include::PropertyLayoutRenderDayVm_updateEndDateWithParameterLayout.java[tags=an
 
 == Layout File
 
-For properties (not parameters), the renderDay hint can be specified using the `Xxx.layout.xml` file:
+For properties (not parameters), the `renderDay` element can be specified using the `Xxx.layout.xml` file:
 
 * property definition:
 +
@@ -81,7 +81,7 @@ include::PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout.java[tags=clas
 
 == Meta-annotated
 
-The renderDay hint can also be specified using a custom meta-annotation:
+The `renderDay` element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +

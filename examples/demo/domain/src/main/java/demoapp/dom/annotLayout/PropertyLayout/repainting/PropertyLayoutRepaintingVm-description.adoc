@@ -1,11 +1,11 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The "repainting" hint indicates that the value held by the property never changes over time, even when other properties of the object do change.
-When set to "no repaint", the viewer uses this hint to not repaint the property after an AJAX update even if some other property/ies of the object have changed.
+The `repainting` element indicates that the value held by the property never changes over time, even when other properties of the object do change.
+When set to "no repaint", the viewer uses this element to not repaint the property after an AJAX update even if some other property/ies of the object have changed.
 
-* for properties, the hint can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the element can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
-The hint does _not_ apply for action parameters.
+The element does _not_ apply for action parameters.
 
 The primarily use case for performance, eg can improve the user experience when rendering PDFs/blobs.
 
@@ -14,7 +14,7 @@ Said another way: if only one blob/clob property requires a repaint, then all wi
 
 == Annotated
 
-The (no) repainting hint can be specified explicitly using an annotation:
+The (no) repainting element can be specified explicitly using an annotation:
 
 * for properties, using `@PropertyLayout#repainting()`:
 +
@@ -27,7 +27,7 @@ include::PropertyLayoutRepaintingVm.java[tags=annotation]
 
 == Layout File
 
-For properties (not parameters), the renderDay hint can be specified using the `Xxx.layout.xml` file:
+For properties (not parameters), the `renderDay` element can be specified using the `Xxx.layout.xml` file:
 
 * property definition:
 +
@@ -61,7 +61,7 @@ include::PropertyLayoutRepaintingVm_mixinProperty.java[tags=class]
 
 == Meta-annotated
 
-The (no) repainting hint can also be specified using a custom meta-annotation:
+The (no) repainting element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +

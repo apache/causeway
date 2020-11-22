@@ -45,6 +45,9 @@ import demoapp.dom.annotDomain.Property.hidden.child.PropertyHiddenChildVm;
 import demoapp.dom.annotDomain.Property.maxLength.PropertyMaxLengthVm;
 import demoapp.dom.annotDomain.Property.mustSatisfy.PropertyMustSatisfyVm;
 import demoapp.dom.annotDomain.Property.optionality.PropertyOptionalityVm;
+import demoapp.dom.annotDomain.Property.projecting.PropertyProjectingVm;
+import demoapp.dom.annotDomain.Property.projecting.child.PropertyProjectingChildVm;
+import demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdoEntities;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
 import demoapp.dom.types.Samples;
 
@@ -54,6 +57,7 @@ import demoapp.dom.types.Samples;
 public class PropertyMenu {
 
     final PropertyCommandPublishingJdoEntities propertyCommandJdoEntities;
+    final PropertyProjectingChildJdoEntities propertyProjectingChildJdoEntities;
     final PropertyExecutionPublishingJdoEntities propertyPublishingJdoEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
@@ -81,7 +85,7 @@ public class PropertyMenu {
         vm.setPropertyUsingMetaAnnotationButOverridden("this property is NOT editable");
         return vm;
     }
-    
+
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
     public PropertyExecutionPublishingJdo executionPublishing(){
@@ -146,6 +150,19 @@ public class PropertyMenu {
         vm.setMandatoryPropertyUsingAnnotation("mandatory");
         vm.setPropertyUsingMetaAnnotation(null);
         vm.setPropertyUsingMetaAnnotationButOverridden("mandatory");
+        return vm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-external-link-square-alt", describedAs = "Regular expressions, such as email")
+    public PropertyProjectingVm projecting(){
+        val vm = new PropertyProjectingVm();
+
+        propertyProjectingChildJdoEntities.all().forEach(jdoEntity -> {
+            val childVm = new PropertyProjectingChildVm(jdoEntity);
+            vm.getChildren().add(childVm);
+        });
+
         return vm;
     }
 

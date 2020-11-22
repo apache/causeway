@@ -15,11 +15,9 @@
         xmlns:cpt="http://isis.apache.org/applib/layout/component"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
-			<cpt:action id="returnsStandaloneList"/>
 		</bs3:col>
 		<bs3:col span="2">
 			<cpt:fieldSet name="" id="sources" />
@@ -28,10 +26,11 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Properties" id="variants"/>
-			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
-			<cpt:fieldSet name="Meta-annotated Overridden" id="meta-annotated-overridden"/>
+			<cpt:fieldSet name="Properties" id="properties"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+			<cpt:collection id="children">
+				<cpt:action id="returnsChildren"/>
+			</cpt:collection>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >

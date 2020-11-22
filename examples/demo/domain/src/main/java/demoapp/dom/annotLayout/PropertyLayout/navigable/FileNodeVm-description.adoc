@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `navigable` hint allows the viewer to construct a breadcrumb trail.
+The `navigable` element allows the viewer to construct a breadcrumb trail.
 It is commonly used with objects forming a hierarchy, and so often is used in conjunction with the `TreeNode` value type.
 
 This app uses the filesystem of the host computer to illustrate the idea:
@@ -11,14 +11,14 @@ This app uses the filesystem of the host computer to illustrate the idea:
 This allows the user to drill into the tree and inspect the individual files, without "losing their place".
 
 The mechanics of creating the tree are shown below.
-But first, let's discuss the `navigable` hint as a means to construct breadcrumbs.
+But first, let's discuss the `navigable` element as a means to construct breadcrumbs.
 
 == Navigable (Breadcrumbs)
 
 For all ``FileNode``s a breadcrumb trail is rendered.
 The one node where this is not visible is the initial root node (see the `path` property), because it has no parent.
 
-The framework constructs the breadcrumbs using the value returned by the property with the `navigable` hint.
+The framework constructs the breadcrumbs using the value returned by the property with the `navigable` element.
 This hint should be used on no more than one property of the object, and points back to the logical parent of the domain object:
 
 [source,java,indent=0]
