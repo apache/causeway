@@ -85,7 +85,7 @@ _Other_
 [discrete]
 == Components
 
-* xref:system:ROOT:about.adoc[System Overview]
+* xref:system:ROOT:system-overview.adoc[System Overview]
 
 _Viewers_
 

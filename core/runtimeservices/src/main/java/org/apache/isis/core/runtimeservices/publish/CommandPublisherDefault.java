@@ -65,7 +65,7 @@ public class CommandPublisherDefault implements CommandPublisher {
             return;
         }
 
-        if(!command.isDispatchingEnabled()) {
+        if(!command.isPublishingEnabled()) {
             return;
         }
         if(command.getLogicalMemberIdentifier() == null) {

@@ -3,6 +3,10 @@
 
 * Components
 
+** Overview
+
+*** xref:system:ROOT:system-overview.adoc[System Overview]
+
 ** Viewers
 
 *** xref:vw:ROOT:about.adoc[Wicket UI]

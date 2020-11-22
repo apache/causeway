@@ -274,7 +274,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      */
     // tag::refguide[]
     @Getter
-    private boolean dispatchingEnabled;
+    private boolean publishingEnabled;
     // end::refguide[]
 
     private final Updater UPDATER = new Updater();
@@ -365,7 +365,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         public void setDispatchingEnabled(boolean dispatchingEnabled) {
-            Command.this.dispatchingEnabled = dispatchingEnabled;
+            Command.this.publishingEnabled = dispatchingEnabled;
         }
 
     };
