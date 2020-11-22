@@ -60,6 +60,8 @@ This is also sometimes called _query-only_.
 The framework does not verify or ensure that the action results in no side-effects; the annotation is taken "on trust".
 ====
 
+Safe actions are called using HTTP GET when invoked through the Restful Objects' REST API.
+
 Both regular and mixin actions can be annotated:
 
 * on regular actions; the `reportPropertyForSafe` action is annotated as having safe semantics:
@@ -68,9 +70,9 @@ Both regular and mixin actions can be annotated:
 ----
 include::ActionSemanticsVm.java[tags=action-semantics-safe]
 ----
-<.> safe semantics, meaning that invoking the action results in no permanent change of state
+<.> safe semantics, meaning invoking the action results in no permanent change of state
 
-* on mixin actions; `reportPropertyForSafe` is annotated with safe sematics
+* on mixin actions; `mixinReportPropertyForSafe` is annotated with safe semantics
 +
 [source,java]
 ----
@@ -78,18 +80,133 @@ include::ActionSemanticsVm_mixinReportPropertyForSemanticsSafe.java[tags=class]
 ----
 <.> safe semantics, meaning that invoking the action results in no permanent change of state
 
-*TODO: safe and request cacheable*
+=== Safe and Request Cacheable
+
+Since invoking a safe query-only action will often return the same result (at least for some short period of time), the framework also provides a variant that will automatically cache the result for the duration of the interaction (HTTP request).
+
+To leverage this, the action must be invoked "through" the framework, in other words using the `WrapperFactory` service.
+
+To demonstrate this, the demo app declares the following action:
+
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-semantics-safe-and-request-cacheable]
+----
+<.> the result of invoking this action will be cached for the duration of the interaction (HTTP request)
+<.> the action need not be exposed in the end-user
+<.> for the purpose of the demo, counts the number of times invoked
+
+This action can then be invoked through the `WrapperFactory`:
+
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-semantics-safe-and-request-cacheable-caller]
+----
+<.> invoke the action 5 times
+<.> skips the check that the action is hidden
+<.> reports on the number of times the action was actually executed
+
+In this case the called action should indicate it was only executed once.
 
 == Annotated as Idempotent
 
-*TODO: idempotent*
-*TODO: idempotent are you sure*
+Annotating an action as idempotent means that it will change the state of the system, but invoking more than once will not change the state of the system further.
+
+Idempotent actions are called using HTTP PUT when invoked through the Restful Objects' REST API.
+
+Both regular and mixin actions can be annotated:
+
+* on regular actions; the `setToValuePropertyForIdempotent` action is annotated as having idempotent semantics:
++
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-semantics-idempotent]
+----
+<.> idempotent semantics
+
+* on mixin actions; `mixinSetToValueForPropertySemanticsIdempotent` is annotated with idempotent sematics
++
+[source,java]
+----
+include::ActionSemanticsVm_mixinSetToValueForPropertySemanticsIdempotent.java[tags=class]
+----
+<.> idempotent semantics
+
+
+=== Are you sure?
+
+Because an idempotent action will change the state of the system, the framework offers a variant that will cause the viewer to render an "are you sure?" pop-up.
+
+Both regular and mixin actions can be annotated:
+
+* on regular actions; the `setToValuePropertyForIdempotentAreYouSure` action is annotated as having idempotent "are you sure" semantics:
++
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-semantics-idempotent-are-you-sure]
+----
+<.> idempotent semantics, with "are you sure" prompt
+
+* on mixin actions; `mixinSetToValueForPropertySemanticsIdempotent` is annotated with idempotent "are you sure" semantics
++
+[source,java]
+----
+include::ActionSemanticsVm_mixinSetToValueForPropertySemanticsIdempotentAreYouSure.java[tags=class]
+----
+<.> idempotent semantics, with "are you sure" prompt
+
 
 == Annotated as Not Idempotent
 
-*TODO: non idempotent*
-*TODO: non idempotent are you sure*
+Annotating an action as non-idempotent means that it will change the state of the system, and invoking more than once will change the state of the system further.
 
+If an action is not annotated with the `semantics` element, it is considered to be non-idempotent.
+
+Non-idempotent actions are called using HTTP POST when invoked through the Restful Objects' REST API.
+
+
+Both regular and mixin actions can be annotated:
+
+* on regular actions; the `incrementByAmountPropertyForNonIdempotent` action is annotated as having non-idempotent semantics:
++
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-semantics-non-idempotent]
+----
+<.> non-idempotent semantics
+
+* on mixin actions; `mixinSetToValueForPropertySemanticsIdempotent` is annotated with non-idempotent semantics
++
+[source,java]
+----
+include::ActionSemanticsVm_mixinIncrementByAmountNonIdempotent.java[tags=class]
+----
+<.> non-idempotent semantics
+
+
+=== Are you sure ?
+
+Because an non-idempotent action will change the state of the system, the framework offers a variant that will cause the viewer to render an "are you sure?" pop-up.
+
+Both regular and mixin actions can be annotated:
+
+* on regular actions; the `incrementByAmountPropertyForNonIdempotentAreYouSure` action is annotated as having non-idempotent "are you sure" semantics:
++
+[source,java,indent=0]
+----
+include::ActionSemanticsVm.java[tags=action-semantics-non-idempotent-are-you-sure]
+----
+<.> non-idempotent semantics, with "are you sure" prompt
+
+* on mixin actions; `mixinIncrementNonIdempotentAreYouSure` is annotated with non-idempotent "are you sure" semantics
++
+[source,java]
+----
+include::ActionSemanticsVm_mixinIncrementNonIdempotentAreYouSure.java[tags=class]
+----
+<.> non-idempotent semantics, with "are you sure" prompt
++
+NOTE: Because this action takes no parameters, then the pop-up will be triggered for the action button itself (rather than the OK button of the action prompt form).
 
 == Meta-annotated
 

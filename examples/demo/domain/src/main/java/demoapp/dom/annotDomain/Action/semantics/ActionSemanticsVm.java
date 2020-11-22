@@ -174,40 +174,37 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     }
 //end::action-semantics-safe[]
 
-//tag::action-semantics-safe-and-request-cacheable[]
+//tag::action-semantics-safe-and-request-cacheable-caller[]
     @Action(
-        semantics = SemanticsOf.SAFE_AND_REQUEST_CACHEABLE      // <.>
+        semantics = SemanticsOf.SAFE
         , associateWith = "propertyForSafeAndRequestCacheable"
         , associateWithSequence = "1"
     )
     @ActionLayout(
-        named = "Report",
-        describedAs =
-            "@Action(semantics = SemanticsOf.SAFE_AND_REQUEST_CACHEABLE)"
+        named = "Report"
+        , describedAs = "@Action(semantics = SemanticsOf.SAFE)"
     )
     public ActionSemanticsVm reportPropertyForSafeAndRequestCacheable() {
         int val = 0;
-        for (int i=0; i<5; i++) {
-            val = wrapperFactory.wrap(this, control().withSkipRules())
+        for (int i=0; i<5; i++) {                                                   // <.>
+            val = wrapperFactory.wrap(this, control().withSkipRules())              // <.>
                     .queryPropertyForSafeAndRequestCacheable();
         }
         messageService.informUser(String.format(
                 "Action 'queryPropertyForSafeAndRequestCacheable' returns %d " +
-                "and was invoked 5 times in this action but was executed %d times."
+                "and was invoked 5 times in this action but was executed %d times." // <.>
                 , val, numberOfTimesActionSafeAndRequestCacheableWasExecuted));
         return this;
     }
+//end::action-semantics-safe-and-request-cacheable-caller[]
 
+//tag::action-semantics-safe-and-request-cacheable[]
     @Action(
-        semantics = SemanticsOf.SAFE_AND_REQUEST_CACHEABLE      // <.>
-        , hidden = Where.EVERYWHERE
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action(semantics = SemanticsOf.SAFE_AND_REQUEST_CACHEABLE)"
+        semantics = SemanticsOf.SAFE_AND_REQUEST_CACHEABLE          // <.>
+        , hidden = Where.EVERYWHERE                                 // <.>
     )
     public int queryPropertyForSafeAndRequestCacheable() {
-        ++numberOfTimesActionSafeAndRequestCacheableWasExecuted;
+        ++numberOfTimesActionSafeAndRequestCacheableWasExecuted;    // <.>
         return getPropertyForSafeAndRequestCacheable();
     }
     transient int numberOfTimesActionSafeAndRequestCacheableWasExecuted = 0;
@@ -220,9 +217,8 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         , associateWithSequence = "1"
     )
     @ActionLayout(
-        named = "Set to Value",
-        describedAs =
-            "@Action(semantics = SemanticsOf.IDEMPOTENT)"
+        named = "Set to Value"
+        , describedAs = "@Action(semantics = SemanticsOf.IDEMPOTENT)"
     )
     public ActionSemanticsVm setToValuePropertyForIdempotent(final int value) {
         setPropertyForIdempotent(value);
@@ -241,8 +237,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         named = "Set to Value",
-        describedAs =
-            "@Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)"
+        describedAs = "@Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)"
     )
     public ActionSemanticsVm setToValuePropertyForIdempotentAreYouSure(final int value) {
         setPropertyForIdempotentAreYouSure(value);
@@ -258,21 +253,6 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         semantics = SemanticsOf.NON_IDEMPOTENT      // <.>
         , associateWith = "propertyForNonIdempotent"
         , associateWithSequence = "1"
-    )
-    @ActionLayout(
-        named = "Increment"
-        , describedAs =
-            "@Action(semantics = SemanticsOf.NON_IDEMPOTENT)"
-    )
-    public ActionSemanticsVm incrementPropertyForNonIdempotent() {
-        setPropertyForNonIdempotent(getPropertyForNonIdempotent() + 1);
-        return this;
-    }
-
-    @Action(
-        semantics = SemanticsOf.NON_IDEMPOTENT      // <.>
-        , associateWith = "propertyForNonIdempotent"
-        , associateWithSequence = "2"
     )
     @ActionLayout(
         named = "Increment by Amount"
