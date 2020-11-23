@@ -19,8 +19,10 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -39,6 +41,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -78,6 +81,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import lombok.val;
 
 
@@ -86,7 +91,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
     private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid =
             new MetaModelValidatorForValidationFailures();
-    
+
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
@@ -95,7 +100,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
-    
+
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
@@ -111,7 +116,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        
+
         processAuditing(processClassContext);
         processAutoComplete(processClassContext);
         processBounded(processClassContext);
@@ -126,7 +131,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     void processAuditing(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        
+
         //
         // this rule originally implemented only in AuditableFacetFromConfigurationFactory
         // but think should apply in general
@@ -145,7 +150,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         // then add
         super.addFacet(auditableFacet);
     }
-    
+
     // -- AUTO COMPLETE
 
     void processAutoComplete(final ProcessClassContext processClassContext) {
@@ -159,7 +164,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         // then add
         super.addFacet(facet);
     }
-    
+
     private static final class AnnotHelper {
         AnnotHelper(DomainObject domainObject) {
             this.autoCompleteRepository = domainObject.autoCompleteRepository();
@@ -174,7 +179,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder facetHolder,
             final Class<?> cls) {
-        
+
         if(!domainObjectIfAny.isPresent()) {
             return null;
         }
@@ -184,12 +189,12 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 .filter(a -> a.autoCompleteRepository != Object.class)
                 .filter(a -> {
                     a.repositoryMethod = findRepositoryMethod(
-                            facetHolder, 
-                            cls, 
-                            "@DomainObject", 
-                            a.autoCompleteRepository, 
+                            facetHolder,
+                            cls,
+                            "@DomainObject",
+                            a.autoCompleteRepository,
                             a.autoCompleteAction);
-                    
+
                     return a.repositoryMethod != null;
                 })
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
@@ -203,7 +208,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
             final String annotationName,
             final Class<?> repositoryClass,
             final String methodName) {
-        
+
         final Method[] methods = repositoryClass.getMethods();
         for (Method method : methods) {
             if(method.getName().equals(methodName)) {
@@ -220,7 +225,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;
     }
-    
+
     // -- BOUNDED
 
     void processBounded(final ProcessClassContext processClassContext) {
@@ -239,18 +244,18 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
         // check from @DomainObject(editing=...)
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        
+
         super.addFacet(
                 EditingEnabledFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, facetHolder));
-        
+
         super.addFacet(
                 ImmutableFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
 
     void processObjectType(final ProcessObjectSpecIdContext processClassContext) {
-        
+
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(objectType=...)
@@ -272,10 +277,10 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         }
 
         val postConstructMethodCache = this;
-        final ViewModelFacet recreatableObjectFacet = 
+        final ViewModelFacet recreatableObjectFacet =
                 RecreatableObjectFacetForDomainObjectAnnotation.create(
-                    domainObjectIfAny, 
-                    facetHolder, 
+                    domainObjectIfAny,
+                    facetHolder,
                     postConstructMethodCache);
 
         if(recreatableObjectFacet != null) {
@@ -288,7 +293,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                     .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                     .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
 
-            val mixinFacet = 
+            val mixinFacet =
                     MixinFacetForDomainObjectAnnotation.create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector());
             super.addFacet(mixinFacet);
         }
@@ -297,13 +302,13 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
 
     private void processLifecycleEvents(final ProcessClassContext processClassContext) {
-        
+
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         if(!domainObjectIfAny.isPresent()) {
             return;
         }
         val facetHolder = processClassContext.getFacetHolder();
-        
+
         processLifecycleEventCreated(domainObjectIfAny, facetHolder);
         processLifecycleEventLoaded(domainObjectIfAny, facetHolder);
         processLifecycleEventPersisted(domainObjectIfAny, facetHolder);
@@ -439,7 +444,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     }
 
     private void processDomainEventAction(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
-        
+
         domainObjectIfAny
         .map(DomainObject::actionDomainEvent)
         .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
@@ -450,7 +455,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     }
 
     private void processDomainEventProperty(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
-        
+
         domainObjectIfAny
         .map(DomainObject::propertyDomainEvent)
         .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
@@ -460,7 +465,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     }
 
     private void processDomainEventCollection(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
-        
+
         domainObjectIfAny
         .map(DomainObject::collectionDomainEvent)
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
@@ -472,70 +477,64 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
-            @Override
-            public boolean visit(final ObjectSpecification thisSpec, final MetaModelValidator validator) {
-
-                validate(thisSpec, validator);
-                return true;
-            }
-
-            private void validate(final ObjectSpecification thisSpec, final MetaModelValidator validator) {
-                if(!thisSpec.isEntityOrViewModel()) {
-                    return;
-                }
-
-                final Map<ObjectSpecId, ObjectSpecification> specById = _Maps.newHashMap();
-                for (final ObjectSpecification otherSpec : getSpecificationLoader().snapshotSpecifications()) {
-
-                    if(thisSpec == otherSpec) {
-                        continue;
-                    }
-
-                    if(!otherSpec.isEntityOrViewModel()) {
-                        continue;
-                    }
-
-                    final ObjectSpecId objectSpecId = otherSpec.getSpecId();
-                    if (objectSpecId == null) {
-                        continue;
-                    }
-                    final ObjectSpecification existingSpec = specById.put(objectSpecId, otherSpec);
-                    if (existingSpec == null) {
-                        continue;
-                    }
-                    validator.onFailure(
-                            existingSpec,
-                            existingSpec.getIdentifier(),
-                            "%s: cannot have two entities with same object type (@Discriminator, @DomainObject(objectType=...), @ObjectType or @PersistenceCapable(schema=...)); %s " +
-                                    "has same value (%s).",
-                            existingSpec.getFullIdentifier(),
-                            otherSpec.getFullIdentifier(),
-                            objectSpecId);
-                }
-
-                final AutoCompleteFacet autoCompleteFacet = thisSpec.getFacet(AutoCompleteFacet.class);
-                if(autoCompleteFacet != null && !autoCompleteFacet.isFallback() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
-                    val autoCompleteFacetAbstract = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
-                    val repositoryClass = autoCompleteFacetAbstract.getRepositoryClass();
-                    val isRepositoryResolvable = getServiceRegistry()
-                            .lookupService(repositoryClass).isPresent();
-                    if(!isRepositoryResolvable) {
-                        validator.onFailure(
-                                thisSpec,
-                                thisSpec.getIdentifier(),
-                                "@DomainObject annotation on %s specifies unknown repository '%s'",
-                                thisSpec.getFullIdentifier(), repositoryClass.getName());
-                    }
-
-                }
-            }
-
-        });
+        if(getConfiguration().getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
+            addValidatorToEnsureUniqueObjectIds(programmingModel);
+        }
 
         programmingModel.addValidator(autoCompleteMethodInvalid);
         programmingModel.addValidator(mixinTypeValidator);
     }
+
+    private void addValidatorToEnsureUniqueObjectIds(ProgrammingModel pm) {
+
+        final _Multimaps.ListMultimap<ObjectSpecId, ObjectSpecification> collidingSpecsById =
+                _Multimaps.newConcurrentListMultimap();
+
+        final MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds =
+                new MetaModelValidatorVisiting.SummarizingVisitor(){
+
+                    @Override
+                    public boolean visit(ObjectSpecification objSpec, MetaModelValidator validator) {
+                        val specId = objSpec.getSpecId();
+                        collidingSpecsById.putElement(specId, objSpec);
+                        return true;
+                    }
+
+                    @Override
+                    public void summarize(MetaModelValidator validator) {
+                        for (val specId : collidingSpecsById.keySet()) {
+                            val collidingSpecs = collidingSpecsById.get(specId);
+                            val isCollision = collidingSpecs.size()>1;
+                            if(isCollision) {
+                                val csv = asCsv(collidingSpecs);
+
+                                collidingSpecs.forEach(spec->{
+                                    validator.onFailure(
+                                            spec,
+                                            spec.getIdentifier(),
+                                            "Object type '%s' mapped to multiple classes: %s",
+                                            specId.asString(),
+                                            csv);
+                                });
+
+
+                            }
+                        }
+                        // so can be revalidated again if necessary.
+                        collidingSpecsById.clear();
+                    }
+
+                    private String asCsv(final List<ObjectSpecification> specList) {
+                        return stream(specList)
+                                .map(ObjectSpecification::getFullIdentifier)
+                                .collect(Collectors.joining(","));
+                    }
+
+                };
+
+        pm.addValidator(ensureUniqueObjectIds);
+    }
+
 
     // //////////////////////////////////////
 

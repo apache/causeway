@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.specloader.validator;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
@@ -29,7 +30,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -38,23 +39,36 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
 
     @NonNull private Identifier origin;
     @NonNull private String message;
-    
+
     private static final Comparator<ValidationFailure> comparator = Comparator
             .<ValidationFailure, String>comparing(failure->failure.getOrigin().getClassName(), nullsFirst(naturalOrder()))
             .<String>thenComparing(failure->failure.getOrigin().getMemberName(), nullsFirst(naturalOrder()))
             .thenComparing(ValidationFailure::getMessage);
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ValidationFailure that = (ValidationFailure) o;
+        return message.equals(that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message);
+    }
+
     @Override
     public int compareTo(ValidationFailure o) {
-        
+
         if(equals(o)) {
             return 0; // for consistency with equals
         }
-        
+
         if(o==null) {
             return -1; // null last policy
         }
-        
+
         return comparator.compare(this, o);
     }
 

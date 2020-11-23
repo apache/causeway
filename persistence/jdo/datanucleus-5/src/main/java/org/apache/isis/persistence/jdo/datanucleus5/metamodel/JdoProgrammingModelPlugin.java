@@ -60,14 +60,14 @@ import lombok.val;
 
 @Component
 public class JdoProgrammingModelPlugin implements MetaModelRefiner {
-    
+
     @Inject private IsisConfiguration config;
 
     @Override
     public void refineProgrammingModel(ProgrammingModel pm) {
-        
+
         val step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
-        
+
         // come what may, we have to ignore the PersistenceCapable supertype.
         pm.addFactory(step1, RemoveJdoEnhancementTypesFacetFactory.class, Marker.JDO);
         // so we may as well also just ignore any 'jdo' prefixed methods here also.
@@ -76,7 +76,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
         pm.addFactory(step1, RemoveDatanucleusPersistableTypesFacetFactory.class, Marker.JDO);
         pm.addFactory(step1, RemoveDnPrefixedMethodsFacetFactory.class, Marker.JDO);
 
-        
+
         val step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
 
         pm.addFactory(step2, JdoPersistenceCapableAnnotationFacetFactory.class, Marker.JDO);
@@ -98,13 +98,9 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
 
         // -- validators
-        
+
         addValidatorToEnsureIdentityType(pm);
         addValidatorToCheckForUnsupportedAnnotations(pm);
-        
-        if(config.getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
-            addValidatorToEnsureUniqueObjectIds(pm);
-        }
 
     }
 
@@ -156,56 +152,6 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
             return true;
         }, Marker.JDO);
 
-    }
-
-    private void addValidatorToEnsureUniqueObjectIds(ProgrammingModel pm) {
-
-        final ListMultimap<ObjectSpecId, ObjectSpecification> collidingSpecsById = 
-                _Multimaps.newConcurrentListMultimap();
-
-        final MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds = 
-                new MetaModelValidatorVisiting.SummarizingVisitor(){
-
-            @Override
-            public boolean visit(ObjectSpecification objSpec, MetaModelValidator validator) {
-                val specId = objSpec.getSpecId();
-                collidingSpecsById.putElement(specId, objSpec);
-                return true;
-            }
-
-            @Override
-            public void summarize(MetaModelValidator validator) {
-                for (val specId : collidingSpecsById.keySet()) {
-                    val collidingSpecs = collidingSpecsById.get(specId);
-                    val isCollision = collidingSpecs.size()>1;
-                    if(isCollision) {
-                        val csv = asCsv(collidingSpecs);
-                        
-                        collidingSpecs.forEach(spec->{
-                            validator.onFailure(
-                                    spec,
-                                    spec.getIdentifier(),
-                                    "Object type '%s' mapped to multiple classes: %s", 
-                                    specId.asString(), 
-                                    csv);    
-                        });
-                        
-                        
-                    }
-                }
-                // so can be revalidated again if necessary.
-                collidingSpecsById.clear();
-            }
-
-            private String asCsv(final List<ObjectSpecification> specList) {
-                return stream(specList)
-                        .map(ObjectSpecification::getFullIdentifier)
-                        .collect(Collectors.joining(","));
-            }
-
-        };
-
-        pm.addValidator(ensureUniqueObjectIds);
     }
 
 
