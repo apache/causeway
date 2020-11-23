@@ -28,9 +28,13 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:fieldSet name="Annotated" id="annotation"/>
-					<cpt:fieldSet name="Contributed" id="contributed"/>
+					<cpt:fieldSet name="Properties" id="properties"/>
 					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+				</bs3:col>
+			</bs3:row>
+			<bs3:row>
+				<bs3:col span="12">
+					<cpt:collection id="events"/>
 				</bs3:col>
 			</bs3:row>
 		</bs3:col>

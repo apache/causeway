@@ -20,20 +20,42 @@ package demoapp.dom.annotDomain.Collection;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.types.Samples;
+import demoapp.dom.annotDomain.Collection.domainEvent.CollectionDomainEventVm;
+import demoapp.dom.annotDomain.Collection.domainEvent.CollectionDomainEventVm_addChild;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.CollectionMenu")
 @Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class CollectionMenu {
+
+    final FactoryService factoryService;
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of collections")
+    public CollectionDomainEventVm domainEvent(){
+        val collectionDomainEventVm = new CollectionDomainEventVm();
+
+        addChild(collectionDomainEventVm).act();
+        addChild(collectionDomainEventVm).act();
+        addChild(collectionDomainEventVm).act();
+
+        return collectionDomainEventVm;
+    }
+
+    private CollectionDomainEventVm_addChild addChild(CollectionDomainEventVm collectionDomainEventVm) {
+        return factoryService.mixin(CollectionDomainEventVm_addChild.class, collectionDomainEventVm);
+    }
 
 
 }

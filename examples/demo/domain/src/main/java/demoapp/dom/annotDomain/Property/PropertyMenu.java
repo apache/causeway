@@ -68,7 +68,6 @@ public class PropertyMenu {
         return propertyCommandJdoEntities.first();
     }
 
-
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of properties")
     public PropertyDomainEventVm domainEvent(){

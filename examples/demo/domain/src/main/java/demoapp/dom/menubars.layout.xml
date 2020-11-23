@@ -131,6 +131,10 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
             </mb3:section>
             <mb3:section>
+                <mb3:named>@Collection</mb3:named>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="domainEvent"/>
+            </mb3:section>
+            <mb3:section>
                 <mb3:named>@Property</mb3:named>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="commandPublishing"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="domainEvent"/>

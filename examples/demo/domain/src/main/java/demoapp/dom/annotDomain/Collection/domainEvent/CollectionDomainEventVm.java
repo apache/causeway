@@ -16,11 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.projecting;
+package demoapp.dom.annotDomain.Collection.domainEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -28,53 +30,58 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.annotDomain.Property.projecting.child.PropertyProjectingChildVm;
-import demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdo;
+import demoapp.dom.annotDomain.Collection.domainEvent.child.CollectionDomainEventChildVm;
 
-//tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyProjectingVm",
-        editing = Editing.ENABLED
+    nature=Nature.VIEW_MODEL,
+    objectType = "demo.CollectionDomainEventVm",
+    editing = Editing.ENABLED
 )
-@NoArgsConstructor
-public class PropertyProjectingVm implements HasAsciiDocDescription {
+//tag::class[]
+public class CollectionDomainEventVm implements HasAsciiDocDescription {
+    // ...
+//end::class[]
 
     public String title() {
-        return "Property#projecting";
+        return "Collection#domainEvent";
     }
+//tag::class[]
 
-//tag::property[]
-    @MemberOrder(name = "properties", sequence = "1")
-    public PropertyProjectingChildVm getFirstChild() {
-        return getChildren().get(0);
-    }
-//end::property[]
+    public static class ChildrenDomainEvent             // <.>
+        extends CollectionDomainEvent<CollectionDomainEventVm,CollectionDomainEventChildVm> {}
 
 //tag::children[]
-    @Collection
+    @Collection(
+        domainEvent = ChildrenDomainEvent.class         // <.>
+    )
+    @CollectionLayout(
+        describedAs = "@Collection(domainEvent = ChildrenDomainEvent.class)"
+    )
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
     @Getter @Setter
-    private List<PropertyProjectingChildVm> children = new ArrayList<>();
+    private List<CollectionDomainEventChildVm> children = new ArrayList<>();
 //end::children[]
+
+    int lastChildNumberAdded;
 
 }
 //end::class[]

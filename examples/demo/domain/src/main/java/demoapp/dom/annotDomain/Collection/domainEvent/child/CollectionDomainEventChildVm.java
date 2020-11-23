@@ -16,25 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.projecting;
-
-import java.util.ArrayList;
-import java.util.List;
+package demoapp.dom.annotDomain.Collection.domainEvent.child;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
@@ -42,39 +37,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.annotDomain.Property.projecting.child.PropertyProjectingChildVm;
 import demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdo;
 
 //tag::class[]
-@XmlRootElement(name = "root")
+@XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyProjectingVm",
-        editing = Editing.ENABLED
+        objectType = "demo.CollectionDomainEventChildVm"
 )
 @NoArgsConstructor
-public class PropertyProjectingVm implements HasAsciiDocDescription {
+public class CollectionDomainEventChildVm implements HasAsciiDocDescription {
 
-    public String title() {
-        return "Property#projecting";
+//end::class[]
+    public CollectionDomainEventChildVm(final String value) {
+        this.value = value;
     }
 
-//tag::property[]
+//tag::class[]
+    @Title
+    @Property()
     @MemberOrder(name = "properties", sequence = "1")
-    public PropertyProjectingChildVm getFirstChild() {
-        return getChildren().get(0);
-    }
-//end::property[]
-
-//tag::children[]
-    @Collection
-    @XmlElementWrapper(name = "children")
-    @XmlElement(name = "child")
+    @XmlElement(required = true)
     @Getter @Setter
-    private List<PropertyProjectingChildVm> children = new ArrayList<>();
-//end::children[]
+    private String value;
 
 }
 //end::class[]

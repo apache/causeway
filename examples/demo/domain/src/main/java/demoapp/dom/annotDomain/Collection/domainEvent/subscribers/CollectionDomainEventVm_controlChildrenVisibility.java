@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.domainEvent.subscribers;
+package demoapp.dom.annotDomain.Collection.domainEvent.subscribers;
 
 import javax.inject.Inject;
 
@@ -28,32 +28,32 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.annotDomain.Property.domainEvent.PropertyDomainEventVm;
+import demoapp.dom.annotDomain.Collection.domainEvent.CollectionDomainEventVm;
 
 
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlText", associateWithSequence = "1"
+    , associateWith = "controlChildren", associateWithSequence = "1"
 )
 @ActionLayout(
     promptStyle = PromptStyle.INLINE_AS_IF_EDIT
     , redirectPolicy = Redirect.EVEN_IF_SAME                        // <.>
 )
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlTextEditing {
+public class CollectionDomainEventVm_controlChildrenVisibility {
 
-    private final PropertyDomainEventVm propertyDomainEventVm;
+    private final CollectionDomainEventVm collectionDomainEventVm;
 
-    public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
+    public CollectionDomainEventVm act(final CollectionDomainEventControlStrategy controlStrategy) {
         eventControlService.controlStrategy = controlStrategy;
-        return propertyDomainEventVm;
+        return collectionDomainEventVm;
     }
-    public PropertyDomainEventControlStrategy default0Act() {
+    public CollectionDomainEventControlStrategy default0Act() {
         return eventControlService.controlStrategy;
     }
 
     @Inject
-    PropertyDomainEventControlService eventControlService;
+    CollectionDomainEventControlService eventControlService;
 }
 //end::class[]

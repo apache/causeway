@@ -1,13 +1,13 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Usually a domain event is emitted by the framework to emit whenever the user interacts with a property.
-Domain service subscribers can influence this interaction, either by:
+Domain service subscribers can influence these interaction by subscribing to these events, allowing them to:
 
-* hiding the property
-* disabling the property
-* validating proposed values for the property
-* performing arbitrary operations before the property has been modified (including modifying the proposed value of the property)
-* performing arbitrary operations after the property has been modified
+* hide the property
+* disable the property
+* validate proposed values for the property
+* perform arbitrary operations before the property has been modified (including modifying the proposed value of the property)
+* perform arbitrary operations after the property has been modified
 
 The `domainEvent` element specifies the class to be emitted; this must be a subclass of the abstract `org.apache.isis.applib.events.domain.PropertyDomainEvent` class.
 
@@ -21,7 +21,7 @@ The fallback domain event can be suppressed using the `isis.applib.annotation.pr
 
 == Annotated Property
 
-In the demo, the `PropertyDomainEventVmMakingThisLongerAndLonger` class defines an editable property, "text", annotated with `domainEvent`:
+In the demo, the `PropertyDomainEventVm` class defines an editable property, "text", annotated with `domainEvent`:
 
 [source,java]
 ----
@@ -33,7 +33,7 @@ include::PropertyDomainEventVm.java[tags=class]
 
 == Subscriber
 
-The `PropertyDomainEventControlService` is the subscriber:
+The `CollectionDomainEventControlService` is the subscriber:
 
 [source,java]
 ----
