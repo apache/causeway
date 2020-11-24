@@ -19,22 +19,23 @@
 package org.apache.isis.testdomain.applayer.publishing;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
+import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingExecutionPublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -45,17 +46,18 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingEntityPropertyChangePublishing.class,
+                Configuration_usingExecutionPublishing.class,
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG"
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
+                "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class EntityPropertyChangePublishingTest extends IsisIntegrationTestAbstract {
+class ExecutionPublishingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
@@ -66,30 +68,51 @@ class EntityPropertyChangePublishingTest extends IsisIntegrationTestAbstract {
     }
 
     private void given() {
-        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
+        ExecutionSubscriberForTesting.clearPublishedEntries(kvStore);
     }
-
+    
     private void verify(VerificationStage verificationStage) {
         switch(verificationStage) {
-        case PRE_COMMIT:
+        
         case FAILURE_CASE:
-            assertHasPropertyChangeEntries(Can.empty());
+            assertHasExecutionEntries(Can.empty());
             break;
         case POST_COMMIT:
-            assertHasPropertyChangeEntries(Can.of(
-                    "Jdo Book/name: 'Sample Book' -> 'Book #2'"));
+        
+            
+            Interaction interaction = null;
+            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
+            Object target = null;
+            Object argValue = "Book #2";
+            String targetMemberName = "name???";
+            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
+            assertHasExecutionEntries(Can.of(
+                    new Interaction.PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass)
+                    ));
             break;
         default:
             // ignore ... no checks
         }
     }
-
+    
     // -- HELPER
 
-    private void assertHasPropertyChangeEntries(Can<String> expectedAuditEntries) {
-        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
-        CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
+    private void assertHasExecutionEntries(Can<Execution<?, ?>> expectedExecutions) {
+        val actualExecutions = ExecutionSubscriberForTesting.getPublishedExecutions(kvStore);
+        CollectionAssertions.assertComponentWiseEquals(
+                expectedExecutions, actualExecutions, this::executionDifference);
     }
-
+    
+    private String executionDifference(Execution<?, ?> a, Execution<?, ?> b) {
+        if(!Objects.equals(a.getMemberIdentifier(), b.getMemberIdentifier())) {
+            return String.format("differing member identifier %s != %s", 
+                    a.getMemberIdentifier(), b.getMemberIdentifier());
+        }
+        if(!Objects.equals(a.getInteractionType(), b.getInteractionType())) {
+            return String.format("differing interaction type %s != %s", 
+                    a.getInteractionType(), b.getInteractionType());
+        }
+        return null; // no difference
+    }
 
 }

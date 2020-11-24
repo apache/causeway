@@ -26,58 +26,51 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
-public class EntityPropertyChangeSubscriberForTesting 
-implements EntityPropertyChangeSubscriber {
+@Service
+@Log4j2
+public class CommandSubscriberForTesting 
+implements CommandSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
-    
+
     @PostConstruct
     public void init() {
         log.info("about to initialize");
     }
 
     @Override
-    public void onChanging(final EntityPropertyChange entityPropertyChange) {
-
-        val propertyChangeEntry = String.format("%s/%s: '%s' -> '%s'", 
-                entityPropertyChange.getTargetClassName(), 
-                entityPropertyChange.getPropertyName(), 
-                entityPropertyChange.getPreValue(), 
-                entityPropertyChange.getPostValue());
+    public void onCompleted(Command command) {
 
         @SuppressWarnings("unchecked")
-        val propertyChangeEntries = (List<String>) kvStore.get(this, "propertyChangeEntries")
-            .orElseGet(ArrayList::new);
-        kvStore.put(this, "propertyChangeEntries", propertyChangeEntries);
-        
-        propertyChangeEntries.add(propertyChangeEntry);
-        
-        log.debug("property changes {}", propertyChangeEntry);
-    }
-    
-    // -- UTILITIES
-    
-    @SuppressWarnings("unchecked")
-    public static Can<String> getPropertyChangeEntries(KVStoreForTesting kvStore) {
-        return Can.ofCollection(
-                (List<String>) kvStore
-                .get(EntityPropertyChangeSubscriberForTesting.class, "propertyChangeEntries")
-                .orElse(null));
-    }
-    
-    public static void clearPropertyChangeEntries(KVStoreForTesting kvStore) {
-        kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
+        val publishedCommands = 
+        (List<Command>) kvStore.get(this, "publishedCommands").orElseGet(ArrayList::new);
+
+        publishedCommands.add(command);
+
+        kvStore.put(this, "publishedCommands", publishedCommands);
+        log.debug("publish command {}", ()->command.getCommandDto());
     }
 
-   
+    // -- UTILITIES
+
+    @SuppressWarnings("unchecked")
+    public static Can<Command> getPublishedCommands(KVStoreForTesting kvStore) {
+        return Can.ofCollection(
+                (List<Command>) kvStore.get(CommandSubscriberForTesting.class, "publishedCommands")
+                .orElse(null));
+    }
+
+    public static void clearPublishedEntries(KVStoreForTesting kvStore) {
+        kvStore.clear(CommandSubscriberForTesting.class);
+    }
+
 
 }

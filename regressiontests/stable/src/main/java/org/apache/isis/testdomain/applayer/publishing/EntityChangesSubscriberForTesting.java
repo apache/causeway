@@ -26,12 +26,9 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
-import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -41,28 +38,13 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Log4j2
 public class EntityChangesSubscriberForTesting 
-implements 
-    ExecutionSubscriber,
-    EntityChangesSubscriber {
+implements EntityChangesSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
 
     @PostConstruct
     public void init() {
         log.info("about to initialize");
-    }
-
-    @Override
-    public void onExecution(Execution<?, ?> execution) {
-
-        @SuppressWarnings("unchecked")
-        val publishedEntries = 
-        (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
-
-        publishedEntries.add(execution);
-
-        kvStore.put(this, "publishedExecutions", publishedEntries);
-        log.debug("publish execution {}", ()->MemberExecutionDtoUtils.toXml(execution.getDto()));
     }
 
     @Override
@@ -85,13 +67,6 @@ implements
     public static Can<EntityChanges> getPublishedObjects(KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<EntityChanges>) kvStore.get(EntityChangesSubscriberForTesting.class, "publishedObjects")
-                .orElse(null));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Can<Execution<?, ?>> getPublishedExecutions(KVStoreForTesting kvStore) {
-        return Can.ofCollection(
-                (List<Execution<?, ?>>) kvStore.get(EntityChangesSubscriberForTesting.class, "publishedExecutions")
                 .orElse(null));
     }
 

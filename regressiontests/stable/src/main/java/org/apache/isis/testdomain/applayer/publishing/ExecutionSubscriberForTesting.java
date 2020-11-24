@@ -26,58 +26,54 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
+import org.apache.isis.applib.services.iactn.Interaction.Execution;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
-public class EntityPropertyChangeSubscriberForTesting 
-implements EntityPropertyChangeSubscriber {
+@Service
+@Log4j2
+public class ExecutionSubscriberForTesting 
+implements ExecutionSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
-    
+
     @PostConstruct
     public void init() {
         log.info("about to initialize");
     }
 
     @Override
-    public void onChanging(final EntityPropertyChange entityPropertyChange) {
-
-        val propertyChangeEntry = String.format("%s/%s: '%s' -> '%s'", 
-                entityPropertyChange.getTargetClassName(), 
-                entityPropertyChange.getPropertyName(), 
-                entityPropertyChange.getPreValue(), 
-                entityPropertyChange.getPostValue());
+    public void onExecution(Execution<?, ?> execution) {
 
         @SuppressWarnings("unchecked")
-        val propertyChangeEntries = (List<String>) kvStore.get(this, "propertyChangeEntries")
-            .orElseGet(ArrayList::new);
-        kvStore.put(this, "propertyChangeEntries", propertyChangeEntries);
+        val publishedEntries = 
+        (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
+
+        publishedEntries.add(execution);
+
+        kvStore.put(this, "publishedExecutions", publishedEntries);
+        log.debug("publish execution {}", ()->MemberExecutionDtoUtils.toXml(execution.getDto()));
         
-        propertyChangeEntries.add(propertyChangeEntry);
+        System.err.println("exec: " + MemberExecutionDtoUtils.toXml(execution.getDto()));
         
-        log.debug("property changes {}", propertyChangeEntry);
-    }
-    
-    // -- UTILITIES
-    
-    @SuppressWarnings("unchecked")
-    public static Can<String> getPropertyChangeEntries(KVStoreForTesting kvStore) {
-        return Can.ofCollection(
-                (List<String>) kvStore
-                .get(EntityPropertyChangeSubscriberForTesting.class, "propertyChangeEntries")
-                .orElse(null));
-    }
-    
-    public static void clearPropertyChangeEntries(KVStoreForTesting kvStore) {
-        kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
     }
 
-   
+    // -- UTILITIES
+
+    @SuppressWarnings("unchecked")
+    public static Can<Execution<?, ?>> getPublishedExecutions(KVStoreForTesting kvStore) {
+        return Can.ofCollection(
+                (List<Execution<?, ?>>) kvStore.get(ExecutionSubscriberForTesting.class, "publishedExecutions")
+                .orElse(null));
+    }
+
+    public static void clearPublishedEntries(KVStoreForTesting kvStore) {
+        kvStore.clear(ExecutionSubscriberForTesting.class);
+    }
 
 }

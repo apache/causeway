@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -60,7 +61,9 @@ public class JdoProduct {
         return toString();
     }
 
-    @Property(editing = Editing.DISABLED) // used for an async rule check test
+    @Property(
+            executionPublishing = Publishing.ENABLED, // used for publishing tests
+            editing = Editing.DISABLED) // used for an async rule check test
     @Getter @Setter @Column(allowsNull = "true")
     private String name;
 //    public void setName(String name) {
