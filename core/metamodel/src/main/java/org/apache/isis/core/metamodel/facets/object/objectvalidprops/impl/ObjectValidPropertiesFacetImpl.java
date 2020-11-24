@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -47,7 +47,7 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
         final StringBuilder buf = new StringBuilder();
         final ManagedObject adapter = context.getTarget();
 
-        adapter.getSpecification().streamAssociations(Contributed.EXCLUDED)
+        adapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
         .filter(property->property.isVisible(adapter, context.getInitiatedBy(), where).isVetoed()) // ignore hidden properties
         .filter(property->property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed())  // ignore disabled properties

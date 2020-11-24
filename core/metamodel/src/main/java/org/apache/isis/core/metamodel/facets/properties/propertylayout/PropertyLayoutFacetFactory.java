@@ -24,21 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 
 import lombok.val;
 
-public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class PropertyLayoutFacetFactory 
+extends FacetFactoryAbstract {
 
     public PropertyLayoutFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
@@ -136,51 +128,6 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
         val unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         super.addFacet(unchangingFacet);
     }
-
-    @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
-
-        // cssClass
-        CssClassFacet cssClassFacet = null;
-        super.addFacet(cssClassFacet);
-
-
-        // describedAs
-        DescribedAsFacet describedAsFacet = null;
-        super.addFacet(describedAsFacet);
-
-
-        // hidden
-        HiddenFacet hiddenFacet = null;
-        super.addFacet(hiddenFacet);
-
-
-        // labelAt
-        LabelAtFacet labelAtFacet = null;
-        super.addFacet(labelAtFacet);
-
-
-        // multiLine
-        MultiLineFacet multiLineFacet = null;
-        super.addFacet(multiLineFacet);
-
-
-        // named
-        NamedFacet namedFacet = null;
-        super.addFacet(namedFacet);
-
-
-        // renderedAsDayBefore
-        RenderedAdjustedFacet renderedAdjustedFacet = null;
-        super.addFacet(renderedAdjustedFacet);
-
-
-        // typicalLength
-        TypicalLengthFacet typicalLengthFacet = null;
-        super.addFacet(typicalLengthFacet);
-
-    }
-
 
     FacetedMethod facetHolderFrom(final ProcessMethodContext processMethodContext) {
         return processMethodContext.getFacetHolder();

@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -81,7 +81,7 @@ implements MetaModelRefiner {
             public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
                 
                 val objectActions = 
-                        objectSpec.streamObjectActions(Contributed.EXCLUDED);
+                        objectSpec.streamObjectActions(MixedIn.EXCLUDED);
 
                 objectActions
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))

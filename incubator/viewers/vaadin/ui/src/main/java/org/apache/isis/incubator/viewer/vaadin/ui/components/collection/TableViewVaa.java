@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
@@ -98,7 +98,7 @@ public class TableViewVaa extends VerticalLayout {
     private Can<OneToOneAssociation> columnProperties(ObjectSpecification elementSpec, Where where) {
 
         //TODO honor column order (as per layout)
-        return elementSpec.streamProperties(Contributed.INCLUDED)
+        return elementSpec.streamProperties(MixedIn.INCLUDED)
                 .filter(ObjectAssociation.Predicates.staticallyVisible(where))
                 .collect(Can.toCan());
     }

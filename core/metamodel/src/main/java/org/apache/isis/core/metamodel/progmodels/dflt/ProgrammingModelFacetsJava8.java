@@ -151,7 +151,7 @@ import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSeman
 import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.val;
@@ -369,10 +369,10 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addValidator(new TitlesAndTranslationsValidator());
 
         addValidator((objectSpec, validator) -> {
-            final long numActions = objectSpec.streamObjectActions(Contributed.INCLUDED).count();
+            final long numActions = objectSpec.streamObjectActions(MixedIn.INCLUDED).count();
             if (numActions > 0L) {
                 
-                val actionIds = objectSpec.streamObjectActions(Contributed.INCLUDED)
+                val actionIds = objectSpec.streamObjectActions(MixedIn.INCLUDED)
                 .map(ObjectAction::getIdentifier)
                 .map(Identifier::toString)
                 .collect(Collectors.joining(", "));

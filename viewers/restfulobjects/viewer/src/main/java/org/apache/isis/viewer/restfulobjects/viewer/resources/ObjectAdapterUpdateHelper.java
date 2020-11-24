@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -63,7 +63,7 @@ public class ObjectAdapterUpdateHelper {
             final Intent intent) {
 
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
-        final Stream<ObjectAssociation> properties = objectSpec.streamAssociations(Contributed.EXCLUDED)
+        final Stream<ObjectAssociation> properties = objectSpec.streamAssociations(MixedIn.EXCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
 
         final boolean[] allOk = {true}; // simply a non-thread-safe value reference

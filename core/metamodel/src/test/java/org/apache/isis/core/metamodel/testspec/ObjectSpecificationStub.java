@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -122,7 +122,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
+    public Stream<ObjectAssociation> streamAssociations(final MixedIn contributed) {
         return fields.stream();
     }
 
@@ -303,12 +303,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final Contributed contributed) {
+    public Stream<ObjectAction> streamObjectActions(final MixedIn contributed) {
         return null;
     }
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final ActionType type, final Contributed contributed) {
+    public Stream<ObjectAction> streamObjectActions(final ActionType type, final MixedIn contributed) {
         return null;
     }
 

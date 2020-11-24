@@ -25,7 +25,7 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
@@ -109,7 +109,7 @@ implements MethodPrefixBasedFacetFactory {
             public boolean visit(ObjectSpecification objectSpec, MetaModelValidator metaModelValidator) {
 
                 // ensure accepted actions do not have any of the reserved prefixes
-                objectSpec.streamObjectActions(Contributed.EXCLUDED)
+                objectSpec.streamObjectActions(MixedIn.EXCLUDED)
                         .forEach(objectAction -> {
 
                             val actionId = objectAction.getId();

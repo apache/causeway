@@ -25,14 +25,12 @@ import java.util.regex.Pattern;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class CssClassFacetOnActionFromConfiguredRegexFactory 
+extends FacetFactoryAbstract {
 
     public CssClassFacetOnActionFromConfiguredRegexFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -60,25 +58,6 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
             return;
         }
         CssClassFacet cssClassFacet = createFromConfiguredRegexIfPossible(name, facetHolder);
-
-        // no-op if null
-        super.addFacet(cssClassFacet);
-    }
-
-
-    @Override
-    public void process(final ProcessContributeeMemberContext processMemberContext) {
-
-        final ObjectMember objectMember = processMemberContext.getFacetHolder();
-        if(!(objectMember instanceof ObjectAction)) {
-            return;
-        }
-        if(objectMember.containsNonFallbackFacet(CssClassFacet.class)) {
-            return;
-        }
-
-        final String id = objectMember.getId();
-        CssClassFacet cssClassFacet = createFromConfiguredRegexIfPossible(id, objectMember);
 
         // no-op if null
         super.addFacet(cssClassFacet);

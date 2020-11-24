@@ -210,7 +210,7 @@ public class MetaModelServiceMenu {
     }
 
     private static String header() {
-        return "classType,packageName,className,memberType,memberName,numParams,contributed?,contributedBy,mixedIn?,mixin,hidden,disabled,choices,autoComplete,default,validate";
+        return "classType,packageName,className,memberType,memberName,numParams,mixedIn?,mixin,hidden,disabled,choices,autoComplete,default,validate";
     }
 
     private static String asTextCsv(final DomainMember row) {
@@ -221,16 +221,14 @@ public class MetaModelServiceMenu {
                 row.getType(),
                 row.getMemberName(),
                 row.getNumParams(),
-                row.isContributed() ? "Y" : "",
-                        row.getContributedBy(),
-                        row.isMixedIn() ? "Y" : "",
-                                row.getMixin(),
-                                row.getHidden(),
-                                row.getDisabled(),
-                                row.getChoices(),
-                                row.getAutoComplete(),
-                                row.getDefault(),
-                                row.getValidate())
+                row.isMixedIn() ? "Y" : "",
+                row.getMixin(),
+                row.getHidden(),
+                row.getDisabled(),
+                row.getChoices(),
+                row.getAutoComplete(),
+                row.getDefault(),
+                row.getValidate())  
                 .collect(Collectors.joining(","));
     }
 

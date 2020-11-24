@@ -98,7 +98,7 @@ import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.Typi
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -128,13 +128,13 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
         // all the actions of this type
         val actionTypes = inferActionTypes();
-        final Stream<ObjectAction> objectActions = objectSpecification.streamObjectActions(actionTypes, Contributed.INCLUDED);
+        final Stream<ObjectAction> objectActions = objectSpecification.streamObjectActions(actionTypes, MixedIn.INCLUDED);
 
         // and all the collections of this type
-        final Stream<OneToManyAssociation> collections = objectSpecification.streamCollections(Contributed.INCLUDED);
+        final Stream<OneToManyAssociation> collections = objectSpecification.streamCollections(MixedIn.INCLUDED);
 
         // and all the properties of this type
-        final Stream<OneToOneAssociation> properties = objectSpecification.streamProperties(Contributed.INCLUDED);
+        final Stream<OneToOneAssociation> properties = objectSpecification.streamProperties(MixedIn.INCLUDED);
 
         // for each action, ...
         objectActions.forEach(objectAction -> {
@@ -191,7 +191,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
                     new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
-            objectSpecification.streamObjectActions(actionTypes, Contributed.INCLUDED)
+            objectSpecification.streamObjectActions(actionTypes, MixedIn.INCLUDED)
             .filter(ObjectAction.Predicates.associatedWith(collection))
             .forEach(action->{
 

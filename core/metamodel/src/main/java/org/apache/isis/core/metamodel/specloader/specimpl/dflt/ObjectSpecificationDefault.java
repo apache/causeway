@@ -56,7 +56,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -289,7 +289,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         final Stream<ObjectAction> actions =
-                streamObjectActions(type, Contributed.INCLUDED);
+                streamObjectActions(type, MixedIn.INCLUDED);
         return firstAction(actions, id, parameters);
     }
 
@@ -298,7 +298,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
-                streamObjectActions(type, Contributed.INCLUDED);
+                streamObjectActions(type, MixedIn.INCLUDED);
         return firstAction(actions, id);
     }
 
@@ -307,7 +307,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
-                streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
+                streamObjectActions(ActionType.ALL, MixedIn.INCLUDED);
         return firstAction(actions, id);
     }
 
@@ -382,7 +382,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void cataloguePropertiesAndCollections(BiConsumer<Method, ObjectMember> onMember) {
-        streamAssociations(Contributed.EXCLUDED)
+        streamAssociations(MixedIn.EXCLUDED)
         .forEach(field->{
             final Stream<Facet> facets = field.streamFacets().filter(ImperativeFacet.PREDICATE);
             facets.forEach(facet->{
@@ -395,7 +395,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void catalogueActions(BiConsumer<Method, ObjectMember> onMember) {
-        streamObjectActions(Contributed.INCLUDED)
+        streamObjectActions(MixedIn.INCLUDED)
         .forEach(userAction->{
             final Stream<Facet> facets = userAction.streamFacets().filter(ImperativeFacet.PREDICATE);
             facets.forEach(facet->{

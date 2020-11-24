@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -131,7 +131,7 @@ public final class Util {
             final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
 
         final List<ObjectAssociation> list =
-                objectSpecification.streamAssociations(Contributed.INCLUDED)
+                objectSpecification.streamAssociations(MixedIn.INCLUDED)
                 .filter(associationPredicate.and(associationsWith(visibility)))
                 .collect(Collectors.toList());
 
@@ -144,7 +144,7 @@ public final class Util {
             final ClassExcluder classExcluder) {
         val actionTypes = actionTypesFor(visibility);
 
-        return objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED)
+        return objectSpec.streamObjectActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->
                 !classExcluder.exclude(objectAction) &&
                 !visibility.isPublic() || isVisibleForPublic(objectAction)

@@ -62,7 +62,7 @@ import org.apache.isis.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.val;
@@ -371,7 +371,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             }
         }
 
-        final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(actionType, Contributed.INCLUDED);
+        final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(actionType, MixedIn.INCLUDED);
 
         return objectActions
                 // skip if annotated to not be included in repository menu using legacy mechanism

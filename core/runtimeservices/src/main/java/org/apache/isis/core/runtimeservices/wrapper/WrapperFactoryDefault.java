@@ -85,7 +85,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -379,7 +379,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
-        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamObjectActions(Contributed.INCLUDED)
+        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamObjectActions(MixedIn.INCLUDED)
                 .filter(ObjectActionMixedIn.class::isInstance)
                 .map(ObjectActionMixedIn.class::cast)
                 .filter(x -> x.hasMixinAction((ObjectAction) mixinMember))

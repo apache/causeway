@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 import org.apache.isis.core.metamodel.facets.properties.typicallen.annotation.TypicalLengthFacetOnPropertyAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -110,10 +110,10 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockSpec).getFullIdentifier();
                 will(returnValue(Bar.class.getName()));
 
-                allowing(mockSpec).streamAssociations(with(Contributed.INCLUDED));//, with(ObjectAssociation.Predicates.PROPERTIES));
+                allowing(mockSpec).streamAssociations(with(MixedIn.INCLUDED));//, with(ObjectAssociation.Predicates.PROPERTIES));
                 will(returnValue(properties.stream().filter(ObjectAssociation.Predicates.PROPERTIES)));
 
-                allowing(mockSpec).streamAssociations(with(Contributed.INCLUDED));//, with(ObjectAssociation.Predicates.COLLECTIONS));
+                allowing(mockSpec).streamAssociations(with(MixedIn.INCLUDED));//, with(ObjectAssociation.Predicates.COLLECTIONS));
                 will(returnValue(collections.stream().filter(ObjectAssociation.Predicates.COLLECTIONS)));
 
                 allowing(mockSpec).getFacet(HiddenFacet.class);
@@ -127,7 +127,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockSpec).getCorrespondingClass();
                 will(returnValue(Bar.class));
 
-                allowing(mockSpec).streamObjectActions(with(Contributed.INCLUDED));
+                allowing(mockSpec).streamObjectActions(with(MixedIn.INCLUDED));
                 will(returnValue(actions.stream()));
 
                 allowing(mockProp).getId();

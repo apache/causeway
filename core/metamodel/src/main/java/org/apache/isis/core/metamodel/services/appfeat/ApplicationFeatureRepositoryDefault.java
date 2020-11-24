@@ -51,12 +51,11 @@ import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -140,13 +139,13 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
 
-        final List<ObjectAssociation> properties = spec.streamAssociations(Contributed.INCLUDED)
+        final List<ObjectAssociation> properties = spec.streamAssociations(MixedIn.INCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
                 .collect(Collectors.toList());
-        final List<ObjectAssociation> collections = spec.streamAssociations(Contributed.INCLUDED)
+        final List<ObjectAssociation> collections = spec.streamAssociations(MixedIn.INCLUDED)
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
                 .collect(Collectors.toList());
-        final List<ObjectAction> actions = spec.streamObjectActions(Contributed.INCLUDED)
+        final List<ObjectAction> actions = spec.streamObjectActions(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
         if (properties.isEmpty() && collections.isEmpty() && actions.isEmpty()) {
@@ -169,20 +168,17 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             final Integer maxLength = returnType == String.class ? valueOf(property, MaxLengthFacet.class) : null;
             final Integer typicalLength = returnType == String.class ? valueOf(property, TypicalLengthFacet.class) : null;
             final boolean derived = !property.containsNonFallbackFacet(PropertySetterFacet.class);
-            final boolean contributed = property instanceof ContributeeMember;
-            addedMembers = newProperty(classFeatureId, property, returnType, contributed, maxLength, typicalLength, derived) || addedMembers;
+            addedMembers = newProperty(classFeatureId, property, returnType, maxLength, typicalLength, derived) || addedMembers;
         }
         for (final ObjectAssociation collection : collections) {
             final boolean derived = !(collection.containsNonFallbackFacet(CollectionAddToFacet.class) || collection.containsNonFallbackFacet(CollectionRemoveFromFacet.class));
             final Class<?> elementType = correspondingClassFor(collection.getSpecification());
-            final boolean contributed = collection instanceof ContributeeMember;
-            addedMembers = newCollection(classFeatureId, collection, elementType, contributed, derived) || addedMembers;
+            addedMembers = newCollection(classFeatureId, collection, elementType, derived) || addedMembers;
         }
         for (final ObjectAction action : actions) {
             final Class<?> returnType = correspondingClassFor(action.getReturnType());
             final SemanticsOf actionSemantics = action.getSemantics();
-            final boolean contributed = action instanceof ContributeeMember;
-            addedMembers = newAction(classFeatureId, action, returnType, contributed, actionSemantics) || addedMembers;
+            addedMembers = newAction(classFeatureId, action, returnType, actionSemantics) || addedMembers;
         }
 
         if (!addedMembers) {
@@ -251,28 +247,26 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             final ApplicationFeatureId classFeatureId,
             final ObjectMember objectMember,
             final Class<?> returnType,
-            final boolean contributed,
-            final Integer maxLength, final Integer typicalLength,
+            final Integer maxLength, 
+            final Integer typicalLength,
             final boolean derived) {
-        return newMember(classFeatureId, objectMember, ApplicationMemberType.PROPERTY, returnType, contributed, derived, maxLength, typicalLength, null);
+        return newMember(classFeatureId, objectMember, ApplicationMemberType.PROPERTY, returnType, derived, maxLength, typicalLength, null);
     }
 
     private boolean newCollection(
             final ApplicationFeatureId classFeatureId,
             final ObjectMember objectMember,
             final Class<?> returnType,
-            final boolean contributed,
             final boolean derived) {
-        return newMember(classFeatureId, objectMember, ApplicationMemberType.COLLECTION, returnType, contributed, derived, null, null, null);
+        return newMember(classFeatureId, objectMember, ApplicationMemberType.COLLECTION, returnType, derived, null, null, null);
     }
 
     private boolean newAction(
             final ApplicationFeatureId classFeatureId,
             final ObjectMember objectMember,
             final Class<?> returnType,
-            final boolean contributed,
             final SemanticsOf actionSemantics) {
-        return newMember(classFeatureId, objectMember, ApplicationMemberType.ACTION, returnType, contributed, null, null, null, actionSemantics);
+        return newMember(classFeatureId, objectMember, ApplicationMemberType.ACTION, returnType, null, null, null, actionSemantics);
     }
 
     private boolean newMember(
@@ -280,14 +274,14 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             final ObjectMember objectMember,
             final ApplicationMemberType memberType,
             final Class<?> returnType,
-            final boolean contributed,
             final Boolean derived,
-            final Integer maxLength, final Integer typicalLength,
+            final Integer maxLength, 
+            final Integer typicalLength,
             final SemanticsOf actionSemantics) {
         if (objectMember.isAlwaysHidden()) {
             return false;
         }
-        newMember(classFeatureId, objectMember.getId(), memberType, returnType, contributed, derived, maxLength, typicalLength, actionSemantics);
+        newMember(classFeatureId, objectMember.getId(), memberType, returnType, derived, maxLength, typicalLength, actionSemantics);
         return true;
     }
 
@@ -296,7 +290,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             final String memberId,
             final ApplicationMemberType memberType,
             final Class<?> returnType,
-            final boolean contributed,
             final Boolean derived,
             final Integer maxLength, final Integer typicalLength,
             final SemanticsOf actionSemantics) {
@@ -306,7 +299,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         memberFeature.setMemberType(memberType);
 
         memberFeature.setReturnTypeName(returnType != null ? returnType.getSimpleName() : null);
-        memberFeature.setContributed(contributed);
         memberFeature.setDerived(derived);
         memberFeature.setPropertyMaxLength(maxLength);
         memberFeature.setPropertyTypicalLength(typicalLength);

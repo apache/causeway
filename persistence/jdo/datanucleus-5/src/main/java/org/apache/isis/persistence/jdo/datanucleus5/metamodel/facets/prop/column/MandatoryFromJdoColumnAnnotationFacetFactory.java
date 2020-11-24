@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -137,7 +137,7 @@ implements MetaModelRefiner {
                 }
 
                 final Stream<ObjectAssociation> associations = objectSpec
-                        .streamAssociations(Contributed.EXCLUDED)
+                        .streamAssociations(MixedIn.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
 
                 associations

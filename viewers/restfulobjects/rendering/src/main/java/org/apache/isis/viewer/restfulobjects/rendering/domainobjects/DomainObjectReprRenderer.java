@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -290,7 +290,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final JsonRepresentation appendTo =
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
         final List<ObjectAssociation> associations = objectAdapter.getSpecification()
-                .streamAssociations(Contributed.INCLUDED)
+                .streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
         addProperties(objectAdapter, appendTo, associations);
@@ -302,7 +302,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             if (mode.isRegular()) {
                 final Stream<ObjectAction> actions = objectAdapter.getSpecification()
-                        .streamObjectActions(Contributed.INCLUDED);
+                        .streamObjectActions(MixedIn.INCLUDED);
 
                 addActions(objectAdapter, actions, appendTo);
             }

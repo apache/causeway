@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
@@ -64,7 +64,7 @@ public final class JdoPropertyUtils {
 
 
         final List<ObjectAssociation> propertyList = objSpec
-                .streamAssociations(Contributed.EXCLUDED)
+                .streamAssociations(MixedIn.EXCLUDED)
                 .filter(predicate)
                 .limit(2)
                 .collect(Collectors.toList());

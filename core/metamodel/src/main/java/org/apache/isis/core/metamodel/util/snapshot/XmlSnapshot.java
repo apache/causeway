@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -475,7 +475,7 @@ public class XmlSnapshot implements Snapshot {
 
         if (field instanceof OneToOneAssociation) {
 
-            if (field.getSpecification().streamAssociations(Contributed.INCLUDED).limit(1).count() == 0L) {
+            if (field.getSpecification().streamAssociations(MixedIn.INCLUDED).limit(1).count() == 0L) {
                 if (log.isDebugEnabled()) {
                     log.debug("includeField(Pl, Vec, Str): field is value; done");
                 }
@@ -640,7 +640,7 @@ public class XmlSnapshot implements Snapshot {
 
         isisMetaModel.setAttributesForClass(element, oidAsString(adapter).toString());
 
-        final List<ObjectAssociation> fields = nos.streamAssociations(Contributed.INCLUDED)
+        final List<ObjectAssociation> fields = nos.streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
         if (log.isDebugEnabled()) {
             log.debug("objectToElement(NO): processing fields");

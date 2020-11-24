@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -193,7 +193,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             }
 
             // don't check if domain service has only programmatic methods
-            final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.INCLUDED);
+            final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(MixedIn.INCLUDED);
             return objectActions.anyMatch(__->true); // return true if not empty
 
         }

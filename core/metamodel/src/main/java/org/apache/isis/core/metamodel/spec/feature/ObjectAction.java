@@ -368,7 +368,7 @@ public interface ObjectAction extends ObjectMember {
                     .and(ObjectAction.Predicates.excludeWizardActions(adapterSpec));
 
             final Stream<ObjectAction> userActions = 
-                    adapterSpec.streamObjectActions(actionType, Contributed.INCLUDED)
+                    adapterSpec.streamObjectActions(actionType, MixedIn.INCLUDED)
                     .filter(predicate);
             userActions
             .forEach(topLevelActions::add);
@@ -409,7 +409,7 @@ public interface ObjectAction extends ObjectMember {
                     .and(ObjectAction.Predicates.excludeWizardActions(objectSpecification));
 
             final Stream<ObjectAction> userActions = 
-                    objectSpecification.streamObjectActions(type, Contributed.INCLUDED)
+                    objectSpecification.streamObjectActions(type, MixedIn.INCLUDED)
                     .filter(predicate);
             userActions
             .forEach(associatedActions::add);
@@ -595,7 +595,7 @@ public interface ObjectAction extends ObjectMember {
 
             final Set<String> associationNamesAndIds = _Sets.newHashSet(); 
 
-            adapterSpec.streamAssociations(Contributed.INCLUDED)
+            adapterSpec.streamAssociations(MixedIn.INCLUDED)
             .forEach(ass->{
                 associationNamesAndIds.add(_Strings.lower(ass.getName()));
                 associationNamesAndIds.add(_Strings.lower(ass.getId()));

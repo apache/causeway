@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -204,7 +204,7 @@ implements CollectionCountProvider {
                 .and(associationDoesNotReferenceParent(parentSpecIfAny));
 
         final Stream<? extends ObjectAssociation> propertyList = 
-                typeOfSpec.streamAssociations(Contributed.INCLUDED)
+                typeOfSpec.streamAssociations(MixedIn.INCLUDED)
                 .filter(predicate);
 
         final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();

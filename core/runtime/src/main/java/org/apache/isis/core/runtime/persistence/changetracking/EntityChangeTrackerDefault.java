@@ -67,7 +67,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
 
@@ -264,7 +264,7 @@ implements
         log.debug("enlist entity's property changes for auditing {}", entity);
 
         entity.getSpecification()
-        .streamAssociations(Contributed.EXCLUDED)
+        .streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
         .filter(property->!property.isNotPersisted())
         .map(property->AdapterAndProperty.of(entity, property))

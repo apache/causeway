@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -119,7 +119,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
             {
                 final Stream<ObjectAssociation> properties = 
-                        spec.streamAssociations(Contributed.EXCLUDED)
+                        spec.streamAssociations(MixedIn.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
 
                 properties
@@ -130,7 +130,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
             {
                 final Stream<ObjectAssociation> associations = 
-                        spec.streamAssociations(Contributed.EXCLUDED)
+                        spec.streamAssociations(MixedIn.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.COLLECTIONS);
 
                 associations
@@ -141,7 +141,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
             {
                 final Stream<ObjectAction> actions = 
-                        spec.streamObjectActions(Contributed.INCLUDED);
+                        spec.streamObjectActions(MixedIn.INCLUDED);
 
                 actions
                 .filter(action->!exclude(action))

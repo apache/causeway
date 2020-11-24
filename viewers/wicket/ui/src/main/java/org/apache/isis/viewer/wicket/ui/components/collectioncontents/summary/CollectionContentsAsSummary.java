@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
@@ -86,7 +86,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         addOrReplace(feedback);
 
         final Stream<ObjectAssociation> numberAssociations = elementSpec
-                .streamAssociations(Contributed.EXCLUDED)
+                .streamAssociations(MixedIn.EXCLUDED)
                 .filter(CollectionContentsAsSummaryFactory.OF_TYPE_BIGDECIMAL);
 
         final RepeatingView repeating = new RepeatingView(ID_REPEATING_SUMMARY);

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -97,7 +97,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     private void addMembers() {
         final JsonRepresentation membersList = JsonRepresentation.newArray();
         representation.mapPut("members", membersList);
-        final Stream<ObjectAssociation> associations = objectSpecification.streamAssociations(Contributed.EXCLUDED);
+        final Stream<ObjectAssociation> associations = objectSpecification.streamAssociations(MixedIn.EXCLUDED);
 
         associations.forEach(association->{
             if (association.isOneToOneAssociation()) {
@@ -111,7 +111,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             }
         });
 
-        final Stream<ObjectAction> actions = objectSpecification.streamObjectActions(Contributed.INCLUDED);
+        final Stream<ObjectAction> actions = objectSpecification.streamObjectActions(MixedIn.INCLUDED);
 
         actions.forEach(action->{
             final LinkBuilder linkBuilder = ActionDescriptionReprRenderer

@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -343,7 +343,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private static ObjectAction findActionElseNull(
             final ObjectSpecification specification,
             final String localActionId) {
-        final Stream<ObjectAction> objectActions = specification.streamObjectActions(Contributed.INCLUDED);
+        final Stream<ObjectAction> objectActions = specification.streamObjectActions(MixedIn.INCLUDED);
 
         return objectActions
                 .filter(objectAction->
@@ -356,7 +356,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final ObjectSpecification specification,
             final String localPropertyId) {
 
-        final Stream<ObjectAssociation> associations = specification.streamAssociations(Contributed.INCLUDED);
+        final Stream<ObjectAssociation> associations = specification.streamAssociations(MixedIn.INCLUDED);
 
         return associations
                 .filter(association->

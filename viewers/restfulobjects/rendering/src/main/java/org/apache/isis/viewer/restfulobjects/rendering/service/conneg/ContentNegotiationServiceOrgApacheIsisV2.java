@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
@@ -332,7 +332,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         val where = resourceContext.getWhere();
         
         owner.getSpecification()
-        .streamCollections(Contributed.INCLUDED)
+        .streamCollections(MixedIn.INCLUDED)
         .forEach(collection->{
             
             val collectionRepresentation = JsonRepresentation.newArray();
@@ -360,7 +360,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
         val where = resourceContext.getWhere();
         final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
-                .streamProperties(Contributed.INCLUDED);
+                .streamProperties(MixedIn.INCLUDED);
 
         properties.forEach(property->{
             final Consent visibility = property.isVisible(objectAdapter, interactionInitiatedBy, where);

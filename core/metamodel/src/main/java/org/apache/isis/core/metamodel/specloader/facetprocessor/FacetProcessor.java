@@ -31,13 +31,12 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -95,13 +94,6 @@ public class FacetProcessor {
      */
     private final _Lazy<List<MethodFilteringFacetFactory>> methodFilteringFactories =
             _Lazy.threadSafe(this::init_methodFilteringFactories);
-
-    /**
-     * All registered {@link FacetFactory factories} that implement
-     * {@link ContributeeMemberFacetFactory}.
-     */
-    private final _Lazy<List<ContributeeMemberFacetFactory>> contributeeMemberFacetFactories =
-            _Lazy.threadSafe(this::init_contributeeMemberFacetFactories);
 
     /**
      * All registered {@link FacetFactory factories} that implement
@@ -352,15 +344,7 @@ public class FacetProcessor {
         .forEach(facetFactory->facetFactory.process(processMethodContext));
     }
 
-
     public void processMemberOrder(ObjectMember facetHolder) {
-        
-        //((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
-        
-        val processMemberContext =
-                new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(facetHolder);
-        contributeeMemberFacetFactories.get().forEach(facetFactory->
-            facetFactory.process(processMemberContext));
         
     }
 
@@ -418,7 +402,6 @@ public class FacetProcessor {
         factoryListByFeatureType.clear();
         methodPrefixes.clear();
         methodFilteringFactories.clear();
-        contributeeMemberFacetFactories.clear();
         propertyOrCollectionIdentifyingFactories.clear();
     }
     
@@ -453,17 +436,6 @@ public class FacetProcessor {
             }
         }
         return methodFilteringFactories;
-    }
-
-    private List<ContributeeMemberFacetFactory> init_contributeeMemberFacetFactories() {
-        val contributeeMemberFacetFactories = _Lists.<ContributeeMemberFacetFactory>newArrayList();
-        for (val factory : factories) {
-            if (factory instanceof ContributeeMemberFacetFactory) {
-                final ContributeeMemberFacetFactory memberOrderingFacetFactory = (ContributeeMemberFacetFactory) factory;
-                contributeeMemberFacetFactories.add(memberOrderingFacetFactory);
-            }
-        }
-        return contributeeMemberFacetFactories;
     }
 
     private List<PropertyOrCollectionIdentifyingFacetFactory> init_propertyOrCollectionIdentifyingFactories() {

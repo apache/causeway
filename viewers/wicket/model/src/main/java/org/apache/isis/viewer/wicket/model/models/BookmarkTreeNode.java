@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
@@ -197,7 +197,7 @@ public class BookmarkTreeNode implements Serializable {
             val entityModel = (EntityModel) candidateBookmarkableModel;
             val candidateAdapter = entityModel.getObject();
             final Stream<ObjectAssociation> properties = candidateAdapter.getSpecification()
-                    .streamAssociations(Contributed.EXCLUDED)
+                    .streamAssociations(MixedIn.EXCLUDED)
                     .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES);
 
             properties

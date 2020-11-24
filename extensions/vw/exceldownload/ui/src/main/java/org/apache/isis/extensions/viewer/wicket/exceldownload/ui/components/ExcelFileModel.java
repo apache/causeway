@@ -42,7 +42,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -85,7 +85,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
 
     private Can<OneToOneAssociation> columnProperties() {
         val typeOfSpec = model.getTypeOfSpecification();
-        return typeOfSpec.streamProperties(Contributed.INCLUDED)
+        return typeOfSpec.streamProperties(MixedIn.INCLUDED)
                 .filter(ObjectAssociation.Predicates.staticallyVisible(
                         model.isParented()
                         ? Where.PARENTED_TABLES

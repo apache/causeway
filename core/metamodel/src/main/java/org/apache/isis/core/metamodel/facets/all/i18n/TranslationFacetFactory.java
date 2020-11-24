@@ -24,12 +24,12 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
-public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class TranslationFacetFactory
+extends FacetFactoryAbstract {
 
     public TranslationFacetFactory() {
         super(FeatureType.EVERYTHING);
@@ -60,15 +60,6 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
         final IdentifiedHolder holder = processParameterContext.getFacetHolder();
 
         final String context = holder.getIdentifier().toFullIdentityString();
-        translateName(holder, context);
-        translateDescription(holder, context);
-    }
-
-    @Override
-    public void process(final ProcessContributeeMemberContext processMemberContext) {
-        final IdentifiedHolder holder = processMemberContext.getFacetHolder();
-
-        final String context = holder.getIdentifier().toClassAndNameIdentityString();
         translateName(holder, context);
         translateDescription(holder, context);
     }

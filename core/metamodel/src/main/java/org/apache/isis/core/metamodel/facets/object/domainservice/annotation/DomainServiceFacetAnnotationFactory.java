@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
@@ -119,7 +119,7 @@ implements MetaModelRefiner {
                         return;
                     }
 
-                    final Stream<ObjectAssociation> associations = thisSpec.streamAssociations(Contributed.EXCLUDED);
+                    final Stream<ObjectAssociation> associations = thisSpec.streamAssociations(MixedIn.EXCLUDED);
 
                     final String associationNames = associations
                             .map(ObjectAssociation::getName)

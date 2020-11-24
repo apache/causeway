@@ -30,7 +30,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
@@ -65,7 +65,7 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
         }
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
         final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
-        final Stream<ObjectAssociation> associations = elementSpec.streamAssociations(Contributed.EXCLUDED);
+        final Stream<ObjectAssociation> associations = elementSpec.streamAssociations(MixedIn.EXCLUDED);
 
         return appliesIf(associations.anyMatch(OF_TYPE_BIGDECIMAL));
     }

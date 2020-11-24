@@ -250,28 +250,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     }
 
 
-
-
-    // -- contributed (property)
-
-    public static class ContributedDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, Boolean> {}
-
-    /**
-     * For packages and class names, will be null.
-     */
-    @Property(
-            domainEvent = ContributedDomainEvent.class
-            )
-    @MemberOrder(name="Contributed", sequence = "2.5.5")
-    public boolean isContributed() {
-        return getFeature().isContributed();
-    }
-
-    public boolean hideContributed() {
-        return getType().hideMember();
-    }
-
-
     // -- permissions (collection)
     public static class PermissionsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {}
 

@@ -63,7 +63,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -128,7 +128,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * @since 2.0
      */
     public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
-        return streamObjectActions(Contributed.INCLUDED)
+        return streamObjectActions(MixedIn.INCLUDED)
                 .filter(MixedInMember.class::isInstance)
                 .map(MixedInMember.class::cast)
                 .filter(member->member.getMixinType() == onType)
@@ -448,13 +448,13 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     default Stream<FacetHolder> streamFacetHolders(){
         
         val self = Stream.of(this);
-        val actions = streamObjectActions(Contributed.EXCLUDED);
-        val actionParameters = streamObjectActions(Contributed.EXCLUDED)
+        val actions = streamObjectActions(MixedIn.EXCLUDED);
+        val actionParameters = streamObjectActions(MixedIn.EXCLUDED)
                 .flatMap(action->action.getParameterCount()>0
                         ? action.getParameters().stream()
                                 : Stream.empty());
-        val properties = streamProperties(Contributed.EXCLUDED);
-        val collections = streamCollections(Contributed.EXCLUDED);
+        val properties = streamProperties(MixedIn.EXCLUDED);
+        val collections = streamCollections(MixedIn.EXCLUDED);
 
         return _Streams.concat(self, actions, actionParameters, properties, collections);
         

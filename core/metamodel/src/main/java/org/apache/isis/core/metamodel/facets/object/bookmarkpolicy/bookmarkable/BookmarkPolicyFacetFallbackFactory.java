@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract
@@ -57,7 +57,7 @@ implements MetaModelRefiner {
         
         programmingModel.addValidator((objectSpec, validator) -> {
 
-            final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
+            final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(MixedIn.EXCLUDED);
 
             objectActions
             .filter(objectAction->{

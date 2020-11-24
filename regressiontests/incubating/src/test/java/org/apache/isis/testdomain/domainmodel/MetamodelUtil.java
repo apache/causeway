@@ -23,7 +23,7 @@ import java.util.Set;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.val;
 
@@ -35,11 +35,11 @@ final class MetamodelUtil {
         
         allSpecs.stream()
         .forEach(spec->{
-            spec.streamObjectActions(Contributed.INCLUDED)
+            spec.streamObjectActions(MixedIn.INCLUDED)
             .forEach(feature->{
                 features.add(feature.getIdentifier().toString());
             });
-            spec.streamAssociations(Contributed.INCLUDED)
+            spec.streamAssociations(MixedIn.INCLUDED)
             .forEach(feature->{
                 features.add(feature.getIdentifier().toString());
             });

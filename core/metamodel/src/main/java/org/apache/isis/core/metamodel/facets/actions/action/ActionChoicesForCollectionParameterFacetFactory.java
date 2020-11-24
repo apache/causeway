@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterA
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
@@ -78,7 +78,7 @@ implements MetaModelRefiner {
                     final ObjectSpecification objectSpec,
                     final MetaModelValidator validator) {
                 
-                objectSpec.streamObjectActions(Contributed.INCLUDED)
+                objectSpec.streamObjectActions(MixedIn.INCLUDED)
                 .forEach(objectAction->{
                     if(objectAction instanceof ObjectActionMixedIn) {
                         // we'll report only the mixin

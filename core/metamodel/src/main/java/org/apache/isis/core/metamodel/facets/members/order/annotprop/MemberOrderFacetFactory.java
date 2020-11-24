@@ -22,11 +22,11 @@ package org.apache.isis.core.metamodel.facets.members.order.annotprop;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 
-public class MemberOrderFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class MemberOrderFacetFactory 
+extends FacetFactoryAbstract  {
 
     public MemberOrderFacetFactory() {
         super(FeatureType.MEMBERS);
@@ -39,11 +39,6 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
 
         // no-op if facet is null
         FacetUtil.addFacet(memberOrderFacet);
-    }
-
-    @Override
-    public void process(final ProcessContributeeMemberContext processMemberContext) {
-
     }
 
     private MemberOrderFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {

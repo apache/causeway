@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -32,8 +31,8 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
 import lombok.val;
 
-
-public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class CollectionLayoutFacetFactory 
+extends FacetFactoryAbstract {
 
     public CollectionLayoutFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
@@ -84,40 +83,6 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
     }
 
-    @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
-
-        // cssClass
-        CssClassFacet cssClassFacet = null;
-        super.addFacet(cssClassFacet);
-
-
-        // describedAs
-        DescribedAsFacet describedAsFacet = null;
-        super.addFacet(describedAsFacet);
-
-
-        // hidden
-        HiddenFacet hiddenFacet = null;
-        super.addFacet(hiddenFacet);
-
-
-        // named
-        NamedFacet namedFacet = null;
-        super.addFacet(namedFacet);
-
-
-        // paged
-        PagedFacet pagedFacet = null;
-        super.addFacet(pagedFacet);
-
-
-        // sortedBy
-        SortedByFacet sortedByFacet = null;
-        super.addFacet(sortedByFacet);
-
-
-    }
 
 
 }

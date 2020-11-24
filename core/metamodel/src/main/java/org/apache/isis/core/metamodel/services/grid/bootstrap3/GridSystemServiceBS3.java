@@ -64,7 +64,7 @@ import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
 import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -178,7 +178,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
-        val objectActionById = ObjectMember.mapById( objectSpec.streamObjectActions(Contributed.INCLUDED));
+        val objectActionById = ObjectMember.mapById( objectSpec.streamObjectActions(MixedIn.INCLUDED));
 
         val propertyLayoutDataById = bs3Grid.getAllPropertiesById();
         val collectionLayoutDataById = bs3Grid.getAllCollectionsById();

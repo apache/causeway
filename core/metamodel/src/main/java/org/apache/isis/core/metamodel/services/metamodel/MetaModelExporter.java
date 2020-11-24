@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -237,7 +237,7 @@ class MetaModelExporter {
         }
 
         final List<Property> properties = domainClass.getProperties().getProp();
-        specification.streamProperties(Contributed.INCLUDED)
+        specification.streamProperties(MixedIn.INCLUDED)
         .map(otoa -> asXsdType(otoa, domainClassByObjectSpec, config))
         .forEach(properties::add);
 
@@ -255,7 +255,7 @@ class MetaModelExporter {
         }
 
         final List<Collection> collections = domainClass.getCollections().getColl();
-        specification.streamCollections(Contributed.INCLUDED)
+        specification.streamCollections(MixedIn.INCLUDED)
         .map(otma -> asXsdType(otma, domainClassByObjectSpec, config))
         .forEach(collections::add);
 
@@ -273,7 +273,7 @@ class MetaModelExporter {
         }
 
         final List<Action> actions = domainClass.getActions().getAct();
-        specification.streamObjectActions(Contributed.INCLUDED)
+        specification.streamObjectActions(MixedIn.INCLUDED)
         .map(action ->asXsdType(action, domainClassByObjectSpec, config))
         .forEach(actions::add);
 

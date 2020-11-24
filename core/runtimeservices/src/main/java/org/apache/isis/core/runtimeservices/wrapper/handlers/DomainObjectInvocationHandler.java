@@ -22,7 +22,6 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -58,13 +57,11 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 import lombok.SneakyThrows;
@@ -173,12 +170,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         val objectMember = targetSpec.getMemberElseFail(method);
-        final ContributeeMember contributeeMember = determineIfContributed(args, objectMember);
-        //_Assert.assertNull(contributeeMember); //TODO if never fails, can remove legacy code (potentially needed when invoking mixins via wrapper)
+        val memberName = objectMember.getName();
 
-        final String memberName = objectMember.getName();
-
-        final Intent intent = ImperativeFacet.Util.getIntent(objectMember, method);
+        val intent = ImperativeFacet.Util.getIntent(objectMember, method);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
             throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberName));
         }
@@ -245,7 +239,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
                 if (mixinMember != null) {
                     if(mixinMember instanceof ObjectAction) {
-                        return handleActionMethod(contributeeAdapter, args, (ObjectAction)mixinMember, contributeeMember);
+                        return handleActionMethod(contributeeAdapter, args, (ObjectAction)mixinMember);
                     }
                     if(mixinMember instanceof OneToOneAssociation) {
                         return handleGetterMethodOnProperty(contributeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
@@ -260,7 +254,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             }
 
             // this is just a regular non-mixin action.
-            return handleActionMethod(targetAdapter, args, objectAction, contributeeMember);
+            return handleActionMethod(targetAdapter, args, objectAction);
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
@@ -274,8 +268,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return null;
         }
         val specification = domainObjectAdapter.getSpecification();
-        val objectActions = specification.streamObjectActions(Contributed.INCLUDED);
-        val objectAssociations = specification.streamAssociations(Contributed.INCLUDED);
+        val objectActions = specification.streamObjectActions(MixedIn.INCLUDED);
+        val objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
 
         final Stream<ObjectMember> objectMembers = Stream.concat(objectActions, objectAssociations);
         return objectMembers
@@ -292,61 +286,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return shouldEnforceRules()
                 ? InteractionInitiatedBy.USER
                         : InteractionInitiatedBy.FRAMEWORK;
-    }
-
-    // see if this is a contributed property/collection/action
-    private ContributeeMember determineIfContributed(
-            final Object[] args,
-            final ObjectMember objectMember) {
-
-        if (!(objectMember instanceof ObjectAction)) {
-            return null;
-        }
-
-        final ObjectAction objectAction = (ObjectAction) objectMember;
-
-        for (final Object arg : args) {
-            if (arg == null) {
-                continue;
-            }
-            val argumentSpec = loadSpecification(arg.getClass());
-
-            if (args.length == 1) {
-                // is this a contributed property/collection?
-                final Stream<ObjectAssociation> associations =
-                        argumentSpec.streamAssociations(Contributed.INCLUDED);
-
-
-                final Optional<ContributeeMember> contributeeMember = associations
-                        .filter(association->association instanceof ContributeeMember)
-                        .map(association->(ContributeeMember) association)
-                        .filter(contributeeMember1->contributeeMember1.isContributedBy(objectAction))
-                        .findAny();
-
-                if(contributeeMember.isPresent()) {
-                    return contributeeMember.get();
-                }
-            }
-
-            // is this a contributed action?
-            {
-                final Stream<ObjectAction> actions =
-                        argumentSpec.streamObjectActions(Contributed.INCLUDED);
-
-                final Optional<ContributeeMember> contributeeMember = actions
-                        .filter(action->action instanceof ContributeeMember)
-                        .map(action->(ContributeeMember) action)
-                        .filter(contributeeMember1->contributeeMember1.isContributedBy(objectAction))
-                        .findAny();
-
-                if(contributeeMember.isPresent()) {
-                    return contributeeMember.get();
-                }
-            }
-
-        }
-
-        return null;
     }
 
     private boolean isEnhancedEntityMethod(final Method method) {
@@ -615,36 +554,15 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private Object handleActionMethod(
             final ManagedObject targetAdapter, 
             final Object[] args,
-            final ObjectAction objectAction,
-            final ContributeeMember contributeeMember) {
+            final ObjectAction objectAction) {
 
         val head = objectAction.interactionHead(targetAdapter);
-        
-        final ManagedObject contributeeAdapter;
-        if(contributeeMember != null) {
-            val contributeeParamPosition = contributeeMember.getContributeeParamIndex();
-            val contributee = args[contributeeParamPosition];
-            
-            contributeeAdapter = getObjectManager().adapt(contributee);
-             
-        } else {
-            contributeeAdapter = null;
-        }
-        
         val argAdapters = asObjectAdaptersUnderlying(args);
 
         runValidationTask(()->{
-            if(contributeeMember != null) {
-                checkVisibility(contributeeAdapter, contributeeMember);
-                checkUsability(contributeeAdapter, contributeeMember);
-                
-                // nothing to do for contributed properties or collections
-                
-            } else {
-                checkVisibility(targetAdapter, objectAction);
-                checkUsability(targetAdapter, objectAction);
-                checkValidity(head, objectAction, argAdapters);
-            }
+            checkVisibility(targetAdapter, objectAction);
+            checkUsability(targetAdapter, objectAction);
+            checkValidity(head, objectAction, argAdapters);
         });
         
         return runExecutionTask(()->{

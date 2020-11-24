@@ -74,7 +74,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -678,16 +678,19 @@ implements ObjectSpecification {
     // -- ASSOCIATIONS
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
+    public Stream<ObjectAssociation> streamAssociations(final MixedIn contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         if(contributed.isIncluded()) {
             createMixedInAssociations(); // only if not already
+            synchronized(unmodifiableAssociations) {
+                return stream(unmodifiableAssociations.get());
+            }
         }
         
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
-                    .filter(ContributeeMember.Predicates.regularElse(contributed));    
+                    .filter(MixedIn::isNotMixedIn);    
         }
         
     }
@@ -725,21 +728,22 @@ implements ObjectSpecification {
     @Override
     public Optional<ObjectAssociation> getAssociation(final String id) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        return streamAssociations(Contributed.INCLUDED)
+        return streamAssociations(MixedIn.INCLUDED)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
     }
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final ActionType type, final Contributed contributed) {
+    public Stream<ObjectAction> streamObjectActions(final ActionType type, final MixedIn contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         if(contributed.isIncluded()) {
             createMixedInActions(); // only if not already
+            return stream(objectActionsByType.get(type));
         }
 
         return stream(objectActionsByType.get(type))
-                .filter(ContributeeMember.Predicates.regularElse(contributed));
+                .filter(MixedIn::isNotMixedIn);
     }
 
     // -- mixin associations (properties and collections)
@@ -777,7 +781,7 @@ implements ObjectSpecification {
         val mixinMethodName = mixinFacet.value();
 
         final Stream<ObjectAction> mixinActions = specification
-                .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
+                .streamObjectActions(ActionType.ALL, MixedIn.INCLUDED);
 
         mixinActions
         .filter(Predicates::isMixedInAssociation)
@@ -832,7 +836,7 @@ implements ObjectSpecification {
         val mixinMethodName = mixinFacet.value();
 
         final Stream<ObjectAction> mixinsActions = mixinSpec
-                .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
+                .streamObjectActions(ActionType.ALL, MixedIn.INCLUDED);
 
         mixinsActions
         .filter(Predicates::isMixedInAction)

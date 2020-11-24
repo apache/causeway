@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -156,7 +156,7 @@ class ExcelConverter {
 
         final List<ManagedObject> adapters = domainObjects.stream().map(objectManager::adapt).collect(Collectors.toList());
 
-        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(Contributed.INCLUDED)
+        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(MixedIn.INCLUDED)
                                                         .filter(VISIBLE_PROPERTIES)
                                                         .collect(Collectors.toList());
 
@@ -248,7 +248,7 @@ class ExcelConverter {
 
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(factory.getCls());
 
-        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(Contributed.INCLUDED)
+        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(MixedIn.INCLUDED)
                 .filter(VISIBLE_PROPERTIES)
                 .collect(Collectors.toList());
 
@@ -544,7 +544,7 @@ class ExcelConverter {
     }
 
     private static OneToOneAssociation getAssociation(final ObjectSpecification objectSpec, final String propertyNameOrId) {
-        final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(Contributed.INCLUDED);
+        final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(MixedIn.INCLUDED);
         return associations
                 .filter(OneToOneAssociation.class::isInstance)
                 .map(OneToOneAssociation.class::cast)

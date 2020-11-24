@@ -74,7 +74,7 @@ public interface ObjectActionContainer {
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));  
     }
 
-    default Stream<ObjectAction> streamObjectActions(Contributed contributed) {
+    default Stream<ObjectAction> streamObjectActions(MixedIn contributed) {
         return streamObjectActions(ActionType.ALL, contributed);
     }
 
@@ -82,9 +82,9 @@ public interface ObjectActionContainer {
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamObjectActions(ActionType type, Contributed contributee);
+    Stream<ObjectAction> streamObjectActions(ActionType type, MixedIn contributee);
 
-    default Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, Contributed contributee) {
+    default Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, MixedIn contributee) {
         return stream(types)
                 .flatMap(type->streamObjectActions(type, contributee));
     }

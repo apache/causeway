@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
@@ -47,7 +47,7 @@ public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstra
     }
 
     public static ProjectionFacet create(final ObjectSpecification objectSpecification) {
-        return objectSpecification.streamProperties(Contributed.EXCLUDED)
+        return objectSpecification.streamProperties(MixedIn.EXCLUDED)
         .filter(propertySpec -> {
             val projectingFacet = propertySpec.getFacet(ProjectingFacet.class);
             return projectingFacet != null && !projectingFacet.isFallback()

@@ -92,9 +92,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     @Getter @Setter
     private String returnTypeName;
 
-    @Getter @Setter
-    private boolean contributed;
-
     /**
      * Only for {@link ApplicationMemberType#PROPERTY} and {@link ApplicationMemberType#COLLECTION}
      */

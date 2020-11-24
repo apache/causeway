@@ -25,13 +25,11 @@ import java.util.regex.Pattern;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
 public class CssClassFaFacetOnMemberFactory 
-extends FacetFactoryAbstract 
-implements ContributeeMemberFacetFactory {
+extends FacetFactoryAbstract {
 
     public CssClassFaFacetOnMemberFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -43,10 +41,6 @@ implements ContributeeMemberFacetFactory {
 
         // no-op if null
         super.addFacet(cssClassFaFacet);
-    }
-
-    @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
     }
 
 

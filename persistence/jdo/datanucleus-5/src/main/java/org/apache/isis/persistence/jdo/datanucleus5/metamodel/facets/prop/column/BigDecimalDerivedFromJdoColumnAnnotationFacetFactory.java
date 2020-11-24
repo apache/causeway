@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -124,7 +124,7 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(Contributed.EXCLUDED)
+                final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(MixedIn.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
 
                 associations

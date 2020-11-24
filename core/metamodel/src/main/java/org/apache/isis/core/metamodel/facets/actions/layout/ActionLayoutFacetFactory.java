@@ -19,9 +19,7 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -41,7 +39,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class ActionLayoutFacetFactory 
+extends FacetFactoryAbstract {
 
     public ActionLayoutFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -133,39 +132,6 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
         final boolean b = mixinFacet != null && !mixinFacet.isFallback();
         return b;
-    }
-
-    @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
-        final FacetHolder holder = processMemberContext.getFacetHolder();
-
-        // cssClass
-        CssClassFacet cssClassFacet = null;
-        super.addFacet(cssClassFacet);
-
-        // cssClassFa
-        CssClassFaFacet cssClassFaFacet = null;
-        super.addFacet(cssClassFaFacet);
-
-        // describedAs
-        DescribedAsFacet describedAsFacet = null;
-        super.addFacet(describedAsFacet);
-
-        // hidden
-        HiddenFacet hiddenFacet = null;
-        super.addFacet(hiddenFacet);
-
-        // named
-        NamedFacet namedFacet = null;
-        super.addFacet(namedFacet);
-
-        // position
-        ActionPositionFacet actionPositionFacet = null;
-        if(! holder.containsNonFallbackFacet(ActionPositionFacet.class)) {
-            actionPositionFacet = new ActionPositionFacetFallback(holder);
-        }
-        super.addFacet(actionPositionFacet);
-
     }
 
 }

@@ -56,7 +56,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 import lombok.val;
@@ -131,20 +130,6 @@ public class DomainMemberDefault implements DomainMember {
     @XmlElement @Override
     public String getNumParams() {
         return action!=null?""+action.getParameterCount():"";
-    }
-
-    @XmlElement @Override
-    public boolean isContributed() {
-        return member instanceof ContributeeMember;
-    }
-
-    @XmlElement @Override
-    public String getContributedBy() {
-        if(member instanceof ContributeeMember) {
-            final ObjectSpecification serviceContributedBy = ((ContributeeMember) member).getServiceContributedBy();
-            return serviceContributedBy.getCorrespondingClass().getSimpleName();
-        }
-        return "";
     }
 
     @XmlElement @Override

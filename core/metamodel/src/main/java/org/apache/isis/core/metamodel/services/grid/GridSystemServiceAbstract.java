@@ -78,7 +78,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLe
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyXml;
 import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -181,7 +181,7 @@ implements GridSystemService<G> {
 
         val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
-        val objectActionById = ObjectMember.mapById(objectSpec.streamObjectActions(Contributed.INCLUDED));
+        val objectActionById = ObjectMember.mapById(objectSpec.streamObjectActions(MixedIn.INCLUDED));
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
         fcGrid.visit(new Grid.VisitorAdapter() {
@@ -327,7 +327,7 @@ implements GridSystemService<G> {
     protected static Stream<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
         @SuppressWarnings("rawtypes")
         Stream associations = objectSpec
-        .streamAssociations(Contributed.INCLUDED)
+        .streamAssociations(MixedIn.INCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES);
         return _Casts.uncheckedCast(associations);
     }
@@ -335,7 +335,7 @@ implements GridSystemService<G> {
     protected static Stream<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
         @SuppressWarnings("rawtypes")
         Stream associations = objectSpec
-        .streamAssociations(Contributed.INCLUDED)
+        .streamAssociations(MixedIn.INCLUDED)
         .filter(ObjectAssociation.Predicates.COLLECTIONS);
         return _Casts.uncheckedCast(associations);
     }
