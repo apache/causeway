@@ -37,7 +37,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.val;
 
 /**
- * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt> and <tt>BackgroundServiceDefault</tt>.
+ * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt> 
+ * and <tt>BackgroundServiceDefault</tt>.
  */
 public class CommandUtil {
 

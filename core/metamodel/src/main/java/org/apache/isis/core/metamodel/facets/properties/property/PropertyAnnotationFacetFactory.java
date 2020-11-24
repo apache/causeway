@@ -93,9 +93,9 @@ implements MetaModelRefiner {
         processModify(processMethodContext, propertyIfAny);
         processHidden(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
-        processCommand(processMethodContext, propertyIfAny);
+        processCommandPublishing(processMethodContext, propertyIfAny);
         processProjecting(processMethodContext, propertyIfAny);
-        processPublishing(processMethodContext, propertyIfAny);
+        processExecutionPublishing(processMethodContext, propertyIfAny);
         processMaxLength(processMethodContext, propertyIfAny);
         processMustSatisfy(processMethodContext, propertyIfAny);
         processNotPersisted(processMethodContext, propertyIfAny);
@@ -234,7 +234,9 @@ implements MetaModelRefiner {
         super.addFacet(disabledFacet);
     }
 
-    void processCommand(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
+    void processCommandPublishing(
+            final ProcessMethodContext processMethodContext, 
+            final Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 
         //
@@ -246,11 +248,11 @@ implements MetaModelRefiner {
             return;
         }
 
-        // check for @Property(command=...)
-        val commandFacet = CommandPublishingFacetForPropertyAnnotation
+        // check for @Property(commandPublishing=...)
+        val commandPublishing = CommandPublishingFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector());
 
-        super.addFacet(commandFacet);
+        super.addFacet(commandPublishing);
     }
 
     void processProjecting(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -264,7 +266,9 @@ implements MetaModelRefiner {
 
     }
 
-    void processPublishing(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
+    void processExecutionPublishing(
+            final ProcessMethodContext processMethodContext, 
+            final Optional<Property> propertyIfAny) {
 
         
         val holder = processMethodContext.getFacetHolder();
@@ -279,11 +283,11 @@ implements MetaModelRefiner {
             return;
         }
 
-        // check for @Property(publishing=...)
-        val facet = ExecutionPublishingPropertyFacetForPropertyAnnotation
+        // check for @Property(executionPublishing=...)
+        val executionPublishingFacet = ExecutionPublishingPropertyFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder);
 
-        super.addFacet(facet);
+        super.addFacet(executionPublishingFacet);
     }
 
 

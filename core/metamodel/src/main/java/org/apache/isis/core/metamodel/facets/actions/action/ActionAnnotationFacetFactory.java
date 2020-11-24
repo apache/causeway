@@ -68,10 +68,10 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         processSemantics(processMethodContext, actionIfAny);
 
         // must come after processing semantics
-        processCommand(processMethodContext, actionIfAny);
+        processCommandPublishing(processMethodContext, actionIfAny);
 
         // must come after processing semantics
-        processPublishing(processMethodContext, actionIfAny);
+        processExecutionPublishing(processMethodContext, actionIfAny);
 
         processTypeOf(processMethodContext, actionIfAny);
         processAssociateWith(processMethodContext, actionIfAny);
@@ -189,7 +189,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         super.addFacet(facet);
     }
 
-    void processCommand(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
+    void processCommandPublishing(
+            final ProcessMethodContext processMethodContext, 
+            final Optional<Action> actionIfAny) {
 
         val facetedMethod = processMethodContext.getFacetHolder();
 
@@ -202,13 +204,16 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        // check for @Action(command=...)
-        val commandFacet = CommandPublishingFacetForActionAnnotation.create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod);
+        // check for @Action(commandPublishing=...)
+        val commandPublishingFacet = CommandPublishingFacetForActionAnnotation
+                .create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod);
 
-        super.addFacet(commandFacet);
+        super.addFacet(commandPublishingFacet);
     }
 
-    void processPublishing(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
+    void processExecutionPublishing(
+            final ProcessMethodContext processMethodContext, 
+            final Optional<Action> actionIfAny) {
 
         val facetedMethod = processMethodContext.getFacetHolder();
         
@@ -222,9 +227,10 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        // check for @Action(publishing=...)
-        val facet = ExecutionPublishingActionFacetForActionAnnotation.create(actionIfAny, getConfiguration(), facetedMethod);
-        super.addFacet(facet);
+        // check for @Action(executionPublishing=...)
+        val executionPublishingFacet = ExecutionPublishingActionFacetForActionAnnotation
+                .create(actionIfAny, getConfiguration(), facetedMethod);
+        super.addFacet(executionPublishingFacet);
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {

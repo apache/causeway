@@ -43,7 +43,7 @@ public class CommandPublishingFacetForActionAnnotation extends CommandPublishing
 
         return actionsIfAny
                 .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
-                .map(action -> {
+                .<CommandPublishingFacet>map(action -> {
 
                     Publishing commandPublishing = action.commandPublishing();
                     final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
@@ -65,7 +65,7 @@ public class CommandPublishingFacetForActionAnnotation extends CommandPublishing
                             }
                             // else fall through
                         default:
-                            return (CommandPublishingFacet)new CommandPublishingFacetForActionAnnotationAsConfigured(
+                            return new CommandPublishingFacetForActionAnnotationAsConfigured(
                                     holder, servicesInjector);
                         }
                     case DISABLED:

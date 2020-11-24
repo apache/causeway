@@ -201,8 +201,8 @@ implements ImperativeFacet {
 
         if(executionExceptionIfAny != null) {
             throw executionExceptionIfAny instanceof RuntimeException
-            ? ((RuntimeException)executionExceptionIfAny)
-                    : new RuntimeException(executionExceptionIfAny);
+                ? ((RuntimeException)executionExceptionIfAny)
+                : new RuntimeException(executionExceptionIfAny);
         }
 
         val returnedPojo = priorExecution.getReturned();
