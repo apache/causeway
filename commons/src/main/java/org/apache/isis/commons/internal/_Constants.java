@@ -52,6 +52,11 @@ public final class _Constants {
      * Convenient e.g. for reflective invocation
      */
     public static final Class<?>[] emptyClasses = new Class[0];
+    
+    /**
+     * Convenient e.g. for reflective invocation
+     */
+    public static final Class<?>[] classesOfObject = new Class[] { Object.class };
 
     /**
      * Convenient e.g. for toArray conversions

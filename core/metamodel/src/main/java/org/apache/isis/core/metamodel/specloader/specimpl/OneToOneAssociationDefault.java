@@ -19,12 +19,11 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.UUID;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -189,13 +188,12 @@ implements OneToOneAssociation {
 
         val propertySetterFacet = getFacet(PropertySetterFacet.class);
         if (propertySetterFacet == null) {
-            return ownerAdapter;
+            throw _Exceptions.unexpectedCodeReach();
         }
         
         EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(ownerAdapter, newReferencedAdapter);
 
-        ManagedObject targetPossiblyCloned = propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
-        return targetPossiblyCloned;
+        return propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }
 
     private ManagedObject clearValue(
@@ -203,6 +201,11 @@ implements OneToOneAssociation {
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val propertyClearFacet = getFacet(PropertyClearFacet.class);
+        
+        if (propertyClearFacet == null) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
+        
         return propertyClearFacet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 

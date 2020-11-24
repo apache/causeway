@@ -22,17 +22,18 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
@@ -54,20 +55,17 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     private boolean resolveObjectChangedEnabled;
 
     public DelegatingInvocationHandlerDefault(
-            final ServiceRegistry serviceRegistry,
-            final T delegate,
+            final @NonNull MetaModelContext metaModelContext,
+            final @NonNull T delegate,
             final SyncControl syncControl) {
 
-        if (delegate == null) {
-            throw new IllegalArgumentException("delegate must not be null");
-        }
         this.delegate = delegate;
-        this.wrapperFactory = serviceRegistry.lookupServiceElseFail(WrapperFactory.class);
-        this.objectManager = serviceRegistry.lookupServiceElseFail(ObjectManager.class);
+        this.objectManager = metaModelContext.getObjectManager();
+        this.wrapperFactory = metaModelContext.getWrapperFactory();
         this.syncControl = syncControl;
 
         try {
-            equalsMethod = delegate.getClass().getMethod("equals", new Class[] { Object.class });
+            equalsMethod = delegate.getClass().getMethod("equals", _Constants.classesOfObject);
             hashCodeMethod = delegate.getClass().getMethod("hashCode", _Constants.emptyClasses);
             toStringMethod = delegate.getClass().getMethod("toString", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
@@ -96,9 +94,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         val loadRequest = ObjectLoader.Request.of(adapter.getSpecification(), rootOid.getIdentifier());
         
         objectManager.loadObject(loadRequest);
-        
-        //legacy of 
-        //getPersistenceSession().refreshRootInTransaction(domainObject);
     }
     
     protected void resolveIfRequired(final Object domainObject) {

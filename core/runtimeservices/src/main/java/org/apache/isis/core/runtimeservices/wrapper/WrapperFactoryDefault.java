@@ -87,11 +87,9 @@ import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
@@ -348,8 +346,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     private <T> MemberAndTarget forRegular(Method method, T domainObject) {
 
-        val targetObjSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
-        val objectMember = targetObjSpec.getMember(method);
+        val targetObjSpec = specificationLoader.loadSpecification(method.getDeclaringClass());
+        val objectMember = targetObjSpec.getMember(method).orElse(null);
         if(objectMember == null) {
             return MemberAndTarget.notFound();
         }
@@ -369,15 +367,15 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     private <T> MemberAndTarget forMixin(Method method, T mixedIn) {
 
-        final ObjectSpecificationDefault mixinSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
-        final ObjectMember mixinMember = mixinSpec.getMember(method);
+        val mixinSpec = specificationLoader.loadSpecification(method.getDeclaringClass());
+        val mixinMember = mixinSpec.getMember(method).orElse(null);
         if (mixinMember == null) {
             return MemberAndTarget.notFound();
         }
 
         // find corresponding action of the mixedIn (this is the 'real' target).
         val mixedInClass = mixedIn.getClass();
-        val mixedInSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(mixedInClass);
+        val mixedInSpec = specificationLoader.loadSpecification(mixedInClass);
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).

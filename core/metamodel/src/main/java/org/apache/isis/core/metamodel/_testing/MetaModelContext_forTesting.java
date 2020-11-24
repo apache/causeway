@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
@@ -47,10 +48,10 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistryDefault;
+import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -86,6 +87,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private IsisConfiguration configuration = newIsisConfiguration();
     
     private ObjectManager objectManager;
+    
+    private WrapperFactory wrapperFactory;
 
     private SpecificationLoader specificationLoader;
     
@@ -149,6 +152,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         val fields = _Lists.of(
                 getConfiguration(),
                 getObjectManager(),
+                getWrapperFactory(),
                 getIsisBeanTypeClassifier(),
                 getIsisBeanTypeRegistry(),
                 systemEnvironment,
@@ -277,6 +281,14 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             objectManager = ObjectManagerDefault.forTesting((MetaModelContext)this);
         }
         return objectManager;
+    }
+    
+    @Override
+    public WrapperFactory getWrapperFactory() {
+        if(wrapperFactory==null) {
+            wrapperFactory = new WrapperFactory_forTesting();
+        }
+        return wrapperFactory;
     }
 
     public void runWithConfigProperties(Consumer<Map<String, String>> setup, Runnable runnable) {

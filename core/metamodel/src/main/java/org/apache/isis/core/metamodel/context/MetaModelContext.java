@@ -26,6 +26,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -57,6 +58,8 @@ public interface MetaModelContext {
     IsisConfiguration getConfiguration();
 
     ObjectManager getObjectManager();
+    
+    WrapperFactory getWrapperFactory();
     
     ServiceInjector getServiceInjector();
 
@@ -206,6 +209,11 @@ public interface MetaModelContext {
             return getMetaModelContext().getObjectManager();
         }
 
+        @Override
+        default WrapperFactory getWrapperFactory() {
+            return getMetaModelContext().getWrapperFactory();
+        }
+        
     }
 
     

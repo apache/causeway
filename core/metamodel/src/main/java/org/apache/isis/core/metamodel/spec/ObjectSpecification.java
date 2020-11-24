@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.spec;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Objects;
@@ -70,6 +71,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -97,7 +99,28 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
         s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
 
+    /**
+     * @param memberId
+     * @return optionally the ObjectMember associated with given {@code memberId}, 
+     * based on whether given memberId exists
+     */
     Optional<? extends ObjectMember> getMember(String memberId);
+    
+    /**
+     * @param method
+     * @return optionally the ObjectMember associated with given {@code method}, 
+     * based on whether such an association exists
+     */
+    Optional<? extends ObjectMember> getMember(Method method);
+    
+    default ObjectMember getMemberElseFail(final @NonNull Method method) {
+        return getMember(method).orElseThrow(()->{
+            val methodName = method.getName();
+            val msg = "Method '" + methodName + "' does not correspond "
+                    + "to any of the object's fields or actions.";
+            return new UnsupportedOperationException(msg);
+        });
+    }
 
     /**
      * @param onType

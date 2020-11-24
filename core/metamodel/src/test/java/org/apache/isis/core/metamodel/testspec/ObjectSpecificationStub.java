@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.testspec;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -349,6 +350,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     public String getManagedBeanName() {
         // [2158] not implemented yet
         return null;
+    }
+
+    @Override
+    public Optional<? extends ObjectMember> getMember(Method method) {
+        return Optional.empty();
     }
 
 }

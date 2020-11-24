@@ -84,6 +84,24 @@ public final class _Assert {
         }
     }
 
+    // -- NULL
+    
+    public static void assertNull(Object object) {
+        assertNull(object, (String) null);
+    }
+
+    public static void assertNull(Object object, String message) {
+        if (object!=null) {
+            fail(message, "null", "not null");
+        }
+    }
+
+    public static void assertNull(Object object, Supplier<String> lazyMessage) {
+        if (object!=null) {
+            fail(lazyMessage.get(), "null", "not null");
+        }
+    }
+    
     // -- NOT NULL
 
     public static void assertNotNull(Object object) {

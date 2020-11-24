@@ -41,9 +41,9 @@ import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -64,10 +64,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -106,20 +104,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final T domainObject,
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
-        super(metaModelContext.getServiceRegistry(), domainObject, syncControl);
+        super(metaModelContext, domainObject, syncControl);
 
         this.mmContext = metaModelContext;
         this.proxyContextHandler = proxyContextHandler;
 
         try {
-            titleMethod = getDelegate().getClass().getMethod("title", new Class[]{});
+            titleMethod = getDelegate().getClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
         try {
-            __isis_saveMethod = WrappingObject.class.getMethod("__isis_save", new Class[]{});
-            __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", new Class[]{});
-            __isis_executionModes = WrappingObject.class.getMethod("__isis_executionModes", new Class[]{});
+            __isis_saveMethod = WrappingObject.class.getMethod("__isis_save", _Constants.emptyClasses);
+            __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", _Constants.emptyClasses);
+            __isis_executionModes = WrappingObject.class.getMethod("__isis_executionModes", _Constants.emptyClasses);
             
 
         } catch (final NoSuchMethodException nsme) {
@@ -174,8 +172,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return getSyncControl().getExecutionModes();
         }
 
-        final ObjectMember objectMember = locateAndCheckMember(method);
+        val objectMember = targetSpec.getMemberElseFail(method);
         final ContributeeMember contributeeMember = determineIfContributed(args, objectMember);
+        //_Assert.assertNull(contributeeMember); //TODO if never fails, can remove legacy code (potentially needed when invoking mixins via wrapper)
 
         final String memberName = objectMember.getName();
 
@@ -310,12 +309,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             if (arg == null) {
                 continue;
             }
-            final ObjectSpecificationDefault objectSpec = getJavaSpecification(arg.getClass());
+            val argumentSpec = loadSpecification(arg.getClass());
 
             if (args.length == 1) {
                 // is this a contributed property/collection?
                 final Stream<ObjectAssociation> associations =
-                        objectSpec.streamAssociations(Contributed.INCLUDED);
+                        argumentSpec.streamAssociations(Contributed.INCLUDED);
 
 
                 final Optional<ContributeeMember> contributeeMember = associations
@@ -332,7 +331,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             // is this a contributed action?
             {
                 final Stream<ObjectAction> actions =
-                        objectSpec.streamObjectActions(Contributed.INCLUDED);
+                        argumentSpec.streamObjectActions(Contributed.INCLUDED);
 
                 final Optional<ContributeeMember> contributeeMember = actions
                         .filter(action->action instanceof ContributeeMember)
@@ -622,16 +621,14 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         val head = objectAction.interactionHead(targetAdapter);
         
         final ManagedObject contributeeAdapter;
-        final Object[] contributeeArgs;
         if(contributeeMember != null) {
             val contributeeParamPosition = contributeeMember.getContributeeParamIndex();
             val contributee = args[contributeeParamPosition];
             
             contributeeAdapter = getObjectManager().adapt(contributee);
-            contributeeArgs = _Arrays.removeByIndex(args, contributeeParamPosition); 
+             
         } else {
             contributeeAdapter = null;
-            contributeeArgs = null;
         }
         
         val argAdapters = asObjectAdaptersUnderlying(args);
@@ -755,40 +752,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         throw new IllegalArgumentException("Provided interactionEvent must be a VisibilityEvent, UsabilityEvent or a ValidityEvent");
     }
 
-    // -- SWITCHING
-
-    private ObjectMember locateAndCheckMember(final Method method) {
-        val objectSpecificationDefault = getJavaSpecificationOfOwningClass(method);
-        val member = objectSpecificationDefault.getMember(method);
-
-        if(member == null) {
-            val methodName = method.getName();
-            val msg = "Method '" + methodName + "' being invoked does not correspond "
-                    + "to any of the object's fields or actions.";
-            throw new UnsupportedOperationException(msg);
-        }
-        
-        return member;
-    }
-
-    // -- SPECIFICATION LOOKUP
-
-    private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
-        return getJavaSpecification(method.getDeclaringClass());
-    }
-
-    private ObjectSpecificationDefault getJavaSpecification(final Class<?> clazz) {
-        final ObjectSpecification objectSpec = getSpecification(clazz);
-        if (!(objectSpec instanceof ObjectSpecificationDefault)) {
-            throw new UnsupportedOperationException("Only Java is supported (specification is '" + objectSpec.getClass().getCanonicalName() + "')");
-        }
-        return (ObjectSpecificationDefault) objectSpec;
-    }
-
-    private ObjectSpecification getSpecification(final Class<?> type) {
-        return getSpecificationLoader().loadSpecification(type);
-    }
-
     // -- HELPER
     
     private boolean shouldEnforceRules() {
@@ -866,8 +829,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     
     // -- DEPENDENCIES
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return mmContext.getSpecificationLoader();
+    protected ObjectSpecification loadSpecification(Class<?> type) {
+        return mmContext.getSpecificationLoader().loadSpecification(type);
     }
 
     protected ObjectManager getObjectManager() {

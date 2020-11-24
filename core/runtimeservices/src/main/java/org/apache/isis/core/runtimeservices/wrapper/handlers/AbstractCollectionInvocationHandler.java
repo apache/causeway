@@ -42,7 +42,7 @@ abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvoc
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
         
-        super(otma.getMetaModelContext().getServiceRegistry(), 
+        super(otma.getMetaModelContext(),
                 collectionOrMapToProxy, 
                 handler.getSyncControl());
         

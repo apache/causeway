@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 /**
  * Interface indicating an a contributed association or action.
  */
+@Deprecated
 public interface ContributeeMember extends ObjectMember {
 
 

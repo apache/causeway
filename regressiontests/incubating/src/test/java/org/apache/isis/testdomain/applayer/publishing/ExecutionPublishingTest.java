@@ -32,6 +32,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
@@ -112,6 +113,30 @@ class ExecutionPublishingTest extends IsisIntegrationTestAbstract {
             return String.format("differing interaction type %s != %s", 
                     a.getInteractionType(), b.getInteractionType());
         }
+        
+        switch(a.getInteractionType()) {
+        case ACTION_INVOCATION:
+            return actionInvocationDifference(
+                    (Interaction.ActionInvocation)a, (Interaction.ActionInvocation)b);
+        case PROPERTY_EDIT:
+            return porpertyEditDifference(
+                    (Interaction.PropertyEdit)a, (Interaction.PropertyEdit)b);
+        default:
+            throw _Exceptions.unexpectedCodeReach();
+        }
+    }
+    
+    private String actionInvocationDifference(Interaction.ActionInvocation a, Interaction.ActionInvocation b) {
+        return null; // no difference
+    }
+    
+    
+    private String porpertyEditDifference(Interaction.PropertyEdit a, Interaction.PropertyEdit b) {
+        if(!Objects.equals(a.getNewValue(), b.getNewValue())) {
+            return String.format("differing new value %s != %s", 
+                    a.getNewValue(), b.getNewValue());
+        }
+        
         return null; // no difference
     }
 

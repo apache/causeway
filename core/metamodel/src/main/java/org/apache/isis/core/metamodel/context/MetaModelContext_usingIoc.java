@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -116,6 +117,10 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     @Getter(lazy=true) 
     private final ObjectManager objectManager =
     getSingletonElseFail(ObjectManager.class);
+    
+    @Getter(lazy=true) 
+    private final WrapperFactory wrapperFactory =
+    getSingletonElseFail(WrapperFactory.class);
     
     
     @Override

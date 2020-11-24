@@ -26,8 +26,6 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
@@ -366,20 +364,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 .findFirst();
     }
 
-    /**
-     * @param method
-     * @return ObjectMember associated with given {@code method}, or else {@code null}
-     * @apiNote not API; refactoring result type to Optional<ObjectMember> would be desired, 
-     * but did not work with JMock tests on first attempt
-     */
-    @Nullable
-    public ObjectMember getMember(final Method method) {
+    @Override
+    public Optional<? extends ObjectMember> getMember(final Method method) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         if (membersByMethod == null) {
             this.membersByMethod = catalogueMembers();
         }
-        return membersByMethod.get(method);
+        return Optional.ofNullable(membersByMethod.get(method));
     }
 
     private Map<Method, ObjectMember> catalogueMembers() {
