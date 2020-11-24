@@ -62,6 +62,7 @@ public class JdoProduct {
     }
 
     @Property(
+            commandPublishing = Publishing.ENABLED, // used for publishing tests
             executionPublishing = Publishing.ENABLED, // used for publishing tests
             editing = Editing.DISABLED) // used for an async rule check test
     @Getter @Setter @Column(allowsNull = "true")
