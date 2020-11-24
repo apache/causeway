@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation;
@@ -60,7 +59,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingLifecycl
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -68,6 +66,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Co
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.EditingEnabledFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
@@ -117,7 +116,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        processAuditing(processClassContext);
+        processEntityChangePublishing(processClassContext);
         processAutoComplete(processClassContext);
         processBounded(processClassContext);
         processEditing(processClassContext);
@@ -128,7 +127,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     }
 
 
-    void processAuditing(final ProcessClassContext processClassContext) {
+    void processEntityChangePublishing(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
@@ -142,13 +141,14 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
             return;
         }
 
-        // check for @DomainObject(auditing=....)
-        val auditing = processClassContext.synthesizeOnType(DomainObject.class).map(DomainObject::entityChangePublishing);
-        val auditableFacet = AuditableFacetForDomainObjectAnnotation
-                .create(auditing, getConfiguration(), facetHolder);
+        // check for @DomainObject(entityChangePublishing=....)
+        val entityChangePublishing = processClassContext.synthesizeOnType(DomainObject.class)
+                .map(DomainObject::entityChangePublishing);
+        val entityChangePublishingFacet = EntityChangePublishingFacetForDomainObjectAnnotation
+                .create(entityChangePublishing, getConfiguration(), facetHolder);
 
         // then add
-        super.addFacet(auditableFacet);
+        super.addFacet(entityChangePublishingFacet);
     }
 
     // -- AUTO COMPLETE

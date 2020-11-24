@@ -41,20 +41,20 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotationAsConfigured;
-import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
+import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured;
+import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -108,7 +108,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     }
 
-    public static class Auditing extends DomainObjectAnnotationFacetFactoryTest {
+    public static class EntityChangePublishing extends DomainObjectAnnotationFacetFactoryTest {
 
         @DomainObject(entityChangePublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
         class CustomerWithDomainObjectAndAuditingSetToAsConfigured {
@@ -127,25 +127,25 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-            facetFactory.processAuditing(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
+            facetFactory.processEntityChangePublishing(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
 
-            final Facet facet = facetHolder.getFacet(AuditableFacet.class);
+            final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
             Assert.assertNull(facet);
 
             expectNoMethodsRemoved();
         }
 
-        public static class WhenNotAnnotatedAndDefaultsFromConfiguration extends Auditing {
+        public static class WhenNotAnnotatedAndDefaultsFromConfiguration extends EntityChangePublishing {
 
             @Test
             public void configured_value_set_to_all() {
                 allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-                facetFactory.processAuditing(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                facetFactory.processEntityChangePublishing(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
+                final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 assertThat(facet, is(notNullValue()));
-                Assert.assertTrue(facet instanceof AuditableFacetFromConfiguration);
+                Assert.assertTrue(facet instanceof EntityChangePublishingFacetFromConfiguration);
 
                 expectNoMethodsRemoved();
             }
@@ -156,7 +156,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
-                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNull(facet); 
 
                 expectNoMethodsRemoved();
@@ -164,7 +164,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
         }
 
-        public static class WithDomainObjectAnnotationWithAuditingSetToAsConfigured extends Auditing {
+        public static class WithDomainObjectAnnotationWithAuditingSetToAsConfigured extends EntityChangePublishing {
 
             @Test
             public void configured_value_set_to_all() {
@@ -172,9 +172,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
+                final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof AuditableFacetForDomainObjectAnnotationAsConfigured);
+                Assert.assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured);
 
                 expectNoMethodsRemoved();
             }
@@ -185,7 +185,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
-                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNull(facet);
 
                 expectNoMethodsRemoved();
@@ -193,7 +193,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
         }
 
-        public static class WithDomainObjectAnnotationWithAuditingSetToEnabled extends Auditing {
+        public static class WithDomainObjectAnnotationWithAuditingSetToEnabled extends EntityChangePublishing {
 
             @Test
             public void irrespective_of_configured_value() {
@@ -201,16 +201,16 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
+                final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof AuditableFacetForDomainObjectAnnotation);
+                Assert.assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotation);
 
                 expectNoMethodsRemoved();
             }
 
         }
 
-        public static class WithDomainObjectAnnotationWithAuditingSetToDisabled extends Auditing {
+        public static class WithDomainObjectAnnotationWithAuditingSetToDisabled extends EntityChangePublishing {
 
             @Test
             public void irrespective_of_configured_value() {
@@ -218,10 +218,10 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
-                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNotNull(facet);
 
-                Assert.assertEquals(true, facet.isDisabled());
+                //Assert.assertEquals(true, facet.isDisabled());
                 Assert.assertEquals(true, facet.alwaysReplace());
                 Assert.assertEquals(false, facet.isFallback());
                 Assert.assertEquals(false, facet.isDerived());

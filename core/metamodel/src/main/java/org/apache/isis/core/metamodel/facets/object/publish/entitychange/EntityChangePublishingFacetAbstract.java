@@ -16,46 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.audit;
-
-
-import java.util.Map;
+package org.apache.isis.core.metamodel.facets.object.publish.entitychange;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-public abstract class AuditableFacetAbstract extends FacetAbstract implements
-AuditableFacet {
+public abstract class EntityChangePublishingFacetAbstract 
+extends FacetAbstract 
+implements EntityChangePublishingFacet {
 
     public static Class<? extends Facet> type() {
-        return AuditableFacet.class;
+        return EntityChangePublishingFacet.class;
     }
 
-    public enum Enablement {
-        DISABLED,
-        ENABLED;
-
-        public static Enablement ifDisabled(boolean disabled) {
-            return disabled ? DISABLED: ENABLED;
-        }
+    public EntityChangePublishingFacetAbstract(final FacetHolder facetHolder) {
+        super(EntityChangePublishingFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
     }
-
-    private final Enablement enablement;
-
-    public AuditableFacetAbstract(final FacetHolder facetHolder, final Enablement enablement) {
-        super(AuditableFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.enablement = enablement;
-    }
-
-    @Override
-    public boolean isDisabled() {
-        return this.enablement == Enablement.DISABLED;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("enablement", enablement);
-    }
+    
 }

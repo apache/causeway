@@ -16,36 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.audit;
+package org.apache.isis.core.metamodel.facets.object.publish.entitychange;
 
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 
 /**
- * Corresponds to annotating the class with the {@Code @DomainObject(auditing=ENABLED)} annotation.
+ * Corresponds to annotating the entity class with 
+ * {@Code @DomainObject(entityChangePublishing=ENABLED)}.
+ * 
+ * @since 2.0
  */
-public interface AuditableFacet extends Facet {
-
-    /**
-     * Indicates that the object to which this {@link Facet} is
-     * attached should <i>not</i> be treated as being audited.
-     *
-     * <p>
-     * Exists to allow implementations that configure auditing for all objects, but which
-     * can then be disabled for selected objects (eg using {@link Audited#disabled()} ).
-     */
-    public boolean isDisabled();
+public interface EntityChangePublishingFacet extends Facet {
     
-    public static boolean isAuditingEnabled(final FacetHolder facetHolder) {
+    public static boolean isPublishingEnabled(final FacetHolder facetHolder) {
         if(facetHolder==null) {
             return false;
         }
-        val auditableFacet = facetHolder.getFacet(AuditableFacet.class);
-        if(auditableFacet == null || auditableFacet.isDisabled()) {
+        
+        if(facetHolder instanceof ObjectSpecification) {
+            if(!((ObjectSpecification)facetHolder).isEntity()) {
+                return false;
+            }    
+        }
+        
+        val auditableFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+        if(auditableFacet == null) {
             return false;
         }
         return true;

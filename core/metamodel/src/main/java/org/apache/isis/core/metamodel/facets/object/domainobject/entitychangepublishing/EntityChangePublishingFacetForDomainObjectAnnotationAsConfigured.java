@@ -16,21 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainobject.auditing;
+package org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing;
 
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
 
 
-/**
- * If the domain object has not been annotated with {@link org.apache.isis.applib.annotation.DomainObject} but auditing
- * has been configured in <tt>application.properties</tt>.
- */
-public class AuditableFacetFromConfiguration extends AuditableFacetAbstract {
+public class EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured extends EntityChangePublishingFacetForDomainObjectAnnotation {
 
-    public AuditableFacetFromConfiguration(final FacetHolder facetHolder) {
-        super(facetHolder, Enablement.ENABLED);
+    public EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(final FacetHolder facetHolder) {
+        super(facetHolder);
     }
 
 }

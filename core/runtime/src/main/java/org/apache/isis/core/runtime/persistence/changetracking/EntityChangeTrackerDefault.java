@@ -50,7 +50,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
@@ -65,6 +64,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -163,12 +163,8 @@ implements
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
         
-        val spec = adapter.getSpecification();
-        if(!spec.isEntity()) {
-            return false;
-        }
-        if(!AuditableFacet.isAuditingEnabled(spec)) {
-            return false; // ignore entities that are not enabled for auditing
+        if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
+            return false; // ignore entities that are not enabled for entity change publishing
         }
         
         return true;

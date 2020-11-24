@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainobject.auditing;
+package org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing;
 
 
 import java.util.Optional;
@@ -26,14 +26,15 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacetAbstract;
 
 import lombok.val;
 
-public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {
+public class EntityChangePublishingFacetForDomainObjectAnnotation 
+extends EntityChangePublishingFacetAbstract {
 
-    public static AuditableFacet create(
+    public static EntityChangePublishingFacet create(
             Optional<Publishing> entityChangePublishingIfAny,
             IsisConfiguration configuration,
             FacetHolder holder) {
@@ -50,25 +51,21 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
                 return null;
             default:
                 return entityChangePublishingIfAny.isPresent()
-                        ? new AuditableFacetForDomainObjectAnnotationAsConfigured(holder)
-                        : new AuditableFacetFromConfiguration(holder);
+                        ? new EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(holder)
+                        : new EntityChangePublishingFacetFromConfiguration(holder);
             }
         case DISABLED:
-            // explicitly disable
-            return new AuditableFacetForDomainObjectAnnotation(Enablement.DISABLED, holder);
+            return null;
         case ENABLED:
-            return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
+            return new EntityChangePublishingFacetForDomainObjectAnnotation(holder);
             
         default:
             throw _Exceptions.unmatchedCase(publish);
         }
     }
 
-    protected AuditableFacetForDomainObjectAnnotation(
-            Enablement enablement,
-            FacetHolder holder) {
-        
-        super(holder, enablement);
+    protected EntityChangePublishingFacetForDomainObjectAnnotation(FacetHolder holder) {
+        super(holder);
     }
 }
 
