@@ -30,6 +30,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -218,13 +219,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
-                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                Assert.assertNotNull(facet);
-
-                //Assert.assertEquals(true, facet.isDisabled());
-                Assert.assertEquals(true, facet.alwaysReplace());
-                Assert.assertEquals(false, facet.isFallback());
-                Assert.assertEquals(false, facet.isDerived());
+                assertFalse(EntityChangePublishingFacet.isPublishingEnabled(facetHolder));
 
                 expectNoMethodsRemoved();
             }
