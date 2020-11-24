@@ -18,7 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
-import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -179,8 +178,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             return;
         }
 
-        completeCommandFromInteractionAndClearDomainEvents();
-
         unregisterLifecycleListeners.run();
         unregisterLifecycleListeners = null;
         
@@ -195,36 +192,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         objectAdapterContext.close();
 
         this.state = State.CLOSED;
-    }
-
-    @Deprecated //TODO[2464] should be the responsibility of the internal Interaction lifecycle handler 
-    private void completeCommandFromInteractionAndClearDomainEvents() {
-
-        val interaction = interactionContextProvider.get().getInteractionElseFail();
-        val command = interaction.getCommand();
-
-        if(command.getStartedAt() != null && command.getCompletedAt() == null) {
-            // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
-
-            val priorInteractionExecution = interaction.getPriorExecution();
-            final Timestamp completedAt =
-                    priorInteractionExecution != null
-                    ?
-                        // copy over from the most recent (which will be the top-level) interaction
-                        priorInteractionExecution.getCompletedAt()
-                    :
-                        // this could arise as the result of calling SessionManagementService#nextSession within an action
-                        // the best we can do is to use the current time
-
-                        // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
-                         clockService.nowAsJavaSqlTimestamp();
-
-            command.updater().setCompletedAt(completedAt);
-        }
-
-        commandPublisher.complete(command);
-
-        interaction.clear();
     }
 
     @Override

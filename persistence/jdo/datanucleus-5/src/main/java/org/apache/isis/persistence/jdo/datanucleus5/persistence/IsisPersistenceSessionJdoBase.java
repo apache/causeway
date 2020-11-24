@@ -25,18 +25,13 @@ import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -62,14 +57,9 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     @Getter protected final MetaModelContext metaModelContext;
     protected final ServiceInjector serviceInjector;
     protected final ServiceRegistry serviceRegistry;
-    protected final CommandPublisher commandPublisher;
-    protected final FactoryService factoryService;
-    protected final ClockService clockService;
-    protected final UserService userService;
     protected final IsisConfiguration configuration;
 
     protected final Supplier<EntityChangeTracker> entityChangeTrackerProvider;
-    protected final Supplier<InteractionContext> interactionContextProvider;
 
     /**
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
@@ -113,12 +103,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.configuration = metaModelContext.getConfiguration();
         this.specificationLoader = metaModelContext.getSpecificationLoader();
 
-        this.commandPublisher = lookupService(CommandPublisher.class);
-        this.factoryService = lookupService(FactoryService.class);
-        this.clockService = lookupService(ClockService.class);
-        this.userService = lookupService(UserService.class);
-        
-        this.interactionContextProvider = ()->lookupService(InteractionContext.class);
         this.entityChangeTrackerProvider = ()->lookupService(EntityChangeTracker.class);
 
         // sub-components

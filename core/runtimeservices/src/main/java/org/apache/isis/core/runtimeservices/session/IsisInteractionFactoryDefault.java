@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.runtimeservices.session;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.UUID;
@@ -31,7 +30,15 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
@@ -42,6 +49,7 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.InteractionClosure;
@@ -58,12 +66,8 @@ import org.apache.isis.core.runtimeservices.user.UserServiceDefault.UserAndRoleO
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -94,6 +98,9 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     @Inject MetaModelContext metaModelContext;
     @Inject IsisConfiguration configuration;
     @Inject ServiceInjector serviceInjector;
+    
+    @Inject ClockService clockService;
+    @Inject CommandPublisher commandPublisher;
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
@@ -281,6 +288,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     }
     
     private void preSessionClosed(InteractionSession isisInteraction) {
+        completeAndPublishCurrentCommand();
         runtimeEventService.fireInteractionIsEnding(isisInteraction); // only fire on top-level session 
         isisInteractionScopeCloseListener.preTopLevelIsisInteractionClose(); // cleanup the isis-session scope
         isisInteraction.close(); // do this last
@@ -332,8 +340,36 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         return Optional.empty();
     }
 
-
+    // -- HELPER - COMMAND COMPLETION
     
+    private void completeAndPublishCurrentCommand() {
+
+        val interaction = getInteractionElseFail();
+        val command = interaction.getCommand();
+
+        if(command.getStartedAt() != null && command.getCompletedAt() == null) {
+            // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
+
+            val priorInteractionExecution = interaction.getPriorExecution();
+            final Timestamp completedAt =
+                    priorInteractionExecution != null
+                    ?
+                        // copy over from the most recent (which will be the top-level) interaction
+                        priorInteractionExecution.getCompletedAt()
+                    :
+                        // this could arise as the result of calling SessionManagementService#nextSession within an action
+                        // the best we can do is to use the current time
+
+                        // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
+                         clockService.nowAsJavaSqlTimestamp();
+
+            command.updater().setCompletedAt(completedAt);
+        }
+
+        commandPublisher.complete(command);
+
+        interaction.clear();
+    }
 
 
 }
