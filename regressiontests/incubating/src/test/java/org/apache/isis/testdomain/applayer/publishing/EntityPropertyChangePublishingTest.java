@@ -75,6 +75,7 @@ class EntityPropertyChangePublishingTest extends IsisIntegrationTestAbstract {
         case FAILURE_CASE:
             assertHasPropertyChangeEntries(Can.empty());
             break;
+        case POST_COMMIT_WHEN_PROGRAMMATIC:
         case POST_COMMIT:
             assertHasPropertyChangeEntries(Can.of(
                     "Jdo Book/name: 'Sample Book' -> 'Book #2'"));

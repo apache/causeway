@@ -74,7 +74,8 @@ public class ApplicationLayerTestFactory {
     public static enum VerificationStage {
         PRE_COMMIT,
         POST_COMMIT,
-        FAILURE_CASE,
+        POST_COMMIT_WHEN_PROGRAMMATIC,
+        FAILURE_CASE, 
     }
     
     @Service
@@ -155,7 +156,7 @@ public class ApplicationLayerTestFactory {
             // auditing.
 
             // then
-            verifier.accept(VerificationStage.POST_COMMIT);
+            verifier.accept(VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC);
         });
     }
     

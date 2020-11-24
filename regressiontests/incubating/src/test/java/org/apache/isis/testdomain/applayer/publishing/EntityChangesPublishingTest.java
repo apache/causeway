@@ -83,6 +83,7 @@ class EntityChangesPublishingTest extends IsisIntegrationTestAbstract {
             assertEquals(0, getUpdated(kvStore));
             assertEquals(0, getModified(kvStore));
             break;
+        case POST_COMMIT_WHEN_PROGRAMMATIC:
         case POST_COMMIT:
             assertEquals(0, getCreated(kvStore));
             assertEquals(0, getDeleted(kvStore));
