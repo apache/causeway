@@ -31,9 +31,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingCommandPublishing;
@@ -69,7 +70,7 @@ class CommandPublishingTest extends IsisIntegrationTestAbstract {
     }
 
     private void given() {
-        CommandSubscriberForTesting.clearPublishedEntries(kvStore);
+        CommandSubscriberForTesting.clearPublishedCommands(kvStore);
     }
     
     private void verify(VerificationStage verificationStage) {
@@ -78,18 +79,27 @@ class CommandPublishingTest extends IsisIntegrationTestAbstract {
         case FAILURE_CASE:
             assertHasCommandEntries(Can.empty());
             break;
-        case POST_COMMIT:
+        case POST_INTERACTION:
         
             
-            Interaction interaction = null;
-            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
-            Object target = null;
-            Object argValue = "Book #2";
-            String targetMemberName = "name???";
-            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
-            assertHasCommandEntries(Can.of(
-                    new Command(UUID.randomUUID())
-                    ));
+//            Interaction interaction = null;
+//            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
+//            Object target = null;
+//            Object argValue = "Book #2";
+//            String targetMemberName = "name???";
+//            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
+            
+            val propertyDto = new PropertyDto();
+            propertyDto.setLogicalMemberIdentifier("testdomain.jdo.Book#name");
+            
+            val command = new Command(UUID.randomUUID());
+            val commandDto = new CommandDto();
+            commandDto.setTransactionId(command.getUniqueId().toString());
+            commandDto.setMember(propertyDto);
+
+            command.updater().setCommandDto(commandDto);
+            
+            assertHasCommandEntries(Can.of(command));
             break;
         default:
             // ignore ... no checks

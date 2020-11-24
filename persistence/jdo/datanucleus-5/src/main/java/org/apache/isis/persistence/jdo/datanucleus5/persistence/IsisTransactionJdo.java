@@ -379,14 +379,14 @@ public class IsisTransactionJdo implements Transaction {
             flushCommands();
             flushTransaction();
             
-            notifyPreCommit(PreCommitPhase.PRE_AUDITING);
-            notifyPreCommit(PreCommitPhase.AUDITING);
+            notifyPreCommit(PreCommitPhase.PRE_PUBLISHING);
+            notifyPreCommit(PreCommitPhase.WHILE_PUBLISHING);
 
         } catch (RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
         } finally {
-            notifyPreCommit(PreCommitPhase.POST_AUDITING);
+            notifyPreCommit(PreCommitPhase.POST_PUBLISHING);
         }
     }
 

@@ -61,7 +61,7 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
     @Override
     public void onPreCommit(PreCommitPhase preCommitPhase) {
         switch (preCommitPhase) {
-        case POST_AUDITING:
+        case POST_PUBLISHING:
             kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
             break;
         default:

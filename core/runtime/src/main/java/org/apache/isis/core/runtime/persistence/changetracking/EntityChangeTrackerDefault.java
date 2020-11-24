@@ -124,7 +124,7 @@ implements
     }
 
     private void enlistCreatedInternal(final @NonNull ManagedObject adapter) {
-        if(!isEntityEnabledForAuditing(adapter)) {
+        if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
         enlistForChangeKindAuditing(adapter, EntityChangeKind.CREATE);
@@ -132,7 +132,7 @@ implements
     }
 
     private void enlistUpdatingInternal(final @NonNull ManagedObject adapter) {
-        if(!isEntityEnabledForAuditing(adapter)) {
+        if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
         enlistForChangeKindAuditing(adapter, EntityChangeKind.UPDATE);
@@ -140,7 +140,7 @@ implements
     }
 
     private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
-        if(!isEntityEnabledForAuditing(adapter)) {
+        if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
         final boolean enlisted = enlistForChangeKindAuditing(adapter, EntityChangeKind.DELETE);
@@ -156,12 +156,14 @@ implements
         return changedObjectPropertiesRef.get();
     }
 
-    private boolean isEntityEnabledForAuditing(final @NonNull ManagedObject adapter) {
+    private boolean isEntityEnabledForChangePublishing(final @NonNull ManagedObject adapter) {
 
         if(changedObjectPropertiesRef.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
+
+        entityChangeEventCount.increment();
         
         if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
             return false; // ignore entities that are not enabled for entity change publishing
@@ -178,28 +180,30 @@ implements
     @Override
     public void onPreCommit(PreCommitPhase preCommitPhase) {
         switch (preCommitPhase) {
-        case AUDITING:
-            log.debug("about to dispatch audit entries and entity changes");
-            prepareAuditDispatching();
+        case WHILE_PUBLISHING:
+            log.debug("about to publish entity changes");
+            prepareCommandPublishing();
             entityPropertyChangePublisher.publishChangedProperties(this);
             entityChangesPublisher.publishChangingEntities(this);
             break;
-        case POST_AUDITING:
-            log.debug("purging auditing data");
+        case POST_PUBLISHING:
+            log.debug("purging entity change records");
             enlistedEntityPropertiesForAuditing.clear();
             changeKindByEnlistedAdapter.clear();
             changedObjectPropertiesRef.clear();
+            entityChangeEventCount.reset();
+            numberEntitiesLoaded.reset();
             break;
         default:
             break;
         }
     }
     
-    private void prepareAuditDispatching() {
+    private void prepareCommandPublishing() {
         val command = currentInteraction().getCommand();
         command.updater().setSystemStateChanged(
                 command.isSystemStateChanged() 
-                || numberEntitiesDirtied() > 0);
+                || entityChangeEventCount.longValue() > 0L);
     }
 
     @Override
@@ -374,6 +378,7 @@ implements
     }
     
     private final LongAdder numberEntitiesLoaded = new LongAdder();
+    private final LongAdder entityChangeEventCount = new LongAdder();
     
     @Override
     public void incrementLoaded() {

@@ -230,7 +230,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final T domainObject,
             final AsyncControl<R> asyncControl) {
 
-        val proxyFactory = proxyFactoryService.factory((Class<T>) domainObject.getClass(), WrappingObject.class);
+        val proxyFactory = proxyFactoryService
+                .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class);
 
         return proxyFactory.createInstance(new InvocationHandler() {
             @Override
@@ -336,7 +337,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         val executorService = asyncControl.getExecutorService();
         val future = executorService.submit(
-                new ExecCommand(asyncAuthSession, commandDto, asyncControl.getReturnType(), command, serviceInjector)
+                new ExecCommand<R>(
+                        asyncAuthSession, 
+                        commandDto, 
+                        asyncControl.getReturnType(), 
+                        command, 
+                        serviceInjector)
         );
 
         asyncControl.setFuture(future);

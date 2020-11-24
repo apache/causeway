@@ -19,7 +19,9 @@
 package org.apache.isis.testdomain.applayer;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
@@ -47,6 +49,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -59,7 +62,7 @@ import lombok.val;
 
 @Component
 @Import({
-    ApplicationLayerTestFactory.PreAuditHook.class
+    ApplicationLayerTestFactory.PreCommitListener.class
 })
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationLayerTestFactory {
@@ -69,24 +72,27 @@ public class ApplicationLayerTestFactory {
     private final TransactionService transactionService;
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
-    private final PreAuditHook preAuditHook;
+    private final PreCommitListener preCommitListener;
+    private final IsisInteractionFactory isisInteractionFactory;
     
     public static enum VerificationStage {
         PRE_COMMIT,
         POST_COMMIT,
         POST_COMMIT_WHEN_PROGRAMMATIC,
         FAILURE_CASE, 
+        POST_INTERACTION, 
+        POST_INTERACTION_WHEN_PROGRAMMATIC, 
     }
     
     @Service
-    public static class PreAuditHook implements TransactionScopeListener {
+    public static class PreCommitListener implements TransactionScopeListener {
         
         @Setter private Consumer<VerificationStage> verifier;
         
         @Override
         public void onPreCommit(PreCommitPhase preCommitPhase) {
             switch (preCommitPhase) {
-            case PRE_AUDITING:
+            case PRE_PUBLISHING:
                 if(verifier!=null) {
                     verifier.accept(VerificationStage.PRE_COMMIT);
                 }
@@ -101,16 +107,240 @@ public class ApplicationLayerTestFactory {
             final Runnable given,
             final Consumer<VerificationStage> verifier) {
         return _Lists.of(
-                dynamicTest("No initial Transaction with Test Execution", this::no_initial_tx_context),
-                programmaticExecution(given, verifier),
-                interactionApiExecution(given, verifier),
-                wrapperSyncExecution(given, verifier),
-                wrapperSyncExecutionWithFailure(given, verifier),
-                wrapperAsyncExecution(given, verifier),
-                wrapperAsyncExecutionWithFailure(given, verifier)
+                dynamicTest("No initial Transaction with Test Execution", 
+                        this::no_initial_tx_context),
+                programmaticTest("Programmatic Execution", 
+                        given, verifier, this::programmaticExecution),
+                interactionTest("Interaction Api Execution", 
+                        given, verifier, this::interactionApiExecution),
+                interactionTest("Wrapper Sync Execution w/o Rules", 
+                        given, verifier, this::wrapperSyncExecution),
+                interactionTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)", 
+                        given, verifier, this::wrapperSyncExecutionWithFailure),
+                interactionTest("Wrapper Async Execution w/o Rules", 
+                        given, verifier, this::wrapperAsyncExecution),
+                interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", 
+                        given, verifier, this::wrapperAsyncExecutionWithFailure)
                 );
     }
+    
+    // -- INTERACTION TEST FACTORY
+    
+    @FunctionalInterface
+    private static interface InteractionTestRunner {
+        boolean run(Runnable given, Consumer<VerificationStage> verifier) throws Exception;
+    }
+    
+    private DynamicTest interactionTest(
+            final String displayName,
+            final Runnable given,
+            final Consumer<VerificationStage> verifier,
+            final InteractionTestRunner interactionTestRunner) {
+        return dynamicTest(displayName, ()->{
+            
+            val isSuccesfulRun = isisInteractionFactory.callAnonymous(()->
+                    interactionTestRunner.run(given, verifier));
+            
+            isisInteractionFactory.closeSessionStack();
+            
+            if(isSuccesfulRun) {
+                verifier.accept(VerificationStage.POST_INTERACTION);
+            }
+                        
+        });
+    }
 
+    private DynamicTest programmaticTest(
+            final String displayName,
+            final Runnable given,
+            final Consumer<VerificationStage> verifier,
+            final InteractionTestRunner interactionTestRunner) {
+        return dynamicTest(displayName, ()->{
+            
+            val isSuccesfulRun = isisInteractionFactory.callAnonymous(()->
+                        interactionTestRunner.run(given, verifier));
+                    
+            isisInteractionFactory.closeSessionStack();
+            
+            if(isSuccesfulRun) {
+                verifier.accept(VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC);
+            }
+
+        });
+    }
+    
+
+    // -- TESTS - ENSURE TESTS ARE CORRECTLY INVOKED 
+
+    boolean no_initial_tx_context() {
+        val txState = transactionService.currentTransactionState();
+        assertEquals(TransactionState.NONE, txState);
+        return true;
+    }
+
+    // -- TESTS - WRAPPER SYNC
+
+    private boolean programmaticExecution(
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) {
+        
+        // given
+        val book = setupForJdo();
+        given.run();
+
+        preCommitListener.setVerifier(verifier);
+        
+        transactionService.executeWithinTransaction(()->{
+
+            // when - direct change (circumventing the framework)
+            book.setName("Book #2");
+            repository.persist(book);
+            
+        });
+        
+        preCommitListener.setVerifier(null);
+
+        // This test does not trigger command or execution publishing, however it does trigger
+        // entity-change-publishing.
+
+        // then
+        verifier.accept(VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC);
+        
+        return true;
+    }
+    
+    // -- TESTS - INTERACTION API
+
+    private boolean interactionApiExecution(
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) {
+
+        // given
+        val book = setupForJdo();
+        given.run();
+
+        preCommitListener.setVerifier(verifier);
+        
+        // when
+        val managedObject = objectManager.adapt(book);
+        val propertyInteraction = PropertyInteraction.start(managedObject, "name", Where.OBJECT_FORMS);
+        val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+        val propertyModel = managedProperty.startNegotiation();
+        val propertySpec = managedProperty.getSpecification();
+        propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
+        propertyModel.submit();
+        
+        preCommitListener.setVerifier(null);
+
+        // then
+        verifier.accept(VerificationStage.POST_COMMIT);
+        
+        return true;
+    }
+
+    // -- TESTS - WRAPPER SYNC
+
+    private boolean wrapperSyncExecution(
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) {
+
+        // given
+        val book = setupForJdo();
+        given.run();
+        
+        preCommitListener.setVerifier(verifier);
+
+        // when - running synchronous
+        val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+        wrapper.wrap(book, syncControl).setName("Book #2");
+        
+        preCommitListener.setVerifier(null);
+
+        // then
+        verifier.accept(VerificationStage.POST_COMMIT);
+        
+        return true;
+    }
+
+    private boolean wrapperSyncExecutionWithFailure(
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) {
+
+        // given
+        val book = setupForJdo();
+        given.run();
+
+        preCommitListener.setVerifier(verifier);
+        
+        // when - running synchronous
+        val syncControl = SyncControl.control().withCheckRules(); // enforce rules 
+
+        assertThrows(DisabledException.class, ()->{
+            wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
+        });
+        
+        preCommitListener.setVerifier(null);
+
+        // then
+        verifier.accept(VerificationStage.FAILURE_CASE);
+        
+        return false;
+    }
+
+    // -- TESTS - WRAPPER ASYNC
+
+    private boolean wrapperAsyncExecution(
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) throws InterruptedException, ExecutionException, TimeoutException {
+
+        // given
+        val book = setupForJdo();
+        given.run();
+        
+        preCommitListener.setVerifier(verifier);
+
+        // when - running asynchronous
+        val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
+        wrapper.asyncWrap(book, asyncControl).setName("Book #2");
+
+        asyncControl.getFuture().get(10, TimeUnit.SECONDS);
+        
+        preCommitListener.setVerifier(null);
+
+        // then
+        verifier.accept(VerificationStage.POST_COMMIT);
+        
+        return true;
+    }
+
+    private boolean wrapperAsyncExecutionWithFailure(
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) {
+        
+        // given
+        val book = setupForJdo();
+        given.run();
+        
+        preCommitListener.setVerifier(verifier);
+
+        // when - running synchronous
+        val asyncControl = returningVoid().withCheckRules(); // enforce rules 
+
+        assertThrows(DisabledException.class, ()->{
+            // should fail with DisabledException (synchronous) within the calling Thread
+            wrapper.asyncWrap(book, asyncControl).setName("Book #2"); 
+
+            fail("unexpected code reach");
+        });
+        
+        preCommitListener.setVerifier(null);
+
+        // then
+        verifier.accept(VerificationStage.FAILURE_CASE);
+     
+        return false;
+    }
+    
     // -- TEST SETUP
 
     private JdoBook setupForJdo() {
@@ -121,170 +351,6 @@ public class ApplicationLayerTestFactory {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
         
         return repository.allInstances(JdoBook.class).listIterator().next();
-    }
-
-    // -- TESTS - ENSURE TESTS ARE CORRECTLY INVOKED 
-
-    void no_initial_tx_context() {
-        val txState = transactionService.currentTransactionState();
-        assertEquals(TransactionState.NONE, txState);
-    }
-
-    // -- TESTS - WRAPPER SYNC
-
-    private DynamicTest programmaticExecution(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
-        return dynamicTest("Programmatic Execution", ()->{
-            // given
-            val book = setupForJdo();
-            given.run();
-
-            preAuditHook.setVerifier(verifier);
-            
-            transactionService.executeWithinTransaction(()->{
-
-                // when - direct change (circumventing the framework)
-                book.setName("Book #2");
-                repository.persist(book);
-                
-            });
-            
-            preAuditHook.setVerifier(null);
-
-            // This test does not trigger command or execution dispatching, however it does trigger
-            // auditing.
-
-            // then
-            verifier.accept(VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC);
-        });
-    }
-    
-    // -- TESTS - INTERACTION API
-
-    private DynamicTest interactionApiExecution(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
-        return dynamicTest("Interaction Api Execution", ()->{
-            // given
-            val book = setupForJdo();
-            given.run();
-
-            preAuditHook.setVerifier(verifier);
-            
-            // when
-            val managedObject = objectManager.adapt(book);
-            val propertyInteraction = PropertyInteraction.start(managedObject, "name", Where.OBJECT_FORMS);
-            val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
-            val propertyModel = managedProperty.startNegotiation();
-            val propertySpec = managedProperty.getSpecification();
-            propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
-            propertyModel.submit();
-            
-            preAuditHook.setVerifier(null);
-
-            // then
-            verifier.accept(VerificationStage.POST_COMMIT);
-        });
-    }
-
-    // -- TESTS - WRAPPER SYNC
-
-    private DynamicTest wrapperSyncExecution(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
-        return dynamicTest("Wrapper Sync Execution w/o Rules", ()->{
-            // given
-            val book = setupForJdo();
-            given.run();
-            
-            preAuditHook.setVerifier(verifier);
-
-            // when - running synchronous
-            val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
-            wrapper.wrap(book, syncControl).setName("Book #2");
-            
-            preAuditHook.setVerifier(null);
-
-            // then
-            verifier.accept(VerificationStage.POST_COMMIT);
-        });
-    }
-
-    private DynamicTest wrapperSyncExecutionWithFailure(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
-        return dynamicTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)", ()->{
-            // given
-            val book = setupForJdo();
-            given.run();
-
-            preAuditHook.setVerifier(verifier);
-            
-            // when - running synchronous
-            val syncControl = SyncControl.control().withCheckRules(); // enforce rules 
-
-            assertThrows(DisabledException.class, ()->{
-                wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
-            });
-            
-            preAuditHook.setVerifier(null);
-
-            // then
-            verifier.accept(VerificationStage.FAILURE_CASE);
-        });
-    }
-
-    // -- TESTS - WRAPPER ASYNC
-
-    private DynamicTest wrapperAsyncExecution(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
-        return dynamicTest("Wrapper Async Execution w/o Rules", ()->{
-            // given
-            val book = setupForJdo();
-            given.run();
-            
-            preAuditHook.setVerifier(verifier);
-
-            // when - running asynchronous
-            val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
-            wrapper.asyncWrap(book, asyncControl).setName("Book #2");
-
-            asyncControl.getFuture().get(10, TimeUnit.SECONDS);
-            
-            preAuditHook.setVerifier(null);
-
-            // then
-            verifier.accept(VerificationStage.POST_COMMIT);
-        });
-    }
-
-    private DynamicTest wrapperAsyncExecutionWithFailure(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
-        return dynamicTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", ()->{
-            // given
-            val book = setupForJdo();
-            given.run();
-            
-            preAuditHook.setVerifier(verifier);
-
-            // when - running synchronous
-            val asyncControl = returningVoid().withCheckRules(); // enforce rules 
-
-            assertThrows(DisabledException.class, ()->{
-                // should fail with DisabledException (synchronous) within the calling Thread
-                wrapper.asyncWrap(book, asyncControl).setName("Book #2"); 
-
-                fail("unexpected code reach");
-            });
-            
-            preAuditHook.setVerifier(null);
-
-            // then
-            verifier.accept(VerificationStage.FAILURE_CASE);
-        });
     }
 
 }
