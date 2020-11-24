@@ -52,9 +52,9 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
@@ -161,8 +161,8 @@ implements ImperativeFacet {
         val interaction = interactionContext.getInteractionElseFail();
         val command = interaction.getCommand();
         
-        command.updater().setDispatchingEnabled(
-                CommandFacet.isDispatchingEnabled(getFacetHolder()));
+        command.updater().setPublishingEnabled(
+                CommandPublishingFacet.isPublishingEnabled(getFacetHolder()));
 
         val actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
         log.debug("about to invoke action {}", actionId);
@@ -216,9 +216,8 @@ implements ImperativeFacet {
         setCommandResultIfEntity(command, returnedAdapter);
 
         // publish (if not a contributed association, query-only mixin)
-        val publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-        if (publishedActionFacet != null) {
-            getExecutionDispatcher().publishActionInvocation(priorExecution);
+        if (ExecutionPublishingFacet.isPublishingEnabled(getIdentified())) {
+            getExecutionPublisher().publishActionInvocation(priorExecution);
         }
 
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
@@ -372,7 +371,7 @@ implements ImperativeFacet {
         return serviceRegistry.lookupServiceElseFail(MetricsService.class);
     }
 
-    private ExecutionPublisher getExecutionDispatcher() {
+    private ExecutionPublisher getExecutionPublisher() {
         return serviceRegistry.lookupServiceElseFail(ExecutionPublisher.class);
     }
 

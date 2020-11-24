@@ -17,31 +17,36 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.command;
+package org.apache.isis.core.metamodel.facets.members.publish.command;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
 import lombok.val;
 
 /**
- * Indicates that details of the action should be available as a
- * {@link Command} object, if possible.
- *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * action method using <tt>@Command</tt>.
+ * Indicates that details of the action invocation or property edit,
+ * captured by a {@link Command},
+ * should be dispatched via {@link CommandPublisher} to all subscribed 
+ * {@link CommandSubscriber}s.
+ * 
+ * Corresponds to annotating the action method or property using 
+ * {@code @Action/@Property(commandPublishing=ENABLED)}
+ * 
+ * @since 2.0
  */
-public interface CommandFacet extends Facet {
+public interface CommandPublishingFacet extends Facet {
 
     public CommandDtoProcessor getProcessor();
 
-    public static boolean isDispatchingEnabled(final @NonNull FacetHolder facetHolder) {
+    public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
         
-        val commandFacet = facetHolder.getFacet(CommandFacet.class);
+        val commandFacet = facetHolder.getFacet(CommandPublishingFacet.class);
         if(commandFacet!=null) {
             return true;
         }

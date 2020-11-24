@@ -17,16 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property.publishing;
+package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacetAbstract;
 
-public class ExecutionDispatchPropertyFacetFromConfiguration 
-extends ExecutionDispatchPropertyFacetAbstract {
+public abstract class ExecutionPublishingFacetAbstract 
+extends FacetAbstract
+implements ExecutionPublishingFacet {
 
-    public ExecutionDispatchPropertyFacetFromConfiguration(final FacetHolder holder) {
-        super(holder);
+    public static Class<? extends Facet> type() {
+        return ExecutionPublishingFacet.class;
     }
 
+    public ExecutionPublishingFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
+    }
 }

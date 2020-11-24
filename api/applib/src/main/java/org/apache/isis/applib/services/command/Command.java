@@ -364,8 +364,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        public void setDispatchingEnabled(boolean dispatchingEnabled) {
-            Command.this.publishingEnabled = dispatchingEnabled;
+        public void setPublishingEnabled(boolean publishingEnabled) {
+            Command.this.publishingEnabled = publishingEnabled;
         }
 
     };

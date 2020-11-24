@@ -17,24 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.publish;
+package org.apache.isis.core.metamodel.facets.members.publish.command;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class PublishedActionFacetAbstract 
-extends FacetAbstract 
-implements PublishedActionFacet {
+public class CommandPublishingFacetFromConfiguration extends CommandPublishingFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return PublishedActionFacet.class;
+    public static CommandPublishingFacet create(
+            final FacetHolder holder,
+            final ServiceInjector servicesInjector) {
+        return new CommandPublishingFacetFromConfiguration(holder, servicesInjector);
     }
 
-    public PublishedActionFacetAbstract(final FacetHolder holder) {
-        super(  type(),
-                holder);
+    private CommandPublishingFacetFromConfiguration(
+            final FacetHolder holder,
+            final ServiceInjector servicesInjector) {
+        super(null, holder, servicesInjector);
     }
-
 
 }

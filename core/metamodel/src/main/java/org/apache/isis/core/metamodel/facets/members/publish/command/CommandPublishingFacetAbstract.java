@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.command;
+package org.apache.isis.core.metamodel.facets.members.publish.command;
 
 import java.util.Map;
 
@@ -27,15 +27,17 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class CommandFacetAbstract extends FacetAbstract implements CommandFacet {
+public abstract class CommandPublishingFacetAbstract 
+extends FacetAbstract 
+implements CommandPublishingFacet {
 
     public static Class<? extends Facet> type() {
-        return CommandFacet.class;
+        return CommandPublishingFacet.class;
     }
 
     private final CommandDtoProcessor processor;
 
-    public CommandFacetAbstract(
+    public CommandPublishingFacetAbstract(
             final CommandDtoProcessor processor,
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {

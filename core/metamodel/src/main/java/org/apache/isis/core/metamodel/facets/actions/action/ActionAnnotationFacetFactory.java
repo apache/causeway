@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
@@ -40,10 +39,11 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
@@ -203,7 +203,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(command=...)
-        val commandFacet = CommandFacetForActionAnnotation.create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod);
+        val commandFacet = CommandPublishingFacetForActionAnnotation.create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod);
 
         super.addFacet(commandFacet);
     }
@@ -223,7 +223,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(publishing=...)
-        val facet = PublishedActionFacetForActionAnnotation.create(actionIfAny, getConfiguration(), facetedMethod);
+        val facet = ExecutionPublishingActionFacetForActionAnnotation.create(actionIfAny, getConfiguration(), facetedMethod);
         super.addFacet(facet);
     }
 

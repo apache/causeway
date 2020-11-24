@@ -35,10 +35,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -260,8 +260,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             return head.getTarget();
         }
         
-        command.updater().setDispatchingEnabled(
-                CommandFacet.isDispatchingEnabled(getFacetHolder()));
+        command.updater().setPublishingEnabled(
+                CommandPublishingFacet.isPublishingEnabled(getFacetHolder()));
 
         val propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
 
@@ -291,7 +291,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         }
 
         // publish (if not a contributed association, query-only mixin)
-        val publishedPropertyFacet = getIdentified().getFacet(ExecutionDispatchPropertyFacet.class);
+        val publishedPropertyFacet = getIdentified().getFacet(ExecutionPublishingFacet.class);
         if (publishedPropertyFacet != null) {
             getExecutionDispatcher().publishPropertyEdit(priorExecution);
         }

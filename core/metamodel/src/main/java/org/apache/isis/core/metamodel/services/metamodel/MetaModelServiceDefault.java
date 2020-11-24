@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
@@ -257,11 +257,11 @@ public class MetaModelServiceDefault implements MetaModelService {
         if (objectMemberIfAny == null) {
             return null;
         }
-        final CommandFacet commandFacet = objectMemberIfAny.getFacet(CommandFacet.class);
-        if(commandFacet == null) {
+        final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.getFacet(CommandPublishingFacet.class);
+        if(commandPublishingFacet == null) {
             return null;
         }
-        return commandFacet.getProcessor();
+        return commandPublishingFacet.getProcessor();
     }
 
     @Override

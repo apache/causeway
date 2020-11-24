@@ -17,13 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.action.publishing;
+package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class PublishedActionFacetForActionAnnotationAsConfigured extends PublishedActionFacetForActionAnnotation {
+public class ExecutionPublishingActionFacetForActionAnnotationAsConfigured 
+extends ExecutionPublishingActionFacetForActionAnnotation {
 
-    public PublishedActionFacetForActionAnnotationAsConfigured(
+    public ExecutionPublishingActionFacetForActionAnnotationAsConfigured(
             final FacetHolder holder) {
         super(holder);
     }

@@ -16,18 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.actions.action.command;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
+package org.apache.isis.core.metamodel.facets.members.publish.execution;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class CommandFacetForActionAnnotationAsConfigured extends CommandFacetForActionAnnotation {
+public class ExecutionPublishingActionFacetFromConfiguration 
+extends ExecutionPublishingFacetAbstract {
 
-    CommandFacetForActionAnnotationAsConfigured(
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
-        super(null, holder, servicesInjector);
+    public ExecutionPublishingActionFacetFromConfiguration(
+            final FacetHolder holder) {
+        super(holder);
     }
-
 
 }

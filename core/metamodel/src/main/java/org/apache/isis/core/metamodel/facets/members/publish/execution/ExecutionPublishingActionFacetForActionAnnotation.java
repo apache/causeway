@@ -16,47 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.actions.action.command;
+
+package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 import lombok.val;
 
-public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
+public class ExecutionPublishingActionFacetForActionAnnotation 
+extends ExecutionPublishingFacetAbstract {
 
-    public static CommandFacet create(
+    public static ExecutionPublishingFacet create(
             final Optional<Action> actionsIfAny,
             final IsisConfiguration configuration,
-            final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 
-        val publishingPolicy = PublishingPolicies.actionCommandPublishingPolicy(configuration); 
+        val publishingPolicy = PublishingPolicies.actionExecutionPublishingPolicy(configuration);
 
         return actionsIfAny
-                .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
-                .map(action -> {
-
-                    Publishing commandPublishing = action.commandPublishing();
-                    final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
-                    final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
-
-                    if(processor != null) {
-                        commandPublishing = Publishing.ENABLED;
-                    }
-
-                    switch (commandPublishing) {
+                .map(Action::executionPublishing)
+                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+                .<ExecutionPublishingFacet>map(publishing -> {
+                    switch (publishing) {
                     case AS_CONFIGURED:
+
                         switch (publishingPolicy) {
                         case NONE:
                             return null;
@@ -67,17 +57,15 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                             }
                             // else fall through
                         default:
-                            return (CommandFacet)new CommandFacetForActionAnnotationAsConfigured(
-                                    holder, servicesInjector);
+                            return new ExecutionPublishingActionFacetForActionAnnotationAsConfigured(holder);
                         }
                     case DISABLED:
                         return null;
                     case ENABLED:
-                        return new CommandFacetForActionAnnotation(
-                                processor, holder, servicesInjector);
+                        return new ExecutionPublishingActionFacetForActionAnnotation(holder);
                     default:
                     }
-                    throw new IllegalStateException("command '" + commandPublishing + "' not recognised");
+                    throw new IllegalStateException("publishing '" + publishing + "' not recognised");
                 })
                 .orElseGet(() -> {
                     switch (publishingPolicy) {
@@ -90,7 +78,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                         }
                         // else fall through
                     default:
-                        return CommandFacetFromConfiguration.create(holder, servicesInjector);
+                        return new ExecutionPublishingActionFacetFromConfiguration(holder);
                     }
                 });
     }
@@ -100,18 +88,13 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
         if(actionSemanticsFacet == null) {
             throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
         }
-        if(actionSemanticsFacet.value().isSafeInNature()) {
-            return true;
-        }
-        return false;
+
+        return actionSemanticsFacet.value().isSafeInNature();
     }
 
-    CommandFacetForActionAnnotation(
-            final CommandDtoProcessor processor,
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
-        super(processor, holder, servicesInjector);
+    ExecutionPublishingActionFacetForActionAnnotation(
+            final FacetHolder holder) {
+        super(holder);
     }
-
 
 }

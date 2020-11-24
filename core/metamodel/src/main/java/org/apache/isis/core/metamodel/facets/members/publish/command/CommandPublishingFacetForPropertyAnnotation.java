@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.property.command;
+package org.apache.isis.core.metamodel.facets.members.publish.command;
 
 import java.util.Optional;
 
@@ -27,15 +27,12 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 
 import lombok.val;
 
-public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
+public class CommandPublishingFacetForPropertyAnnotation extends CommandPublishingFacetAbstract {
 
-    public static CommandFacet create(
+    public static CommandPublishingFacet create(
             final Optional<Property> propertyIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder,
@@ -61,12 +58,12 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
                         case NONE:
                             return null;
                         default:
-                            return (CommandFacet)new CommandFacetForPropertyAnnotationAsConfigured(holder, servicesInjector);
+                            return (CommandPublishingFacet)new CommandPublishingFacetForPropertyAnnotationAsConfigured(holder, servicesInjector);
                         }
                     case DISABLED:
                         return null;
                     case ENABLED:
-                        return new CommandFacetForPropertyAnnotation(holder, processor, servicesInjector);
+                        return new CommandPublishingFacetForPropertyAnnotation(holder, processor, servicesInjector);
                     default:
                     }
                     throw new IllegalStateException("command '" + commandReification + "' not recognised");
@@ -76,13 +73,13 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
                     case NONE:
                         return null;
                     default:
-                        return CommandFacetFromConfiguration.create(holder, servicesInjector);
+                        return CommandPublishingFacetFromConfiguration.create(holder, servicesInjector);
                     }
                 });
     }
 
 
-    CommandFacetForPropertyAnnotation(
+    CommandPublishingFacetForPropertyAnnotation(
             final FacetHolder holder,
             final CommandDtoProcessor processor,
             final ServiceInjector servicesInjector) {

@@ -16,12 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.property.publishing;
+
+package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class PublishedPropertyFacetForPropertyAnnotationAsConfigured extends ExecutionDispatchPropertyFacetForPropertyAnnotation {
-    public PublishedPropertyFacetForPropertyAnnotationAsConfigured(final FacetHolder holder) {
+public class ExecutionPublishingPropertyFacetFromConfiguration 
+extends ExecutionPublishingFacetAbstract {
+
+    public ExecutionPublishingPropertyFacetFromConfiguration(final FacetHolder holder) {
         super(holder);
     }
+
 }

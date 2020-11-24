@@ -16,38 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.metamodel.facets.actions.action.publishing;
+package org.apache.isis.core.metamodel.facets.members.publish.command;
 
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 import lombok.val;
 
-public class PublishedActionFacetForActionAnnotation extends PublishedActionFacetAbstract {
+public class CommandPublishingFacetForActionAnnotation extends CommandPublishingFacetAbstract {
 
-    public static PublishedActionFacet create(
+    public static CommandPublishingFacet create(
             final Optional<Action> actionsIfAny,
             final IsisConfiguration configuration,
+            final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 
-        val publishingPolicy = PublishingPolicies.actionExecutionPublishingPolicy(configuration);
+        val publishingPolicy = PublishingPolicies.actionCommandPublishingPolicy(configuration); 
 
         return actionsIfAny
-                .map(Action::executionPublishing)
-                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
-                .map(publishing -> {
-                    switch (publishing) {
-                    case AS_CONFIGURED:
+                .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
+                .map(action -> {
 
+                    Publishing commandPublishing = action.commandPublishing();
+                    final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
+                    final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+
+                    if(processor != null) {
+                        commandPublishing = Publishing.ENABLED;
+                    }
+
+                    switch (commandPublishing) {
+                    case AS_CONFIGURED:
                         switch (publishingPolicy) {
                         case NONE:
                             return null;
@@ -58,15 +65,17 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                             }
                             // else fall through
                         default:
-                            return (PublishedActionFacet)new PublishedActionFacetForActionAnnotationAsConfigured(holder);
+                            return (CommandPublishingFacet)new CommandPublishingFacetForActionAnnotationAsConfigured(
+                                    holder, servicesInjector);
                         }
                     case DISABLED:
                         return null;
                     case ENABLED:
-                        return new PublishedActionFacetForActionAnnotation(holder);
+                        return new CommandPublishingFacetForActionAnnotation(
+                                processor, holder, servicesInjector);
                     default:
                     }
-                    throw new IllegalStateException("publishing '" + publishing + "' not recognised");
+                    throw new IllegalStateException("command '" + commandPublishing + "' not recognised");
                 })
                 .orElseGet(() -> {
                     switch (publishingPolicy) {
@@ -79,7 +88,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                         }
                         // else fall through
                     default:
-                        return new PublishedActionFacetFromConfiguration(holder);
+                        return CommandPublishingFacetFromConfiguration.create(holder, servicesInjector);
                     }
                 });
     }
@@ -89,13 +98,18 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
         if(actionSemanticsFacet == null) {
             throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
         }
-
-        return actionSemanticsFacet.value().isSafeInNature();
+        if(actionSemanticsFacet.value().isSafeInNature()) {
+            return true;
+        }
+        return false;
     }
 
-    PublishedActionFacetForActionAnnotation(
-            final FacetHolder holder) {
-        super(holder);
+    CommandPublishingFacetForActionAnnotation(
+            final CommandDtoProcessor processor,
+            final FacetHolder holder,
+            final ServiceInjector servicesInjector) {
+        super(processor, holder, servicesInjector);
     }
+
 
 }

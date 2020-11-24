@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property.publishing;
+package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
 import java.util.Optional;
 
@@ -26,15 +26,13 @@ import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacet;
-import org.apache.isis.core.metamodel.facets.properties.publish.ExecutionDispatchPropertyFacetAbstract;
 
 import lombok.val;
 
-public class ExecutionDispatchPropertyFacetForPropertyAnnotation 
-extends ExecutionDispatchPropertyFacetAbstract {
+public class ExecutionPublishingPropertyFacetForPropertyAnnotation 
+extends ExecutionPublishingFacetAbstract {
 
-    public static ExecutionDispatchPropertyFacet create(
+    public static ExecutionPublishingFacet create(
             final Optional<Property> propertyIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
@@ -52,13 +50,13 @@ extends ExecutionDispatchPropertyFacetAbstract {
                         case NONE:
                             return null;
                         default:
-                            return (ExecutionDispatchPropertyFacet)
-                                    new PublishedPropertyFacetForPropertyAnnotationAsConfigured(holder);
+                            return (ExecutionPublishingFacet)
+                                    new ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(holder);
                         }
                     case DISABLED:
                         return null;
                     case ENABLED:
-                        return new ExecutionDispatchPropertyFacetForPropertyAnnotation(holder);
+                        return new ExecutionPublishingPropertyFacetForPropertyAnnotation(holder);
                     default:
                     }
                     return null;
@@ -69,13 +67,13 @@ extends ExecutionDispatchPropertyFacetAbstract {
                     case NONE:
                         return null;
                     default:
-                        return new ExecutionDispatchPropertyFacetFromConfiguration(holder);
+                        return new ExecutionPublishingPropertyFacetFromConfiguration(holder);
                     }
                 });
 
     }
 
-    public ExecutionDispatchPropertyFacetForPropertyAnnotation(final FacetHolder holder) {
+    public ExecutionPublishingPropertyFacetForPropertyAnnotation(final FacetHolder holder) {
         super(holder);
     }
 

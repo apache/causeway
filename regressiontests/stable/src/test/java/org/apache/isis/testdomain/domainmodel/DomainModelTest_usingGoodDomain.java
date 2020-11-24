@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
@@ -173,7 +173,7 @@ class DomainModelTest_usingGoodDomain {
     // -- HELPER
     
     private void assertHasPublishedActionFacet(FacetHolder facetHolder) {
-        val facet = facetHolder.getFacet(PublishedActionFacet.class);
+        val facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
     }
     

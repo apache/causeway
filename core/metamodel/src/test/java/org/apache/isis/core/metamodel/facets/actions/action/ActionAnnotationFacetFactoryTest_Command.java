@@ -23,15 +23,15 @@ import java.lang.reflect.Method;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 
 import lombok.val;
 
@@ -52,8 +52,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         processCommand(facetFactory, new ProcessMethodContext(SomeHasUniqueId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(CommandFacet.class);
-        assertNull(facet);
+        assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
     }
 
     @Test
@@ -71,8 +70,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(CommandFacet.class);
-        assertNull(facet);
+        assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
     }
 
     @Test
@@ -90,9 +88,9 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(CommandFacet.class);
+        final Facet facet = facetedMethod.getFacet(CommandPublishingFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof CommandFacetForActionAnnotation);
+        assertTrue(facet instanceof CommandPublishingFacetForActionAnnotation);
     }
 
 
@@ -111,8 +109,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(CommandFacet.class);
-        assertNull(facet);
+        assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
     }
 
 

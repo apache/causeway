@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -32,10 +32,10 @@ import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetFromConfiguration;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 
 import lombok.val;
 
@@ -54,8 +54,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
 
         processPublishing(facetFactory, new ProcessMethodContext(SomeHasUniqueId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
-        assertNull(facet);
+        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
 
         expectNoMethodsRemoved();
     }
@@ -74,8 +73,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
-        assertNull(facet);
+        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
     }
 
     @Test
@@ -92,9 +90,9 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
+        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
-        final PublishedActionFacetFromConfiguration facetImpl = (PublishedActionFacetFromConfiguration) facet;
+        final ExecutionPublishingActionFacetFromConfiguration facetImpl = (ExecutionPublishingActionFacetFromConfiguration) facet;
         _Blackhole.consume(facetImpl);
     }
 
@@ -123,8 +121,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
-        assertNull(facet);
+        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
 
         expectNoMethodsRemoved();
 
@@ -143,9 +140,9 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
+        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PublishedActionFacetFromConfiguration);
+        assertTrue(facet instanceof ExecutionPublishingActionFacetFromConfiguration);
     }
 
     @Test
@@ -164,8 +161,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
 
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
-        assertNull(facet);
+        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
 
         expectNoMethodsRemoved();
     }
@@ -191,9 +187,9 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
+        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
-        final PublishedActionFacetForActionAnnotation facetImpl = (PublishedActionFacetForActionAnnotation) facet;
+        final ExecutionPublishingActionFacetForActionAnnotation facetImpl = (ExecutionPublishingActionFacetForActionAnnotation) facet;
         _Blackhole.consume(facetImpl);
 
         expectNoMethodsRemoved();
@@ -228,8 +224,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
 
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
-        assertNull(facet);
+        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
 
         expectNoMethodsRemoved();
 
@@ -254,9 +249,9 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
+        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PublishedActionFacetForActionAnnotation);
+        assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
 
         expectNoMethodsRemoved();
     }
@@ -281,9 +276,9 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
+        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PublishedActionFacetForActionAnnotation);
+        assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
     }
 
     @Test
@@ -306,8 +301,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         processPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
-        assertNull(facet);
+        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
     }
 
 }

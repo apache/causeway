@@ -16,22 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
-package org.apache.isis.core.metamodel.facets.properties.publish;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class ExecutionDispatchPropertyFacetAbstract 
-extends FacetAbstract
-implements ExecutionDispatchPropertyFacet {
-
-    public static Class<? extends Facet> type() {
-        return ExecutionDispatchPropertyFacet.class;
-    }
-
-    public ExecutionDispatchPropertyFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
+public class ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured 
+extends ExecutionPublishingPropertyFacetForPropertyAnnotation {
+    
+    public ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(final FacetHolder holder) {
+        super(holder);
     }
 }

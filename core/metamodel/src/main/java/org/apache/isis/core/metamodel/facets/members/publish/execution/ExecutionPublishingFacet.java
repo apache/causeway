@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.publish;
+package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
@@ -29,15 +29,22 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Indicates that editing of the property, captured by an {@link Interaction.Execution},
+ * Indicates that details of the action invocation or property edit, 
+ * captured by an {@link Interaction.Execution},
  * should be dispatched via {@link ExecutionPublisher} to all subscribed 
  * {@link ExecutionSubscriber}s.
+ * <p>
+ * Corresponds to annotating the action method or property using 
+ * {@code @Action/@Property(executionPublishing=ENABLED)}
+ * 
+ * @since 2.0
+ * 
  */
-public interface ExecutionDispatchPropertyFacet extends Facet {
+public interface ExecutionPublishingFacet extends Facet {
     
-    public static boolean isDispatchingEnabled(final @NonNull FacetHolder facetHolder) {
-        val executionDispatchingFacet = facetHolder.getFacet(ExecutionDispatchPropertyFacet.class);
-        return executionDispatchingFacet!=null;
+    public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
+        val executionPublishingFacet = facetHolder.getFacet(ExecutionPublishingFacet.class);
+        return executionPublishingFacet!=null;
     }
     
 }

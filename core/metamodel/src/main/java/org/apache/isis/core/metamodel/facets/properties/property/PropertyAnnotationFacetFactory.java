@@ -36,10 +36,11 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.command.CommandFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
@@ -55,7 +56,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.publishing.ExecutionDispatchPropertyFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -247,7 +247,7 @@ implements MetaModelRefiner {
         }
 
         // check for @Property(command=...)
-        val commandFacet = CommandFacetForPropertyAnnotation
+        val commandFacet = CommandPublishingFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector());
 
         super.addFacet(commandFacet);
@@ -280,7 +280,7 @@ implements MetaModelRefiner {
         }
 
         // check for @Property(publishing=...)
-        val facet = ExecutionDispatchPropertyFacetForPropertyAnnotation
+        val facet = ExecutionPublishingPropertyFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder);
 
         super.addFacet(facet);
