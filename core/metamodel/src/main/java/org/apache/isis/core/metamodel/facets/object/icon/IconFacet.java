@@ -20,9 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.icon;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-/*
+/**
  * Icon for an object a class (for example, by placing an appropriately named image
  * file into a certain directory).
  *
@@ -33,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * different icons for its instances (eg Visa, Mastercard, Amex).
  *
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to a method named <tt>iconName</tt>.
+ * In the standard Apache Isis Programming Model, typically corresponds to a method named {@code iconName}.
  *
  * @see TitleFacet
  * @see PluralFacet

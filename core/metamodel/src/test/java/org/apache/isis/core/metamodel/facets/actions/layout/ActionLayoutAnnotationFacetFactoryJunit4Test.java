@@ -74,7 +74,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
+                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
                 }));
             }});
 
@@ -109,7 +109,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
+                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
                 }));
             }});
 
@@ -146,7 +146,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
+                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
                 }));
             }});
 
@@ -186,7 +186,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
+                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
                 }));
             }});
 
@@ -223,7 +223,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
+                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
                 }));
             }});
 

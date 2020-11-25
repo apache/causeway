@@ -69,16 +69,6 @@ public @interface DomainService {
     // tag::refguide[]
     String objectType()                         // <.>
             default "";
-
-    // end::refguide[]
-    /**
-     * If this domain service acts as a repository for an entity type, specify that entity type.
-     * @deprecated was never implemented
-     */
-    @Deprecated
-    Class<?> repositoryFor()                    // <.>
-            default Object.class;
-
-    // tag::refguide[]
+    
 }
 // end::refguide[]

@@ -28,8 +28,7 @@ public class DomainServiceFacetAnnotation extends DomainServiceFacetAbstract {
 
     public DomainServiceFacetAnnotation(
             final FacetHolder facetHolder,
-            final Class<?> repositoryFor,
             final NatureOfService natureOfService) {
-        super(facetHolder, repositoryFor, natureOfService);
+        super(facetHolder, natureOfService);
     }
 }

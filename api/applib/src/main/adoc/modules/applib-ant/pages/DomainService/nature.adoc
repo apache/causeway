@@ -41,7 +41,6 @@ A final example:
 @RequiredArgsConstructor(onConstructor_ = {@Inject} )
 public class Loans {                                   // <.>
 
-    @Inject
     private final LoanRepository loanRepository;       // <.>
 
     @Action(semantics=SemanticsOf.SAFE)

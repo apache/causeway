@@ -76,17 +76,24 @@ VIEW_MENU_ONLY,
 VIEW_CONTRIBUTIONS_ONLY,
 ----
 
-== Changes to the Programming Model (Publishing)
+== Changes to the Programming Model
 
 === Removed
 
 [source,java]
 ----
-@Action/@Property(command=...)
-@Action/@Property(publish=...)
-@DomainObject(audit=...)
-@DomainObject(publish=...)
+@Action/@Property(command=...)    // <.>
+@Action/@Property(publish=...)    // <.>
+@DomainObject(audit=...)          // <.>
+@DomainObject(publish=...)        // <.> 
+@DomainService(repositoryFor=...) // <.>
 ----
+<.> replaced with `commandPublishing`
+<.> replaced with `executionPublishing`
+<.> replaced with `entityChangePublishing`
+<.> replaced with `entityChangePublishing`
+<.> if this domain service acts as a repository for an entity type, 
+specify that entity type (was never implemented)
 
 === Added
 
@@ -137,7 +144,6 @@ PublisherDispatchService -> ExecutionPublisher & EntityChangesPublisher
 PublisherDispatchServiceDefault -> ExecutionPublisherDefault & EntityChangesPublisherDefault
 CommandServiceInternal -> CommandPublisher
 ----
-
 
 
 

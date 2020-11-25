@@ -22,9 +22,7 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -140,7 +138,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
             }));
         }});
 
@@ -173,7 +171,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
             }));
         }});
 

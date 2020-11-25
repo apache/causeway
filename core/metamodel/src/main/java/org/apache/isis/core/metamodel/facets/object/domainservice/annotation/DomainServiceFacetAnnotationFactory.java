@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -57,7 +56,6 @@ implements MetaModelRefiner {
         mixinOnlyValidator.setMetaModelContext(metaModelContext);
     }
 
-    @SuppressWarnings("deprecation") // because we specifically want to handle deprecated enum use here
     @Override
     public void process(ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
@@ -68,29 +66,8 @@ implements MetaModelRefiner {
         val facetHolder = processClassContext.getFacetHolder();
         val domainServiceFacet = new DomainServiceFacetAnnotation(
                 facetHolder,
-                domainServiceAnnotation.repositoryFor(), domainServiceAnnotation.nature());
+                domainServiceAnnotation.nature());
         super.addFacet(domainServiceFacet);
-
-
-        super.addFacet(
-                new IconFacetDerivedFromDomainServiceAnnotation(
-                        facetHolder,
-                        domainServiceAnnotation.repositoryFor()));
-
-//        val natureOfService = domainServiceFacet.getNatureOfService();
-//        
-//        switch (natureOfService) {
-//        case VIEW_CONTRIBUTIONS_ONLY:
-//            val msg = String.format("%s: menu/contributed services (nature == %s) are prohibited "
-//                    + "convert into a mixin (@Mixin annotation) instead",
-//                    cls.getName(),
-//                    natureOfService);
-//            
-//            mixinOnlyValidator.onFailure(facetHolder, Identifier.classIdentifier(cls), msg);
-//            break;
-//        default:
-//            // no op
-//        }
     }
 
     @Override
