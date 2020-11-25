@@ -34,9 +34,9 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
 public interface TransactionScopeListener {
     
     enum PreCommitPhase {
-        PRE_AUDITING,
-        AUDITING,
-        POST_AUDITING
+        PRE_PUBLISHING,
+        WHILE_PUBLISHING,
+        POST_PUBLISHING
     }
     
     default void onTransactionStarted() {

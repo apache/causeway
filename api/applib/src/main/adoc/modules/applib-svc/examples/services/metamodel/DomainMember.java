@@ -31,9 +31,6 @@ public interface DomainMember extends Comparable<DomainMember> {
     String getMemberName();
     String getNumParams();
 
-    boolean isContributed();
-    String getContributedBy();
-
     boolean isMixedIn();
     String getMixin();
 

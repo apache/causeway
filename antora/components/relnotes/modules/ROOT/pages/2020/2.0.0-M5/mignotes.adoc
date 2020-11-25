@@ -5,7 +5,7 @@
 
 WARNING: Not released yet.
 
-== Java
+== Removal of Image Value Type
 
 Some Java classes and/or packages have been renamed/moved:
 
@@ -16,3 +16,128 @@ Some Java classes and/or packages have been renamed/moved:
 org.apache.isis.legacy.applib.value.Image // <.>
 ----
 <.> only kept to ease migration, use `java.awt.image.BufferedImage` instead, which is supported by the framework as value type
+
+
+== Removal of deprecated Contributees
+
+.Config
+[source,java]
+----
+isis.core.metaModel.validator.serviceActionsOnly=true // <.>
+isis.core.metaModel.validator.mixins-only=true        // <.>
+----
+<.> `@DomainService(natureOfService=VIEW/REST)` is now solely used for UI menu action providers and REST end-points.
+There is no longer the need to validate uses of `natureOfService=DOMAIN` as this option was removed.  
+<.> Support for services that contribute members to other `DomainObjects` was removed. Use `Mixins` instead. 
+
+See the former java-doc for hints on how to migrate the previous options.
+
+.@DomainService(natureOfService=...)
+[source,java]
+----
+/**
+ * A <em>programmatic</em> service.
+ * <p>
+ * The service's actions do not appear on any viewer and are not visible in the REST API. In other words
+ * these are not contributed to the domain-model. However, the service is injectable into domain objects.
+ * </p>
+ *
+ * @deprecated will be removed with 2.0.0 release! use Spring's {@link org.springframework.stereotype.Service @Service} instead;
+ * @apiNote For now, used as synonym for {@link #REST}
+ */
+@Deprecated
+DOMAIN,
+
+/**
+ * @deprecated will be removed with 2.0.0 release! use {@link #REST} instead;
+ * @apiNote For now, used as synonym for {@link #REST}
+ */
+@Deprecated
+VIEW_REST_ONLY,
+
+/**
+ * @deprecated will be removed with 2.0.0 release! use {@link #VIEW} instead
+ * @apiNote For now, used as synonym for {@link #VIEW}
+ */
+@Deprecated
+VIEW_MENU_ONLY,
+
+/**
+ * @deprecated will be removed with 2.0.0 release!
+ * <p>
+ * For now, contributing actions will be gathered to show up in the 'others' menu to ease migration.
+ * These will likely not work.
+ * <p>
+ * Migration Note: For each {@code Action} write a new mixin class.
+ * see {@link Mixin}
+ * @apiNote For now, used as synonym for {@link #VIEW}
+ */
+@Deprecated
+VIEW_CONTRIBUTIONS_ONLY,
+----
+
+== Changes to the Programming Model (Publishing)
+
+=== Removed
+
+[source,java]
+----
+@Action/@Property(command=...)
+@Action/@Property(publish=...)
+@DomainObject(audit=...)
+@DomainObject(publish=...)
+----
+
+=== Added
+
+.Command/Execution Publishing (Member Level Annotations)
+[source,java]
+----
+@Action/@Property(commandPublishing=ENABLED/DISABLED)   // <.>
+@Action/@Property(executionPublishing=ENABLED/DISABLED) // <.>
+----
+<.> affects Command publishing
+<.> affects Execution publishing
+
+.Entity Change Publishing (Class Level Annotations)
+[source,java]
+----
+@DomainObject(entityChangePublishing=ENABLED/DISABLED) // <.>
+----
+<.> affects EntityChange publishing (effective only for entity types)
+
+=== Renamed
+
+.Publishing API/SPI
+[source,java]
+----
+AuditerService -> EntityPropertyChangeSubscriber                  // <.>
+PublisherService -> ExecutionSubscriber & EntityChangesSubscriber // <.>
+CommandServiceListener -> CommandSubscriber
+
+PublishedObjects -> ChangingEntities
+----
+<.> `EntityPropertyChangeSubscriber` receives pre-post property values for each changed entity
+<.> `EntityChangesSubscriber` receives the entire set of changed entities, serializable as `ChangesDto`
+
+
+.Loggers - each to be activated by enabling debug logging for the corresponding Logger class
+[source,java]
+----
+AuditerServiceLogging -> EntityPropertyChangeLogger
+PublisherServiceLogging -> ExecutionLogger & EntityChangesLogger
+CommandLogger (NEW)
+----
+
+.Internal Services
+[source,java]
+----
+AuditerDispatchService -> EntityPropertyChangePublisher
+PublisherDispatchService -> ExecutionPublisher & EntityChangesPublisher
+PublisherDispatchServiceDefault -> ExecutionPublisherDefault & EntityChangesPublisherDefault
+CommandServiceInternal -> CommandPublisher
+----
+
+
+
+
