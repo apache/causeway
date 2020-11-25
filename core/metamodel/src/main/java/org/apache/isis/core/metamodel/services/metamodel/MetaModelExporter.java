@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.spec.Specification;
@@ -207,7 +206,7 @@ class MetaModelExporter {
         }
 
         if (specification.isManagedBean()) {
-            if(!hasNatureOfServiceOfDomain(specification)) {
+            if(DomainServiceFacet.getNatureOfService(specification).isPresent()) {
                 addActions(specification, domainClassByObjectSpec, config);
             }
         } else {
@@ -219,11 +218,6 @@ class MetaModelExporter {
 
     private boolean isEnum(final ObjectSpecification specification) {
         return specification.getCorrespondingClass().isEnum();
-    }
-
-    private boolean hasNatureOfServiceOfDomain(final ObjectSpecification specification) {
-        final DomainServiceFacet domainServiceFacet = specification.getFacet(DomainServiceFacet.class);
-        return domainServiceFacet != null && domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
     }
 
     private void addProperties(

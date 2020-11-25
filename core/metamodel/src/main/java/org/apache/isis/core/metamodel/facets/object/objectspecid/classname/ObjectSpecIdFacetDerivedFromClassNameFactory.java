@@ -184,12 +184,9 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             return false; //skip validation
         }
         if (objectSpec.isManagedBean()) {
-            // don't check if domain service isn't a target in public API (UI/REST)
-            final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
-            if(domainServiceFacet != null) {
-                if(domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN) {
-                    return false; //skip validation
-                }
+            // only check if domain service is contributing to the public API (UI/REST)
+            if(!DomainServiceFacet.getNatureOfService(objectSpec).isPresent()) {
+                return false; //skip validation
             }
 
             // don't check if domain service has only programmatic methods

@@ -1350,15 +1350,6 @@ public class IsisConfiguration {
                 private boolean actionCollectionParameterChoices = true;
 
                 /**
-                 * If set, checks that any domain services have only actions associated with them, not properties
-                 * or collections.
-                 *
-                 * @deprecated - in that in the future the programming model will simply not search for properties or collections of domain services.
-                 */
-                @Deprecated
-                private boolean serviceActionsOnly = true;
-
-                /**
                  * Whether to ensure that the object type of all objects must be specified explicitly, using either
                  * {@link DomainObject#objectType()} or {@link DomainService#objectType()}.
                  *

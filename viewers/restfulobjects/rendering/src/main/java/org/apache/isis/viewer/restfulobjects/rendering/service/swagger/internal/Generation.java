@@ -151,18 +151,8 @@ class Generation {
 
         for (val spec : specificationLoader.snapshotSpecifications()) {
 
-            val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-            if (domainServiceFacet == null) {
+            if(!DomainServiceFacet.isContributing(spec)) {
                 continue;
-            }
-            val natureOfService = domainServiceFacet.getNatureOfService();
-            
-            if (natureOfService.isProgrammatic()) {
-                continue; // ignore programmatic services
-            }
-            
-            if (visibility.isPublic() && !natureOfService.isRestAlso()) {
-                continue; // ignore services that don't publicly contribute to rest
             }
 
             val serviceActions = Util.actionsOf(spec, visibility, classExcluder);

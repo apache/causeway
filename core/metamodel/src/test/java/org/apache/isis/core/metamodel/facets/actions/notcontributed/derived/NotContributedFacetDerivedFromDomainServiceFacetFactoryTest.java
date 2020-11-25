@@ -85,41 +85,41 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
     //        assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.VIEW_MENU_ONLY));
     //    }
 
-    @Test
-    public void whenDomain() throws Exception {
-
-        // given
-        @DomainService(nature = NatureOfService.DOMAIN)
-        class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
-        }
-
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) {
-            }));
-        }});
-
-        expectNoMethodsRemoved();
-
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
-
-        // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
-        assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof NotContributedFacetDerivedFromDomainServiceFacet, is(true));
-        final NotContributedFacetDerivedFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotContributedFacetDerivedFromDomainServiceFacet) facet;
-        assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.DOMAIN));
-    }
+//    @Test
+//    public void whenDomain() throws Exception {
+//
+//        // given
+//        @DomainService(nature = NatureOfService.DOMAIN)
+//        class CustomerService {
+//
+//            public String name() {
+//                return "Joe";
+//            }
+//        }
+//
+//        context.checking(new Expectations() {{
+//            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
+//            will(returnValue(mockObjSpec));
+//
+//            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+//            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) {
+//            }));
+//        }});
+//
+//        expectNoMethodsRemoved();
+//
+//        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+//
+//        // when
+//        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+//
+//        // then
+//        final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
+//        assertThat(facet, is(not(nullValue())));
+//        assertThat(facet instanceof NotContributedFacetDerivedFromDomainServiceFacet, is(true));
+//        final NotContributedFacetDerivedFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotContributedFacetDerivedFromDomainServiceFacet) facet;
+//        assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.DOMAIN));
+//    }
 
     @Test
     public void whenView() throws Exception {

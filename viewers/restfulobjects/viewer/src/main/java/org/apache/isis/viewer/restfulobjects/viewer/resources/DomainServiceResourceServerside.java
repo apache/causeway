@@ -38,13 +38,11 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -64,15 +62,8 @@ import lombok.val;
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
 
-    private static final Predicate<ManagedObject> NATURE_REST_ALSO = (final ManagedObject input) -> {
-        final ObjectSpecification specification = input.getSpecification();
-        final DomainServiceFacet facet = specification.getFacet(DomainServiceFacet.class);
-        if (facet == null) {
-            // not expected, because we know these are domain services.
-            return false;
-        }
-        val natureOfService = facet.getNatureOfService();
-        return natureOfService.isRestAlso();
+    private static final Predicate<ManagedObject> NATURE_REST = (final ManagedObject input) -> {
+        return DomainServiceFacet.isContributing(input.getSpecification());
     };
 
     @Inject
@@ -95,7 +86,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         val metaModelContext = resourceContext.getMetaModelContext();
         
         final Stream<ManagedObject> serviceAdapters = metaModelContext.streamServiceAdapters()
-                .filter(NATURE_REST_ALSO);
+                .filter(NATURE_REST);
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())

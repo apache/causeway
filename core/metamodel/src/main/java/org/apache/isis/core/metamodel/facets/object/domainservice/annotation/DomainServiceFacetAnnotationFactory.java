@@ -77,26 +77,26 @@ implements MetaModelRefiner {
                         facetHolder,
                         domainServiceAnnotation.repositoryFor()));
 
-        val natureOfService = domainServiceFacet.getNatureOfService();
-        
-        switch (natureOfService) {
-        case VIEW_CONTRIBUTIONS_ONLY:
-            val msg = String.format("%s: menu/contributed services (nature == %s) are prohibited "
-                    + "convert into a mixin (@Mixin annotation) instead",
-                    cls.getName(),
-                    natureOfService);
-            
-            mixinOnlyValidator.onFailure(facetHolder, Identifier.classIdentifier(cls), msg);
-            break;
-        default:
-            // no op
-        }
+//        val natureOfService = domainServiceFacet.getNatureOfService();
+//        
+//        switch (natureOfService) {
+//        case VIEW_CONTRIBUTIONS_ONLY:
+//            val msg = String.format("%s: menu/contributed services (nature == %s) are prohibited "
+//                    + "convert into a mixin (@Mixin annotation) instead",
+//                    cls.getName(),
+//                    natureOfService);
+//            
+//            mixinOnlyValidator.onFailure(facetHolder, Identifier.classIdentifier(cls), msg);
+//            break;
+//        default:
+//            // no op
+//        }
     }
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        val isServiceActionsOnly = getConfiguration().getCore().getMetaModel().getValidator().isServiceActionsOnly();
+        val isServiceActionsOnly = true;
         if (isServiceActionsOnly) {
             
             programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {

@@ -324,45 +324,45 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
         //
         //        }
 
-        @Test
-        public void onDomainServiceForDomainWithBoth() {
-
-            // given
-            @DomainService(nature = NatureOfService.DOMAIN)
-            class CustomerService {
-
-                @ActionLayout(contributed = Contributed.AS_NEITHER)
-                public String name() {
-                    return "Joe";
-                }
-            }
-
-            context.checking(new Expectations() {{
-
-                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-                will(returnValue(mockObjSpec));
-
-                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) { }));
-
-                allowing(mockObjSpec).getFacet(MixinFacet.class);
-                will(returnValue(null));
-
-            }});
-
-            expectNoMethodsRemoved();
-
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
-
-            // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(
-                    CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-
-            // then
-            final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
-            assertThat(facet, CoreMatchers.is(nullValue()));
-
-        }
+//        @Test
+//        public void onDomainServiceForDomainWithBoth() {
+//
+//            // given
+//            @DomainService(nature = NatureOfService.DOMAIN)
+//            class CustomerService {
+//
+//                @ActionLayout(contributed = Contributed.AS_NEITHER)
+//                public String name() {
+//                    return "Joe";
+//                }
+//            }
+//
+//            context.checking(new Expectations() {{
+//
+//                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
+//                will(returnValue(mockObjSpec));
+//
+//                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+//                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) { }));
+//
+//                allowing(mockObjSpec).getFacet(MixinFacet.class);
+//                will(returnValue(null));
+//
+//            }});
+//
+//            expectNoMethodsRemoved();
+//
+//            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+//
+//            // when
+//            facetFactory.process(new FacetFactory.ProcessMethodContext(
+//                    CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+//
+//            // then
+//            final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
+//            assertThat(facet, CoreMatchers.is(nullValue()));
+//
+//        }
 
         @Test
         public void onDomainObjectIsIgnored() {

@@ -119,13 +119,7 @@ extends FacetFactoryAbstract {
         final Class<?> cls =  processMethodContext.getCls();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(cls);
 
-        return isContributingService(spec) || isMixinObject(spec);
-    }
-
-    private static boolean isContributingService(final ObjectSpecification spec) {
-        final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-        return domainServiceFacet != null && !domainServiceFacet.isFallback() && 
-                !domainServiceFacet.getNatureOfService().isProgrammatic();
+        return DomainServiceFacet.isContributing(spec) || isMixinObject(spec);
     }
 
     private static boolean isMixinObject(final ObjectSpecification spec) {

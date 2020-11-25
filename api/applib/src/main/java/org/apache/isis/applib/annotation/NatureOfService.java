@@ -42,59 +42,16 @@ public enum NatureOfService {
     REST,
     // end::refguide[]
 
-    //
-    // -- DEPRECATIONS
-    //
-
-    /**
-     * A <em>programmatic</em> service.
-     * <p>
-     * The service's actions do not appear on any viewer and are not visible in the REST API. In other words
-     * these are not contributed to the domain-model. However, the service is injectable into domain objects.
-     * </p>
-     *
-     * @deprecated will be removed with 2.0.0 release! use Spring's {@link org.springframework.stereotype.Service @Service} instead;
-     * @apiNote For now, used as synonym for {@link #REST}
-     */
-    @Deprecated
-    DOMAIN,
-
-    /**
-     * @deprecated will be removed with 2.0.0 release! use {@link #REST} instead;
-     * @apiNote For now, used as synonym for {@link #REST}
-     */
-    @Deprecated
-    VIEW_REST_ONLY,
-
-    /**
-     * @deprecated will be removed with 2.0.0 release! use {@link #VIEW} instead
-     * @apiNote For now, used as synonym for {@link #VIEW}
-     */
-    @Deprecated
-    VIEW_MENU_ONLY,
-
-    /**
-     * @deprecated will be removed with 2.0.0 release!
-     * <p>
-     * For now, contributing actions will be gathered to show up in the 'others' menu to ease migration.
-     * These will likely not work.
-     * <p>
-     * Migration Note: For each {@code Action} write a new mixin class.
-     * see {@link Mixin}
-     * @apiNote For now, used as synonym for {@link #VIEW}
-     */
-    @Deprecated
-    VIEW_CONTRIBUTIONS_ONLY,
-
     ;
 
     // -- BASIC PREDICATES
 
     /**
+     * Whether a service contributes its actions to viewers and to the REST API.
      * @see {@link NatureOfService#VIEW}
      */
     public boolean isView() {
-        return this == VIEW || this == VIEW_MENU_ONLY  || this == VIEW_CONTRIBUTIONS_ONLY;
+        return this == VIEW;
     }
 
     /**
@@ -102,24 +59,7 @@ public enum NatureOfService {
      * @see {@link NatureOfService#REST}
      */
     public boolean isRestOnly() {
-        return this == REST || this == VIEW_REST_ONLY;
-    }
-
-    /**
-     * Whether a service contributes no actions at all.
-     * @see {@link NatureOfService#DOMAIN}
-     */
-    public boolean isProgrammatic() {
-        return this == DOMAIN;
-    }
-
-    // -- SEMANTIC PREDICATES
-
-    /**
-     * Whether a service contributes its actions (not necessarily exclusive) to the REST API.
-     */
-    public boolean isRestAlso() {
-        return isRestOnly() || isView();
+        return this == REST;
     }
 
     // tag::refguide[]

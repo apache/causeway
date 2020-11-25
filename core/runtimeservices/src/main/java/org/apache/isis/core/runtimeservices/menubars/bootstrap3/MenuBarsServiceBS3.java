@@ -230,12 +230,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             // services that have an imperative hidden() method.
             return false;
         }
-        val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-        if (domainServiceFacet == null) {
-            return true;
-        }
-        val natureOfService = domainServiceFacet.getNatureOfService();
-        return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
+        return DomainServiceFacet.getNatureOfService(spec)
+                .filter(NatureOfService::isView)
+                .isPresent();
     }
 
 

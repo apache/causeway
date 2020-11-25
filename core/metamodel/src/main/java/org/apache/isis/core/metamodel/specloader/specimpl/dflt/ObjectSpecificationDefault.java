@@ -134,16 +134,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             return;
         }
 
-        val domainServiceFacet = getFacet(DomainServiceFacet.class);
-        val isServiceWithNatureOfDomain = domainServiceFacet != null 
-                && domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
-        if (isServiceWithNatureOfDomain) {
-            if (log.isDebugEnabled()) {
-                log.debug("skipping type hierarchy introspection for domain service with natureOfService = DOMAIN {}", getFullIdentifier());
-            }
-            return;
-        }
-
         // superclass
         final Class<?> superclass = getCorrespondingClass().getSuperclass();
         loadSpecOfSuperclass(superclass);
