@@ -34,8 +34,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -62,43 +60,43 @@ extends ChoiceProvider<ObjectMemento> {
     }
 
     @Override
-    public String getDisplayValue(final ObjectMemento choice) {
-        if (choice == null) {
+    public String getDisplayValue(final ObjectMemento choiceMemento) {
+        if (choiceMemento == null) {
             return NULL_DISPLAY_TEXT;
         }
-        val objectAdapter = getCommonContext().reconstructObject(choice);
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
-            return "Internal error: broken memento " + choice;
+        val choice = getCommonContext().reconstructObject(choiceMemento);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(choice)) {
+            return "Internal error: broken memento " + choiceMemento;
         }
-        final IConverter<Object> converter = findConverter(objectAdapter);
+        final IConverter<Object> converter = findConverter(choice);
         return converter != null
-                ? converter.convertToString(objectAdapter.getPojo(), getLocale())
-                : objectAdapter.titleString(null);
+                ? converter.convertToString(choice.getPojo(), getLocale())
+                : choice.titleString(null);
     }
 
     protected Locale getLocale() {
         return Session.exists() ? Session.get().getLocale() : Locale.ENGLISH;
     }
 
-    protected IConverter<Object> findConverter(final ManagedObject objectAdapter) {
-        return IsisConverterLocator.findConverter(objectAdapter, getWicketViewerSettings());
+    protected IConverter<Object> findConverter(final ManagedObject choice) {
+        return IsisConverterLocator.findConverter(choice, getWicketViewerSettings());
     }
 
     @Override
-    public String getIdValue(final ObjectMemento choice) {
-        if (choice == null) {
+    public String getIdValue(final ObjectMemento choiceMemento) {
+        if (choiceMemento == null) {
             return NULL_PLACEHOLDER;
         }
-        final ObjectSpecId objectSpecId = choice.getObjectSpecId();
-        final ObjectSpecification spec = getCommonContext().getSpecificationLoader()
+        val objectSpecId = choiceMemento.getObjectSpecId();
+        val spec = getCommonContext().getSpecificationLoader()
                 .lookupBySpecIdElseLoad(objectSpecId);
 
         // support enums that are implementing an interface; only know this late in the day
         // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectSpecId
         if(spec != null && spec.isEncodeable()) {
-            return objectSpecId.asString() + ":" + choice.asString();
+            return objectSpecId.asString() + ":" + choiceMemento.asString();
         } else {
-            return choice.asString();
+            return choiceMemento.asString();
         }
     }
 
