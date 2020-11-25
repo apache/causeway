@@ -45,7 +45,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
 import lombok.Getter;
 import lombok.val;
 
-public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvider<ObjectMemento> {
+public abstract class ObjectAdapterMementoProviderAbstract 
+extends ChoiceProvider<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,14 +54,11 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     private static final String NULL_DISPLAY_TEXT = "";
 
     @Getter private final ScalarModel scalarModel;
-    @Getter private final transient IsisAppCommonContext commonContext;
-    @Getter private final transient WicketViewerSettings wicketViewerSettings;
+    private transient IsisAppCommonContext commonContext;
+    private transient WicketViewerSettings wicketViewerSettings;
 
     public ObjectAdapterMementoProviderAbstract(ScalarModel scalarModel) {
-        
         this.scalarModel = scalarModel;
-        this.commonContext = scalarModel.getCommonContext();
-        this.wicketViewerSettings = commonContext.lookupServiceElseFail(WicketViewerSettings.class);
     }
 
     @Override
@@ -68,7 +66,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         if (choice == null) {
             return NULL_DISPLAY_TEXT;
         }
-        val objectAdapter = commonContext.reconstructObject(choice);
+        val objectAdapter = getCommonContext().reconstructObject(choice);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "Internal error: broken memento " + choice;
         }
@@ -83,7 +81,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     }
 
     protected IConverter<Object> findConverter(final ManagedObject objectAdapter) {
-        return IsisConverterLocator.findConverter(objectAdapter, wicketViewerSettings);
+        return IsisConverterLocator.findConverter(objectAdapter, getWicketViewerSettings());
     }
 
     @Override
@@ -92,7 +90,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             return NULL_PLACEHOLDER;
         }
         final ObjectSpecId objectSpecId = choice.getObjectSpecId();
-        final ObjectSpecification spec = commonContext.getSpecificationLoader()
+        final ObjectSpecification spec = getCommonContext().getSpecificationLoader()
                 .lookupBySpecIdElseLoad(objectSpecId);
 
         // support enums that are implementing an interface; only know this late in the day
@@ -136,6 +134,8 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             return choicesMementos;
         } 
             
+        val commonContext = getCommonContext();
+        
         return choicesMementos.filter((ObjectMemento candidate)->{
             val objectAdapter = commonContext.reconstructObject(candidate); 
             val title = objectAdapter.titleString(objectAdapter);
@@ -157,6 +157,22 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         return true;
     }
     
+    // -- DEPS
+    
+    protected IsisAppCommonContext getCommonContext() {
+        if(commonContext==null) {
+            commonContext = scalarModel.getCommonContext();
+        }
+        return commonContext;
+    }
+    
+    protected WicketViewerSettings getWicketViewerSettings() {
+        if(wicketViewerSettings==null) {
+            wicketViewerSettings = getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
+        }
+        return wicketViewerSettings;
+    }
+
     // -- HELPER
     
     private ObjectMemento idToMemento(String id) {
@@ -166,8 +182,6 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         val rootOid = RootOid.deString(id);
         return getCommonContext().mementoFor(rootOid);
     }
-
-    
 
 
 }
