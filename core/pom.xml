@@ -161,7 +161,6 @@
 		<shiro.version>1.7.0</shiro.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
-		<spring-framework.version>5.3.1</spring-framework.version>
 		<spring-boot.version>2.4.0</spring-boot.version> <!--  has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.2</swagger-core.version>
@@ -170,14 +169,14 @@
 
 		<vaadin.version>14.3.1</vaadin.version>
 
-		<wicket.version>8.9.0</wicket.version>
+		<wicket.version>8.11.0</wicket.version>
 		<wicket-bootstrap.version>2.0.14</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
 		<wicket-bootstrap-datetimepicker.version>4.17.47</wicket-bootstrap-datetimepicker.version>
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
 		<wicket-webjars.version>2.0.15</wicket-webjars.version>
 
-		<wicketstuff.version>8.9.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+		<wicketstuff.version>8.11.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
 		<xdocreport.version>1.0.6</xdocreport.version>
