@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
@@ -75,6 +76,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         processTypeOf(processMethodContext, actionIfAny);
         processAssociateWith(processMethodContext, actionIfAny);
+        
+        processFileAccept(processMethodContext, actionIfAny);
     }
 
     void processExplicit(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -276,6 +279,16 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             }
         });
         
+
+    }
+    
+    void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
+
+        val holder = processMethodContext.getFacetHolder();
+
+        // check for @Action(fileAccept=...)
+        val facet = FileAcceptFacetForActionAnnotation.create(actionIfAny, holder);
+        super.addFacet(facet);
 
     }
 
