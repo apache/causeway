@@ -57,26 +57,18 @@ implements CommandSubscriber {
 
         kvStore.put(this, "publishedCommands", publishedCommands);
         log.debug("publish command {}", ()->command.getCommandDto());
-        
-        System.err.println("STORE CMD");
     }
 
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
     public static Can<Command> getPublishedCommands(KVStoreForTesting kvStore) {
-        
-        System.err.println("LOAD CMD");
-        
         return Can.ofCollection(
                 (List<Command>) kvStore.get(CommandSubscriberForTesting.class, "publishedCommands")
                 .orElse(null));
     }
 
     public static void clearPublishedCommands(KVStoreForTesting kvStore) {
-        
-        System.err.println("CLEAR CMD");
-        
         kvStore.clear(CommandSubscriberForTesting.class);
     }
 
