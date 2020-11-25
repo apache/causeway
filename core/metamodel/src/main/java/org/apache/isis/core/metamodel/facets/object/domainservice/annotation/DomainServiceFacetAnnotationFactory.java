@@ -40,7 +40,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 
 import lombok.val;
 
-public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract 
+public class DomainServiceFacetAnnotationFactory
+extends FacetFactoryAbstract 
 implements MetaModelRefiner {
 
     private MetaModelValidatorForValidationFailures mixinOnlyValidator =
@@ -78,17 +79,12 @@ implements MetaModelRefiner {
 
         val natureOfService = domainServiceFacet.getNatureOfService();
         
-        // Note: mixinOnlyValidator is only added to metaModelValidator if config option
-        // isis.core.meta-model.validator.mixinsOnly == true
-        // see code at the end of #refineMetaModelValidator(...)
-        
         switch (natureOfService) {
         case VIEW_CONTRIBUTIONS_ONLY:
-            val msg = String.format("%s: menu/contributed services (nature == %s) are prohibited ('%s' config property);"
-                    + " convert into a mixin (@Mixin annotation) instead",
+            val msg = String.format("%s: menu/contributed services (nature == %s) are prohibited "
+                    + "convert into a mixin (@Mixin annotation) instead",
                     cls.getName(),
-                    natureOfService,
-                    "'isis.core.meta-model.validator.mixinsOnly'");
+                    natureOfService);
             
             mixinOnlyValidator.onFailure(facetHolder, Identifier.classIdentifier(cls), msg);
             break;
@@ -142,10 +138,7 @@ implements MetaModelRefiner {
             });
         }
 
-        val isMixinsOnly = getConfiguration().getCore().getMetaModel().getValidator().isMixinsOnly();
-        if (isMixinsOnly) {
-            programmingModel.addValidator(mixinOnlyValidator);
-        }
+        programmingModel.addValidator(mixinOnlyValidator);
 
     }
     

@@ -1359,14 +1359,6 @@ public class IsisConfiguration {
                 private boolean serviceActionsOnly = true;
 
                 /**
-                 * If set, then domain services actions are not contributed to domain objects.
-                 *
-                 * @deprecated - in that in the future the programming model will simply not support contributed actions from domain services.
-                 */
-                @Deprecated
-                private boolean mixinsOnly = true;
-
-                /**
                  * Whether to ensure that the object type of all objects must be specified explicitly, using either
                  * {@link DomainObject#objectType()} or {@link DomainService#objectType()}.
                  *
