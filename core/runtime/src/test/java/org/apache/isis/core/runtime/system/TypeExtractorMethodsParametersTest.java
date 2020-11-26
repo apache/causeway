@@ -21,17 +21,16 @@ package org.apache.isis.core.runtime.system;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodParameters;
+import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
+
+import lombok.val;
 
 public class TypeExtractorMethodsParametersTest {
 
@@ -50,31 +49,11 @@ public class TypeExtractorMethodsParametersTest {
         final Class<?> clazz = CustomerRepository.class;
         final Method method = clazz.getMethod("filterCustomers", List.class);
 
-        final TypeExtractorMethodParameters extractor = new TypeExtractorMethodParameters(method);
-
-        assertThat(extractor.getClasses().size(), is(2));
-        assertThat(extractor.getClasses(), containsElementThat(equalTo(java.util.List.class)));
-        assertThat(extractor.getClasses(), containsElementThat(equalTo(Customer.class)));
+        val classes = TypeExtractor.streamMethodParameters(method).collect(Collectors.toSet());
+        
+        assertEquals(2, classes.size());
+        assertTrue(classes.contains(java.util.List.class));
+        assertTrue(classes.contains(Customer.class));
     }
-
-    static Matcher<List<?>> containsElementThat(final Matcher<?> elementMatcher) {
-        return new TypeSafeMatcher<List<?>>() {
-            @Override
-            public boolean matchesSafely(final List<?> list) {
-                for (final Object o : list) {
-                    if (elementMatcher.matches(o)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("contains element that ").appendDescriptionOf(elementMatcher);
-            }
-        };
-    }
-
 
 }

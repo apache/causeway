@@ -21,14 +21,16 @@ package org.apache.isis.core.runtime.system;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodReturn;
+import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
+
+import lombok.val;
 
 public class TypeExtractorMethodReturnTest {
 
@@ -46,13 +48,13 @@ public class TypeExtractorMethodReturnTest {
 
         final Class<?> clazz = CustomerRepository.class;
         final Method method = clazz.getMethod("findCustomers");
-
-        final TypeExtractorMethodReturn extractor = new TypeExtractorMethodReturn(method);
-
-        final List<Class<?>> classes = extractor.getClasses();
-        assertThat(classes.size(), is(2));
-        assertThat(classes, TypeExtractorMethodsParametersTest.containsElementThat(equalTo((Class<?>)java.util.List.class)));
-        assertThat(classes, TypeExtractorMethodsParametersTest.containsElementThat(equalTo((Class<?>)Customer.class)));
+        
+        val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
+        
+        assertEquals(2, classes.size());
+        assertTrue(classes.contains(java.util.List.class));
+        assertTrue(classes.contains(Customer.class));
+        
     }
 
     @Test
@@ -67,9 +69,8 @@ public class TypeExtractorMethodReturnTest {
         final Class<?> clazz = CustomerRepository.class;
         final Method method = clazz.getMethod("findCustomers");
 
-        final TypeExtractorMethodReturn extractor = new TypeExtractorMethodReturn(method);
-
-        assertThat(extractor.getClasses().size(), is(0));
+        val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
+        assertEquals(0, classes.size());
     }
 
 }

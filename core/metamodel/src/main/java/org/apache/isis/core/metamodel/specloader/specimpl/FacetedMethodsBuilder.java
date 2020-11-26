@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodReturn;
+import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -210,23 +210,20 @@ public class FacetedMethodsBuilder {
             log.debug("introspecting {}: properties and collections", getClassName());
         }
         
+        val specLoader = getSpecificationLoader();
+        
         val associationCandidateMethods = new HashSet<Method>();
         
         methodRemover.acceptRemaining(methodsRemaining->{
             getFacetProcessor()
             .findAssociationCandidateAccessors(methodsRemaining, associationCandidateMethods::add);
         });
-
+        
         // Ensure all return types are known
-        val typesToLoad = _Sets.<Class<?>>newHashSet();
-        for (val method : associationCandidateMethods) {
-            new TypeExtractorMethodReturn(method).forEach(typesToLoad::add);
-        }
-        typesToLoad.remove(introspectedClass);
-
-        val specLoader = getSpecificationLoader();
-        val upTo = IntrospectionState.TYPE_INTROSPECTED;
-        typesToLoad.forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo));
+        
+        TypeExtractor.streamMethodReturn(associationCandidateMethods)
+        .filter(typeToLoad->typeToLoad!=introspectedClass)
+        .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED));
 
         // now create FacetedMethods for collections and for properties
         val associationFacetedMethods = _Lists.<FacetedMethod>newArrayList();
@@ -455,14 +452,11 @@ public class FacetedMethodsBuilder {
             
         }
 
-        val typesToLoad = _Sets.<Class<?>>newHashSet();
-        new TypeExtractorMethodReturn(actionMethod).forEach(typesToLoad::add);
-
         val specLoader = getSpecificationLoader();
 
-        val anyLoadedAsNull = typesToLoad.stream()
-                .map(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
-                .anyMatch(Objects::isNull);
+        val anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
+        .map(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
+        .anyMatch(Objects::isNull);
 
         if (anyLoadedAsNull) {
             return false;
