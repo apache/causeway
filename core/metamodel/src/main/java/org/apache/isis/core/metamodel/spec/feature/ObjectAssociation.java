@@ -111,6 +111,13 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     int getAutoCompleteMinLength();
 
+    /**
+     * Returns true if calculated from other data in the object, that is, should
+     * not be persisted.
+     * @deprecated see https://issues.apache.org/jira/browse/ISIS-2468
+     */
+    @Deprecated
+    boolean isNotPersisted();
 
     /**
      * Returns <code>true</code> if this field on the specified object is deemed
