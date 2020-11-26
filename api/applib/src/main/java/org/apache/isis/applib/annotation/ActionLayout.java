@@ -59,22 +59,6 @@ public @interface ActionLayout {
 
     // end::refguide[]
     /**
-     * For actions of domain services that can be viewed and contributed (that is, whose
-     * {@link DomainService#nature() nature} is either {@link org.apache.isis.applib.annotation.NatureOfService#VIEW}
-     * or {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}), specifies how the
-     * contribution should be implemented, as an action, as an association, or as both.
-     *
-     * <p>
-     *     Has no meaning for actions of domain entities.
-     * </p>
-     */
-    @Deprecated
-    Contributed contributed()                           // <.>
-            default Contributed.NOT_SPECIFIED;
-
-    // tag::refguide[]
-    // end::refguide[]
-    /**
      * Indicates the css class that an action should have.
      *
      * <p>

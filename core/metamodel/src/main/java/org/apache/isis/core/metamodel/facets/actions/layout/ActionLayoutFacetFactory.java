@@ -107,12 +107,12 @@ extends FacetFactoryAbstract {
         super.addFacet(redirectFacet);
 
 
-        // contributing
-        if (isContributingServiceOrMixinObject(processMethodContext)) {
-            NotContributedFacet notContributedFacet = NotContributedFacetForActionLayoutAnnotation
-                    .create(actionLayoutIfAny, facetHolder);
-            super.addFacet(notContributedFacet);
-        }
+//        // contributing
+//        if (isContributingServiceOrMixinObject(processMethodContext)) {
+//            NotContributedFacet notContributedFacet = NotContributedFacetForActionLayoutAnnotation
+//                    .create(actionLayoutIfAny, facetHolder);
+//            super.addFacet(notContributedFacet);
+//        }
     }
 
     private boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
