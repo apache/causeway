@@ -27,10 +27,13 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.services.wrapperFactory.WrapperFactoryJdo;
 import demoapp.dom.services.wrapperFactory.WrapperFactoryJdoEntities;
+import demoapp.dom.services.xmlSnapshotService.XmlSnapshotParentVm;
+import demoapp.dom.services.xmlSnapshotService.peer.child.XmlSnapshotPeerVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ServicesMenu")
 @Log4j2
@@ -43,6 +46,22 @@ public class ServicesMenu {
     @ActionLayout(cssClassFa="fa-gift", describedAs = "Formal object interactions + async")
     public WrapperFactoryJdo wrapperFactory(){
         return wrapperFactoryJdoEntities.first();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-gift", describedAs = "Snapshot object graphs as XML")
+    public XmlSnapshotParentVm xmlSnapshot(){
+
+        val parentVm = new XmlSnapshotParentVm("parent object");
+
+        val peerVm = new XmlSnapshotPeerVm("peer object");
+        parentVm.setPeer(peerVm);
+
+        parentVm.addChild("child 1");
+        parentVm.addChild("child 2");
+        parentVm.addChild("child 3");
+
+        return parentVm;
     }
 
 }

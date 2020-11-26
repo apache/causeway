@@ -176,6 +176,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>Services</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
             </mb3:section>
         </mb3:menu>
 
