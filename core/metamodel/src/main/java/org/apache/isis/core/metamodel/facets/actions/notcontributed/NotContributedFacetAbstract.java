@@ -26,7 +26,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class NotContributedFacetAbstract extends FacetAbstract implements NotContributedFacet {
+public abstract class NotContributedFacetAbstract 
+extends FacetAbstract 
+implements NotContributedFacet {
 
     private final Contributed contributed;
 
@@ -53,19 +55,8 @@ public abstract class NotContributedFacetAbstract extends FacetAbstract implemen
         return contributed;
     }
 
-    @Override
-    public boolean toActions() {
-        // not contributed to actions if...
-        return contributed() == Contributed.AS_NEITHER || contributed() == Contributed.AS_ASSOCIATION;
-    }
-
-    @Override
-    public boolean toAssociations() {
-        // not contributed to associations if...
-        return contributed() == Contributed.AS_NEITHER || contributed() == Contributed.AS_ACTION;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("contributed", contributed);
     }
