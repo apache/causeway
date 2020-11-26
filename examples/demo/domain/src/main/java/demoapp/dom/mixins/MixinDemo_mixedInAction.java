@@ -20,6 +20,7 @@ package demoapp.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +36,7 @@ public class MixinDemo_mixedInAction {
         return holder;
     }
     
+    @Model
     public String default0Act() {
         return holder.getNote();
     }
