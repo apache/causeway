@@ -20,11 +20,12 @@ package demoapp.dom.mixins.legacy;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin(method="act")
+@DomainObject(nature=Nature.MIXIN, mixinMethod="act")
 @RequiredArgsConstructor
 public class MixinLegacyDemo_mixedInAction {
     

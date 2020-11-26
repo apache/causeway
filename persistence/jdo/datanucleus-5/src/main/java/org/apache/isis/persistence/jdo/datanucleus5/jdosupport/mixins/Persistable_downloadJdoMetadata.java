@@ -29,9 +29,7 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -42,7 +40,15 @@ import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin(method = "act")
+@Action(
+        domainEvent = Persistable_downloadJdoMetadata.ActionDomainEvent.class,
+        semantics = SemanticsOf.SAFE,
+        restrictTo = RestrictTo.PROTOTYPING
+        )
+@ActionLayout(
+        cssClassFa = "fa-download",
+        position = ActionLayout.Position.PANEL_DROPDOWN
+        )
 @RequiredArgsConstructor
 public class Persistable_downloadJdoMetadata {
 
@@ -52,16 +58,6 @@ public class Persistable_downloadJdoMetadata {
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-download",
-            position = ActionLayout.Position.PANEL_DROPDOWN
-            )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "710.1")
     public Clob act(
             @ParameterLayout(named = "File name")

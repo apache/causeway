@@ -74,7 +74,6 @@ import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveAnno
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
@@ -252,8 +251,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, RecreatableObjectFacetFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, JaxbFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, MixinFacetForMixinAnnotationFactory.class);
-
 
         // must come after RecreatableObjectFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DomainObjectAnnotationFacetFactory.class);

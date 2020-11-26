@@ -21,28 +21,21 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.contributio
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 
-@Mixin(method = "act")
+@Action
 public class ExcelDemoToDoItem_export2 {
 
+    @SuppressWarnings("unused")
     private final ExcelDemoToDoItem toDoItem;
 
     public ExcelDemoToDoItem_export2(final ExcelDemoToDoItem toDoItem) {
         this.toDoItem = toDoItem;
     }
 
-    @Action()
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION
-    )
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public Blob act() {
         throw new UnsupportedOperationException();
 //        if(actionInvocationContext.isLast()) {

@@ -19,17 +19,16 @@
 package org.apache.isis.testdomain.model.stereotypes;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Mixin;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin @RequiredArgsConstructor
+@Action
+@RequiredArgsConstructor
 public class MyObject_mixin {
     
     private final MyObject holder;
     
-    @Action
-    public MyObject $$() {
+    public MyObject act() {
         return holder;
     }
 

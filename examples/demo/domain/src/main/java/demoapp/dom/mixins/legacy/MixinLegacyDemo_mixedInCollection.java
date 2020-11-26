@@ -23,14 +23,15 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.mixins.DemoItem;
 
-@Mixin(method="coll")
+@DomainObject(nature=Nature.MIXIN, mixinMethod="coll")
 @RequiredArgsConstructor
 public class MixinLegacyDemo_mixedInCollection {
     

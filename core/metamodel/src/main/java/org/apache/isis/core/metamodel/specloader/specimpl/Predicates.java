@@ -22,7 +22,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.val;
@@ -65,13 +64,6 @@ final class Predicates {
     static boolean isAlwaysHidden(final FacetHolder holder) {
         val hiddenFacet = holder.getFacet(HiddenFacet.class);
         return hiddenFacet != null && hiddenFacet.where() == Where.ANYWHERE;
-    }
-    
-    static boolean isAnyContributeeParameterMatching(
-            final ObjectSpecification typeSpec, 
-            final ObjectAction contributeeAction) {
-
-        return Utils.contributeeParameterIndexOf(typeSpec, contributeeAction)!=-1;
     }
     
     // -- HIGHER LEVEL - MIXINS

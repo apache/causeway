@@ -45,7 +45,7 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
         ElementType.ANNOTATION_TYPE }
 )
 @Retention(RetentionPolicy.RUNTIME)
-@Mixin(method = "act")
+@DomainObject(nature=Nature.MIXIN, mixinMethod = "act") // meta annotation, only applies at class level
 public @interface Action {
 
     // end::refguide[]

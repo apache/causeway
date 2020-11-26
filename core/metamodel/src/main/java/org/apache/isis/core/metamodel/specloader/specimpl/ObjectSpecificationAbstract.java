@@ -368,7 +368,7 @@ implements ObjectSpecification {
     }
 
     protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
-        val orderedAssociations = Utils.sortAssociations(associations);
+        val orderedAssociations = MemberSortingUtils.sortAssociations(associations);
         synchronized (unmodifiableAssociations) {
             this.associations.clear();
             this.associations.addAll(orderedAssociations);
@@ -377,7 +377,7 @@ implements ObjectSpecification {
     }
 
     protected void sortCacheAndUpdateActions(final List<ObjectAction> objectActions) {
-        val orderedActions = Utils.sortActions(objectActions);
+        val orderedActions = MemberSortingUtils.sortActions(objectActions);
         synchronized (unmodifiableActions){
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);

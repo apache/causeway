@@ -21,7 +21,8 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
@@ -44,12 +45,16 @@ class MixinInterceptor {
     static String intendedNameOf(Method method) {
 
         val declaringClass = method.getDeclaringClass();
-        val mixinIfAny = _Annotations.findNearestAnnotation(declaringClass, Mixin.class);
+        
+        //XXX the framework does this kind of reasoning at multiple places, maybe we can
+        // consolidate and use caching
+        val mixinAnnotMethodName = _Annotations.findNearestAnnotation(declaringClass, DomainObject.class)
+                .filter(domainObject->Nature.MIXIN.equals(domainObject.nature()))
+                .map(DomainObject::mixinMethod)
+                .orElse(null);
 
-        if(mixinIfAny.isPresent()) {
-            val methodName = method.getName();
-            val mixinAnnotMethodName = mixinIfAny.get().method();
-            if(mixinAnnotMethodName.equals(methodName)) {
+        if(mixinAnnotMethodName!=null) {
+            if(mixinAnnotMethodName.equals(method.getName())) {
                 val mixinMethodName = 
                         ObjectMemberAbstract.deriveMemberNameFrom(method.getDeclaringClass().getName());
                 if(mixinMethodName!=null) {

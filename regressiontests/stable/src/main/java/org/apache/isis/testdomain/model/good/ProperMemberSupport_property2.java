@@ -21,50 +21,50 @@ package org.apache.isis.testdomain.model.good;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin @RequiredArgsConstructor
+@Property
+@PropertyLayout(named= "foo", describedAs = "bar")
+@RequiredArgsConstructor
 public class ProperMemberSupport_property2 {
     
     private final ProperMemberSupport holder;
 
     //@Action(semantics=SAFE)   // <-- inferred (required)
     //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
-    @Property
-    @PropertyLayout(named= "foo", describedAs = "bar")
-    public String $$() {
+    
+    public String prop() {
         return holder.toString();
     }
     
     // -- PROPERLY DECLARED SUPPORTING METHODS 
     
     @Model
-    public Set<String> autoComplete$$(@MinLength(3) String search) {
+    public Set<String> autoCompleteProp(@MinLength(3) String search) {
         return null;
     }
     
     @Model
-    public Set<String> choices$$() {
+    public Set<String> choicesProp() {
         return null;
     }
     
     @Model
-    public String default$$() {
+    public String defaultProp() {
         return "";
     }
 
     @Model
-    public String disable$$() {
+    public String disableProp() {
         return null;
     }
     
     @Model
-    public boolean hide$$() {
+    public boolean hideProp() {
         return false;
     }
 

@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Property;
 
 import lombok.Data;
@@ -66,13 +65,12 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     // -- classic mix-in declaration
     // ------------------------------
     
-    @Mixin @RequiredArgsConstructor 
+    @Action @RequiredArgsConstructor 
     static class Customer_mixin {
         
         private final Customer holder;
         
-        @Action
-        public void $$(String newName) { holder.setName(newName); }
+        public void act(String newName) { holder.setName(newName); }
     }
     
     @Test
@@ -89,7 +87,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
         // proper instantiation
         val holderPojo = new Customer();
         val mixinPojo = mixinFacet.instantiate(holderPojo);
-        ((Customer_mixin)mixinPojo).$$("hello");
+        ((Customer_mixin)mixinPojo).act("hello");
         assertEquals("hello", holderPojo.getName());
         
     }

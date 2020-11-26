@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;

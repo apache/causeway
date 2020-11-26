@@ -20,45 +20,35 @@ package org.apache.isis.extensions.secman.model.app.feature;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin @RequiredArgsConstructor
+@Property(
+        domainEvent = ApplicationPermission_feature.PropertyDomainEvent.class
+        )
+@PropertyLayout(
+        hidden=Where.REFERENCES_PARENT
+        )
+@RequiredArgsConstructor
 public class ApplicationPermission_feature {
 
-    public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_feature> {}
+    public static class PropertyDomainEvent 
+    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
 
     final ApplicationPermission holder;
 
-    @Action(
-            semantics = SemanticsOf.SAFE,
-            domainEvent = ActionDomainEvent.class
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ASSOCIATION
-            )
-    @Property(
-            )
-    @PropertyLayout(
-            hidden=Where.REFERENCES_PARENT
-            )
     @MemberOrder(name="Feature", sequence = "4")
-    public ApplicationFeatureViewModel $$(final ApplicationPermission permission) {
+    public ApplicationFeatureViewModel prop(final ApplicationPermission permission) {
         if(permission.getFeatureType() == null) {
             return null;
         }

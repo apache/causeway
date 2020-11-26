@@ -40,7 +40,7 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Mixin(method = "act")
+@DomainObject(nature=Nature.MIXIN, mixinMethod = "act") // meta annotation, only applies at class level
 public @interface ActionLayout {
 
     // end::refguide[]

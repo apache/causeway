@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -32,22 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.val;
 
 /** package private utility */
-final class Utils {
-    
-    /**
-     * @param contributeeAction - number of the parameter that matches, or -1 if none.
-     */
-    static int contributeeParameterIndexOf(
-            final ObjectSpecification typeSpec, 
-            final ObjectAction contributeeAction) {
-        
-        for (val param : contributeeAction.getParameters()) {
-            if (typeSpec.isOfType(param.getSpecification())) {
-                return param.getNumber();
-            }
-        }
-        return -1;
-    }
+final class MemberSortingUtils {
     
     // -- ASSOCIATION SORTING
 

@@ -21,10 +21,7 @@ package org.apache.isis.extensions.secman.model.dom.user;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.having.HasUsername;
@@ -34,7 +31,11 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin(method = "exec") @RequiredArgsConstructor
+@Action(
+        semantics = SemanticsOf.SAFE,
+        domainEvent = HasUsername_open.ActionDomainEvent.class
+        )
+@RequiredArgsConstructor
 public class HasUsername_open {
 
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
@@ -43,25 +44,20 @@ public class HasUsername_open {
 
     public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<HasUsername_open> {}
 
-    @Action(
-            semantics = SemanticsOf.SAFE,
-            domainEvent = ActionDomainEvent.class
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION
-            )
+    
     @MemberOrder(name = "User", sequence = "1") // associate with a 'User' property (if any)
-    public ApplicationUser exec() {
+    public ApplicationUser act() {
         if (holder == null || holder.getUsername() == null) {
             return null;
         }
         return applicationUserRepository.findByUsername(holder.getUsername()).orElse(null);
     }
-    public boolean hideExec() {
+    
+    public boolean hideAct() {
         return holder instanceof ApplicationUser;
     }
 
-    public TranslatableString disableExec() {
+    public TranslatableString disableAct() {
         if (holder == null || holder.getUsername() == null) {
             return TranslatableString.tr("No username");
         }

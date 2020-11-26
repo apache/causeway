@@ -21,14 +21,15 @@ package demoapp.dom.mixins.legacy;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.mixins.DemoItem;
 
-@Mixin(method="prop")
+@DomainObject(nature=Nature.MIXIN, mixinMethod="prop")
 @RequiredArgsConstructor
 public class MixinLegacyDemo_mixedInProperty {
     

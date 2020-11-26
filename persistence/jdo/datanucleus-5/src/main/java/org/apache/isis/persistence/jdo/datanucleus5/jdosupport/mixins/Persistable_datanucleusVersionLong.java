@@ -22,37 +22,29 @@ import javax.jdo.JDOHelper;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.MixinConstants;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin(method = "prop")
+@Property(
+        domainEvent = Persistable_datanucleusVersionLong.PropertyDomainEvent.class)
+@PropertyLayout(
+        named = "Version",
+        hidden = Where.ALL_TABLES
+        )
 @RequiredArgsConstructor
 public class Persistable_datanucleusVersionLong {
 
     private final Persistable persistable;
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_datanucleusVersionLong> {}
+    public static class PropertyDomainEvent 
+    extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
+    <Persistable_datanucleusVersionLong, Long> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ASSOCIATION
-            )
-    @PropertyLayout(
-            named = "Version",
-            hidden = Where.ALL_TABLES
-            )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.2")
     public Long prop() {
         final Object version = JDOHelper.getVersion(persistable);
