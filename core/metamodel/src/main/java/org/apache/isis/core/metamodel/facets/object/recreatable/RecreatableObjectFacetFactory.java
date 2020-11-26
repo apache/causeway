@@ -51,7 +51,9 @@ implements MetaModelRefiner, PostConstructMethodCache {
     }
 
     /**
-     * We simply attach all facets we can find; the {@link #refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, IsisConfiguration) meta-model validation} will detect if multiple interfaces/annotations have
+     * We simply attach all facets we can find; 
+     * the {@link #refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, IsisConfiguration) meta-model validation} 
+     * will detect if multiple interfaces/annotations have
      * been attached.
      */
     @Override
@@ -67,11 +69,6 @@ implements MetaModelRefiner, PostConstructMethodCache {
                     facetHolder, postConstructMethodCache));
         }
 
-        // ViewModel annotation
-        final org.apache.isis.applib.annotation.ViewModel annotation = 
-                Annotations.getAnnotation(type, org.apache.isis.applib.annotation.ViewModel.class);
-        FacetUtil.addFacet(create(annotation, facetHolder));
-        
         // RecreatableDomainObject interface
         if (RecreatableDomainObject.class.isAssignableFrom(type)) {
             final PostConstructMethodCache postConstructMethodCache = this;
@@ -85,13 +82,6 @@ implements MetaModelRefiner, PostConstructMethodCache {
         FacetUtil.replaceIfAlreadyPresent(create(xmlRootElement, facetHolder));
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory
-    }
-
-    private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
-        final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null 
-                ? new RecreatableObjectFacetForViewModelAnnotation(holder, postConstructMethodCache) 
-                        : null;
     }
 
     private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {

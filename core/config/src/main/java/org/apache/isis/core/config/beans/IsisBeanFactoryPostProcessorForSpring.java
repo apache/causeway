@@ -29,19 +29,18 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.commons.collections.Can;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * The framework's stereotypes {@link DomainService}, {@link DomainObject}, {@link ViewModel}, etc. 
+ * The framework's stereotypes {@link DomainService}, {@link DomainObject}, etc. 
  * are meta annotated with eg. {@link Component}, which allows for the Spring framework to pick up the 
  * annotated type as candidate to become a managed bean. 
  * <p>
  * By plugging into Spring's bootstrapping via a {@link BeanFactoryPostProcessor}, intercepting those 
- * types is possible. Eg. {@link ViewModel} should not be managed by Spring, only discovered.
+ * types is possible. Eg. {@link DomainObject} should not be managed by Spring, only discovered.
  * 
  * @since 2.0
  *

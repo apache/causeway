@@ -20,7 +20,8 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehand
 
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelMetaDataEnabled;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
@@ -32,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@ViewModel
+@DomainObject(nature = Nature.VIEW_MODEL)
 @ToString
 public class DemoToDoItemRowHandler2 
 implements FixtureAwareRowHandler<DemoToDoItemRowHandler2>, ExcelMetaDataEnabled {

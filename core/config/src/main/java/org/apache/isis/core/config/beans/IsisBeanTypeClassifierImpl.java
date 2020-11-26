@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -67,10 +66,6 @@ implements IsisBeanTypeClassifier {
             if(classification!=null) {
                 return classification;
             }
-        }
-
-        if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
         }
 
         if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {

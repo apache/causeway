@@ -24,7 +24,6 @@ import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -67,14 +66,11 @@ implements MetaModelRefiner {
 
         final DomainObjectLayout domainObjectLayout = Annotations.getAnnotation(cls, DomainObjectLayout.class);
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
-        final ViewModel viewModel = Annotations.getAnnotation(cls, ViewModel.class);
-
         final boolean implementsViewModel = org.apache.isis.applib.ViewModel.class.isAssignableFrom(cls);
         final boolean implementsRecreatableDomainObject = org.apache.isis.applib.RecreatableDomainObject.class.isAssignableFrom(cls);
 
         final boolean annotatedWithDomainObjectLayout = domainObjectLayout != null;
         final boolean annotatedWithDomainObject = domainObject != null;
-        final boolean annotatedWithViewModel = viewModel != null;
 
         if(implementsViewModel && implementsRecreatableDomainObject) {
             validator.onFailure(
@@ -96,7 +92,7 @@ implements MetaModelRefiner {
                     cls.getName(),
                     org.apache.isis.applib.ViewModel.class.getSimpleName(),
                     DomainObject.class.getSimpleName(),
-                    ViewModel.class.getSimpleName(),
+                    "TODO ViewModel removed",
                     RecreatableDomainObject.class.getSimpleName()
                     );
         }
@@ -112,51 +108,10 @@ implements MetaModelRefiner {
                     RecreatableDomainObject.class.getSimpleName());
         }
 
-
-        if(annotatedWithViewModel && implementsRecreatableDomainObject) {
-            validator.onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(cls),
-                    "Inconsistent view model / domain object semantics; %1$s should not be annotated "
-                    + "with @%2$s but implement @%3$s (implement %4$s instead of %3$s, or annotate with @%5$s with nature of "
-                    + "%6s, %7s or %8s instead of annotating with @%2$s)",
-                    cls.getName(),
-                    org.apache.isis.applib.annotation.ViewModel.class.getSimpleName(),
-                    org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName(),
-                    org.apache.isis.applib.ViewModel.class.getName(),
-                    org.apache.isis.applib.annotation.DomainObject.class.getName(),
-                    Nature.VIEW_MODEL,
-                    Nature.INMEMORY_ENTITY,
-                    Nature.EXTERNAL_ENTITY
-                    );
-        }
-        if(annotatedWithViewModel && annotatedWithDomainObject) {
-            validator.onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(cls),
-                    "Inconsistent view model / domain object semantics; %1$s should not be annotated with "
-                    + "both @%2$s and @%3$s (annotate with one or the other)",
-                    cls.getName(),
-                    org.apache.isis.applib.annotation.ViewModel.class.getSimpleName(),
-                    org.apache.isis.applib.annotation.DomainObject.class.getSimpleName());
-
-        }
-        if(annotatedWithViewModel && annotatedWithDomainObjectLayout) {
-            validator.onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(cls),
-                    "Inconsistent view model / domain object semantics; %1$s should not be annotated with "
-                    + "both @%2$s and @%3$s (annotate with @%4$s instead of @%3$s, or annotate with @%5$s instead of @%2$s)",
-                    cls.getName(),
-                    org.apache.isis.applib.annotation.ViewModel.class.getSimpleName(),
-                    DomainObjectLayout.class.getSimpleName(),
-                    "TODO removed",
-                    DomainObject.class.getSimpleName());
-        }
-
-        if(     annotatedWithDomainObject &&
-                (domainObject.nature() == Nature.NOT_SPECIFIED || domainObject.nature() == Nature.JDO_ENTITY) &&
-                implementsRecreatableDomainObject) {
+        if(annotatedWithDomainObject
+                && (domainObject.nature() == Nature.NOT_SPECIFIED 
+                    || domainObject.nature().isEntity()) 
+                && implementsRecreatableDomainObject) {
             validator.onFailure(
                     facetHolder,
                     Identifier.classIdentifier(cls),

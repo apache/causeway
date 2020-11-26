@@ -18,9 +18,10 @@
  */
 package org.apache.isis.testdomain.model.stereotypes;
 
-import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
-@ViewModel
+@DomainObject(nature = Nature.VIEW_MODEL)
 public class MyView {
 
 }

@@ -88,6 +88,7 @@ public enum Nature {
      * </p>
      */
     // tag::refguide[]
+    @Deprecated
     EXTERNAL_ENTITY,
 
     // end::refguide[]
@@ -107,6 +108,7 @@ public enum Nature {
      * </p>
      */
     // tag::refguide[]
+    @Deprecated
     INMEMORY_ENTITY,
 
     // end::refguide[]
@@ -149,6 +151,15 @@ public enum Nature {
      */
     // tag::refguide[]
     BEAN,
-
+    // end::refguide[]
+    ;
+    
+    public boolean isEntity() {
+        return this == Nature.JDO_ENTITY 
+                || this == Nature.JPA_ENTITY;
+    }
+    
+    
+    // tag::refguide[]
 }
-// tag::refguide[]
+//end::refguide[]
