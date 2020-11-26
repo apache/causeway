@@ -20,7 +20,6 @@ package demoapp.dom.services.xmlSnapshotService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,17 +27,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,6 +57,7 @@ public class XmlSnapshotParentVm implements HasAsciiDocDescription {
 
     public XmlSnapshotParentVm(String text) {
         this.text = text;
+        this.otherText = text;
     }
 
     public String title() {
@@ -73,8 +70,14 @@ public class XmlSnapshotParentVm implements HasAsciiDocDescription {
     @Getter @Setter
     private String text;
 
-    @Property(editing = Editing.ENABLED)
+    @Property(editing = Editing.ENABLED, mementoSerialization = MementoSerialization.EXCLUDED)
     @MemberOrder(name = "properties", sequence = "2")
+    @XmlElement(required = true)
+    @Getter @Setter
+    private String otherText;
+
+    @Property(editing = Editing.ENABLED)
+    @MemberOrder(name = "properties", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private XmlSnapshotPeerVm peer;
