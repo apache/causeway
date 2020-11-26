@@ -39,7 +39,7 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Mixin(method = "coll")
+@DomainObject(nature=Nature.MIXIN, mixinMethod = "coll") // meta annotation, only applies at class level
 public @interface Collection {
 
     // end::refguide[]

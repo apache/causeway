@@ -38,7 +38,7 @@ import java.util.Comparator;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Mixin(method = "coll")
+@DomainObject(nature=Nature.MIXIN, mixinMethod = "coll") // meta annotation, only applies at class level
 public @interface CollectionLayout {
 
     // end::refguide[]

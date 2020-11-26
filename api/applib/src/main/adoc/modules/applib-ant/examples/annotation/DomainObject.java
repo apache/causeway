@@ -145,7 +145,7 @@ public @interface DomainObject {
      */
     // tag::refguide[]
     String mixinMethod()                            // <.>
-            default Mixin.DEFAULT_METHOD_NAME;
+            default "$$";
 
     // end::refguide[]
     /**

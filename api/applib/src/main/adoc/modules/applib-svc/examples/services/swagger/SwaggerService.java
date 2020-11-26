@@ -19,11 +19,10 @@
 package org.apache.isis.applib.services.swagger;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.applib.annotation.ViewModel;
 
 // tag::refguide[]
 public interface SwaggerService {
@@ -40,7 +39,8 @@ public interface SwaggerService {
          * Specification for use by third-party clients, ie public use.
          *
          * <p>
-         * Restricted only to view models ({@link ViewModel} or equivalent) and {@link DomainService} with a nature
+         * Restricted only to view models ({@link DomainObject} or equivalent) 
+         * and {@link DomainService} with a nature
          * of {@link NatureOfService#VIEW_REST_ONLY}.
          * </p>
          */

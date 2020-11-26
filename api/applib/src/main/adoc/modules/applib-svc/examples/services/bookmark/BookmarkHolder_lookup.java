@@ -23,33 +23,30 @@ import javax.inject.Inject;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-@Mixin(method = "act")
+import lombok.RequiredArgsConstructor;
+
+@Action(
+        domainEvent = BookmarkHolder_lookup.ActionDomainEvent.class,
+        semantics = SemanticsOf.SAFE
+)
+@ActionLayout(
+        cssClassFa = "fa-bookmark"
+)
+@RequiredArgsConstructor
 public class BookmarkHolder_lookup {
 
     private final BookmarkHolder bookmarkHolder;
 
-    public BookmarkHolder_lookup(final BookmarkHolder bookmarkHolder) {
-        this.bookmarkHolder = bookmarkHolder;
-    }
-
     public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<BookmarkHolder_lookup> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE
-    )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-bookmark"
-    )
     public Object act() {
         return bookmarkService.lookup(bookmarkHolder);
     }
-
+    
+    // -- DEPENDENCIES
+    
     @Inject private BookmarkService bookmarkService;
 
 }

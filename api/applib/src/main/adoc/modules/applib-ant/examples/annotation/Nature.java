@@ -74,43 +74,6 @@ public enum Nature {
 
     // end::refguide[]
     /**
-     * A domain entity that is a wrapper/proxy/stub to some externally managed entity.  Domain entities are
-     * considered to be part of the domain model layer.
-     *
-     * <p>
-     *     The identity of an external entity is determined solely by the state of object's properties (that have not
-     *     been set to be ignored using {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
-     * </p>
-     *
-     * <p>
-     *     Note that collections are ignored; if their state is required to fully identify the view model, use
-     *     {@link XmlRootElement} annotation instead.
-     * </p>
-     */
-    // tag::refguide[]
-    EXTERNAL_ENTITY,
-
-    // end::refguide[]
-    /**
-     * A domain entity that is a wrapper/proxy/stub to a &quot;synthetic&quot; entity, for example one that is
-     * constructed from some sort of internal memory data structure.
-     *
-     * <p>
-     *     As for a {@link #EXTERNAL_ENTITY}, the identity of a synthetic entity is determined solely by the
-     *     state of object's properties (that have not been set to be ignored using
-     *     {@link Property#mementoSerialization()}).
-     * </p>
-     *
-     * <p>
-     *     Note that collections are ignored; if their state is required to fully identify the view model, use
-     *     {@link XmlRootElement} annotation instead.
-     * </p>
-     */
-    // tag::refguide[]
-    INMEMORY_ENTITY,
-
-    // end::refguide[]
-    /**
      * An object that is conceptually part of the application layer, and which surfaces behavior and/or state that
      * is aggregate of one or more domain entity.
      *
@@ -149,6 +112,15 @@ public enum Nature {
      */
     // tag::refguide[]
     BEAN,
-
+    // end::refguide[]
+    ;
+    
+    public boolean isEntity() {
+        return this == Nature.JDO_ENTITY 
+                || this == Nature.JPA_ENTITY;
+    }
+    
+    
+    // tag::refguide[]
 }
-// tag::refguide[]
+//end::refguide[]

@@ -49,7 +49,7 @@ import org.apache.isis.applib.value.Clob;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Mixin(method = "prop")
+@DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
 public @interface Property {
 
     // end::refguide[]
