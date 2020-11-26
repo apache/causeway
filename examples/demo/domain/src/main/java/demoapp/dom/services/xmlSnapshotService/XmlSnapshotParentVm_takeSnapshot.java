@@ -98,7 +98,7 @@ public class XmlSnapshotParentVm_takeSnapshot {
         abstract void refine(XmlSnapshotService.Snapshot.Builder builder);
 
         private static Clob asClob(final Document document, final Demo demo) {
-            return new Clob(demo.name(), "application/xml", asChars(document));
+            return new Clob(demo.name() + ".xml", "application/xml", asChars(document));
         }
 
         @SneakyThrows
