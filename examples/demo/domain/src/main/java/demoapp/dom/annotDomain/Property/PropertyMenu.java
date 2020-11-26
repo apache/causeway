@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
+import demoapp.dom.annotDomain.Property.mementoSerialization.PropertyMementoSerializationVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -120,7 +121,6 @@ public class PropertyMenu {
         return vm;
     }
 
-
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
     public PropertyMaxLengthVm maxLength(){
@@ -129,6 +129,13 @@ public class PropertyMenu {
         vm.setPropertyUsingMetaAnnotation("abcdefghij");
         vm.setPropertyUsingMetaAnnotationButOverridden("abc");
         return vm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot inclusion/exclusion")
+    public PropertyMementoSerializationVm mementoSerialization(){
+        val vm = new PropertyMementoSerializationVm("value");
+        return new PropertyMementoSerializationVm("value");
     }
 
     @Action(semantics = SemanticsOf.SAFE)

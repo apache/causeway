@@ -29,13 +29,11 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:fieldSet name="Properties" id="properties"/>
+					<cpt:fieldSet name="Not annotated" id="no-annotations"/>
+					<cpt:fieldSet name="Annotated" id="annotations"/>
+					<cpt:fieldSet name="Meta-annotated" id="meta-annotations"/>
+					<cpt:fieldSet name="Meta-annotated overrriden" id="meta-annotated-overrriden"/>
 					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-				</bs3:col>
-			</bs3:row>
-			<bs3:row>
-				<bs3:col span="12">
-					<cpt:collection id="children"/>
 				</bs3:col>
 			</bs3:row>
 		</bs3:col>

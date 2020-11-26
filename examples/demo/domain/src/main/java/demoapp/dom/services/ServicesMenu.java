@@ -26,14 +26,13 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom.services.wrapperFactory.WrapperFactoryJdo;
 import demoapp.dom.services.wrapperFactory.WrapperFactoryJdoEntities;
 import demoapp.dom.services.xmlSnapshotService.XmlSnapshotParentVm;
-import demoapp.dom.services.xmlSnapshotService.peer.child.XmlSnapshotPeerVm;
+import demoapp.dom.services.xmlSnapshotService.peer.XmlSnapshotPeerVm;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ServicesMenu")
 @Log4j2
@@ -49,13 +48,12 @@ public class ServicesMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-gift", describedAs = "Snapshot object graphs as XML")
+    @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot object graphs as XML")
     public XmlSnapshotParentVm xmlSnapshot(){
 
         val parentVm = new XmlSnapshotParentVm("parent object");
 
-        val peerVm = new XmlSnapshotPeerVm("peer object");
-        parentVm.setPeer(peerVm);
+        parentVm.setPeer(new XmlSnapshotPeerVm("peer object"));
 
         parentVm.addChild("child 1");
         parentVm.addChild("child 2");

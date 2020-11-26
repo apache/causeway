@@ -29,6 +29,7 @@ import org.w3c.dom.Document;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.value.Clob;
 
@@ -45,6 +46,8 @@ public class XmlSnapshotParentVm_takeSnapshot {
 
     @Inject
     XmlSnapshotService xmlSnapshotService;
+    @Inject
+    XmlService xmlService;
 
     // ...
 //end::class[]
@@ -54,7 +57,7 @@ public class XmlSnapshotParentVm_takeSnapshot {
 
 //tag::class[]
     public Clob act(Demo demo) {
-        return demo.snapshotUsing(xmlSnapshotService, xmlSnapshotParentVm);
+        return demo.snapshotUsing(xmlSnapshotParentVm, xmlSnapshotService, xmlService);
     }
 
     public Demo default0Act() {
@@ -87,30 +90,23 @@ public class XmlSnapshotParentVm_takeSnapshot {
             }
         };
 
-        public final Clob snapshotUsing(XmlSnapshotService xmlSnapshotService, Object parentVm) {
+        public final Clob snapshotUsing(
+                final Object parentVm,
+                final XmlSnapshotService xmlSnapshotService,
+                final XmlService xmlService) {
             val builder = xmlSnapshotService.builderFor(parentVm);
             refine(builder);
             XmlSnapshotService.Snapshot snapshot = builder.build();
             val doc = snapshot.getXmlDocument();
-            return Demo.asClob(doc, this);
+            return Demo.asClob(xmlService.asString(doc), this);
         }
 
         abstract void refine(XmlSnapshotService.Snapshot.Builder builder);
 
-        private static Clob asClob(final Document document, final Demo demo) {
-            return new Clob(demo.name() + ".xml", "application/xml", asChars(document));
+        private static Clob asClob(final String xmlStr, final Demo demo) {
+            return new Clob(demo.name() + ".xml", "application/xml", xmlStr);
         }
 
-        @SneakyThrows
-        private static CharSequence asChars(Document document) {
-            val domSource = new DOMSource(document);
-            val writer = new StringWriter();
-            val result = new StreamResult(writer);
-            val tf = TransformerFactory.newInstance();
-            val transformer = tf.newTransformer();
-            transformer.transform(domSource, result);
-            return writer.toString();
-        }
     }
 }
 //end::class[]
