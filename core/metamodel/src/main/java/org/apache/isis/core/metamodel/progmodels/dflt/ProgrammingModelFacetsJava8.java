@@ -26,11 +26,10 @@ import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetF
 import org.apache.isis.core.metamodel.facets.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.contributing.derived.ContributingFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
@@ -237,7 +236,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory.class);
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, NotContributedFacetDerivedFromDomainServiceFacetFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory.class);
 
 
@@ -266,7 +264,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ParameterAnnotationFacetFactory.class);
 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, NotContributedFacetDerivedFromMixinFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ContributingFacetDerivedFromMixinFacetFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, OrphanedSupportingMethodValidator.class);
 
         addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);

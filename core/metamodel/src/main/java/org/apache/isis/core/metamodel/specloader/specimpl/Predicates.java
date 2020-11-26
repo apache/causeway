@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
@@ -59,7 +59,7 @@ final class Predicates {
         if(isAlwaysHidden(mixinTypeAction)) {
             return false;
         }
-        if(NotContributedFacet.isActionContributionVetoed(mixinTypeAction)) {
+        if(ContributingFacet.isActionContributionVetoed(mixinTypeAction)) {
             return false;
         }
         return true;
@@ -72,7 +72,7 @@ final class Predicates {
         if(isAlwaysHidden(mixinAction)) {
             return false;
         }
-        if(NotContributedFacet.isAssociationContributionVetoed(mixinAction)) {
+        if(ContributingFacet.isAssociationContributionVetoed(mixinAction)) {
             return false;
         }
         if(!isGetterCandidate(mixinAction)) {

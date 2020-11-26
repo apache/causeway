@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 
 /**
@@ -39,7 +39,7 @@ public interface DomainServiceFacet extends Facet {
      *
      * <p>
      *     If set to {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN}, 
-     *     then {@link NotContributedFacet} and
+     *     then {@link ContributingFacet} and
      *     {@link NotInServiceMenuFacet} is
      *     derived for all actions.
      * </p>

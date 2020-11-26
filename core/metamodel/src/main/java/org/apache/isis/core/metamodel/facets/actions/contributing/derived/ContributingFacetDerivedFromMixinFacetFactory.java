@@ -17,22 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
+package org.apache.isis.core.metamodel.facets.actions.contributing.derived;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.val;
 
-public class NotContributedFacetDerivedFromMixinFacetFactory extends FacetFactoryAbstract {
+public class ContributingFacetDerivedFromMixinFacetFactory extends FacetFactoryAbstract {
 
-    public NotContributedFacetDerivedFromMixinFacetFactory() {
+    public ContributingFacetDerivedFromMixinFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
 
@@ -62,11 +62,8 @@ public class NotContributedFacetDerivedFromMixinFacetFactory extends FacetFactor
                 || processMethodContext.synthesizeOnType(ActionLayout.class).isPresent();
 
         if(isForceContributedAsAction) {
-            FacetUtil.addFacet(new NotContributedFacetAbstract(Contributed.AS_ACTION, facetedMethod) {});
-        } else {
-            // fallback to legacy default
-            FacetUtil.addFacet(new NotContributedFacetDerivedFromMixinFacet(facetedMethod));    
-        }
+            FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ACTION, facetedMethod) {});
+        } 
         
     }
     

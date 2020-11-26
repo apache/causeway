@@ -17,48 +17,47 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.notcontributed;
+package org.apache.isis.core.metamodel.facets.actions.contributing;
 
 import java.util.Map;
 
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class NotContributedFacetAbstract 
+public abstract class ContributingFacetAbstract 
 extends FacetAbstract 
-implements NotContributedFacet {
+implements ContributingFacet {
 
-    private final Contributed contributed;
+    private final Contributing contributing;
 
     public static Class<? extends Facet> type() {
-        return NotContributedFacet.class;
+        return ContributingFacet.class;
     }
 
-    public NotContributedFacetAbstract(
-            final Contributed contributed,
+    public ContributingFacetAbstract(
+            final Contributing contributing,
             final FacetHolder holder) {
-        this(contributed, holder, Derivation.NOT_DERIVED);
+        this(contributing, holder, Derivation.NOT_DERIVED);
     }
 
-    public NotContributedFacetAbstract(
-            final Contributed contributed,
+    public ContributingFacetAbstract(
+            final Contributing contributing,
             final FacetHolder holder,
             final Derivation derivation) {
         super(type(), holder, derivation);
-        this.contributed = contributed;
+        this.contributing = contributing;
     }
 
     @Override
-    public Contributed contributed() {
-        return contributed;
+    public Contributing contributed() {
+        return contributing;
     }
 
     @Override 
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("contributed", contributed);
+        attributeMap.put("contributing", contributing);
     }
 
 }

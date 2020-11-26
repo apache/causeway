@@ -55,22 +55,22 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
             final ServiceInjector servicesInjector) {
         
         return domainObjectIfAny
-                .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
-                .map(domainObject -> {
-                    
-                    val mixinContructors = _Reflect
-                            .getPublicConstructors(candidateMixinType)
-                            .filter(paramCount(1));
-                    
-                    return mixinContructors.getSingleton() // empty if cardinality!=1
-                    .map(constructor -> new MixinFacetForDomainObjectAnnotation(
-                                candidateMixinType, 
-                                domainObject.mixinMethod(), 
-                                constructor, 
-                                facetHolder))
-                    .orElse(null);
-                })
-                .orElse(null);
+        .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
+        .map(domainObject -> {
+            
+            val mixinContructors = _Reflect
+                    .getPublicConstructors(candidateMixinType)
+                    .filter(paramCount(1));
+            
+            return mixinContructors.getSingleton() // empty if cardinality!=1
+            .map(constructor -> new MixinFacetForDomainObjectAnnotation(
+                        candidateMixinType, 
+                        domainObject.mixinMethod(), 
+                        constructor, 
+                        facetHolder))
+            .orElse(null);
+        })
+        .orElse(null);
     }
 
 }

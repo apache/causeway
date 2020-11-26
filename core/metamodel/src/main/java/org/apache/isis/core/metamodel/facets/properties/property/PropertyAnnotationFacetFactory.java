@@ -24,7 +24,6 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -34,7 +33,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
@@ -119,7 +119,7 @@ implements MetaModelRefiner {
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addOrReplaceFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        FacetUtil.addFacet(new NotContributedFacetAbstract(Contributed.AS_ASSOCIATION, facetedMethod) {});
+        FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
     }
 
     void processModify(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {

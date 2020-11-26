@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
@@ -32,10 +31,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -115,17 +111,17 @@ extends FacetFactoryAbstract {
 //        }
     }
 
-    private boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
-        final Class<?> cls =  processMethodContext.getCls();
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(cls);
+//    private boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
+//        final Class<?> cls =  processMethodContext.getCls();
+//        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(cls);
+//
+//        return DomainServiceFacet.isContributing(spec) || isMixinObject(spec);
+//    }
 
-        return DomainServiceFacet.isContributing(spec) || isMixinObject(spec);
-    }
-
-    private static boolean isMixinObject(final ObjectSpecification spec) {
-        final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
-        final boolean b = mixinFacet != null && !mixinFacet.isFallback();
-        return b;
-    }
+//    private static boolean isMixinObject(final ObjectSpecification spec) {
+//        final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
+//        final boolean b = mixinFacet != null && !mixinFacet.isFallback();
+//        return b;
+//    }
 
 }
