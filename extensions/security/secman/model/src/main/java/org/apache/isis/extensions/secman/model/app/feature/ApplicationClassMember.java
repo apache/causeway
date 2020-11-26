@@ -20,15 +20,15 @@ package org.apache.isis.extensions.secman.model.app.feature;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
         objectType = "isissecurity.ApplicationClassMember"
         )
-@ViewModelLayout(
+@DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
 public abstract class ApplicationClassMember extends ApplicationFeatureViewModel {

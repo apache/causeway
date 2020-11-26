@@ -89,18 +89,6 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     }
 
     @Test
-    public void whenValidAnnotatedWithViewModelAndViewModelLayout() throws Exception {
-
-        @org.apache.isis.applib.annotation.ViewModel
-        @org.apache.isis.applib.annotation.ViewModelLayout
-        class ValidAnnotatedWithViewModelAndViewModelLayout {
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(ValidAnnotatedWithViewModelAndViewModelLayout.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
     public void whenValidAnnotatedDomainObjectAndDomainObjectLayout() throws Exception {
 
         @org.apache.isis.applib.annotation.DomainObject
@@ -110,32 +98,6 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
         final ValidationFailures validationFailures = processThenValidate(ValidAnnotatedDomainObjectAndDomainObjectLayout.class);
         assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
-    public void whenInvalidAnnotatedViewModelAndDomainObjectLayout() throws Exception {
-
-        @org.apache.isis.applib.annotation.ViewModel
-        @org.apache.isis.applib.annotation.DomainObjectLayout
-        class InvalidAnnotatedViewModelAndDomainObjectLayout {
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(InvalidAnnotatedViewModelAndDomainObjectLayout.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with both @ViewModel and @DomainObjectLayout (annotate with @ViewModelLayout instead of @DomainObjectLayout, or annotate with @DomainObject instead of @ViewModel)"));
-    }
-
-    @Test
-    public void whenInvalidAnnotatedDomainObjectAndViewModelLayout() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject
-        @org.apache.isis.applib.annotation.ViewModelLayout
-        class InvalidAnnotatedDomainObjectAndViewModelLayout {
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(InvalidAnnotatedDomainObjectAndViewModelLayout.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @ViewModelLayout and also be annotated with @DomainObject (annotate with @ViewModel instead of @DomainObject, or instead annotate with @DomainObjectLayout instead of @ViewModelLayout)"));
     }
 
     @Test

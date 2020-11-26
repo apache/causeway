@@ -24,15 +24,15 @@ import java.util.SortedSet;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 
 @DomainObject(
         objectType = "isissecurity.ApplicationPackage"
         )
-@ViewModelLayout(paged=100)
+@DomainObjectLayout(paged=100)
 public class ApplicationPackage extends ApplicationFeatureViewModel {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClass, T> {}

@@ -29,13 +29,13 @@ import javax.inject.Inject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -67,7 +67,7 @@ import lombok.val;
         nature = Nature.VIEW_MODEL,
         objectType = "isissecurity.UserPermissionViewModel"
         )
-@ViewModelLayout(
+@DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 

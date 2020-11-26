@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
@@ -33,7 +34,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
@@ -44,7 +44,7 @@ import lombok.Setter;
         nature = Nature.VIEW_MODEL,
         objectType = "isisExtFixture.FixtureResult"
         )
-@ViewModelLayout(paged=500)
+@DomainObjectLayout(paged=500)
 @XmlRootElement(name = "fixtureResult")
 @XmlType(
         propOrder = {

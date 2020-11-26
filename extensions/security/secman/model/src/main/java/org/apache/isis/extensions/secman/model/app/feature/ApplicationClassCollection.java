@@ -19,15 +19,15 @@
 package org.apache.isis.extensions.secman.model.app.feature;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
         objectType = "isissecurity.ApplicationClassCollection"
         )
-@ViewModelLayout(paged=100)
+@DomainObjectLayout(paged=100)
 public class ApplicationClassCollection extends ApplicationClassMember {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassCollection, T> {}
