@@ -25,10 +25,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -123,8 +122,8 @@ public class OneToManyAssociationDefaultTest {
     public void canAddPersistable() {
         context.checking(new Expectations() {
             {
-                oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
-                will(returnValue(false));
+//                oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
+//                will(returnValue(false));
 
                 oneOf(mockOwnerAdapter).getSpecification();
                 will(returnValue(mockOwnerAdapterSpec));
