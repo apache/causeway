@@ -84,10 +84,8 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         //
         // ensure the contributed property cannot be modified
         //
-        final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
 
-        FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
 
         //
@@ -96,9 +94,9 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         // These could include everything under @Property(...) because the
         // PropertyAnnotationFacetFactory is also run against actions.
         //
-        
+
         FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
-        
+
 
         // adjust name if necessary
         final String name = getName();
@@ -115,7 +113,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
     }
-    
+
     @Override
     protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
@@ -138,7 +136,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val head = headFor(mixedInAdapter);
-        
+
         return getPublisherDispatchService().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(head, Can.empty(), interactionInitiatedBy)
         );

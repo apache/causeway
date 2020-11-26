@@ -26,10 +26,6 @@ If `editing()` is `DISABLED`, provides a reason as to why.
 +
 Indicates where (in the UI) the collection should be hidden from the user.
 
-<.> xref:refguide:applib-ant:Collection.adoc#mementoSerialization[`memento()`]
-+
-Whether to include/exclude in snapshots. +
-
 <.> xref:refguide:applib-ant:Collection.adoc#typeOf[`typeOf()`]
 +
 Hints as to the run-time type of the objects within that collection (as a fallback)
@@ -76,5 +72,4 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 include::Collection/domainEvent.adoc[leveloffset=+1]
 include::Collection/editing.adoc[leveloffset=+1]
 include::Collection/hidden.adoc[leveloffset=+1]
-include::Collection/mementoSerialization.adoc[leveloffset=+1]
 include::Collection/typeOf.adoc[leveloffset=+1]

@@ -66,7 +66,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     @Override
     ManagedObject get(
-            ManagedObject owner, 
+            ManagedObject owner,
             InteractionInitiatedBy interactionInitiatedBy);
 
     //Instance get(final Instance owner, final InteractionInitiatedBy interactionInitiatedBy);
@@ -111,11 +111,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     int getAutoCompleteMinLength();
 
-    /**
-     * Returns true if calculated from other data in the object, that is, should
-     * not be persisted.
-     */
-    boolean isNotPersisted();
 
     /**
      * Returns <code>true</code> if this field on the specified object is deemed
