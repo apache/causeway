@@ -119,42 +119,6 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     }
 
     @Test
-    public void whenValidDomainObjectWithNatureExternalEntityImplementingRecreatableDomainObject() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.EXTERNAL_ENTITY)
-        class ValidDomainObjectWithNatureExternalEntityImplementingRecreatableDomainObject implements RecreatableDomainObject {
-            @Override
-            public String __isis_memento() {
-                return null;
-            }
-            @Override
-            public void __isis_recreate(final String memento) {
-            }
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(ValidDomainObjectWithNatureExternalEntityImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
-    public void whenValidDomainObjectWithNatureInmemoryEntityImplementingRecreatableDomainObject() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.INMEMORY_ENTITY)
-        class ValidDomainObjectWithNatureInmemoryEntityImplementingRecreatableDomainObject implements RecreatableDomainObject {
-            @Override
-            public String __isis_memento() {
-                return null;
-            }
-            @Override
-            public void __isis_recreate(final String memento) {
-            }
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(ValidDomainObjectWithNatureInmemoryEntityImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
     public void whenInvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject() throws Exception {
 
         @org.apache.isis.applib.annotation.DomainObject(nature = Nature.NOT_SPECIFIED)
@@ -170,7 +134,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
         final ValidationFailures validationFailures = processThenValidate(InvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of NOT_SPECIFIED and also implement RecreatableDomainObject (specify a nature of EXTERNAL_ENTITY, INMEMORY_ENTITY or VIEW_MODEL)"));
+        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of NOT_SPECIFIED and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
     }
 
     @Test
@@ -189,7 +153,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
         final ValidationFailures validationFailures = processThenValidate(InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of JDO_ENTITY and also implement RecreatableDomainObject (specify a nature of EXTERNAL_ENTITY, INMEMORY_ENTITY or VIEW_MODEL)"));
+        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of JDO_ENTITY and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
     }
 
 

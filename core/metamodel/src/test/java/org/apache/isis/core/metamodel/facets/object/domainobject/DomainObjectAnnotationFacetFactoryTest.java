@@ -599,14 +599,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         class CustomerWithDomainObjectAndNatureSetToNotSpecified {
         }
 
-        @DomainObject(nature = org.apache.isis.applib.annotation.Nature.INMEMORY_ENTITY)
-        class CustomerWithDomainObjectAndNatureSetToInmemoryEntity {
-        }
-
-        @DomainObject(nature = org.apache.isis.applib.annotation.Nature.EXTERNAL_ENTITY)
-        class CustomerWithDomainObjectAndNatureSetToExternalEntity {
-        }
-
         @DomainObject(nature = org.apache.isis.applib.annotation.Nature.VIEW_MODEL)
         class CustomerWithDomainObjectAndNatureSetToViewModel {
         }
@@ -648,33 +640,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         public void whenDomainObjectAndNatureSetToViewModel() {
 
             facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndNatureSetToViewModel.class, mockMethodRemover, facetHolder));
-
-            final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
-            Assert.assertNotNull(facet);
-
-            Assert.assertTrue(facet instanceof RecreatableObjectFacetForDomainObjectAnnotation);
-
-            expectNoMethodsRemoved();
-        }
-
-
-        @Test
-        public void whenDomainObjectAndNatureSetToExternalEntity() {
-
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndNatureSetToExternalEntity.class, mockMethodRemover, facetHolder));
-
-            final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
-            Assert.assertNotNull(facet);
-
-            Assert.assertTrue(facet instanceof RecreatableObjectFacetForDomainObjectAnnotation);
-
-            expectNoMethodsRemoved();
-        }
-
-        @Test
-        public void whenDomainObjectAndNatureSetToInmemoryEntity() {
-
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndNatureSetToInmemoryEntity.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
             Assert.assertNotNull(facet);

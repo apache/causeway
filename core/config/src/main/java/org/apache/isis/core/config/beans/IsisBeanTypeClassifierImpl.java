@@ -83,8 +83,6 @@ implements IsisBeanTypeClassifier {
                 return BeanClassification.selfManaged(BeanSort.ENTITY_JDO);
             case JPA_ENTITY:
                 return BeanClassification.selfManaged(BeanSort.ENTITY_JPA);
-            case EXTERNAL_ENTITY:
-            case INMEMORY_ENTITY:
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above

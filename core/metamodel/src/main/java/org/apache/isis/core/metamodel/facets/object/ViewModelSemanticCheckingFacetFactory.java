@@ -116,12 +116,12 @@ implements MetaModelRefiner {
                     facetHolder,
                     Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not be annotated with "
-                    + "@%2$s with nature of %3$s and also implement %4$s (specify a nature of %5$s, %6$s or %7$s)",
+                    + "@%2$s with nature of %3$s and also implement %4$s (specify a nature of %5$s)",
                     cls.getName(),
                     DomainObject.class.getSimpleName(),
                     domainObject.nature(),
                     org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName(),
-                    Nature.EXTERNAL_ENTITY, Nature.INMEMORY_ENTITY, Nature.VIEW_MODEL);
+                    Nature.VIEW_MODEL);
         }
 
     }

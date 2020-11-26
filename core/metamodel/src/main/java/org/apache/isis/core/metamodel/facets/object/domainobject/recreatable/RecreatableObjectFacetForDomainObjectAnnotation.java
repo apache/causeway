@@ -47,11 +47,7 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
                     case MIXIN:
                         // not a recreatable object, so no facet
                         return null;
-
                     case VIEW_MODEL:
-                    case EXTERNAL_ENTITY:
-                    case INMEMORY_ENTITY:
-
                         return new RecreatableObjectFacetForDomainObjectAnnotation(
                                 holder, postConstructMethodCache);
                     }

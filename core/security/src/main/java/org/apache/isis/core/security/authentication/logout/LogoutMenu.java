@@ -83,7 +83,7 @@ public class LogoutMenu {
     
     /** A pseudo model used to redirect to the login page.*/
     @DomainObject(
-            nature = Nature.INMEMORY_ENTITY, 
+            nature = Nature.VIEW_MODEL, //XXX was INMEMORY_ENTITY 
             objectType = LoginRedirect.OBJECT_TYPE)  
     public static class LoginRedirect {
         public final static String OBJECT_TYPE = "isisSecurityApi.LoginRedirect";
