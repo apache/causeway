@@ -98,19 +98,6 @@ public @interface Collection {
 
     // end::refguide[]
     /**
-     * Indicates whether the collecion should be included or excluded from mementos.
-     *
-     * <p>
-     *     To ensure that the collection is actually not persisted in the objectstore,
-     *     also annotate with the JDO annotation {@link javax.jdo.annotations.NotPersistent}.
-     * </p>
-     */
-    // tag::refguide[]
-    MementoSerialization mementoSerialization()                 // <.>
-            default MementoSerialization.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
      * The type-of the elements held within the collection.
      *
      * @return

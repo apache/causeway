@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
 
-public class OneToManyAssociationDefault 
+public class OneToManyAssociationDefault
 extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     public OneToManyAssociationDefault(final FacetedMethod facetedMethod) {
@@ -74,7 +74,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject ownerAdapter, 
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new CollectionVisibilityContext(
@@ -84,7 +84,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject ownerAdapter, 
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new CollectionUsabilityContext(
@@ -150,10 +150,6 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
-    private boolean readWrite() {
-        return !isNotPersisted();
-    }
-
 
 
     // -- get, isEmpty, add, clear
@@ -168,11 +164,11 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         if (collection == null) {
             return null;
         }
-        
+
         val objectManager = super.getObjectManager();
-        
+
         super.getServiceInjector().injectServicesInto(collection);
-        
+
         return objectManager.adapt(collection);
     }
 
@@ -191,19 +187,16 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             final ManagedObject ownerAdapter,
             final ManagedObject referencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         if (referencedAdapter == null) {
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
-        if (readWrite()) {
-            
-            EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(
-                    ownerAdapter, 
-                    referencedAdapter);
-                    
-            val facet = getFacet(CollectionAddToFacet.class);
-            facet.add(ownerAdapter, referencedAdapter, interactionInitiatedBy);
-        }
+        EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(
+                ownerAdapter,
+                referencedAdapter);
+
+        val facet = getFacet(CollectionAddToFacet.class);
+        facet.add(ownerAdapter, referencedAdapter, interactionInitiatedBy);
     }
 
     @Override
@@ -214,10 +207,8 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         if (referencedAdapter == null) {
             throw new IllegalArgumentException("element should not be null");
         }
-        if (readWrite()) {
-            final CollectionRemoveFromFacet facet = getFacet(CollectionRemoveFromFacet.class);
-            facet.remove(ownerAdapter, referencedAdapter, interactionInitiatedBy);
-        }
+        final CollectionRemoveFromFacet facet = getFacet(CollectionRemoveFromFacet.class);
+        facet.remove(ownerAdapter, referencedAdapter, interactionInitiatedBy);
     }
 
     public void removeAllAssociations(final ManagedObject ownerAdapter) {
@@ -242,7 +233,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
     public Can<ManagedObject> getChoices(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return Can.empty();
     }
 
@@ -262,7 +253,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             ManagedObject object,
             String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return Can.empty();
     }
 

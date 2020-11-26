@@ -50,6 +50,13 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
+    /**
+     * Returns true if calculated from other data in the object, that is, should
+     * not be persisted.
+     */
+    boolean isNotPersisted();
+
+
 
     default String getCssClass(String prefix) {
         final String ownerSpecId = getOnType().getSpecId().asString().replace(".", "-");

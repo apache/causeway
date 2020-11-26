@@ -48,7 +48,6 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
@@ -67,15 +66,14 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        
+
         val collectionIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Collection.class);
-        
+
         inferIntentWhenOnTypeLevel(processMethodContext, collectionIfAny);
-        
+
         processModify(processMethodContext, collectionIfAny);
         processHidden(processMethodContext, collectionIfAny);
         processEditing(processMethodContext, collectionIfAny);
-        processNotPersisted(processMethodContext, collectionIfAny);
         processTypeOf(processMethodContext, collectionIfAny);
     }
 
@@ -86,9 +84,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         //          XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
         //          val isPropertyMethodLevel = processMethodContext.synthesizeOnMethod(Property.class).isPresent();
-        //          if(isPropertyMethodLevel) return; 
+        //          if(isPropertyMethodLevel) return;
 
-        //[1998] if @Collection detected on method or type level infer:    
+        //[1998] if @Collection detected on method or type level infer:
         //@Action(semantics=SAFE)
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
@@ -116,7 +114,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        
+
 
         // search for @Collection(domainEvent=...)
         val collectionDomainEventFacet = collectionIfAny
@@ -158,13 +156,13 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
             if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromCollectionAnnotation(
-                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, 
+                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet,
                         collectionDomainEventFacet, holder, getServiceRegistry());
             } else
                 // default
             {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromDefault(
-                        collectionDomainEventFacet.getEventType(), getterFacet, 
+                        collectionDomainEventFacet.getEventType(), getterFacet,
                         collectionAddToFacet, collectionDomainEventFacet, holder, getServiceRegistry());
             }
             super.addFacet(replacementFacet);
@@ -215,15 +213,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         // check for @Collection(editing=...)
         val facet = DisabledFacetForCollectionAnnotation.create(collectionIfAny, holder);
-
-        super.addFacet(facet);
-    }
-
-    void processNotPersisted(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
-
-        // search for @Collection(notPersisted=...)
-        val facet = NotPersistedFacetForCollectionAnnotation.create(collectionIfAny, holder);
 
         super.addFacet(facet);
     }
