@@ -137,18 +137,17 @@ public class Customer {
 
 
 
-include::DomainObject/auditing.adoc[leveloffset=+1]
 include::DomainObject/autoCompleteRepository.adoc[leveloffset=+1]
 include::DomainObject/bounding.adoc[leveloffset=+1]
 include::DomainObject/createdLifecycleEvent.adoc[leveloffset=+1]
 include::DomainObject/editing.adoc[leveloffset=+1]
+include::DomainObject/entityChangePublishing.adoc[leveloffset=+1]
 include::DomainObject/loadedLifecycleEvent.adoc[leveloffset=+1]
 include::DomainObject/mixinMethod.adoc[leveloffset=+1]
 include::DomainObject/nature.adoc[leveloffset=+1]
 include::DomainObject/persistedLifecycleEvent.adoc[leveloffset=+1]
 include::DomainObject/persistingLifecycleEvent.adoc[leveloffset=+1]
 include::DomainObject/objectType.adoc[leveloffset=+1]
-include::DomainObject/publishing.adoc[leveloffset=+1]
 include::DomainObject/removingLifecycleEvent.adoc[leveloffset=+1]
 include::DomainObject/updatingLifecycleEvent.adoc[leveloffset=+1]
 include::DomainObject/updatedLifecycleEvent.adoc[leveloffset=+1]

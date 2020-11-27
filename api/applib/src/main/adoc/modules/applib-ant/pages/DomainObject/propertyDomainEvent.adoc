@@ -31,15 +31,17 @@ For example:
 
 [source,java]
 ----
-@Mixin(method="act")
+@Property(
+	propertyDomainEvent=ToDoItem_priority.PropertyDomainEventDefault.class
+)
 public class ToDoItem_priority {
     private final ToDoItem todoItem;
     // constructor omitted
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
-    @Property
-    public Integer act() { /* ... */ }
+    
+    public static class PropertyDomainEventDefault
+        extends org.apache.isis.applib.events.domain.PropertyDomainEvent<Object> { }
+    
+    public Integer prop() { /* ... */ }
 }
 ----
 

@@ -57,7 +57,7 @@ public class ToDoItemDto implements Dto {
 
 Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions) and UI hints, you may wish to keep the DTO "clean", just focused on specifying the data contract.
 
-Behaviour can therefore be provided using xref:userguide:fun:overview.adoc#mixins[mixins] (annotated with xref:refguide:applib-ant:Mixin.adoc[`@Mixin`]), while xref:applib-classes:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
+Behaviour can therefore be provided using xref:userguide:fun:overview.adoc#mixins[mixins] (annotated with xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject(nature=MIXIN)`]), while xref:applib-classes:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
 
 For a more complete discussion of writing JAXB view models/DTOs, see xref:userguide:fun:overview.adoc#view-models[this topic] in the user guide.
 

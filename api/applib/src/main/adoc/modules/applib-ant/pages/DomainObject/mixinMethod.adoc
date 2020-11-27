@@ -35,10 +35,10 @@ public class Customer {
 )
 ----
 <.> This is a mixin. +
-Alternatively, could have used xref:refguide:applib-ant:Mixin.adoc[`@Mixin`].
+Alternatively, could have used xref:refguide:applib-ant:Action.adoc[`@Action`].
 <.> This mixin is using a non-standard method. +
-Alternatively, could have used xref:refguide:applib-ant:Mixin.adoc#method[`@Mixin#method()`].
 <.> Same name as the specified mixinMethod.
+Alternatively, when using xref:refguide:applib-ant:Action.adoc[`@Action`] then method's name defaults to `act`.
 
 This allows all mixins to follow a similar convention, with the name of the mixin inferred entirely from its type ("placeOrder").
 

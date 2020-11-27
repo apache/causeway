@@ -29,37 +29,37 @@ Specifically, the nature must be one of:
 +
 indicates that the domain object is an entity whose persistence is managed internally by Apache Isis, using the JDO/DataNucleus objectstore.
 
-* `EXTERNAL_ENTITY`
-+
-indicates that the domain objecct is a wrapper/proxy/stub (choose your term) to an entity that is managed by some related external system.
-For example, the domain object may hold just the URI to a RESTful resource of some third party REST service, or the id of some system accessible over SOAP.
-+
-The identity of an external entity is determined solely by the state of entity's properties.
-The framework will automatically recreate the domain object each time it is interacted with.
-
-* `INMEMORY_ENTITY`
-+
-indicates that the domain object is a wrapper/proxy/stub to a "synthetic" entity, for example one that is constructed from some sort of internal memory data structure.
-+
-The identity of an inmemory entity is determined solely by the state of entity's properties.
-The framework will automatically recreate the domain object each time it is interacted with.
-
 * `MIXIN`
 +
 indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
 +
-Equivalent to annotating with xref:refguide:applib-ant:Mixin.adoc[`@Mixin`].
 For further discussion on using mixins, see xref:userguide:fun:overview.adoc#mixins[mixins] in the user guide.
 
 * `VIEW_MODEL`
 +
 indicates that the domain object is conceptually part of the application layer, and exists to surfaces behaviour and/or state that is aggregate of one or more domain entities.
++
+_Variant: External Entity_
++
+Or indicates that the domain object is a wrapper/proxy/stub (choose your term) to an entity that is managed by some related external system.
+For example, the domain object may hold just the URI to a RESTful resource of some third party REST service, or the id of some system accessible over SOAP.
++
+The identity of an external entity is determined solely by the state of entity's properties.
+The framework will automatically recreate the domain object each time it is interacted with.
++
+_Variant: In-Memory Entity_
++
+Or indicates that the domain object is a wrapper/proxy/stub to a "synthetic" entity, for example one that is constructed from some sort of internal memory data structure.
++
+The identity of an in-memory entity is determined solely by the state of entity's properties.
+The framework will automatically recreate the domain object each time it is interacted with.
+
 
 Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.
 
 [NOTE]
 ====
-Under the covers Apache Isis' support for `VIEW_MODEL`, `EXTERNAL_ENTITY` and `INMEMORY_ENTITY` domain objects is identical; the state of the object is encoded into its internal OID (represented ultimately as its URL), and is recreated directly from that URL.
+For `VIEW_MODEL` domain objects the state of the object is encoded into its internal OID (represented ultimately as its URL), and is recreated directly from that URL.
 
 Because this particular implementation was originally added to Apache Isis in support of view models, the term was also used for the logically different external entities and inmemory entities.
 
