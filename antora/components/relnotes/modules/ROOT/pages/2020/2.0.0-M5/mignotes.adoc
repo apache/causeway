@@ -80,20 +80,55 @@ VIEW_CONTRIBUTIONS_ONLY,
 
 === Removed
 
-[source,java]
-----
-@Action/@Property(command=...)    // <.>
-@Action/@Property(publish=...)    // <.>
-@DomainObject(audit=...)          // <.>
-@DomainObject(publish=...)        // <.> 
-@DomainService(repositoryFor=...) // <.>
-----
-<.> replaced with `commandPublishing`
-<.> replaced with `executionPublishing`
-<.> replaced with `entityChangePublishing`
-<.> replaced with `entityChangePublishing`
-<.> if this domain service acts as a repository for an entity type, 
+[cols="2a,3a", options="header"]
+
+|===
+
+| was
+| now what?
+
+| `@ActionLayout(contributed=...)` 
+| was only effective on mixin methods; use `@Action`, `@Property` or `@Collection` instead
+
+| `@Action/@Property(command=...)` 
+| replaced with `commandPublishing`
+
+| `@Action/@Property(publish=...)` 
+| replaced with `executionPublishing`
+
+| `@Collection(mementoSerialization=...)`
+| TODO: work in progress
+
+| `@DomainObject(audit=...)` 
+| replaced with `entityChangePublishing`
+
+| `@DomainObject(nature=...)`
+
+* `EXTERNAL_ENTITY`
+* `INMEMORY_ENTITY`
+| use `@DomainObject(nature=VIEW_MODEL)` instead
+
+| `@DomainObject(publish=...)` 
+| replaced with `entityChangePublishing`
+
+| `@DomainService(repositoryFor=...)`
+| if this domain service acts as a repository for an entity type, 
 specify that entity type (was never implemented)
+
+| `@Mixin`
+| use `@Action`, `@Property` or `@Collection` instead; 
+
+for more fine grained control (eg. setting the mixin's method name) 
+use `@DomainObject(nature=MIXIN, ...)` combined with one of the above
+
+| `@ViewModel`
+| use `@DomainObject(nature=VIEW_MODEL)` instead
+
+| `@ViewModelLayout` 
+| use `@DomainObjectLayout` instead
+
+|===
+
 
 === Added
 
