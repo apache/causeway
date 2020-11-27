@@ -16,7 +16,7 @@ For example:
 
 [source,java]
 ----
-@ViewModel
+@DomainObject(nature=VIEW_MODEL)
 public InvoiceSummary {
 
     @Property(

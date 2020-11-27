@@ -6,6 +6,8 @@
 
 include::../section-hooks/isis.applib~pre.adoc[]
 
+WARNING: TODO, outdated due to changes in Nov '20 ... the table below should rather be auto-generated from IsisConfiguration's java-doc.  
+
 [cols="3a,2a,5a", options="header"]
 |===
 |Property
@@ -458,9 +460,10 @@ css-class-ui-event. +
 post-for-default
 
 |  true
-| Influences whether an ``CssClassUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally ``CssClassUiEvent#setCssClass(String)`` change) the CSS classes that are used.
+| Influences whether an ``CssClassUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @DomainObject(nature=VIEW_MODEL)) is about to be rendered in the UI - thereby allowing subscribers to optionally ``CssClassUiEvent#setCssClass(String)`` change) the CSS classes that are used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``ViewModelLayout#cssClassUiEvent()`` @ViewModelLayout(cssClassEvent=...)} for the domain object in question:
+(TODO: ViewModel and ViewModelLayout have been removed) 
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``DomainObjectLayout#cssClassUiEvent()`` @DomainObjectLayout(cssClassEvent=...)} for the domain object in question:
 
 * If set to some subtype of CssClassUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of CssClassUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -474,9 +477,10 @@ view-model-layout.icon-ui-event. +
 post-for-default
 
 |  true
-| Influences whether an ``IconUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally ``IconUiEvent#setIconName(String)`` change) the icon that is used.
+| Influences whether an ``IconUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @DomainObject(nature=VIEW_MODEL)) is about to be rendered in the UI - thereby allowing subscribers to optionally ``IconUiEvent#setIconName(String)`` change) the icon that is used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``ViewModelLayout#iconUiEvent()`` @ViewModelLayout(iconEvent=...)} for the domain object in question:
+(TODO: ViewModel and ViewModelLayout have been removed)
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``DomainObjectLayout#iconUiEvent()`` @DomainObjectLayout(iconEvent=...)} for the domain object in question:
 
 * If set to some subtype of IconUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of IconUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -490,11 +494,12 @@ view-model-layout.layout-ui-event. +
 post-for-default
 
 |  true
-| Influences whether an ``LayoutUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally ``LayoutUiEvent#setLayout(String)`` change) the layout that is used.
+| Influences whether an ``LayoutUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @DomainObject(nature=VIEW_MODEL)) is about to be rendered in the UI - thereby allowing subscribers to optionally ``LayoutUiEvent#setLayout(String)`` change) the layout that is used.
 
+(TODO: ViewModel and ViewModelLayout have been removed)
 If a different layout value has been set, then a layout in the form ``xml`` use used (where ``zzz`` is the name of the layout).
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``ViewModelLayout#layoutUiEvent()`` @ViewModelLayout(layoutEvent=...)} for the domain object in question:
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``DomainObjectLayout#layoutUiEvent()`` @DomainObjectLayout(layoutEvent=...)} for the domain object in question:
 
 * If set to some subtype of LayoutUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of LayoutUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -508,9 +513,10 @@ view-model-layout.title-ui-event. +
 post-for-default
 
 |  true
-| Influences whether an ``TitleUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally ``TitleUiEvent#setTitle(String)`` change) the title that is used.
+| Influences whether an ``TitleUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @DomainObject(nature=VIEW_MODEL)) is about to be rendered in the UI - thereby allowing subscribers to optionally ``TitleUiEvent#setTitle(String)`` change) the title that is used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``ViewModelLayout#titleUiEvent()`` @ViewModelLayout(titleEvent=...)} for the domain object in question:
+(TODO: ViewModel and ViewModelLayout have been removed)
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``DomainObjectLayout#titleUiEvent()`` @DomainObjectLayout(titleEvent=...)} for the domain object in question:
 
 * If set to some subtype of TitleUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of TitleUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -524,7 +530,8 @@ validation.semantic-checking. +
 enable
 
 | 
-| Whether to check for inconsistencies between the usage of ``DomainObject``, ``ViewModel``, ``DomainObjectLayout`` and ``ViewModelLayout``.
+| (TODO: ViewModel and ViewModelLayout have been removed) 
+Whether to check for inconsistencies between the usage of ``DomainObject``, ``ViewModel``, ``DomainObjectLayout`` and ``ViewModelLayout``.
 
 
 

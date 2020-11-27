@@ -11,7 +11,9 @@ In the case of a JAXB-annotated object this memento is its XML representation.
 JAXB generally requires that the root element of the XML representation is annotated with `@XmlRootElement`.
 Apache Isis makes this a mandatory requirement.
 
-In comparison to using either the xref:applib-classes:ViewModel.adoc[`ViewModel`] interface or the xref:refguide:applib-ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of significant advantages:
+In comparison to using either the xref:applib-classes:ViewModel.adoc[`ViewModel`] interface or the 
+xref:refguide:applib-ant:ViewModel.adoc[`@DomainObject(nature=VIEW_MODEL)`] annotation, 
+using `@XmlRootElement` has a couple of significant advantages:
 
 * the view model can be used as a "canonical" DTO, for example when accessing data using the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in combination with the
 xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`].
@@ -20,7 +22,7 @@ This provides a stable and versioned API to access data in XML format using what
 
 * the XML graph can be as deep as required; in particular it can contain collections of other objects.
 +
-In contrast, if the `@ViewModel` annotation is used then only the state of the properties (not collections) is captured.
+In contrast, if the `@DomainObject(nature=VIEW_MODEL)` annotation is used then only the state of the properties (not collections) is captured.
 If using `ViewModel` interface then arbitrary state (including that of collections), however the programmer must write all the code by hand
 
 The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated with the xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`], using the framework-provided `PersistentEntityAdapter`.
