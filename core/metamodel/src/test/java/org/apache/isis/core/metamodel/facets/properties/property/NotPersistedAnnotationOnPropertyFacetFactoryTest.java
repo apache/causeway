@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.MementoSerializationExcludeFacetForPropertyAnnotation;
 
 import lombok.val;
 
@@ -46,7 +46,7 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
     }
-    
+
     public void testAnnotationPickedUpOnProperty() {
 
         class Customer {
@@ -60,9 +60,9 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
 
         processNotPersisted(facetFactory, new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
+        final Facet facet = facetedMethod.getFacet(MementoSerializationExcludeFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NotPersistedFacetForPropertyAnnotation);
+        assertTrue(facet instanceof MementoSerializationExcludeFacetForPropertyAnnotation);
 
         assertNoMethodsRemoved();
     }

@@ -35,17 +35,16 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public class ObjectAssociationAbstractTest {
+public class OneToOneAssociationAbstractTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -54,7 +53,7 @@ public class ObjectAssociationAbstractTest {
     @Mock private ServiceInjector mockServicesInjector;
     @Mock private SpecificationLoader mockSpecificationLoader;
 
-    private ObjectAssociationAbstract objectAssociation;
+    private OneToOneAssociation objectAssociation;
     private FacetedMethod facetedMethod;
 
 
@@ -77,8 +76,7 @@ public class ObjectAssociationAbstractTest {
             //            will(returnValue(mockPersistenceSessionServiceInternal));
         }});
 
-        objectAssociation = new ObjectAssociationAbstract(
-                facetedMethod, FeatureType.PROPERTY, objectSpecification) {
+        objectAssociation = new OneToOneAssociationDefault(facetedMethod, objectSpecification) {
 
             @Override
             public ManagedObject get(
@@ -149,32 +147,22 @@ public class ObjectAssociationAbstractTest {
     }
 
     @Test
-    public void notHidden() throws Exception {
-        assertFalse(objectAssociation.isAlwaysHidden());
-    }
-
-    @Test
-    public void optional() throws Exception {
-        assertFalse(objectAssociation.isMandatory());
-    }
-
-    @Test
-    public void mandatory() throws Exception {
-        final MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class);
+    public void notPersistedWhenDerived() throws Exception {
+        final MementoSerializationExcludeFacet mockFacet = mockFacetIgnoring(MementoSerializationExcludeFacet.class);
         facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isMandatory());
+        assertTrue(objectAssociation.isNotPersisted());
     }
 
     @Test
-    public void hasNoChoices() throws Exception {
-        assertFalse(objectAssociation.hasChoices());
-    }
-
-    @Test
-    public void hasChoices() throws Exception {
-        final PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class);
+    public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
+        final MementoSerializationExcludeFacet mockFacet = mockFacetIgnoring(MementoSerializationExcludeFacet.class);
         facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.hasChoices());
+        assertTrue(objectAssociation.isNotPersisted());
+    }
+
+    @Test
+    public void persisted() throws Exception {
+        assertFalse(objectAssociation.isNotPersisted());
     }
 
     private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock) {

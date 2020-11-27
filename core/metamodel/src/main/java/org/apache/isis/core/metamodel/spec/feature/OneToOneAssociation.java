@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
@@ -54,7 +55,9 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      * Returns true if calculated from other data in the object, that is, should
      * not be persisted.
      */
-    boolean isNotPersisted();
+    default boolean isNotPersisted() {
+        return containsFacet(MementoSerializationExcludeFacet.class);
+    }
 
 
 

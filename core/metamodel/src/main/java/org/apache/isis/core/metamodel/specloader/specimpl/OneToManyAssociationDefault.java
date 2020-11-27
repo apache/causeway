@@ -271,7 +271,6 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         final ToString str = new ToString(this);
         str.append(super.toString());
         str.append(",");
-        str.append("persisted", !isNotPersisted());
         str.append("type", getSpecification() == null ? "unknown" : getSpecification().getShortIdentifier());
         return str.toString();
     }

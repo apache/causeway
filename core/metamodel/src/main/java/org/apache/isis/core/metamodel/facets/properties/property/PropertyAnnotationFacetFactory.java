@@ -55,7 +55,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.MementoSerializationExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -67,29 +67,29 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract 
+public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = 
+    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator =
             new MetaModelValidatorForConflictingOptionality();
 
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
     }
-    
+
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
         conflictingOptionalityValidator.setMetaModelContext(metaModelContext);
     }
-    
+
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        
+
         val propertyIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Property.class);
-        
+
         inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
-        
+
         processModify(processMethodContext, propertyIfAny);
         processHidden(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
@@ -112,9 +112,9 @@ implements MetaModelRefiner {
 
         //          XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
         //          val isPropertyMethodLevel = processMethodContext.synthesizeOnMethod(Property.class).isPresent();
-        //          if(isPropertyMethodLevel) return; 
+        //          if(isPropertyMethodLevel) return;
 
-        //[1998] if @Property detected on method or type level infer:    
+        //[1998] if @Property detected on method or type level infer:
         //@Action(semantics=SAFE)
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
@@ -218,7 +218,7 @@ implements MetaModelRefiner {
 
     void processHidden(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
-        
+
         // search for @Property(hidden=...)
         val hiddenFacet = HiddenFacetForPropertyAnnotation.create(propertyIfAny, facetHolder);
 
@@ -235,7 +235,7 @@ implements MetaModelRefiner {
     }
 
     void processCommandPublishing(
-            final ProcessMethodContext processMethodContext, 
+            final ProcessMethodContext processMethodContext,
             final Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 
@@ -267,10 +267,10 @@ implements MetaModelRefiner {
     }
 
     void processExecutionPublishing(
-            final ProcessMethodContext processMethodContext, 
+            final ProcessMethodContext processMethodContext,
             final Optional<Property> propertyIfAny) {
 
-        
+
         val holder = processMethodContext.getFacetHolder();
 
         //
@@ -315,7 +315,7 @@ implements MetaModelRefiner {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(notPersisted=...)
-        val facet = NotPersistedFacetForPropertyAnnotation.create(propertyIfAny, holder);
+        val facet = MementoSerializationExcludeFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         super.addFacet(facet);
     }
@@ -353,12 +353,12 @@ implements MetaModelRefiner {
             super.addFacet(facet);
             return;
         }
-        
+
         // else search for @Property(pattern=...)
         val facet2 = RegExFacetForPropertyAnnotation.create(propertyIfAny, returnType, holder);
         super.addFacet(facet2);
-        
-        
+
+
     }
 
 

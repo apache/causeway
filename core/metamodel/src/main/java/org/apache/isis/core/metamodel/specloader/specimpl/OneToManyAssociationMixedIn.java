@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -75,13 +75,13 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final ObjectActionDefault objectAction) {
 
         val actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault, 
-        // which ensures that there is always a TypeOfFacet for any mixedIn associations 
+        // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault,
+        // which ensures that there is always a TypeOfFacet for any mixedIn associations
         // created from mixin actions.
-        val type = actionTypeOfFacet != null
+        Class<?> type = actionTypeOfFacet != null
                 ? actionTypeOfFacet.value()
                 : (Class<?>)Object.class;
-                
+
         return objectAction.getSpecificationLoader().loadSpecification(type);
     }
 
@@ -100,11 +100,11 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         //
         // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet
         //
-        final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
+        final MementoSerializationExcludeFacet mementoSerializationExcludeFacet = new MementoSerializationExcludeFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
         final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {};
 
-        FacetUtil.addFacet(notPersistedFacet);
+        FacetUtil.addFacet(mementoSerializationExcludeFacet);
         FacetUtil.addFacet(disabledFacet);
         FacetUtil.addFacet(typeOfFacet);
 
@@ -131,7 +131,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
     }
-    
+
     @Override
     protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
@@ -152,7 +152,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     public ManagedObject get(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return getPublishingServiceInternal().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(
                         headFor(ownerAdapter), Can.empty(), interactionInitiatedBy));

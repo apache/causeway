@@ -210,12 +210,7 @@ public class XmlSnapshot implements Snapshot {
 
         final String fullyQualifiedClassName = object.getSpecification().getFullIdentifier();
 
-        schema.setUri(fullyQualifiedClassName); // derive
-        // URI
-        // from
-        // fully
-        // qualified
-        // name
+        schema.setUri(fullyQualifiedClassName); // derive URI from fully qualified name
 
         final Place place = objectToElement(object);
 
@@ -501,6 +496,10 @@ public class XmlSnapshot implements Snapshot {
             }
 
             final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
+
+            if(oneToOneAssociation.isNotPersisted()) {
+                return false;
+            }
             final ManagedObject referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
                     InteractionInitiatedBy.FRAMEWORK);
 

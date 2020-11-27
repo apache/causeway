@@ -17,19 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propcoll.notpersisted;
+package org.apache.isis.core.metamodel.facets.propcoll.memserexcl;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class NotPersistedFacetAbstract extends FacetAbstract implements NotPersistedFacet {
+public abstract class MementoSerializationExcludeFacetAbstract extends FacetAbstract implements MementoSerializationExcludeFacet {
 
     public static Class<? extends Facet> type() {
-        return NotPersistedFacet.class;
+        return MementoSerializationExcludeFacet.class;
     }
 
-    public NotPersistedFacetAbstract(final FacetHolder holder) {
+    public MementoSerializationExcludeFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
     }
 

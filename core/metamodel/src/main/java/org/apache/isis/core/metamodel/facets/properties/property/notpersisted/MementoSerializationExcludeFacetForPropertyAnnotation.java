@@ -24,23 +24,23 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacetAbstract;
 
-public class NotPersistedFacetForPropertyAnnotation extends NotPersistedFacetAbstract {
+public class MementoSerializationExcludeFacetForPropertyAnnotation extends MementoSerializationExcludeFacetAbstract {
 
-    public NotPersistedFacetForPropertyAnnotation(final FacetHolder holder) {
+    public MementoSerializationExcludeFacetForPropertyAnnotation(final FacetHolder holder) {
         super(holder);
     }
 
-    public static NotPersistedFacet create(
+    public static MementoSerializationExcludeFacet create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
         return propertyIfAny
                 .map(Property::mementoSerialization)
                 .filter(mementoSerialization -> mementoSerialization == MementoSerialization.EXCLUDED)
-                .map(mementoSerialization -> new NotPersistedFacetForPropertyAnnotation(holder))
+                .map(mementoSerialization -> new MementoSerializationExcludeFacetForPropertyAnnotation(holder))
                 .orElse(null);
     }
 }

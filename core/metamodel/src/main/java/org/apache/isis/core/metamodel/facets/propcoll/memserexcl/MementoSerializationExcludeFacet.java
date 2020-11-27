@@ -17,22 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propcoll.notpersisted;
+package org.apache.isis.core.metamodel.facets.propcoll.memserexcl;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Indicates that a property or a collection shouldn't be persisted.
- *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * property or collection with the <tt>@NotPersisted</tt> annotation.
- *
- * <p>
- * Note that being non-persisted does not imply being disabled; see for example:
- *
- * @see http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/201010.mbox/%3C4CB2FA43.7030206@nakedobjects.org%3E
+ * Indicates that a property should be excluded from snapshots (as per
+ * <code>XmlSnapshotService</code>.
  */
-public interface NotPersistedFacet extends Facet {
+public interface MementoSerializationExcludeFacet extends Facet {
 
 }

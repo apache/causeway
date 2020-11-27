@@ -47,7 +47,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.primar
 import lombok.val;
 
 
-public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract 
+public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     public MandatoryFromJdoColumnAnnotationFacetFactory() {
@@ -106,13 +106,13 @@ implements MetaModelRefiner {
 
         if(_Strings.isNotEmpty(allowsNull)) {
             // if miss-spelled, then DN assumes is not-nullable
-            return !"true".equalsIgnoreCase(allowsNull.trim()); 
+            return !"true".equalsIgnoreCase(allowsNull.trim());
         }
-        
+
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         // per JDO spec
         return returnType != null && returnType.isPrimitive();
-        
+
     }
 
     @Override
@@ -156,15 +156,6 @@ implements MetaModelRefiner {
 
                 if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
 
-                    if(association.isNotPersisted()) {
-                        validator.onFailure(
-                                association,
-                                association.getIdentifier(),
-                                "%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)",
-                                association.getIdentifier().toClassAndNameIdentityString());
-                        return;
-                    }
-
                     if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
                         return;
                     }
@@ -174,24 +165,19 @@ implements MetaModelRefiner {
                         validator.onFailure(
                                 association,
                                 association.getIdentifier(),
-                                "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", 
+                                "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
                                 association.getIdentifier().toClassAndNameIdentityString());
                     } else {
                         validator.onFailure(
                                 association,
                                 association.getIdentifier(),
-                                "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", 
+                                "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
                                 association.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
 
                 if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
 
-                    if(association.isNotPersisted()) {
-                        // nothing to do.
-                        return;
-                    }
-
                     if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
                         return;
                     }
@@ -200,13 +186,13 @@ implements MetaModelRefiner {
                         validator.onFailure(
                                 association,
                                 association.getIdentifier(),
-                                "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", 
+                                "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
                                 association.getIdentifier().toClassAndNameIdentityString());
                     } else {
                         validator.onFailure(
                                 association,
                                 association.getIdentifier(),
-                                "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", 
+                                "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
                                 association.getIdentifier().toClassAndNameIdentityString());
                     }
                 }

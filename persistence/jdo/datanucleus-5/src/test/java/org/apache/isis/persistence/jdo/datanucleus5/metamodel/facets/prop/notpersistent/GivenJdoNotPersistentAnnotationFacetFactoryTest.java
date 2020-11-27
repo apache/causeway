@@ -25,12 +25,12 @@ import javax.jdo.annotations.NotPersistent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
 import org.apache.isis.persistence.jdo.datanucleus5.testing.AbstractFacetFactoryTest;
 
 import lombok.val;
 
-public class GivenJdoNotPersistentAnnotationFacetFactoryTest 
+public class GivenJdoNotPersistentAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private JdoNotPersistentAnnotationFacetFactory facetFactory;
@@ -65,16 +65,6 @@ extends AbstractFacetFactoryTest {
         final Facet facet = facetedMethod.getFacet(JdoNotPersistentFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof JdoNotPersistentFacet);
-    }
-
-    public void testNotPersistedDerived() throws Exception {
-        final Class<?> cls = SimpleObjectWithNotPersistentColumn.class;
-        final Method method = cls.getMethod("getSomeColumn");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NotPersistedFacetDerivedFromJdoNotPersistentAnnotation);
     }
 
     public void testIfNoIdAnnotationThenNoFacet() throws Exception {

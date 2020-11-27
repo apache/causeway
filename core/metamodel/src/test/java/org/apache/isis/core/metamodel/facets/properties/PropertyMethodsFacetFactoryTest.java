@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContex
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
@@ -175,8 +175,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        assertNull(facetedMethod.getFacet(NotPersistedFacet.class));
-        assertNull(facetedMethod.getFacet(NotPersistedFacet.class));
+        assertNull(facetedMethod.getFacet(MementoSerializationExcludeFacet.class));
+        assertNull(facetedMethod.getFacet(MementoSerializationExcludeFacet.class));
     }
 
     public void testSetterFacetIsInstalledForModifyMethodAndMethodRemoved() {
@@ -239,7 +239,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactoryForModify.process(processMethodContext);
         disabledFacetOnPropertyInferredFactory.process(processMethodContext);
 
-        Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
+        Facet facet = facetedMethod.getFacet(MementoSerializationExcludeFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetInferred);
 
@@ -618,7 +618,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         val facetFactory = new PropertyAccessorFacetViaAccessorFactory();
         val facetFactoryForHide = new HideForContextFacetViaMethodFactory();
         val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        
+
         facetFactory.setMetaModelContext(super.metaModelContext);
         facetFactoryForHide.setMetaModelContext(super.metaModelContext);
         facetFactoryForDisable.setMetaModelContext(super.metaModelContext);

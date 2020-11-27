@@ -44,6 +44,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
+import lombok.val;
+
 /**
  * Provides reflective access to a field on a domain object.
  */
@@ -112,14 +114,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     int getAutoCompleteMinLength();
 
     /**
-     * Returns true if calculated from other data in the object, that is, should
-     * not be persisted.
-     * @deprecated see https://issues.apache.org/jira/browse/ISIS-2468
-     */
-    @Deprecated
-    boolean isNotPersisted();
-
-    /**
      * Returns <code>true</code> if this field on the specified object is deemed
      * to be empty, or has no content.
      */
@@ -136,47 +130,36 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     ObjectSpecification getOnType();
 
+
     // //////////////////////////////////////////////////////
     // Predicates
     // //////////////////////////////////////////////////////
 
     @Vetoed
-    public static class Predicates {
+    class Predicates {
 
         private Predicates(){}
 
-        public static final Predicate<ObjectAssociation> PROPERTIES = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation association) {
-                return association.isOneToOneAssociation();
-            }
-        };
-        public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation association) {
-                return association.isOneToOneAssociation() &&
-                        !association.getSpecification().containsNonFallbackFacet(ValueFacet.class);
-            }
-        };
-        public static final Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation property) {
-                return property.isOneToManyAssociation();
-            }
-        };
+        public static final Predicate<ObjectAssociation> PROPERTIES =
+                assoc -> assoc.isOneToOneAssociation();
+
+        public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
+                assoc ->  assoc.isOneToOneAssociation() &&
+                         !assoc.getSpecification().containsNonFallbackFacet(ValueFacet.class);
+
+        public static final Predicate<ObjectAssociation> COLLECTIONS =
+                assoc -> assoc.isOneToManyAssociation();
 
         public static final Predicate<ObjectAssociation> staticallyVisible(final Where where) {
-            return new Predicate<ObjectAssociation>() {
-                @Override
-                public boolean test(final ObjectAssociation association) {
-                    final Stream<Facet> facets = association.streamFacets()
-                            .filter((final Facet facet)->
-                            facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
+            return assoc -> {
 
-                    return !facets
-                            .map(facet->(WhereValueFacet) facet)
-                            .anyMatch(wawF->wawF.where().includes(where));
-                }
+                val b = assoc.streamFacets()
+                        .filter(facet ->
+                                facet instanceof WhereValueFacet &&
+                                facet instanceof HiddenFacet)
+                        .map(facet -> (WhereValueFacet) facet)
+                        .anyMatch(wawF -> wawF.where().includes(where));
+                return !b;
             };
         }
 

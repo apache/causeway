@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
@@ -67,7 +67,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.MementoSerializationExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetAbstract;
@@ -109,56 +109,56 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
         }});
     }
-    
+
     private static void processModify(
             PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processModify(processMethodContext, propertyIfAny);
     }
-    
+
     private static void processHidden(
             PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processHidden(processMethodContext, propertyIfAny);
     }
-    
+
     private static void processOptional(
             PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
-    
+
     private static void processRegEx(
             PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
-    
+
     private static void processEditing(
             PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processEditing(processMethodContext, propertyIfAny);
     }
-    
+
     private static void processMaxLength(
             PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processMaxLength(processMethodContext, propertyIfAny);
     }
-    
+
     private static void processMustSatisfy(
             PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processMustSatisfy(processMethodContext, propertyIfAny);
     }
-    
+
     private static void processNotPersisted(
             PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
     }
-    
-    
+
+
 
     @Before
     public void setUp() throws Exception {
@@ -202,7 +202,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             FacetUtil.addFacet(new PropertyClearFacetAbstract(holder) {
                 @Override
                 public ManagedObject clearProperty(
-                        final OneToOneAssociation owningProperty, 
+                        final OneToOneAssociation owningProperty,
                         final ManagedObject targetAdapter,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return targetAdapter;
@@ -231,7 +231,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
             context.checking(new Expectations() {{
-                //[ahuber] never called during this test ...             	
+                //[ahuber] never called during this test ...
                 //oneOf(mockConfiguration).getBoolean("isis.core.meta-model.annotation.property.domain-event.post-for-default", true);
                 //will(returnValue(true));
 
@@ -453,7 +453,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         }
 
     }
-   
+
 
     public static class Editing extends PropertyAnnotationFacetFactoryTest {
 
@@ -595,9 +595,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             processNotPersisted(facetFactory, processMethodContext);
 
             // then
-            final NotPersistedFacet notPersistedFacet = facetedMethod.getFacet(NotPersistedFacet.class);
-            Assert.assertNotNull(notPersistedFacet);
-            Assert.assertTrue(notPersistedFacet instanceof NotPersistedFacetForPropertyAnnotation);
+            final MementoSerializationExcludeFacet mementoSerializationExcludeFacet = facetedMethod.getFacet(MementoSerializationExcludeFacet.class);
+            Assert.assertNotNull(mementoSerializationExcludeFacet);
+            Assert.assertTrue(mementoSerializationExcludeFacet instanceof MementoSerializationExcludeFacetForPropertyAnnotation);
         }
 
     }

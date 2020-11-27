@@ -41,14 +41,9 @@ public class JdoNotPersistentAnnotationFacetFactory extends FacetFactoryAbstract
         if(!JdoMetamodelUtil.isPersistenceEnhanced(cls)) {
             return;
         }
-        
-        //val method = processMethodContext.getMethod();
 
         final NotPersistent annotation = processMethodContext.synthesizeOnMethod(NotPersistent.class)
                 .orElse(null);
-                
-//        _Assert.assertEquals("expected same", annotation,
-//                Annotations.getAnnotation(method, NotPersistent.class));
 
         if (annotation == null) {
             return;
@@ -56,6 +51,5 @@ public class JdoNotPersistentAnnotationFacetFactory extends FacetFactoryAbstract
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new JdoNotPersistentFacetAnnotation(holder));
-        FacetUtil.addFacet(new NotPersistedFacetDerivedFromJdoNotPersistentAnnotation(holder));
     }
 }

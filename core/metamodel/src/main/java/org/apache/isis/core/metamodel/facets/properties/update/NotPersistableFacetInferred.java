@@ -20,9 +20,9 @@
 package org.apache.isis.core.metamodel.facets.properties.update;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacetAbstract;
 
-public class NotPersistableFacetInferred extends NotPersistedFacetAbstract {
+public class NotPersistableFacetInferred extends MementoSerializationExcludeFacetAbstract {
 
     public NotPersistableFacetInferred(final FacetHolder holder) {
         super(holder);
