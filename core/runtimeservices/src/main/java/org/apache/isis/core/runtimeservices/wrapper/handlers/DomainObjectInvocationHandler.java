@@ -69,7 +69,8 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
+public class DomainObjectInvocationHandler<T> 
+extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxyContextHandler;
     private final MetaModelContext mmContext;
@@ -97,13 +98,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private EntityFacet entityFacet; 
 
     public DomainObjectInvocationHandler(
-            final MetaModelContext metaModelContext,
             final T domainObject,
+            final ManagedObject targetAdapter,
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
-        super(metaModelContext, domainObject, syncControl);
+        super(targetAdapter.getSpecification().getMetaModelContext(), domainObject, syncControl);
 
-        this.mmContext = metaModelContext;
+        this.mmContext = targetAdapter.getSpecification().getMetaModelContext();
         this.proxyContextHandler = proxyContextHandler;
 
         try {
@@ -123,7 +124,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                     nsme);
         }
 
-        entityFacet = metaModelContext.getSpecification(getDelegate().getClass())
+        entityFacet = targetAdapter.getSpecification()
                 .getFacet(EntityFacet.class);
     }
 
@@ -285,13 +286,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     public InteractionInitiatedBy getInteractionInitiatedBy() {
         return shouldEnforceRules()
                 ? InteractionInitiatedBy.USER
-                        : InteractionInitiatedBy.FRAMEWORK;
+                : InteractionInitiatedBy.FRAMEWORK;
     }
 
     private boolean isEnhancedEntityMethod(final Method method) {
         return entityFacet!=null 
                 ? entityFacet.isProxyEnhancement(method)
-                        : false;
+                : false;
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -747,11 +748,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     
     // -- DEPENDENCIES
 
-    protected ObjectSpecification loadSpecification(Class<?> type) {
-        return mmContext.getSpecificationLoader().loadSpecification(type);
-    }
-
-    protected ObjectManager getObjectManager() {
+    private ObjectManager getObjectManager() {
         return mmContext.getObjectManager();
     }
 

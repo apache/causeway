@@ -27,7 +27,8 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvocationHandlerDefault<C> {
+abstract class AbstractCollectionInvocationHandler<T, C> 
+extends DelegatingInvocationHandlerDefault<C> {
 
     private final List<Method> interceptedMethods = _Lists.newArrayList();
     private final List<Method> vetoedMethods = _Lists.newArrayList();

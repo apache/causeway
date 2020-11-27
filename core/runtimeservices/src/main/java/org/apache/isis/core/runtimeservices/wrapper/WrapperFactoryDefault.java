@@ -85,6 +85,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -106,6 +107,7 @@ import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RE
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Data;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -163,14 +165,15 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // -- WRAPPING
     
     @Override
-    public <T> T wrap(T domainObject) {
+    public <T> T wrap(
+            final @NonNull T domainObject) {
         return wrap(domainObject, control());
     }
 
     @Override
     public <T> T wrap(
-            final T domainObject,
-            final SyncControl syncControl) {
+            final @NonNull T domainObject,
+            final @NonNull SyncControl syncControl) {
         final ImmutableEnumSet<ExecutionMode> modes = syncControl.getExecutionModes();
         if (domainObject instanceof WrappingObject) {
             val wrapperObject = (WrappingObject) domainObject;
@@ -193,18 +196,24 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @Override
-    public <T> T wrapMixin(Class<T> mixinClass, Object mixedIn) {
+    public <T> T wrapMixin(
+            final @NonNull Class<T> mixinClass, 
+            final @NonNull Object mixedIn) {
         return wrapMixin(mixinClass, mixedIn, control());
     }
 
     @Override
-    public <T> T wrapMixin(Class<T> mixinClass, Object mixedIn, SyncControl syncControl) {
+    public <T> T wrapMixin(
+            final @NonNull Class<T> mixinClass, 
+            final @NonNull Object mixedIn, 
+            final @NonNull SyncControl syncControl) {
         T mixin = factoryService.mixin(mixinClass, mixedIn);
         return wrap(mixin, syncControl);
     }
 
     protected <T> T createProxy(T domainObject, SyncControl syncControl) {
-        return proxyContextHandler.proxy(metaModelContext, domainObject, syncControl);
+        val objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
+        return proxyContextHandler.proxy(domainObject, objAdapter, syncControl);
     }
 
     @Override
@@ -227,9 +236,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     @Override
     public <T,R> T asyncWrap(
-            final T domainObject,
+            final @NonNull T domainObject,
             final AsyncControl<R> asyncControl) {
 
+        val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
+        
         val proxyFactory = proxyFactoryService
                 .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class);
 
@@ -243,11 +254,14 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
                 if (shouldCheckRules(asyncControl)) {
                     val doih = new DomainObjectInvocationHandler<>(
-                            metaModelContext, domainObject, control().withNoExecute(), null);
+                            domainObject, 
+                            targetAdapter,
+                            control().withNoExecute(), 
+                            null);
                     doih.invoke(null, method, args);
                 }
 
-                val memberAndTarget = forRegular(method, domainObject);
+                val memberAndTarget = memberAndTargetForRegular(method, targetAdapter);
                 if( ! memberAndTarget.isMemberFound()) {
                     return method.invoke(domainObject, args);
                 }
@@ -264,9 +278,15 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @Override
-    public <T, R> T asyncWrapMixin(Class<T> mixinClass, Object mixedIn, AsyncControl<R> asyncControl) {
+    public <T, R> T asyncWrapMixin(
+            final @NonNull Class<T> mixinClass, 
+            final @NonNull Object mixedIn, 
+            final @NonNull AsyncControl<R> asyncControl) {
 
         T mixin = factoryService.mixin(mixinClass, mixedIn);
+        
+        val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
+        
         val proxyFactory = proxyFactoryService.factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixedIn.getClass()});
 
         return proxyFactory.createInstance(new InvocationHandler() {
@@ -280,11 +300,14 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
                 if (shouldCheckRules(asyncControl)) {
                     val doih = new DomainObjectInvocationHandler<>(
-                            metaModelContext, mixin, control().withNoExecute(), null);
+                            mixin,
+                            mixinAdapter, 
+                            control().withNoExecute(), 
+                            null);
                     doih.invoke(null, method, args);
                 }
 
-                val actionAndTarget = forMixin(method, mixedIn);
+                val actionAndTarget = memberAndTargetForMixin(method, mixedIn, mixinAdapter);
                 if (! actionAndTarget.isMemberFound()) {
                     return method.invoke(mixin, args);
                 }
@@ -350,15 +373,15 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return null;
     }
 
-    private <T> MemberAndTarget forRegular(Method method, T domainObject) {
-
-        val targetObjSpec = specificationLoader.loadSpecification(method.getDeclaringClass());
-        val objectMember = targetObjSpec.getMember(method).orElse(null);
+    private MemberAndTarget memberAndTargetForRegular(
+            final Method method, 
+            final ManagedObject targetAdapter) {
+        
+        val objectMember = targetAdapter.getSpecification().getMember(method).orElse(null);
         if(objectMember == null) {
             return MemberAndTarget.notFound();
         }
-
-        val targetAdapter = currentObjectManager().adapt(domainObject);
+        
         if (objectMember instanceof OneToOneAssociation) {
             return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method);
         }
@@ -371,10 +394,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
                         + "(method " + method.getName() + " represents a " + objectMember.getFeatureType().name() + "')");
     }
 
-    private <T> MemberAndTarget forMixin(Method method, T mixedIn) {
+    private <T> MemberAndTarget memberAndTargetForMixin(
+            final Method method, 
+            final T mixedIn, 
+            final ManagedObject mixinAdapter) {
 
-        val mixinSpec = specificationLoader.loadSpecification(method.getDeclaringClass());
-        val mixinMember = mixinSpec.getMember(method).orElse(null);
+        val mixinMember = mixinAdapter.getSpecification().getMember(method).orElse(null);
         if (mixinMember == null) {
             return MemberAndTarget.notFound();
         }
@@ -473,6 +498,21 @@ public class WrapperFactoryDefault implements WrapperFactory {
             throw _Exceptions.unrecoverable(msg);
         }
         dispatcher.dispatch(interactionEvent);
+    }
+    
+    // -- HELPER - CHECK WRAPPING SUPPORTED
+    
+    private ManagedObject adaptAndGuardAgainstWrappingNotSupported(
+            final @NonNull Object domainObject) {
+        
+        val adapter = currentObjectManager().adapt(domainObject);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
+            throw _Exceptions.illegalArgument("Cannot wrap an object of type %s", 
+                    domainObject.getClass().getName());
+        }
+        
+        return adapter;
     }
     
     // -- HELPER - SETUP

@@ -323,7 +323,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
                 + "are we missing an interaction context?");
 
         if (command.getCommandDto() != null) {
-            // guard here to prevent subsequent contributed/mixin actions from
+            // guard here to prevent subsequent mixin actions from
             // trampling over the command's DTO
         } else {
             val dto = commandDtoFactory.apply(command.getUniqueId());
