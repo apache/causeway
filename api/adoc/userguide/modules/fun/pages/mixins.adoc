@@ -17,14 +17,9 @@ Under the covers, all mixins are basically actions that use the mixee as one of 
 
 Accordingly, a mixin can be defined using the xref:refguide:applib-ant:Action.adoc[`@Action`], xref:refguide:applib-ant:Property.adoc[`@Property`] or xref:refguide:applib-ant:Collection.adoc[`@Collection`] annotations, but defined at the domain class level rather than at the method level.
 
-The older way of declaring a mixin is to use defined using the xref:refguide:applib-ant:Mixin.adoc[`@Mixin`] annotation for the domain class (in fact, `@Action` et al are meta-annotated with `@Mixin`).
-Equivalently, it can be defined using xref:refguide:applib-ant:DomainObject.adoc#nature[`@DomainObject#nature`] attribute (specifying a nature of `Nature.MIXIN`).
+Using xref:refguide:applib-ant:DomainObject.adoc#nature[`@DomainObject#nature`] attribute (specifying a nature of `Nature.MIXIN`), in combination with the above allows for more fine grained control, eg. nominating the mixin's method name.
 
 When the mixin follows the naming convention `SomeType_mixinName` then the method name can be abbreviated, and the name of the member being contributed is inferred from the name of the class itself, being everything after the last '_'.
-
-
-//WARNING: TODO: v2: perhaps we should get rid of @DomainObject#nature=MIXIN ?
-
 
 == Contributed Collection
 
@@ -33,12 +28,10 @@ The example below shows how to contribute a collection, using xref:refguide:appl
 [source,java]
 ----
 @Collection                                                     // <.>
+@RequiredArgsConstructor                                        // <.>
 public class DocumentHolder_documents {
 
     private final DocumentHolder holder;
-    public DocumentHolderDocuments(DocumentHolder holder) {     // <.>
-        this.holder = holder;
-    }
 
     public List<Document> coll() {                              // <.>
         ...
@@ -46,41 +39,36 @@ public class DocumentHolder_documents {
     public boolean hideColl() { /* ... */ }                     // <.>
 }
 ----
-<.> indicates this is a collection mixin.
+<.> indicates this is a collection mixin (that contributes its method as an association) with method name 'coll'
 <.> mixee is injected into the mixin
-<.> method (which must be called "coll") must accept no arguments, be query-only, and return a collection.
-<.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions. +
+<.> method (which must be called "coll") must accept no arguments, be query-only, and return a collection
+<.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions
 (Because the collection is derived/read-only, the only supporting method that is relevant is `hideColl()`).
 
 The above will result in a contributed collection "documents" for all types that implement/extend from `DocumentHolder`.
 
-The following does the same thing, but using the (more flexible but more verbose) xref:refguide:applib-ant:Mixin.adoc[`@Mixin`] annotation:
+The following does the same thing, but using the xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] annotation, to explicitly specify the method name:
 
 [source,java]
 ----
-@Mixin(method="coll")                                           // <.>
+@Collection                                                     // <.>
+@DomainObject(nature=MIXIN, mixinMethod="coll")                 // <.>
+@RequiredArgsConstructor                                        // <.>
 public class DocumentHolder_documents {
 
     private final DocumentHolder holder;
-    public DocumentHolderDocuments(DocumentHolder holder) {     // <.>
-        this.holder = holder;
-    }
 
-    @Action(semantics=SemanticsOf.SAFE)                         // <.>
-    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <.>
-    @CollectionLayout(defaultView="table")
     public List<Document> coll() {                              // <.>
         ...
     }
     public boolean hideColl() { /* ... */ }                     // <.>
 }
 ----
-<.> indicates this is a mixin, and in this case nominates the method name.
+<.> indicates this is a collection mixin (that contributes its method as an association)
+<.> nominates the method name 
 The recommended name for collections is "coll" (if none is specified the default name is "$$").
 <.> mixee is injected into the mixin
-<.> required; actions that have side-effects cannot be contributed as collections
-<.> required; otherwise the mixin will default to being rendered as an action
-<.> method (which must match `@Mixin#method` above), must accept no arguments.
+<.> method has no side-effects, must match `@DomainObject(mixinMethod=...)` above and accept no arguments
 The mixin is a collection rather than a property because the return type is a collection, not a scalar.
 <.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions.
 
@@ -93,12 +81,10 @@ Contributed properties can likewise be defined using xref:refguide:applib-ant:Pr
 [source,java]
 ----
 @Property                                                       // <.>
+@RequiredArgsConstructor                                        // <.>
 public class DocumentHolder_mostRecentDocument {
 
     private final DocumentHolder holder;
-    public DocumentHolderDocuments(DocumentHolder holder) {     // <.>
-        this.holder = holder;
-    }
 
     public Document prop() {                                    // <.>
         ...
@@ -106,39 +92,36 @@ public class DocumentHolder_mostRecentDocument {
     public boolean hiderProp() { /* ... */ }                    // <.>
 }
 ----
-<.> indicates this is a property mixin
+<.> indicates this is a property mixin (that contributes its method as an association) with method name 'prop'
 <.> mixee is injected into the mixin
-<.> method (which must be called "prop") must accept no arguments, be query-only, and return a scalar value.
-<.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions. +
+<.> method (which must be called "prop") must accept no arguments, be query-only, and return a scalar value
+<.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions
 (Because the property is derived/read-only, the only supporting method that is relevant is `hideProp()`).
 
 This contributes a property called "mostRecentDocument".
 
-The following does the same thing, but using the (more flexible but more verbose) xref:refguide:applib-ant:Mixin.adoc[`@Mixin`] annotation:
+The following does the same thing, but using the xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] annotation, to explicitly specify the method name:
 
 [source,java]
 ----
-@Mixin(method="prop")                                           // <1>
+@Property                                                       // <.>
+@DomainObject(nature=MIXIN, mixinMethod="prop")                 // <.>
+@RequiredArgsConstructor                                        // <.>
 public class DocumentHolder_mostRecentDocument {
 
     private final DocumentHolder holder;
-    public DocumentHolderDocuments(DocumentHolder holder) {     // <.>
-        this.holder = holder;
-    }
 
-    @Action(semantics=SemanticsOf.SAFE)                         // <.>
-    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <.>
     public Document prop() {                                    // <.>
         ...
     }
     public boolean hiderProp() { /* ... */ }                    // <.>
 }
 ----
-<.> indicates this is a mixin, and in this case nominates the method name. +
+<.> indicates this is a property mixin (that contributes its method as an association)
+<.> nominates the method name
 The recommended name for properties is "prop" (if none is specified the default name is "$$").
 <.> mixee is injected into the mixin
-<.> action has no side-effects, and must match `@Mixin#method` above and accept no arguments
-<.> and should be rendered as an association.
+<.> method has no side-effects, must match `@DomainObject(mixinMethod=...)` above and accept no arguments
 The mixin is a property rather than a collection because the return type is a scalar.
 <.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions.
 
@@ -152,12 +135,10 @@ Contributed actions are defined similarly, for example:
 [source,java]
 ----
 @Action                                                         // <.>
+@RequiredArgsConstructor                                        // <.>
 public class DocumentHolder_addDocument {
 
     private final DocumentHolder holder;
-    public DocumentHolderDocuments(DocumentHolder holder) {     // <.>
-        this.holder = holder;
-    }
 
     public Document> act(Document doc) {                        // <.>
         ...
@@ -165,41 +146,37 @@ public class DocumentHolder_addDocument {
     public boolean hideAct() { /* ... */ }                      // <.>
 }
 ----
-<.> indicates this is an action mixin.
+<.> indicates this is an action mixin (that contributes its method as an action) with method name 'act'
 <.> mixee is injected into the mixin
-<3> method must be called "act". +
+<.> method must be called "act"
 Unlike contributed properties and collections, contributed actions can accept parameters, and have any semantics.
-<4> xref:business-rules.adoc[supporting methods] follow the usual naming conventions.
+<.> xref:business-rules.adoc[supporting methods] follow the usual naming conventions
 
 This contributes an action called "addDocument".
 
-The following does the same thing, but using the (more flexible but more verbose) xref:refguide:applib-ant:Mixin.adoc[`@Mixin`] annotation:
+The following does the same thing, but using the xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] annotation, to explicitly specify the method name:
 
 [source,java]
 ----
-@Mixin(method="act")                                            // <.>
+@Action                                                         // <.>
+@DomainObject(nature=MIXIN, mixinMethod="act")                  // <.>
+@RequiredArgsConstructor                                        // <.>
 public class DocumentHolder_addDocument {
 
     private final DocumentHolder holder;
-    public DocumentHolderDocuments(DocumentHolder holder) {     // <.>
-        this.holder = holder;
-    }
 
-    @Action()
-    @ActionLayout(contributed = Contributed.AS_ACTION)          // <.>
     public Document> act(Document doc) {                        // <.>
         ...
     }
     public boolean hideAct() { /* ... */ }                      // <.>
 }
 ----
-<.> indicates this is a mixin, and in this case nominates the method name. +
-The recommended name for properties is "prop" (if none is specified the default name is "$$").
+<.> indicates this is an action mixin (that contributes its method as an action)
+<.> nominates the method name
 <.> mixee is injected into the mixin
-<.> recommended
-<.> method must match `@Mixin#method` above.
+<.> method must match `@DomainObject(mixinMethod=...)` above
 Unlike contributed properties and collections, contributed actions can accept parameters.
-<.> xref:business-rules.adoc[supporting methods] follow the usual naming conventions.
+<.> xref:business-rules.adoc[supporting methods] follow the usual naming conventions
 
 
 [[mixins-as-nested-classes]]
