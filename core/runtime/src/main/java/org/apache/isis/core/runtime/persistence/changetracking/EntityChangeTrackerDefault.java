@@ -69,6 +69,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionPlaceholder;
 
 import lombok.AccessLevel;
@@ -85,25 +86,25 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @IsisInteractionScope
 @Log4j2
-public class EntityChangeTrackerDefault 
-implements 
+public class EntityChangeTrackerDefault
+implements
     TransactionScopeListener,
     MetricsService,
     EntityChangeTracker,
-    HasEnlistedEntityPropertyChanges, 
+    HasEnlistedEntityPropertyChanges,
     HasEnlistedEntityChanges {
 
     // end::refguide[]
-    
+
     @Inject private EntityPropertyChangePublisher entityPropertyChangePublisher;
     @Inject private EntityChangesPublisher entityChangesPublisher;
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionContext> interactionContextProvider;
-    
+
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
      * <p>
-     * When {@link #getEntityAuditEntries()} is called, then this is cleared out and 
+     * When {@link #getEntityAuditEntries()} is called, then this is cleared out and
      * {@link #changedObjectProperties} is non-null, containing the actual differences.
      */
     // tag::refguide[]
@@ -151,7 +152,7 @@ implements
     }
 
     private Set<PropertyChangeRecord> getPropertyChangeRecords() {
-        // this code path has side-effects, it locks the result for this transaction, 
+        // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
         return changedObjectPropertiesRef.get();
     }
@@ -164,11 +165,11 @@ implements
         }
 
         entityChangeEventCount.increment();
-        
+
         if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
             return false; // ignore entities that are not enabled for entity change publishing
         }
-        
+
         return true;
     }
 
@@ -198,11 +199,11 @@ implements
             break;
         }
     }
-    
+
     private void prepareCommandPublishing() {
         val command = currentInteraction().getCommand();
         command.updater().setSystemStateChanged(
-                command.isSystemStateChanged() 
+                command.isSystemStateChanged()
                 || entityChangeEventCount.longValue() > 0L);
     }
 
@@ -212,11 +213,11 @@ implements
             final String userName) {
         return ChangingEntitiesFactory.createChangingEntities(timestamp, userName, this);
     }
-    
+
     Interaction currentInteraction() {
         return interactionContextProvider.get().getInteractionElseFail();
     }
-    
+
     // -- HELPER
 
     static String asString(Object object) {
@@ -227,9 +228,9 @@ implements
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
     private boolean enlistForChangeKindAuditing(
-            final @NonNull ManagedObject entity, 
+            final @NonNull ManagedObject entity,
             final @NonNull EntityChangeKind changeKind) {
-        
+
         val previousChangeKind = changeKindByEnlistedAdapter.get(entity);
         if(previousChangeKind == null) {
             changeKindByEnlistedAdapter.put(entity, changeKind);
@@ -262,7 +263,7 @@ implements
     }
 
     private void enlistForPreAndPostValueAuditing(
-            final ManagedObject entity, 
+            final ManagedObject entity,
             final Function<AdapterAndProperty, PreAndPostValues> pre) {
 
         log.debug("enlist entity's property changes for auditing {}", entity);
@@ -270,6 +271,7 @@ implements
         entity.getSpecification()
         .streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
+        .map(OneToOneAssociation.class::cast)
         .filter(property->!property.isNotPersisted())
         .map(property->AdapterAndProperty.of(entity, property))
         .filter(aap->!enlistedEntityPropertiesForAuditing.containsKey(aap)) // already enlisted, so ignore
@@ -278,8 +280,8 @@ implements
         });
     }
 
-    /** 
-     * For any enlisted Object Properties collects those, that are meant for auditing, 
+    /**
+     * For any enlisted Object Properties collects those, that are meant for auditing,
      * then clears enlisted objects.
      */
     private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
@@ -308,19 +310,19 @@ implements
             preAndPostValues.setPost(adapterAndProperty.getPropertyValue());
         }
     }
-    
+
     // -- METRICS SERVICE
-    
+
     @Override
     public int numberEntitiesLoaded() {
         return Math.toIntExact(numberEntitiesLoaded.longValue());
     }
-    
+
     @Override
     public int numberEntitiesDirtied() {
         return changeKindByEnlistedAdapter.size();
     }
-    
+
     int numberAuditedEntityPropertiesModified() {
         return getPropertyChangeRecords().size();
     }
@@ -362,24 +364,24 @@ implements
     @Override
     public void recognizeLoaded(ManagedObject entity) {
         CallbackFacet.Util.callCallback(entity, LoadedCallbackFacet.class);
-        postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);        
+        postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
     }
 
     @Override
     public void recognizePersisting(ManagedObject entity) {
         CallbackFacet.Util.callCallback(entity, PersistingCallbackFacet.class);
-        postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);        
+        postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
     }
-    
+
     @Override
     public void recognizeUpdating(ManagedObject entity) {
         CallbackFacet.Util.callCallback(entity, UpdatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
     }
-    
+
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
-    
+
     @Override
     public void incrementLoaded() {
         numberEntitiesLoaded.increment();
@@ -415,7 +417,7 @@ implements
             final java.sql.Timestamp timestamp,
             final String userName,
             final TransactionId txId) {
-        
+
         return getPropertyChangeRecords().stream()
         .map(propertyChangeRecord->EntityPropertyChangeFactory
                 .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord));
