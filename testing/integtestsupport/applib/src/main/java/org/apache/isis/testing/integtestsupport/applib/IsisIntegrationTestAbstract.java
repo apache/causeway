@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -123,6 +124,7 @@ public abstract class IsisIntegrationTestAbstract {
     @Inject protected FactoryService factoryService;
     @Inject @Getter(AccessLevel.PACKAGE) protected ServiceRegistry serviceRegistry; // share with ExceptionRecognizerTranslate
     @Inject protected RepositoryService repositoryService;
+    @Inject protected ServiceInjector serviceInjector;
     @Inject protected UserService userService;
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;

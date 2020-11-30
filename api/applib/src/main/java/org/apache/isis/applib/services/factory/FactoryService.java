@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.exceptions.IsisException;
 
+import lombok.NonNull;
+
 // tag::refguide[]
 public interface FactoryService {
 
@@ -50,7 +52,7 @@ public interface FactoryService {
      *
      */
     // tag::refguide[]
-    <T> T getOrCreate(Class<T> requiredType);                               // <.>
+    <T> T getOrCreate(@NonNull Class<T> requiredType); // <.>
 
     // end::refguide[]
     /**
@@ -70,7 +72,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T get(Class<T> requiredType);                                       // <.>
+    <T> T get(@NonNull Class<T> requiredType); // <.>
 
     // end::refguide[]
     /**
@@ -85,7 +87,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T detachedEntity(Class<T> domainClass);                             // <.>
+    <T> T detachedEntity(@NonNull Class<T> domainClass); // <.>
 
     // end::refguide[]
     /**
@@ -99,7 +101,7 @@ public interface FactoryService {
      * @apiNote forces the mixinClass to be added to the meta-model if not already
      */
     // tag::refguide[]
-    <T> T mixin(Class<T> mixinClass, Object mixedIn);                       // <.>
+    <T> T mixin(@NonNull Class<T> mixinClass, @NonNull Object mixedIn); // <.>
 
     // end::refguide[]
     /**
@@ -113,7 +115,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);  // <.>
+    <T> T viewModel(@NonNull Class<T> viewModelClass, @Nullable String mementoStr);  // <.>
 
     // end::refguide[]
     /**
@@ -126,9 +128,20 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    default <T> T viewModel(Class<T> viewModelClass) {                      // <.>
+    default <T> T viewModel(@NonNull Class<T> viewModelClass) {                      // <.>
         return viewModel(viewModelClass, /*mementoStr*/null);
     }
+    
+    // end::refguide[]
+    /**
+     * Resolves injection points for given ViewModel instance.
+     * @param viewModelClass
+     * @throws IllegalArgumentException if viewModelClass is not a viewmodel type
+     * @apiNote forces the viewModelClass to be added to the meta-model if not already
+     * @since 2.0
+     */
+    // tag::refguide[]
+    <T> T viewModel(@NonNull T viewModelInstance); // <.>
 
     // end::refguide[]
     /**
@@ -142,7 +155,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T create(Class<T> domainClass);                                 // <.>
+    <T> T create(@NonNull Class<T> domainClass); // <.>
     // end::refguide[]
 
     // -- DEPRECATIONS

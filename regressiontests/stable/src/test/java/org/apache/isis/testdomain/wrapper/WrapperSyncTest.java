@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.commandexecution;
+package org.apache.isis.testdomain.wrapper;
 
 import java.util.concurrent.ExecutionException;
 

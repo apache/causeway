@@ -25,6 +25,7 @@ The class must have a no-arg constructor (for xref:pjdo:ROOT:about.adoc[JDO/Data
 The class must have a 1-arg constructor of the appropriate type.
 <.> Creates a new ViewModel instance, with injection points resolved, and initialized according to the given memento string.
 <.> Creates a new ViewModel instance, with injection points resolved and defaults applied.
+<.> Resolves injection points for given ViewModel instance.
 <.> Creates a new instance of the specified class, with injection points resolved and defaults applied.
 
 
