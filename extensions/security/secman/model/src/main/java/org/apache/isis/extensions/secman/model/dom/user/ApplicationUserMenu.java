@@ -110,7 +110,7 @@ public class ApplicationUserMenu {
             @ParameterLayout(named = "Enabled?")
             final Boolean enabled) {
         
-        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
         val newDelegateUserMixin = factory.mixin(
                 ApplicationUserManager_newDelegateUser.class, applicationUserManager);
         return newDelegateUserMixin.act(username, initialRole, enabled);
@@ -153,7 +153,7 @@ public class ApplicationUserMenu {
             @ParameterLayout(named = "Email Address")
             final String emailAddress) {
         
-        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
         val newLocalUserMixin = factory.mixin(
                 ApplicationUserManager_newLocalUser.class, applicationUserManager);
         return newLocalUserMixin.act(username, password, passwordRepeat, initialRole, enabled, emailAddress);
@@ -167,7 +167,7 @@ public class ApplicationUserMenu {
             final Boolean enabled,
             final String emailAddress) {
         
-        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
         val newLocalUserMixin = factory.mixin(
                 ApplicationUserManager_newLocalUser.class, applicationUserManager);
         

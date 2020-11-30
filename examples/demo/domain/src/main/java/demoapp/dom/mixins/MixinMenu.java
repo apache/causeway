@@ -42,7 +42,7 @@ public class MixinMenu {
             cssClassFa="fa-bolt",
             describedAs="Opens the Mixin-Demo page.")
     public MixinDemo mixinDemo(){
-        val demo = factoryService.viewModel(MixinDemo.class);
+        val demo = factoryService.viewModel(new MixinDemo());
         demo.setNote("Update me! The button below is contributed by one of my mixins.");
 
         demo.collection = new ArrayList<>();

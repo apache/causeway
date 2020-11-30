@@ -39,7 +39,7 @@ public class AsyncActionMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public AsyncActionDemo asyncActions(){
-        val demo = factoryService.viewModel(AsyncActionDemo.class);
+        val demo = factoryService.viewModel(new AsyncActionDemo());
         // demo.initDefaults();
         demo.setProgressView(Markup.valueOfHtml("Please start a task!"));
         return demo;

@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.TabMenu")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
@@ -41,7 +40,7 @@ public class TabMenu {
             describedAs="Opens the Tabs-Demo page."
     )
     public TabDemo tabDemo(){
-        return factoryService.viewModel(TabDemo.class);
+        return factoryService.viewModel(new TabDemo());
     }
 
 }

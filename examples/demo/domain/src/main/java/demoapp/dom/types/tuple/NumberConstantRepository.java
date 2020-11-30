@@ -42,7 +42,7 @@ public class NumberConstantRepository {
     }
 
     public void add(String name, ComplexNumber number) {
-        val numConst = factory.detachedEntity(NumberConstant.class);
+        val numConst = factory.detachedEntity(new NumberConstant());
         numConst.setName(name);
         numConst.setNumber(number);
         add(numConst);

@@ -69,7 +69,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     @Override
     public ApplicationPermission newApplicationPermission() {
-        return factory.detachedEntity(ApplicationPermission.class);
+        return factory.detachedEntity(new ApplicationPermission());
     }
 
     // -- findByRole (programmatic)
@@ -286,7 +286,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             return null;
         }
 
-        val permission = factory.detachedEntity(ApplicationPermission.class);
+        val permission = factory.detachedEntity(new ApplicationPermission());
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);

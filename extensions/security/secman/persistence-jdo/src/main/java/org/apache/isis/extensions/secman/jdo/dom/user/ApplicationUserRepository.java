@@ -67,7 +67,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     
     @Override
     public ApplicationUser newApplicationUser() {
-        return factoryService.detachedEntity(ApplicationUser.class);
+        return factoryService.detachedEntity(new ApplicationUser());
     }
     
     // -- findOrCreateUserByUsername (programmatic)

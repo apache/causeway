@@ -76,21 +76,17 @@ class ViewModelFactoryTest extends IsisIntegrationTestAbstract {
     
     @Test
     void sampleViewModel_shouldHave_injectionPointsResolved() {
-        
-        val sampleViewModel = factoryService.viewModel(SampleViewModel.class);
-        
+        val sampleViewModel = factoryService.viewModel(new SampleViewModel());
+
         assertTrue(sampleViewModel.areInjectionPointsResolved());
-        
     }
     
     @Test
     void advancedViewModel_shouldHave_injectionPointsResolved() {
-        
         val advancedViewModel = factoryService.viewModel(new AdvancedViewModel("aName"));
         
         assertTrue(advancedViewModel.areInjectionPointsResolved());
         assertTrue(advancedViewModel.isNameInitialized());
-        
     }
 
     

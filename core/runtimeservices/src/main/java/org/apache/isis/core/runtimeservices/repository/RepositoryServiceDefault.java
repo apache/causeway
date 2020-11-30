@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
+import lombok.NonNull;
 import lombok.val;
 
 @Repository
@@ -85,8 +86,8 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
     
     @Override
-    public <T> T detachedEntity(final Class<T> domainClass) {
-        return factoryService.detachedEntity(domainClass);
+    public <T> T detachedEntity(final @NonNull T entity) {
+        return factoryService.detachedEntity(entity);
     }
 
     @Override

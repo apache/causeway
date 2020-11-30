@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.EventsDemoMenu")
 @DomainObjectLayout(named="Events Demo")
@@ -40,7 +39,7 @@ public class EventsDemoMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public EventsDemo eventsDemo(){
-        return factoryService.viewModel(EventsDemo.class);
+        return factoryService.viewModel(new EventsDemo());
     }
     
     

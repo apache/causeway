@@ -29,6 +29,7 @@ import com.google.common.base.Predicate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
+import org.springframework.objenesis.instantiator.util.ClassUtils;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.ViewModel;
@@ -50,6 +51,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.legacy.applib.filter.Filter;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
+
+import lombok.NonNull;
+import lombok.SneakyThrows;
 
 /**
  * @deprecated
@@ -187,8 +191,9 @@ public class DomainObjectContainer {
      */
     @Deprecated
     @Programmatic
-    public <T> T newTransientInstance(final Class<T> ofType) {
-    	return factoryService.detachedEntity(ofType);
+    @SneakyThrows
+    public <T> T newTransientInstance(final @NonNull Class<T> ofType) {
+    	return factoryService.detachedEntity(ofType.newInstance());
     }
 
     /**
@@ -205,7 +210,7 @@ public class DomainObjectContainer {
     	if(memento!=null) {
     		throw new IllegalArgumentException("parameter 'memento' is no longer supported");
     	}
-    	T obj = factoryService.viewModel(ofType);
+    	T obj = factoryService.viewModel(ClassUtils.newInstance(ofType));
     	serviceInjector.injectServicesInto(obj);
     	return obj;
     }

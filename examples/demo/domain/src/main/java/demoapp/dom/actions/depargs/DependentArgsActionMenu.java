@@ -38,7 +38,7 @@ public class DependentArgsActionMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public DependentArgsActionDemo dependentArgsActions(){
-        val demo = factoryService.viewModel(DependentArgsActionDemo.class);
+        val demo = factoryService.viewModel(new DependentArgsActionDemo());
 
         demo.getItems().clear();
         demo.getItems().add(DemoItem.of("first", Parity.ODD));

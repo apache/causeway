@@ -44,7 +44,7 @@ public class TupleDemoMenu {
             numberConstantRepo.add("Imaginary Unit", ComplexNumber.of(0, 1.));
         }
 
-        return factoryService.viewModel(TupleDemo.class);
+        return factoryService.viewModel(new TupleDemo());
     }
     
     

@@ -38,7 +38,7 @@ public class JeeMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public JeeDemo jeeInjectDemo(){
-        val demo = factoryService.viewModel(JeeDemo.class);
+        val demo = factoryService.viewModel(new JeeDemo());
         return demo;
     }
 

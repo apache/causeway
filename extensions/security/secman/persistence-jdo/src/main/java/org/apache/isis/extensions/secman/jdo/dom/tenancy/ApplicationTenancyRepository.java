@@ -50,7 +50,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     
     @Override
     public ApplicationTenancy newApplicationTenancy() {
-        return factory.detachedEntity(ApplicationTenancy.class);
+        return factory.detachedEntity(new ApplicationTenancy());
     }
     
     // -- findByNameOrPathMatching

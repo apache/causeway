@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 
 import lombok.val;
@@ -63,7 +64,11 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @Override
     public Object getHomePage() {
-        return viewModelTypeForHomepage.map(factoryService::viewModel).orElse(null);
+        
+        return viewModelTypeForHomepage
+                .map(ClassExtensions::newInstance)
+                .map(factoryService::viewModel)
+                .orElse(null);
     }
 
 

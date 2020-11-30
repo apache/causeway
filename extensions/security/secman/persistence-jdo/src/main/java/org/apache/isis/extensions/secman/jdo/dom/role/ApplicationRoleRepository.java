@@ -54,7 +54,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
     
     @Override
     public ApplicationRole newApplicationRole() {
-        return factoryService.detachedEntity(ApplicationRole.class);
+        return factoryService.detachedEntity(new ApplicationRole());
     }
     
     @Override

@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ErrorMenu")
 @DomainObjectLayout(named="Error Handling")
@@ -40,7 +39,7 @@ public class ErrorMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public ErrorDemo errorHandling(){
-        return factoryService.viewModel(ErrorDemo.class);
+        return factoryService.viewModel(new ErrorDemo());
     }
 
 }
