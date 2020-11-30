@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.factory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.inject.Inject;
@@ -48,7 +49,7 @@ class ViewModelFactoryTest extends IsisIntegrationTestAbstract {
     // -- VIEW MODEL SAMPLES
     
     @DomainObject(nature = Nature.VIEW_MODEL)
-    public static class SampleViewModel {
+    public static class SimpleViewModel {
         @Inject private RepositoryService repository;
         
         public boolean areInjectionPointsResolved() {
@@ -66,17 +67,13 @@ class ViewModelFactoryTest extends IsisIntegrationTestAbstract {
         public boolean areInjectionPointsResolved() {
             return repository!=null;
         }
-        
-        public boolean isNameInitialized() {
-            return name!=null;
-        }
     }
     
     // -- TESTS
     
     @Test
     void sampleViewModel_shouldHave_injectionPointsResolved() {
-        val sampleViewModel = factoryService.viewModel(new SampleViewModel());
+        val sampleViewModel = factoryService.viewModel(SimpleViewModel.class);
 
         assertTrue(sampleViewModel.areInjectionPointsResolved());
     }
@@ -86,7 +83,7 @@ class ViewModelFactoryTest extends IsisIntegrationTestAbstract {
         val advancedViewModel = factoryService.viewModel(new AdvancedViewModel("aName"));
         
         assertTrue(advancedViewModel.areInjectionPointsResolved());
-        assertTrue(advancedViewModel.isNameInitialized());
+        assertEquals("aName", advancedViewModel.getName());
     }
 
     
