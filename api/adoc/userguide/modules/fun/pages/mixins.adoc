@@ -202,10 +202,10 @@ public class SimpleObject /* ... */ {
             SimpleModule.ActionDomainEvent<SimpleObject.updateName> {}  // <.>
 
     @Action(semantics = IDEMPOTENT,
-            command = CommandReification.ENABLED,
-            publishing = Publishing.ENABLED,
-            associateWith = "name",
-            domainEvent = UpdateNameActionDomainEvent.class)
+	        commandPublishing = Publishing.ENABLED,
+	        executionPublishing = Publishing.ENABLED,
+	        associateWith = "name",
+	        domainEvent = UpdateNameActionDomainEvent.class)
     public class updateName {                                           // <.>
         public SimpleObject act(@Name final String name) {
             setName(name);                                              // <.>

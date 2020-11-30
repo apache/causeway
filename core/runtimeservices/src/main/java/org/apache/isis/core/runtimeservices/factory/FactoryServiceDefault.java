@@ -87,6 +87,19 @@ public class FactoryServiceDefault implements FactoryService {
     }
     
     @Override
+    public <T> T detachedEntity(final @NonNull T entity) {
+        val entityClass = entity.getClass();
+        val spec = loadSpec(entityClass);
+        if(!spec.isEntity()) {
+            throw _Exceptions.illegalArgument("Type '%s' is not recogniced as an entity type by the framework.",
+                    entityClass);
+        }
+
+        serviceInjector.injectServicesInto(entity);
+        return entity;
+    }
+    
+    @Override
     public <T> T mixin(final @NonNull Class<T> mixinClass, final @NonNull Object mixedIn) {
         val mixinSpec = loadSpec(mixinClass);
         val mixinFacet = mixinSpec.getFacet(MixinFacet.class);

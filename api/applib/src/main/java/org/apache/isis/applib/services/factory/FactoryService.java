@@ -88,6 +88,20 @@ public interface FactoryService {
      */
     // tag::refguide[]
     <T> T detachedEntity(@NonNull Class<T> domainClass); // <.>
+    
+    // end::refguide[]
+    /**
+     * Creates a new detached entity instance, with injection points resolved.
+     *
+     * @param <T>
+     * @param entity - most likely just new-ed up, without injection points resolved
+     * @return
+     * @throws IllegalArgumentException if domainClass is not an entity type
+     * @apiNote forces the domainClass to be added to the meta-model if not already
+     * @since 2.0
+     */
+    // tag::refguide[]
+    <T> T detachedEntity(@NonNull T entity); // <.>
 
     // end::refguide[]
     /**
@@ -135,13 +149,13 @@ public interface FactoryService {
     // end::refguide[]
     /**
      * Resolves injection points for given ViewModel instance.
-     * @param viewModelClass
+     * @param viewModel - most likely just new-ed up, without injection points resolved
      * @throws IllegalArgumentException if viewModelClass is not a viewmodel type
-     * @apiNote forces the viewModelClass to be added to the meta-model if not already
+     * @apiNote forces the viewModel's class to be added to the meta-model if not already
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T viewModel(@NonNull T viewModelInstance); // <.>
+    <T> T viewModel(@NonNull T viewModel); // <.>
 
     // end::refguide[]
     /**

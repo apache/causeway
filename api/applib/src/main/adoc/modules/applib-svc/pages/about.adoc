@@ -87,9 +87,9 @@ public class Customer {
 
 For objects that are already persisted, the service is automatically injected just after the object is rehydrated by JDO/DataNucleus.
 
-For transient objects (instantiated programmatically), the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService#create(...)`] or the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService#detachedEntity(...)`]'s will automatically inject the services.
+For transient objects (instantiated programmatically), the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService#viewModel(...)`] or the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService#detachedEntity(...)`]'s will automatically inject the services.
 
-Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`]'s ``injectServicesInto(...)`` method.
+Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib-svc:ServiceInjector.adoc[`ServiceInjector`]'s ``injectServicesInto(...)`` method.
 
 [#overriding-the-services]
 == Overriding the services

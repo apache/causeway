@@ -81,7 +81,7 @@ private ToDoItemBulkUpdate lookupBulkUpdateViewModel() {
     ToDoItemBulkUpdate bulkUpdate =
         (ToDoItemBulkUpdate) scratchpad.get("bulkUpdateViewModel");     // <1>
     if(bulkUpdate == null) {
-        bulkUpdate = container.injectServicesInto(new ToDoItemBulkUpdate());
+        bulkUpdate = factoryService.viewModel(new ToDoItemBulkUpdate());
         scratchpad.put("bulkUpdateViewModel", bulkUpdate);              // <2>
     }
     return bulkUpdate;

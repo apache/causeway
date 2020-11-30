@@ -16,16 +16,16 @@ The API of `ServiceRegistry` is:
 [source,java]
 ----
 public interface ServiceRegistry {
-    <T> T injectServicesInto(final T domainObject);     // <1>
-    <T> T lookupService(Class<T> service);              // <2>
-    <T> Iterable<T> lookupServices(Class<T> service);   // <3>
-    List<Object> getRegisteredServices();               // <4>
+	<T> Optional<T> lookupService(Class<T> serviceClass);      // <.>
+	<T> T lookupServiceElseFail(Class<T> serviceClass);        // <.>
+	<T> Can<T> select(Class<T> type);                          // <.>
+	<T> Can<T> select(Class<T> type, Annotation[] qualifiers); // <.>
 }
 ----
-<1> injects services into domain object; used extensively internally by the framework (eg to inject to other services, or to entities, or integration test instances, or fixture scripts).
-<2> returns the first registered service that implements the specified class
-<3> returns an `Iterable` in order to iterate over all registered services that implement the specified class
-<4> returns the list of all domain services that constitute the running application (including internal domain services).
+<.> optionally returns the first registered service that implements the specified class
+<.> returns the first registered service that implements the specified class, else throws an exception
+<.> returns all registered services that implement the specified type
+<.> returns all registered services that implement the specified type, considering given qualifiers
 
 Service injection is done automatically if objects are created using the
 xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
@@ -34,20 +34,21 @@ xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
 
 == Usage
 
-The primary use case is to instantiate domain objects using a regular constructor ("new is the new new"), and then using the `#injectServicesInto(...)` API to set up any dependencies.
+The primary use case is to lookup domain services programmatically (as an alternative to injection).
 
 For example:
 
+.Service Lookup (Optional)
 [source,java]
 ----
-Customer cust = serviceRegistry.injectServicesInto( new Customer());
-cust.setFirstName("Freddie");
-cust.setLastName("Mercury");
-repositoryService.persist(cust);
+Optional<MyService> myServiceIfAny = serviceRegistry.lookupService(MyService.class);
 ----
 
-The alternative is to use the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] API which performs both steps in a single factory method.
-
+.Service Lookup (enforced non-null)
+[source,java]
+----
+MyService myService = serviceRegistry.lookupServiceElseFail(MyService.class);
+----
 
 
 == Implementation

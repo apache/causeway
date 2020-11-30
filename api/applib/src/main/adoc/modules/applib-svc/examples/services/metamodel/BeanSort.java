@@ -134,6 +134,10 @@ public enum BeanSort {
         return isEntityJdo() || isEntityJpa();
     }
 
+    public boolean isWrappingSupported() {
+        return isMixin() || isViewModel() || isEntity();
+    }
+
 
     // tag::refguide[]
     // ...

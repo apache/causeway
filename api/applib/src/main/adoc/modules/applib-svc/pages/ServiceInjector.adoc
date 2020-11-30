@@ -15,6 +15,23 @@ include::refguide:applib-svc:example$services/inject/ServiceInjector.java[tags="
 
 The framework provides a default implementation of `o.a.i.core.metamodel.services.ServiceInjectorDefault`.
 
+== Usage
+
+The primary use case is to instantiate domain objects using a regular constructor ("new is the new new"), and then using the `#injectServicesInto(...)` API to set up any dependencies.
+
+For example:
+
+[source,java]
+----
+Customer cust = serviceInjector.injectServicesInto( new Customer());
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+repositoryService.persist(cust);
+----
+
+The recommended alternative is to use the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] API which performs both steps in a single factory method and also emits lifecycle events.
+
+
 
 == Related Services
 

@@ -38,8 +38,8 @@ For example:
 [source,java]
 ----
 Customer cust = ...
-CustomerViewModel vm = new CustomerViewModel(cust.getFirstName(),cust.getLastName());
-serviceRegistry.injectServicesInto(vm);
+CustomerViewModel vm = factoryService.viewModel(
+    new CustomerViewModel(cust.getFirstName(), cust.getLastName()));
 ----
 
 [TIP]

@@ -21,6 +21,7 @@ Maps onto one of the specialized factory methods `#get(Class)` or `#create(Class
 <.> Gets an instance (possibly shared or independent) of the specified type, with injection points resolved and any life-cycle callback processed.
 <.> Creates a new detached (not yet persisted) entity instance, with injection points resolved and defaults applied.
 The class must have a no-arg constructor (for xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], the enhancer adds this automatically).
+<.> Resolves injection points for given entity.
 <.> Creates a new Mixin instance, with injection points resolved.
 The class must have a 1-arg constructor of the appropriate type.
 <.> Creates a new ViewModel instance, with injection points resolved, and initialized according to the given memento string.

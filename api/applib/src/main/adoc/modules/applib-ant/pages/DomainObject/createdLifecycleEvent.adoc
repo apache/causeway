@@ -6,15 +6,15 @@
 
 
 Whenever a domain object is instantiated or otherwise becomes known to the framework, a "created" lifecycle event is fired.
-This is typically when the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s `instantiate()` method is called.
+This is typically when the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s `viewModel(...)` method is called.
 
 Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the object just created.
 The subscriber could then, for example, update the object, eg looking up state from some external datastore.
 
 [TIP]
 ====
-It's possible to instantiate objects without firing this lifecycle; just instantiate using its regular constructor, and then use the ``ServiceRegistry``'s
-xref:refguide:applib-svc:ServiceRegistry.adoc[`injectServicesInto(...)`] to manually inject any required domain services.
+It's possible to instantiate objects without firing this lifecycle; just instantiate using its regular constructor, and then use the ``ServiceInjector``'s
+xref:refguide:applib-svc:ServiceInjector.adoc[`injectServicesInto(...)`] to manually inject any required domain services.
 ====
 
 By default the event raised is `ObjectCreatedEvent.Default`.

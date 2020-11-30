@@ -40,23 +40,23 @@ public class Customer {
 ----
 
 In such cases, the domain object cannot be instantiated using xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
-Instead the xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] service can be used to inject services:
+Instead the xref:refguide:applib-svc:ServiceInjector.adoc[`ServiceInjector`] service can be used to inject services:
 
 [source,java]
 ----
 Customer customer = new Customer(reference, firstName, lastName);
-serviceRegister.injectServicesInto(customer);
+factoryService.detachedEntity(customer);
 ----
 
 If you prefer, this can be performed in one step:
 
 [source,java]
 ----
-Customer customer = serviceRegister.injectServicesInto(
+Customer customer = factoryService.detachedEntity(
                         new Customer(reference, firstName, lastName));
 ----
 
-Note though that this does _not_ raise any lifecycle event.
+Note though that this does _not_ raise any lifecycle event. 
 
 
 [[persisting]]

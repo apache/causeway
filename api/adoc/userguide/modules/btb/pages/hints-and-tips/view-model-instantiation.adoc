@@ -4,6 +4,23 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+The xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] service
+covers all use-cases for programmatic view model creation and takes care, 
+that all injection points are resolved for the resulting view model instance. 
+
+.Simple Case (using the public no-arg constructor)
+[source,java]
+----
+CustomerViewModel viewModel = factoryService.viewModel(CustomerViewModel.class);
+----
+
+.Advanced Case (using a custom constructor)
+[source,java]
+----
+CustomerViewModel viewModel = factoryService.viewModel(new CustomerViewModel("Joe", "Bloggs"));
+----
+
+== TODO outdated docs (likely to just be removed) ...
 
 WARNING: TODO - v2 - don't know if this is still valid or not.
 If it is, then we should probably remove FactoryService#create(...) for view models completely.
@@ -16,7 +33,7 @@ In practical terms, this means that view models should be instantiated using a c
 [source,java]
 ----
 CustomerViewModel viewModel = new CustomerViewModel("Joe", "Bloggs");
-serviceRegistry.injectServicesInto(viewModel);
+serviceInjector.injectServicesInto(viewModel);
 ----
 
 What will most likely *fail* is to use the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]:
@@ -29,7 +46,7 @@ CustomerViewModel viewModel = factoryService.instantiate(CustomerViewModel.class
 
 viewModel.setFirstName("Joe");
 viewModel.setLastName("Bloggs");
-serviceRegistry.injectServicesInto(viewModel);
+serviceInjector.injectServicesInto(viewModel);
 ----
 
 That's because the internal "OID" identifier that the framework creates to handle this view model will be incomplete.
@@ -53,13 +70,13 @@ public class YearSummary {                                                  // <
         List<OfficeOptionViewModel> amountsPerOffice = new ArrayList<>();
 
         OfficeOptionViewModel office1 =                                     // <2>
-            factoryService.instantiate(OfficeOptionViewModel.class);
+            factoryService.viewModel(OfficeOptionViewModel.class);
         office1.setOffice("Amsterdam");                                     // <3>
         office1.setAmount(200);
         amountsPerOffice.add(office1);
 
         OfficeOptionViewModel office2 =                                     // <2>
-            factoryService.instantiate(OfficeOptionViewModel.class);
+            factoryService.viewModel(OfficeOptionViewModel.class);
         office2.setOffice("London");                                        // <3>
         office2.setAmount(100);
         amountsPerOffice.add(office2);
@@ -96,11 +113,11 @@ public class YearSummary {
         List<OfficeOptionViewModel> amountsPerOffice = new ArrayList<>();
 
 		OfficeOptionViewModel office1 = new OfficeOptionViewModel("Amsterdam", 200);    // <1>
-		serviceRegistry.injectServicesInto(office1);
+		serviceInjector.injectServicesInto(office1);
 		amountsPerOffice.add(office1);
 
 		OfficeOptionViewModel office2 = new OfficeOptionViewModel("London", 100);       // <1>
-		serviceRegistry.injectServicesInto(office2);
+		serviceInjector.injectServicesInto(office2);
 		amountsPerOffice.add(office2);
 
         return amountsPerOffice;
@@ -140,13 +157,13 @@ public class YearSummary {
     public List<OfficeOptionViewModel> calculateAmountsPerOffice() {
         List<OfficeOptionViewModel> amountsPerOffice = new ArrayList<>();
 
-		OfficeOptionViewModel office1 = factoryService.instantiate(OfficeOptionViewModel.class);
+		OfficeOptionViewModel office1 = factoryService.viewModel(OfficeOptionViewModel.class);
 		office1.setOffice("Amsterdam");
 		office1.setAmount(200);
 
 		amountsPerOffice.add(office1);
 
-		OfficeOptionViewModel office2 = factoryService.instantiate(OfficeOptionViewModel.class);
+		OfficeOptionViewModel office2 = factoryService.viewModel(OfficeOptionViewModel.class);
 		office2.setOffice("London");
 		office2.setAmount(100);
 

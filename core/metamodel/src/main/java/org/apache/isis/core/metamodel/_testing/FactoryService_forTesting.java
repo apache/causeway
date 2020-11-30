@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -49,6 +50,11 @@ class FactoryService_forTesting implements FactoryService {
     public <T> T detachedEntity(Class<T> domainClass) {
         return domainClass.newInstance();
     }
+    
+    @Override
+    public <T> T detachedEntity(@NonNull T entity) {
+        return entity;
+    }
 
     @Override
     public <T> T mixin(Class<T> mixinClass, Object mixedIn) {
@@ -59,6 +65,11 @@ class FactoryService_forTesting implements FactoryService {
     public <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr) {
         throw new IllegalArgumentException("Not yet supported");
     }
+    
+    @Override
+    public <T> T viewModel(T viewModel) {
+        return viewModel;
+    }
 
     @SneakyThrows
     @Override
@@ -66,8 +77,5 @@ class FactoryService_forTesting implements FactoryService {
         return domainClass.newInstance();
     }
 
-    @Override
-    public <T> T viewModel(T viewModel) {
-        return viewModel;
-    }
+
 }
