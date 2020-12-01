@@ -294,7 +294,20 @@ public interface RepositoryService {
     // -- DEPRECATIONS
 
     /**
-     * @deprecated if applicable use {@link #detachedEntity(Class)} instead
+     * Same as {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)}; provided as a
+     * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
+     * @deprecated if applicable use {@link #detachedEntity(Object)} instead ... "new is the new new", passing
+     * in a new-ed up instance is more flexible and also more error prone, eg. it allows the compiler to check 
+     * validity of the used constructor rather than doing construction reflective at runtime.
+     */
+    @Deprecated
+    @SneakyThrows
+    default <T> T detachedEntity(Class<T> ofType) {
+        return detachedEntity(ofType.newInstance());
+    }
+    
+    /**
+     * @deprecated if applicable use {@link #detachedEntity(Object)} instead
      */
     @Deprecated
     @SneakyThrows

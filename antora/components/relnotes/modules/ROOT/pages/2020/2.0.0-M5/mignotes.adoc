@@ -78,7 +78,7 @@ VIEW_CONTRIBUTIONS_ONLY,
 
 == Changes to the Programming Model
 
-=== Removed
+=== Removed (Programming Model)
 
 [cols="2a,3a", options="header"]
 
@@ -130,7 +130,7 @@ use `@DomainObject(nature=MIXIN, ...)` combined with one of the above
 |===
 
 
-=== Added
+=== Added (Programming Model)
 
 .Command/Execution Publishing (Member Level Annotations)
 [source,java]
@@ -148,7 +148,7 @@ use `@DomainObject(nature=MIXIN, ...)` combined with one of the above
 ----
 <.> affects EntityChange publishing (effective only for entity types)
 
-=== Renamed
+=== Renamed (Programming Model)
 
 .Publishing API/SPI
 [source,java]
@@ -180,5 +180,15 @@ PublisherDispatchServiceDefault -> ExecutionPublisherDefault & EntityChangesPubl
 CommandServiceInternal -> CommandPublisher
 ----
 
+== Deprecations
+
+.RepositoryService
+[source,java]
+----
+<T> T detachedEntity(Class<T> ofType);     // <.>
+----
+<.> if applicable use `<T> T detachedEntity(T entity)` instead ... "new is the new new", passing
+in a new-ed up (entity) instance is more flexible and also more error prone, eg. it allows the compiler to check 
+validity of the used constructor rather than doing construction reflective at runtime
 
 

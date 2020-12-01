@@ -27,6 +27,8 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.query.Query;
 
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 
 // tag::refguide[]
@@ -44,12 +46,12 @@ public interface RepositoryService {
 
     // end::refguide[]
     /**
-     * Same as {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)}; provided as a
+     * Same as {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Object)}; provided as a
      * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T detachedEntity(Class<T> ofType);                  // <.>
+    <T> T detachedEntity(@NonNull T entity);                // <.>
 
     // end::refguide[]
     /**
@@ -292,11 +294,25 @@ public interface RepositoryService {
     // -- DEPRECATIONS
 
     /**
-     * @deprecated if applicable use {@link #detachedEntity(Class)} instead
+     * Same as {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)}; provided as a
+     * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
+     * @deprecated if applicable use {@link #detachedEntity(Object)} instead ... "new is the new new", passing
+     * in a new-ed up instance is more flexible and also more error prone, eg. it allows the compiler to check 
+     * validity of the used constructor rather than doing construction reflective at runtime.
      */
     @Deprecated
+    @SneakyThrows
+    default <T> T detachedEntity(Class<T> ofType) {
+        return detachedEntity(ofType.newInstance());
+    }
+    
+    /**
+     * @deprecated if applicable use {@link #detachedEntity(Object)} instead
+     */
+    @Deprecated
+    @SneakyThrows
     default <T> T instantiate(Class<T> ofType) {
-        return detachedEntity(ofType);
+        return detachedEntity(ofType.newInstance());
     }
 
     /**
