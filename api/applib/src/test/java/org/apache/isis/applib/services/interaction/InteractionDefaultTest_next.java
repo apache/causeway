@@ -26,7 +26,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.SimpleInteraction;
 
 import lombok.val;
 
@@ -34,7 +34,7 @@ public class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-        val interaction = new Interaction(UUID.randomUUID());
+        val interaction = new SimpleInteraction(UUID.randomUUID());
 
         assertThat(interaction.next("foo"), is(0));
         assertThat(interaction.next("foo"), is(1));

@@ -22,9 +22,7 @@ import java.util.UUID;
 
 
 /**
- * Mix-in interface for objects (usually created by service implementations) that are be persistable,
- * and so can be associated together using a unique identifier.
- *
+ * @since 2.0
  */
 // tag::refguide[]
 public interface HasUniqueId {

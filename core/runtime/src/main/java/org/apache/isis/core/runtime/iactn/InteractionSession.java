@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.SimpleInteraction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Casts;
@@ -65,7 +66,7 @@ public class InteractionSession extends RuntimeContextBase {
         super(mmc);
         this.authenticationSession = authenticationSession; // binds this session to given authenticationSession
         this.lifecycleStartedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
-        this.interaction = new Interaction(UUID.randomUUID());
+        this.interaction = new SimpleInteraction(UUID.randomUUID());
     }
 
     // -- FLUSH
