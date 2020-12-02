@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.applib.services.iactn;
+package org.apache.isis.core.runtime.iactn;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,6 +26,7 @@ import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -38,9 +37,9 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class SimpleInteraction implements Interaction {
+public class IsisInteraction implements Interaction {
 
-    public SimpleInteraction(final @NonNull UUID uniqueId) {
+    public IsisInteraction(final @NonNull UUID uniqueId) {
         this.command = new Command(uniqueId);
     }
 
@@ -54,18 +53,12 @@ public class SimpleInteraction implements Interaction {
 
     private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
 
-    @Override
-    public List<Execution<?,?>> getExecutions() {
-        return Collections.unmodifiableList(executionGraphs);
-    }
-
     @Getter(onMethod_ = {@Override})
     private Execution<?,?> currentExecution;
 
     @Getter(onMethod_ = {@Override})
     private Execution<?,?> priorExecution;
 
-    @Override
     public void clear() {
         executionGraphs.clear();
     }
@@ -160,7 +153,7 @@ public class SimpleInteraction implements Interaction {
     }
 
     private void start(
-            final SimpleInteraction.Execution<?,?> execution,
+            final IsisInteraction.Execution<?,?> execution,
             final ClockService clockService,
             final MetricsService metricsService,
             final Command command) {

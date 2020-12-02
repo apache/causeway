@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.services.interaction;
+package org.apache.isis.core.runtime.iactn;
 
 import java.util.UUID;
 
@@ -26,15 +26,13 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.services.iactn.SimpleInteraction;
-
 import lombok.val;
 
 public class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-        val interaction = new SimpleInteraction(UUID.randomUUID());
+        val interaction = new IsisInteraction(UUID.randomUUID());
 
         assertThat(interaction.next("foo"), is(0));
         assertThat(interaction.next("foo"), is(1));

@@ -47,6 +47,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
@@ -54,6 +55,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.InteractionClosure;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
+import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
@@ -90,7 +92,8 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class IsisInteractionFactoryDefault implements IsisInteractionFactory, IsisInteractionTracker {
+public class IsisInteractionFactoryDefault 
+implements IsisInteractionFactory, IsisInteractionTracker {
 
     @Inject AuthenticationManager authenticationManager;
     @Inject RuntimeEventService runtimeEventService;
@@ -317,6 +320,15 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         }
     }
     
+    private IsisInteraction getInternalInteractionElseFail() {
+        val interaction = getInteractionElseFail();
+        if(interaction instanceof IsisInteraction) {
+            return (IsisInteraction) interaction;
+        }
+        throw _Exceptions.unrecoverableFormatted("the framework does not recognice "
+                + "this implementation of an Interaction: %s", interaction.getClass().getName());
+    }
+    
     // -- HELPER - SUDO SUPPORT 
 
     @Inject private UserServiceDefault userServiceDefault;
@@ -344,7 +356,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     
     private void completeAndPublishCurrentCommand() {
 
-        val interaction = getInteractionElseFail();
+        val interaction = getInternalInteractionElseFail();
         val command = interaction.getCommand();
 
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {

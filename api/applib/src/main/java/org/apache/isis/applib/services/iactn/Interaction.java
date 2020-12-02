@@ -80,26 +80,24 @@ public interface Interaction extends HasUniqueId {
 
     // end::refguide[]
 
-    /**
-     * Returns a (list of) {@link Execution}s in the order that they were pushed.  Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
-     *
-     * <p>
-     *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
-     *     that may in turn cause other domain events to be fired (by virtue of the {@link WrapperFactory}).
-     *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
-     *     action will return a list of just one element.
-     * </p>
-     *
-     * @implNote - it seems that this is never actually called.
-     *  The PropertyEdit/ActionInvocation facet diligently calls
-     *  {@link #execute(MemberExecutor, PropertyEdit, ClockService, MetricsService)} or
-     *  {@link #execute(MemberExecutor, ActionInvocation, ClockService, MetricsService)} for us, to ensure that the
-     *  graph is populated, but then delegate to the PublisherService immediately at the end... ie {@link org.apache.isis.schema.ixn.v2.InteractionDto}s are published as we go, not all in a batch at the end.
-     */
-    // tag::refguide[]
-    List<Execution<?,?>> getExecutions();   // <.>
+//    /**
+//     * Returns a (list of) {@link Execution}s in the order that they were pushed.  Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
+//     *
+//     * <p>
+//     *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
+//     *     that may in turn cause other domain events to be fired (by virtue of the {@link WrapperFactory}).
+//     *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
+//     *     action will return a list of just one element.
+//     * </p>
+//     *
+//     * @implNote - it seems that this is never actually called.
+//     *  The PropertyEdit/ActionInvocation facet diligently calls
+//     *  {@link #execute(MemberExecutor, PropertyEdit, ClockService, MetricsService)} or
+//     *  {@link #execute(MemberExecutor, ActionInvocation, ClockService, MetricsService)} for us, to ensure that the
+//     *  graph is populated, but then delegate to the PublisherService immediately at the end... ie {@link org.apache.isis.schema.ixn.v2.InteractionDto}s are published as we go, not all in a batch at the end.
+//     */
+//    List<Execution<?,?>> getExecutions();
 
-    // end::refguide[]
     /**
      * The current (most recently pushed) {@link Execution}.
      */
@@ -114,12 +112,12 @@ public interface Interaction extends HasUniqueId {
     Execution<?,?> getPriorExecution();          // <.>
 
     // end::refguide[]
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * Clears the set of {@link Execution}s that may have been {@link #push(Execution)}ed.
-     */
-    public void clear();
+//    /**
+//     * <b>NOT API</b>: intended to be called only by the framework.
+//     *
+//     * Clears the set of {@link Execution}s that may have been {@link #push(Execution)}ed.
+//     */
+//    public void clear();
 
     /**
      * <b>NOT API</b>: intended only to be implemented by the framework.
@@ -384,7 +382,7 @@ public interface Interaction extends HasUniqueId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        void setCompletedAt(
+        public void setCompletedAt(
                 final Timestamp completedAt,
                 final MetricsService metricsService) {
             syncMetrics(When.AFTER, completedAt, metricsService);
