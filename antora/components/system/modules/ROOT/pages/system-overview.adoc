@@ -181,6 +181,11 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -227,6 +232,7 @@ skinparam rectangle<<10>> {
   BorderColor #2E6295
 }
 package "package-ecosystem\n[Software System]" {
+  rectangle "==Apache Isis - JDK Supplemental\n<size:10>[Container: packaging: pom]</size>" <<12>> as 12
   rectangle "==Apache Isis Core\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Core - AppLib\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Core - Code Gen (ByteBuddy)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -234,18 +240,19 @@ package "package-ecosystem\n[Software System]" {
   rectangle "==Apache Isis Core - MetaModel\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Isis Core - Runtime\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
   rectangle "==Apache Isis Core - Runtime Services\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
-  rectangle "==Apache Isis Core - Schemas\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis Core - Schemas\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
   rectangle "==Apache Isis Core - Security\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
   rectangle "==Apache Isis Core - Unit Test Support\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Core - WebApp\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
 }
+2 .[#707070].> 12 : ""
 2 .[#707070].> 3 : ""
 2 .[#707070].> 4 : ""
 2 .[#707070].> 5 : ""
 2 .[#707070].> 7 : ""
 2 .[#707070].> 8 : ""
 2 .[#707070].> 9 : ""
-2 .[#707070].> 12 : ""
+2 .[#707070].> 13 : ""
 2 .[#707070].> 10 : ""
 2 .[#707070].> 6 : ""
 2 .[#707070].> 11 : ""
@@ -545,6 +552,29 @@ _Dependencies_
 * org.springframework.boot:spring-boot:jar:<managed>
 * org.springframework.boot:spring-boot-actuator:jar:<managed>
 * org.springframework.boot:spring-boot-starter-thymeleaf:jar:<managed>
+
+
+
+|org.apache.isis.core
+|isis-jdk-supplemental
+|pom
+|\core\jdk-supplemental
+|Apache Isis - JDK Supplemental
+|Defines a module to bring in dependencies that were part of JDK 8 but
+        had been removed with later JDK versions. 
+        
+        Will be removed once the framework migrates to Java 11 as the required 
+        minimum version.
+
+_Dependencies_
+
+* com.fasterxml.woodstox:woodstox-core:jar:<managed>
+* com.sun.xml.bind:jaxb-core:jar:<managed>
+* com.sun.xml.bind:jaxb-impl:jar:<managed>
+* com.sun.xml.ws:jaxws-ri:pom:<managed>
+* com.sun.xml.ws:jaxws-rt:jar:${jaxws-ri.version}
+* javax.xml.bind:jaxb-api:jar:<managed>
+* org.codehaus.woodstox:stax2-api:jar:<managed>
 
 
 
@@ -1287,12 +1317,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -2419,9 +2449,11 @@ _Dependencies_
 |_Components_
 
 * org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory
-* org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory$PreAuditHook
+* org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory$PreCommitListener
+* org.apache.isis.testdomain.applayer.publishing.CommandSubscriberForTesting
 * org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting
 * org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting
+* org.apache.isis.testdomain.applayer.publishing.ExecutionSubscriberForTesting
 * org.apache.isis.testdomain.conf.Configuration_headless$HeadlessCommandSupport
 * org.apache.isis.testdomain.util.kv.KVStoreForTesting
 * org.apache.isis.testdomain.util.rest.RestEndpointService
@@ -3111,12 +3143,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3211,12 +3243,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3844,18 +3876,20 @@ package "package-ecosystem\n[Software System]" {
 * demoapp.dom.annotDomain.Action.commandPublishing.ActionCommandPublishingJdoSeedService
 * demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdoEntities
 * demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdoEntities
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectAuditingDisabledJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoSeedService
 * demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities
 * demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoEntities
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectAuditingEnabledMetaAnnotatedJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoEntities
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectAuditingEnabledMetaAnnotOverriddenJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities
+* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoSeedService
 * demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoEntities
 * demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoSeedService
 * demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdoEntities
 * demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdoSeedService
+* demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdoEntities
+* demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdoSeedService
 * demoapp.dom.annotDomain._changes.EntityChangesSubscriberToCaptureChangesInMemory
 * demoapp.dom.annotDomain._commands.ExposePersistedCommands$TableColumnOrderDefault
 * demoapp.dom.annotDomain._interactions.ExecutionListenerToCaptureInteractionsInMemory
@@ -4001,7 +4035,7 @@ _Dependencies_
 * org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed>
 * org.apache.isis.testing:isis-testing-h2console-ui:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
-* org.assertj:assertj-core:jar:3.17.2
+* org.assertj:assertj-core:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
 

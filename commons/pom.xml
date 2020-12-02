@@ -59,39 +59,14 @@
 			<activation>
 				<jdk>[11,)</jdk>
 			</activation>
-
-			<!-- These dependencies are required in order to build on jdk11 -->
+			<!-- These dependencies are required in order to build on JDK11+ -->
 			<dependencies>
 				<dependency>
-					<groupId>javax.xml.bind</groupId>
-					<artifactId>jaxb-api</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-core</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-impl</artifactId>
+					<groupId>org.apache.isis.core</groupId>
+					<artifactId>isis-jdk-supplemental</artifactId>
+					<type>pom</type>
 				</dependency>
 			</dependencies>
-			<build>
-				<pluginManagement>
-
-					<plugins>
-						<plugin>
-							<groupId>org.jvnet.jaxb2.maven2</groupId>
-							<artifactId>maven-jaxb2-plugin</artifactId>
-							<version>0.14.0</version>
-							<configuration>
-								<removeOldOutput>true</removeOldOutput>
-								<episode>true</episode>
-							</configuration>
-						</plugin>
-					</plugins>
-
-				</pluginManagement>
-			</build>
 		</profile>
 	</profiles>
 

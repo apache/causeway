@@ -69,7 +69,7 @@
 
 	<dependencyManagement>
 		<dependencies>
-
+		
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-core</artifactId>
