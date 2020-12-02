@@ -35,6 +35,7 @@ import org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDef
 import org.apache.isis.core.runtimeservices.email.EmailServiceDefault;
 import org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring;
 import org.apache.isis.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault;
+import org.apache.isis.core.runtimeservices.executor.MemberExecutorServiceDefault;
 import org.apache.isis.core.runtimeservices.factory.FactoryServiceDefault;
 import org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault;
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo;
@@ -88,6 +89,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         IsisInteractionFactoryDefault.class,
         JaxbServiceDefault.class,
         TranslationServicePo.class,
+        MemberExecutorServiceDefault.class,
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,
         MessageServiceDefault.class,

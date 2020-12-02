@@ -26,10 +26,10 @@ import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.execution.InternalInteraction;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -37,7 +37,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class IsisInteraction implements Interaction {
+public class IsisInteraction implements InternalInteraction {
 
     public IsisInteraction(final @NonNull UUID uniqueId) {
         this.command = new Command(uniqueId);

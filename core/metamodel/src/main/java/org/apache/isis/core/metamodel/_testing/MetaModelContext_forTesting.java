@@ -45,6 +45,7 @@ import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -109,6 +110,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private RepositoryService repositoryService;
 
     private FactoryService factoryService;
+    
+    private MemberExecutorService memberExecutor;
 
     private TransactionService transactionService;
 

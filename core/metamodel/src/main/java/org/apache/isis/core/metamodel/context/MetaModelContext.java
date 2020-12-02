@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -84,6 +85,8 @@ public interface MetaModelContext {
     RepositoryService getRepositoryService();
 
     FactoryService getFactoryService();
+    
+    MemberExecutorService getMemberExecutor();
 
     TransactionService getTransactionService();
 
@@ -133,7 +136,12 @@ public interface MetaModelContext {
         public default FactoryService getFactoryService() {
             return getMetaModelContext().getFactoryService();
         }
-
+        
+        @Override
+        public default MemberExecutorService getMemberExecutor() {
+            return getMetaModelContext().getMemberExecutor();
+        }
+        
         @Override
         public default SpecificationLoader getSpecificationLoader() {
             return getMetaModelContext().getSpecificationLoader();

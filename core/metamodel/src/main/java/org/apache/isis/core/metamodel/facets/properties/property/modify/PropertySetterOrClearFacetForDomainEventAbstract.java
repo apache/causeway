@@ -24,26 +24,19 @@ import java.util.Objects;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.execution.InternalInteraction;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
-import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
-import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -78,7 +71,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         this.domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
-    enum Style {
+    public enum EditingVariant {
         SET {
             @Override
             boolean hasCorrespondingFacet(final PropertySetterOrClearFacetForDomainEventAbstract facet) {
@@ -132,7 +125,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return setOrClearProperty(Style.CLEAR,
+        return setOrClearProperty(EditingVariant.CLEAR,
                 owningProperty, targetAdapter, /*newValueAdapter*/ null, interactionInitiatedBy);
 
     }
@@ -143,13 +136,13 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return setOrClearProperty(Style.SET,
+        return setOrClearProperty(EditingVariant.SET,
                 owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
 
     }
 
     private ManagedObject setOrClearProperty(
-            final Style style,
+            final EditingVariant style,
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final ManagedObject newValueAdapter,
@@ -161,16 +154,16 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     @RequiredArgsConstructor
     private final class DomainEventMemberExecutor
-            implements Interaction.MemberExecutor<Interaction.PropertyEdit> {
+            implements InternalInteraction.MemberExecutor<Interaction.PropertyEdit> {
 
         private final ManagedObject newValueAdapter;
         private final OneToOneAssociation owningProperty;
         private final ManagedObject targetManagedObject;
-        private final Interaction.PropertyEdit propertyEdit;
-        private final Command command;
+        //private final Interaction.PropertyEdit propertyEdit;
+//        private final Command command;
         private final InteractionInitiatedBy interactionInitiatedBy;
         private final InteractionHead head;
-        private final Style style;
+        private final EditingVariant style;
 
         public Object execute(Interaction.PropertyEdit currentExecution) {
 
@@ -241,7 +234,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     }
 
     private ManagedObject doSetOrClearProperty(
-            final Style style,
+            final EditingVariant editingVariant,
             final OneToOneAssociation owningProperty,
             final InteractionHead head,
             final ManagedObject newValueAdapter,
@@ -249,54 +242,20 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
         // similar code in ActionInvocationFacetFDEA
 
-        if(!style.hasCorrespondingFacet(this)) {
-            return head.getTarget();
-        }
-
-        val interactionContext = getInteractionContext();
-        val interaction = interactionContext.getInteractionElseFail();
-        val command = interaction.getCommand();
-        if( command==null ) {
+        if(!editingVariant.hasCorrespondingFacet(this)) {
             return head.getTarget();
         }
         
-        command.updater().setPublishingEnabled(
-                CommandPublishingFacet.isPublishingEnabled(getFacetHolder()));
-
-        val propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
-
-        val targetManagedObject = head.getTarget();
-        val target = UnwrapUtil.single(targetManagedObject);
-        val argValue = UnwrapUtil.single(newValueAdapter);
-
-        val targetMemberName = CommandUtil.targetMemberNameFor(owningProperty);
-        val targetClass = CommandUtil.targetClassNameFor(targetManagedObject);
-
-        val propertyEdit = new Interaction.PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
-        val executor = new DomainEventMemberExecutor(newValueAdapter, owningProperty, targetManagedObject, propertyEdit, command, interactionInitiatedBy, head, style);
-
-        // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(executor, propertyEdit, getClockService(), getMetricsService(), command);
-
-        // handle any exceptions
-        final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
-
-        // TODO: should also sync DTO's 'threw' attribute here...?
-
-        val executionExceptionIfAny = priorExecution.getThrew();
-        if(executionExceptionIfAny != null) {
-            throw executionExceptionIfAny instanceof RuntimeException
-            ? ((RuntimeException)executionExceptionIfAny)
-                    : new RuntimeException(executionExceptionIfAny);
-        }
-
-        // publish (if not a contributed association, query-only mixin)
-        val publishedPropertyFacet = getIdentified().getFacet(ExecutionPublishingFacet.class);
-        if (publishedPropertyFacet != null) {
-            getExecutionDispatcher().publishPropertyEdit(priorExecution);
-        }
-
-        return getObjectManager().adapt(targetPojo);
+        return getMemberExecutor().setOrClearProperty(
+                owningProperty,
+                head,
+                newValueAdapter,
+                interactionInitiatedBy,
+                DomainEventMemberExecutor::new,
+                getFacetHolder(),
+                getIdentified(),
+                editingVariant
+                );
     }
 
     private ManagedObject cloneIfViewModelCloneable(final ManagedObject adapter) {
@@ -317,22 +276,6 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
         return getServiceRegistry().lookupServiceElseFail(InteractionDtoServiceInternal.class);
-    }
-
-    private InteractionContext getInteractionContext() {
-        return getServiceRegistry().lookupServiceElseFail(InteractionContext.class);
-    }
-
-    private ClockService getClockService() {
-        return getServiceRegistry().lookupServiceElseFail(ClockService.class);
-    }
-
-    private MetricsService getMetricsService() {
-        return getServiceRegistry().lookupServiceElseFail(MetricsService.class);
-    }
-
-    private ExecutionPublisher getExecutionDispatcher() {
-        return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

@@ -22,7 +22,6 @@ package org.apache.isis.applib.services.iactn;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -80,24 +79,6 @@ public interface Interaction extends HasUniqueId {
 
     // end::refguide[]
 
-//    /**
-//     * Returns a (list of) {@link Execution}s in the order that they were pushed.  Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
-//     *
-//     * <p>
-//     *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
-//     *     that may in turn cause other domain events to be fired (by virtue of the {@link WrapperFactory}).
-//     *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
-//     *     action will return a list of just one element.
-//     * </p>
-//     *
-//     * @implNote - it seems that this is never actually called.
-//     *  The PropertyEdit/ActionInvocation facet diligently calls
-//     *  {@link #execute(MemberExecutor, PropertyEdit, ClockService, MetricsService)} or
-//     *  {@link #execute(MemberExecutor, ActionInvocation, ClockService, MetricsService)} for us, to ensure that the
-//     *  graph is populated, but then delegate to the PublisherService immediately at the end... ie {@link org.apache.isis.schema.ixn.v2.InteractionDto}s are published as we go, not all in a batch at the end.
-//     */
-//    List<Execution<?,?>> getExecutions();
-
     /**
      * The current (most recently pushed) {@link Execution}.
      */
@@ -112,66 +93,6 @@ public interface Interaction extends HasUniqueId {
     Execution<?,?> getPriorExecution();          // <.>
 
     // end::refguide[]
-//    /**
-//     * <b>NOT API</b>: intended to be called only by the framework.
-//     *
-//     * Clears the set of {@link Execution}s that may have been {@link #push(Execution)}ed.
-//     */
-//    public void clear();
-
-    /**
-     * <b>NOT API</b>: intended only to be implemented by the framework.
-     *
-     * <p>
-     * (Modelled after {@link Callable}), is the implementation
-     * by which the framework actually performs the interaction.
-     */
-    public interface MemberExecutor<T extends Execution<?,?>> {
-        Object execute(final T currentExecution);
-    }
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
-     * Use the provided {@link MemberExecutor} to invoke an action, with the provided
-     * {@link ActionInvocation} capturing the details of said action.
-     * </p>
-     *
-     * <p>
-     *     Because this both pushes an {@link Interaction.Execution} to
-     *     represent the action invocation and then pops it, that completed
-     *     execution is accessible at {@link Interaction#getPriorExecution()}.
-     * </p>
-     */
-    Object execute(
-            final MemberExecutor<ActionInvocation> memberExecutor,
-            final ActionInvocation actionInvocation,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final Command command);
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
-     * Use the provided {@link MemberExecutor} to edit a property, with the provided
-     * {@link PropertyEdit} capturing the details of said property edit.
-     * </p>
-     *
-     * <p>
-     *     Because this both pushes an {@link Interaction.Execution} to
-     *     represent the property edit and then pops it, that completed
-     *     execution is accessible at {@link Interaction#getPriorExecution()}.
-     * </p>
-     */
-    Object execute(
-            final MemberExecutor<PropertyEdit> memberExecutor,
-            final PropertyEdit propertyEdit,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final Command command);
-
 
     /**
      * Enumerates the different reasons why multiple occurrences of a certain type might occur within a single

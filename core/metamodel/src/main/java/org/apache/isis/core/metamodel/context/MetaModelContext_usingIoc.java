@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._IocContainer;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -121,6 +122,10 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     @Getter(lazy=true) 
     private final WrapperFactory wrapperFactory =
     getSingletonElseFail(WrapperFactory.class);
+    
+    @Getter(lazy=true) 
+    private final MemberExecutorService memberExecutor =
+    getSingletonElseFail(MemberExecutorService.class);
     
     
     @Override
