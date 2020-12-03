@@ -53,10 +53,9 @@ class ReflectTest {
                 .collect(Collectors.toSet());
 
         assertSetContainsAll(_Sets.<String>of(
-                    "org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi",
+                    "org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$Nested",
                     "java.lang.Object"),
                 typeSet);
-
     }
     
 
@@ -68,10 +67,10 @@ class ReflectTest {
         val typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .map(Class::getName)
                 .collect(Collectors.toSet());
-
+        
         assertSetContainsAll(_Sets.<String>of(
-                    "org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi",
-                    "org.apache.isis.applib.services.sudo.SudoService$Spi",
+                    "org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$NestedInterface",
+                    "org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$Nested",
                     "java.lang.Object"), 
                 typeSet);
 
@@ -85,12 +84,10 @@ class ReflectTest {
         val typeSet = streamAllMethods(type, true)
                 .map(m->m.toString())
                 .collect(Collectors.toSet());
-
+        
         assertSetContainsAll(_Sets.<String>of(
-                "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs()",
-                "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List)",
-                "public void org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi.releaseRunAs()",
-                "public void org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"),
+                "public abstract void org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$NestedInterface.sayHello()",
+                "public void org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$Nested.sayHello()"),
             typeSet);
 
     }
