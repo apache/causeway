@@ -20,11 +20,11 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.fixturescri
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
@@ -99,13 +99,13 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
     }
 
     private LocalDate daysFromToday(final int i) {
-        final LocalDate date = clockService.now();
+        final LocalDate date = clockService.getClock().localDate(ZoneId.systemDefault());
         return date.plusDays(i);
     }
 
 
     @Inject private ExcelDemoToDoItemMenu demoToDoItemMenu;
-    @Inject private IsisJdoSupport isisJdoSupport;
+    //@Inject private IsisJdoSupport isisJdoSupport;
     @Inject private ClockService clockService;
 
 }

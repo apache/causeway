@@ -69,6 +69,7 @@ public interface SudoService {
     /**
      * Allows the {@link SudoService} to notify other services/components that the effective user has been changed.
      * @since 2.0
+     * @deprecated its better to subscribe to interaction life-cycle events on the event bus 
      */
     // tag::refguide-1[]
     interface Listener {

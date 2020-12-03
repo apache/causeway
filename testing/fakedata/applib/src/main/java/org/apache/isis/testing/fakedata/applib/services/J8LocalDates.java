@@ -20,6 +20,7 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -36,13 +37,13 @@ public class J8LocalDates extends AbstractRandomValueGenerator {
 
     @Programmatic
     public LocalDate before(final Period period) {
-        final LocalDate now = fake.clockService.now();
+        final LocalDate now = fake.clockService.getClock().localDate(ZoneId.systemDefault());
         return now.minus(period);
     }
 
     @Programmatic
     public LocalDate after(final Period period) {
-        final LocalDate now = fake.clockService.now();
+        final LocalDate now = fake.clockService.getClock().localDate(ZoneId.systemDefault());
         return now.plus(period);
     }
 

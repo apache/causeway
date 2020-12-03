@@ -183,7 +183,7 @@ public class IsisInteraction implements InternalInteraction {
         }
         final Execution<?,?> popped = currentExecution;
 
-        final Timestamp completedAt = clockService.nowAsJavaSqlTimestamp();
+        final Timestamp completedAt = clockService.getClock().javaSqlTimestamp();
         popped.setCompletedAt(completedAt, metricsService);
 
         moveCurrentTo(currentExecution.getParent());

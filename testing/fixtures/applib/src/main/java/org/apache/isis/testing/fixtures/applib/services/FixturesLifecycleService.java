@@ -23,21 +23,22 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.testing.fixtures.applib.clock.Clock;
+import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.extern.log4j.Log4j2;
 

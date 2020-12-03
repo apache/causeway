@@ -68,7 +68,7 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
             return;
         }
         
-        val currentTime = clockService.nowAsJavaSqlTimestamp();
+        val currentTime = clockService.getClock().javaSqlTimestamp();
         val currentUser = userService.getUser().getName();
         
         val entityChanges = hasEnlistedEntityChanges.getEntityChanges(currentTime, currentUser);

@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration;
 
-import java.util.Date;
 import java.util.Objects;
 
 import org.apache.wicket.Session;
@@ -28,7 +27,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
@@ -252,10 +251,13 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
+            
+            val now = virtualClock().javaUtilDate();
+            
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
             int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-            sessionLoggingServices.forEach(
-                sessionLoggingService -> sessionLoggingService.log(type, username, now(), causedBy, Integer.toString(sessionHashCode))
+            sessionLoggingServices.forEach(sessionLoggingService -> 
+                sessionLoggingService.log(type, username, now, causedBy, Integer.toString(sessionHashCode))
             );
         };
 
@@ -278,19 +280,19 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return commonContext.getIsisInteractionTracker();
     }
 
-    private Date now() {
+    private VirtualClock virtualClock() {
         try {
             return commonContext.getServiceRegistry()
                     .lookupService(ClockService.class)
-                    .map(ClockService::nowAsJavaUtilDate)
-                    .orElse(nowFallback());
+                    .map(ClockService::getClock)
+                    .orElseGet(this::nowFallback);
         } catch (Exception e) {
             return nowFallback();
         }
     }
 
-    private Date nowFallback() {
-        return new Date(Clock.getEpochMillis());
+    private VirtualClock nowFallback() {
+        return VirtualClock.system();
     }
 
     @Override

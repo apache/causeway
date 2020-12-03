@@ -18,6 +18,8 @@
  */
 package demoapp.dom.annotLayout.PropertyLayout;
 
+import java.time.ZoneId;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -122,7 +124,7 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-step-forward", describedAs = "Inclusive and exclusive date ranges")
     public PropertyLayoutRenderDayVm renderDay(){
-        return new PropertyLayoutRenderDayVm(clockService.nowAsJodaLocalDate());
+        return new PropertyLayoutRenderDayVm(clockService.getClock().localDate(ZoneId.systemDefault()));
     }
 
     @Action(semantics = SemanticsOf.SAFE)

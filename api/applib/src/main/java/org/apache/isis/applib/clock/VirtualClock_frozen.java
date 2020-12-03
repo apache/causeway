@@ -16,36 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotLayout.PropertyLayout.renderDay;
+package org.apache.isis.applib.clock;
 
-import java.time.LocalDate;
-
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDay;
+import java.time.Instant;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
-@Property()
-@PropertyLayout(
-    renderDay = RenderDay.AS_DAY_BEFORE         // <.>
-    , describedAs =
-        "@PropertyLayout(renderDay = AS_DAY_BEFORE)"
-)
 @RequiredArgsConstructor
-public class PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout {
-    // ...
-//end::class[]
+class VirtualClock_frozen implements VirtualClock {
 
-    private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
-
-    @MemberOrder(name = "contributed", sequence = "1")
-    public LocalDate prop() {
-        return propertyLayoutRenderDayVm.getEndDate();
+    private static final long serialVersionUID = -2589204298085221985L;
+    
+    private final Instant frozenInstant;
+    
+    @Override
+    public Instant now() {
+        return frozenInstant;
     }
 
-//tag::class[]
 }
-//end::class[]

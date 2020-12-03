@@ -291,7 +291,7 @@ public interface Interaction extends HasUniqueId {
                 final MetricsService metricsService) {
             // end::refguide-2[]
 
-            val startedAt = clockService.nowAsJavaSqlTimestamp();
+            val startedAt = clockService.getClock().javaSqlTimestamp();
             syncMetrics(When.BEFORE, startedAt, metricsService);
             return startedAt;
 

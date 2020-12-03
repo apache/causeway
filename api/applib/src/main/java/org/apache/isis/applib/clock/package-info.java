@@ -18,24 +18,24 @@
  */
 
 /**
- * Defines a {@link org.apache.isis.applib.clock.Clock} singleton
+ * Defines a {@link org.apache.isis.legacy.applib.clock.Clock} singleton
  * that can be used to obtain the current time.
  *
  * <p>
  * All of the built-in value types relating to time have
  * {@link org.apache.isis.applib.adapters.ValueSemanticsProvider#getDefaultsProvider() defaults}
- * that use the {@link org.apache.isis.applib.clock.Clock} singleton.  For
+ * that use the {@link org.apache.isis.legacy.applib.clock.Clock} singleton.  For
  * consistency, domain objects and services should also use the Clock.
  *
  * <p>
  * Providing a clock is useful for testing, allowing the "current" time
  * to be placed under programmatic control (by {@link org.apache.isis.applib.fixtures.FixtureClock#initialize() initializing}
  * a {@link org.apache.isis.applib.fixtures.FixtureClock}.  Otherwise though
- * the {@link org.apache.isis.applib.clock.Clock} just uses the time from the
+ * the {@link org.apache.isis.legacy.applib.clock.Clock} just uses the time from the
  * current system.
  *
  * <p>
- * Note: this design also means that other {@link org.apache.isis.applib.clock.Clock}
+ * Note: this design also means that other {@link org.apache.isis.legacy.applib.clock.Clock}
  * implementations - such as a one that accesses the time from an NNTP time
  * daemon - could also be used.
  */

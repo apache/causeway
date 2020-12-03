@@ -20,6 +20,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -120,7 +121,7 @@ public class ExcelDemoToDoItemMenu {
         return Category.Professional.subcategories().get(0);
     }
     public LocalDate default3NewToDoItem() {
-        return clockService.now().plusDays(14);
+        return currentDate().plusDays(14);
     }
     public List<Subcategory> choices2NewToDoItem(
             final String description, final Category category) {
@@ -175,7 +176,7 @@ public class ExcelDemoToDoItemMenu {
 //        toDoItem.setLocation(
 //                new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
 
-        LocalDate today = clockService.now();
+        LocalDate today = currentDate();
         toDoItem.setDueBy(today.plusDays((long)random(10)-2L));
 
         repositoryService.persist(toDoItem);
@@ -205,6 +206,10 @@ public class ExcelDemoToDoItemMenu {
     
     private String currentUserName() {
         return userService.getUser().getName();
+    }
+    
+    private LocalDate currentDate() {
+        return clockService.getClock().localDate(ZoneId.systemDefault());
     }
 
 

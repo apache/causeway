@@ -20,6 +20,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehand
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
         if(i == null) {
             return null;
         }
-        final LocalDate date = clockService.now();
+        final LocalDate date = clockService.getClock().localDate(ZoneId.systemDefault());
         return date.plusDays(i);
     }
 

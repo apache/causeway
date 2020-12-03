@@ -18,7 +18,7 @@
  */
 package demoapp.dom.annotLayout.PropertyLayout.renderDay;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;

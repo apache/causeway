@@ -16,36 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotLayout.PropertyLayout.renderDay;
+package org.apache.isis.applib.clock;
 
-import java.time.LocalDate;
-
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDay;
+import java.time.Instant;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
-@Property()
-@PropertyLayout(
-    renderDay = RenderDay.AS_DAY_BEFORE         // <.>
-    , describedAs =
-        "@PropertyLayout(renderDay = AS_DAY_BEFORE)"
-)
 @RequiredArgsConstructor
-public class PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout {
-    // ...
-//end::class[]
+class VirtualClock_withOffset implements VirtualClock {
 
-    private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
-
-    @MemberOrder(name = "contributed", sequence = "1")
-    public LocalDate prop() {
-        return propertyLayoutRenderDayVm.getEndDate();
+    private static final long serialVersionUID = -2589204298085221985L;
+    
+    /**
+     * Amount of time (milli seconds) this clock is offset into the future 
+     * with respect to the actual (system) time.
+     */
+    private final long millisOffset;
+    
+    @Override
+    public Instant now() {
+        return Instant.now().plusMillis(millisOffset);
     }
 
-//tag::class[]
 }
-//end::class[]

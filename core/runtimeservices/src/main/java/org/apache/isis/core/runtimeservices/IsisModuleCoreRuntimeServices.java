@@ -29,6 +29,7 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
+import org.apache.isis.core.runtimeservices.clock.ClockServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
 import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault;
 import org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault;
@@ -74,6 +75,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         BookmarkServiceDefault.class,
         EntityChangesPublisherDefault.class,
         EntityPropertyChangePublisherDefault.class,
+        ClockServiceDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
         CommandPublisherDefault.class,

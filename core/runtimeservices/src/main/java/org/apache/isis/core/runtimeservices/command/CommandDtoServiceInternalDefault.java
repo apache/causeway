@@ -154,7 +154,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoFactory {
 
         dto.setTransactionId(uniqueId.toString());
         dto.setUser(userService.getUser().getName());
-        dto.setTimestamp(clockService.nowAsXMLGregorianCalendar());
+        dto.setTimestamp(clockService.getClock().xmlGregorianCalendar());
 
         for (val targetAdapter : targetAdapters) {
             final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetAdapter);

@@ -31,7 +31,6 @@ import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_objectType;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
-import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
@@ -68,7 +67,6 @@ import org.apache.isis.schema.IsisModuleSchema;
         MetaModelServiceMenu.class,
 
         // @Service's
-        ClockService.class,
         CommandDtoProcessorServiceIdentity.class,
         CommandLogger.class,
         ContentMappingServiceForCommandDto.class,

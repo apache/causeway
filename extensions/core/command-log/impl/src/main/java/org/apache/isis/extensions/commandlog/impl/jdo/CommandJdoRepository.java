@@ -19,6 +19,8 @@
 package org.apache.isis.extensions.commandlog.impl.jdo;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,6 @@ import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -64,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor
-@Log4j2
+//@Log4j2
 public class CommandJdoRepository {
 
     @Inject final Provider<InteractionContext> interactionContextProvider;
@@ -169,7 +169,10 @@ public class CommandJdoRepository {
 
     private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, int daysOffset) {
         return dt!=null
-                ?new java.sql.Timestamp(dt.toDateTimeAtStartOfDay().plusDays(daysOffset).getMillis())
+                ?new java.sql.Timestamp(
+                        Instant.from(
+                                dt.atStartOfDay().plusDays(daysOffset))
+                        .toEpochMilli())
                 :null;
     }
 
@@ -193,7 +196,7 @@ public class CommandJdoRepository {
 
 
     /**
-     * Intended to support the replay of commands on a seconadry instance of
+     * Intended to support the replay of commands on a secondary instance of
      * the application.
      *
      * This finder returns all (completed) {@link CommandJdo}s started after

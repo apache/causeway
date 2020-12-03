@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.value.dateutil;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,6 +30,7 @@ import java.util.TimeZone;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -166,7 +166,9 @@ public class JavaUtilDateValueSemanticsProvider extends ValueSemanticsProviderAb
     @Override
     protected Date now() {
         return getServiceRegistry().lookupService(ClockService.class)
-                .map(ClockService::nowAsJavaUtilDate)
+                .map(ClockService::getClock)
+                .map(VirtualClock::getEpochMillis)
+                .map(Date::new)
                 .orElseGet(Date::new); // fallback to system time
     }
 

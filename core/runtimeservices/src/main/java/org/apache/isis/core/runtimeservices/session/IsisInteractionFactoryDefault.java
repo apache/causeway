@@ -343,7 +343,7 @@ implements IsisInteractionFactory, IsisInteractionTracker {
                         // the best we can do is to use the current time
 
                         // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
-                         clockService.nowAsJavaSqlTimestamp();
+                         clockService.getClock().javaSqlTimestamp();
 
             command.updater().setCompletedAt(completedAt);
         }

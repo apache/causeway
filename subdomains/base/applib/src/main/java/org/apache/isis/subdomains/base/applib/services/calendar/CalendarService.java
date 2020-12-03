@@ -19,6 +19,7 @@
 package org.apache.isis.subdomains.base.applib.services.calendar;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,7 +49,7 @@ public class CalendarService {
     }
 
     public LocalDate beginningOfMonth() {
-        return beginningOfMonth(clockService.now());
+        return beginningOfMonth(nowAsLocalDate());
     }
 
     static LocalDate beginningOfMonth(final LocalDate date) {
@@ -57,13 +58,11 @@ public class CalendarService {
     }
 
     public LocalDate beginningOfQuarter() {
-        final LocalDate date = clockService.now();
-        return beginningOfQuarter(date);
+        return beginningOfQuarter(nowAsLocalDate());
     }
 
     public LocalDate beginningOfNextQuarter() {
-        final LocalDate date = clockService.now().plusMonths(3);
-        return beginningOfQuarter(date);
+        return beginningOfQuarter(nowAsLocalDate().plusMonths(3));
     }
     
     static LocalDate beginningOfQuarter(final LocalDate date) {
@@ -75,12 +74,16 @@ public class CalendarService {
         return beginningOfMonth.minusMonths(deltaMonth);
     }
 
+    private LocalDate nowAsLocalDate() {
+        return clockService.getClock().localDate(ZoneId.systemDefault());
+    }
+    
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.clock.ClockService#nowAsMillis()}.
+     * @deprecated - use {@link ClockService#getClock()}.getEpochMillis()
      */
     @Deprecated
     public long timestamp() {
-        return clockService.nowAsMillis();
+        return clockService.getClock().getEpochMillis();
     }
 
     

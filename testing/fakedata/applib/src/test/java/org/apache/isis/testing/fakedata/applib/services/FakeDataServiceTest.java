@@ -20,8 +20,8 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +39,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
@@ -68,27 +69,11 @@ public class FakeDataServiceTest {
         fakeDataService.clockService = mockClockService;
         fakeDataService.init();
 
-        final OffsetDateTime now = OffsetDateTime.now();
-        final LocalDate nowAsLocalDate = now.toLocalDate();
-        final long nowAsMillis = now.toInstant().toEpochMilli();
-        final LocalDateTime nowAsLocalDateTime = now.toLocalDateTime();
-        final Timestamp nowAsJavaSqlTimestamp = new Timestamp(nowAsMillis);
-
+        final VirtualClock virtualClock = VirtualClock.frozenAt(Instant.now()); 
+        
         context.checking(new Expectations() {{
-            allowing(mockClockService).nowAsOffsetDateTime();
-            will(returnValue(now));
-
-            allowing(mockClockService).now();
-            will(returnValue(nowAsLocalDate));
-
-            allowing(mockClockService).nowAsMillis();
-            will(returnValue(nowAsMillis));
-
-            allowing(mockClockService).nowAsLocalDateTime();
-            will(returnValue(nowAsLocalDateTime));
-
-            allowing(mockClockService).nowAsJavaSqlTimestamp();
-            will(returnValue(nowAsJavaSqlTimestamp));
+            allowing(mockClockService).getClock();
+            will(returnValue(virtualClock));
         }});
     }
 

@@ -24,10 +24,12 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.clock.VirtualClock;
 
-public class TestClock extends Clock {
+public class TestClock implements VirtualClock {
 
+    private static final long serialVersionUID = 1L;
+    
     public static final TimeZone timeZone;
 
     public static void initialize() {
@@ -49,7 +51,7 @@ public class TestClock extends Clock {
      * Always return the time as 2003/8/17 21:30:25
      */
     @Override
-    protected Instant now() {
+    public Instant now() {
         final Calendar c = Calendar.getInstance();
         c.setTimeZone(timeZone);
 

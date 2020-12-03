@@ -19,19 +19,23 @@
 package org.apache.isis.applib.clock;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.iactn.Interaction;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Works in connection with {@link InteractionFactory}, such that it allows an {@link Interaction}
@@ -63,6 +67,17 @@ public interface VirtualClock extends Serializable {
         return Instant::now;
     }
     
+    static VirtualClock nowAt(@NonNull Instant virtualNow) {
+        // positive if the resulting clock is in the future
+        val offsetMillis = ChronoUnit.MILLIS.between(Instant.now(), virtualNow);
+        return new VirtualClock_withOffset(offsetMillis);
+    }
+    
+    static VirtualClock frozenAt(@NonNull Instant frozenAt) {
+        // positive if the resulting clock is in the future
+        return new VirtualClock_frozen(frozenAt);
+    }
+    
     // -- UTILITY
     
     /**
@@ -81,15 +96,15 @@ public interface VirtualClock extends Serializable {
      * Returns the (virtual) time as {@link LocalDate}, using the {@link ZoneId} timezone.
      * @param zoneId - the time-zone, which may be an offset, not null
      */
-    default LocalDate getTimeAsLocalDate(final @NonNull ZoneId zoneId) {
-        return getTimeAsLocalDateTime(zoneId).toLocalDate();
+    default LocalDate localDate(final @NonNull ZoneId zoneId) {
+        return localDateTime(zoneId).toLocalDate();
     }
 
     /**
      * Returns the (virtual) time as {@link LocalDateTime}, using the {@link ZoneId} timezone.
      * @param zoneId - the time-zone, which may be an offset, not null
      */
-    default LocalDateTime getTimeAsLocalDateTime(final @NonNull ZoneId zoneId) {
+    default LocalDateTime localDateTime(final @NonNull ZoneId zoneId) {
         return LocalDateTime.ofInstant(now(), zoneId);
     }
 
@@ -97,22 +112,45 @@ public interface VirtualClock extends Serializable {
      * Returns the (virtual) time as {@link OffsetDateTime}, using the {@link ZoneId} timezone.
      * @param zoneId - the time-zone, which may be an offset, not null
      */
-    default OffsetDateTime getTimeAsOffsetDateTime(final @NonNull ZoneId zoneId) {
+    default OffsetDateTime offsetDateTime(final @NonNull ZoneId zoneId) {
         return OffsetDateTime.ofInstant(now(), zoneId);
     }
 
-    default Timestamp getTimeAsJavaSqlTimestamp() {
+    default java.util.Date javaUtilDate() {
+        return new java.util.Date(getEpochMillis());
+    }
+    
+    default java.sql.Timestamp javaSqlTimestamp() {
         return new java.sql.Timestamp(getEpochMillis());
     }
+    
+    default XMLGregorianCalendar xmlGregorianCalendar() {
+        return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(javaSqlTimestamp());
+    }
 
+    // -- DEPRECATIONS
+    
+    /**
+     * Returns the time as a Joda {@link org.joda.time.DateTime},
+     * using the {@link ZoneId#systemDefault() system default} timezone.
+     * @deprecated please migrate to java.time.*
+     */
+    @Deprecated
+    default org.joda.time.DateTime asJodaDateTime(final @NonNull ZoneId zoneId) {
+        return new org.joda.time.DateTime(getEpochMillis(), DateTimeZone.forID(zoneId.getId()));
+    }
+    
     /**
      * Returns the time as a Joda {@link DateTime},
      * using the {@link ZoneId#systemDefault() system default} timezone.
-     * @deprecated please migrate to java.time.* TODO provide a compatibility layer?
+     * @deprecated please migrate to java.time.*
      */
     @Deprecated
-    default DateTime getTimeAsJodaDateTime() {
-        final ZoneId zoneId = ZoneId.systemDefault();
-        return new DateTime(getEpochMillis(), DateTimeZone.forID(zoneId.getId()));
+    default org.joda.time.LocalDate asJodaLocalDate(final @NonNull ZoneId zoneId) {
+        return new org.joda.time.LocalDate(getEpochMillis(), DateTimeZone.forID(zoneId.getId()));
     }
+
+    
+
+
 }

@@ -18,8 +18,11 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
+import java.time.ZoneId;
+
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public class JodaLocalDates extends AbstractRandomValueGenerator{
@@ -35,19 +38,21 @@ public class JodaLocalDates extends AbstractRandomValueGenerator{
 
     @Programmatic
     public org.joda.time.LocalDate before(final Period period) {
-        final org.joda.time.LocalDate now = fake.clockService.nowAsJodaLocalDate();
-        return now.minus(period);
+        return now().minus(period);
     }
 
     @Programmatic
     public org.joda.time.LocalDate after(final Period period) {
-        final org.joda.time.LocalDate now = fake.clockService.nowAsJodaLocalDate();
-        return now.plus(period);
+        return now().plus(period);
     }
 
     @Programmatic
     public LocalDate any() {
         final org.joda.time.Period upTo5Years = fake.jodaPeriods().yearsUpTo(5);
         return around(upTo5Years);
+    }
+    
+    private LocalDate now() {
+        return fake.clockService.getClock().asJodaLocalDate(ZoneId.systemDefault());
     }
 }

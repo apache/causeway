@@ -370,7 +370,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
         long epochMillisAtStartOfDay = 
                 dueBy.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
                 
-        return epochMillisAtStartOfDay < (clockService.nowAsMillis() - ONE_WEEK_IN_MILLIS);
+        return epochMillisAtStartOfDay < (clockService.getEpochMillis() - ONE_WEEK_IN_MILLIS);
     }
 
     //endregion

@@ -18,13 +18,14 @@
  */
 package org.apache.isis.extensions.commandlog.impl.ui;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -104,10 +105,10 @@ public class CommandServiceMenu {
         return commandServiceRepository == null;
     }
     public LocalDate default0FindCommands() {
-        return clockService.nowAsJodaLocalDate().minusDays(7);
+        return now().minusDays(7);
     }
     public LocalDate default1FindCommands() {
-        return clockService.nowAsJodaLocalDate();
+        return now();
     }
 
 
@@ -133,6 +134,10 @@ public class CommandServiceMenu {
         commandServiceRepository.truncateLog();
     }
 
+    
+    private LocalDate now() {
+        return clockService.getClock().localDate(ZoneId.systemDefault());
+    }
 
 }
 

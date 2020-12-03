@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.clock;
+package org.apache.isis.testing.fixtures.applib.clock;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -151,3 +151,4 @@ final class SystemClock extends Clock {
     }
 
 }
+
