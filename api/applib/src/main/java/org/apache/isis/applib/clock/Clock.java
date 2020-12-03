@@ -36,7 +36,7 @@ import lombok.val;
  *
  * <p>
  * The clock is used primarily by the temporal value classes, and is accessed by
- * the NOF as a singleton. The actual implementation used can be configured at
+ * the framework as a singleton. The actual implementation used can be configured at
  * startup, but once specified the clock instance cannot be changed.
  *
  * <p>

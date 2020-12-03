@@ -117,6 +117,10 @@ public final class _Lists {
     public static <T> ArrayList<T> newArrayList() {
         return new ArrayList<T>();
     }
+    
+    public static <T> ArrayList<T> newArrayList(final int initialSize) {
+        return new ArrayList<T>(initialSize);
+    }
 
     public static <T> ArrayList<T> newArrayList(@Nullable Collection<T> collection) {
         if(collection==null) {
@@ -195,5 +199,7 @@ public final class _Lists {
     Collector<T, ?, List<T>> toUnmodifiable() {
         return toUnmodifiable(ArrayList::new);
     }
+
+
 
 }

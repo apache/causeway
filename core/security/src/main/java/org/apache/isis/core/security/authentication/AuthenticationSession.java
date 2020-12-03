@@ -21,6 +21,8 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 
+import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -75,7 +77,21 @@ public interface AuthenticationSession extends Serializable {
      */
     MessageBroker getMessageBroker();
 
-    UserMemento createUserMemento();
+    /**
+     * The (programmatically) simulated (or actual) user, belonging to this session.
+     * 
+     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
+     * own simulated (or actual) user 
+     */
+    UserMemento getUser();
+    
+    /**
+     * The (programmatically) simulated (or actual) clock, belonging to this session.
+     * 
+     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
+     * own simulated (or actual) clock 
+     */
+    VirtualClock getClock();
 
     /**
      * To support external security mechanisms such as keycloak, where the validity of the session is defined by

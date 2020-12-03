@@ -22,6 +22,7 @@ package org.apache.isis.core.security.authentication.standard;
 import java.util.Collection;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -46,7 +47,7 @@ public class SimpleSession extends AuthenticationSessionAbstract {
     }
 
     public SimpleSession(final String userName, final Stream<String> roles, final String code) {
-        super(userName, roles, code);
+        super(VirtualClock.system(), userName, roles, code);
     }
 
     @Getter @Setter

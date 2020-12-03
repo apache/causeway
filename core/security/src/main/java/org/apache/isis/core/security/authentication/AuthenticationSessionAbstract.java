@@ -21,53 +21,64 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
-public abstract class AuthenticationSessionAbstract implements AuthenticationSession, Serializable {
+public abstract class AuthenticationSessionAbstract 
+implements AuthenticationSession, Serializable {
 
     private static final long serialVersionUID = 1L;
 
     // -- Constructor, fields
 
-    @Getter private final String userName;
-    private final Set<String> roles = _Sets.newHashSet();
-    private transient Can<String> rolesImmutable;
+    @Getter(onMethod_ = {@Override}) @NonNull 
+    private final VirtualClock clock;
+    
+    @Getter(onMethod_ = {@Override}) @NonNull 
+    private final String userName;
+    
+    @Getter(onMethod_ = {@Override}) @NonNull
+    private final Can<String> roles;
+    
+    @Getter(onMethod_ = {@Override}) @NonNull
     private final String validationCode;
 
-    private final Map<String, Object> attributeByName = new HashMap<String, Object>();
-
+    @Getter(onMethod_ = {@Override}) @NonNull
     private final MessageBroker messageBroker;
+    
+    private final Map<String, Object> attributeByName = new HashMap<String, Object>();
+    
 
     public AuthenticationSessionAbstract(
             @NonNull final String name, 
             @NonNull final String validationCode) {
-        this(name, Stream.empty(), validationCode);
+        this(VirtualClock.system(), name, Stream.empty(), validationCode);
     }
 
     public AuthenticationSessionAbstract(
+            @NonNull final VirtualClock clock,
             @NonNull final String userName, 
             @NonNull final Stream<String> roles, 
             @NonNull final String validationCode) {
-        this.userName = userName;
 
-        roles
-        .filter(_Strings::isNotEmpty)
-        .forEach(this.roles::add);
+        this.clock = clock;
+        this.userName = userName;
+        this.roles = Can.ofStream(roles
+                .filter(_Strings::isNotEmpty)
+                .distinct());
 
         this.validationCode = validationCode;
         this.messageBroker = new MessageBroker();
@@ -84,25 +95,8 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     // -- Roles
 
     @Override
-    public Can<String> getRoles() {
-        if(rolesImmutable==null) { 
-            // lazy in support of serialization, 
-            // its also (effectively) thread-safe without doing any synchronization here 
-            rolesImmutable = Can.ofCollection(roles);
-        }
-        return rolesImmutable;
-    }
-
-    @Override
     public boolean hasRole(String role) {
         return roles.contains(role);
-    }
-
-    // -- Validation Code
-
-    @Override
-    public String getValidationCode() {
-        return validationCode;
     }
 
     // -- Attributes
@@ -117,22 +111,20 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         attributeByName.put(attributeName, attribute);
     }
 
-    // -- MessageBroker
+    // -- UserMemento
 
+    private transient UserMemento user; 
+    
     @Override
-    public MessageBroker getMessageBroker() {
-        return messageBroker;
-    }
-
-    // -- createUserMemento
-
-    @Override
-    public UserMemento createUserMemento() {
-        final List<RoleMemento> roles = _Lists.newArrayList();
-        for (final String roleName : this.roles) {
-            roles.add(new RoleMemento(roleName));
+    public UserMemento getUser() {
+        if(user==null) {
+            val roleMementos = _Lists.<RoleMemento>newArrayList(roles.size());
+            for (final String roleName : roles) {
+                roleMementos.add(new RoleMemento(roleName));
+            }
+            user = new UserMemento(getUserName(), roleMementos);
         }
-        return new UserMemento(getUserName(), roles);
+        return user;
     }
 
     // -- toString

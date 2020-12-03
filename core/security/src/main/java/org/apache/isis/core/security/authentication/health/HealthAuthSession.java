@@ -21,6 +21,7 @@ package org.apache.isis.core.security.authentication.health;
 
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 public class HealthAuthSession extends AuthenticationSessionAbstract {
@@ -32,7 +33,7 @@ public class HealthAuthSession extends AuthenticationSessionAbstract {
     private static final String CODE = "";
 
     public HealthAuthSession() {
-        super(USER_NAME, Stream.of(ROLE), CODE);
+        super(VirtualClock.system(), USER_NAME, Stream.of(ROLE), CODE);
     }
 
 

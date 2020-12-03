@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 /**
- * Details, obtained from the container, about the user and his roles.
+ * Details about a user and his roles.
  * Read-only.
  */
 // tag::refguide[]
@@ -59,7 +59,7 @@ public final class UserMemento {
             throw new IllegalArgumentException("Name not specified");
         }
         this.name = name;
-        this.roles.addAll(roles);
+        this.roles = Collections.unmodifiableList(new ArrayList<RoleMemento>(roles));
     }
 
     public String title() {
@@ -79,10 +79,10 @@ public final class UserMemento {
      * The roles associated with this user.
      */
     @MemberOrder(sequence = "1.1")
-    private final List<RoleMemento> roles = new ArrayList<RoleMemento>();
+    private final List<RoleMemento> roles;
     // tag::refguide[]
     public List<RoleMemento> getRoles() {
-        return Collections.unmodifiableList(roles);
+        return roles;
     }
     // end::refguide[]
     /**
@@ -99,27 +99,28 @@ public final class UserMemento {
         return name.equals(userName);
     }
 
-    /**
-     * Determines if the user fulfills the specified role.
-     *
-     * @param role  the role to search for, regular expressions are allowed
-     */
-    public boolean hasRole(final RoleMemento role) {
-        return hasRole(role.getName());
-    }
-
-    /**
-     * Determines if the user fulfills the specified role. Roles are compared
-     * lexically by role name.
-     */
-    public boolean hasRole(final String roleName) {
-        for (final RoleMemento role : roles) {
-            if (role.getName().matches(roleName)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//XXX implemented as regex match, java-doc is not specific about what these methods actually do; so if in doubt, rather remove     
+//    /**
+//     * Determines if the user fulfills the specified role.
+//     *
+//     * @param role  the role to search for, regular expressions are allowed
+//     */
+//    public boolean hasRole(final RoleMemento role) {
+//        return hasRole(role.getName());
+//    }
+//
+//    /**
+//     * Determines if the user fulfills the specified role. Roles are compared
+//     * lexically by role name.
+//     */
+//    public boolean hasRole(final String roleName) {
+//        for (final RoleMemento role : roles) {
+//            if (role.getName().matches(roleName)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     @Override
     public String toString() {

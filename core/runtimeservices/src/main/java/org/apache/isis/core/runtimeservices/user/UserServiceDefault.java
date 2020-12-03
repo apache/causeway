@@ -97,7 +97,7 @@ public class UserServiceDefault implements UserService {
 
         } else {
             return isisInteractionTracker.currentAuthenticationSession()
-            .map(AuthenticationSession::createUserMemento)
+            .map(AuthenticationSession::getUser)
             .orElseThrow(()->_Exceptions.illegalState("need an AuthenticationSession to create a UserMemento"));
         }
     }
