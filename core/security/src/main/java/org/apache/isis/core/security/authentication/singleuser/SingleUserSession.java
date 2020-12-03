@@ -19,23 +19,31 @@
 
 package org.apache.isis.core.security.authentication.singleuser;
 
+import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 public final class SingleUserSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String DEFAULT_USER_NAME = "prototyping";
+    private static final UserMemento DEFAULT_SINGLE_USER = 
+            UserMemento.ofName("prototyping");
 
     /**
-     * Defaults validation code to <tt>""</tt>.
+     * Defaults session's authentication validation code to <tt>""</tt>.
      */
     public SingleUserSession() {
-        this("");
+        this(AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
     }
 
-    public SingleUserSession(final String code) {
-        super(DEFAULT_USER_NAME, code);
+    public SingleUserSession(final String authValidationCode) {
+        super(VirtualClock.system(), DEFAULT_SINGLE_USER, authValidationCode);
     }
 
+
+
+
+    
+    
 }

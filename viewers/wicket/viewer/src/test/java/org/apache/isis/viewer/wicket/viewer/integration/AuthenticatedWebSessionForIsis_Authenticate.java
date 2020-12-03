@@ -30,19 +30,20 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory.ThrowingRunnable;
+import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -134,7 +135,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
                 will(returnValue(true));
                 oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
-                will(returnValue(new SimpleSession("test-user", null)));
+                will(returnValue(SimpleSession.validOf(UserMemento.ofName("test-user"))));
             }
         });
 

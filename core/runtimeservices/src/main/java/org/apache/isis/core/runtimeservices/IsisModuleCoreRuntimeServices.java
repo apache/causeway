@@ -100,7 +100,6 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         UrlEncodingServiceWithCompression.class,
         UserProfileServiceDefault.class,
         UserServiceDefault.class,
-        UserServiceDefault.SudoServiceSpi.class,
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,

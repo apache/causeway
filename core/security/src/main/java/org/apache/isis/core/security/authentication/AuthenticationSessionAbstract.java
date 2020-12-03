@@ -16,36 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class AuthenticationSessionAbstract 
 implements AuthenticationSession, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    protected static final String DEFAULT_AUTH_VALID_CODE = "";
+    
     // -- Constructor, fields
 
     @Getter(onMethod_ = {@Override}) @NonNull 
     private final VirtualClock clock;
+    
+    @Getter(onMethod_ = {@Override}) @NonNull 
+    private final UserMemento user;
     
     @Getter(onMethod_ = {@Override}) @NonNull 
     private final String userName;
@@ -60,25 +60,22 @@ implements AuthenticationSession, Serializable {
     private final MessageBroker messageBroker;
     
     private final Map<String, Object> attributeByName = new HashMap<String, Object>();
-    
 
     public AuthenticationSessionAbstract(
-            @NonNull final String name, 
-            @NonNull final String validationCode) {
-        this(VirtualClock.system(), name, Stream.empty(), validationCode);
+            @NonNull final UserMemento user) {
+        this(VirtualClock.system(), user, DEFAULT_AUTH_VALID_CODE);
     }
 
     public AuthenticationSessionAbstract(
             @NonNull final VirtualClock clock,
-            @NonNull final String userName, 
-            @NonNull final Stream<String> roles, 
+            @NonNull final UserMemento user,
             @NonNull final String validationCode) {
 
         this.clock = clock;
-        this.userName = userName;
-        this.roles = Can.ofStream(roles
-                .filter(_Strings::isNotEmpty)
-                .distinct());
+        this.user = user;
+        this.userName = user.getName();
+        this.roles = Can.ofCollection(user.getRoles())
+                .map(RoleMemento::getName);
 
         this.validationCode = validationCode;
         this.messageBroker = new MessageBroker();
@@ -111,21 +108,6 @@ implements AuthenticationSession, Serializable {
         attributeByName.put(attributeName, attribute);
     }
 
-    // -- UserMemento
-
-    private transient UserMemento user; 
-    
-    @Override
-    public UserMemento getUser() {
-        if(user==null) {
-            val roleMementos = _Lists.<RoleMemento>newArrayList(roles.size());
-            for (final String roleName : roles) {
-                roleMementos.add(new RoleMemento(roleName));
-            }
-            user = new UserMemento(getUserName(), roleMementos);
-        }
-        return user;
-    }
 
     // -- toString
 

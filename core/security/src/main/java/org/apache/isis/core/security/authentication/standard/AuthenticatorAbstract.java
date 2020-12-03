@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+
+import lombok.val;
 
 public abstract class AuthenticatorAbstract implements Authenticator {
 
@@ -29,11 +32,16 @@ public abstract class AuthenticatorAbstract implements Authenticator {
      * if required.
      */
     @Override
-    public final AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
+    public final AuthenticationSession authenticate(
+            final AuthenticationRequest request, 
+            final String validationCode) {
+        
         if (!isValid(request)) {
             return null;
         }
-        return new SimpleSession(request.getName(), request.streamRoles(), code);
+        
+        val user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles()); 
+        return SimpleSession.of(user, validationCode);
     }
 
 

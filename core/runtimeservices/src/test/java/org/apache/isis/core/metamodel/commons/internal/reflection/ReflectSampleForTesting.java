@@ -16,23 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.commons.internal.reflection;
 
-package org.apache.isis.security.authentication.standard;
+public class ReflectSampleForTesting {
 
-import java.io.Serializable;
-
-import org.jmock.integration.junit4.JMock;
-import org.junit.runner.RunWith;
-
-import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
-
-@RunWith(JMock.class)
-public class SimpleSessionEncodabilityNoRolesTest extends SimpleSessionEncodabilityTestAbstract {
-
-    @Override
-    protected Serializable createEncodable() {
-        return SimpleSession.validOf(UserMemento.ofName("joe"));
+    public static interface NestedInterface {
+        void sayHello();
     }
+    
+    public static class Nested implements NestedInterface {
 
+        @Override
+        public void sayHello() {
+            
+        }
+        
+    }
+    
 }

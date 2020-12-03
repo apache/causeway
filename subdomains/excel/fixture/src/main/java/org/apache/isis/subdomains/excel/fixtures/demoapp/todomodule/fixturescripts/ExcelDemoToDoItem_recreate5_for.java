@@ -23,7 +23,6 @@ import java.time.LocalDate;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;

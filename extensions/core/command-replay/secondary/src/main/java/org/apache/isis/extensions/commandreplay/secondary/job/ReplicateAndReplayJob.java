@@ -25,15 +25,14 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
-import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-
+import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.IsTickingClockInitialized;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
-import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -53,7 +52,11 @@ public class ReplicateAndReplayJob implements Job {
         new SecondaryStatusData(quartzContext);
 
         if(secondaryConfig.isConfigured()) {
-            authSession = new SimpleSession(secondaryConfig.getPrimaryUser(), secondaryConfig.getQuartzRoles());
+            val user = UserMemento.ofNameAndRoleNames(
+                    secondaryConfig.getPrimaryUser(), 
+                    secondaryConfig.getQuartzRoles().stream());
+            
+            authSession = SimpleSession.validOf(user);
             exec(quartzContext);
         }
     }

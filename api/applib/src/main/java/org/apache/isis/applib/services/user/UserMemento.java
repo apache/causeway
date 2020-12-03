@@ -19,14 +19,16 @@
 
 package org.apache.isis.applib.services.user;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -34,32 +36,59 @@ import lombok.experimental.UtilityClass;
  * Read-only.
  */
 // tag::refguide[]
-public final class UserMemento {
-
+public final class UserMemento implements Serializable {
     // end::refguide[]
+    
+    private static final long serialVersionUID = 7190090455587885367L;
+    
+    // -- FACTORIES
+    
     /**
      * Creates a new user with the specified name and no roles.
      */
-    public UserMemento(final String name) {
-        this(name, new RoleMemento[0]);
+    public static UserMemento ofName(
+            final @NonNull String name) {
+        return new UserMemento(name, Stream.empty());
     }
+    
+    /**
+     * Creates a new user with the specified name and assigned roles.
+     */
+    public static UserMemento ofNameAndRoles(
+            final @NonNull String name, 
+            final RoleMemento... roles) {
+        return new UserMemento(name, Stream.of(roles));
+    }
+    
+    /**
+     * Creates a new user with the specified name and assigned role names.
+     */
+    public static UserMemento ofNameAndRoleNames(
+            final @NonNull String name, 
+            final String... roleNames) {
+        return new UserMemento(name, Stream.of(roleNames).map(RoleMemento::new));
+    }
+    
+    /**
+     * Creates a new user with the specified name and assigned role names.
+     */
+    public static UserMemento ofNameAndRoleNames(
+            final @NonNull String name, 
+            final @NonNull Stream<String> roleNames) {
+        return new UserMemento(name, roleNames.map(RoleMemento::new));
+    }
+    
+    // -- CONSTRUCTOR
 
     /**
      * Creates a new user with the specified name and assigned roles.
      */
-    public UserMemento(final String name, final RoleMemento... roles) {
-        this(name, Arrays.asList(roles));
-    }
-
-    /**
-     * Creates a new user with the specified name and assigned roles.
-     */
-    public UserMemento(final String name, final List<RoleMemento> roles) {
-        if (name == null) {
+    public UserMemento(final String name, final @NonNull Stream<RoleMemento> roles) {
+        if (_Strings.isEmpty(name)) {
             throw new IllegalArgumentException("Name not specified");
         }
         this.name = name;
-        this.roles = Collections.unmodifiableList(new ArrayList<RoleMemento>(roles));
+        this.roles = roles.collect(_Lists.toUnmodifiable()); 
     }
 
     public String title() {
@@ -97,6 +126,11 @@ public final class UserMemento {
             throw new IllegalArgumentException("no user name provided");
         }
         return name.equals(userName);
+    }
+    
+    public Stream<String> streamRoleNames() {
+        return roles.stream()
+                .map(RoleMemento::getName);
     }
 
 //XXX implemented as regex match, java-doc is not specific about what these methods actually do; so if in doubt, rather remove     
@@ -138,6 +172,7 @@ public final class UserMemento {
             public static final int MAX_LEN = 50;
         }
     }
+
 
     // tag::refguide[]
 

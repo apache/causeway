@@ -41,6 +41,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
@@ -426,9 +427,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private static <R> SimpleSession authSessionFrom(AsyncControl<R> asyncControl, AuthenticationSession authSession) {
-        val user = asyncControl.getUser();
-        val roles = asyncControl.getRoles();
-        return new SimpleSession(user != null ? user : authSession.getUserName(), roles != null ? roles : authSession.getRoles());
+        val clock = Optional.ofNullable(asyncControl.getClock())
+                .orElseGet(VirtualClock::system);
+        val user = Optional.ofNullable(asyncControl.getUser())
+                .orElseGet(authSession::getUser);
+        return SimpleSession.validOf(clock, user);
     }
 
     @Data

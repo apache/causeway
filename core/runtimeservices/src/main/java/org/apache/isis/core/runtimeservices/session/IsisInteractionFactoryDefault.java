@@ -43,7 +43,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -63,11 +62,8 @@ import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeCloseListene
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
-import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
-import org.apache.isis.core.runtimeservices.user.UserServiceDefault.UserAndRoleOverrides;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -162,11 +158,8 @@ implements IsisInteractionFactory, IsisInteractionTracker {
             ThreadLocal.withInitial(Stack::new);
     
     @Override
-    public InteractionClosure openInteraction(final @NonNull AuthenticationSession authenticationSession) {
+    public InteractionClosure openInteraction(final @NonNull AuthenticationSession authSessionToUse) {
 
-        val authSessionToUse = getAuthenticationSessionOverride()
-                .orElse(authenticationSession);
-        
         val interactionSession = getOrCreateInteractionSession(authSessionToUse);
         val newInteractionClosure = new InteractionClosure(interactionSession, authSessionToUse);
         
@@ -329,29 +322,6 @@ implements IsisInteractionFactory, IsisInteractionTracker {
                 + "this implementation of an Interaction: %s", interaction.getClass().getName());
     }
     
-    // -- HELPER - SUDO SUPPORT 
-
-    @Inject private UserServiceDefault userServiceDefault;
-    
-    /**
-     * Checks if there are overrides, and if so return a {@link SimpleSession} to represent those
-     * overrides.
-     */
-    private Optional<AuthenticationSession> getAuthenticationSessionOverride() {
-
-        // if user/role has been overridden by SudoService, then honor that value.
-        final UserAndRoleOverrides userAndRoleOverrides = userServiceDefault.currentOverridesIfAny();
-
-        if(userAndRoleOverrides != null) {
-            String user = userAndRoleOverrides.getUser();
-            Can<String> roles = userAndRoleOverrides.getRoles();
-            return Optional.of(new SimpleSession(user, roles));
-        }
-
-        // otherwise...
-        return Optional.empty();
-    }
-
     // -- HELPER - COMMAND COMPLETION
     
     private void completeAndPublishCurrentCommand() {

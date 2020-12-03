@@ -148,8 +148,6 @@ public class BulkUpdateManagerForDemoToDoItem {
         return userService.getUser().getName();
     }
 
-
-    @SuppressWarnings("unchecked")
     @Collection
     @CollectionLayout(defaultView = "table")
     public List<ExcelDemoToDoItem> getToDoItems() {

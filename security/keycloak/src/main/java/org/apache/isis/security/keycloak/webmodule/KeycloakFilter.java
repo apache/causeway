@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
@@ -61,7 +62,8 @@ public class KeycloakFilter implements Filter {
         }
         final List<String> roles = toClaims(rolesHeader);
         
-        val authenticationSession = new SimpleSession(userid, roles, subjectHeader);
+        val user = UserMemento.ofNameAndRoleNames(userid, roles.stream());
+        val authenticationSession = SimpleSession.of(user, subjectHeader);
         authenticationSession.setType(AuthenticationSession.Type.EXTERNAL);
         
         isisInteractionFactory.runAuthenticated(

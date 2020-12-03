@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.user;
 
 // tag::refguide[]
@@ -24,7 +23,8 @@ public interface UserService {
 
     // end::refguide[]
     /**
-     * Get the details about the current user.
+     * Gets the details about the current user, based on calling thread's {@link AuthenticationSession}.
+     * @throws IllegalStateException if the calling thread has no {@link AuthenticationSession}.
      */
     // tag::refguide[]
     UserMemento getUser();      // <.>

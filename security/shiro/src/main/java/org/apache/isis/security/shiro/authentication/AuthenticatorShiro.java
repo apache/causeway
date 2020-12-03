@@ -47,6 +47,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
@@ -57,6 +58,7 @@ import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -157,7 +159,7 @@ public class AuthenticatorShiro implements Authenticator {
 
     AuthenticationSession authenticationSessionFor(
             AuthenticationRequest request, 
-            String code, 
+            String validationCode, 
             AuthenticationToken token, 
             Subject currentSubject) {
 
@@ -167,8 +169,9 @@ public class AuthenticatorShiro implements Authenticator {
                 // copy over any roles passed in
                 // (this is used by the Wicket viewer, for example).
                 request.streamRoles());
-
-        return new SimpleSession(request.getName(), roles, code);
+        
+        val user = UserMemento.ofNameAndRoleNames(request.getName(), roles); 
+        return SimpleSession.of(user, validationCode);
     }
 
     /**

@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
-import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
 import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
@@ -42,15 +41,12 @@ import static org.apache.isis.commons.internal.reflection._Reflect.streamTypeHie
 
 import lombok.val;
 
-//TODO we are using real world classes from the framework, we could instead isolate these tests
-// if we provide some custom classes for hierarchy traversal here (could be nested); 
-// then move this test to the 'commons' module, where it belongs
 class ReflectTest {
 
     @Test
     void typeHierarchy() {
 
-        Class<?> type = UserServiceDefault.SudoServiceSpi.class;
+        Class<?> type = ReflectSampleForTesting.Nested.class;
 
         val typeSet = streamTypeHierarchy(type, InterfacePolicy.EXCLUDE)
                 .map(Class::getName)
@@ -67,7 +63,7 @@ class ReflectTest {
     @Test
     void typeHierarchyAndInterfaces() {
 
-        Class<?> type = UserServiceDefault.SudoServiceSpi.class;
+        Class<?> type = ReflectSampleForTesting.Nested.class;
 
         val typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .map(Class::getName)
@@ -84,7 +80,7 @@ class ReflectTest {
     @Test
     void allMethods() {
 
-        Class<?> type = UserServiceDefault.SudoServiceSpi.class;
+        Class<?> type = ReflectSampleForTesting.Nested.class;
 
         val typeSet = streamAllMethods(type, true)
                 .map(m->m.toString())

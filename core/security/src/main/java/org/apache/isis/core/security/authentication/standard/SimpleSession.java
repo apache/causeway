@@ -19,35 +19,51 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
-import java.util.Collection;
-import java.util.stream.Stream;
-
 import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 public class SimpleSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
-    private static final String DEFAULT_VALIDATION_CODE = "";
-
-    /**
-     * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
-     */
-    public SimpleSession(final String userName, final Iterable<String> roles) {
-        this(userName, stream(roles), DEFAULT_VALIDATION_CODE);
+    
+    // -- FACTORIES
+    
+    public static SimpleSession of( 
+            final @NonNull UserMemento user,
+            final @NonNull String validationCode) {
+        return new SimpleSession(VirtualClock.system(), user, validationCode);
     }
-
-    public SimpleSession(final String userName, final Collection<String> roles, final String code) {
-        this(userName, roles.stream(), code);
+    
+    public static SimpleSession of(
+            final @NonNull VirtualClock clock, 
+            final @NonNull UserMemento user,
+            final @NonNull String validationCode) {
+        return new SimpleSession(clock, user, validationCode);
     }
-
-    public SimpleSession(final String userName, final Stream<String> roles, final String code) {
-        super(VirtualClock.system(), userName, roles, code);
+    
+    public static SimpleSession validOf( 
+            final @NonNull UserMemento user) {
+        return of(user, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
+    }
+    
+    public static SimpleSession validOf(
+            final @NonNull VirtualClock clock, 
+            final @NonNull UserMemento user) {
+        return of(clock, user, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
+    }
+    
+    // -- CONSTRUCTOR
+    
+    public SimpleSession(
+            final @NonNull VirtualClock clock, 
+            final @NonNull UserMemento user, 
+            final @NonNull String validationCode) {
+        super(clock, user, validationCode);
     }
 
     @Getter @Setter

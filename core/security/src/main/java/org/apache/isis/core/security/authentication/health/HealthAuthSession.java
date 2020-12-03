@@ -16,24 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.security.authentication.health;
 
-import java.util.stream.Stream;
-
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 public class HealthAuthSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String USER_NAME = "__health";
-    private static final String ROLE = "__health-role";
-    private static final String CODE = "";
+    private static final UserMemento HEALTH_USER = 
+            UserMemento.ofNameAndRoleNames(
+                    "__health", // user name
+                    "__health-role"); // role(s) 
 
     public HealthAuthSession() {
-        super(VirtualClock.system(), USER_NAME, Stream.of(ROLE), CODE);
+        super(HEALTH_USER);
     }
 
 

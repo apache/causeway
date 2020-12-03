@@ -16,17 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.runtime.session.init;
 
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 public final class InitialisationSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    private static final UserMemento INITIALISATION_USER = 
+            UserMemento.ofName("initialisation");
+    
     public InitialisationSession() {
-        super("initialisation", "");
+        super(INITIALISATION_USER);
     }
 
 }
