@@ -31,7 +31,7 @@ import org.apache.isis.core.security.authentication.AuthenticationRequestPasswor
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.isis.security.SecurityFactoryForTesting;
+import org.apache.isis.security.AuthenticatorsForTesting;
 
 public class StandardAuthenticationManager_AuthenticationTest {
 
@@ -41,7 +41,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
     public void setUp() throws Exception {
         
         authenticationManager = new AuthenticationManager(
-                Collections.singletonList(SecurityFactoryForTesting.authenticatorValidForFoo()), 
+                Collections.singletonList(AuthenticatorsForTesting.authenticatorValidForFoo()), 
                 new RandomCodeGeneratorDefault());
     }
 

@@ -24,7 +24,7 @@ import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstra
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class SecurityFactoryForTesting {
+public class AuthenticatorsForTesting {
 
     public static AuthenticatorAbstract authenticatorAllwaysValid() {
         return new AuthenticatorAbstract() {
@@ -66,9 +66,6 @@ public class SecurityFactoryForTesting {
                 if(!"foo".equals(request.getName())) {
                     return false;
                 }
-//                if(!request.streamRoles().anyMatch(roleName->"bar".equals(roleName))) {
-//                    return false;
-//                }
                 return true;
             }
         };

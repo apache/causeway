@@ -53,8 +53,17 @@ public class SudoServiceDefault implements SudoService {
 
     private final IsisInteractionFactory interactionFactory;
 
+    // -- LISTENERS
+    
     private Can<SudoService.Listener> sudoListeners = Can.empty();
 
+    @PostConstruct @Inject
+    public void init(final ServiceRegistry serviceRegistry) {
+        this.sudoListeners = serviceRegistry.select(SudoService.Listener.class);
+    }
+    
+    // -- IMPLEMENTATION
+    
     @Override
     public <T> T call(final @NonNull UserMemento user, final @NonNull Callable<T> callable) {
 
@@ -64,11 +73,6 @@ public class SudoServiceDefault implements SudoService {
         } finally {
             afterCall();
         }
-    }
-
-    @PostConstruct @Inject
-    public void init(final ServiceRegistry serviceRegistry) {
-        this.sudoListeners = serviceRegistry.select(SudoService.Listener.class);
     }
 
     // -- HELPER

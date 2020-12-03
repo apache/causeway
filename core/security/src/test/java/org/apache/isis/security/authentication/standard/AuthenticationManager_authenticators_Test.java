@@ -31,7 +31,7 @@ import org.apache.isis.core.security.authentication.AuthenticationRequestPasswor
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.NoAuthenticatorException;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.isis.security.SecurityFactoryForTesting;
+import org.apache.isis.security.AuthenticatorsForTesting;
 
 import lombok.val;
 
@@ -51,7 +51,7 @@ public class AuthenticationManager_authenticators_Test {
     @Test
     public void shouldBeAbleToUseAuthenticators() throws Exception {
 
-        val auth = SecurityFactoryForTesting.authenticatorAllwaysValid();
+        val auth = AuthenticatorsForTesting.authenticatorAllwaysValid();
         
         authenticationManager = new AuthenticationManager(
                 Collections.singletonList(auth), 
