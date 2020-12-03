@@ -21,12 +21,7 @@ package org.apache.isis.security.authentication.standard;
 
 import java.util.Collections;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -34,36 +29,35 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.NoAuthenticatorException;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.isis.security.SecurityFactoryForTesting;
 
-@RunWith(JMock.class)
+import lombok.val;
+
 public class AuthenticationManager_authenticators_Test {
 
-    private final Mockery mockery = new JUnit4Mockery();
-
     private AuthenticationManager authenticationManager;
-    private Authenticator mockAuthenticator;
-
-    @Before
-    public void setUp() throws Exception {
-        mockAuthenticator = mockery.mock(Authenticator.class);
-    }
 
     @Test(expected = NoAuthenticatorException.class)
     public void shouldNotBeAbleToAuthenticateWithNoAuthenticators() throws Exception {
 
-        authenticationManager = new AuthenticationManager(Collections.emptyList(), new RandomCodeGeneratorDefault());
+        authenticationManager = new AuthenticationManager(
+                Collections.emptyList(), 
+                new RandomCodeGeneratorDefault());
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
 
     @Test
     public void shouldBeAbleToUseAuthenticators() throws Exception {
 
-        authenticationManager = new AuthenticationManager(Collections.singletonList(mockAuthenticator), new RandomCodeGeneratorDefault());
+        val auth = SecurityFactoryForTesting.authenticatorAllwaysValid();
+        
+        authenticationManager = new AuthenticationManager(
+                Collections.singletonList(auth), 
+                new RandomCodeGeneratorDefault());
         assertThat(authenticationManager.getAuthenticators().size(), is(1));
-        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
+        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(auth)));
     }
 
 }

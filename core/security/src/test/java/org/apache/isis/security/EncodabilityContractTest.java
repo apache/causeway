@@ -16,18 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.security;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.io.Serializable;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,15 +32,17 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 public abstract class EncodabilityContractTest {
 
-    protected final Mockery context = new JUnit4Mockery();
-    protected AuthenticationSession mockAuthSession;
-
+    protected AuthenticationSession simpleAuthSession;
     protected Serializable serializable;
 
     public EncodabilityContractTest() {
@@ -53,7 +52,7 @@ public abstract class EncodabilityContractTest {
     @Before
     public void setUp() throws Exception {
         serializable = createEncodable();
-        mockAuthSession = context.mock(AuthenticationSession.class);
+        simpleAuthSession = SimpleSession.validOf(UserMemento.ofName("test"));
     }
 
     /**
@@ -68,16 +67,22 @@ public abstract class EncodabilityContractTest {
 
     @Test
     public void shouldRoundTrip() throws IOException, ClassNotFoundException {
-        final PipedInputStream pipedInputStream = new PipedInputStream();
-        final PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
+        val decodedObject = doRoundTrip(serializable);
+        assertRoundtripped(decodedObject, serializable);
+    }
+    
+    @SneakyThrows
+    private static <T extends Serializable> T doRoundTrip(T serializable) {
         
-        try(val out = new ObjectOutputStream(pipedOutputStream)) {
+        val buffer = new ByteArrayOutputStream();
+        
+        try(val out = new ObjectOutputStream(buffer)) {
             out.writeObject(serializable);
+        }
         
-            val in = new ObjectInputStream(pipedInputStream);
+        try(val in = new ObjectInputStream(new ByteArrayInputStream(buffer.toByteArray()))) {
             val decodedObject = in.readObject();
-
-            assertRoundtripped(decodedObject, serializable);
+            return _Casts.uncheckedCast(decodedObject);
         }
     }
 

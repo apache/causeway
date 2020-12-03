@@ -115,6 +115,9 @@ public class AuthenticationManager {
 
 
     public final boolean isSessionValid(final AuthenticationSession session) {
+        if(session==null) {
+            return false;
+        }
         if(session instanceof SimpleSession) {
             final SimpleSession simpleSession = (SimpleSession) session;
             if(simpleSession.getType() == AuthenticationSession.Type.EXTERNAL) {
