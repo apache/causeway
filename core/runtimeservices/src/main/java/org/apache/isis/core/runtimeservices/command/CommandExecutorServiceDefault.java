@@ -44,6 +44,7 @@ import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
@@ -149,8 +150,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         try {
             val result = transactionService.executeWithinTransaction(
                 () -> sudoPolicy == SudoPolicy.SWITCH
-                    ? sudoService.sudo(
-                        dto.getUser(),
+                    ? sudoService.call(
+                        UserMemento.ofName(dto.getUser()),
                         () -> doExecuteCommand(dto))
                     : doExecuteCommand(dto));
 
@@ -211,8 +212,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 } else {
                     head = InteractionHead.simple(targetAdapter);
                 }
-                val resultAdapter = objectAction.execute(head
-                        , argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                val resultAdapter = objectAction.execute(head, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                 // flush any Isis PersistenceCommands pending
                 // (else might get transient objects for the return value)
