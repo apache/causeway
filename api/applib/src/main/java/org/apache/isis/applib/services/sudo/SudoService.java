@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.sudo;
 
 import java.util.concurrent.Callable;
 
+import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 
@@ -38,8 +39,11 @@ public interface SudoService {
      * If included in the list of roles, then will disable security checks (can view and use all object members).
      */
     // tag::refguide[]
-    String ACCESS_ALL_ROLE =                                // <.>
-            SudoService.class.getName() + "#accessAll";
+    RoleMemento ACCESS_ALL_ROLE =                                // <.>
+            new RoleMemento(
+                    SudoService.class.getName() + "#accessAll",
+                    "Sudo, can view and use all object members.");
+            
 
     // end::refguide[]
     /**

@@ -107,7 +107,7 @@ public class AuthorizationManager {
         if(session==null) {
             return false;
         }
-        return session.hasRole(SudoService.ACCESS_ALL_ROLE);
+        return session.getRoles().contains(SudoService.ACCESS_ALL_ROLE.getName());
     }
     
     private boolean anyMatchOnRoles(

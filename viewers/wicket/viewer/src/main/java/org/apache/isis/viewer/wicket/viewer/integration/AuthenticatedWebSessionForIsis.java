@@ -203,7 +203,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         }
 
         final Roles roles = new Roles();
-        getAuthenticationSession().getRoles().stream()
+        getAuthenticationSession().getUser().streamRoleNames()
         .forEach(roles::add);
         return roles;
     }

@@ -23,18 +23,24 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 import org.apache.isis.security.EncodabilityContractTest;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 public abstract class SimpleSessionEncodabilityTestAbstract extends EncodabilityContractTest {
 
     @Override
     protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
-        final SimpleSession decoded = (SimpleSession) decodedEncodable;
-        final SimpleSession original = (SimpleSession) originalEncodable;
+        final AuthenticationSessionAbstract decoded = (AuthenticationSessionAbstract) decodedEncodable;
+        final AuthenticationSessionAbstract original = (AuthenticationSessionAbstract) originalEncodable;
 
-        assertThat(decoded.getUserName(), is(equalTo(original.getUserName())));
-        assertThat(decoded.getRoles(), is(equalTo(original.getRoles())));
+        assertThat(decoded.getUser(), is(equalTo(original.getUser()))); // redundant shortcut
+        
+        assertThat(decoded.getExecutionContext().getTimeZone(), is(equalTo(original.getExecutionContext().getTimeZone())));
+        assertThat(decoded.getExecutionContext().getLocale(), is(equalTo(original.getExecutionContext().getLocale())));
+        assertThat(decoded.getExecutionContext().getUser(), is(equalTo(original.getExecutionContext().getUser())));
+        assertThat(decoded.getExecutionContext().getClock(), is(equalTo(original.getExecutionContext().getClock())));
+        
+        assertThat(decoded.getExecutionContext(), is(equalTo(original.getExecutionContext())));
     }
 
 }

@@ -69,7 +69,7 @@ public interface VirtualClock extends Serializable {
      * Returns a the system's default ticking clock.
      */
     static VirtualClock system() {
-        return Instant::now;
+        return new VirtualClock_system();
     }
     
     /**

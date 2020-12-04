@@ -178,7 +178,7 @@ public final class UserMemento implements Serializable {
     
     @Override
     public int hashCode() {
-        return getName().hashCode();
+        return getName().hashCode(); // its good enough to hash on just the user's name
     }
         
     

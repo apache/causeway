@@ -44,13 +44,6 @@ public interface AuthenticationSession extends Serializable {
     Can<String> getRoles();
 
     /**
-     * Whether this user has specified {@code role}
-     * @param role 
-     * @since 2.0
-     */
-    boolean hasRole(String role);
-
-    /**
      * A unique code given to this session during authentication.
      *
      * <p>

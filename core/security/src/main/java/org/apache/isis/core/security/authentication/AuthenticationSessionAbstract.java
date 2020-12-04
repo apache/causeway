@@ -38,20 +38,20 @@ implements AuthenticationSession, Serializable {
     
     // -- Constructor, fields
 
-    @Getter(onMethod_ = {@Override}) @NonNull 
-    private final ExecutionContext executionContext;
+    @Getter(onMethod_ = {@Override})  
+    private final @NonNull ExecutionContext executionContext;
     
-    @Getter(onMethod_ = {@Override}) @NonNull 
-    private final String userName;
+    @Getter(onMethod_ = {@Override}) 
+    private final @NonNull String userName;
     
-    @Getter(onMethod_ = {@Override}) @NonNull
-    private final Can<String> roles;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull Can<String> roles;
     
-    @Getter(onMethod_ = {@Override}) @NonNull
-    private final String validationCode;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull String validationCode;
 
-    @Getter(onMethod_ = {@Override}) @NonNull
-    private final MessageBroker messageBroker;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull MessageBroker messageBroker;
     
     public AuthenticationSessionAbstract(
             @NonNull final ExecutionContext executionEnvironment,
@@ -73,25 +73,6 @@ implements AuthenticationSession, Serializable {
     public boolean hasUserNameOf(final String userName) {
         return Objects.equals(userName, getUserName());
     }
-
-    // -- Roles
-
-    @Override
-    public boolean hasRole(String role) {
-        return roles.contains(role);
-    }
-
-    // -- Attributes
-
-//    @Override
-//    public Object getAttribute(final String attributeName) {
-//        return attributeByName.get(attributeName);
-//    }
-//
-//    @Override
-//    public void setAttribute(final String attributeName, final Object attribute) {
-//        attributeByName.put(attributeName, attribute);
-//    }
 
     // -- TO STRING, EQUALS, HASHCODE
 
