@@ -30,9 +30,9 @@ import org.apache.isis.applib.services.user.UserMemento;
  */
 public interface AuthenticationSession extends Serializable {
 
-//    /**
-//     * The name of the authenticated user; for display purposes only.
-//     */
+    /**
+     * The name of the authenticated user; for display purposes only.
+     */
     default String getUserName() {
         return getUser().getName();
     }

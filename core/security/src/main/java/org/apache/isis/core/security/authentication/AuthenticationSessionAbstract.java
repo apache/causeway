@@ -81,6 +81,9 @@ implements AuthenticationSession, Serializable {
     }
 
     private boolean isEqualsTo(final AuthenticationSessionAbstract other) {
+        if(!Objects.equals(this.getType(), other.getType())) {
+            return false;
+        }
         if(!Objects.equals(this.getValidationCode(), other.getValidationCode())) {
             return false;
         }
@@ -92,7 +95,7 @@ implements AuthenticationSession, Serializable {
 
     @Override
     public int hashCode() {
-        return getUserName().hashCode(); // its good enough to hash on just the user's name
+        return getUserName().hashCode(); // propably good enough to hash on just the user's name
     }
 
 }
