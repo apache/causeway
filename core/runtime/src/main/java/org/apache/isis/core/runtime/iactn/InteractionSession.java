@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,7 +54,6 @@ import lombok.Setter;
  */
 public class InteractionSession extends RuntimeContextBase {
 
-    @Getter private final AuthenticationSession authenticationSession;
     @Getter private final long lifecycleStartedAtSystemNanos;
     
     /**
@@ -64,11 +62,9 @@ public class InteractionSession extends RuntimeContextBase {
     @Getter private final MessageBroker messageBroker = new MessageBroker();
 
     public InteractionSession(
-            @NonNull final MetaModelContext mmc,
-            @NonNull final AuthenticationSession authenticationSession) {
+            @NonNull final MetaModelContext mmc) {
 
         super(mmc);
-        this.authenticationSession = authenticationSession; // binds this session to given authenticationSession
         this.lifecycleStartedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.interaction = new IsisInteraction(UUID.randomUUID());
     }

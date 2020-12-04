@@ -30,12 +30,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
 
@@ -70,21 +68,11 @@ public class SudoServiceDefault implements SudoService {
     @Override
     public <T> T call(final @NonNull UserMemento sudoUser, final @NonNull Callable<T> callable) {
 
-        val interactionLayer = interactionTracker.currentInteractionLayer()
-                .orElseThrow(()->_Exceptions.illegalState(
-                        "will not execute sudo on top of non authenticated session, use WrapperFactory instead"));
+        val currentinteractionLayer = interactionTracker.currentInteractionLayerElseFail();
+        val currentExecutionContext = currentinteractionLayer.getExecutionContext();
+        val sudoExecutionContext = currentExecutionContext.withUser(sudoUser);
         
-        val executionContext = interactionLayer.getExecutionContext();
-        
-        val sudoExecutionContext = ExecutionContext.builder()
-        .clock(executionContext.getClock())
-        .locale(executionContext.getLocale())
-        .timeZone(executionContext.getTimeZone())
-        .user(sudoUser)
-        .build();
-        
-        val interactionSession = interactionLayer.getInteractionSession();
-        val sodoSession = interactionSession
+        val sodoSession = currentinteractionLayer
                 .getAuthenticationSession()
                 .withExecutionContext(sudoExecutionContext);
         

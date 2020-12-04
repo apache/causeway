@@ -86,7 +86,7 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
     // end::refguide[]
     /**
-     * Defaults to the system clock, if not overridden
+     * Defaults to the system locale, if not overridden
      */
     // tag::refguide[]
     @Getter

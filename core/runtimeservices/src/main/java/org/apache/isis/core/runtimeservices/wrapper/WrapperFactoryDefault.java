@@ -93,7 +93,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.runtime.iactn.InteractionSession;
+import org.apache.isis.core.runtime.iactn.InteractionLayer;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -124,7 +124,7 @@ import lombok.val;
 //@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
     
-    @Inject InteractionTracker isisInteractionTracker;
+    @Inject InteractionTracker interactionTracker;
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
     @Inject SpecificationLoader specificationLoader;
@@ -326,8 +326,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final Object[] args,
             final AsyncControl<R> asyncControl) {
 
-        val interactionSession = currentInteractionSession();
-        val asyncAuthSession = authSessionFrom(asyncControl, interactionSession.getAuthenticationSession());
+        val interactionLayer = currentInteractionLayer();
+        val asyncAuthSession = authSessionFrom(asyncControl, interactionLayer.getAuthenticationSession());
         val command = interactionContextProvider.get().getInteractionElseFail().getCommand();
         val commandUniqueId = command.getUniqueId();
 
@@ -545,13 +545,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
         dispatchersByEventClass.put(type, dispatcher);
     }
 
-
-    private InteractionSession currentInteractionSession() {
-        return isisInteractionTracker.currentInteractionSession().orElseThrow(() -> new RuntimeException("No IsisInteraction is open"));
+    private InteractionLayer currentInteractionLayer() {
+        return interactionTracker.currentInteractionLayerElseFail();
     }
 
     private ObjectManager currentObjectManager() {
-        return currentInteractionSession().getObjectManager();
+        return metaModelContext.getObjectManager();
     }
 
     @RequiredArgsConstructor

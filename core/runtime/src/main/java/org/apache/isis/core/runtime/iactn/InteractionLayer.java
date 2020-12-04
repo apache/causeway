@@ -20,6 +20,7 @@ package org.apache.isis.core.runtime.iactn;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -27,7 +28,7 @@ import lombok.NonNull;
 /**
  * Provides the environment for an (or parts of an) user interaction to be executed.
  * <p>
- * Can be nested by pushing onto the current Thread's ClosureStack.  
+ * Can be nested by pushing onto the current Thread's InteractionLayer Stack.  
  * 
  * @since 2.0
  *
@@ -35,11 +36,11 @@ import lombok.NonNull;
 public class InteractionLayer extends RuntimeContextBase {
 
 	@Getter private final InteractionSession interactionSession;
-	@Getter private final ExecutionContext executionContext;
+	@Getter private final AuthenticationSession authenticationSession;
 	
 	public InteractionLayer(
 			final @NonNull InteractionSession interactionSession,
-			final @NonNull ExecutionContext executionContext) {
+			final @NonNull AuthenticationSession authenticationSession) {
 
 		super(interactionSession.getMetaModelContext());
 		
@@ -47,8 +48,12 @@ public class InteractionLayer extends RuntimeContextBase {
 		// meaning the InteractionSession that holds the stack containing this layer 
 		this.interactionSession = interactionSession;
 		
-		// binds given executionContext to this layer 
-		this.executionContext = executionContext; 
+		// binds given authenticationSession to this layer 
+		this.authenticationSession = authenticationSession; 
+	}
+	
+	public ExecutionContext getExecutionContext() {
+	    return authenticationSession.getExecutionContext();
 	}
 
 }

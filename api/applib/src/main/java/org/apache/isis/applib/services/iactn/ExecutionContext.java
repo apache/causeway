@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.With;
 
 /**
  * Provides the user and scenario specific environment for an {@link Interaction.Execution}
@@ -50,7 +51,7 @@ public final class ExecutionContext implements Serializable {
      * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
      * own simulated (or actual) user 
      */
-    @Getter @Builder.Default
+    @With @Getter @Builder.Default 
     private final @NonNull UserMemento user = UserMemento.system();
     
     /**
@@ -59,13 +60,13 @@ public final class ExecutionContext implements Serializable {
      * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
      * own simulated (or actual) clock 
      */
-    @Getter @Builder.Default 
+    @With @Getter @Builder.Default 
     private final @NonNull VirtualClock clock = VirtualClock.system();
     
-    @Getter @Builder.Default 
+    @With @Getter @Builder.Default 
     private final @NonNull Locale locale = Locale.getDefault();
     
-    @Getter @Builder.Default 
+    @With @Getter @Builder.Default 
     private final @NonNull TimeZone timeZone = TimeZone.getDefault();
     
     // -- FACTORIES

@@ -154,8 +154,8 @@ implements InteractionFactory, InteractionTracker {
     @Override
     public InteractionLayer openInteraction(final @NonNull AuthenticationSession authSessionToUse) {
 
-        val interactionSession = getOrCreateInteractionSession(authSessionToUse);
-        val newInteractionClosure = new InteractionLayer(interactionSession, authSessionToUse.getExecutionContext());
+        val interactionSession = getOrCreateInteractionSession();
+        val newInteractionClosure = new InteractionLayer(interactionSession, authSessionToUse);
         
         interactionLayerStack.get().push(newInteractionClosure);
 
@@ -173,11 +173,10 @@ implements InteractionFactory, InteractionTracker {
         return newInteractionClosure;
     }
     
-    private InteractionSession getOrCreateInteractionSession(
-    		final @NonNull AuthenticationSession authSessionToUse) {
+    private InteractionSession getOrCreateInteractionSession() {
     	
     	return interactionLayerStack.get().isEmpty()
-    			? new InteractionSession(metaModelContext, authSessionToUse)
+    			? new InteractionSession(metaModelContext)
 				: interactionLayerStack.get().firstElement().getInteractionSession();
     }
 

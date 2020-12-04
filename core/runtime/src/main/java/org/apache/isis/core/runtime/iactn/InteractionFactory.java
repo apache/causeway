@@ -43,6 +43,18 @@ public interface InteractionFactory {
         void run() throws Exception;
     }
 
+    /**
+     * Creates a new {@link InteractionSession}, which represents a user's span of
+     * activities interacting with the application.
+     *
+     * <p>
+     *     If there is already an {@link InteractionSession} available (as held
+     *     in a thread-local stack), then the interactions are stacked.
+     *     These are closed using {@link #closeSessionStack()}.
+     * </p>
+     *
+     * @param authenticationSession
+     */
     InteractionLayer openInteraction();
     
     /**
@@ -56,7 +68,6 @@ public interface InteractionFactory {
      * </p>
      *
      * @param authenticationSession
-     * @return
      */
     InteractionLayer openInteraction(AuthenticationSession authenticationSession);
 
