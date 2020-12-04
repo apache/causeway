@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import junit.framework.TestCase;
 
@@ -64,7 +64,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected TranslationService mockTranslationService;
-    protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
+    protected AuthenticationContext mockAuthenticationContext;
     protected AuthenticationSession mockAuthenticationSession;
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
@@ -103,7 +103,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         methodRemover = new MethodRemoverForTesting();
 
-        mockAuthenticationSessionTracker = context.mock(AuthenticationSessionTracker.class);
+        mockAuthenticationContext = context.mock(AuthenticationContext.class);
 
         mockTranslationService = context.mock(TranslationService.class);
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
@@ -113,12 +113,12 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
-                .authenticationSessionTracker(mockAuthenticationSessionTracker)
+                .authenticationContext(mockAuthenticationContext)
                 .build();
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+            allowing(mockAuthenticationContext).currentAuthenticationSession();
             will(returnValue(Optional.of(mockAuthenticationSession)));
         }});
         

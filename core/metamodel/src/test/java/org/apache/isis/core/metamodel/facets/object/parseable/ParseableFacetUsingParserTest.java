@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 public class ParseableFacetUsingParserTest {
 
@@ -46,7 +46,7 @@ public class ParseableFacetUsingParserTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock private FacetHolder mockFacetHolder;
-    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
+    @Mock private AuthenticationContext mockAuthenticationContext;
     @Mock private ServiceInjector mockServicesInjector;
     @Mock private ServiceRegistry mockServiceRegistry;
 
@@ -57,13 +57,13 @@ public class ParseableFacetUsingParserTest {
     public void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .authenticationSessionTracker(mockAuthenticationSessionTracker)
+                .authenticationContext(mockAuthenticationContext)
                 .build();
 
 
         context.checking(new Expectations() {
             {
-                never(mockAuthenticationSessionTracker);
+                never(mockAuthenticationContext);
                 //never(mockAdapterManager);
 
                 allowing(mockFacetHolder).getMetaModelContext();

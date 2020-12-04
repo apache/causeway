@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.MessageBroker;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -57,6 +58,11 @@ public class InteractionSession extends RuntimeContextBase {
 
     @Getter private final AuthenticationSession authenticationSession;
     @Getter private final long lifecycleStartedAtSystemNanos;
+    
+    /**
+     * The {@link MessageBroker} that holds messages for this session.
+     */
+    @Getter private final MessageBroker messageBroker = new MessageBroker();
 
     public InteractionSession(
             @NonNull final MetaModelContext mmc,
@@ -148,6 +154,7 @@ public class InteractionSession extends RuntimeContextBase {
                 ? attributes = new HashMap<>() 
                 : attributes;
     }
+    
     
     // -- TO STRING
     

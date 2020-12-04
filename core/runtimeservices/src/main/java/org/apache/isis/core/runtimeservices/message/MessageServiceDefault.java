@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.MessageBroker;
 
 @Service
@@ -44,7 +44,7 @@ import org.apache.isis.core.security.authentication.MessageBroker;
 public class MessageServiceDefault implements MessageService {
     
     @Inject private TranslationService translationService;
-    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
+    @Inject private InteractionTracker interactionTracker;
 
     @Override
     public void informUser(final String message) {
@@ -119,7 +119,7 @@ public class MessageServiceDefault implements MessageService {
     }
 
     private Optional<MessageBroker> currentMessageBroker() {
-        return authenticationSessionTracker.currentMessageBroker();
+        return interactionTracker.currentMessageBroker();
     }
 
     

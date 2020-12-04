@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 /**
  * @since 2.0
  */
-public interface AuthenticationSessionTracker {
+public interface AuthenticationContext {
 
     Optional<AuthenticationSession> currentAuthenticationSession();
     
@@ -38,14 +38,5 @@ public interface AuthenticationSessionTracker {
                             "no AuthenticationSession available with current %s", 
                             _Probe.currentThreadId()));
     }
-    
-    default Optional<MessageBroker> currentMessageBroker() {
-        return currentAuthenticationSession().map(AuthenticationSession::getMessageBroker);
-    }
-    
-    default MessageBroker getMessageBrokerElseFail() {
-        return getAuthenticationSessionElseFail().getMessageBroker();
-    }
-    
     
 }

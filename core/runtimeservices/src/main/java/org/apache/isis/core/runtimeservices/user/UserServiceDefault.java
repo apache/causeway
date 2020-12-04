@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.user;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -27,14 +29,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 @Service
-@Named("isisMetaModel.UserServiceDefault")
+@Named("isisRuntimeServices.UserServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -44,9 +46,17 @@ public class UserServiceDefault implements UserService {
     
     @Override
     public UserMemento getUser() {
-        return isisInteractionTracker.currentAuthenticationSession()
-                .map(AuthenticationSession::getUser)
+        return isisInteractionTracker.currentExecutionContext()
+                .map(ExecutionContext::getUser)
                 .orElseThrow(()->_Exceptions.illegalState("Current thread has not AuthenticationSession."));
     }
+    
+    @Override
+    public Optional<UserMemento> getUser2() {
+        return isisInteractionTracker.currentExecutionContext()
+                .map(ExecutionContext::getUser);
+    }
+
+    
 
 }

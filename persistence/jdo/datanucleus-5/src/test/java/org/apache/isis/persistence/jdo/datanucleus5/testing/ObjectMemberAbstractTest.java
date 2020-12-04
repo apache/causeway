@@ -19,15 +19,6 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.testing;
 
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Optional;
 
 import org.datanucleus.enhancement.Persistable;
@@ -36,6 +27,15 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.metamodel.BeanSort;
@@ -65,8 +65,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.PojoAdapter;
 
@@ -80,7 +80,7 @@ public class ObjectMemberAbstractTest {
     private ObjectAdapter persistentAdapter;
     protected MetaModelContext metaModelContext;
 
-    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
+    @Mock private AuthenticationContext mockAuthenticationContext;
     @Mock private AuthenticationSession mockAuthenticationSession;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private ObjectSpecification mockSpecForCustomer;
@@ -92,11 +92,11 @@ public class ObjectMemberAbstractTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authenticationSessionTracker(mockAuthenticationSessionTracker)
+                .authenticationContext(mockAuthenticationContext)
                 .build();
 
         context.checking(new Expectations() {{
-            allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+            allowing(mockAuthenticationContext).currentAuthenticationSession();
             will(returnValue(Optional.of(mockAuthenticationSession)));
         }});
 

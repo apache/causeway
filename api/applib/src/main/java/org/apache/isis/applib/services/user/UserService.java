@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.user;
 
+import java.util.Optional;
+
 // tag::refguide[]
 public interface UserService {
 
@@ -27,7 +29,16 @@ public interface UserService {
      * @throws IllegalStateException if the calling thread has no {@link AuthenticationSession}.
      */
     // tag::refguide[]
+    @Deprecated // TODO make optional, see getUser2
     UserMemento getUser();      // <.>
+    
+    Optional<UserMemento> getUser2();
+    
+    default Optional<String> getUserName() {
+        return getUser2()
+                .map(UserMemento::getName);
+    }
+    
 
 }
 // end::refguide[]

@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 public class OneToManyAssociationDefaultTest {
 
@@ -63,7 +63,7 @@ public class OneToManyAssociationDefaultTest {
 
     @Mock private ManagedObject mockOwnerAdapter;
     @Mock private ManagedObject mockAssociatedAdapter;
-    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
+    @Mock private AuthenticationContext mockAuthenticationContext;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private ObjectSpecification mockOwnerAdapterSpec;
     @Mock private MessageService mockMessageService;
@@ -79,7 +79,7 @@ public class OneToManyAssociationDefaultTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authenticationSessionTracker(mockAuthenticationSessionTracker)
+                .authenticationContext(mockAuthenticationContext)
                 .singleton(mockMessageService)
                 .build();
 

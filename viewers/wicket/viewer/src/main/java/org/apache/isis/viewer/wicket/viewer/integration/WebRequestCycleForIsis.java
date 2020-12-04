@@ -45,17 +45,16 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.session.IsisRequestCycle;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -370,9 +369,6 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         if(!isInInteraction()) {
             return false;
         }
-        if(!getAuthenticationSession().isPresent()) {
-            return false;
-        }
         return getWicketAuthenticationSession().isSignedIn();
     }
 
@@ -395,13 +391,8 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         return commonContext.getInteractionTracker().isInInteractionSession();
     }
 
-    private Optional<AuthenticationSession> getAuthenticationSession() {
-        return commonContext.getAuthenticationSessionTracker().currentAuthenticationSession();
-    }
-
     private Optional<MessageBroker> getMessageBroker() {
-        return getAuthenticationSession()
-                .map(AuthenticationSession::getMessageBroker);
+        return commonContext.getInteractionTracker().currentMessageBroker();
     }
 
     private AuthenticatedWebSession getWicketAuthenticationSession() {

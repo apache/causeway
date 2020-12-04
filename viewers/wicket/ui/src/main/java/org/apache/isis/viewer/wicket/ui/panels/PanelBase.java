@@ -141,7 +141,7 @@ implements HasCommonContext {
     }
     
     protected MessageBroker getMessageBroker() {
-        return commonContext.getAuthenticationSessionTracker().getMessageBrokerElseFail();
+        return commonContext.getInteractionTracker().currentMessageBrokerElseFail();
     }
     
     protected HeaderUiModel getHeaderModel() {

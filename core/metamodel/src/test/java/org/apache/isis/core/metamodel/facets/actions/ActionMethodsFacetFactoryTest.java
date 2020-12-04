@@ -77,7 +77,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+            allowing(mockAuthenticationContext).currentAuthenticationSession();
             will(returnValue(Optional.of(mockAuthenticationSession)));
 
             //            allowing(mockServicesInjector).lookupService(TranslationService.class);

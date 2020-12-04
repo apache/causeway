@@ -155,7 +155,7 @@ implements InteractionFactory, InteractionTracker {
     public InteractionLayer openInteraction(final @NonNull AuthenticationSession authSessionToUse) {
 
         val interactionSession = getOrCreateInteractionSession(authSessionToUse);
-        val newInteractionClosure = new InteractionLayer(interactionSession, authSessionToUse);
+        val newInteractionClosure = new InteractionLayer(interactionSession, authSessionToUse.getExecutionContext());
         
         interactionLayerStack.get().push(newInteractionClosure);
 

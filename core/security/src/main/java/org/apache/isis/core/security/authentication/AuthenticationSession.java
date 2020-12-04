@@ -48,11 +48,6 @@ public interface AuthenticationSession extends Serializable {
     String getValidationCode();
 
     /**
-     * The {@link MessageBroker} that holds messages for this user.
-     */
-    MessageBroker getMessageBroker();
-
-    /**
      * The (programmatically) simulated (or actual) user, belonging to this session.
      * 
      * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 

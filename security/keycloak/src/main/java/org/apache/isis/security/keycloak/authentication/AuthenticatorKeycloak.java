@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 
 @Service
@@ -39,7 +39,7 @@ import org.apache.isis.core.security.authentication.standard.Authenticator;
 @Singleton
 public class AuthenticatorKeycloak implements Authenticator {
     
-    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
+    @Inject private AuthenticationContext authenticationSessionTracker;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {

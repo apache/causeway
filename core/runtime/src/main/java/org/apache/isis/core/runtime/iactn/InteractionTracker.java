@@ -23,8 +23,9 @@ import java.util.Optional;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.MessageBroker;
 
 /**
@@ -33,9 +34,7 @@ import org.apache.isis.core.security.authentication.MessageBroker;
  *
  */
 public interface InteractionTracker 
-extends 
-	AuthenticationSessionTracker, 
-	InteractionContext {
+extends InteractionContext, AuthenticationContext {
 
     boolean isInInteractionSession();
     
@@ -48,23 +47,29 @@ extends
     	return currentInteractionLayer().map(InteractionLayer::getInteractionSession);
     }
     
-    @Override
-    default Optional<AuthenticationSession> currentAuthenticationSession() {
-        return currentInteractionLayer().map(InteractionLayer::getAuthenticationSession);
-    }
-    
     default Optional<ExecutionContext> currentExecutionContext() {
-        return currentAuthenticationSession().map(AuthenticationSession::getExecutionContext);
+        return currentInteractionLayer().map(InteractionLayer::getExecutionContext);
     }
     
-    @Override
     default Optional<MessageBroker> currentMessageBroker() {
-        return currentAuthenticationSession().map(AuthenticationSession::getMessageBroker);
+        return currentInteractionSession().map(InteractionSession::getMessageBroker);
+    }
+    
+    default MessageBroker currentMessageBrokerElseFail() {
+        return currentMessageBroker()
+        .orElseThrow(()->_Exceptions.illegalState("No InteractionSession available on current thread"));
     }
     
     /** @return the unique id of the current top-level request- or test-scoped IsisInteraction*/
-    public Optional<String> getConversationId();
+    Optional<String> getConversationId();
 
+    // -- AUTHENTICATION SESSION TRACKER
+    
+    @Override
+    default Optional<AuthenticationSession> currentAuthenticationSession() {
+        return currentInteractionSession().map(InteractionSession::getAuthenticationSession);
+    }
+    
     // -- INTERACTION CONTEXT
     
     @Override

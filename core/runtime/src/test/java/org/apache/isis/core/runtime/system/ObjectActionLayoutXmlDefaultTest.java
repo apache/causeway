@@ -25,10 +25,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 public class ObjectActionLayoutXmlDefaultTest {
 
@@ -50,7 +50,7 @@ public class ObjectActionLayoutXmlDefaultTest {
     private ObjectActionDefault action;
 
     @Mock private FacetedMethod mockFacetedMethod;
-    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
+    @Mock private AuthenticationContext mockAuthenticationContext;
     @Mock private SpecificationLoader mockSpecificationLoader;
 
     protected MetaModelContext metaModelContext;
@@ -60,7 +60,7 @@ public class ObjectActionLayoutXmlDefaultTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authenticationSessionTracker(mockAuthenticationSessionTracker)
+                .authenticationContext(mockAuthenticationContext)
                 .build();
 
         context.checking(new Expectations() {

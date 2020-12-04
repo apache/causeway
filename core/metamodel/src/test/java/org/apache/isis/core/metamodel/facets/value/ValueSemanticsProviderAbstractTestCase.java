@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
@@ -56,7 +56,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock protected FacetHolder mockFacetHolder;
-    @Mock protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
+    @Mock protected AuthenticationContext mockAuthenticationContext;
     @Mock protected ManagedObject mockAdapter;
     
     protected MetaModelContext metaModelContext;
@@ -71,13 +71,13 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         Locale.setDefault(Locale.UK);
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .authenticationSessionTracker(mockAuthenticationSessionTracker)
+                .authenticationContext(mockAuthenticationContext)
                 .build();
 
         context.checking(new Expectations() {
             {
 
-                never(mockAuthenticationSessionTracker);
+                never(mockAuthenticationContext);
                 //never(mockSessionServiceInternal);
                 
                 allowing(mockFacetHolder).getMetaModelContext();

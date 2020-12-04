@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefaul
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import lombok.val;
 
@@ -70,8 +70,8 @@ abstract class SpecificationLoaderTestAbstract {
             return config;
         }
 
-        AuthenticationSessionTracker mockAuthenticationSessionProvider() {
-            return Mockito.mock(AuthenticationSessionTracker.class);
+        AuthenticationContext mockAuthenticationContext() {
+            return Mockito.mock(AuthenticationContext.class);
         }
 
         GridService mockGridService() {
@@ -104,7 +104,7 @@ abstract class SpecificationLoaderTestAbstract {
 
     protected IsisConfiguration isisConfiguration;
     protected SpecificationLoader specificationLoader;
-    protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
+    protected AuthenticationContext mockAuthenticationContext;
     protected GridService mockGridService;
     protected MessageService mockMessageService;
     protected MetaModelContext metaModelContext;
@@ -127,8 +127,8 @@ abstract class SpecificationLoaderTestAbstract {
                 .translationService(producers.mockTranslationService())
                 .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
-                .authenticationSessionTracker(mockAuthenticationSessionTracker = 
-                    producers.mockAuthenticationSessionProvider())
+                .authenticationContext(mockAuthenticationContext = 
+                    producers.mockAuthenticationContext())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())
                 .serviceInjector(producers.mockServiceInjector())

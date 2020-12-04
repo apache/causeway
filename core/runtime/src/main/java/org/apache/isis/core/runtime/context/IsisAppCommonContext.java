@@ -82,7 +82,7 @@ public class IsisAppCommonContext implements MetaModelContext.Delegating {
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
     
     public Optional<MessageBroker> getMessageBroker() {
-        val messageBroker = getAuthenticationSessionTracker().currentMessageBroker();
+        val messageBroker = getInteractionTracker().currentMessageBroker();
         if(!messageBroker.isPresent()) {
             log.warn("failed to locate a MessageBroker on current AuthenticationSession");
         }

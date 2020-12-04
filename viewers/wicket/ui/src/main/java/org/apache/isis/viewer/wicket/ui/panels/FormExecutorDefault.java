@@ -52,7 +52,6 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -184,8 +183,11 @@ implements FormExecutor {
                 // also in this branch we also know that there *is* an ajax target to use
                 addComponentsToRedraw(targetIfAny);
 
-                final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(getAuthenticationSession().getMessageBroker());
-                targetIfAny.appendJavaScript(jGrowlCalls);
+                currentMessageBroker().ifPresent(messageBorker->{
+                    final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(messageBorker);
+                    targetIfAny.appendJavaScript(jGrowlCalls);    
+                });
+                
             }
 
             return true;
@@ -227,8 +229,13 @@ implements FormExecutor {
             // if we did recognize the message, and not inline prompt, then display to user as a growl pop-up
             if (message != null && !withinPrompt) {
                 // ... display as growl pop-up
-                final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
-                messageBroker.setApplicationError(message);
+                
+                val errorMsg = message;
+                
+                currentMessageBroker().ifPresent(messageBroker->{
+                    messageBroker.setApplicationError(errorMsg);    
+                });
+                
 
                 //TODO [2089] hotfix to render the error on the same page instead of redirecting;
                 // previous behavior was to fall through and re-throw, which lead to the error never shown
@@ -475,9 +482,8 @@ implements FormExecutor {
         return getCommonContext().lookupServiceElseFail(InteractionFactory.class);
     }
 
-    protected AuthenticationSession getAuthenticationSession() {
-        return getCommonContext().getAuthenticationSessionTracker()
-                .getAuthenticationSessionElseFail();
+    protected Optional<MessageBroker> currentMessageBroker() {
+        return getCommonContext().getInteractionTracker().currentMessageBroker();
     }
 
     protected WicketViewerSettings getSettings() {

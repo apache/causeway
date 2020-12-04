@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.runtime.iactn;
 
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -35,24 +35,24 @@ import lombok.NonNull;
 public class InteractionLayer extends RuntimeContextBase {
 
 	@Getter private final InteractionSession interactionSession;
-	@Getter private final AuthenticationSession authenticationSession;
+	@Getter private final ExecutionContext executionContext;
 	
 	public InteractionLayer(
 			final @NonNull InteractionSession interactionSession,
-			final @NonNull AuthenticationSession authenticationSession) {
+			final @NonNull ExecutionContext executionContext) {
 
 		super(interactionSession.getMetaModelContext());
 		
-		// current thread's InteractionSession which this Closure belongs to, 
-		// meaning the InteractionSession that holds the stack containing this Closure 
+		// current thread's InteractionSession which this layer belongs to, 
+		// meaning the InteractionSession that holds the stack containing this layer 
 		this.interactionSession = interactionSession;
 		
-		// binds this closure to given authenticationSession
-		this.authenticationSession = authenticationSession; 
+		// binds given executionContext to this layer 
+		this.executionContext = executionContext; 
 	}
 
 	public InteractionLayer(final @NonNull InteractionSession interactionSession) {
-		this(interactionSession, interactionSession.getAuthenticationSession());
+		this(interactionSession, interactionSession.getAuthenticationSession().getExecutionContext());
 	}
 
 }

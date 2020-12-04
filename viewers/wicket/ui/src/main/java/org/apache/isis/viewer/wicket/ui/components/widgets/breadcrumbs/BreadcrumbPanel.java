@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,15 +37,13 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-
-import lombok.val;
 
 public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
@@ -126,19 +125,20 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            val messageBroker = currentAuthenticationSession().getMessageBroker();
-                            messageBroker.addWarning("Cannot find object");
-                            String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
-                            target.appendJavaScript(feedbackMsg);
+                            currentMessageBroker().ifPresent(messageBroker->{
+                                messageBroker.addWarning("Cannot find object");
+                                String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
+                                target.appendJavaScript(feedbackMsg);    
+                            });
                             breadcrumbModel.remove(oidStr);
                             return;
                         }
                         setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
                     }
 
-                    private AuthenticationSession currentAuthenticationSession() {
-                        return getCommonContext().getAuthenticationSessionTracker()
-                                .getAuthenticationSessionElseFail();
+                    private Optional<MessageBroker> currentMessageBroker() {
+                        return getCommonContext().getInteractionTracker()
+                                .currentMessageBroker();
                     }
                     
                     private IsisAppCommonContext getCommonContext() {

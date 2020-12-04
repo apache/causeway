@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -78,7 +78,7 @@ public interface MetaModelContext {
 
     AuthenticationManager getAuthenticationManager();
     
-    AuthenticationSessionTracker getAuthenticationSessionTracker();
+    AuthenticationContext getAuthenticationContext();
 
     TitleService getTitleService();
 
@@ -163,8 +163,8 @@ public interface MetaModelContext {
         }
         
         @Override
-        public default AuthenticationSessionTracker getAuthenticationSessionTracker() {
-            return getMetaModelContext().getAuthenticationSessionTracker();
+        public default AuthenticationContext getAuthenticationContext() {
+            return getMetaModelContext().getAuthenticationContext();
         }
 
         @Override

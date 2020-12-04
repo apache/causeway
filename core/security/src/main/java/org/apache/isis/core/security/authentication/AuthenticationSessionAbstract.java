@@ -34,25 +34,22 @@ implements AuthenticationSession, Serializable {
 
     protected static final String DEFAULT_AUTH_VALID_CODE = "";
     
-    // -- Constructor, fields
+    // -- FIELDS
 
     @Getter(onMethod_ = {@Override})  
     private final @NonNull ExecutionContext executionContext;
     
     @Getter(onMethod_ = {@Override})
     private final @NonNull String validationCode;
-
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull MessageBroker messageBroker;
     
-    public AuthenticationSessionAbstract(
+    // -- CONSTRUCTOR
+
+    protected AuthenticationSessionAbstract(
             @NonNull final ExecutionContext executionEnvironment,
             @NonNull final String validationCode) {
 
         this.executionContext = executionEnvironment;
         this.validationCode = validationCode;
-        this.messageBroker = new MessageBroker();
-        // nothing to do
     }
 
     // -- TO STRING, EQUALS, HASHCODE

@@ -35,23 +35,18 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
+
+import lombok.RequiredArgsConstructor;
 
 @Named("isisSecurityApi.LogoutMenu")
 @DomainService(objectType = "isisSecurityApi.LogoutMenu")
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LogoutMenu {
 
     private final List<LogoutHandler> logoutHandler;
-    private final AuthenticationSessionTracker authenticationSessionTracker;
-
-    @Inject
-    public LogoutMenu(
-            final List<LogoutHandler> logoutHandler,
-            final AuthenticationSessionTracker authenticationSessionTracker) {
-        this.logoutHandler = logoutHandler;
-        this.authenticationSessionTracker = authenticationSessionTracker;
-    }
+    private final AuthenticationContext authenticationSessionTracker;
 
     public static class LogoutDomainEvent
         extends IsisModuleApplib.ActionDomainEvent<LogoutMenu> {}
