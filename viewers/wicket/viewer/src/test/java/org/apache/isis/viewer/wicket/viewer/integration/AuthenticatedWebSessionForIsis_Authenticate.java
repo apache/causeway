@@ -36,7 +36,6 @@ import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -46,9 +45,9 @@ import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.singleuser.SingleUserSession;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
 
@@ -87,10 +86,10 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 will(returnValue(mockIsisInteractionTracker));
                 
                 allowing(mockIsisInteractionTracker).currentAuthenticationSession();
-                will(returnValue(Optional.of(new AuthenticationSessionForTesting())));
+                will(returnValue(Optional.of(new SingleUserSession())));
                 
                 allowing(mockIsisInteractionFactory)
-                .runAuthenticated(with(new AuthenticationSessionForTesting()), with(any(ThrowingRunnable.class)));
+                .runAuthenticated(with(new SingleUserSession()), with(any(ThrowingRunnable.class)));
                 
                 allowing(mockIsisInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
@@ -133,7 +132,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
                 will(returnValue(true));
                 oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
-                will(returnValue(SimpleSession.validOfUserWithSystemDefaults(UserMemento.ofName("test-user"))));
+                will(returnValue(new SingleUserSession()));
             }
         });
 

@@ -42,6 +42,7 @@ import org.apache.isis.core.runtime.iactn.InteractionFactory.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.singleuser.SingleUserSession;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 
@@ -80,7 +81,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 will(returnValue(mockIsisInteractionFactory));
 
                 allowing(mockIsisInteractionFactory)
-                .runAuthenticated(with(new AuthenticationSessionForTesting()), with(any(ThrowingRunnable.class)));
+                .runAuthenticated(with(new SingleUserSession()), with(any(ThrowingRunnable.class)));
                 
                 allowing(mockIsisInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));

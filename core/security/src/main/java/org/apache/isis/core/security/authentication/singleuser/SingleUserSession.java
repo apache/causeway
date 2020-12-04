@@ -31,7 +31,7 @@ public final class SingleUserSession extends AuthenticationSessionAbstract {
                     UserMemento.ofName("prototyping"));
 
     /**
-     * Defaults session's authentication validation code to <tt>""</tt>.
+     * Defaults session's authentication validation code to {@code ""}
      */
     public SingleUserSession() {
         this(AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
