@@ -61,17 +61,6 @@ public interface AuthenticationSession extends Serializable {
     String getValidationCode();
 
     /**
-     * For viewers (in particular) to store additional attributes, analogous to
-     * an <tt>HttpSession</tt>.
-     */
-    Object getAttribute(String attributeName);
-
-    /**
-     * @see #getAttribute(String)
-     */
-    void setAttribute(String attributeName, Object attribute);
-
-    /**
      * The {@link MessageBroker} that holds messages for this user.
      */
     MessageBroker getMessageBroker();
@@ -83,16 +72,16 @@ public interface AuthenticationSession extends Serializable {
      * own simulated (or actual) user 
      */
     default UserMemento getUser() {
-        return getExecutionEnvironment().getUser();
+        return getExecutionContext().getUser();
     }
     
     /**
-     * The execution environment (programmatically) simulated (or actual), belonging to this session.
+     * The {@link ExecutionContext} (programmatically) simulated (or actual), belonging to this session.
      * 
      * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
      * own simulated (or actual) clock 
      */
-    ExecutionContext getExecutionEnvironment();
+    ExecutionContext getExecutionContext();
 
     /**
      * To support external security mechanisms such as keycloak, where the validity of the session is defined by

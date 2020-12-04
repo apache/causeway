@@ -69,35 +69,4 @@ extends AuthenticationSessionAbstract {
     @Getter @Setter
     private Type type = Type.DEFAULT;
 
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-        final SimpleSession other = (SimpleSession) obj;
-        return equals(other);
-    }
-
-    public boolean equals(final SimpleSession other) {
-        if (other == this) {
-            return true;
-        }
-        if (other == null) {
-            return false;
-        }
-        return getUserName().equals(other.getUserName());
-    }
-
-    @Override
-    public int hashCode() {
-        return getUserName().hashCode();
-    }
-
 }

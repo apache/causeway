@@ -19,8 +19,6 @@
 package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
@@ -41,7 +39,7 @@ implements AuthenticationSession, Serializable {
     // -- Constructor, fields
 
     @Getter(onMethod_ = {@Override}) @NonNull 
-    private final ExecutionContext executionEnvironment;
+    private final ExecutionContext executionContext;
     
     @Getter(onMethod_ = {@Override}) @NonNull 
     private final String userName;
@@ -55,13 +53,11 @@ implements AuthenticationSession, Serializable {
     @Getter(onMethod_ = {@Override}) @NonNull
     private final MessageBroker messageBroker;
     
-    private final Map<String, Object> attributeByName = new HashMap<String, Object>();
-
     public AuthenticationSessionAbstract(
             @NonNull final ExecutionContext executionEnvironment,
             @NonNull final String validationCode) {
 
-        this.executionEnvironment = executionEnvironment;
+        this.executionContext = executionEnvironment;
         this.userName = getUser().getName();
         this.roles = Can.ofCollection(getUser().getRoles())
                 .map(RoleMemento::getName);
@@ -87,18 +83,17 @@ implements AuthenticationSession, Serializable {
 
     // -- Attributes
 
-    @Override
-    public Object getAttribute(final String attributeName) {
-        return attributeByName.get(attributeName);
-    }
+//    @Override
+//    public Object getAttribute(final String attributeName) {
+//        return attributeByName.get(attributeName);
+//    }
+//
+//    @Override
+//    public void setAttribute(final String attributeName, final Object attribute) {
+//        attributeByName.put(attributeName, attribute);
+//    }
 
-    @Override
-    public void setAttribute(final String attributeName, final Object attribute) {
-        attributeByName.put(attributeName, attribute);
-    }
-
-
-    // -- toString
+    // -- TO STRING, EQUALS, HASHCODE
 
     private static final ToString<AuthenticationSessionAbstract> toString = ToString
             .toString("name", AuthenticationSessionAbstract::getUserName)
@@ -107,6 +102,32 @@ implements AuthenticationSession, Serializable {
     @Override
     public String toString() {
         return toString.toString(this);
+    }
+    
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        return isEqualsTo((AuthenticationSessionAbstract) obj);
+    }
+
+    private boolean isEqualsTo(final AuthenticationSessionAbstract other) {
+        if(!getExecutionContext().equals(other.getExecutionContext())) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return getUserName().hashCode(); // its good enough to hash on just the user's name
     }
 
 }

@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -29,7 +30,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 
 /**
  * Details about a user and his roles.
@@ -141,29 +141,8 @@ public final class UserMemento implements Serializable {
                 .map(RoleMemento::getName);
     }
 
-//XXX implemented as regex match, java-doc is not specific about what these methods actually do; so if in doubt, rather remove     
-//    /**
-//     * Determines if the user fulfills the specified role.
-//     *
-//     * @param role  the role to search for, regular expressions are allowed
-//     */
-//    public boolean hasRole(final RoleMemento role) {
-//        return hasRole(role.getName());
-//    }
-//
-//    /**
-//     * Determines if the user fulfills the specified role. Roles are compared
-//     * lexically by role name.
-//     */
-//    public boolean hasRole(final String roleName) {
-//        for (final RoleMemento role : roles) {
-//            if (role.getName().matches(roleName)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
+    // -- TO STRING, EQUALS, HASHCODE
+    
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
@@ -172,19 +151,75 @@ public final class UserMemento implements Serializable {
         }
         return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
     }
-
-    @UtilityClass
-    public static class NameType {
-        @UtilityClass
-        public static class Meta {
-            public static final int MAX_LEN = 50;
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
         }
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        return isEqualsTo((UserMemento) obj);
     }
 
-
+    private boolean isEqualsTo(final UserMemento other) {
+        if(!Objects.equals(this.getName(), other.getName())) {
+            return false;
+        }
+        if(!Objects.equals(this.getRoles(), other.getRoles())) {
+            return false;
+        }
+        return true;
+    }
+    
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
+    }
+        
+    
     // tag::refguide[]
 
     // ...
 
 }
 // end::refguide[]
+
+// -- REMOVED
+
+//XXX implemented as regex match, java-doc is not specific about what these methods actually do; so if in doubt, rather remove     
+///**
+//* Determines if the user fulfills the specified role.
+//*
+//* @param role  the role to search for, regular expressions are allowed
+//*/
+//public boolean hasRole(final RoleMemento role) {
+//  return hasRole(role.getName());
+//}
+//
+///**
+//* Determines if the user fulfills the specified role. Roles are compared
+//* lexically by role name.
+//*/
+//public boolean hasRole(final String roleName) {
+//  for (final RoleMemento role : roles) {
+//      if (role.getName().matches(roleName)) {
+//          return true;
+//      }
+//  }
+//  return false;
+//}
+
+//XXX not used    
+//@UtilityClass
+//public static class NameType {
+//  @UtilityClass
+//  public static class Meta {
+//      public static final int MAX_LEN = 50;
+//  }
+//}
+

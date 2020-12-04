@@ -24,7 +24,9 @@ import java.io.Serializable;
 import org.apache.isis.applib.annotation.MemberOrder;
 
 import lombok.Getter;
+import lombok.Value;
 
+@Value
 // tag::refguide[]
 public final class RoleMemento implements Serializable {
 

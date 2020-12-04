@@ -53,8 +53,8 @@ extends
         return currentInteractionLayer().map(InteractionLayer::getAuthenticationSession);
     }
     
-    default Optional<ExecutionContext> currentExecutionEnvironment() {
-        return currentAuthenticationSession().map(AuthenticationSession::getExecutionEnvironment);
+    default Optional<ExecutionContext> currentExecutionContext() {
+        return currentAuthenticationSession().map(AuthenticationSession::getExecutionContext);
     }
     
     @Override
