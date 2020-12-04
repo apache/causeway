@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.MessageBroker;
 
 import lombok.Getter;
 import lombok.NonNull;

@@ -52,7 +52,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.runtime.iactn.MessageBroker;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

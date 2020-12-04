@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.runtime.iactn.MessageBroker;
 
 import lombok.AccessLevel;
 import lombok.Getter;

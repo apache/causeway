@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.security.authentication;
+package org.apache.isis.core.runtime.iactn;
 
 import java.io.Serializable;
 import java.util.ArrayList;

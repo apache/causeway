@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.runtime.iactn.MessageBroker;
 
 @Service
 @Named("isisRuntimeServices.MessageServiceDefault")

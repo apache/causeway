@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.runtime.iactn.MessageBroker;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
