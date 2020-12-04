@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Collections;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.apache.wicket.request.Request;
 import org.jmock.Expectations;
@@ -30,22 +29,21 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionFactory.ThrowingRunnable;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 public class AuthenticatedWebSessionForIsis_SignIn {
 
@@ -82,7 +80,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 will(returnValue(mockIsisInteractionFactory));
 
                 allowing(mockIsisInteractionFactory)
-                .runAuthenticated(with(new InitialisationSession()), with(any(ThrowingRunnable.class)));
+                .runAuthenticated(with(new AuthenticationSessionForTesting()), with(any(ThrowingRunnable.class)));
                 
                 allowing(mockIsisInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));

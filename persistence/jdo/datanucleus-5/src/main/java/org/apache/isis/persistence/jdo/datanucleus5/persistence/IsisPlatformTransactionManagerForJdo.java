@@ -44,7 +44,6 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAf
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeBeginEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeCommitEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeRollbackEvent;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -88,22 +87,22 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         
         if(!isInInteraction) {
             
-            if(Utils.isJUnitTest()) {
-            
-                val authenticationSession = isisInteractionTracker.currentAuthenticationSession()
-                        .orElseGet(InitialisationSession::new);
-
-                log.debug("open new session authenticationSession={}", authenticationSession);
-                isisInteractionFactory.openInteraction(authenticationSession);
-                
-                return IsisTransactionObject.of(transactionBeforeBegin, IsisInteractionScopeType.TEST_SCOPED);
-
-            } else {
+//            if(Utils.isJUnitTest()) {
+//            
+//                val authenticationSession = isisInteractionTracker.currentAuthenticationSession()
+//                        .orElseGet(InitialisationSession::new);
+//
+//                log.debug("open new session authenticationSession={}", authenticationSession);
+//                isisInteractionFactory.openInteraction(authenticationSession);
+//                
+//                return IsisTransactionObject.of(transactionBeforeBegin, IsisInteractionScopeType.TEST_SCOPED);
+//
+//            } else {
 
                 throw _Exceptions.illegalState("No IsisInteraction available. "
                         + "Transactions are expected to be nested within the life-cycle of an IsisInteraction.");
                 
-            }
+//            }
             
         }
 

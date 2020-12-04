@@ -39,10 +39,12 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 public interface InteractionFactory {
 
     @FunctionalInterface
-    public interface ThrowingRunnable {
+    interface ThrowingRunnable {
         void run() throws Exception;
     }
 
+    InteractionLayer openInteraction();
+    
     /**
      * Creates a new {@link InteractionSession}, which represents a user's span of
      * activities interacting with the application.
@@ -56,17 +58,17 @@ public interface InteractionFactory {
      * @param authenticationSession
      * @return
      */
-    public InteractionLayer openInteraction(AuthenticationSession authenticationSession);
+    InteractionLayer openInteraction(AuthenticationSession authenticationSession);
 
     /**
      * @return whether the calling thread is within the context of an open IsisInteractionSession
      */
-    public boolean isInInteractionSession();
+    boolean isInInteractionSession();
 
     /**
      * @return whether the calling thread is within the context of an open IsisTransactionSession
      */
-    public boolean isInTransaction();
+    boolean isInTransaction();
 
     
     /**
@@ -76,14 +78,14 @@ public interface InteractionFactory {
      * @param callable - the piece of code to run
      * 
      */
-    public <R> R callAuthenticated(AuthenticationSession authenticationSession, Callable<R> callable);
+    <R> R callAuthenticated(AuthenticationSession authenticationSession, Callable<R> callable);
     
     /**
      * Variant of {@link #callAuthenticated(AuthenticationSession, Callable)} that takes a runnable.
      * @param authenticationSession
      * @param runnable
      */
-    public default void runAuthenticated(AuthenticationSession authenticationSession, ThrowingRunnable runnable) {
+    default void runAuthenticated(AuthenticationSession authenticationSession, ThrowingRunnable runnable) {
         final Callable<Void> callable = ()->{runnable.run(); return null;};
         callAuthenticated(authenticationSession, callable);
     }
@@ -95,18 +97,18 @@ public interface InteractionFactory {
      * @param <R>
      * @param callable
      */
-    public <R> R callAnonymous(Callable<R> callable);
+    <R> R callAnonymous(Callable<R> callable);
     
     /**
      * Variant of {@link #callAnonymous(Callable)} that takes a runnable.
      * @param runnable
      */
-    public void runAnonymous(ThrowingRunnable runnable);
+    void runAnonymous(ThrowingRunnable runnable);
 
     /**
      * closes all open InteractionClosures as stacked on the current thread
      */
-    public void closeSessionStack();
+    void closeSessionStack();
 
 
 }

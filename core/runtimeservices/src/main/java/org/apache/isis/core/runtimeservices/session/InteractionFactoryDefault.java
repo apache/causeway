@@ -59,7 +59,6 @@ import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeCloseListener;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
@@ -146,6 +145,11 @@ implements InteractionFactory, InteractionTracker {
 
     private final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = 
             ThreadLocal.withInitial(Stack::new);
+    
+    @Override
+    public InteractionLayer openInteraction() {
+        return openInteraction(new InitialisationSession());
+    }
     
     @Override
     public InteractionLayer openInteraction(final @NonNull AuthenticationSession authSessionToUse) {

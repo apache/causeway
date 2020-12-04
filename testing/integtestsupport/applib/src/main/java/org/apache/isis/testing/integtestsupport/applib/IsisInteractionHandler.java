@@ -25,14 +25,13 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 
 public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCallback {
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
         isisInteractionFactory(extensionContext)
-        .ifPresent(isisInteractionFactory->isisInteractionFactory.openInteraction(new InitialisationSession()));
+        .ifPresent(isisInteractionFactory->isisInteractionFactory.openInteraction());
     }
     
     @Override

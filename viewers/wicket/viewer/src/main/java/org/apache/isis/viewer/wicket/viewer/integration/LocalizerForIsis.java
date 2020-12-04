@@ -37,7 +37,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
 import lombok.val;
@@ -79,7 +78,7 @@ public class LocalizerForIsis extends Localizer {
         if(isisInteractionTracker.isInInteractionSession()) {
             return translate(key, context);
         } else {
-            return isisInteractionFactory.callAuthenticated(new InitialisationSession(), ()->translate(key, context));
+            return isisInteractionFactory.callAnonymous(()->translate(key, context));
         }
     }
 

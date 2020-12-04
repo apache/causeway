@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Collections;
@@ -44,7 +43,6 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionFactory.ThrowingRunnable;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -89,10 +87,10 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 will(returnValue(mockIsisInteractionTracker));
                 
                 allowing(mockIsisInteractionTracker).currentAuthenticationSession();
-                will(returnValue(Optional.of(new InitialisationSession())));
+                will(returnValue(Optional.of(new AuthenticationSessionForTesting())));
                 
                 allowing(mockIsisInteractionFactory)
-                .runAuthenticated(with(new InitialisationSession()), with(any(ThrowingRunnable.class)));
+                .runAuthenticated(with(new AuthenticationSessionForTesting()), with(any(ThrowingRunnable.class)));
                 
                 allowing(mockIsisInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
