@@ -37,6 +37,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.
@@ -50,7 +51,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 @Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class TransactionRollbackTest_usingTransactional {
+class TransactionRollbackTest_usingTransactional extends IsisIntegrationTestAbstract {
     
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;

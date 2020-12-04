@@ -34,6 +34,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -47,7 +48,7 @@ import lombok.val;
                 //IsisPresets.DebugPersistence,
         })
 @Transactional
-class JdoBootstrappingTest_usingFixtures {
+class JdoBootstrappingTest_usingFixtures extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;

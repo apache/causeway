@@ -87,22 +87,19 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         
         if(!isInInteraction) {
             
-//            if(Utils.isJUnitTest()) {
-//            
-//                val authenticationSession = isisInteractionTracker.currentAuthenticationSession()
-//                        .orElseGet(InitialisationSession::new);
-//
-//                log.debug("open new session authenticationSession={}", authenticationSession);
-//                isisInteractionFactory.openInteraction(authenticationSession);
-//                
-//                return IsisTransactionObject.of(transactionBeforeBegin, IsisInteractionScopeType.TEST_SCOPED);
-//
-//            } else {
+            if(Utils.isJUnitTest()) {
 
                 throw _Exceptions.illegalState("No IsisInteraction available. "
-                        + "Transactions are expected to be nested within the life-cycle of an IsisInteraction.");
+                        + "Transactions are expected to be within scope of an InteractionSession."
+                        + "\n"
+                        + "Possible solution: Make sure your JUnit test extends IsisIntegrationTestAbstract.");
                 
-//            }
+            } else {
+
+                throw _Exceptions.illegalState("No IsisInteraction available. "
+                        + "Transactions are expected to be within scope of an InteractionSession.");
+                
+            }
             
         }
 

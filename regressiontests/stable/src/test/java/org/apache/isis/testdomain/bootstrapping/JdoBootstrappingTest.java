@@ -44,6 +44,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -54,7 +55,7 @@ import lombok.val;
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoBootstrappingTest {
+class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
     //@Inject private TransactionService transactionService;
