@@ -37,8 +37,8 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory.ThrowingRunnable;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory.ThrowingRunnable;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -58,7 +58,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
     private AuthenticationManager authMgr;
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisAppCommonContext mockCommonContext;
-    @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
+    @Mock protected InteractionFactory mockIsisInteractionFactory;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -78,7 +78,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 allowing(mockServiceRegistry).select(SessionLoggingService.class);
                 will(returnValue(Can.empty()));
 
-                allowing(mockCommonContext).lookupServiceElseFail(IsisInteractionFactory.class);
+                allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
                 will(returnValue(mockIsisInteractionFactory));
 
                 allowing(mockIsisInteractionFactory)

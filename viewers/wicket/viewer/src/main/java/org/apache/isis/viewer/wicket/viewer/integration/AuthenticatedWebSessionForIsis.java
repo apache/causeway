@@ -33,8 +33,8 @@ import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -147,7 +147,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     public synchronized AuthenticationSession getAuthenticationSession() {
         
-        commonContext.getIsisInteractionTracker().currentAuthenticationSession()
+        commonContext.getInteractionTracker().currentAuthenticationSession()
         .ifPresent(currentAuthenticationSession->{
             
             if (getAuthenticationManager().isSessionValid(currentAuthenticationSession)) {
@@ -272,12 +272,12 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
     
-    protected IsisInteractionFactory getIsisInteractionFactory() {
-        return commonContext.lookupServiceElseFail(IsisInteractionFactory.class);
+    protected InteractionFactory getIsisInteractionFactory() {
+        return commonContext.lookupServiceElseFail(InteractionFactory.class);
     }
 
-    protected IsisInteractionTracker getIsisInteractionTracker() {
-        return commonContext.getIsisInteractionTracker();
+    protected InteractionTracker getIsisInteractionTracker() {
+        return commonContext.getInteractionTracker();
     }
 
     private VirtualClock virtualClock() {

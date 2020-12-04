@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 
 
@@ -42,14 +42,14 @@ implements JdoPersistenceCapableFacet {
     private final String schema;
     private final String table;
     private final IdentityType identityType;
-    private final Supplier<IsisInteractionTracker> isisInteractionTracker;
+    private final Supplier<InteractionTracker> isisInteractionTracker;
 
     public JdoPersistenceCapableFacetAbstract(
             final String schemaName,
             final String tableOrTypeName,
             final IdentityType identityType,
             final FacetHolder holder,
-            final Supplier<IsisInteractionTracker> isisInteractionTracker) {
+            final Supplier<InteractionTracker> isisInteractionTracker) {
         
         super(JdoPersistenceCapableFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(EntityFacet.class);

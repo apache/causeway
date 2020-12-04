@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
@@ -50,9 +50,9 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final ServiceInjector serviceInjector;
     @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
-    @Getter(onMethod = @__(@Override)) protected final IsisInteractionTracker isisInteractionTracker;
+    @Getter(onMethod = @__(@Override)) protected final InteractionTracker isisInteractionTracker;
     
-    @Getter protected final IsisInteractionFactory isisInteractionFactory;
+    @Getter protected final InteractionFactory isisInteractionFactory;
     @Getter protected final AuthenticationManager authenticationManager;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<ManagedObject> homePageSupplier;
@@ -69,9 +69,9 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageSupplier = mmc::getHomePageAdapter;
-        this.isisInteractionFactory = serviceRegistry.lookupServiceElseFail(IsisInteractionFactory.class);
+        this.isisInteractionFactory = serviceRegistry.lookupServiceElseFail(InteractionFactory.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
-        this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(IsisInteractionTracker.class);
+        this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
     }
     
     // -- AUTH

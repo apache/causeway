@@ -41,9 +41,9 @@ import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory.ThrowingRunnable;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory.ThrowingRunnable;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -64,8 +64,8 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     private AuthenticationManager authMgr;
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisAppCommonContext mockCommonContext;
-    @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock protected IsisInteractionTracker mockIsisInteractionTracker;
+    @Mock protected InteractionFactory mockIsisInteractionFactory;
+    @Mock protected InteractionTracker mockIsisInteractionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -82,10 +82,10 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockServiceRegistry).select(SessionLoggingService.class);
                 will(returnValue(Can.empty()));
 
-                allowing(mockCommonContext).lookupServiceElseFail(IsisInteractionFactory.class);
+                allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
                 will(returnValue(mockIsisInteractionFactory));
 
-                allowing(mockCommonContext).getIsisInteractionTracker();
+                allowing(mockCommonContext).getInteractionTracker();
                 will(returnValue(mockIsisInteractionTracker));
                 
                 allowing(mockIsisInteractionTracker).currentAuthenticationSession();

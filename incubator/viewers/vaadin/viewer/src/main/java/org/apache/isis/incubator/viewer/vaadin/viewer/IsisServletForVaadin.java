@@ -29,7 +29,7 @@ import com.vaadin.flow.spring.SpringServlet;
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
 
 import lombok.NonNull;
@@ -47,10 +47,10 @@ extends SpringServlet {
 
     private static final long serialVersionUID = 1L;
     
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
 
     public IsisServletForVaadin(
-            @NonNull final IsisInteractionFactory isisInteractionFactory, 
+            @NonNull final InteractionFactory isisInteractionFactory, 
             @NonNull final ApplicationContext context, 
             final boolean forwardingEnforced) {
         super(context, forwardingEnforced);

@@ -30,8 +30,8 @@ import com.vaadin.flow.server.VaadinServiceInitListener;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory.ThrowingRunnable;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;
 
@@ -49,7 +49,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
 
     private static final long serialVersionUID = 1L;
     
-    @Inject private transient IsisInteractionFactory isisInteractionFactory; 
+    @Inject private transient InteractionFactory isisInteractionFactory; 
     @Inject private transient MetaModelContext metaModelContext;
 
     @Override

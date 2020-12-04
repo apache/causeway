@@ -45,7 +45,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
@@ -65,7 +65,7 @@ class JpaBootstrappingTest /*extends IsisIntegrationTestAbstract*/ {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
     @Inject private RepositoryService repository;
-    @Inject private IsisInteractionFactory isisInteractionFactory;
+    @Inject private InteractionFactory isisInteractionFactory;
     @Inject private SpecificationLoader specLoader;
     //@Inject private TransactionService transactionService;
 

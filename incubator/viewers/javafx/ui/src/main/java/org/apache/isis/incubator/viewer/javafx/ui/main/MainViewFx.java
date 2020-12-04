@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
@@ -57,7 +57,7 @@ public class MainViewFx {
     private final JavaFxViewerConfig viewerConfig;
     private final MetaModelContext metaModelContext;
     private final HeaderUiModelProvider headerUiModelProvider;
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
     private final UiContextFx uiContext;
     private final UiActionHandlerFx uiActionHandler;
     private final UiComponentFactoryFx uiComponentFactory;

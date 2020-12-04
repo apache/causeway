@@ -28,7 +28,7 @@ import org.springframework.beans.factory.config.Scope;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 
 import lombok.Data;
 import lombok.val;
@@ -40,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
     
-    @Inject private IsisInteractionTracker isisInteractionTracker;
+    @Inject private InteractionTracker isisInteractionTracker;
 
     @Data(staticConstructor = "of")
     private static class ScopedObject {

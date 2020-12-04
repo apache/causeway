@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -141,7 +141,7 @@ implements FormExecutor {
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
             {
                 val commonContext = targetEntityModel.getCommonContext();
-                commonContext.getIsisInteractionTracker().currentInteractionSession()
+                commonContext.getInteractionTracker().currentInteractionSession()
                 .ifPresent(interaction->{
                     commonContext.lookupServiceElseFail(RuntimeEventService.class)
                     .fireInteractionFlushRequest(interaction);
@@ -473,8 +473,8 @@ implements FormExecutor {
         return getCommonContext().getSpecificationLoader();
     }
 
-    protected IsisInteractionFactory getIsisInteractionFactory() {
-        return getCommonContext().lookupServiceElseFail(IsisInteractionFactory.class);
+    protected InteractionFactory getIsisInteractionFactory() {
+        return getCommonContext().lookupServiceElseFail(InteractionFactory.class);
     }
 
     protected AuthenticationSession getAuthenticationSession() {

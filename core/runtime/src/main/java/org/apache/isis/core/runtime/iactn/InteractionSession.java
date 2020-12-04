@@ -51,7 +51,7 @@ import lombok.Setter;
  *     {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber}.
  * </p>
  *
- * @see IsisInteractionFactory
+ * @see InteractionFactory
  */
 public class InteractionSession extends RuntimeContextBase {
 

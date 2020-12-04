@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.MessageBroker;
 
 import lombok.AccessLevel;
@@ -73,7 +73,7 @@ public class IsisAppCommonContext implements MetaModelContext.Delegating {
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
     
     @Getter(lazy = true)
-    private final IsisInteractionTracker isisInteractionTracker = lookupServiceElseFail(IsisInteractionTracker.class);
+    private final InteractionTracker interactionTracker = lookupServiceElseFail(InteractionTracker.class);
     
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);

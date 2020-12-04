@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
 
@@ -96,9 +96,9 @@ implements ObjectSpecIdFacetFactory {
     
     // -- INTERACTION TRACKER LOOKUP
     
-    private final _Lazy<IsisInteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(this::lookupIsisInteractionTracker); 
-    private IsisInteractionTracker lookupIsisInteractionTracker() {
-        return super.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(IsisInteractionTracker.class);        
+    private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(this::lookupIsisInteractionTracker); 
+    private InteractionTracker lookupIsisInteractionTracker() {
+        return super.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(InteractionTracker.class);        
     }
     
     

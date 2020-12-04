@@ -93,8 +93,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
@@ -125,7 +125,7 @@ import lombok.val;
 //@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
     
-    @Inject IsisInteractionTracker isisInteractionTracker;
+    @Inject InteractionTracker isisInteractionTracker;
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
     @Inject SpecificationLoader specificationLoader;
@@ -553,7 +553,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         private final Command parentCommand;
         private final ServiceInjector serviceInjector;
 
-        @Inject IsisInteractionFactory isisInteractionFactory;
+        @Inject InteractionFactory isisInteractionFactory;
         @Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
         @Inject Provider<InteractionContext> interactionContextProvider;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ClockServiceDefault implements ClockService {
     
-    private final IsisInteractionTracker interactionTracker;
+    private final InteractionTracker interactionTracker;
 
     @Override
     public VirtualClock getClock() {

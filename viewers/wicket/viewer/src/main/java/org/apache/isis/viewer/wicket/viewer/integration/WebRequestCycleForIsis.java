@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.session.IsisRequestCycle;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
@@ -106,7 +106,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         }
 
         val isisRequestCycle = IsisRequestCycle.next(
-                commonContext.lookupServiceElseFail(IsisInteractionFactory.class),
+                commonContext.lookupServiceElseFail(InteractionFactory.class),
                 commonContext.createTransactionTemplate());
         
         requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, isisRequestCycle);
@@ -392,7 +392,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private boolean isInInteraction() {
-        return commonContext.getIsisInteractionTracker().isInInteractionSession();
+        return commonContext.getInteractionTracker().isInInteractionSession();
     }
 
     private Optional<AuthenticationSession> getAuthenticationSession() {

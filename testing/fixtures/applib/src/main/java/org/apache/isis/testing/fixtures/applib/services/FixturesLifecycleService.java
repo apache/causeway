@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.testing.fixtures.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -53,7 +53,7 @@ public class FixturesLifecycleService {
     @SuppressWarnings("unused")
 
     @Inject
-    private IsisInteractionFactory isisInteractionFactory; // depends on relationship
+    private InteractionFactory isisInteractionFactory; // depends on relationship
     @Inject
     private IsisSystemEnvironment isisSystemEnvironment;
     @Inject

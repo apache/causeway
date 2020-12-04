@@ -34,7 +34,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -44,7 +44,7 @@ import lombok.val;
 public class SwaggerSpecResource {
 
     private final SwaggerService swaggerService;
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
 
     @Context HttpHeaders httpHeaders;
     @Context HttpServletRequest httpServletRequest;
@@ -52,7 +52,7 @@ public class SwaggerSpecResource {
     @Inject
     public SwaggerSpecResource(
             final SwaggerService swaggerService,
-            final IsisInteractionFactory isisInteractionFactory) {
+            final InteractionFactory isisInteractionFactory) {
         this.swaggerService = swaggerService;
         this.isisInteractionFactory = isisInteractionFactory;
     }

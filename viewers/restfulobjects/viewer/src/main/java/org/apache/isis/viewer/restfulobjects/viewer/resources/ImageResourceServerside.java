@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 
 @Component
 @Path("/image")
@@ -43,7 +43,7 @@ public class ImageResourceServerside extends ResourceAbstract {
     public ImageResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final IsisInteractionTracker isisInteractionTracker) {
+            final InteractionTracker isisInteractionTracker) {
         super(metaModelContext, isisConfiguration, isisInteractionTracker);
     }
 

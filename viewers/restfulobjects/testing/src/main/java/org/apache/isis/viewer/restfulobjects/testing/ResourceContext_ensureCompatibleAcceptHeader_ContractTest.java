@@ -43,8 +43,8 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -65,12 +65,12 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock HttpHeaders mockHttpHeaders;
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
-    @Mock IsisInteractionFactory mockIsisInteractionFactory;
+    @Mock InteractionFactory mockIsisInteractionFactory;
     @Mock InteractionSession mockInteractionSession;
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
-    @Mock IsisInteractionTracker mockIsisInteractionTracker;
+    @Mock InteractionTracker mockIsisInteractionTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
     
     MetaModelContext metaModelContext;

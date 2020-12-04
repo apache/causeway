@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 import lombok.NonNull;
@@ -51,7 +51,7 @@ import jakarta.annotation.PostConstruct;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SudoServiceDefault implements SudoService {
 
-    private final IsisInteractionFactory interactionFactory;
+    private final InteractionFactory interactionFactory;
 
     // -- LISTENERS
     

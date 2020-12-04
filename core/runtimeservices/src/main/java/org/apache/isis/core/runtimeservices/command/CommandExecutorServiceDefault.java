@@ -64,8 +64,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MemberDto;
@@ -98,10 +98,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final SudoService sudoService;
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
-    @Inject final IsisInteractionTracker isisInteractionTracker;
+    @Inject final InteractionTracker isisInteractionTracker;
     @Inject final Provider<InteractionContext> interactionContextProvider;
 
-    @Inject @Getter final IsisInteractionFactory isisInteractionFactory;
+    @Inject @Getter final InteractionFactory isisInteractionFactory;
     @Inject @Getter final SpecificationLoader specificationLoader;
 
     @Override

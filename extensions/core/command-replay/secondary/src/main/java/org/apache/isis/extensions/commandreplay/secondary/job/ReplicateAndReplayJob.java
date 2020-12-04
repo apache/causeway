@@ -26,7 +26,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
@@ -61,7 +61,7 @@ public class ReplicateAndReplayJob implements Job {
         }
     }
 
-    @Inject protected IsisInteractionFactory isisInteractionFactory;
+    @Inject protected InteractionFactory isisInteractionFactory;
 
     private void exec(final JobExecutionContext quartzContext) {
         val ssh = new SecondaryStatusData(quartzContext);

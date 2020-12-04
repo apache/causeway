@@ -31,7 +31,7 @@ import org.apache.isis.core.security.authentication.MessageBroker;
  * @since 2.0
  *
  */
-public interface IsisInteractionTracker 
+public interface InteractionTracker 
 extends 
 	AuthenticationSessionTracker, 
 	InteractionContext {
@@ -40,16 +40,16 @@ extends
     
     /** @return the InteractionClosure that sits on top of the current 
      * request- or test-scoped InteractionSession*/
-    Optional<InteractionClosure> currentInteractionClosure();
+    Optional<InteractionEnvironment> currentInteractionClosure();
     
     /** @return the current request- or test-scoped InteractionSession*/
     default Optional<InteractionSession> currentInteractionSession() {
-    	return currentInteractionClosure().map(InteractionClosure::getInteractionSession);
+    	return currentInteractionClosure().map(InteractionEnvironment::getInteractionSession);
     }
     
     @Override
     default Optional<AuthenticationSession> currentAuthenticationSession() {
-        return currentInteractionClosure().map(InteractionClosure::getAuthenticationSession);
+        return currentInteractionClosure().map(InteractionEnvironment::getAuthenticationSession);
     }
     
     @Override

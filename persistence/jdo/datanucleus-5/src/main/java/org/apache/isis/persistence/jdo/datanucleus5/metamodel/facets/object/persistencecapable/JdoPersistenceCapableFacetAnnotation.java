@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 
 
 public class JdoPersistenceCapableFacetAnnotation extends JdoPersistenceCapableFacetImpl {
@@ -33,7 +33,7 @@ public class JdoPersistenceCapableFacetAnnotation extends JdoPersistenceCapableF
             final String tableOrTypeName,
             final IdentityType identityType,
             final FacetHolder holder, 
-            final Supplier<IsisInteractionTracker> isisInteractionTracker) {
+            final Supplier<InteractionTracker> isisInteractionTracker) {
         super(schemaName, tableOrTypeName, identityType, holder, isisInteractionTracker);
     }
 

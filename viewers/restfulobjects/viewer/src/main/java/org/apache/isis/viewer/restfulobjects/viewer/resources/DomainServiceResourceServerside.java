@@ -43,7 +43,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -70,7 +70,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public DomainServiceResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final IsisInteractionTracker isisInteractionTracker) {
+            final InteractionTracker isisInteractionTracker) {
         super(metaModelContext, isisConfiguration, isisInteractionTracker);
     }
 

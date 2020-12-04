@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 @Service
@@ -40,7 +40,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 @Qualifier("Default")
 public class UserServiceDefault implements UserService {
     
-    @Inject private IsisInteractionTracker isisInteractionTracker;
+    @Inject private InteractionTracker isisInteractionTracker;
     
     @Override
     public UserMemento getUser() {

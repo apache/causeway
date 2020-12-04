@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
@@ -43,7 +43,7 @@ import lombok.val;
 
 public class KeycloakFilter implements Filter {
     
-    @Autowired private IsisInteractionFactory isisInteractionFactory;
+    @Autowired private InteractionFactory isisInteractionFactory;
 
     @Override
     public void doFilter(

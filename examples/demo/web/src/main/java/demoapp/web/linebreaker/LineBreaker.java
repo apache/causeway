@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -39,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class LineBreaker {
 
-    final IsisInteractionTracker isisInteractionTracker;
+    final InteractionTracker isisInteractionTracker;
 
     @Action(semantics = SemanticsOf.SAFE)
     public void shutdown() {

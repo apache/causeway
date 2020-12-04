@@ -36,7 +36,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
  *     The implementation is a singleton service.
  * </p>
  */
-public interface IsisInteractionFactory {
+public interface InteractionFactory {
 
     @FunctionalInterface
     public interface ThrowingRunnable {
@@ -56,7 +56,7 @@ public interface IsisInteractionFactory {
      * @param authenticationSession
      * @return
      */
-    public InteractionClosure openInteraction(AuthenticationSession authenticationSession);
+    public InteractionEnvironment openInteraction(AuthenticationSession authenticationSession);
 
     /**
      * @return whether the calling thread is within the context of an open IsisInteractionSession

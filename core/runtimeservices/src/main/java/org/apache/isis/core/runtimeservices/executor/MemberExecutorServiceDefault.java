@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.Getter;
@@ -62,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
 public class MemberExecutorServiceDefault 
 implements MemberExecutorService {
     
-    private final @Getter IsisInteractionTracker isisInteractionTracker;
+    private final @Getter InteractionTracker isisInteractionTracker;
     private final @Getter IsisConfiguration configuration;
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;

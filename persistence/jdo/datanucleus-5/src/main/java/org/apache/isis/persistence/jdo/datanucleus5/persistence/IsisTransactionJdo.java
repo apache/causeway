@@ -38,7 +38,7 @@ import org.apache.isis.commons.internal.collections._Inbox;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionFlushException;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
@@ -155,7 +155,7 @@ public class IsisTransactionJdo implements Transaction {
 
     private final _Inbox<PersistenceCommand> persistenceCommands = new _Inbox<>();
 
-    private final IsisInteractionTracker isisInteractionTracker;
+    private final InteractionTracker isisInteractionTracker;
 
     private final Can<TransactionScopeListener> transactionScopeListeners;
 
@@ -168,7 +168,7 @@ public class IsisTransactionJdo implements Transaction {
 
         id = TransactionId.of(interactionId, sequence);
         
-        this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(IsisInteractionTracker.class);
+        this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
         this.transactionScopeListeners = serviceRegistry.select(TransactionScopeListener.class);
 
         this.state = State.IN_PROGRESS;

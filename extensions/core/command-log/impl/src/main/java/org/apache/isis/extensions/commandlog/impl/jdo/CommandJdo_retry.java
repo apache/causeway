@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 
 @Action(
@@ -57,7 +57,7 @@ public class CommandJdo_retry {
         return commandJdo;
     }
 
-    @Inject IsisInteractionFactory isisInteractionFactory;
+    @Inject InteractionFactory isisInteractionFactory;
     @Inject TransactionService transactionService;
     @Inject CommandExecutorService commandExecutorService;
     @Inject RepositoryService repositoryService;

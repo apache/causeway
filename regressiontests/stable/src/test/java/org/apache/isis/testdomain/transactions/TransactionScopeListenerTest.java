@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -52,7 +52,7 @@ class TransactionScopeListenerTest {
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
-    @Inject private IsisInteractionFactory isisInteractionFactory;
+    @Inject private InteractionFactory isisInteractionFactory;
     @Inject private KVStoreForTesting kvStoreForTesting;
     
     /* Expectations:

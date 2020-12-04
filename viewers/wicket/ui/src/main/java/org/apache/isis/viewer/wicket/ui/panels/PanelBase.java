@@ -33,7 +33,7 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
@@ -66,7 +66,7 @@ implements HasCommonContext {
     private transient ImageResourceCache imageCache;
     private transient MetaModelContext metaModelContext;
     private transient IsisAppCommonContext commonContext;
-    private transient IsisInteractionFactory isisInteractionFactory;
+    private transient InteractionFactory isisInteractionFactory;
     private transient TranslationService translationService;
     private transient LocaleProvider localeProvider;
     private transient TreeThemeProvider treeThemeProvider;
@@ -112,8 +112,8 @@ implements HasCommonContext {
         return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
     }
     
-    public IsisInteractionFactory getIsisInteractionFactory() {
-        return isisInteractionFactory = computeIfAbsent(IsisInteractionFactory.class, isisInteractionFactory);
+    public InteractionFactory getIsisInteractionFactory() {
+        return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
     }
     
     public TranslationService getTranslationService() {

@@ -43,7 +43,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
@@ -62,7 +62,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
 
     private static final String SECMAN_ENABLE_DELEGATED_USERS = "secman.enableDelegatedUsers";
 	@Inject protected ServiceInjector serviceInjector;
-    @Inject protected IsisInteractionFactory isisInteractionFactory;
+    @Inject protected InteractionFactory isisInteractionFactory;
     @Inject protected PlatformTransactionManager txMan;
     @Inject private SecurityModuleConfig configBean;
 	@Inject protected IsisConfiguration isisConfiguration;

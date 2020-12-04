@@ -48,7 +48,7 @@ import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.webapp.modules.templresources.TemplateResourceCachingFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyDefault;
@@ -156,7 +156,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
-    @Autowired private IsisInteractionFactory isisInteractionFactory;
+    @Autowired private InteractionFactory isisInteractionFactory;
     @Autowired private SpecificationLoader specificationLoader;
     @Autowired private TransactionService transactionService;
     

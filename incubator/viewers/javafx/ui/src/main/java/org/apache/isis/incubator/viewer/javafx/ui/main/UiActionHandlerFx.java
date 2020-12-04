@@ -26,7 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
@@ -46,7 +46,7 @@ import javafx.scene.layout.GridPane;
 public class UiActionHandlerFx {
 
     private final UiContextFx uiContext;
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
     private final UiComponentFactoryFx uiComponentFactory;
 
     public void handleActionLinkClicked(ManagedAction managedAction) {

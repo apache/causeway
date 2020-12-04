@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTrackerDefault;
 import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -53,7 +53,7 @@ import lombok.val;
 public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
     
     @Inject protected ObjectManager objectManager;
-    @Inject protected IsisInteractionFactory interactionFactory;
+    @Inject protected InteractionFactory interactionFactory;
     @Inject protected WrapperFactory wrapper;
     @Inject protected KVStoreForTesting kvStoreForTesting;
     @Inject private javax.inject.Provider<EntityChangeTrackerDefault> changedObjectsServiceProvider;

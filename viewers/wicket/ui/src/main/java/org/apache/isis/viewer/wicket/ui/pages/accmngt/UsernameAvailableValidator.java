@@ -24,7 +24,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 
 import lombok.val;
 
@@ -51,7 +51,7 @@ public class UsernameAvailableValidator extends ValidatorBase<String> {
                 .lookupServiceElseFail(UserRegistrationService.class);
         
         val isisInteractionFactory = super.getCommonContext()
-                .lookupServiceElseFail(IsisInteractionFactory.class);
+                .lookupServiceElseFail(InteractionFactory.class);
         
         isisInteractionFactory.runAnonymous(() -> {
 

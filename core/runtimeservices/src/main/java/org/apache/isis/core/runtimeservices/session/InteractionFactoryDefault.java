@@ -52,11 +52,11 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
-import org.apache.isis.core.runtime.iactn.InteractionClosure;
+import org.apache.isis.core.runtime.iactn.InteractionEnvironment;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeCloseListener;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
@@ -83,13 +83,13 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Service
-@Named("isisRuntime.IsisInteractionFactoryDefault")
+@Named("isisRuntime.InteractionFactoryDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class IsisInteractionFactoryDefault 
-implements IsisInteractionFactory, IsisInteractionTracker {
+public class InteractionFactoryDefault 
+implements InteractionFactory, InteractionTracker {
 
     @Inject AuthenticationManager authenticationManager;
     @Inject RuntimeEventService runtimeEventService;
@@ -154,14 +154,14 @@ implements IsisInteractionFactory, IsisInteractionTracker {
 
     }
 
-    private final ThreadLocal<Stack<InteractionClosure>> interactionClosureStack = 
+    private final ThreadLocal<Stack<InteractionEnvironment>> interactionClosureStack = 
             ThreadLocal.withInitial(Stack::new);
     
     @Override
-    public InteractionClosure openInteraction(final @NonNull AuthenticationSession authSessionToUse) {
+    public InteractionEnvironment openInteraction(final @NonNull AuthenticationSession authSessionToUse) {
 
         val interactionSession = getOrCreateInteractionSession(authSessionToUse);
-        val newInteractionClosure = new InteractionClosure(interactionSession, authSessionToUse);
+        val newInteractionClosure = new InteractionEnvironment(interactionSession, authSessionToUse);
         
         interactionClosureStack.get().push(newInteractionClosure);
 
@@ -198,7 +198,7 @@ implements IsisInteractionFactory, IsisInteractionTracker {
     }
 
 	@Override
-    public Optional<InteractionClosure> currentInteractionClosure() {
+    public Optional<InteractionEnvironment> currentInteractionClosure() {
     	val stack = interactionClosureStack.get();
     	return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
     }

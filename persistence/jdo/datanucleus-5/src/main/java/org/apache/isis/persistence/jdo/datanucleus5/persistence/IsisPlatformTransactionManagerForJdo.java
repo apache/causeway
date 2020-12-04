@@ -33,8 +33,8 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject.IsisInteractionScopeType;
@@ -60,15 +60,15 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 
     private static final long serialVersionUID = 1L;
 
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
     private final EventBusService eventBusService;
-    private final IsisInteractionTracker isisInteractionTracker;
+    private final InteractionTracker isisInteractionTracker;
 
     @Inject
     public IsisPlatformTransactionManagerForJdo(
-            final IsisInteractionFactory isisInteractionFactory,
+            final InteractionFactory isisInteractionFactory,
             final EventBusService eventBusService,
-            final IsisInteractionTracker isisInteractionTracker) {
+            final InteractionTracker isisInteractionTracker) {
         this.isisInteractionFactory = isisInteractionFactory;
         this.eventBusService = eventBusService;
         this.isisInteractionTracker = isisInteractionTracker;

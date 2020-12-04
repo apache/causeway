@@ -29,7 +29,7 @@ import com.vaadin.flow.component.Component;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 
 import lombok.Getter;
@@ -46,7 +46,7 @@ public class UiContextVaaDefault implements UiContextVaa {
 //    @Getter(onMethod_ = {@Override})
 //    private final JavaFxViewerConfig javaFxViewerConfig;
     @Getter(onMethod_ = {@Override})
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
 //    @Getter(onMethod_ = {@Override})
 //    private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
     

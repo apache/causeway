@@ -23,7 +23,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class IsisRequestCycle {
 
     // -- SUPPORTING ISIS TRANSACTION FILTER FOR RESTFUL OBJECTS ...
 
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
     private final TransactionTemplate transactionTemplate;
     private TransactionStatus txStatus;
 
