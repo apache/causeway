@@ -19,9 +19,10 @@
 package org.apache.isis.applib.services.sudo;
 
 import java.util.concurrent.Callable;
+import java.util.function.UnaryOperator;
 
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.RoleMemento;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 
 import lombok.NonNull;
@@ -48,23 +49,25 @@ public interface SudoService {
     // end::refguide[]
     /**
      * Executes the supplied block, with the {@link UserService} returning the specified user.
+     * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
      * @since 2.0
      */
     // tag::refguide[]
     <T> T call(                                             // <.>
-            @NonNull UserMemento user,
+            @NonNull UnaryOperator<ExecutionContext> sudoMapper,
             @NonNull Callable<T> supplier);
 
     // end::refguide[]
     /**
      * Executes the supplied block, with the {@link UserService} returning the specified user.
+     * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
      * @since 2.0
      */
     // tag::refguide[]
     default void run(                                        // <.>
-            final @NonNull UserMemento user,
+            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
             final @NonNull Runnable runnable) {
-        call(user, ()->{runnable.run(); return null;});
+        call(sudoMapper, ()->{runnable.run(); return null;});
     }
 
     // end::refguide[]
@@ -73,14 +76,13 @@ public interface SudoService {
     /**
      * Allows the {@link SudoService} to notify other services/components that the effective user has been changed.
      * @since 2.0
-     * @deprecated its better to subscribe to interaction life-cycle events on the event bus 
      */
     // tag::refguide-1[]
     interface Listener {
 
-        void beforeCall(@NonNull UserMemento user);          // <.>
+        void beforeCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);          // <.>
 
-        void afterCall();                                    // <.>
+        void afterCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);          // <.>
     }
     // end::refguide-1[]
 

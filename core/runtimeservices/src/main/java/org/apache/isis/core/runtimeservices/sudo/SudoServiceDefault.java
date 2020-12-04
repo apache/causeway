@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtimeservices.sudo;
 
 import java.util.concurrent.Callable;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,9 +31,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
@@ -66,36 +67,42 @@ public class SudoServiceDefault implements SudoService {
     // -- IMPLEMENTATION
     
     @Override
-    public <T> T call(final @NonNull UserMemento sudoUser, final @NonNull Callable<T> callable) {
+    public <T> T call(
+            final @NonNull UnaryOperator<ExecutionContext> sudoMapper, 
+            final @NonNull Callable<T> callable) {
 
-        val currentinteractionLayer = interactionTracker.currentInteractionLayerElseFail();
-        val currentExecutionContext = currentinteractionLayer.getExecutionContext();
-        val sudoExecutionContext = currentExecutionContext.withUser(sudoUser);
+        val currentInteractionLayer = interactionTracker.currentInteractionLayerElseFail();
+        val currentExecutionContext = currentInteractionLayer.getExecutionContext();
+        val sudoExecutionContext = sudoMapper.apply(currentExecutionContext);
         
-        val sodoSession = currentinteractionLayer
+        val sodoSession = currentInteractionLayer
                 .getAuthenticationSession()
                 .withExecutionContext(sudoExecutionContext);
         
         try {
-            beforeCall(sudoUser);
+            beforeCall(currentExecutionContext, sudoExecutionContext);
             
             return interactionFactory.callAuthenticated(sodoSession, callable);
         } finally {
-            afterCall();
+            afterCall(sudoExecutionContext, currentExecutionContext);
         }
     }
 
     // -- HELPER
 
-    private void beforeCall(final @NonNull UserMemento sudoUser) {
+    private void beforeCall(
+            final @NonNull ExecutionContext before, 
+            final @NonNull ExecutionContext after) {
         for (val sudoListener : sudoListeners) {
-            sudoListener.beforeCall(sudoUser);
+            sudoListener.beforeCall(before, after);
         }
     }
 
-    private void afterCall() {
+    private void afterCall(
+            final @NonNull ExecutionContext before, 
+            final @NonNull ExecutionContext after) {
         for (val sudoListener : sudoListeners) {
-            sudoListener.afterCall();
+            sudoListener.afterCall(before, after);
         }
     }
 

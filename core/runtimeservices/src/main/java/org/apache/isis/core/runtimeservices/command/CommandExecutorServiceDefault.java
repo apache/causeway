@@ -151,8 +151,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             val result = transactionService.executeWithinTransaction(
                 () -> sudoPolicy == SudoPolicy.SWITCH
                     ? sudoService.call(
-                        UserMemento.ofName(dto.getUser()),
-                        () -> doExecuteCommand(dto))
+                            context->context.withUser(UserMemento.ofName(dto.getUser())),
+                            () -> doExecuteCommand(dto))
                     : doExecuteCommand(dto));
 
             return handleOutcomeAndSetCompletedAt(commandUpdater, result, null);
