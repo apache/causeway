@@ -21,11 +21,10 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 /**
  * The representation within the system of an authenticated user.
@@ -83,15 +82,17 @@ public interface AuthenticationSession extends Serializable {
      * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
      * own simulated (or actual) user 
      */
-    UserMemento getUser();
+    default UserMemento getUser() {
+        return getExecutionEnvironment().getUser();
+    }
     
     /**
-     * The (programmatically) simulated (or actual) clock, belonging to this session.
+     * The execution environment (programmatically) simulated (or actual), belonging to this session.
      * 
      * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
      * own simulated (or actual) clock 
      */
-    VirtualClock getClock();
+    ExecutionContext getExecutionEnvironment();
 
     /**
      * To support external security mechanisms such as keycloak, where the validity of the session is defined by
@@ -104,10 +105,10 @@ public interface AuthenticationSession extends Serializable {
     public enum Type {
         DEFAULT,
         /**
-         * Instructs the {@link AuthenticationManager} to not cache this session in its internal map of
+         * Instructs the {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager} to not cache this session in its internal map of
          * sessions by validation code, and therefore to ignore this aspect when considering if an
          * {@link AuthenticationSession} is
-         * {@link AuthenticationManager#isSessionValid(AuthenticationSession) valid} or not.
+         * {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager#isSessionValid(AuthenticationSession) valid} or not.
          */
         EXTERNAL
     }

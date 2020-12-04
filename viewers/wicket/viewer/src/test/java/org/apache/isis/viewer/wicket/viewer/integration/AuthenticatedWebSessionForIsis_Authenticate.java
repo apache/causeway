@@ -135,7 +135,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
                 will(returnValue(true));
                 oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
-                will(returnValue(SimpleSession.validOf(UserMemento.ofName("test-user"))));
+                will(returnValue(SimpleSession.validOfUserWithSystemDefaults(UserMemento.ofName("test-user"))));
             }
         });
 

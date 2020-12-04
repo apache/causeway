@@ -40,8 +40,16 @@ public final class UserMemento implements Serializable {
     // end::refguide[]
     
     private static final long serialVersionUID = 7190090455587885367L;
+    private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system"); 
     
     // -- FACTORIES
+    
+    /**
+     * The framework's internal user with unrestricted privileges.
+     */
+    public static UserMemento system() {
+        return SYSTEM_USER;
+    }
     
     /**
      * Creates a new user with the specified name and no roles.

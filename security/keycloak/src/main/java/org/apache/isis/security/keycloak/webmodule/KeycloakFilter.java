@@ -63,7 +63,7 @@ public class KeycloakFilter implements Filter {
         final List<String> roles = toClaims(rolesHeader);
         
         val user = UserMemento.ofNameAndRoleNames(userid, roles.stream());
-        val authenticationSession = SimpleSession.of(user, subjectHeader);
+        val authenticationSession = SimpleSession.ofUserWithSystemDefaults(user, subjectHeader);
         authenticationSession.setType(AuthenticationSession.Type.EXTERNAL);
         
         isisInteractionFactory.runAuthenticated(

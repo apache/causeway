@@ -32,12 +32,12 @@ import lombok.NonNull;
  * @since 2.0
  *
  */
-public class InteractionEnvironment extends RuntimeContextBase {
+public class InteractionLayer extends RuntimeContextBase {
 
 	@Getter private final InteractionSession interactionSession;
 	@Getter private final AuthenticationSession authenticationSession;
 	
-	public InteractionEnvironment(
+	public InteractionLayer(
 			final @NonNull InteractionSession interactionSession,
 			final @NonNull AuthenticationSession authenticationSession) {
 
@@ -51,7 +51,7 @@ public class InteractionEnvironment extends RuntimeContextBase {
 		this.authenticationSession = authenticationSession; 
 	}
 
-	public InteractionEnvironment(final @NonNull InteractionSession interactionSession) {
+	public InteractionLayer(final @NonNull InteractionSession interactionSession) {
 		this(interactionSession, interactionSession.getAuthenticationSession());
 	}
 

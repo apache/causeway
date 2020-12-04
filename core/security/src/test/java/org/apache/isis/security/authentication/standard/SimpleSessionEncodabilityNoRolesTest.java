@@ -28,7 +28,7 @@ public class SimpleSessionEncodabilityNoRolesTest extends SimpleSessionEncodabil
 
     @Override
     protected Serializable createEncodable() {
-        return SimpleSession.validOf(UserMemento.ofName("joe"));
+        return SimpleSession.validOfUserWithSystemDefaults(UserMemento.ofName("joe"));
     }
 
 }

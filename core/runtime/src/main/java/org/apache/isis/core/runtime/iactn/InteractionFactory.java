@@ -56,7 +56,7 @@ public interface InteractionFactory {
      * @param authenticationSession
      * @return
      */
-    public InteractionEnvironment openInteraction(AuthenticationSession authenticationSession);
+    public InteractionLayer openInteraction(AuthenticationSession authenticationSession);
 
     /**
      * @return whether the calling thread is within the context of an open IsisInteractionSession

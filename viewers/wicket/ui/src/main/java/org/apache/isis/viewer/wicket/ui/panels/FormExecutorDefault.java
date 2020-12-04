@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -44,7 +43,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

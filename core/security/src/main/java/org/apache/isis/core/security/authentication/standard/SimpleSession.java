@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
@@ -27,43 +27,43 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-public class SimpleSession extends AuthenticationSessionAbstract {
+public class SimpleSession
+extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
     
     // -- FACTORIES
     
     public static SimpleSession of( 
-            final @NonNull UserMemento user,
+            final @NonNull ExecutionContext executionEnvironment,
             final @NonNull String validationCode) {
-        return new SimpleSession(VirtualClock.system(), user, validationCode);
-    }
-    
-    public static SimpleSession of(
-            final @NonNull VirtualClock clock, 
-            final @NonNull UserMemento user,
-            final @NonNull String validationCode) {
-        return new SimpleSession(clock, user, validationCode);
+        return new SimpleSession(executionEnvironment, validationCode);
     }
     
     public static SimpleSession validOf( 
-            final @NonNull UserMemento user) {
-        return of(user, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
+            final @NonNull ExecutionContext executionEnvironment) {
+        return of(executionEnvironment, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
     }
     
-    public static SimpleSession validOf(
-            final @NonNull VirtualClock clock, 
+    @Deprecated //
+    public static SimpleSession ofUserWithSystemDefaults( 
+            final @NonNull UserMemento user,
+            final @NonNull String validationCode) {
+        return of(ExecutionContext.ofUserWithSystemDefaults(user), validationCode);
+    }
+    
+    @Deprecated //
+    public static SimpleSession validOfUserWithSystemDefaults( 
             final @NonNull UserMemento user) {
-        return of(clock, user, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
+        return validOf(ExecutionContext.ofUserWithSystemDefaults(user));
     }
     
     // -- CONSTRUCTOR
     
     public SimpleSession(
-            final @NonNull VirtualClock clock, 
-            final @NonNull UserMemento user, 
+            final @NonNull ExecutionContext executionEnvironment, 
             final @NonNull String validationCode) {
-        super(clock, user, validationCode);
+        super(executionEnvironment, validationCode);
     }
 
     @Getter @Setter

@@ -171,7 +171,7 @@ public class AuthenticatorShiro implements Authenticator {
                 request.streamRoles());
         
         val user = UserMemento.ofNameAndRoleNames(request.getName(), roles); 
-        return SimpleSession.of(user, validationCode);
+        return SimpleSession.ofUserWithSystemDefaults(user, validationCode);
     }
 
     /**

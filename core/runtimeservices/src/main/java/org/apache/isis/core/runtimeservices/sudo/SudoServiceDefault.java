@@ -69,7 +69,7 @@ public class SudoServiceDefault implements SudoService {
 
         try {
             beforeCall(user);
-            return interactionFactory.callAuthenticated(SimpleSession.validOf(user), callable);
+            return interactionFactory.callAuthenticated(SimpleSession.validOfUserWithSystemDefaults(user), callable);
         } finally {
             afterCall();
         }

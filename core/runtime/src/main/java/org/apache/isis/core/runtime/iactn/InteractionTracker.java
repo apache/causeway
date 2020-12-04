@@ -20,6 +20,7 @@ package org.apache.isis.core.runtime.iactn;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -40,16 +41,20 @@ extends
     
     /** @return the InteractionClosure that sits on top of the current 
      * request- or test-scoped InteractionSession*/
-    Optional<InteractionEnvironment> currentInteractionClosure();
+    Optional<InteractionLayer> currentInteractionEnvironment();
     
     /** @return the current request- or test-scoped InteractionSession*/
     default Optional<InteractionSession> currentInteractionSession() {
-    	return currentInteractionClosure().map(InteractionEnvironment::getInteractionSession);
+    	return currentInteractionEnvironment().map(InteractionLayer::getInteractionSession);
     }
     
     @Override
     default Optional<AuthenticationSession> currentAuthenticationSession() {
-        return currentInteractionClosure().map(InteractionEnvironment::getAuthenticationSession);
+        return currentInteractionEnvironment().map(InteractionLayer::getAuthenticationSession);
+    }
+    
+    default Optional<ExecutionContext> currentExecutionEnvironment() {
+        return currentAuthenticationSession().map(AuthenticationSession::getExecutionEnvironment);
     }
     
     @Override

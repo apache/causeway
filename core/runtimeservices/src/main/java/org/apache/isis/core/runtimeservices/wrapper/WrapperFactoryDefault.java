@@ -48,6 +48,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -92,8 +93,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -427,11 +428,15 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private static <R> SimpleSession authSessionFrom(AsyncControl<R> asyncControl, AuthenticationSession authSession) {
-        val clock = Optional.ofNullable(asyncControl.getClock())
-                .orElseGet(VirtualClock::system);
-        val user = Optional.ofNullable(asyncControl.getUser())
-                .orElseGet(authSession::getUser);
-        return SimpleSession.validOf(clock, user);
+        
+        val executionContext = ExecutionContext.builder()
+        .clock(Optional.ofNullable(asyncControl.getClock())
+                .orElseGet(VirtualClock::system))
+        .user(Optional.ofNullable(asyncControl.getUser())
+                .orElseGet(authSession::getUser))
+        .build();
+        
+        return SimpleSession.validOf(executionContext);
     }
 
     @Data

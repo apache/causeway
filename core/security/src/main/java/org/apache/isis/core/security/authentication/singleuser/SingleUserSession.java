@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.security.authentication.singleuser;
 
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
@@ -27,8 +26,9 @@ public final class SingleUserSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final UserMemento DEFAULT_SINGLE_USER = 
-            UserMemento.ofName("prototyping");
+    private static final ExecutionContext DEFAULT_SINGLE_USER_ENVIRONMENT = 
+            ExecutionContext.ofUserWithSystemDefaults(
+                    UserMemento.ofName("prototyping"));
 
     /**
      * Defaults session's authentication validation code to <tt>""</tt>.
@@ -38,12 +38,7 @@ public final class SingleUserSession extends AuthenticationSessionAbstract {
     }
 
     public SingleUserSession(final String authValidationCode) {
-        super(VirtualClock.system(), DEFAULT_SINGLE_USER, authValidationCode);
+        super(DEFAULT_SINGLE_USER_ENVIRONMENT, authValidationCode);
     }
-
-
-
-
-    
     
 }

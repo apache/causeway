@@ -23,9 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.RoleMemento;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 
@@ -42,10 +41,7 @@ implements AuthenticationSession, Serializable {
     // -- Constructor, fields
 
     @Getter(onMethod_ = {@Override}) @NonNull 
-    private final VirtualClock clock;
-    
-    @Getter(onMethod_ = {@Override}) @NonNull 
-    private final UserMemento user;
+    private final ExecutionContext executionEnvironment;
     
     @Getter(onMethod_ = {@Override}) @NonNull 
     private final String userName;
@@ -62,19 +58,12 @@ implements AuthenticationSession, Serializable {
     private final Map<String, Object> attributeByName = new HashMap<String, Object>();
 
     public AuthenticationSessionAbstract(
-            @NonNull final UserMemento user) {
-        this(VirtualClock.system(), user, DEFAULT_AUTH_VALID_CODE);
-    }
-
-    public AuthenticationSessionAbstract(
-            @NonNull final VirtualClock clock,
-            @NonNull final UserMemento user,
+            @NonNull final ExecutionContext executionEnvironment,
             @NonNull final String validationCode) {
 
-        this.clock = clock;
-        this.user = user;
-        this.userName = user.getName();
-        this.roles = Can.ofCollection(user.getRoles())
+        this.executionEnvironment = executionEnvironment;
+        this.userName = getUser().getName();
+        this.roles = Can.ofCollection(getUser().getRoles())
                 .map(RoleMemento::getName);
 
         this.validationCode = validationCode;

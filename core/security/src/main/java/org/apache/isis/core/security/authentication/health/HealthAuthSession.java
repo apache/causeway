@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.security.authentication.health;
 
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
@@ -25,13 +26,15 @@ public class HealthAuthSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final UserMemento HEALTH_USER = 
-            UserMemento.ofNameAndRoleNames(
-                    "__health", // user name
-                    "__health-role"); // role(s) 
+    private static final ExecutionContext HEALTH_EXEC_CTX = 
+            ExecutionContext.ofUserWithSystemDefaults(
+                    UserMemento.ofNameAndRoleNames(
+                            "__health", // user name
+                            "__health-role") // role(s) 
+                    );
 
     public HealthAuthSession() {
-        super(HEALTH_USER);
+        super(HEALTH_EXEC_CTX, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
     }
 
 

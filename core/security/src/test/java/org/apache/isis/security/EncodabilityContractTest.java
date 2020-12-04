@@ -52,7 +52,7 @@ public abstract class EncodabilityContractTest {
     @Before
     public void setUp() throws Exception {
         serializable = createEncodable();
-        simpleAuthSession = SimpleSession.validOf(UserMemento.ofName("test"));
+        simpleAuthSession = SimpleSession.validOfUserWithSystemDefaults(UserMemento.ofName("test"));
     }
 
     /**

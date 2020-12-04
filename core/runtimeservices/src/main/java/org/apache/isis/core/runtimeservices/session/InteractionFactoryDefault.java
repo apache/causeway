@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
-import org.apache.isis.core.runtime.iactn.InteractionEnvironment;
+import org.apache.isis.core.runtime.iactn.InteractionLayer;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
@@ -154,14 +154,14 @@ implements InteractionFactory, InteractionTracker {
 
     }
 
-    private final ThreadLocal<Stack<InteractionEnvironment>> interactionClosureStack = 
+    private final ThreadLocal<Stack<InteractionLayer>> interactionClosureStack = 
             ThreadLocal.withInitial(Stack::new);
     
     @Override
-    public InteractionEnvironment openInteraction(final @NonNull AuthenticationSession authSessionToUse) {
+    public InteractionLayer openInteraction(final @NonNull AuthenticationSession authSessionToUse) {
 
         val interactionSession = getOrCreateInteractionSession(authSessionToUse);
-        val newInteractionClosure = new InteractionEnvironment(interactionSession, authSessionToUse);
+        val newInteractionClosure = new InteractionLayer(interactionSession, authSessionToUse);
         
         interactionClosureStack.get().push(newInteractionClosure);
 
@@ -198,7 +198,7 @@ implements InteractionFactory, InteractionTracker {
     }
 
 	@Override
-    public Optional<InteractionEnvironment> currentInteractionClosure() {
+    public Optional<InteractionLayer> currentInteractionEnvironment() {
     	val stack = interactionClosureStack.get();
     	return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
     }
