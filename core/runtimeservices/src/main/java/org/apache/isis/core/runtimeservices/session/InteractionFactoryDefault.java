@@ -154,7 +154,7 @@ implements InteractionFactory, InteractionTracker {
 
     }
 
-    private final ThreadLocal<Stack<InteractionLayer>> interactionClosureStack = 
+    private final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = 
             ThreadLocal.withInitial(Stack::new);
     
     @Override
@@ -163,7 +163,7 @@ implements InteractionFactory, InteractionTracker {
         val interactionSession = getOrCreateInteractionSession(authSessionToUse);
         val newInteractionClosure = new InteractionLayer(interactionSession, authSessionToUse);
         
-        interactionClosureStack.get().push(newInteractionClosure);
+        interactionLayerStack.get().push(newInteractionClosure);
 
         if(isInTopLevelClosure()) {
         	postSessionOpened(interactionSession);
@@ -172,7 +172,7 @@ implements InteractionFactory, InteractionTracker {
         if(log.isDebugEnabled()) {
             log.debug("new InteractionClosure created (conversation-id={}, total-sessions-on-stack={}, {})", 
                     conversationId.get(), 
-                    interactionClosureStack.get().size(),
+                    interactionLayerStack.get().size(),
                     _Probe.currentThreadId());
         }
         
@@ -182,30 +182,30 @@ implements InteractionFactory, InteractionTracker {
     private InteractionSession getOrCreateInteractionSession(
     		final @NonNull AuthenticationSession authSessionToUse) {
     	
-    	return interactionClosureStack.get().isEmpty()
+    	return interactionLayerStack.get().isEmpty()
     			? new InteractionSession(metaModelContext, authSessionToUse)
-				: interactionClosureStack.get().firstElement().getInteractionSession();
+				: interactionLayerStack.get().firstElement().getInteractionSession();
     }
 
     @Override
     public void closeSessionStack() {
         log.debug("about to close IsisInteraction stack (conversation-id={}, total-sessions-on-stack={}, {})", 
                 conversationId.get(), 
-                interactionClosureStack.get().size(),
+                interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
         closeInteractionStackDownToStackSize(0);
     }
 
 	@Override
-    public Optional<InteractionLayer> currentInteractionEnvironment() {
-    	val stack = interactionClosureStack.get();
+    public Optional<InteractionLayer> currentInteractionLayer() {
+    	val stack = interactionLayerStack.get();
     	return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
     }
 
     @Override
     public boolean isInInteractionSession() {
-        return !interactionClosureStack.get().isEmpty();
+        return !interactionLayerStack.get().isEmpty();
     }
 
     @Override
@@ -229,7 +229,7 @@ implements InteractionFactory, InteractionTracker {
             @NonNull final AuthenticationSession authenticationSession, 
             @NonNull final Callable<R> callable) {
         
-        final int stackSizeWhenEntering = interactionClosureStack.get().size();
+        final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(authenticationSession);
         
         try {
@@ -275,7 +275,7 @@ implements InteractionFactory, InteractionTracker {
     // -- HELPER
     
     private boolean isInTopLevelClosure() {
-    	return interactionClosureStack.get().size()==1; 
+    	return interactionLayerStack.get().size()==1; 
     }
     
     private void postSessionOpened(InteractionSession newIsisInteraction) {
@@ -295,10 +295,10 @@ implements InteractionFactory, InteractionTracker {
         log.debug("about to close IsisInteraction stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,
                 conversationId.get(), 
-                interactionClosureStack.get().size(),
+                interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
         
-        val stack = interactionClosureStack.get();
+        val stack = interactionLayerStack.get();
         while(stack.size()>downToStackSize) {
         	if(isInTopLevelClosure()) {
         		// keep the stack unmodified yet, to allow for callbacks to properly operate
@@ -308,7 +308,7 @@ implements InteractionFactory, InteractionTracker {
         }
         if(downToStackSize == 0) {
             // cleanup thread-local
-            interactionClosureStack.remove();
+            interactionLayerStack.remove();
             conversationId.remove();
         }
     }

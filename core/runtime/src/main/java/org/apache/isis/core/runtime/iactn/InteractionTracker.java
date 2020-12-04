@@ -39,18 +39,18 @@ extends
 
     boolean isInInteractionSession();
     
-    /** @return the InteractionClosure that sits on top of the current 
+    /** @return the InteractionLayer that sits on top of the current 
      * request- or test-scoped InteractionSession*/
-    Optional<InteractionLayer> currentInteractionEnvironment();
+    Optional<InteractionLayer> currentInteractionLayer();
     
     /** @return the current request- or test-scoped InteractionSession*/
     default Optional<InteractionSession> currentInteractionSession() {
-    	return currentInteractionEnvironment().map(InteractionLayer::getInteractionSession);
+    	return currentInteractionLayer().map(InteractionLayer::getInteractionSession);
     }
     
     @Override
     default Optional<AuthenticationSession> currentAuthenticationSession() {
-        return currentInteractionEnvironment().map(InteractionLayer::getAuthenticationSession);
+        return currentInteractionLayer().map(InteractionLayer::getAuthenticationSession);
     }
     
     default Optional<ExecutionContext> currentExecutionEnvironment() {

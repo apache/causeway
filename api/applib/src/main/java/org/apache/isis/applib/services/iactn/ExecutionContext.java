@@ -68,7 +68,7 @@ public final class ExecutionContext {
     // -- FACTORIES
     
     /**
-     * Creates a new ExecutionEnvironment with the specified user and 
+     * Creates a new {@link ExecutionContext} with the specified user and 
      * system defaults for clock, locale and time-zone.
      */
     public static ExecutionContext ofUserWithSystemDefaults(
