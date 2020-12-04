@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.iactn;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -37,10 +38,12 @@ import lombok.Value;
  */
 @Value @Builder
 @RequiredArgsConstructor
-public final class ExecutionContext {
+public final class ExecutionContext implements Serializable {
+    
+    private static final long serialVersionUID = -220896735209733865L;
     
     // -- IMMUTABLE FIELDS
-    
+
     /**
      * The (programmatically) simulated (or actual) user.
      * 
