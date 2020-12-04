@@ -83,4 +83,12 @@ public interface AuthenticationSession extends Serializable {
          */
         EXTERNAL
     }
+
+    // -- WITHERS
+    
+    /**
+     * Returns a copy with given {@code executionContext}.
+     * @param executionContext
+     */
+    AuthenticationSession withExecutionContext(ExecutionContext executionContext);
 }

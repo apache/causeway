@@ -51,8 +51,4 @@ public class InteractionLayer extends RuntimeContextBase {
 		this.executionContext = executionContext; 
 	}
 
-	public InteractionLayer(final @NonNull InteractionSession interactionSession) {
-		this(interactionSession, interactionSession.getAuthenticationSession().getExecutionContext());
-	}
-
 }

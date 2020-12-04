@@ -56,7 +56,7 @@ public class ReplicateAndReplayJob implements Job {
                     secondaryConfig.getPrimaryUser(), 
                     secondaryConfig.getQuartzRoles().stream());
             
-            authSession = SimpleSession.validOfUserWithSystemDefaults(user);
+            authSession = SimpleSession.validOf(user);
             exec(quartzContext);
         }
     }

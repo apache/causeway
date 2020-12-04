@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.wrapper.control;
 
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
@@ -74,7 +76,7 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
     // tag::refguide[]
     @Getter
     private VirtualClock clock;                                         // <.>
-    public AsyncControl<R> withClock(final VirtualClock clock) {
+    public AsyncControl<R> withClock(final @NonNull VirtualClock clock) {
         // end::refguide[]
         this.clock = clock;
         return this;
@@ -84,12 +86,44 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
     // end::refguide[]
     /**
+     * Defaults to the system clock, if not overridden
+     */
+    // tag::refguide[]
+    @Getter
+    private Locale locale;                                         // <.>
+    public AsyncControl<R> withLocale(final @NonNull Locale locale) {
+        // end::refguide[]
+        this.locale = locale;
+        return this;
+        // tag::refguide[]
+        // ...
+    }
+
+    // end::refguide[]
+    /**
+     * Defaults to the system time zone, if not overridden
+     */
+    // tag::refguide[]
+    @Getter
+    private TimeZone timeZone;                                         // <.>
+    public AsyncControl<R> withTimeZone(final @NonNull TimeZone timeZone) {
+        // end::refguide[]
+        this.timeZone = timeZone;
+        return this;
+        // tag::refguide[]
+        // ...
+    }
+
+    // end::refguide[]
+
+
+    /**
      * Defaults to user initiating the action, if not overridden
      */
     // tag::refguide[]
     @Getter
     private UserMemento user;                                           // <.>
-    public AsyncControl<R> withUser(final UserMemento user) {
+    public AsyncControl<R> withUser(final @NonNull UserMemento user) {
         // end::refguide[]
         this.user = user;
         return this;

@@ -30,12 +30,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.runtime.iactn.InteractionTracker;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +54,7 @@ import jakarta.annotation.PostConstruct;
 public class SudoServiceDefault implements SudoService {
 
     private final InteractionFactory interactionFactory;
+    private final InteractionTracker interactionTracker;
 
     // -- LISTENERS
     
@@ -65,11 +68,30 @@ public class SudoServiceDefault implements SudoService {
     // -- IMPLEMENTATION
     
     @Override
-    public <T> T call(final @NonNull UserMemento user, final @NonNull Callable<T> callable) {
+    public <T> T call(final @NonNull UserMemento sudoUser, final @NonNull Callable<T> callable) {
 
+        val interactionLayer = interactionTracker.currentInteractionLayer()
+                .orElseThrow(()->_Exceptions.illegalState(
+                        "will not execute sudo on top of non authenticated session, use WrapperFactory instead"));
+        
+        val executionContext = interactionLayer.getExecutionContext();
+        
+        val sudoExecutionContext = ExecutionContext.builder()
+        .clock(executionContext.getClock())
+        .locale(executionContext.getLocale())
+        .timeZone(executionContext.getTimeZone())
+        .user(sudoUser)
+        .build();
+        
+        val interactionSession = interactionLayer.getInteractionSession();
+        val sodoSession = interactionSession
+                .getAuthenticationSession()
+                .withExecutionContext(sudoExecutionContext);
+        
         try {
-            beforeCall(user);
-            return interactionFactory.callAuthenticated(SimpleSession.validOfUserWithSystemDefaults(user), callable);
+            beforeCall(sudoUser);
+            
+            return interactionFactory.callAuthenticated(sodoSession, callable);
         } finally {
             afterCall();
         }
@@ -77,9 +99,9 @@ public class SudoServiceDefault implements SudoService {
 
     // -- HELPER
 
-    private void beforeCall(final @NonNull UserMemento user) {
+    private void beforeCall(final @NonNull UserMemento sudoUser) {
         for (val sudoListener : sudoListeners) {
-            sudoListener.beforeCall(user);
+            sudoListener.beforeCall(sudoUser);
         }
     }
 

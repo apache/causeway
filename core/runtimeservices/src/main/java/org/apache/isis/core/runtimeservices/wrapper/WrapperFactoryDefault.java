@@ -41,7 +41,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
@@ -102,7 +101,6 @@ import org.apache.isis.core.runtimeservices.wrapper.handlers.DomainObjectInvocat
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
@@ -427,16 +425,23 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return MemberAndTarget.foundAction(targetActionIfAny.get(), currentObjectManager().adapt(mixedIn), method);
     }
 
-    private static <R> SimpleSession authSessionFrom(AsyncControl<R> asyncControl, AuthenticationSession authSession) {
+    private static <R> AuthenticationSession authSessionFrom(AsyncControl<R> asyncControl, AuthenticationSession authSession) {
+    
+        val executionContext = authSession.getExecutionContext();
         
-        val executionContext = ExecutionContext.builder()
+        val newExecutionContext = ExecutionContext.builder()
         .clock(Optional.ofNullable(asyncControl.getClock())
-                .orElseGet(VirtualClock::system))
+                .orElseGet(executionContext::getClock))
+        .locale(Optional.ofNullable(asyncControl.getLocale())
+                .orElseGet(executionContext::getLocale))
+        .timeZone(Optional.ofNullable(asyncControl.getTimeZone())
+                .orElseGet(executionContext::getTimeZone))
         .user(Optional.ofNullable(asyncControl.getUser())
-                .orElseGet(authSession::getUser))
+                .orElseGet(executionContext::getUser))
         .build();
         
-        return SimpleSession.validOf(executionContext);
+        return authSession.withExecutionContext(newExecutionContext);
+        
     }
 
     @Data

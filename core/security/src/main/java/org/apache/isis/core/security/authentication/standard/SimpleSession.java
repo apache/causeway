@@ -33,37 +33,24 @@ extends AuthenticationSessionAbstract {
     private static final long serialVersionUID = 1L;
     
     // -- FACTORIES
-    
+
     public static SimpleSession of( 
-            final @NonNull ExecutionContext executionEnvironment,
+            final @NonNull UserMemento user,
             final @NonNull String validationCode) {
-        return new SimpleSession(executionEnvironment, validationCode);
+        return new SimpleSession(ExecutionContext.ofUserWithSystemDefaults(user), validationCode);
     }
     
     public static SimpleSession validOf( 
-            final @NonNull ExecutionContext executionEnvironment) {
-        return of(executionEnvironment, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
-    }
-    
-    @Deprecated //
-    public static SimpleSession ofUserWithSystemDefaults( 
-            final @NonNull UserMemento user,
-            final @NonNull String validationCode) {
-        return of(ExecutionContext.ofUserWithSystemDefaults(user), validationCode);
-    }
-    
-    @Deprecated //
-    public static SimpleSession validOfUserWithSystemDefaults( 
             final @NonNull UserMemento user) {
-        return validOf(ExecutionContext.ofUserWithSystemDefaults(user));
+        return of(user, DEFAULT_AUTH_VALID_CODE);
     }
     
     // -- CONSTRUCTOR
     
     public SimpleSession(
-            final @NonNull ExecutionContext executionEnvironment, 
+            final @NonNull ExecutionContext executionContext, 
             final @NonNull String validationCode) {
-        super(executionEnvironment, validationCode);
+        super(executionContext, validationCode);
     }
 
     @Getter @Setter

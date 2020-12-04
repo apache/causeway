@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -45,11 +46,22 @@ implements AuthenticationSession, Serializable {
     // -- CONSTRUCTOR
 
     protected AuthenticationSessionAbstract(
-            @NonNull final ExecutionContext executionEnvironment,
-            @NonNull final String validationCode) {
+            final @NonNull ExecutionContext executionContext,
+            final @NonNull String validationCode) {
 
-        this.executionContext = executionEnvironment;
+        this.executionContext = executionContext;
         this.validationCode = validationCode;
+    }
+    
+    // -- WITHERS
+    
+    /**
+     * Returns a copy with given {@code executionContext}.
+     * @param executionContext
+     */
+    @Override
+    public AuthenticationSession withExecutionContext(final @NonNull ExecutionContext executionContext) {
+        return new SimpleSession(executionContext, validationCode);
     }
 
     // -- TO STRING, EQUALS, HASHCODE

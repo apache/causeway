@@ -41,7 +41,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         }
         
         val user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles()); 
-        return SimpleSession.ofUserWithSystemDefaults(user, validationCode);
+        return SimpleSession.of(user, validationCode);
     }
 
 
