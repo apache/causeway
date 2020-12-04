@@ -145,7 +145,7 @@ public class BulkUpdateManagerForDemoToDoItem {
     }
 
     private String currentUserName() {
-        return userService.getUser().getName();
+        return userService.getUserNameElseNobody();
     }
 
     @Collection

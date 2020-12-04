@@ -86,7 +86,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final String actionId = actionIdentifier.substring(actionIdentifier.indexOf('#')+1);
         final String targetTitle = targetBookmark.toString() + ": " + actionId;
 
-        final String currentUser = userService.getUser().getName();
+        final String currentUser = userService.getUserNameElseNobody();
 
         final ActionDto actionDto = new ActionDto();
         commandDtoServiceInternal.addActionArgs(objectAction, actionDto, argumentAdapters);
@@ -132,7 +132,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final String propertyId = propertyIdentifier.substring(propertyIdentifier.indexOf('#')+1);
         final String targetTitle = targetBookmark.toString() + ": " + propertyId;
 
-        final String currentUser = userService.getUser().getName();
+        final String currentUser = userService.getUserNameElseNobody();
 
         final PropertyDto propertyDto = new PropertyDto();
         commandDtoServiceInternal.addPropertyValue(property, propertyDto, newValueAdapterIfAny);

@@ -32,7 +32,6 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
 
 @Service
@@ -45,18 +44,10 @@ public class UserServiceDefault implements UserService {
     @Inject private InteractionTracker isisInteractionTracker;
     
     @Override
-    public UserMemento getUser() {
-        return isisInteractionTracker.currentExecutionContext()
-                .map(ExecutionContext::getUser)
-                .orElseThrow(()->_Exceptions.illegalState("Current thread has not AuthenticationSession."));
-    }
-    
-    @Override
-    public Optional<UserMemento> getUser2() {
+    public Optional<UserMemento> getUser() {
         return isisInteractionTracker.currentExecutionContext()
                 .map(ExecutionContext::getUser);
     }
-
     
 
 }

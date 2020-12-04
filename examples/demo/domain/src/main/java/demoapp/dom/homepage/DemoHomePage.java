@@ -39,7 +39,7 @@ public class DemoHomePage
         implements HasAsciiDocDescription {                     // <.>
 
     public String title() {                                     // <.>
-        return "Hello, " + userService.getUser().getName();
+        return "Hello, " + userService.getUserNameElseNobody();
     }
 
     public AsciiDoc getWelcome() {                              // <.>

@@ -465,7 +465,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public UserMemento getUser() {
-    	return userService.getUser();
+    	return userService.getUser().orElse(null);
     }
 
     /**

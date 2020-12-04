@@ -43,6 +43,7 @@ public final class UserMemento implements Serializable {
     
     private static final long serialVersionUID = 7190090455587885367L;
     private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system"); 
+//    private static final UserMemento NO_USER = UserMemento.ofName("__nobody");
     
     // -- FACTORIES
     
@@ -52,6 +53,14 @@ public final class UserMemento implements Serializable {
     public static UserMemento system() {
         return SYSTEM_USER;
     }
+    
+//    /**
+//     * The framework's internal user with no privileges at all, returned by the
+//     * {@link UserService} if no user is logged in.
+//     */
+//    public static UserMemento nobody() {
+//        return NO_USER;
+//    }
     
     /**
      * Creates a new user with the specified name and no roles.

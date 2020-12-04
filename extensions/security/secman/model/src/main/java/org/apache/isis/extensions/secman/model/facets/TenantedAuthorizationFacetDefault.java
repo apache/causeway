@@ -66,7 +66,7 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
         }
 
         final Object domainObject = ic.getTarget().getPojo();
-        final String userName = userService.getUser().getName();
+        final String userName = userService.getUserNameElseNobody();
 
         final ApplicationUser applicationUser = findApplicationUser(userName);
         if (applicationUser == null) {
@@ -91,7 +91,7 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
         }
 
         final Object domainObject = ic.getTarget().getPojo();
-        final String userName = userService.getUser().getName();
+        final String userName = userService.getUserNameElseNobody();
 
         final ApplicationUser applicationUser = findApplicationUser(userName);
         if (applicationUser == null) {

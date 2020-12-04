@@ -406,11 +406,11 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- helpers
     boolean isForSelf() {
-        final String currentUserName = userService.getUser().getName();
+        final String currentUserName = userService.getUserElseFail().getName();
         return Objects.equals(getUsername(), currentUserName);
     }
     boolean isRunAsAdministrator() {
-        final UserMemento currentUser = userService.getUser();
+        final UserMemento currentUser = userService.getUserElseFail();
         final List<RoleMemento> roles = currentUser.getRoles();
 
         val adminRoleSuffix = ":" + configBean.getAdminRoleName();

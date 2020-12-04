@@ -53,7 +53,7 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
     @Override
     public void execute(ExecutionContext executionContext) {
 
-        final String ownedBy = this.user != null ? this.user : userService.getUser().getName();
+        final String ownedBy = this.user != null ? this.user : userService.getUserNameElseNobody();
 
         installFor(ownedBy, executionContext);
 

@@ -47,7 +47,7 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
     @Override
     protected void execute(ExecutionContext executionContext) {
 
-        final String ownedBy = this.user != null? this.user : userService.getUser().getName();
+        final String ownedBy = this.user != null? this.user : userService.getUserNameElseNobody();
 
         executionContext.executeChild(this, new ExcelDemoToDoItem_tearDown2(ownedBy));
 

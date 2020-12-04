@@ -196,7 +196,7 @@ class PdfJsViewerPanel extends ScalarPanelAbstractLegacy<ScalarPropertyModel> im
     }
 
     private PdfJsViewerAdvisor.InstanceKey toInstanceKey(UserService userService) {
-        String userName = userService.getUser().getName();
+        String userName = userService.getUserNameElseNobody();
 
         val model = getModel();
         val propertyId = model.getIdentifier();

@@ -74,7 +74,7 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
 
         final LocalDate dueBy = daysFromToday(daysFromToday);
         final String user = executionContext.getParameter("user");
-        final String username = user != null && user.length() > 0 ? user : userService.getUser().getName();
+        final String username = user != null && user.length() > 0 ? user : userService.getUserNameElseNobody();
         ExcelDemoToDoItem toDoItem = toDoItemRepository.findToDoItemsByDescription(description);
         if(toDoItem != null) {
             toDoItem.setCategory(category);

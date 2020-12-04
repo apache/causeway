@@ -73,7 +73,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
         }
         
         val currentTime = clockService.getClock().javaSqlTimestamp();
-        val currentUser = userService.getUser().getName();
+        val currentUser = userService.getUserNameElseNobody();
         val currentTransactionId = transactionService.currentTransactionId();
         
         hasEnlistedEntityPropertyChanges.streamPropertyChanges(
