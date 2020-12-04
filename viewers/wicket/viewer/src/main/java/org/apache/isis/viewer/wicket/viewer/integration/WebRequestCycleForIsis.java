@@ -276,7 +276,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             final String translatedPrefix = translate("Action no longer available");
             final String message = translatedSuffixIfAny != null
                     ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
-                            : translatedPrefix;
+                    : translatedPrefix;
             
             broker.addMessage(message);
             

@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -129,10 +131,7 @@ public final class UserMemento implements Serializable {
      *
      * @return true if the names match (is case sensitive).
      */
-    public boolean isCurrentUser(final String userName) {
-        if (userName == null) {
-            throw new IllegalArgumentException("no user name provided");
-        }
+    public boolean isCurrentUser(final @Nullable String userName) {
         return name.equals(userName);
     }
     
@@ -141,7 +140,7 @@ public final class UserMemento implements Serializable {
                 .map(RoleMemento::getName);
     }
     
-    public boolean hasRoleName(final @NonNull String roleName) {
+    public boolean hasRoleName(final @Nullable String roleName) {
         return streamRoleNames().anyMatch(myRoleName->myRoleName.equals(roleName));
     }
 
