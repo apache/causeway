@@ -22,9 +22,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
-import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.collections.Can;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -41,12 +39,6 @@ implements AuthenticationSession, Serializable {
     @Getter(onMethod_ = {@Override})  
     private final @NonNull ExecutionContext executionContext;
     
-    @Getter(onMethod_ = {@Override}) 
-    private final @NonNull String userName;
-    
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull Can<String> roles;
-    
     @Getter(onMethod_ = {@Override})
     private final @NonNull String validationCode;
 
@@ -58,20 +50,9 @@ implements AuthenticationSession, Serializable {
             @NonNull final String validationCode) {
 
         this.executionContext = executionEnvironment;
-        this.userName = getUser().getName();
-        this.roles = Can.ofCollection(getUser().getRoles())
-                .map(RoleMemento::getName);
-
         this.validationCode = validationCode;
         this.messageBroker = new MessageBroker();
         // nothing to do
-    }
-
-    // -- User Name
-
-    @Override
-    public boolean hasUserNameOf(final String userName) {
-        return Objects.equals(userName, getUserName());
     }
 
     // -- TO STRING, EQUALS, HASHCODE
@@ -100,7 +81,10 @@ implements AuthenticationSession, Serializable {
     }
 
     private boolean isEqualsTo(final AuthenticationSessionAbstract other) {
-        if(!getExecutionContext().equals(other.getExecutionContext())) {
+        if(!Objects.equals(this.getValidationCode(), other.getValidationCode())) {
+            return false;
+        }
+        if(!Objects.equals(this.getExecutionContext(), other.getExecutionContext())) {
             return false;
         }
         return true;

@@ -24,24 +24,18 @@ import java.io.Serializable;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.commons.collections.Can;
 
 /**
  * The representation within the system of an authenticated user.
  */
 public interface AuthenticationSession extends Serializable {
 
-    /**
-     * The name of the authenticated user; for display purposes only.
-     */
-    String getUserName();
-
-    boolean hasUserNameOf(String userName);
-
-    /**
-     * The roles this user belongs to
-     */
-    Can<String> getRoles();
+//    /**
+//     * The name of the authenticated user; for display purposes only.
+//     */
+    default String getUserName() {
+        return getUser().getName();
+    }
 
     /**
      * A unique code given to this session during authentication.

@@ -125,7 +125,7 @@ public class AuthenticationManager {
             }
         }
         final String userName = userByValidationCode.get(session.getValidationCode());
-        return session.hasUserNameOf(userName);
+        return session.getUser().isCurrentUser(userName);
     }
 
 

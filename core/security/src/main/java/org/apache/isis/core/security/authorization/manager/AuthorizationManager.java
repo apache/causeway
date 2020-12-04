@@ -103,21 +103,21 @@ public class AuthorizationManager {
 
     // -- HELPER
     
-    private static boolean containsSudoSuperuserRole(@Nullable final AuthenticationSession session) {
-        if(session==null) {
+    private static boolean containsSudoSuperuserRole(
+            final @Nullable AuthenticationSession session) {
+        if(session==null || session.getUser()==null) {
             return false;
         }
-        return session.getRoles().contains(SudoService.ACCESS_ALL_ROLE.getName());
+        return session.getUser().hasRoleName(SudoService.ACCESS_ALL_ROLE.getName());
     }
     
     private boolean anyMatchOnRoles(
-            @Nullable final AuthenticationSession session, 
-            @NonNull final Predicate<String> predicate) {
-        if(session==null) {
+            final @Nullable AuthenticationSession session, 
+            final @NonNull Predicate<String> predicate) {
+        if(session==null || session.getUser()==null) {
             return false;
         }
-        return session.getRoles()
-                .stream()
+        return session.getUser().streamRoleNames()
                 .anyMatch(predicate);
     }
     

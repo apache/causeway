@@ -140,6 +140,10 @@ public final class UserMemento implements Serializable {
         return roles.stream()
                 .map(RoleMemento::getName);
     }
+    
+    public boolean hasRoleName(final @NonNull String roleName) {
+        return streamRoleNames().anyMatch(myRoleName->myRoleName.equals(roleName));
+    }
 
     // -- TO STRING, EQUALS, HASHCODE
     
@@ -180,7 +184,6 @@ public final class UserMemento implements Serializable {
     public int hashCode() {
         return getName().hashCode(); // its good enough to hash on just the user's name
     }
-        
     
     // tag::refguide[]
 
