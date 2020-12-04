@@ -85,7 +85,6 @@ public class IsisSystemEnvironment {
             this.setUnitTesting(primed.isUnitTesting());
         }
         _Context.putSingleton(IsisSystemEnvironment.class, this);
-        
     }
     
     @PreDestroy

@@ -29,7 +29,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.converters.PatternsConverter;
+import org.apache.isis.core.config.environment.IsisLocaleInitializer;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.environment.IsisTimeZoneInitializer;
 import org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
@@ -39,6 +41,8 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
     // @Component's
     PatternsConverter.class,
     IsisBeanFactoryPostProcessorForSpring.class,
+    IsisLocaleInitializer.class,
+    IsisTimeZoneInitializer.class,
     PatternOptionalStringConstraintValidator.class,
 
     // @Service's
@@ -62,6 +66,5 @@ public class IsisModuleCoreConfig {
     public Map<String, String> getResteasyConfigProps() {
         return new HashMap<>();
     }
-
 
 }

@@ -16,24 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.runtime.session.init;
+package org.apache.isis.core.config.environment;
 
 import java.util.Locale;
 import java.util.Optional;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.extern.log4j.Log4j2;
 
+import jakarta.annotation.PostConstruct;
+
+@Component
 @Log4j2
 public class IsisLocaleInitializer {
-
+    
+    @PostConstruct @Inject
     public void initLocale(final IsisConfiguration configuration) {
         final Optional<String> localeSpecOpt = configuration.getCore().getRuntime().getLocale();
         localeSpecOpt.map(IsisLocaleInitializer::toLocale).ifPresent(IsisLocaleInitializer::setLocaleDefault);
         log.debug("locale is {}", Locale.getDefault());
     }
+    
+    // -- HELPER
 
     private static Locale toLocale(String localeSpec) {
         final int pos = localeSpec.indexOf('_');

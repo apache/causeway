@@ -16,18 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.runtime.session.init;
+package org.apache.isis.core.config.environment;
 
 import java.util.TimeZone;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.extern.log4j.Log4j2;
 
+import jakarta.annotation.PostConstruct;
+
+@Component
 @Log4j2
 public class IsisTimeZoneInitializer {
 
+    @PostConstruct @Inject
     public void initTimeZone(final IsisConfiguration configuration) {
         final String timeZoneSpec = configuration.getCore().getRuntime().getTimezone();
         if (timeZoneSpec != null) {

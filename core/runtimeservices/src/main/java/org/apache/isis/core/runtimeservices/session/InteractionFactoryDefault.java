@@ -52,16 +52,14 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
+import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionLayer;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
+import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeCloseListener;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
-import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
-import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
@@ -101,8 +99,6 @@ implements InteractionFactory, InteractionTracker {
     @Inject ClockService clockService;
     @Inject CommandPublisher commandPublisher;
 
-    private IsisLocaleInitializer localeInitializer;
-    private IsisTimeZoneInitializer timeZoneInitializer;
     private IsisInteractionScopeCloseListener isisInteractionScopeCloseListener;
 
     @PostConstruct
@@ -116,14 +112,8 @@ implements InteractionFactory, InteractionTracker {
 
         requires(authenticationManager, "authenticationManager");
 
-        this.localeInitializer = new IsisLocaleInitializer();
-        this.timeZoneInitializer = new IsisTimeZoneInitializer();
-
         log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
-
-        localeInitializer.initLocale(configuration);
-        timeZoneInitializer.initTimeZone(configuration);
 
         runtimeEventService.fireAppPreMetamodel();
 
