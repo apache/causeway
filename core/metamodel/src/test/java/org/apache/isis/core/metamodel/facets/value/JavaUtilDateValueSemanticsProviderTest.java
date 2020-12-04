@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.value;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.junit.Before;
@@ -37,6 +38,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 
+import lombok.val;
+
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private java.util.Date date;
@@ -45,7 +48,6 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
     @Before
     public void setUpObjects() throws Exception {
 
-        TestClock.initialize();
         date = new java.util.Date(0);
 
         holder = new FacetHolderImpl();
@@ -77,14 +79,26 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "1980-01-01 10:40");
 
+        // prepare environment
+        val defaultLocale = Locale.getDefault();
+        val defaultTimezone = TimeZone.getDefault();
+        Locale.setDefault(Locale.UK);
+        TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
+        
+        val parsedDate = getValue().parseTextEntry(null, "1980-01-01 10:40");
+        
+        // restore environment
+        Locale.setDefault(defaultLocale);
+        TimeZone.setDefault(defaultTimezone);
+        
+        
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
         calendar.set(1980, 0, 1, 10, 40, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        assertEquals(calendar.getTime(), newValue);
+        assertEquals(calendar.getTime(), parsedDate);
     }
     
     // -- HELPER

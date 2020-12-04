@@ -46,7 +46,6 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
     @Before
     public void setUpObjects() throws Exception {
 
-        TestClock.initialize();
         date = new Date(0);
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);

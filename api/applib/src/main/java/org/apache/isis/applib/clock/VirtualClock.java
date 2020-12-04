@@ -24,6 +24,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -73,9 +75,20 @@ public interface VirtualClock extends Serializable {
         return new VirtualClock_withOffset(offsetMillis);
     }
     
+    /**
+     * Always return the time as given {@link Instant} {@code frozenAt}
+     */
     static VirtualClock frozenAt(@NonNull Instant frozenAt) {
-        // positive if the resulting clock is in the future
         return new VirtualClock_frozen(frozenAt);
+    }
+    
+    /**
+     * Always return the time as 2003/8/17 21:30:25
+     */
+    static VirtualClock frozenTestClock() {
+        val frozenAt = Instant.from(
+                ZonedDateTime.of(2003, 7, 17, 21, 30, 25, 0, ZoneId.from(ZoneOffset.UTC)));
+        return frozenAt(frozenAt);
     }
     
     // -- UTILITY
