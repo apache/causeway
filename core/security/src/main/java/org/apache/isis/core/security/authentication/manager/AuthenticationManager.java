@@ -36,10 +36,10 @@ import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.NoAuthenticatorException;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.Registrar;
@@ -79,7 +79,7 @@ public class AuthenticationManager {
 
     // -- SESSION MANAGEMENT (including authenticate)
 
-    public synchronized final AuthenticationSession authenticate(AuthenticationRequest request) {
+    public synchronized final Authentication authenticate(AuthenticationRequest request) {
         
         if (request == null) {
             return null;
@@ -114,13 +114,13 @@ public class AuthenticationManager {
     }
 
 
-    public final boolean isSessionValid(final AuthenticationSession session) {
+    public final boolean isSessionValid(final Authentication session) {
         if(session==null) {
             return false;
         }
-        if(session instanceof SimpleSession) {
-            final SimpleSession simpleSession = (SimpleSession) session;
-            if(simpleSession.getType() == AuthenticationSession.Type.EXTERNAL) {
+        if(session instanceof SimpleAuthentication) {
+            final SimpleAuthentication simpleSession = (SimpleAuthentication) session;
+            if(simpleSession.getType() == Authentication.Type.EXTERNAL) {
                 return true;
             }
         }
@@ -129,7 +129,7 @@ public class AuthenticationManager {
     }
 
 
-    public void closeSession(AuthenticationSession session) {
+    public void closeSession(Authentication session) {
         for (Authenticator authenticator : authenticators) {
             authenticator.logout(session);
         }

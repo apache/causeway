@@ -24,7 +24,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -44,7 +44,7 @@ public class IsisRequestCycle {
 
     // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
 
-    public void onBeginRequest(AuthenticationSession authenticationSession) {
+    public void onBeginRequest(Authentication authenticationSession) {
 
         isisInteractionFactory.openInteraction(authenticationSession);
 

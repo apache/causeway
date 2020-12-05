@@ -52,9 +52,9 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
@@ -98,7 +98,7 @@ public class AuthenticatorShiro implements Authenticator {
     }
 
     @Override
-    public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
+    public Authentication authenticate(final AuthenticationRequest request, final String code) {
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
             return null;
@@ -150,14 +150,14 @@ public class AuthenticatorShiro implements Authenticator {
     }
 
     @Override
-    public void logout(final AuthenticationSession session) {
+    public void logout(final Authentication session) {
         Subject currentSubject = SecurityUtils.getSubject();
         if(currentSubject.isAuthenticated()) {
             currentSubject.logout();
         }
     }
 
-    AuthenticationSession authenticationSessionFor(
+    Authentication authenticationSessionFor(
             AuthenticationRequest request, 
             String validationCode, 
             AuthenticationToken token, 
@@ -171,7 +171,7 @@ public class AuthenticatorShiro implements Authenticator {
                 request.streamRoles());
         
         val user = UserMemento.ofNameAndRoleNames(request.getName(), roles); 
-        return SimpleSession.of(user, validationCode);
+        return SimpleAuthentication.of(user, validationCode);
     }
 
     /**

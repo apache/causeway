@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import junit.framework.TestCase;
@@ -65,7 +65,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     protected TranslationService mockTranslationService;
     protected AuthenticationContext mockAuthenticationContext;
-    protected AuthenticationSession mockAuthenticationSession;
+    protected Authentication mockAuthenticationSession;
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
 
@@ -106,7 +106,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         mockAuthenticationContext = context.mock(AuthenticationContext.class);
 
         mockTranslationService = context.mock(TranslationService.class);
-        mockAuthenticationSession = context.mock(AuthenticationSession.class);
+        mockAuthenticationSession = context.mock(Authentication.class);
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 

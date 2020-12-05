@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,7 @@ public class LogoutMenu {
     public String disableLogout() {
         return authenticationSessionTracker.currentAuthenticationSession()
         .map(authenticationSession->
-            authenticationSession.getType() == AuthenticationSession.Type.EXTERNAL
+            authenticationSession.getType() == Authentication.Type.EXTERNAL
             ? "External"
             : null
         )

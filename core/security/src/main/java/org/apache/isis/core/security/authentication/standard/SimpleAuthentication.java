@@ -21,33 +21,33 @@ package org.apache.isis.core.security.authentication.standard;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.security.authentication.AuthenticationAbstract;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-public class SimpleSession
-extends AuthenticationSessionAbstract {
+public class SimpleAuthentication
+extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
     
     // -- FACTORIES
 
-    public static SimpleSession of( 
+    public static SimpleAuthentication of( 
             final @NonNull UserMemento user,
             final @NonNull String validationCode) {
-        return new SimpleSession(ExecutionContext.ofUserWithSystemDefaults(user), validationCode);
+        return new SimpleAuthentication(ExecutionContext.ofUserWithSystemDefaults(user), validationCode);
     }
     
-    public static SimpleSession validOf( 
+    public static SimpleAuthentication validOf( 
             final @NonNull UserMemento user) {
         return of(user, DEFAULT_AUTH_VALID_CODE);
     }
     
     // -- CONSTRUCTOR
     
-    public SimpleSession(
+    public SimpleAuthentication(
             final @NonNull ExecutionContext executionContext, 
             final @NonNull String validationCode) {
         super(executionContext, validationCode);

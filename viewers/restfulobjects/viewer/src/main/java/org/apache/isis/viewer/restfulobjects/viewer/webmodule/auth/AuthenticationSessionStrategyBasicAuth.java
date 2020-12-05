@@ -29,13 +29,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.val;
 
 /**
  * Implements the HTTP Basic Auth protocol; does not bind the
- * {@link AuthenticationSession} onto the {@link HttpSession}.
+ * {@link Authentication} onto the {@link HttpSession}.
  */
 public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessionStrategyAbstract {
 
@@ -45,7 +45,7 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
     private static Pattern USER_AND_PASSWORD_REGEX = Pattern.compile("^(.+):(.+)$");
 
     @Override
-    public AuthenticationSession lookupValid(
+    public Authentication lookupValid(
             final HttpServletRequest httpServletRequest, 
             final HttpServletResponse httpServletResponse) {
 
@@ -81,7 +81,7 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
     public void bind(
             HttpServletRequest httpServletRequest, 
             HttpServletResponse httpServletResponse,
-            AuthenticationSession authSession) {
+            Authentication authSession) {
         // TODO Auto-generated method stub
         
     }

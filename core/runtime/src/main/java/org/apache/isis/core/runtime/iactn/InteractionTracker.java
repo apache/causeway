@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 /**
  * 
@@ -70,7 +70,7 @@ extends InteractionContext, AuthenticationContext {
     // -- AUTHENTICATION SESSION TRACKER
     
     @Override
-    default Optional<AuthenticationSession> currentAuthenticationSession() {
+    default Optional<Authentication> currentAuthenticationSession() {
         return currentInteractionLayer().map(InteractionLayer::getAuthenticationSession);
     }
     

@@ -37,7 +37,7 @@ import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -78,7 +78,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
      * it will be used instead.
      * </p>
      */
-    private AuthenticationSession authenticationSession;
+    private Authentication authenticationSession;
 
     public AuthenticatedWebSessionForIsis(Request request) {
         super(request);
@@ -145,7 +145,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
-    public synchronized AuthenticationSession getAuthenticationSession() {
+    public synchronized Authentication getAuthenticationSession() {
         
         commonContext.getInteractionTracker().currentAuthenticationSession()
         .ifPresent(currentAuthenticationSession->{
@@ -185,11 +185,11 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     /**
      * This is a no-op if the {@link #getAuthenticationSession() authentication session}'s
-     * {@link AuthenticationSession#getType() type} is {@link AuthenticationSession.Type#EXTERNAL external} (eg as
+     * {@link Authentication#getType() type} is {@link Authentication.Type#EXTERNAL external} (eg as
      * managed by keycloak).
      */
     public void invalidate() {
-        if(this.authenticationSession.getType() == AuthenticationSession.Type.EXTERNAL) {
+        if(this.authenticationSession.getType() == Authentication.Type.EXTERNAL) {
             return;
         }
         // otherwise

@@ -23,15 +23,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.security.authentication.AuthenticationAbstract;
 import org.apache.isis.security.EncodabilityContractTest;
 
 public abstract class SimpleSessionEncodabilityTestAbstract extends EncodabilityContractTest {
 
     @Override
     protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
-        final AuthenticationSessionAbstract decoded = (AuthenticationSessionAbstract) decodedEncodable;
-        final AuthenticationSessionAbstract original = (AuthenticationSessionAbstract) originalEncodable;
+        final AuthenticationAbstract decoded = (AuthenticationAbstract) decodedEncodable;
+        final AuthenticationAbstract original = (AuthenticationAbstract) originalEncodable;
 
         assertThat(decoded.getUser(), is(equalTo(original.getUser()))); // redundant shortcut
         

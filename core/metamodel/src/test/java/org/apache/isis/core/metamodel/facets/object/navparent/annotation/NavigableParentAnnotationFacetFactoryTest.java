@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -46,7 +46,7 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
     @Mock
     private ManagedObject mockObjectAdapter;
     @Mock
-    private AuthenticationSession mockAuthenticationSession;
+    private Authentication mockAuthenticationSession;
 
     @Before
     public void setUp() throws Exception {

@@ -66,7 +66,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.PojoAdapter;
 
@@ -81,7 +81,7 @@ public class ObjectMemberAbstractTest {
     protected MetaModelContext metaModelContext;
 
     @Mock private AuthenticationContext mockAuthenticationContext;
-    @Mock private AuthenticationSession mockAuthenticationSession;
+    @Mock private Authentication mockAuthenticationSession;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private ObjectSpecification mockSpecForCustomer;
     @Mock private Persistable mockPersistable;

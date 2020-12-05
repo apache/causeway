@@ -26,9 +26,11 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 
 /**
- * The representation within the system of an authenticated user.
+ * An immutable, serializable value type, that holds details about a user's authentication. 
+ * 
+ * @since 2.0
  */
-public interface AuthenticationSession extends Serializable {
+public interface Authentication extends Serializable {
 
     /**
      * The name of the authenticated user; for display purposes only.
@@ -90,5 +92,5 @@ public interface AuthenticationSession extends Serializable {
      * Returns a copy with given {@code executionContext}.
      * @param executionContext
      */
-    AuthenticationSession withExecutionContext(ExecutionContext executionContext);
+    Authentication withExecutionContext(ExecutionContext executionContext);
 }

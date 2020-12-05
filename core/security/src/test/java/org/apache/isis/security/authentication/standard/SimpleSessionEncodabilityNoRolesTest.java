@@ -22,13 +22,13 @@ package org.apache.isis.security.authentication.standard;
 import java.io.Serializable;
 
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 public class SimpleSessionEncodabilityNoRolesTest extends SimpleSessionEncodabilityTestAbstract {
 
     @Override
     protected Serializable createEncodable() {
-        return SimpleSession.validOf(UserMemento.ofName("joe"));
+        return SimpleAuthentication.validOf(UserMemento.ofName("joe"));
     }
 
 }

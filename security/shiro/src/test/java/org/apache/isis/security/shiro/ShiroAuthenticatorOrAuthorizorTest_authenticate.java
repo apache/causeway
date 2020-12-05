@@ -40,7 +40,7 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
 
@@ -93,7 +93,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        AuthenticationSession isisAuthSession = authenticator.authenticate(ar, "test code");
+        Authentication isisAuthSession = authenticator.authenticate(ar, "test code");
 
         assertThat(isisAuthSession, is(not(nullValue())));
         assertThat(isisAuthSession.getUserName(), is("lonestarr"));

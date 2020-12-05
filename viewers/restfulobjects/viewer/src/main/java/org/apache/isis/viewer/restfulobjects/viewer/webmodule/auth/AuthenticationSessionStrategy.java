@@ -22,25 +22,25 @@ package org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 /**
  * Decouples the <code>IsisRestfulObjectsInteractionFilter</code> from the mechanism of obtaining the
- * {@link AuthenticationSession}.
+ * {@link Authentication}.
  */
 public interface AuthenticationSessionStrategy {
 
     /**
-     * Returns a still-valid {@link AuthenticationSession} or {@code null}
-     * @see {@link AuthenticationManager#isSessionValid(AuthenticationSession)
+     * Returns a still-valid {@link Authentication} or {@code null}
+     * @see {@link AuthenticationManager#isSessionValid(Authentication)
      */
-    AuthenticationSession lookupValid(
+    Authentication lookupValid(
             HttpServletRequest httpServletRequest, 
             HttpServletResponse httpServletResponse);
 
     /**
-     * Binds the request to a still-valid {@link AuthenticationSession} if applicable
+     * Binds the request to a still-valid {@link Authentication} if applicable
      * @param httpServletRequest
      * @param httpServletResponse
      * @param authSession
@@ -48,7 +48,7 @@ public interface AuthenticationSessionStrategy {
     void bind(
             HttpServletRequest httpServletRequest, 
             HttpServletResponse httpServletResponse, 
-            AuthenticationSession authSession);
+            Authentication authSession);
 
     void invalidate(
             HttpServletRequest httpServletRequest, 

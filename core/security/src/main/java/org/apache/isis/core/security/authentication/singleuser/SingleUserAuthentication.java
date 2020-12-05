@@ -16,26 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.security.authentication.health;
+package org.apache.isis.core.security.authentication.singleuser;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.security.authentication.AuthenticationAbstract;
 
-public class HealthAuthSession extends AuthenticationSessionAbstract {
+public final class SingleUserAuthentication extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final ExecutionContext HEALTH_EXEC_CTX = 
+    private static final ExecutionContext DEFAULT_SINGLE_USER_ENVIRONMENT = 
             ExecutionContext.ofUserWithSystemDefaults(
-                    UserMemento.ofNameAndRoleNames(
-                            "__health", // user name
-                            "__health-role") // role(s) 
-                    );
+                    UserMemento.ofName("prototyping"));
 
-    public HealthAuthSession() {
-        super(HEALTH_EXEC_CTX, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
+    /**
+     * Defaults session's authentication validation code to {@code ""}
+     */
+    public SingleUserAuthentication() {
+        this(AuthenticationAbstract.DEFAULT_AUTH_VALID_CODE);
     }
 
-
+    public SingleUserAuthentication(final String authValidationCode) {
+        super(DEFAULT_SINGLE_USER_ENVIRONMENT, authValidationCode);
+    }
+    
 }

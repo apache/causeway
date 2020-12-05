@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.iactn;
 
 import java.util.concurrent.Callable;
 
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 /**
  * The factory of {@link InteractionSession}s, also holding a reference to the
@@ -69,7 +69,7 @@ public interface InteractionFactory {
      *
      * @param authenticationSession
      */
-    InteractionLayer openInteraction(AuthenticationSession authenticationSession);
+    InteractionLayer openInteraction(Authentication authenticationSession);
 
     /**
      * @return whether the calling thread is within the context of an open IsisInteractionSession
@@ -89,14 +89,14 @@ public interface InteractionFactory {
      * @param callable - the piece of code to run
      * 
      */
-    <R> R callAuthenticated(AuthenticationSession authenticationSession, Callable<R> callable);
+    <R> R callAuthenticated(Authentication authenticationSession, Callable<R> callable);
     
     /**
-     * Variant of {@link #callAuthenticated(AuthenticationSession, Callable)} that takes a runnable.
+     * Variant of {@link #callAuthenticated(Authentication, Callable)} that takes a runnable.
      * @param authenticationSession
      * @param runnable
      */
-    default void runAuthenticated(AuthenticationSession authenticationSession, ThrowingRunnable runnable) {
+    default void runAuthenticated(Authentication authenticationSession, ThrowingRunnable runnable) {
         final Callable<Void> callable = ()->{runnable.run(); return null;};
         callAuthenticated(authenticationSession, callable);
     }

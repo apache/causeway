@@ -34,15 +34,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.SneakyThrows;
 import lombok.val;
 
 public abstract class EncodabilityContractTest {
 
-    protected AuthenticationSession simpleAuthSession;
+    protected Authentication simpleAuthSession;
     protected Serializable serializable;
 
     public EncodabilityContractTest() {
@@ -52,7 +52,7 @@ public abstract class EncodabilityContractTest {
     @Before
     public void setUp() throws Exception {
         serializable = createEncodable();
-        simpleAuthSession = SimpleSession.validOf(UserMemento.ofName("test"));
+        simpleAuthSession = SimpleAuthentication.validOf(UserMemento.ofName("test"));
     }
 
     /**

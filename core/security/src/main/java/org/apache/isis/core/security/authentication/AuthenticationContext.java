@@ -29,9 +29,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 public interface AuthenticationContext {
 
-    Optional<AuthenticationSession> currentAuthenticationSession();
+    Optional<Authentication> currentAuthenticationSession();
     
-    default AuthenticationSession getAuthenticationSessionElseFail() {
+    default Authentication getAuthenticationSessionElseFail() {
         return currentAuthenticationSession()
                 .orElseThrow(()->
                     _Exceptions.illegalState(

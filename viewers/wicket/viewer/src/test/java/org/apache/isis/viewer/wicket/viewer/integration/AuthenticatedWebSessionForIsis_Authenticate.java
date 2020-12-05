@@ -45,7 +45,7 @@ import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.singleuser.SingleUserSession;
+import org.apache.isis.core.security.authentication.singleuser.SingleUserAuthentication;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 
@@ -86,10 +86,10 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 will(returnValue(mockIsisInteractionTracker));
                 
                 allowing(mockIsisInteractionTracker).currentAuthenticationSession();
-                will(returnValue(Optional.of(new SingleUserSession())));
+                will(returnValue(Optional.of(new SingleUserAuthentication())));
                 
                 allowing(mockIsisInteractionFactory)
-                .runAuthenticated(with(new SingleUserSession()), with(any(ThrowingRunnable.class)));
+                .runAuthenticated(with(new SingleUserAuthentication()), with(any(ThrowingRunnable.class)));
                 
                 allowing(mockIsisInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
@@ -132,7 +132,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
                 will(returnValue(true));
                 oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
-                will(returnValue(new SingleUserSession()));
+                will(returnValue(new SingleUserAuthentication()));
             }
         });
 

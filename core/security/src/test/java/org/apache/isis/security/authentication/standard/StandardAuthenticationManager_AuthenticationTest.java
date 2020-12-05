@@ -28,7 +28,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.security.AuthenticatorsForTesting;
@@ -48,7 +48,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
     @Test
     public void newlyCreatedAuthenticationSessionShouldBeValid() throws Exception {
         final AuthenticationRequestPassword request = new AuthenticationRequestPassword("foo", "bar");
-        final AuthenticationSession session = authenticationManager.authenticate(request);
+        final Authentication session = authenticationManager.authenticate(request);
 
         assertThat(authenticationManager.isSessionValid(session), is(true));
     }
@@ -56,7 +56,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
     @Test
     public void newlyCreatedAuthenticationSession_whenUnauthorizedUser_shouldBeRejected() throws Exception {
         final AuthenticationRequestPassword request = new AuthenticationRequestPassword("me", "pass");
-        final AuthenticationSession session = authenticationManager.authenticate(request);
+        final Authentication session = authenticationManager.authenticate(request);
 
         assertThat(authenticationManager.isSessionValid(session), is(false));
     }

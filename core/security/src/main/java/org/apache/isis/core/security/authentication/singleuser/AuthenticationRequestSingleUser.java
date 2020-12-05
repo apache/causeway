@@ -22,7 +22,7 @@ package org.apache.isis.core.security.authentication.singleuser;
 import org.apache.isis.core.security.authentication.AuthenticationRequestAbstract;
 
 /**
- * Requests corresponding to an {@link SingleUserSession}.
+ * Requests corresponding to an {@link SingleUserAuthentication}.
  */
 public class AuthenticationRequestSingleUser extends AuthenticationRequestAbstract {
 

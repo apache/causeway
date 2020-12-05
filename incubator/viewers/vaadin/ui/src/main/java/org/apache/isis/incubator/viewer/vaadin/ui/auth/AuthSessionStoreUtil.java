@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
 
 import com.vaadin.flow.server.VaadinSession;
 
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -42,32 +42,32 @@ public class AuthSessionStoreUtil {
 
     public static void put(
             @NonNull final HttpSession httpSession, 
-            @Nullable final AuthenticationSession authSession) {
-        httpSession.setAttribute(AuthenticationSession.class.getName(), authSession);
+            @Nullable final Authentication authSession) {
+        httpSession.setAttribute(Authentication.class.getName(), authSession);
     }
     
-    public static Optional<AuthenticationSession> get(
+    public static Optional<Authentication> get(
             @NonNull final HttpSession httpSession) {
         return Optional.ofNullable(
-                (AuthenticationSession)httpSession
-                .getAttribute(AuthenticationSession.class.getName()));
+                (Authentication)httpSession
+                .getAttribute(Authentication.class.getName()));
     }
     
     /** when within a VaadinSession */
     public static void put(
-            @Nullable final AuthenticationSession authSession) {
+            @Nullable final Authentication authSession) {
         Optional.ofNullable(VaadinSession.getCurrent())
         .map(VaadinSession::getSession)
         .ifPresent(sessionVaa->{
-            sessionVaa.setAttribute(AuthenticationSession.class.getName(), authSession);    
+            sessionVaa.setAttribute(Authentication.class.getName(), authSession);    
         });
     }
     
     /** when within a VaadinSession */
-    public static Optional<AuthenticationSession> get() {
+    public static Optional<Authentication> get() {
         return Optional.ofNullable(
-                (AuthenticationSession)VaadinSession.getCurrent().getSession()
-                .getAttribute(AuthenticationSession.class.getName()));
+                (Authentication)VaadinSession.getCurrent().getSession()
+                .getAttribute(Authentication.class.getName()));
     }
     
     /** when within a VaadinSession */

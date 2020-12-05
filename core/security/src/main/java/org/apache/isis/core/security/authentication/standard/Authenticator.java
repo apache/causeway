@@ -20,7 +20,7 @@
 package org.apache.isis.core.security.authentication.standard;
 
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 public interface Authenticator {
 
@@ -35,7 +35,7 @@ public interface Authenticator {
      *            - a hint; is guaranteed to be unique, but the authenticator
      *            decides whether to use it or not.
      */
-    AuthenticationSession authenticate(AuthenticationRequest request, String code);
+    Authentication authenticate(AuthenticationRequest request, String code);
 
-    void logout(AuthenticationSession session);
+    void logout(Authentication session);
 }

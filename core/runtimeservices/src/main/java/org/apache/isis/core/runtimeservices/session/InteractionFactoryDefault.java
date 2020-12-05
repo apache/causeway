@@ -59,7 +59,7 @@ import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeCloseListener;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -152,7 +152,7 @@ implements InteractionFactory, InteractionTracker {
     }
     
     @Override
-    public InteractionLayer openInteraction(final @NonNull AuthenticationSession authSessionToUse) {
+    public InteractionLayer openInteraction(final @NonNull Authentication authSessionToUse) {
 
         val interactionSession = getOrCreateInteractionSession();
         val newInteractionClosure = new InteractionLayer(interactionSession, authSessionToUse);
@@ -219,7 +219,7 @@ implements InteractionFactory, InteractionTracker {
     @Override
     @SneakyThrows
     public <R> R callAuthenticated(
-            @NonNull final AuthenticationSession authenticationSession, 
+            @NonNull final Authentication authenticationSession, 
             @NonNull final Callable<R> callable) {
         
         final int stackSizeWhenEntering = interactionLayerStack.get().size();

@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 import lombok.NonNull;
@@ -63,7 +63,7 @@ public class AuthorizationManager {
      * Normally the view of the specified field, or the display of the action will be suppress if this returns false.
      * </p>
      */
-    public boolean isUsable(final AuthenticationSession session, final Identifier identifier) {
+    public boolean isUsable(final Authentication session, final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
@@ -84,7 +84,7 @@ public class AuthorizationManager {
      * Normally the specified field will be not appear editable if this returns false.
      * </p>
      */
-    public boolean isVisible(final AuthenticationSession session, final Identifier identifier) {
+    public boolean isVisible(final Authentication session, final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
@@ -104,7 +104,7 @@ public class AuthorizationManager {
     // -- HELPER
     
     private static boolean containsSudoSuperuserRole(
-            final @Nullable AuthenticationSession session) {
+            final @Nullable Authentication session) {
         if(session==null || session.getUser()==null) {
             return false;
         }
@@ -112,7 +112,7 @@ public class AuthorizationManager {
     }
     
     private boolean anyMatchOnRoles(
-            final @Nullable AuthenticationSession session, 
+            final @Nullable Authentication session, 
             final @NonNull Predicate<String> predicate) {
         if(session==null || session.getUser()==null) {
             return false;

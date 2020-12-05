@@ -100,7 +100,7 @@ import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEvent
 import org.apache.isis.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
@@ -425,7 +425,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return MemberAndTarget.foundAction(targetActionIfAny.get(), currentObjectManager().adapt(mixedIn), method);
     }
 
-    private static <R> AuthenticationSession authSessionFrom(AsyncControl<R> asyncControl, AuthenticationSession authSession) {
+    private static <R> Authentication authSessionFrom(AsyncControl<R> asyncControl, Authentication authSession) {
     
         val executionContext = authSession.getExecutionContext();
         
@@ -556,7 +556,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @RequiredArgsConstructor
     private static class ExecCommand<R> implements Callable<R> {
 
-        private final AuthenticationSession authenticationSession;
+        private final Authentication authenticationSession;
         private final CommandDto commandDto;
         private final Class<R> returnType;
         private final Command parentCommand;

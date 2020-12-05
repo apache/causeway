@@ -23,13 +23,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.val;
 
 /**
- * Returns a valid {@link AuthenticationSession} through a number of mechanisms;
- * supports caching of the {@link AuthenticationSession} onto the
+ * Returns a valid {@link Authentication} through a number of mechanisms;
+ * supports caching of the {@link Authentication} onto the
  * {@link HttpSession}.
  *
  * <p>
@@ -45,7 +45,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
     public static final String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationSessionStrategyDefault.class.getPackage().getName() + ".authenticationSession";
 
     @Override
-    public AuthenticationSession lookupValid(
+    public Authentication lookupValid(
             final HttpServletRequest httpServletRequest, 
             final HttpServletResponse httpServletResponse) {
 
@@ -53,7 +53,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
         val httpSession = getHttpSession(httpServletRequest);
 
         // use previously authenticated session if available
-        val authSession = (AuthenticationSession) 
+        val authSession = (Authentication) 
                 httpSession.getAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         if (authSession != null) {
             val sessionValid = authenticationManager.isSessionValid(authSession);
@@ -69,7 +69,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
     public void bind(
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
-            final AuthenticationSession authSession) {
+            final Authentication authSession) {
         
         val httpSession = getHttpSession(httpServletRequest);
         if(authSession != null) {

@@ -21,18 +21,18 @@ package org.apache.isis.core.security.authentication.standard;
 
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.val;
 
 public abstract class AuthenticatorAbstract implements Authenticator {
 
     /**
-     * Default implementation returns a {@link SimpleSession}; can be overridden
+     * Default implementation returns a {@link SimpleAuthentication}; can be overridden
      * if required.
      */
     @Override
-    public final AuthenticationSession authenticate(
+    public final Authentication authenticate(
             final AuthenticationRequest request, 
             final String validationCode) {
         
@@ -41,7 +41,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         }
         
         val user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles()); 
-        return SimpleSession.of(user, validationCode);
+        return SimpleAuthentication.of(user, validationCode);
     }
 
 
@@ -52,7 +52,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
     protected abstract boolean isValid(AuthenticationRequest request);
 
     @Override
-    public final void logout(final AuthenticationSession session) {
+    public final void logout(final Authentication session) {
         // no-op
     }
 

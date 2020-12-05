@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.PojoAdapter;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -45,7 +45,7 @@ public class PojoAdapterTest {
     private TestPojo domainObject;
 
     @Mock private SpecificationLoader mockSpecificationLoader;
-    @Mock private AuthenticationSession mockAuthenticationSession;
+    @Mock private Authentication mockAuthenticationSession;
 
     @Before
     public void setUp() throws Exception {

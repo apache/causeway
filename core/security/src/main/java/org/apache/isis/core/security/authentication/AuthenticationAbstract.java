@@ -23,13 +23,13 @@ import java.util.Objects;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class AuthenticationSessionAbstract 
-implements AuthenticationSession, Serializable {
+public abstract class AuthenticationAbstract 
+implements Authentication, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ implements AuthenticationSession, Serializable {
     
     // -- CONSTRUCTOR
 
-    protected AuthenticationSessionAbstract(
+    protected AuthenticationAbstract(
             final @NonNull ExecutionContext executionContext,
             final @NonNull String validationCode) {
 
@@ -60,15 +60,15 @@ implements AuthenticationSession, Serializable {
      * @param executionContext
      */
     @Override
-    public AuthenticationSession withExecutionContext(final @NonNull ExecutionContext executionContext) {
-        return new SimpleSession(executionContext, validationCode);
+    public Authentication withExecutionContext(final @NonNull ExecutionContext executionContext) {
+        return new SimpleAuthentication(executionContext, validationCode);
     }
 
     // -- TO STRING, EQUALS, HASHCODE
 
-    private static final ToString<AuthenticationSessionAbstract> toString = ToString
-            .toString("name", AuthenticationSessionAbstract::getUserName)
-            .thenToString("code", AuthenticationSessionAbstract::getValidationCode);
+    private static final ToString<AuthenticationAbstract> toString = ToString
+            .toString("name", AuthenticationAbstract::getUserName)
+            .thenToString("code", AuthenticationAbstract::getValidationCode);
 
     @Override
     public String toString() {
@@ -86,10 +86,10 @@ implements AuthenticationSession, Serializable {
         if (obj.getClass() != getClass()) {
             return false;
         }
-        return isEqualsTo((AuthenticationSessionAbstract) obj);
+        return isEqualsTo((AuthenticationAbstract) obj);
     }
 
-    private boolean isEqualsTo(final AuthenticationSessionAbstract other) {
+    private boolean isEqualsTo(final AuthenticationAbstract other) {
         if(!Objects.equals(this.getType(), other.getType())) {
             return false;
         }

@@ -27,8 +27,8 @@ import org.quartz.PersistJobDataAfterExecution;
 
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.IsTickingClockInitialized;
@@ -44,7 +44,7 @@ public class ReplicateAndReplayJob implements Job {
 
     @Inject SecondaryConfig secondaryConfig;
 
-    AuthenticationSession authSession;
+    Authentication authSession;
 
     public void execute(final JobExecutionContext quartzContext) {
 
@@ -56,7 +56,7 @@ public class ReplicateAndReplayJob implements Job {
                     secondaryConfig.getPrimaryUser(), 
                     secondaryConfig.getQuartzRoles().stream());
             
-            authSession = SimpleSession.validOf(user);
+            authSession = SimpleAuthentication.validOf(user);
             exec(quartzContext);
         }
     }
@@ -101,7 +101,7 @@ public class ReplicateAndReplayJob implements Job {
         }
     }
 
-    private boolean isTickingClockInitialized(final AuthenticationSession authSession) {
+    private boolean isTickingClockInitialized(final Authentication authSession) {
         return isisInteractionFactory.callAuthenticated(authSession, new IsTickingClockInitialized());
     }
 

@@ -20,9 +20,9 @@ package org.apache.isis.core.runtimeservices.session;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.security.authentication.AuthenticationAbstract;
 
-final class InitialisationSession extends AuthenticationSessionAbstract {
+final class InitialisationSession extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ final class InitialisationSession extends AuthenticationSessionAbstract {
             ExecutionContext.ofUserWithSystemDefaults(UserMemento.system());
 
     public InitialisationSession() {
-        super(INITIALISATION_CONTEXT, AuthenticationSessionAbstract.DEFAULT_AUTH_VALID_CODE);
+        super(INITIALISATION_CONTEXT, AuthenticationAbstract.DEFAULT_AUTH_VALID_CODE);
     }
     
 

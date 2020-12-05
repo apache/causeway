@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.health.HealthCheckService;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.security.authentication.health.HealthAuthSession;
+import org.apache.isis.core.security.authentication.health.HealthAuthentication;
 
 import lombok.val;
 
@@ -53,7 +53,7 @@ public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndica
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
         val health = healthCheckServiceIfAny.map(healthCheckService ->
-                        isisInteractionFactory.callAuthenticated(new HealthAuthSession(), healthCheckService::check))
+                        isisInteractionFactory.callAuthenticated(new HealthAuthentication(), healthCheckService::check))
                      .orElse(null);
         if(health != null) {
             final boolean result = health.getResult();

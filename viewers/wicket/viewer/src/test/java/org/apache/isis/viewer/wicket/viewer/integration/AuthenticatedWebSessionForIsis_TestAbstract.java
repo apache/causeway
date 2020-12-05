@@ -35,7 +35,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionFactory.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.singleuser.SingleUserSession;
+import org.apache.isis.core.security.authentication.singleuser.SingleUserAuthentication;
 
 public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
 
@@ -62,7 +62,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
                 will(returnValue(mockIsisInteractionFactory));
                 
-                allowing(mockIsisInteractionFactory).runAuthenticated(new SingleUserSession(), with(any(ThrowingRunnable.class)));
+                allowing(mockIsisInteractionFactory).runAuthenticated(new SingleUserAuthentication(), with(any(ThrowingRunnable.class)));
                 // ignore
                 
                 // must provide explicit expectation, since Locale is final.

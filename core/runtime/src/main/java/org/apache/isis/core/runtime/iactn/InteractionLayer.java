@@ -20,7 +20,7 @@ package org.apache.isis.core.runtime.iactn;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -36,11 +36,11 @@ import lombok.NonNull;
 public class InteractionLayer extends RuntimeContextBase {
 
 	@Getter private final InteractionSession interactionSession;
-	@Getter private final AuthenticationSession authenticationSession;
+	@Getter private final Authentication authenticationSession;
 	
 	public InteractionLayer(
 			final @NonNull InteractionSession interactionSession,
-			final @NonNull AuthenticationSession authenticationSession) {
+			final @NonNull Authentication authenticationSession) {
 
 		super(interactionSession.getMetaModelContext());
 		

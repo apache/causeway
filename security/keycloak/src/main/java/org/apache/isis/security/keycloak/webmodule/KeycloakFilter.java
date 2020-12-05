@@ -36,8 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.val;
 
@@ -63,8 +63,8 @@ public class KeycloakFilter implements Filter {
         final List<String> roles = toClaims(rolesHeader);
         
         val user = UserMemento.ofNameAndRoleNames(userid, roles.stream());
-        val authenticationSession = SimpleSession.of(user, subjectHeader);
-        authenticationSession.setType(AuthenticationSession.Type.EXTERNAL);
+        val authenticationSession = SimpleAuthentication.of(user, subjectHeader);
+        authenticationSession.setType(Authentication.Type.EXTERNAL);
         
         isisInteractionFactory.runAuthenticated(
                 authenticationSession,
