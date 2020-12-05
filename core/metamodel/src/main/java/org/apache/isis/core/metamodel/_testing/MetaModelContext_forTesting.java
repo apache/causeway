@@ -99,7 +99,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     private TranslationService translationService;
 
-    private Authentication authenticationSession;
+    private Authentication authentication;
 
     private AuthorizationManager authorizationManager;
 
@@ -165,7 +165,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
                 specificationLoader,
                 authenticationContext,
                 getTranslationService(),
-                authenticationSession,
+                authentication,
                 authorizationManager,
                 authenticationManager,
                 titleService,

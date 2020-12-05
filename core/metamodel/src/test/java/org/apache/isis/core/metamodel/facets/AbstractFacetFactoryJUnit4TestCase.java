@@ -62,7 +62,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock protected ServiceInjector mockServiceInjector;
     @Mock protected ServiceRegistry mockServiceRegistry;
     @Mock protected TranslationService mockTranslationService;
-    @Mock protected AuthenticationContext mockAuthenticationSessionTracker;
+    @Mock protected AuthenticationContext mockAuthenticationTracker;
 
     @Mock protected ObjectSpecification mockOnType;
     @Mock protected ObjectSpecification mockObjSpec;
@@ -106,7 +106,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
             will(returnValue(Optional.of(mockTranslationService)));
 
             allowing(mockServiceRegistry).lookupService(AuthenticationContext.class);
-            will(returnValue(Optional.of(mockAuthenticationSessionTracker)));
+            will(returnValue(Optional.of(mockAuthenticationTracker)));
 
             allowing(mockServiceRegistry).lookupServiceElseFail(MetamodelEventService.class);
             will(returnValue(mockMetamodelEventService));

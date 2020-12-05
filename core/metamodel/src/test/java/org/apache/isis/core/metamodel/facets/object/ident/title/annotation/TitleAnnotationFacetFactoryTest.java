@@ -53,7 +53,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     @Mock
     private ManagedObject mockObjectAdapter;
     @Mock
-    private Authentication mockAuthenticationSession;
+    private Authentication mockAuthentication;
 
     @Before
     public void setUp() throws Exception {
@@ -67,10 +67,10 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         context.checking(new Expectations() {
             {
                 allowing(mockServiceRegistry).lookupService(AuthenticationContext.class);
-                will(returnValue(Optional.of(mockAuthenticationSessionTracker)));
+                will(returnValue(Optional.of(mockAuthenticationTracker)));
 
-                allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
-                will(returnValue(Optional.of(mockAuthenticationSession)));
+                allowing(mockAuthenticationTracker).currentAuthentication();
+                will(returnValue(Optional.of(mockAuthentication)));
 
                 //                allowing(mockServicesInjector).getSpecificationLoader();
                 //                will(returnValue(mockSpecificationLoader));

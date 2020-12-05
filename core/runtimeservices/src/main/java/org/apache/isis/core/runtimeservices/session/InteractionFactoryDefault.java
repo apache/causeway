@@ -219,11 +219,11 @@ implements InteractionFactory, InteractionTracker {
     @Override
     @SneakyThrows
     public <R> R callAuthenticated(
-            @NonNull final Authentication authenticationSession, 
+            @NonNull final Authentication authentication, 
             @NonNull final Callable<R> callable) {
         
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
-        openInteraction(authenticationSession);
+        openInteraction(authentication);
         
         try {
             serviceInjector.injectServicesInto(callable);

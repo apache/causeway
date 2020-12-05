@@ -29,7 +29,7 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
  * Decouples the <code>IsisRestfulObjectsInteractionFilter</code> from the mechanism of obtaining the
  * {@link Authentication}.
  */
-public interface AuthenticationSessionStrategy {
+public interface AuthenticationStrategy {
 
     /**
      * Returns a still-valid {@link Authentication} or {@code null}

@@ -80,7 +80,7 @@ implements CollectionRemoveFromFacet {
         final Object referencedObject = UnwrapUtil.single(referencedObjectAdapter);
 
         // get hold of underlying collection
-        // passing null through for authenticationSession/deploymentType means to avoid any visibility filtering.
+        // passing null through for authentication/deploymentType means to avoid any visibility filtering.
         final Object collection = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
 
         // don't post event if the collections does not contain object

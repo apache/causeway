@@ -81,7 +81,7 @@ public class ObjectMemberAbstractTest {
     protected MetaModelContext metaModelContext;
 
     @Mock private AuthenticationContext mockAuthenticationContext;
-    @Mock private Authentication mockAuthenticationSession;
+    @Mock private Authentication mockAuthentication;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private ObjectSpecification mockSpecForCustomer;
     @Mock private Persistable mockPersistable;
@@ -96,8 +96,8 @@ public class ObjectMemberAbstractTest {
                 .build();
 
         context.checking(new Expectations() {{
-            allowing(mockAuthenticationContext).currentAuthenticationSession();
-            will(returnValue(Optional.of(mockAuthenticationSession)));
+            allowing(mockAuthenticationContext).currentAuthentication();
+            will(returnValue(Optional.of(mockAuthentication)));
         }});
 
         persistentAdapter = PojoAdapter.of(

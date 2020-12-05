@@ -114,26 +114,26 @@ public class AuthenticationManager {
     }
 
 
-    public final boolean isSessionValid(final Authentication session) {
-        if(session==null) {
+    public final boolean isSessionValid(final Authentication authentication) {
+        if(authentication==null) {
             return false;
         }
-        if(session instanceof SimpleAuthentication) {
-            final SimpleAuthentication simpleSession = (SimpleAuthentication) session;
+        if(authentication instanceof SimpleAuthentication) {
+            final SimpleAuthentication simpleSession = (SimpleAuthentication) authentication;
             if(simpleSession.getType() == Authentication.Type.EXTERNAL) {
                 return true;
             }
         }
-        final String userName = userByValidationCode.get(session.getValidationCode());
-        return session.getUser().isCurrentUser(userName);
+        final String userName = userByValidationCode.get(authentication.getValidationCode());
+        return authentication.getUser().isCurrentUser(userName);
     }
 
 
-    public void closeSession(Authentication session) {
+    public void closeSession(Authentication authentication) {
         for (Authenticator authenticator : authenticators) {
-            authenticator.logout(session);
+            authenticator.logout(authentication);
         }
-        userByValidationCode.remove(session.getValidationCode());
+        userByValidationCode.remove(authentication.getValidationCode());
     }
 
     // -- AUTHENTICATORS

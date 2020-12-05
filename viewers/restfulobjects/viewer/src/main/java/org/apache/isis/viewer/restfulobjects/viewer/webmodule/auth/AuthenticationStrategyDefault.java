@@ -36,13 +36,13 @@ import lombok.val;
  * The session is looked-up as follows:
  * <ul>
  * <li>it looks up from the {@link HttpSession} using the value
- * {@link AuthenticationSessionStrategyDefault#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
+ * {@link AuthenticationStrategyDefault#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
  * </ul>
  * 
  */
-public class AuthenticationSessionStrategyDefault extends AuthenticationSessionStrategyAbstract {
+public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstract {
 
-    public static final String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationSessionStrategyDefault.class.getPackage().getName() + ".authenticationSession";
+    public static final String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationStrategyDefault.class.getPackage().getName() + ".authentication";
 
     @Override
     public Authentication lookupValid(

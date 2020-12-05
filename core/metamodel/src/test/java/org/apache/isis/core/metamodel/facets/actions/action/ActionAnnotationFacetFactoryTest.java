@@ -70,7 +70,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
         context.checking(new Expectations() {{
             allowing(mockServiceRegistry).lookupServiceElseFail(AuthenticationContext.class);
-            will(returnValue(mockAuthenticationSessionTracker));
+            will(returnValue(mockAuthenticationTracker));
 
             allowing(mockTypeSpec).getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
             will(returnValue(null));

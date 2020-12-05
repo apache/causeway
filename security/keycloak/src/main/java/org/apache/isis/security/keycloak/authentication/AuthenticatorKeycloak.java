@@ -39,7 +39,7 @@ import org.apache.isis.core.security.authentication.standard.Authenticator;
 @Singleton
 public class AuthenticatorKeycloak implements Authenticator {
     
-    @Inject private AuthenticationContext authenticationSessionTracker;
+    @Inject private AuthenticationContext authenticationTracker;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -48,8 +48,8 @@ public class AuthenticatorKeycloak implements Authenticator {
 
     @Override
     public Authentication authenticate(final AuthenticationRequest request, final String code) {
-        // HTTP request filters should already have taken care of AuthenticationSession creation    
-        return authenticationSessionTracker.currentAuthenticationSession().orElse(null);
+        // HTTP request filters should already have taken care of Authentication creation    
+        return authenticationTracker.currentAuthentication().orElse(null);
     }
 
     @Override

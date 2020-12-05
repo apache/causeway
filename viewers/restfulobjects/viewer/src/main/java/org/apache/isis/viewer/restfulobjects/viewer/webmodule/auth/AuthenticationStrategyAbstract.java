@@ -31,7 +31,7 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 
 import lombok.val;
 
-public abstract class AuthenticationSessionStrategyAbstract implements AuthenticationSessionStrategy {
+public abstract class AuthenticationStrategyAbstract implements AuthenticationStrategy {
 
     public static final int STATUS_UNAUTHORIZED = 401;
     

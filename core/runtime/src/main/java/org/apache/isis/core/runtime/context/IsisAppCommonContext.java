@@ -44,14 +44,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 
  * @since 2.0
  *
  */
-@Log4j2
 public class IsisAppCommonContext implements MetaModelContext.Delegating {
 
     /**
@@ -82,11 +80,7 @@ public class IsisAppCommonContext implements MetaModelContext.Delegating {
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
     
     public Optional<MessageBroker> getMessageBroker() {
-        val messageBroker = getInteractionTracker().currentMessageBroker();
-        if(!messageBroker.isPresent()) {
-            log.warn("failed to locate a MessageBroker on current AuthenticationSession");
-        }
-        return messageBroker;
+        return getInteractionTracker().currentMessageBroker();
     }
     
     // -- SHORTCUTS

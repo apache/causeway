@@ -327,7 +327,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final AsyncControl<R> asyncControl) {
 
         val interactionLayer = currentInteractionLayer();
-        val asyncAuthSession = authSessionFrom(asyncControl, interactionLayer.getAuthenticationSession());
+        val asyncAuth = authSessionFrom(asyncControl, interactionLayer.getAuthentication());
         val command = interactionContextProvider.get().getInteractionElseFail().getCommand();
         val commandUniqueId = command.getUniqueId();
 
@@ -361,7 +361,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val executorService = asyncControl.getExecutorService();
         val future = executorService.submit(
                 new ExecCommand<R>(
-                        asyncAuthSession, 
+                        asyncAuth, 
                         commandDto, 
                         asyncControl.getReturnType(), 
                         command, 
@@ -556,7 +556,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @RequiredArgsConstructor
     private static class ExecCommand<R> implements Callable<R> {
 
-        private final Authentication authenticationSession;
+        private final Authentication authentication;
         private final CommandDto commandDto;
         private final Class<R> returnType;
         private final Command parentCommand;
@@ -574,7 +574,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         public R call() {
             serviceInjector.injectServicesInto(this);
 
-            return isisInteractionFactory.callAuthenticated(authenticationSession, () -> {
+            return isisInteractionFactory.callAuthenticated(authentication, () -> {
                 val childCommand = interactionContextProvider.get().getInteractionElseFail().getCommand();
                 childCommand.updater().setParent(parentCommand);
                 return transactionService.executeWithinTransaction(() -> {

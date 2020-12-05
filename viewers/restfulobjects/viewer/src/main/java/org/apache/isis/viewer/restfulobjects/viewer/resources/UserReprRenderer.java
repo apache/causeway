@@ -34,11 +34,11 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
     }
 
     @Override
-    public UserReprRenderer with(final Authentication authenticationSession) {
-        representation.mapPut("userName", authenticationSession.getUserName());
+    public UserReprRenderer with(final Authentication authentication) {
+        representation.mapPut("userName", authentication.getUserName());
         final JsonRepresentation roles = JsonRepresentation.newArray();
 
-        authenticationSession.getUser().streamRoleNames()
+        authentication.getUser().streamRoleNames()
         .forEach(roles::arrayAdd);
 
         representation.mapPut("roles", roles);
@@ -62,7 +62,7 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(getResourceContext().getAuthenticationSessionTracker().getAuthenticationSessionElseFail());
+            renderer.with(getResourceContext().getAuthenticationContext().getAuthenticationElseFail());
             link.mapPut("value", renderer.render());
         }
 

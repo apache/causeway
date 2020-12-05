@@ -44,9 +44,9 @@ public class IsisRequestCycle {
 
     // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
 
-    public void onBeginRequest(Authentication authenticationSession) {
+    public void onBeginRequest(Authentication authentication) {
 
-        isisInteractionFactory.openInteraction(authenticationSession);
+        isisInteractionFactory.openInteraction(authentication);
 
         txStatus = getTransactionManager().getTransaction(null);
 

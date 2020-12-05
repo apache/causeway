@@ -56,7 +56,7 @@ public class RestEasyConfiguration {
     @Data
     public static class Authentication {
         /**
-         * Defaults to <code>org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth</code>.
+         * Defaults to <code>org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
          */
         private Optional<String> strategyClassName = Optional.empty();    
     }

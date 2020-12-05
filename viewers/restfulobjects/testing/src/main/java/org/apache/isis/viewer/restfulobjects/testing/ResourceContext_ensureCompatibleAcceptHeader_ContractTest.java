@@ -67,7 +67,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock ServletContext mockServletContext;
     @Mock InteractionFactory mockIsisInteractionFactory;
     @Mock InteractionSession mockInteractionSession;
-    @Mock Authentication mockAuthenticationSession;
+    @Mock Authentication mockAuthentication;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
     @Mock InteractionTracker mockIsisInteractionTracker;
@@ -82,7 +82,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authenticationSession(mockAuthenticationSession)
+                .authentication(mockAuthentication)
                 .singleton(mockAuthenticationManager)
                 .singleton(mockIsisInteractionTracker)
                 .singleton(mockIsisInteractionFactory)
@@ -102,9 +102,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
-                
-//                allowing(mockIsisInteraction).getAuthenticationSession();
-//                will(returnValue(mockAuthenticationSession));
                 
             }
         });

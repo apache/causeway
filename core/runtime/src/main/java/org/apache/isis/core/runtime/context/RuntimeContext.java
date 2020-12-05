@@ -35,13 +35,13 @@ public interface RuntimeContext {
 
     MetaModelContext getMetaModelContext();
 
-    InteractionTracker getIsisInteractionTracker(); 
+    InteractionTracker getInteractionTracker(); 
     IsisConfiguration getConfiguration();
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();
     ServiceRegistry getServiceRegistry();
 
-    void logoutAuthenticationSession();
+    void logoutFromSession();
 
 
 }

@@ -50,9 +50,9 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final ServiceInjector serviceInjector;
     @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
-    @Getter(onMethod = @__(@Override)) protected final InteractionTracker isisInteractionTracker;
+    @Getter(onMethod = @__(@Override)) protected final InteractionTracker interactionTracker;
     
-    @Getter protected final InteractionFactory isisInteractionFactory;
+    @Getter protected final InteractionFactory interactionFactory;
     @Getter protected final AuthenticationManager authenticationManager;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<ManagedObject> homePageSupplier;
@@ -69,30 +69,30 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageSupplier = mmc::getHomePageAdapter;
-        this.isisInteractionFactory = serviceRegistry.lookupServiceElseFail(InteractionFactory.class);
+        this.interactionFactory = serviceRegistry.lookupServiceElseFail(InteractionFactory.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
-        this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
+        this.interactionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
     }
     
     // -- AUTH
     
-    public AuthenticationContext getAuthenticationSessionTracker() {
-        return isisInteractionTracker;
+    public AuthenticationContext getAuthenticationContext() {
+        return interactionTracker;
     }
 
     @Override
-    public void logoutAuthenticationSession() {
+    public void logoutFromSession() {
         // we do the logout (removes this session from those valid)
         // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
         
-        isisInteractionTracker
-        .currentAuthenticationSession()
-        .ifPresent(authenticationSession->{
+        interactionTracker
+        .currentAuthentication()
+        .ifPresent(authentication->{
         
             val authenticationManager = getServiceRegistry().lookupServiceElseFail(AuthenticationManager.class);
-            authenticationManager.closeSession(authenticationSession);
+            authenticationManager.closeSession(authentication);
             
-            isisInteractionFactory.closeSessionStack();
+            interactionFactory.closeSessionStack();
             
         });
         

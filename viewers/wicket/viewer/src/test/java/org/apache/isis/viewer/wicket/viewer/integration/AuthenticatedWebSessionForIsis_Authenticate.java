@@ -85,7 +85,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockCommonContext).getInteractionTracker();
                 will(returnValue(mockIsisInteractionTracker));
                 
-                allowing(mockIsisInteractionTracker).currentAuthenticationSession();
+                allowing(mockIsisInteractionTracker).currentAuthentication();
                 will(returnValue(Optional.of(new SingleUserAuthentication())));
                 
                 allowing(mockIsisInteractionFactory)
@@ -139,7 +139,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
         setupWebSession();
 
         assertThat(webSession.authenticate("jsmith", "secret"), is(true));
-        assertThat(webSession.getAuthenticationSession(), is(not(nullValue())));
+        assertThat(webSession.getAuthentication(), is(not(nullValue())));
     }
 
     @Test
@@ -156,7 +156,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
         setupWebSession();
         
         assertThat(webSession.authenticate("jsmith", "secret"), is(false));
-        assertThat(webSession.getAuthenticationSession(), is(nullValue()));
+        assertThat(webSession.getAuthentication(), is(nullValue()));
     }
 
 }

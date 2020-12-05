@@ -35,9 +35,9 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -72,13 +72,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     /**
      * As populated in {@link #signIn(String, String)}.
-     *
-     * <p>
-     * However, if a valid session has been set up previously and stored in {@link AuthenticationSessionWormhole}, then
-     * it will be used instead.
-     * </p>
      */
-    private Authentication authenticationSession;
+    private Authentication authentication;
 
     public AuthenticatedWebSessionForIsis(Request request) {
         super(request);
@@ -95,8 +90,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     public synchronized boolean authenticate(final String username, final String password) {
         AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(USER_ROLE);
-        this.authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
-        if (this.authenticationSession != null) {
+        this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
+        if (this.authentication != null) {
             log(SessionLoggingService.Type.LOGIN, username, null);
             return true;
         } else {
@@ -122,7 +117,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         //        org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor.logout(ShiroAuthenticatorOrAuthorizor.java:179)
         //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
 
-        getAuthenticationManager().closeSession(getAuthenticationSession());
+        getAuthenticationManager().closeSession(getAuthentication());
         //getIsisInteractionFactory().closeSessionStack();
         
         super.invalidateNow();
@@ -138,28 +133,28 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
                 : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
 
         String userName = null;
-        if (getAuthenticationSession() != null) {
-            userName = getAuthenticationSession().getUserName();
+        if (getAuthentication() != null) {
+            userName = getAuthentication().getUserName();
         }
 
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
-    public synchronized Authentication getAuthenticationSession() {
+    public synchronized Authentication getAuthentication() {
         
-        commonContext.getInteractionTracker().currentAuthenticationSession()
-        .ifPresent(currentAuthenticationSession->{
+        commonContext.getInteractionTracker().currentAuthentication()
+        .ifPresent(currentAuthentication->{
             
-            if (getAuthenticationManager().isSessionValid(currentAuthenticationSession)) {
-                if (this.authenticationSession != null) {
-                    if (Objects.equals(currentAuthenticationSession.getUserName(), this.authenticationSession.getUserName())) {
+            if (getAuthenticationManager().isSessionValid(currentAuthentication)) {
+                if (this.authentication != null) {
+                    if (Objects.equals(currentAuthentication.getUserName(), this.authentication.getUserName())) {
                         // ok, same session so far as Wicket is concerned
                         if (isSignedIn()) {
                             // nothing to do...
                         } else {
                             // force as signed in (though not sure if this case can occur)
                             signIn(true);
-                            this.authenticationSession = currentAuthenticationSession;
+                            this.authentication = currentAuthentication;
                         }
                     } else {
                         // different user name
@@ -170,26 +165,26 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
                         // either way, the current one is now signed in
                         signIn(true);
-                        this.authenticationSession = currentAuthenticationSession;
+                        this.authentication = currentAuthentication;
                     }
                 } else {
                     signIn(true);
-                    this.authenticationSession = currentAuthenticationSession;
+                    this.authentication = currentAuthentication;
                 }
             }
             
         });
 
-        return this.authenticationSession;
+        return this.authentication;
     }
 
     /**
-     * This is a no-op if the {@link #getAuthenticationSession() authentication session}'s
+     * This is a no-op if the {@link #getAuthentication() authentication session}'s
      * {@link Authentication#getType() type} is {@link Authentication.Type#EXTERNAL external} (eg as
      * managed by keycloak).
      */
     public void invalidate() {
-        if(this.authenticationSession.getType() == Authentication.Type.EXTERNAL) {
+        if(this.authentication.getType() == Authentication.Type.EXTERNAL) {
             return;
         }
         // otherwise
@@ -203,7 +198,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         }
 
         final Roles roles = new Roles();
-        getAuthenticationSession().getUser().streamRoleNames()
+        getAuthentication().getUser().streamRoleNames()
         .forEach(roles::add);
         return roles;
     }

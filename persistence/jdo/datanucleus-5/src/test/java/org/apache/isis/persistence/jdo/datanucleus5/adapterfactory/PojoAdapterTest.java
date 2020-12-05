@@ -45,7 +45,7 @@ public class PojoAdapterTest {
     private TestPojo domainObject;
 
     @Mock private SpecificationLoader mockSpecificationLoader;
-    @Mock private Authentication mockAuthenticationSession;
+    @Mock private Authentication mockAuthentication;
 
     @Before
     public void setUp() throws Exception {
@@ -62,7 +62,7 @@ public class PojoAdapterTest {
     private void allowUnimportantMethodCallsOn() {
         context.checking(new Expectations() {
             {
-                allowing(mockAuthenticationSession).getUserName();
+                allowing(mockAuthentication).getUserName();
                 will(returnValue("fredbloggs"));
             }
         });

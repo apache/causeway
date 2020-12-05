@@ -69,7 +69,7 @@ abstract class SpecificationLoaderTestAbstract {
             return config;
         }
 
-        AuthenticationContext mockAuthenticationSessionProvider() {
+        AuthenticationContext mockAuthenticationProvider() {
             return Mockito.mock(AuthenticationContext.class);
         }
 
@@ -127,7 +127,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
                 .authenticationContext(mockAuthenticationContext = 
-                    producers.mockAuthenticationSessionProvider())
+                    producers.mockAuthenticationProvider())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())
                 .serviceInjector(producers.mockServiceInjector())

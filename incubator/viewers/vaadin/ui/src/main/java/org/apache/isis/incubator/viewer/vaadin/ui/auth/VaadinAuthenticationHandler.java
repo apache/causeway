@@ -81,7 +81,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
     
     /**
      * Executes a piece of code in a new (possibly nested) IsisInteraction, using the 
-     * current AuthenticationSession, as, at this point, should be stored in the 
+     * current Authentication, as, at this point, should be stored in the 
      * current VaadinSession.
      * 
      * @param callable - the piece of code to run

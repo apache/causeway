@@ -376,17 +376,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         val facetFactory = new PropertyAutoCompleteFacetMethodFactory();
         facetFactory.setMetaModelContext(super.metaModelContext);
 
-        //        context.checking(new Expectations(){{
-        //            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-        //            will(returnValue(mockAuthenticationSessionProvider));
-        //
-        //            final DeploymentCategory deploymentCategory = DeploymentCategory.PRODUCTION;
-        //            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-        //            will(returnValue(mockDeploymentCategoryProvider));
-        //
-        //        }});
-
-
         class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {

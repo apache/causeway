@@ -36,11 +36,11 @@ import lombok.NonNull;
 public class InteractionLayer extends RuntimeContextBase {
 
 	@Getter private final InteractionSession interactionSession;
-	@Getter private final Authentication authenticationSession;
+	@Getter private final Authentication authentication;
 	
 	public InteractionLayer(
 			final @NonNull InteractionSession interactionSession,
-			final @NonNull Authentication authenticationSession) {
+			final @NonNull Authentication authentication) {
 
 		super(interactionSession.getMetaModelContext());
 		
@@ -48,12 +48,12 @@ public class InteractionLayer extends RuntimeContextBase {
 		// meaning the InteractionSession that holds the stack containing this layer 
 		this.interactionSession = interactionSession;
 		
-		// binds given authenticationSession to this layer 
-		this.authenticationSession = authenticationSession; 
+		// binds given authentication to this layer 
+		this.authentication = authentication; 
 	}
 	
 	public ExecutionContext getExecutionContext() {
-	    return authenticationSession.getExecutionContext();
+	    return authentication.getExecutionContext();
 	}
 
 }

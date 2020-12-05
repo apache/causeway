@@ -58,7 +58,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
 
         val metaModelContext = super.getResourceContext().getMetaModelContext();
 
-        addLinkToUser(getResourceContext().getAuthenticationSessionTracker().getAuthenticationSessionElseFail());
+        addLinkToUser(getResourceContext().getAuthenticationContext().getAuthenticationElseFail());
         addLinkToMenuBars();
         addLinkToServices(metaModelContext.streamServiceAdapters());
         addLinkToVersion();
@@ -135,7 +135,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToUser(Authentication authenticationSession) {
+    private void addLinkToUser(Authentication authentication) {
         final JsonRepresentation link = LinkBuilder.newBuilder(
                 getResourceContext(), 
                 Rel.USER.getName(), 
@@ -150,7 +150,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
                     linkFollower, 
                     JsonRepresentation.newMap());
             
-            renderer.with(authenticationSession);
+            renderer.with(authentication);
             link.mapPut("value", renderer.render());
         }
 

@@ -31,7 +31,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
- * @implNote Stores authentication information (AuthenticationSession) on the HttpSession that is associated
+ * @implNote Stores authentication information (Authentication) on the HttpSession that is associated
  * with the current thread's VaadinSession or directly on the provided HttpSession if given as argument.
  * 
  * @since Mar 15, 2020

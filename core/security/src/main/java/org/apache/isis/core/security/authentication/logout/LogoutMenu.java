@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class LogoutMenu {
 
     private final List<LogoutHandler> logoutHandler;
-    private final AuthenticationContext authenticationSessionTracker;
+    private final AuthenticationContext authenticationTracker;
 
     public static class LogoutDomainEvent
         extends IsisModuleApplib.ActionDomainEvent<LogoutMenu> {}
@@ -67,9 +67,9 @@ public class LogoutMenu {
     }
 
     public String disableLogout() {
-        return authenticationSessionTracker.currentAuthenticationSession()
-        .map(authenticationSession->
-            authenticationSession.getType() == Authentication.Type.EXTERNAL
+        return authenticationTracker.currentAuthentication()
+        .map(authentication->
+            authentication.getType() == Authentication.Type.EXTERNAL
             ? "External"
             : null
         )

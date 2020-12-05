@@ -73,28 +73,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         super.setUp();
 
-        final Authentication mockAuthenticationSession = context.mock(Authentication.class);
+        final Authentication mockAuthentication = context.mock(Authentication.class);
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationContext).currentAuthenticationSession();
-            will(returnValue(Optional.of(mockAuthenticationSession)));
-
-            //            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            //            will(returnValue(Optional.of(mockTranslationService)));
-            //
-            //            allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
-            //            will(returnValue(mockAuthenticationSessionProvider));
-
-            //            allowing(mockServicesInjector).getAuthenticationSessionProvider();
-            //            will(returnValue(mockAuthenticationSessionProvider));
-            //
-            //            allowing(mockServicesInjector).getSpecificationLoader();
-            //            will(returnValue(mockSpecificationLoader));
-            //
-            //            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-            //            will(returnValue(mockPersistenceSessionServiceInternal));
-
+            allowing(mockAuthenticationContext).currentAuthentication();
+            will(returnValue(Optional.of(mockAuthentication)));
         }});
 
     }

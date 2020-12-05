@@ -29,13 +29,13 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 public interface AuthenticationContext {
 
-    Optional<Authentication> currentAuthenticationSession();
+    Optional<Authentication> currentAuthentication();
     
-    default Authentication getAuthenticationSessionElseFail() {
-        return currentAuthenticationSession()
+    default Authentication getAuthenticationElseFail() {
+        return currentAuthentication()
                 .orElseThrow(()->
                     _Exceptions.illegalState(
-                            "no AuthenticationSession available with current %s", 
+                            "no InteractionSession available on current %s", 
                             _Probe.currentThreadId()));
     }
     

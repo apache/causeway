@@ -23,18 +23,14 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.core.security.authentication.Authentication;
 
+import lombok.NonNull;
+
 /**
- * The factory of {@link InteractionSession}s, also holding a reference to the
- * current session using a thread-local.
- *
+ * The factory of {@link InteractionSession}(s) and {@link InteractionLayer}(s), 
+ * also holding a reference to the current authentication layer stack using
+ * a thread-local.
  * <p>
- *     The class can in considered as analogous to (and is in many ways a wrapper for) a JDO
- *     <code>PersistenceManagerFactory</code>.
- * </p>
- *
- * <p>
- *     The implementation is a singleton service.
- * </p>
+ * The implementation is a singleton service.
  */
 public interface InteractionFactory {
 
@@ -44,32 +40,29 @@ public interface InteractionFactory {
     }
 
     /**
-     * Creates a new {@link InteractionSession}, which represents a user's span of
-     * activities interacting with the application.
-     *
-     * <p>
-     *     If there is already an {@link InteractionSession} available (as held
-     *     in a thread-local stack), then the interactions are stacked.
-     *     These are closed using {@link #closeSessionStack()}.
-     * </p>
-     *
-     * @param authenticationSession
+     * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new 
+     * anonymous one.
+     * @see {@link #openInteraction(Authentication)}
      */
     InteractionLayer openInteraction();
     
     /**
-     * Creates a new {@link InteractionSession}, which represents a user's span of
-     * activities interacting with the application.
-     *
+     * Returns a new {@link InteractionLayer} that is a holder of {@link Authentication} on top 
+     * of the current thread's authentication layer stack.
      * <p>
-     *     If there is already an {@link InteractionSession} available (as held
-     *     in a thread-local stack), then the interactions are stacked.
-     *     These are closed using {@link #closeSessionStack()}.
-     * </p>
+     * If available reuses an existing {@link InteractionSession}, otherwise creates a new one.
+     * <p> 
+     * The {@link InteractionSession} represents a user's span of activities interacting with 
+     * the application. The session's stack is later closed using {@link #closeSessionStack()}.
      *
-     * @param authenticationSession
+     * @param authentication - the {@link Authentication} to associate with the new top of 
+     * the stack (non-null)
+     * 
+     * @apiNote if the current {@link InteractionLayer} (if any) has an {@link Authentication} that
+     * equals that of the given one, as an optimization, no new layer is pushed onto the stack; 
+     * instead the current one is returned
      */
-    InteractionLayer openInteraction(Authentication authenticationSession);
+    InteractionLayer openInteraction(@NonNull Authentication authentication);
 
     /**
      * @return whether the calling thread is within the context of an open IsisInteractionSession
@@ -85,39 +78,39 @@ public interface InteractionFactory {
     /**
      * Executes a piece of code in a new (possibly nested) IsisInteraction.
      *
-     * @param authenticationSession - the user to run under
-     * @param callable - the piece of code to run
+     * @param authentication - the user details to run under (non-null)
+     * @param callable - the piece of code to run (non-null)
      * 
      */
-    <R> R callAuthenticated(Authentication authenticationSession, Callable<R> callable);
+    <R> R callAuthenticated(@NonNull Authentication authentication, @NonNull Callable<R> callable);
     
     /**
      * Variant of {@link #callAuthenticated(Authentication, Callable)} that takes a runnable.
-     * @param authenticationSession
-     * @param runnable
+     * @param authentication - the user details to run under (non-null)
+     * @param runnable (non-null)
      */
-    default void runAuthenticated(Authentication authenticationSession, ThrowingRunnable runnable) {
+    default void runAuthenticated(@NonNull Authentication authentication, @NonNull ThrowingRunnable runnable) {
         final Callable<Void> callable = ()->{runnable.run(); return null;};
-        callAuthenticated(authenticationSession, callable);
+        callAuthenticated(authentication, callable);
     }
 
     /**
-     * Executes a piece of code in a (possibly reused) IsisInteraction.
+     * Executes a piece of code in a (possibly reused) {@link InteractionSession}.
      * If there is already an open session stacked on the current thread then that one is used, 
      * otherwise an anonymous session is created.
      * @param <R>
-     * @param callable
+     * @param callable (non-null)
      */
-    <R> R callAnonymous(Callable<R> callable);
+    <R> R callAnonymous(@NonNull Callable<R> callable);
     
     /**
      * Variant of {@link #callAnonymous(Callable)} that takes a runnable.
-     * @param runnable
+     * @param runnable (non-null)
      */
-    void runAnonymous(ThrowingRunnable runnable);
+    void runAnonymous(@NonNull ThrowingRunnable runnable);
 
     /**
-     * closes all open InteractionClosures as stacked on the current thread
+     * closes all open {@link InteractionLayer}(s) as stacked on the current thread
      */
     void closeSessionStack();
 

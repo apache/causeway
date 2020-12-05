@@ -78,7 +78,7 @@ public interface IResourceContext {
      */
     RepresentationService.Intent getIntent();
     
-    AuthenticationContext getAuthenticationSessionTracker();
+    AuthenticationContext getAuthenticationContext();
     
     SpecificationLoader getSpecificationLoader();
     MetaModelContext getMetaModelContext(); // TODO derive from specLoader

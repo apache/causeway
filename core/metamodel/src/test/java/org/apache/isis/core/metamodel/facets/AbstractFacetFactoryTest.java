@@ -63,7 +63,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     protected TranslationService mockTranslationService;
     protected AuthenticationContext mockAuthenticationContext;
-    protected Authentication mockAuthenticationSession;
+    protected Authentication mockAuthentication;
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
 
@@ -104,7 +104,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         mockAuthenticationContext = context.mock(AuthenticationContext.class);
 
         mockTranslationService = context.mock(TranslationService.class);
-        mockAuthenticationSession = context.mock(Authentication.class);
+        mockAuthentication = context.mock(Authentication.class);
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
@@ -116,8 +116,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationContext).currentAuthenticationSession();
-            will(returnValue(Optional.of(mockAuthenticationSession)));
+            allowing(mockAuthenticationContext).currentAuthentication();
+            will(returnValue(Optional.of(mockAuthentication)));
         }});
         
         ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);

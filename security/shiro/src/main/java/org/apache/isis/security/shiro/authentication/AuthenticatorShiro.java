@@ -118,9 +118,9 @@ public class AuthenticatorShiro implements Authenticator {
             } else {
 
                 // TODO: should we verify the code passed in that this session is still alive?
-                // TODO: perhaps we should cache Isis' AuthenticationSession inside the Shiro Session, and just retrieve it?
+                // TODO: perhaps we should cache Isis' Authentication inside the Shiro Session, and just retrieve it?
 
-                return authenticationSessionFor(request, code, token, currentSubject);
+                return authenticationFor(request, code, token, currentSubject);
             }
         }
         try {
@@ -146,7 +146,7 @@ public class AuthenticatorShiro implements Authenticator {
             return null;
         }
 
-        return authenticationSessionFor(request, code, token, currentSubject);
+        return authenticationFor(request, code, token, currentSubject);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class AuthenticatorShiro implements Authenticator {
         }
     }
 
-    Authentication authenticationSessionFor(
+    Authentication authenticationFor(
             AuthenticationRequest request, 
             String validationCode, 
             AuthenticationToken token, 

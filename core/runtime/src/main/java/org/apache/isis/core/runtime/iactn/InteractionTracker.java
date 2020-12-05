@@ -20,12 +20,17 @@ package org.apache.isis.core.runtime.iactn;
 
 import java.util.Optional;
 
+import org.apache.logging.log4j.Logger;
+
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
+
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * 
@@ -55,23 +60,37 @@ extends InteractionContext, AuthenticationContext {
         return currentInteractionLayer().map(InteractionLayer::getExecutionContext);
     }
     
+    /** @return the unique id of the current top-level request- or test-scoped IsisInteraction*/
+    Optional<String> getConversationId();
+
+    // -- MESSAGE BROKER
+
     default Optional<MessageBroker> currentMessageBroker() {
         return currentInteractionSession().map(InteractionSession::getMessageBroker);
     }
     
-    default MessageBroker currentMessageBrokerElseFail() {
-        return currentMessageBroker()
-        .orElseThrow(()->_Exceptions.illegalState("No InteractionSession available on current thread"));
+    default Optional<MessageBroker> currentMessageBroker(@NonNull Logger logWarnIfMissing) {
+        val currentMessageBroker = currentMessageBroker();
+        if(!currentMessageBroker.isPresent()) {
+            logWarnIfMissing.warn(
+                    "No InteractionSession available on current thread, "
+                            + "such that cannot locate a MessageBroker");
+        }
+        return currentMessageBroker;
     }
     
-    /** @return the unique id of the current top-level request- or test-scoped IsisInteraction*/
-    Optional<String> getConversationId();
-
-    // -- AUTHENTICATION SESSION TRACKER
+    default MessageBroker currentMessageBrokerElseFail() {
+        return currentMessageBroker()
+        .orElseThrow(()->_Exceptions.illegalState(
+                "No InteractionSession available on current thread, "
+                        + "such that cannot locate a MessageBroker"));
+    }
+    
+    // -- AUTHENTICATION CONTEXT
     
     @Override
-    default Optional<Authentication> currentAuthenticationSession() {
-        return currentInteractionLayer().map(InteractionLayer::getAuthenticationSession);
+    default Optional<Authentication> currentAuthentication() {
+        return currentInteractionLayer().map(InteractionLayer::getAuthentication);
     }
     
     // -- INTERACTION CONTEXT
@@ -80,5 +99,7 @@ extends InteractionContext, AuthenticationContext {
     default Optional<Interaction> getInteraction(){
     	return currentInteractionSession().map(InteractionSession::getInteraction);
     }
+
+    
     
 }

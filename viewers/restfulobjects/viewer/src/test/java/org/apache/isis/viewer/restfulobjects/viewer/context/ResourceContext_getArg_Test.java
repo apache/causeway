@@ -58,7 +58,7 @@ public class ResourceContext_getArg_Test {
     @Mock private InteractionFactory mockIsisInteractionFactory;
     @Mock private InteractionTracker mockIsisInteractionTracker;
     @Mock private AuthenticationManager mockAuthenticationManager;
-    @Mock private Authentication mockAuthenticationSession;
+    @Mock private Authentication mockAuthentication;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private WebApplicationContext webApplicationContext;
 
@@ -79,7 +79,7 @@ public class ResourceContext_getArg_Test {
                 //                .serviceRegistry(mockServiceRegistry)
                 //                .translationService(mockTranslationService)
                 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
-                //                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                //                .authenticationProvider(mockAuthenticationProvider)
                 .build();
 
 
@@ -96,9 +96,6 @@ public class ResourceContext_getArg_Test {
                 
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
-                
-//                allowing(mockIsisInteraction).getAuthenticationSession();
-//                will(returnValue(mockAuthenticationSession));
          
         }});
     }

@@ -37,7 +37,7 @@ import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
-import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
+import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth;
 
 import lombok.Getter;
 import lombok.val;
@@ -100,8 +100,8 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        val authenticationSessionStrategyClassName = restEasyConfiguration.getAuthentication().getStrategyClassName()
-                .orElse(AuthenticationSessionStrategyBasicAuth.class.getName());
+        val authenticationStrategyClassName = restEasyConfiguration.getAuthentication().getStrategyClassName()
+                .orElse(AuthenticationStrategyBasicAuth.class.getName());
         
         registerFilter(ctx, INTERACTION_FILTER_NAME, IsisRestfulObjectsInteractionFilter.class)
         .ifPresent(filterReg -> {
@@ -115,8 +115,8 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
                     this.urlPattern);
             
             filterReg.setInitParameter(
-                    "authenticationSessionStrategy",
-                    authenticationSessionStrategyClassName);
+                    "authenticationStrategy",
+                    authenticationStrategyClassName);
             filterReg.setInitParameter(
                     "whenNoSession", // what to do if no session was found ...
                     "auto"); // ... 401 and a basic authentication challenge if request originates from web browser

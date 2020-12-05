@@ -76,7 +76,7 @@ public class SudoServiceDefault implements SudoService {
         val sudoExecutionContext = sudoMapper.apply(currentExecutionContext);
         
         val sodoSession = currentInteractionLayer
-                .getAuthenticationSession()
+                .getAuthentication()
                 .withExecutionContext(sudoExecutionContext);
         
         try {

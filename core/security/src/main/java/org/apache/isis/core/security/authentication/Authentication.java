@@ -80,8 +80,8 @@ public interface Authentication extends Serializable {
         /**
          * Instructs the {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager} to not cache this session in its internal map of
          * sessions by validation code, and therefore to ignore this aspect when considering if an
-         * {@link AuthenticationSession} is
-         * {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager#isSessionValid(AuthenticationSession) valid} or not.
+         * {@link Authentication} is
+         * {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager#isSessionValid(Authentication) valid} or not.
          */
         EXTERNAL
     }

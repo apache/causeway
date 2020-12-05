@@ -37,7 +37,7 @@ import lombok.val;
  * Implements the HTTP Basic Auth protocol; does not bind the
  * {@link Authentication} onto the {@link HttpSession}.
  */
-public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessionStrategyAbstract {
+public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstract {
 
     public static final String HEADER_AUTHORIZATION = "Authorization";
     public static final String BASIC_AUTH_PREFIX = "Basic ";
@@ -73,8 +73,8 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
 
         val authenticationRequestPwd = new AuthenticationRequestPassword(user, password);
         val authenticationManager = super.getAuthenticationManager(httpServletRequest);
-        val authenticationSession = authenticationManager.authenticate(authenticationRequestPwd);
-        return authenticationSession;
+        val authentication = authenticationManager.authenticate(authenticationRequestPwd);
+        return authentication;
     }
 
     @Override
