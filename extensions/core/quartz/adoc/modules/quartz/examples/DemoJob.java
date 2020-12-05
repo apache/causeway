@@ -49,7 +49,10 @@ public class DemoJob implements Job {
 
     protected Authentication newAuthentication(JobExecutionContext context) {
         
-        val user = UserMemento.ofNameAndRoleNames("isisModuleExtQuartzDemoUser", Arrays.asList("isisModuleExtQuartzDemoRole")); 
+        val user = UserMemento.ofNameAndRoleNames(
+                "isisModuleExtQuartzDemoUser", 
+                Stream.of("isisModuleExtQuartzDemoRole")); 
+        
         return SimpleAuthentication.ofValid(user);
     }
 
