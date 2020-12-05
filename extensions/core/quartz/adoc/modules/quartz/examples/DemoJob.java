@@ -26,28 +26,31 @@ import javax.inject.Inject;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtime.iactn.template.AbstractIsisInteractionTemplate;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 //tag::class[]
-//TODO example is not up to date
 @Log4j2
 public class DemoJob implements Job {
 
     public void execute(final JobExecutionContext context) {
 
-        final Authentication auth = newAuthSession(context);
-        new DemoIsisInteractionTemplate().execute(authSession, null);
+        final Authentication authentication = newAuthentication(context);
+        new DemoIsisInteractionTemplate().execute(authentication, null);
 
     }
 
-    protected Authentication newAuthSession(JobExecutionContext context) {
-        return new SimpleAuthentication("isisModuleExtQuartzDemoUser", Arrays.asList("isisModuleExtQuartzDemoRole"));
+    protected Authentication newAuthentication(JobExecutionContext context) {
+        
+        val user = UserMemento.ofNameAndRoleNames("isisModuleExtQuartzDemoUser", Arrays.asList("isisModuleExtQuartzDemoRole")); 
+        return SimpleAuthentication.ofValid(user);
     }
 
     @Inject IsisConfiguration isisConfiguration;
