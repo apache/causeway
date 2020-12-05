@@ -19,14 +19,21 @@
 
 package org.apache.isis.applib.services.user;
 
+import java.io.Serializable;
+
 import org.apache.isis.applib.annotation.MemberOrder;
 
 import lombok.Getter;
+import lombok.Value;
 
+@Value
 // tag::refguide[]
-public final class RoleMemento {
+public final class RoleMemento implements Serializable {
 
     // end::refguide[]
+    
+    private static final long serialVersionUID = -3876856609238378274L;
+    
     /**
      * Creates a new role with the specified name. Description is left blank.
      */

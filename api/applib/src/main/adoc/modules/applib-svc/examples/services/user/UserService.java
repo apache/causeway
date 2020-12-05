@@ -16,18 +16,56 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.user;
+
+import java.util.Optional;
+
+import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 // tag::refguide[]
 public interface UserService {
 
+    // -- INTERFACE
+    
     // end::refguide[]
     /**
-     * Get the details about the current user.
+     * Optionally gets the details about the current user, 
+     * based on whether an {@link ExecutionContext} can be found with the current thread's context.
      */
     // tag::refguide[]
-    UserMemento getUser();      // <.>
+    Optional<UserMemento> getUser();    // <.>
+
+    // end::refguide[]
+    
+    // -- UTILITIES
+    
+    /**
+     * Gets the details about the current user.
+     * @throws IllegalStateException if no {@link ExecutionContext} can be found with the current thread's context.
+     */
+    // tag::refguide[]
+    default UserMemento getUserElseFail() {              // <.>
+        // end::refguide[]
+        return getUser()
+                .orElseThrow(()->_Exceptions.illegalState("Current thread has no ExecutionContext."));
+    }
+    
+    // end::refguide[]
+    /**
+     * Optionally gets the the current user's name, 
+     * based on whether an {@link ExecutionContext} can be found with the current thread's context.
+     */
+    // tag::refguide[]
+    default Optional<String> getUserName() {    // <.>
+        return getUser()
+                .map(UserMemento::getName);
+    }
+    
+    default String getUserNameElseNobody() {    // <.>
+        return getUserName()
+                .orElse("Nobody");
+    }
 
 }
 // end::refguide[]

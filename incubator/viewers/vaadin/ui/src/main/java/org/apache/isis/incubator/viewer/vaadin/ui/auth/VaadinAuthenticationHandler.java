@@ -68,12 +68,12 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
      * @return whether login was successful
      */
     public boolean loginToSession(AuthenticationRequest authenticationRequest) {
-        val authSession = metaModelContext.getAuthenticationManager()
+        val authentication = metaModelContext.getAuthenticationManager()
                 .authenticate(authenticationRequest);
         
-        if(authSession!=null) {
-            log.debug("logging in {}", authSession.getUserName());
-            AuthSessionStoreUtil.put(authSession);
+        if(authentication!=null) {
+            log.debug("logging in {}", authentication.getUserName());
+            AuthSessionStoreUtil.put(authentication);
             return true;
         }
         return false;
@@ -89,7 +89,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
      */
     public <R> R callAuthenticated(Callable<R> callable) {
         return AuthSessionStoreUtil.get()
-                .map(authSession->isisInteractionFactory.callAuthenticated(authSession, callable))
+                .map(authentication->isisInteractionFactory.callAuthenticated(authentication, callable))
                 .orElse(null); // TODO redirect to login
     }
     
@@ -109,9 +109,9 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
         val targetView = event.getNavigationTarget();
         log.debug("detected a routing event to {}", targetView);
         
-        val authSession = AuthSessionStoreUtil.get().orElse(null);
-        if(authSession!=null) {
-            isisInteractionFactory.openInteraction(authSession);
+        val authentication = AuthSessionStoreUtil.get().orElse(null);
+        if(authentication!=null) {
+            isisInteractionFactory.openInteraction(authentication);
             return; // access granted
         }
         // otherwise redirect to login page

@@ -18,71 +18,62 @@
  */
 package org.apache.isis.applib.services.clock;
 
-import java.util.TimeZone;
-
-import javax.inject.Named;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.joda.time.DateTimeZone;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.isis.applib.clock.VirtualClock;
 
 /**
- * This service allows an application to be decoupled from the system time.  The most common use case is in support of
- * testing scenarios, to &quot;mock the clock&quot;.  Use of this service also opens up the use of centralized
+ * This service allows an application to be decoupled from the system time.  
+ * The most common use case is in support of testing scenarios, to &quot;mock the clock&quot;.  
+ * Use of this service also opens up the use of centralized
  * co-ordinated time management through a centralized time service.
  *
  */
 // tag::refguide[]
-@Service
-@Named("isisApplib.ClockService")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
-@Qualifier("Default")
-public class ClockService {
+public interface ClockService {
 
-    public java.time.LocalDate now() {
-        return Clock.getTimeAsLocalDate();
+    VirtualClock getClock();
+    
+    // -- SHORTCUTS
+    
+    default long getEpochMillis() {
+        return getClock().getEpochMillis();
     }
-
-    public java.time.LocalDateTime nowAsLocalDateTime() {
-        return Clock.getTimeAsLocalDateTime();
-    }
-
-    public java.time.OffsetDateTime nowAsOffsetDateTime() {
-        return Clock.getTimeAsOffsetDateTime();
-    }
-
-    public java.sql.Timestamp nowAsJavaSqlTimestamp() {
-        return Clock.getTimeAsJavaSqlTimestamp();
-    }
-
-    public XMLGregorianCalendar nowAsXMLGregorianCalendar() {
-        return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(nowAsJavaSqlTimestamp());
-    }
-
-    public long nowAsMillis() {
-        return Clock.getEpochMillis();
-    }
-
-    public java.util.Date nowAsJavaUtilDate() {
-        return new java.util.Date(nowAsMillis());
-    }
-
-    public org.joda.time.DateTime nowAsJodaDateTime() {
-        return Clock.getTimeAsJodaDateTime();
-    }
-
-    public org.joda.time.LocalDate nowAsJodaLocalDate() {
-        final DateTimeZone timeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
-        return new org.joda.time.LocalDate(nowAsMillis(), timeZone);
-    }
+    
+//    public java.time.LocalDate now() {
+//        return Clock.getTimeAsLocalDate();
+//    }
+//
+//    public java.time.LocalDateTime nowAsLocalDateTime() {
+//        return Clock.getTimeAsLocalDateTime();
+//    }
+//
+//    public java.time.OffsetDateTime nowAsOffsetDateTime() {
+//        return Clock.getTimeAsOffsetDateTime();
+//    }
+//
+//    public java.sql.Timestamp nowAsJavaSqlTimestamp() {
+//        return Clock.getTimeAsJavaSqlTimestamp();
+//    }
+//
+//    public XMLGregorianCalendar nowAsXMLGregorianCalendar() {
+//        return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(nowAsJavaSqlTimestamp());
+//    }
+//
+//    public long nowAsMillis() {
+//        return Clock.getEpochMillis();
+//    }
+//
+//    public java.util.Date nowAsJavaUtilDate() {
+//        return new java.util.Date(nowAsMillis());
+//    }
+//
+//    public org.joda.time.DateTime nowAsJodaDateTime() {
+//        return Clock.getTimeAsJodaDateTime();
+//    }
+//
+//    public org.joda.time.LocalDate nowAsJodaLocalDate() {
+//        final DateTimeZone timeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
+//        return new org.joda.time.LocalDate(nowAsMillis(), timeZone);
+//    }
 
 }
 // end::refguide[]

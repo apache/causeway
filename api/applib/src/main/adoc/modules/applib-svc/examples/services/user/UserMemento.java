@@ -19,47 +19,95 @@
 
 package org.apache.isis.applib.services.user;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
-import lombok.experimental.UtilityClass;
+import lombok.NonNull;
 
 /**
- * Details, obtained from the container, about the user and his roles.
+ * Details about a user and his roles.
  * Read-only.
  */
 // tag::refguide[]
-public final class UserMemento {
-
+public final class UserMemento implements Serializable {
     // end::refguide[]
+    
+    private static final long serialVersionUID = 7190090455587885367L;
+    private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system"); 
+//    private static final UserMemento NO_USER = UserMemento.ofName("__nobody");
+    
+    // -- FACTORIES
+    
+    /**
+     * The framework's internal user with unrestricted privileges.
+     */
+    public static UserMemento system() {
+        return SYSTEM_USER;
+    }
+    
+//    /**
+//     * The framework's internal user with no privileges at all, returned by the
+//     * {@link UserService} if no user is logged in.
+//     */
+//    public static UserMemento nobody() {
+//        return NO_USER;
+//    }
+    
     /**
      * Creates a new user with the specified name and no roles.
      */
-    public UserMemento(final String name) {
-        this(name, new RoleMemento[0]);
+    public static UserMemento ofName(
+            final @NonNull String name) {
+        return new UserMemento(name, Stream.empty());
     }
+    
+    /**
+     * Creates a new user with the specified name and assigned roles.
+     */
+    public static UserMemento ofNameAndRoles(
+            final @NonNull String name, 
+            final RoleMemento... roles) {
+        return new UserMemento(name, Stream.of(roles));
+    }
+    
+    /**
+     * Creates a new user with the specified name and assigned role names.
+     */
+    public static UserMemento ofNameAndRoleNames(
+            final @NonNull String name, 
+            final String... roleNames) {
+        return new UserMemento(name, Stream.of(roleNames).map(RoleMemento::new));
+    }
+    
+    /**
+     * Creates a new user with the specified name and assigned role names.
+     */
+    public static UserMemento ofNameAndRoleNames(
+            final @NonNull String name, 
+            final @NonNull Stream<String> roleNames) {
+        return new UserMemento(name, roleNames.map(RoleMemento::new));
+    }
+    
+    // -- CONSTRUCTOR
 
     /**
      * Creates a new user with the specified name and assigned roles.
      */
-    public UserMemento(final String name, final RoleMemento... roles) {
-        this(name, Arrays.asList(roles));
-    }
-
-    /**
-     * Creates a new user with the specified name and assigned roles.
-     */
-    public UserMemento(final String name, final List<RoleMemento> roles) {
-        if (name == null) {
+    public UserMemento(final String name, final @NonNull Stream<RoleMemento> roles) {
+        if (_Strings.isEmpty(name)) {
             throw new IllegalArgumentException("Name not specified");
         }
         this.name = name;
-        this.roles.addAll(roles);
+        this.roles = roles.collect(_Lists.toUnmodifiable()); 
     }
 
     public String title() {
@@ -79,10 +127,10 @@ public final class UserMemento {
      * The roles associated with this user.
      */
     @MemberOrder(sequence = "1.1")
-    private final List<RoleMemento> roles = new ArrayList<RoleMemento>();
+    private final List<RoleMemento> roles;
     // tag::refguide[]
     public List<RoleMemento> getRoles() {
-        return Collections.unmodifiableList(roles);
+        return roles;
     }
     // end::refguide[]
     /**
@@ -92,35 +140,21 @@ public final class UserMemento {
      *
      * @return true if the names match (is case sensitive).
      */
-    public boolean isCurrentUser(final String userName) {
-        if (userName == null) {
-            throw new IllegalArgumentException("no user name provided");
-        }
+    public boolean isCurrentUser(final @Nullable String userName) {
         return name.equals(userName);
     }
-
-    /**
-     * Determines if the user fulfills the specified role.
-     *
-     * @param role  the role to search for, regular expressions are allowed
-     */
-    public boolean hasRole(final RoleMemento role) {
-        return hasRole(role.getName());
+    
+    public Stream<String> streamRoleNames() {
+        return roles.stream()
+                .map(RoleMemento::getName);
+    }
+    
+    public boolean hasRoleName(final @Nullable String roleName) {
+        return streamRoleNames().anyMatch(myRoleName->myRoleName.equals(roleName));
     }
 
-    /**
-     * Determines if the user fulfills the specified role. Roles are compared
-     * lexically by role name.
-     */
-    public boolean hasRole(final String roleName) {
-        for (final RoleMemento role : roles) {
-            if (role.getName().matches(roleName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    // -- TO STRING, EQUALS, HASHCODE
+    
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
@@ -129,18 +163,74 @@ public final class UserMemento {
         }
         return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
     }
-
-    @UtilityClass
-    public static class NameType {
-        @UtilityClass
-        public static class Meta {
-            public static final int MAX_LEN = 50;
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
         }
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        return isEqualsTo((UserMemento) obj);
     }
 
+    private boolean isEqualsTo(final UserMemento other) {
+        if(!Objects.equals(this.getName(), other.getName())) {
+            return false;
+        }
+        if(!Objects.equals(this.getRoles(), other.getRoles())) {
+            return false;
+        }
+        return true;
+    }
+    
+    @Override
+    public int hashCode() {
+        return getName().hashCode(); // its good enough to hash on just the user's name
+    }
+    
     // tag::refguide[]
 
     // ...
 
 }
 // end::refguide[]
+
+// -- REMOVED
+
+//XXX implemented as regex match, java-doc is not specific about what these methods actually do; so if in doubt, rather remove     
+///**
+//* Determines if the user fulfills the specified role.
+//*
+//* @param role  the role to search for, regular expressions are allowed
+//*/
+//public boolean hasRole(final RoleMemento role) {
+//  return hasRole(role.getName());
+//}
+//
+///**
+//* Determines if the user fulfills the specified role. Roles are compared
+//* lexically by role name.
+//*/
+//public boolean hasRole(final String roleName) {
+//  for (final RoleMemento role : roles) {
+//      if (role.getName().matches(roleName)) {
+//          return true;
+//      }
+//  }
+//  return false;
+//}
+
+//XXX not used    
+//@UtilityClass
+//public static class NameType {
+//  @UtilityClass
+//  public static class Meta {
+//      public static final int MAX_LEN = 50;
+//  }
+//}
+

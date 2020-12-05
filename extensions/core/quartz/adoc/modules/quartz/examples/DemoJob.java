@@ -41,7 +41,7 @@ public class DemoJob implements Job {
 
     public void execute(final JobExecutionContext context) {
 
-        final Authentication authSession = newAuthSession(context);
+        final Authentication auth = newAuthSession(context);
         new DemoIsisInteractionTemplate().execute(authSession, null);
 
     }

@@ -94,10 +94,10 @@ public class AuthenticationManager {
         }
         
         for (final Authenticator authenticator : compatibleAuthenticators) {
-            val authSession = authenticator.authenticate(request, getUnusedRandomCode());
-            if (authSession != null) {
-                userByValidationCode.put(authSession.getValidationCode(), authSession.getUserName());
-                return authSession;
+            val authentication = authenticator.authenticate(request, getUnusedRandomCode());
+            if (authentication != null) {
+                userByValidationCode.put(authentication.getValidationCode(), authentication.getUserName());
+                return authentication;
             }
         }
         

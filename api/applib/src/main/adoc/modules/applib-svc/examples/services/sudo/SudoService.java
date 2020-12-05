@@ -16,13 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.sudo;
 
-import java.util.List;
-import java.util.function.Supplier;
+import java.util.concurrent.Callable;
+import java.util.function.UnaryOperator;
 
+import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserService;
+
+import lombok.NonNull;
 
 /**
  * Intended only for use by fixture scripts and integration tests, allows a block of code to execute
@@ -37,75 +40,49 @@ public interface SudoService {
      * If included in the list of roles, then will disable security checks (can view and use all object members).
      */
     // tag::refguide[]
-    String ACCESS_ALL_ROLE =                                // <.>
-            SudoService.class.getName() + "#accessAll";
+    RoleMemento ACCESS_ALL_ROLE =                                // <.>
+            new RoleMemento(
+                    SudoService.class.getName() + "#accessAll",
+                    "Sudo, can view and use all object members.");
+            
 
     // end::refguide[]
     /**
      * Executes the supplied block, with the {@link UserService} returning the specified user.
-     *
-     * <p>
-     *    The roles of this user will be the same as the currently logged-in user.
-     * </p>
+     * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
+     * @since 2.0
      */
     // tag::refguide[]
-    void sudo(                                              // <.>
-            String username,
-            final Runnable runnable);
+    <T> T call(                                             // <.>
+            @NonNull UnaryOperator<ExecutionContext> sudoMapper,
+            @NonNull Callable<T> supplier);
 
     // end::refguide[]
     /**
      * Executes the supplied block, with the {@link UserService} returning the specified user.
-     *
-     * <p>
-     *    The roles of this user will be the same as the currently logged-in user.
-     * </p>
+     * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
+     * @since 2.0
      */
     // tag::refguide[]
-    <T> T sudo(                                             // <.>
-            String username,
-            final Supplier<T> supplier);
+    default void run(                                        // <.>
+            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
+            final @NonNull Runnable runnable) {
+        call(sudoMapper, ()->{runnable.run(); return null;});
+    }
 
     // end::refguide[]
-    /**
-     * Executes the supplied block, with the {@link UserService} returning the specified user with the specified roles.
-     */
-    // tag::refguide[]
-    void sudo(                                              // <.>
-            String username, List<String> roles,
-            final Runnable runnable);
-
-    // end::refguide[]
-    /**
-     * Executes the supplied block, with the {@link UserService} returning the specified user with the specified roles.
-     */
-    // tag::refguide[]
-    <T> T sudo(                                             // <.>
-            String username, List<String> roles,
-            final Supplier<T> supplier);
-
-    // end::refguide[]
-
-    // tag::refguide-1[]
+    
+    
     /**
      * Allows the {@link SudoService} to notify other services/components that the effective user has been changed.
+     * @since 2.0
      */
-    interface Spi {
+    // tag::refguide-1[]
+    interface Listener {
 
-        // end::refguide-1[]
-        /**
-         * Any implementation of the {@link SudoService} should call this method on all implementations of the
-         * {@link Spi} service whenever {@link SudoService#sudo(String, List, Supplier)} (or its overloads)
-         * is called.
-         *
-         * <p>
-         *     Modelled after Shiro security's <a href="https://shiro.apache.org/static/1.2.6/apidocs/org/apache/shiro/subject/Subject.html#runAs-org.apache.shiro.subject.PrincipalCollection-">runAs</a> support.
-         * </p>
-         */
-        // tag::refguide-1[]
-        void runAs(String username, List<String> roles);    // <.>
+        void beforeCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);          // <.>
 
-        void releaseRunAs();                                // <.>
+        void afterCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);          // <.>
     }
     // end::refguide-1[]
 

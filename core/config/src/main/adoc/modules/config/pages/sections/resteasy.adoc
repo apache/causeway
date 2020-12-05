@@ -25,7 +25,7 @@ resteasy.authentication. +
 strategy-class-name
 
 | 
-| Defaults to ``AuthenticationSessionStrategyBasicAuth``.
+| Defaults to ``AuthenticationStrategyBasicAuth``.
 
 
 |

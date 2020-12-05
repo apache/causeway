@@ -43,12 +43,12 @@ public interface AuthenticationStrategy {
      * Binds the request to a still-valid {@link Authentication} if applicable
      * @param httpServletRequest
      * @param httpServletResponse
-     * @param authSession
+     * @param auth
      */
     void bind(
             HttpServletRequest httpServletRequest, 
             HttpServletResponse httpServletResponse, 
-            Authentication authSession);
+            Authentication auth);
 
     void invalidate(
             HttpServletRequest httpServletRequest, 

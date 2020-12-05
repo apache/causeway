@@ -62,13 +62,13 @@ extends SpringServlet {
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         
-        val authSession = AuthSessionStoreUtil.get(request.getSession(true))
+        val authentication = AuthSessionStoreUtil.get(request.getSession(true))
                 .orElse(null);
         
-        log.debug("new request incoming (authentication={})", authSession);
+        log.debug("new request incoming (authentication={})", authentication);
         
-        if(authSession!=null) {
-            isisInteractionFactory.runAuthenticated(authSession, ()->{
+        if(authentication!=null) {
+            isisInteractionFactory.runAuthenticated(authentication, ()->{
                 super.service(request, response);                
             });
         } else {
@@ -77,11 +77,11 @@ extends SpringServlet {
             super.service(request, response);    
         }
         
-        log.debug("request was successfully serviced (authentication={})", authSession);
+        log.debug("request was successfully serviced (authentication={})", authentication);
         
         if(isisInteractionFactory.isInInteractionSession()) {
             isisInteractionFactory.closeSessionStack();
-            log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authSession);
+            log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authentication);
         }
         
     }

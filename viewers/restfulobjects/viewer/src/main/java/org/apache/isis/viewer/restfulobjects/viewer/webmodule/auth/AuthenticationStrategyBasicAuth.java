@@ -81,7 +81,7 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
     public void bind(
             HttpServletRequest httpServletRequest, 
             HttpServletResponse httpServletResponse,
-            Authentication authSession) {
+            Authentication auth) {
         // TODO Auto-generated method stub
         
     }

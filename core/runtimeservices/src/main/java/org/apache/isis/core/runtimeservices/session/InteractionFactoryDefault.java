@@ -152,10 +152,10 @@ implements InteractionFactory, InteractionTracker {
     }
     
     @Override
-    public InteractionLayer openInteraction(final @NonNull Authentication authSessionToUse) {
+    public InteractionLayer openInteraction(final @NonNull Authentication authToUse) {
 
         val interactionSession = getOrCreateInteractionSession();
-        val newInteractionClosure = new InteractionLayer(interactionSession, authSessionToUse);
+        val newInteractionClosure = new InteractionLayer(interactionSession, authToUse);
         
         interactionLayerStack.get().push(newInteractionClosure);
 

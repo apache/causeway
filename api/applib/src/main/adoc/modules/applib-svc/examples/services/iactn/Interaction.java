@@ -22,10 +22,6 @@ package org.apache.isis.applib.services.iactn;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -39,7 +35,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.schema.common.v2.DifferenceDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.PeriodDto;
@@ -50,9 +45,7 @@ import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents an action invocation or property modification, resulting in some state change of the system.  It captures
@@ -80,245 +73,26 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 // tag::refguide[]
-@Log4j2
-public class Interaction implements HasUniqueId {
+public interface Interaction extends HasUniqueId {
 
-    public Interaction(final @NonNull UUID uniqueId) {
-        this.command = new Command(uniqueId);
-    }
-
-    @Getter
-    private final Command command;                  // <.>
-
-    @Override
-    public UUID getUniqueId() {                     // <.>
-        return command.getUniqueId();
-    }
+    Command getCommand();                  // <.>
 
     // end::refguide[]
-    private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
 
-    /**
-     * Returns a (list of) {@link Execution}s in the order that they were pushed.  Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
-     *
-     * <p>
-     *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
-     *     that may in turn cause other domain events to be fired (by virtue of the {@link WrapperFactory}).
-     *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
-     *     action will return a list of just one element.
-     * </p>
-     *
-     * @implNote - it seems that this is never actually called.
-     *  The PropertyEdit/ActionInvocation facet diligently calls
-     *  {@link #execute(MemberExecutor, PropertyEdit, ClockService, MetricsService)} or
-     *  {@link #execute(MemberExecutor, ActionInvocation, ClockService, MetricsService)} for us, to ensure that the
-     *  graph is populated, but then delegate to the PublisherService immediately at the end... ie {@link org.apache.isis.schema.ixn.v2.InteractionDto}s are published as we go, not all in a batch at the end.
-     */
-    // tag::refguide[]
-    public List<Execution<?,?>> getExecutions() {   // <.>
-        // end::refguide[]
-
-        return Collections.unmodifiableList(executionGraphs);
-
-        // tag::refguide[]
-        // ...
-    }
-
-    // end::refguide[]
     /**
      * The current (most recently pushed) {@link Execution}.
      */
     // tag::refguide[]
-    @Getter
-    private Execution<?,?> currentExecution;        // <.>
+    Execution<?,?> getCurrentExecution();        // <.>
 
     // end::refguide[]
     /**
      * The execution that preceded the current one.
      */
     // tag::refguide[]
-    @Getter
-    private Execution<?,?> priorExecution;          // <.>
+    Execution<?,?> getPriorExecution();          // <.>
 
     // end::refguide[]
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * Clears the set of {@link Execution}s that may have been {@link #push(Execution)}ed.
-     */
-    public void clear() {
-        executionGraphs.clear();
-    }
-
-    /**
-     * <b>NOT API</b>: intended only to be implemented by the framework.
-     *
-     * <p>
-     * (Modelled after {@link Callable}), is the implementation
-     * by which the framework actually performs the interaction.
-     */
-    public interface MemberExecutor<T extends Execution<?,?>> {
-        Object execute(final T currentExecution);
-    }
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
-     * Use the provided {@link MemberExecutor} to invoke an action, with the provided
-     * {@link ActionInvocation} capturing the details of said action.
-     * </p>
-     *
-     * <p>
-     *     Because this both pushes an {@link Interaction.Execution} to
-     *     represent the action invocation and then pops it, that completed
-     *     execution is accessible at {@link Interaction#getPriorExecution()}.
-     * </p>
-     */
-    public Object execute(
-            final MemberExecutor<ActionInvocation> memberExecutor,
-            final ActionInvocation actionInvocation,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final Command command) {
-
-        pushAndStart(actionInvocation, clockService, metricsService, command);
-        try {
-            return executeInternal(memberExecutor, actionInvocation);
-        } finally {
-            popAndComplete(clockService, metricsService);
-        }
-    }
-
-    private void pushAndStart(ActionInvocation actionInvocation, ClockService clockService, MetricsService metricsService, Command command) {
-        push(actionInvocation);
-        start(actionInvocation, clockService, metricsService, command);
-    }
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
-     * Use the provided {@link MemberExecutor} to edit a property, with the provided
-     * {@link PropertyEdit} capturing the details of said property edit.
-     * </p>
-     *
-     * <p>
-     *     Because this both pushes an {@link Interaction.Execution} to
-     *     represent the property edit and then pops it, that completed
-     *     execution is accessible at {@link Interaction#getPriorExecution()}.
-     * </p>
-     */
-    public Object execute(
-            final MemberExecutor<PropertyEdit> memberExecutor,
-            final PropertyEdit propertyEdit,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final Command command) {
-
-        push(propertyEdit);
-        start(propertyEdit, clockService, metricsService, command);
-        try {
-            return executeInternal(memberExecutor, propertyEdit);
-        } finally {
-            popAndComplete(clockService, metricsService);
-        }
-    }
-
-    private <T extends Execution<?,?>> Object executeInternal(MemberExecutor<T> memberExecutor, T execution) {
-
-        try {
-            Object result = memberExecutor.execute(execution);
-            execution.setReturned(result);
-            return result;
-        } catch (Exception ex) {
-
-            //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
-            // we rather print all of them, no matter whether recognized or not later on
-            // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
-            // WrapperFactory utilizing async calls
-            log.error("failed to execute an interaction", ex);
-
-            // just because an exception has thrown, does not mean it is that significant;
-            // it could be that it is recognized by an ExceptionRecognizer and is not severe
-            // eg. unique index violation in the DB
-            getCurrentExecution().setThrew(ex);
-
-            // propagate (as in previous design); caller will need to trap and decide
-            throw ex;
-        }
-    }
-
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
-     * Push a new {@link org.apache.isis.applib.events.domain.AbstractDomainEvent}
-     * onto the stack of events held by the command.
-     * </p>
-     */
-    private Execution<?,?> push(final Execution<?,?> execution) {
-
-        if(currentExecution == null) {
-            // new top-level execution
-            executionGraphs.add(execution);
-
-        } else {
-            // adds to graph of parent
-            execution.setParent(currentExecution);
-        }
-
-
-        // update this.currentExecution and this.previousExecution
-        moveCurrentTo(execution);
-
-        return execution;
-    }
-
-    private void start(
-            final Interaction.Execution<?,?> execution,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final Command command) {
-        // set the startedAt (and update command if this is the top-most member execution)
-        // (this isn't done within Interaction#execute(...) because it requires the DTO
-        // to have been set on the current execution).
-        val startedAt = execution.start(clockService, metricsService);
-        if(command.getStartedAt() == null) {
-            command.updater().setStartedAt(startedAt);
-        }
-    }
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
-     * Pops the top-most  {@link org.apache.isis.applib.events.domain.ActionDomainEvent}
-     * from the stack of events held by the command.
-     * </p>
-     */
-    private Execution<?,?> popAndComplete(
-            final ClockService clockService,
-            final MetricsService metricsService) {
-
-        if(currentExecution == null) {
-            throw new IllegalStateException("No current execution to pop");
-        }
-        final Execution<?,?> popped = currentExecution;
-
-        final Timestamp completedAt = clockService.nowAsJavaSqlTimestamp();
-        popped.setCompletedAt(completedAt, metricsService);
-
-        moveCurrentTo(currentExecution.getParent());
-        return popped;
-    }
-
-    private void moveCurrentTo(final Execution<?,?> newExecution) {
-        priorExecution = currentExecution;
-        currentExecution = newExecution;
-    }
-
 
     /**
      * Enumerates the different reasons why multiple occurrences of a certain type might occur within a single
@@ -361,8 +135,6 @@ public class Interaction implements HasUniqueId {
     }
     // end::refguide-1[]
 
-    private final Map<String, LongAdder> maxBySequence = _Maps.newHashMap();
-
     /**
      * Generates numbers in a named sequence.
      *
@@ -370,23 +142,10 @@ public class Interaction implements HasUniqueId {
      * generate sequence numbers corresponding to the sequences enumerated by the {@link Sequence} enum.
      */
     // tag::refguide[]
-    public int next(final String sequenceId) {      // <.>
-        // end::refguide[]
-
-        final LongAdder adder = maxBySequence.computeIfAbsent(sequenceId, this::newAdder);
-        adder.increment();
-        return adder.intValue();
-
-        // tag::refguide[]
-        // ...
-    }
+    int next(final String sequenceId);      // <.>
+    
     // end::refguide[]
 
-    private LongAdder newAdder(String ignore) {
-        final LongAdder adder = new LongAdder();
-        adder.decrement();
-        return adder;
-    }
 
     /**
      * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
@@ -532,7 +291,7 @@ public class Interaction implements HasUniqueId {
                 final MetricsService metricsService) {
             // end::refguide-2[]
 
-            val startedAt = clockService.nowAsJavaSqlTimestamp();
+            val startedAt = clockService.getClock().javaSqlTimestamp();
             syncMetrics(When.BEFORE, startedAt, metricsService);
             return startedAt;
 
@@ -544,7 +303,7 @@ public class Interaction implements HasUniqueId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        void setCompletedAt(
+        public void setCompletedAt(
                 final Timestamp completedAt,
                 final MetricsService metricsService) {
             syncMetrics(When.AFTER, completedAt, metricsService);

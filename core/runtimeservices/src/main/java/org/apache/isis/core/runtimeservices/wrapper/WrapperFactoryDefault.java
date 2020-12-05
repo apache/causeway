@@ -327,7 +327,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final AsyncControl<R> asyncControl) {
 
         val interactionLayer = currentInteractionLayer();
-        val asyncAuth = authSessionFrom(asyncControl, interactionLayer.getAuthentication());
+        val asyncAuth = authFrom(asyncControl, interactionLayer.getAuthentication());
         val command = interactionContextProvider.get().getInteractionElseFail().getCommand();
         val commandUniqueId = command.getUniqueId();
 
@@ -425,9 +425,9 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return MemberAndTarget.foundAction(targetActionIfAny.get(), currentObjectManager().adapt(mixedIn), method);
     }
 
-    private static <R> Authentication authSessionFrom(AsyncControl<R> asyncControl, Authentication authSession) {
+    private static <R> Authentication authFrom(AsyncControl<R> asyncControl, Authentication auth) {
     
-        val executionContext = authSession.getExecutionContext();
+        val executionContext = auth.getExecutionContext();
         
         val newExecutionContext = ExecutionContext.builder()
         .clock(Optional.ofNullable(asyncControl.getClock())
@@ -440,7 +440,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 .orElseGet(executionContext::getUser))
         .build();
         
-        return authSession.withExecutionContext(newExecutionContext);
+        return auth.withExecutionContext(newExecutionContext);
         
     }
 

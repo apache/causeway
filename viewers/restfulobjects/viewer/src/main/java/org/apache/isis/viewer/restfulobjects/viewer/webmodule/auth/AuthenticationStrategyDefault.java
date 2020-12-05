@@ -53,12 +53,12 @@ public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstrac
         val httpSession = getHttpSession(httpServletRequest);
 
         // use previously authenticated session if available
-        val authSession = (Authentication) 
+        val authentication = (Authentication) 
                 httpSession.getAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
-        if (authSession != null) {
-            val sessionValid = authenticationManager.isSessionValid(authSession);
+        if (authentication != null) {
+            val sessionValid = authenticationManager.isSessionValid(authentication);
             if (sessionValid) {
-                return authSession;
+                return authentication;
             }
         }
 
@@ -69,12 +69,12 @@ public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstrac
     public void bind(
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
-            final Authentication authSession) {
+            final Authentication authentication) {
         
         val httpSession = getHttpSession(httpServletRequest);
-        if(authSession != null) {
+        if(authentication != null) {
             httpSession.setAttribute(
-                    HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
+                    HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authentication);
         } else {
             httpSession.removeAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         }

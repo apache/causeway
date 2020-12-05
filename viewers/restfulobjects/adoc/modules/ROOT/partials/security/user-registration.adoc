@@ -32,7 +32,7 @@ Here `AuthenticationSession` is Apache Isis' internal API that represents a sign
 
 The framework provides a number of simple strategies:
 
-* `AuthenticationSessionStrategyBasicAuth` implements the HTTP basic auth protocol (the pop-up dialog box shown by the web browser)
+* `AuthenticationStrategyBasicAuth` implements the HTTP basic auth protocol (the pop-up dialog box shown by the web browser)
 * `AuthenticationSessionStrategyHeader` that simply reads the user identity from an HTTP header
 * `AuthenticationSessionStrategyTrusted` that always logs in with a special "exploration" user
 
@@ -50,7 +50,7 @@ The strategy is configured in `web.xml`; for example:
     <init-param>
         <param-name>authenticationSessionStrategy</param-name>
         <param-value>                                           <!--1-->
-    org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth
+    org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationStrategyBasicAuth
         </param-value>
     </init-param>
     <init-param>
@@ -145,7 +145,7 @@ Next, we need to ensure that a client can hit your new resource *with* the Apach
 
 * create a subclass of the `AuthenticationSessionStrategy` that automatically returns a dummy session if the resource being accessed is "/restful/signup", say.  +
 +
-You could do this by subclassing `AuthenticationSessionStrategyBasicAuth`, but then using code from `AuthenticationSessionStrategyBasicAuth` to return an "exploration" (or better, "signup") session if accessing the "/restful/signup" resource.
+You could do this by subclassing `AuthenticationStrategyBasicAuth`, but then using code from `AuthenticationStrategyBasicAuth` to return an "exploration" (or better, "signup") session if accessing the "/restful/signup" resource.
 
 * in the `SignUpResource` resource, you can then do a lookup of the `UserRegistrationService` in order to allow the user to be created: +
 +

@@ -42,8 +42,8 @@ public class AuthSessionStoreUtil {
 
     public static void put(
             @NonNull final HttpSession httpSession, 
-            @Nullable final Authentication authSession) {
-        httpSession.setAttribute(Authentication.class.getName(), authSession);
+            @Nullable final Authentication auth) {
+        httpSession.setAttribute(Authentication.class.getName(), auth);
     }
     
     public static Optional<Authentication> get(
@@ -55,11 +55,11 @@ public class AuthSessionStoreUtil {
     
     /** when within a VaadinSession */
     public static void put(
-            @Nullable final Authentication authSession) {
+            @Nullable final Authentication auth) {
         Optional.ofNullable(VaadinSession.getCurrent())
         .map(VaadinSession::getSession)
         .ifPresent(sessionVaa->{
-            sessionVaa.setAttribute(Authentication.class.getName(), authSession);    
+            sessionVaa.setAttribute(Authentication.class.getName(), auth);    
         });
     }
     

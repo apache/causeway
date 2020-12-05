@@ -44,7 +44,7 @@ public class ReplicateAndReplayJob implements Job {
 
     @Inject SecondaryConfig secondaryConfig;
 
-    Authentication authSession;
+    Authentication authentication;
 
     public void execute(final JobExecutionContext quartzContext) {
 
@@ -56,7 +56,7 @@ public class ReplicateAndReplayJob implements Job {
                     secondaryConfig.getPrimaryUser(), 
                     secondaryConfig.getQuartzRoles().stream());
             
-            authSession = SimpleAuthentication.validOf(user);
+            authentication = SimpleAuthentication.validOf(user);
             exec(quartzContext);
         }
     }
@@ -72,7 +72,7 @@ public class ReplicateAndReplayJob implements Job {
             case TICKING_CLOCK_STATUS_UNKNOWN:
             case TICKING_CLOCK_NOT_YET_INITIALIZED:
                 ssh.setSecondaryStatus(
-                        isTickingClockInitialized(authSession)
+                        isTickingClockInitialized(authentication)
                             ? SecondaryStatus.OK
                             : SecondaryStatus.TICKING_CLOCK_NOT_YET_INITIALIZED);
                 if(ssh.getSecondaryStatus() == SecondaryStatus.OK) {
@@ -84,7 +84,7 @@ public class ReplicateAndReplayJob implements Job {
 
             case OK:
                 val newStatus =
-                        isisInteractionFactory.callAuthenticated(authSession, new ReplicateAndRunCommands());
+                        isisInteractionFactory.callAuthenticated(authentication, new ReplicateAndRunCommands());
 
                 if(newStatus != null) {
                     ssh.setSecondaryStatus(newStatus);
@@ -101,8 +101,8 @@ public class ReplicateAndReplayJob implements Job {
         }
     }
 
-    private boolean isTickingClockInitialized(final Authentication authSession) {
-        return isisInteractionFactory.callAuthenticated(authSession, new IsTickingClockInitialized());
+    private boolean isTickingClockInitialized(final Authentication authentication) {
+        return isisInteractionFactory.callAuthenticated(authentication, new IsTickingClockInitialized());
     }
 
 }

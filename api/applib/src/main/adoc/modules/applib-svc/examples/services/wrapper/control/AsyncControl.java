@@ -18,12 +18,14 @@
  */
 package org.apache.isis.applib.services.wrapper.control;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+
+import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -69,14 +71,14 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
     // end::refguide[]
     /**
-     * Defaults to user initiating the action, if not overridden
+     * Defaults to the system clock, if not overridden
      */
     // tag::refguide[]
     @Getter
-    private String user;                                                // <.>
-    public AsyncControl<R> withUser(final String user) {
+    private VirtualClock clock;                                         // <.>
+    public AsyncControl<R> withClock(final @NonNull VirtualClock clock) {
         // end::refguide[]
-        this.user = user;
+        this.clock = clock;
         return this;
         // tag::refguide[]
         // ...
@@ -84,21 +86,47 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
     // end::refguide[]
     /**
-     * Defaults to roles of user initiating the action, if not overridden
+     * Defaults to the system locale, if not overridden
      */
     // tag::refguide[]
     @Getter
-    private List<String> roles;                                         // <.>
-    public AsyncControl<R> withRoles(final List<String> roles) {
+    private Locale locale;                                         // <.>
+    public AsyncControl<R> withLocale(final @NonNull Locale locale) {
         // end::refguide[]
-        this.roles = Collections.unmodifiableList(roles);
+        this.locale = locale;
         return this;
         // tag::refguide[]
         // ...
     }
-    public AsyncControl<R> withRoles(String... roles) {
+
+    // end::refguide[]
+    /**
+     * Defaults to the system time zone, if not overridden
+     */
+    // tag::refguide[]
+    @Getter
+    private TimeZone timeZone;                                         // <.>
+    public AsyncControl<R> withTimeZone(final @NonNull TimeZone timeZone) {
         // end::refguide[]
-        return withRoles(Arrays.asList(roles));
+        this.timeZone = timeZone;
+        return this;
+        // tag::refguide[]
+        // ...
+    }
+
+    // end::refguide[]
+
+
+    /**
+     * Defaults to user initiating the action, if not overridden
+     */
+    // tag::refguide[]
+    @Getter
+    private UserMemento user;                                           // <.>
+    public AsyncControl<R> withUser(final @NonNull UserMemento user) {
+        // end::refguide[]
+        this.user = user;
+        return this;
         // tag::refguide[]
         // ...
     }

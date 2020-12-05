@@ -32,7 +32,7 @@ Here `AuthenticationSession` is Apache Isis' internal API that represents a sign
 
 The framework provides a number of simple strategies:
 
-* `AuthenticationSessionStrategyBasicAuth` implements the HTTP basic auth protocol (the pop-up dialog box shown by the web browser)
+* `AuthenticationStrategyBasicAuth` implements the HTTP basic auth protocol (the pop-up dialog box shown by the web browser)
 * `AuthenticationSessionStrategyHeader` that simply reads the user identity from an HTTP header
 * `AuthenticationSessionStrategyTrusted` that always logs in with a special "exploration" user
 
@@ -50,7 +50,7 @@ The strategy is configured in `web.xml`; for example:
     <init-param>
         <param-name>authenticationSessionStrategy</param-name>
         <param-value>                                           <!--1-->
-    org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth
+    org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationStrategyBasicAuth
         </param-value>
     </init-param>
     <init-param>

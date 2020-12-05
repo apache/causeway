@@ -237,7 +237,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     }
 
 
-    private AuthenticationStrategy authSessionStrategy;
+    private AuthenticationStrategy authStrategy;
     private List<String> restrictedPaths;
     private WhenNoSession whenNotAuthenticated;
     private String redirectToOnException;
@@ -252,7 +252,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
 
     @Override
     public void init(final FilterConfig config) throws ServletException {
-        authSessionStrategy = lookup(config.getInitParameter(AUTHENTICATION_SESSION_STRATEGY_KEY));
+        authStrategy = lookup(config.getInitParameter(AUTHENTICATION_SESSION_STRATEGY_KEY));
         lookupWhenNoSession(config);
         lookupPassThru(config);
         lookupRedirectToOnException(config);
@@ -356,7 +356,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
             if (queryString != null && queryString
                     .contains(ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT)) {
 
-                authSessionStrategy.invalidate(httpServletRequest, httpServletResponse);
+                authStrategy.invalidate(httpServletRequest, httpServletResponse);
                 return;
             }
 
@@ -373,10 +373,10 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
             
             // authenticate
             val authentication =
-                    authSessionStrategy.lookupValid(httpServletRequest, httpServletResponse);
+                    authStrategy.lookupValid(httpServletRequest, httpServletResponse);
             if (authentication != null) {
                 
-                authSessionStrategy.bind(httpServletRequest, httpServletResponse, authentication);
+                authStrategy.bind(httpServletRequest, httpServletResponse, authentication);
                 
                 isisInteractionFactory.runAuthenticated(
                         authentication,
