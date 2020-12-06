@@ -18,10 +18,11 @@
  */
 package org.apache.isis.applib.services.user;
 
-import java.util.Optional;
-
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 // tag::refguide[]
 public interface UserService {
@@ -34,8 +35,16 @@ public interface UserService {
      * based on whether an {@link ExecutionContext} can be found with the current thread's context.
      */
     // tag::refguide[]
-    Optional<UserMemento> getUser();    // <.>
+    Optional<UserMemento> currentUser();    // <.>
 
+    /**
+     * Gets the details about the current user.
+     * @apiNote for backward compatibility
+     */
+    @Nullable
+    default UserMemento getUser() {
+        return currentUser().orElse(null);
+    }
     // end::refguide[]
     
     // -- UTILITIES
@@ -45,9 +54,9 @@ public interface UserService {
      * @throws IllegalStateException if no {@link ExecutionContext} can be found with the current thread's context.
      */
     // tag::refguide[]
-    default UserMemento getUserElseFail() {              // <.>
+    default UserMemento currentUserElseFail() {              // <.>
         // end::refguide[]
-        return getUser()
+        return currentUser()
                 .orElseThrow(()->_Exceptions.illegalState("Current thread has no ExecutionContext."));
     }
     
@@ -57,13 +66,13 @@ public interface UserService {
      * based on whether an {@link ExecutionContext} can be found with the current thread's context.
      */
     // tag::refguide[]
-    default Optional<String> getUserName() {    // <.>
-        return getUser()
+    default Optional<String> currentUserName() {    // <.>
+        return currentUser()
                 .map(UserMemento::getName);
     }
     
-    default String getUserNameElseNobody() {    // <.>
-        return getUserName()
+    default String currentUserNameElseNobody() {    // <.>
+        return currentUserName()
                 .orElse("Nobody");
     }
 

@@ -153,7 +153,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoFactory {
         dto.setMinorVersion("0");
 
         dto.setTransactionId(uniqueId.toString());
-        dto.setUser(userService.getUserNameElseNobody());
+        dto.setUser(userService.currentUserNameElseNobody());
         dto.setTimestamp(clockService.getClock().xmlGregorianCalendar());
 
         for (val targetAdapter : targetAdapters) {

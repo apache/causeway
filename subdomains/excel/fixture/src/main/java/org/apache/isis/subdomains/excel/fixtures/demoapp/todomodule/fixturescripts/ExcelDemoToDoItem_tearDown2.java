@@ -38,7 +38,7 @@ public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
     @Override
     public void execute(ExecutionContext executionContext) {
 
-        final String ownedBy = this.user != null ? this.user : userService.getUserNameElseNobody();
+        final String ownedBy = this.user != null ? this.user : userService.currentUserNameElseNobody();
 
         isisJdoSupport.executeUpdate(String.format(
                 "delete "

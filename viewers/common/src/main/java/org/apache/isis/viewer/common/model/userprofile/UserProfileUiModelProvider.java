@@ -34,7 +34,7 @@ public class UserProfileUiModelProvider implements UserProfileService {
     
     @Override
     public String userProfileName() {
-        return userService.getUserName().orElse("<Anonymous>");
+        return userService.currentUserName().orElse("<Anonymous>");
     }
 
     public UserProfileUiModel getUserProfile() {

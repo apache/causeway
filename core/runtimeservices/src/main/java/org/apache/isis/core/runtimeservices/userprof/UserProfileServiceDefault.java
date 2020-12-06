@@ -41,7 +41,7 @@ public class UserProfileServiceDefault implements UserProfileService {
     
     @Override
     public String userProfileName() {
-        return userService.getUserName().orElse(null);
+        return userService.currentUserName().orElse(null);
     }
 
     

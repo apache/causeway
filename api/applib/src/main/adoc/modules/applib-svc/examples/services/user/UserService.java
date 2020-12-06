@@ -47,7 +47,7 @@ public interface UserService {
     // tag::refguide[]
     default UserMemento getUserElseFail() {              // <.>
         // end::refguide[]
-        return getUser()
+        return currentUser()
                 .orElseThrow(()->_Exceptions.illegalState("Current thread has no ExecutionContext."));
     }
     
@@ -58,12 +58,12 @@ public interface UserService {
      */
     // tag::refguide[]
     default Optional<String> getUserName() {    // <.>
-        return getUser()
+        return currentUser()
                 .map(UserMemento::getName);
     }
     
     default String getUserNameElseNobody() {    // <.>
-        return getUserName()
+        return currentUserName()
                 .orElse("Nobody");
     }
 

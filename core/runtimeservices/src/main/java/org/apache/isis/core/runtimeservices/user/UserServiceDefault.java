@@ -44,7 +44,7 @@ public class UserServiceDefault implements UserService {
     @Inject private InteractionTracker isisInteractionTracker;
     
     @Override
-    public Optional<UserMemento> getUser() {
+    public Optional<UserMemento> currentUser() {
         return isisInteractionTracker.currentExecutionContext()
                 .map(ExecutionContext::getUser);
     }

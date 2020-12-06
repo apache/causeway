@@ -460,12 +460,12 @@ public class DomainObjectContainer {
     }
 
     /**
-     * @deprecated - use {@link UserService#getUser()} instead
+     * @deprecated - use {@link UserService#currentUser()} instead
      */
     @Deprecated
     @Programmatic
     public UserMemento getUser() {
-    	return userService.getUser().orElse(null);
+    	return userService.currentUser().orElse(null);
     }
 
     /**

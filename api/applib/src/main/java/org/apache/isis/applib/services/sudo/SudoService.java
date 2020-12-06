@@ -30,7 +30,7 @@ import lombok.NonNull;
 
 /**
  * Intended only for use by fixture scripts and integration tests, allows a block of code to execute
- * while the {@link UserService}'s {@link UserService#getUser() getUser()} method returns the specified user/role
+ * while the {@link UserService}'s {@link UserService#currentUser() getUser()} method returns the specified user/role
  * as the effective user.
  */
 // tag::refguide[]

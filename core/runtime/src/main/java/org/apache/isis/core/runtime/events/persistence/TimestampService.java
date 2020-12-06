@@ -51,7 +51,7 @@ public class TimestampService {
         val persistableObject = event.getPersistableObject();
 
         if(persistableObject instanceof HoldsUpdatedBy) {
-            ((HoldsUpdatedBy)persistableObject).setUpdatedBy(userService.getUserNameElseNobody());
+            ((HoldsUpdatedBy)persistableObject).setUpdatedBy(userService.currentUserNameElseNobody());
         }
         
         if(persistableObject instanceof HoldsUpdatedAt) {

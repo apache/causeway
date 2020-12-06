@@ -79,7 +79,7 @@ public class MeService {
     }
 
     protected ApplicationUser doMe() {
-        final String myName = userService.getUserNameElseNobody();
+        final String myName = userService.currentUserNameElseNobody();
         return applicationUserRepository.findOrCreateUserByUsername(myName);
     }
 

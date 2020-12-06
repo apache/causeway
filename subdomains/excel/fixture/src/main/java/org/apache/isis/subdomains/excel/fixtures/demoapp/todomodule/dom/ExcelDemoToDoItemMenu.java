@@ -205,7 +205,7 @@ public class ExcelDemoToDoItemMenu {
     }
     
     private String currentUserName() {
-        return userService.getUserNameElseNobody();
+        return userService.currentUserNameElseNobody();
     }
     
     private LocalDate currentDate() {

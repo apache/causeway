@@ -48,7 +48,6 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetContent;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
-import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
@@ -145,7 +144,7 @@ public class BulkUpdateManagerForDemoToDoItem {
     }
 
     private String currentUserName() {
-        return userService.getUserNameElseNobody();
+        return userService.currentUserNameElseNobody();
     }
 
     @Collection
