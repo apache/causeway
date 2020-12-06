@@ -22,14 +22,14 @@ import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationAbstract;
 
-final class InitialisationSession extends AuthenticationAbstract {
+final class AnonymousSession extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
 
     private static final ExecutionContext INITIALISATION_CONTEXT = 
             ExecutionContext.ofUserWithSystemDefaults(UserMemento.system());
 
-    public InitialisationSession() {
+    public AnonymousSession() {
         super(INITIALISATION_CONTEXT, AuthenticationAbstract.DEFAULT_AUTH_VALID_CODE);
     }
     

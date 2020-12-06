@@ -43,8 +43,8 @@ public interface InteractionFactory {
     AuthenticationLayer openInteraction();
     
     /**
-     * Returns a new {@link AuthenticationLayer} that is a holder of {@link Authentication} on top 
-     * of the current thread's authentication layer stack.
+     * Returns a new or reused {@link AuthenticationLayer} that is a holder of {@link Authentication} 
+     * on top of the current thread's authentication layer stack.
      * <p>
      * If available reuses an existing {@link InteractionSession}, otherwise creates a new one.
      * <p> 
@@ -61,7 +61,7 @@ public interface InteractionFactory {
     AuthenticationLayer openInteraction(@NonNull Authentication authentication);
 
     /**
-     * @return whether the calling thread is within the context of an open IsisInteractionSession
+     * @return whether the calling thread is within the context of an open {@link InteractionSession} 
      */
     boolean isInInteractionSession();
 
@@ -69,11 +69,16 @@ public interface InteractionFactory {
      * @return whether the calling thread is within the context of an open IsisTransactionSession
      */
     boolean isInTransaction();
-
     
     /**
-     * Executes a piece of code in a new (possibly nested) IsisInteraction.
-     *
+     * Executes a block of code with a new or reused {@link InteractionSession} using a new or 
+     * reused {@link AuthenticationLayer}.
+     * <p>
+     * If there is currently no {@link InteractionSession} a new one is created.
+     * <p>
+     * If there is currently an {@link AuthenticationLayer} that has an equal {@link Authentication}
+     * to the given one, it is reused, otherwise a new one is created.
+     * 
      * @param authentication - the user details to run under (non-null)
      * @param callable - the piece of code to run (non-null)
      * 
@@ -85,14 +90,15 @@ public interface InteractionFactory {
      * @param authentication - the user details to run under (non-null)
      * @param runnable (non-null)
      */
-    default void runAuthenticated(@NonNull Authentication authentication, @NonNull ThrowingRunnable runnable) {
-        callAuthenticated(authentication, ThrowingRunnable.toCallable(runnable));
-    }
+    void runAuthenticated(@NonNull Authentication authentication, @NonNull ThrowingRunnable runnable);
 
     /**
-     * Executes a piece of code in a (possibly reused) {@link InteractionSession}.
-     * If there is already an open session stacked on the current thread then that one is used, 
-     * otherwise an anonymous session is created.
+     * Executes a block of code with a new or reused {@link InteractionSession} using a new or 
+     * reused {@link AuthenticationLayer}.
+     * <p>
+     * If there is currently no {@link InteractionSession} a new one is created and a new 
+     * anonymous {@link AuthenticationLayer} is returned. Otherwise both, session and layer are reused.
+     * 
      * @param <R>
      * @param callable (non-null)
      */

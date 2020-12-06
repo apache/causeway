@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.session;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.UUID;
@@ -149,13 +150,28 @@ implements InteractionFactory, InteractionTracker {
     
     @Override
     public AuthenticationLayer openInteraction() {
-        return openInteraction(new InitialisationSession());
+        return currentAuthenticationLayer()
+                // or else create an anonymous authentication layer
+                .orElseGet(()->openInteraction(new AnonymousSession())); 
     }
     
     @Override
     public AuthenticationLayer openInteraction(final @NonNull Authentication authToUse) {
 
         val interactionSession = getOrCreateInteractionSession();
+        
+        // check whether we should reuse any current authenticationLayer, 
+        // that is, if current authentication and authToUse are equal
+        
+        val reuseCurrentLayer = currentAuthentication()
+                .map(currentAuthentication->Objects.equals(currentAuthentication, authToUse))
+                .orElse(false);
+        
+        if(reuseCurrentLayer) {
+            // we are done, just return the stack's top
+            return authenticationStack.get().peek();
+        }
+        
         val authenticationLayer = new AuthenticationLayer(interactionSession, authToUse);
         
         authenticationStack.get().push(authenticationLayer);
@@ -188,13 +204,15 @@ implements InteractionFactory, InteractionTracker {
                 authenticationStack.get().size(),
                 _Probe.currentThreadId());
 
-        closeInteractionStackDownToStackSize(0);
+        closeSessionStackDownToStackSize(0);
     }
 
 	@Override
     public Optional<AuthenticationLayer> currentAuthenticationLayer() {
     	val stack = authenticationStack.get();
-    	return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
+    	return stack.isEmpty() 
+    	        ? Optional.empty() 
+                : Optional.of(stack.lastElement());
     }
 
     @Override
@@ -217,6 +235,8 @@ implements InteractionFactory, InteractionTracker {
 
     }
 
+    // -- AUTHENTICATED EXECUTION
+    
     @Override
     @SneakyThrows
     public <R> R callAuthenticated(
@@ -230,18 +250,38 @@ implements InteractionFactory, InteractionTracker {
             serviceInjector.injectServicesInto(callable);
             return callable.call();
         } finally {
-            closeInteractionStackDownToStackSize(stackSizeWhenEntering);
+            closeSessionStackDownToStackSize(stackSizeWhenEntering);
+        }
+
+    }
+    
+    @Override
+    @SneakyThrows
+    public void runAuthenticated(
+            @NonNull final Authentication authentication, 
+            @NonNull final ThrowingRunnable runnable) {
+        
+        final int stackSizeWhenEntering = authenticationStack.get().size();
+        openInteraction(authentication);
+        
+        try {
+            serviceInjector.injectServicesInto(runnable);
+            runnable.run();
+        } finally {
+            closeSessionStackDownToStackSize(stackSizeWhenEntering);
         }
 
     }
 
+    // -- ANONYMOUS EXECUTION
+    
     @SneakyThrows
-    public <R> R callAnonymous(Callable<R> callable) {
+    public <R> R callAnonymous(@NonNull final Callable<R> callable) {
         if(isInInteractionSession()) {
             serviceInjector.injectServicesInto(callable);
             return callable.call(); // reuse existing session
         }
-        return callAuthenticated(new InitialisationSession(), callable);
+        return callAuthenticated(new AnonymousSession(), callable);
     }
 
     /**
@@ -249,15 +289,17 @@ implements InteractionFactory, InteractionTracker {
      * @param runnable
      */
     @SneakyThrows
-    public void runAnonymous(ThrowingRunnable runnable) {
+    public void runAnonymous(@NonNull final ThrowingRunnable runnable) {
         if(isInInteractionSession()) {
             serviceInjector.injectServicesInto(runnable);
             runnable.run(); // reuse existing session
             return;
         }
-        runAuthenticated(new InitialisationSession(), runnable);
+        runAuthenticated(new AnonymousSession(), runnable);
     }
 
+    // -- CONVERSATION ID
+    
     private final ThreadLocal<UUID> conversationId = ThreadLocal.withInitial(()->null);
     
     @Override
@@ -272,19 +314,19 @@ implements InteractionFactory, InteractionTracker {
     	return authenticationStack.get().size()==1; 
     }
     
-    private void postSessionOpened(InteractionSession newIsisInteraction) {
+    private void postSessionOpened(InteractionSession session) {
         conversationId.set(UUID.randomUUID());
-        runtimeEventService.fireInteractionHasStarted(newIsisInteraction); // only fire on top-level session
+        runtimeEventService.fireInteractionHasStarted(session); // only fire on top-level session
     }
     
-    private void preSessionClosed(InteractionSession isisInteraction) {
+    private void preSessionClosed(InteractionSession session) {
         completeAndPublishCurrentCommand();
-        runtimeEventService.fireInteractionIsEnding(isisInteraction); // only fire on top-level session 
+        runtimeEventService.fireInteractionIsEnding(session); // only fire on top-level session 
         isisInteractionScopeCloseListener.preTopLevelIsisInteractionClose(); // cleanup the isis-session scope
-        isisInteraction.close(); // do this last
+        session.close(); // do this last
     }
     
-    private void closeInteractionStackDownToStackSize(int downToStackSize) {
+    private void closeSessionStackDownToStackSize(int downToStackSize) {
         
         log.debug("about to close IsisInteraction stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,
