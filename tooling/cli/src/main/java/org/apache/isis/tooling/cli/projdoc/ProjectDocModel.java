@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -157,7 +158,8 @@ public class ProjectDocModel {
                 });
             });
 
-            val containerView = c4.getViewSet().createContainerView(softwareSystem, key, "Artifact Dependency Diagram (Maven)");
+            val containerView = c4.getViewSet()
+                    .createContainerView(softwareSystem, key, "Artifact Hierarchy (Maven)");
             containerView.addAllContainers();
 
             val plantUmlSource = c4.toPlantUML(containerView);
@@ -186,15 +188,12 @@ public class ProjectDocModel {
 
         val table = table(doc);
         table.setTitle(String.format("Projects/Modules (%s)", sectionName));
-        table.setAttribute("cols", "2m,2m,1m,1m,2,5a", true);
+        table.setAttribute("cols", "3a,2,5a", true);
         table.setAttribute("header-option", "", true);
 
         val headRow = headRow(table);
 
-        cell(table, headRow, "Group");
-        cell(table, headRow, "Artifact");
-        cell(table, headRow, "Type");
-        cell(table, headRow, "Folder");
+        cell(table, headRow, "Coordinates");
         cell(table, headRow, "Name");
         cell(table, headRow, "Description");
 
@@ -208,16 +207,17 @@ public class ProjectDocModel {
         .forEach(module->{
 
             val projPath = _Files.canonicalPath(module.getProjectDirectory()).get();
-            val projRelativePath = _Files.toRelativePath(projRoot, projPath);
+            val projRelativePath = 
+                    Optional.ofNullable(
+                            _Strings.emptyToNull(
+                                    _Files.toRelativePath(projRoot, projPath)))
+                    .orElse("/");
 
             modulesWritten.add(module);
             groupDiagram.collect(module);
 
             val row = row(table);
-            cell(table, row, module.getArtifactCoordinates().getGroupId());
-            cell(table, row, module.getArtifactCoordinates().getArtifactId());
-            cell(table, row, module.getArtifactCoordinates().getPackaging());
-            cell(table, row, projRelativePath);
+            cell(table, row, coordinates(module, projRelativePath));
             cell(table, row, module.getName());
             cell(table, row, details(module));
         });
@@ -253,6 +253,26 @@ public class ProjectDocModel {
         return false;
     }
 
+    //    [source,yaml]
+    //    ----
+    //    Group: org.apache.isis.commons
+    //    Artifact: isis-commons
+    //    Type: jar
+    //    Folder: \commons
+    //    ----
+    private String coordinates(ProjectNode module, String projRelativePath) {
+        val sb = new StringBuilder();
+        appendKeyValue(sb, "Group", module.getArtifactCoordinates().getGroupId());
+        appendKeyValue(sb, "Artifact", module.getArtifactCoordinates().getArtifactId());
+        appendKeyValue(sb, "Type", module.getArtifactCoordinates().getPackaging());
+        appendKeyValue(sb, "Folder", projRelativePath);
+        return AsciiDocFactory.SourceFactory.yaml(sb.toString(), null);
+    }
+    
+    private void appendKeyValue(StringBuilder sb, String key, String value) {
+        sb.append(String.format("%s: %s\n", key, value));
+    }
+    
     private String details(ProjectNode module) {
         val description = module.getDescription().trim();
         val dependencyList = module.getDependencies()
