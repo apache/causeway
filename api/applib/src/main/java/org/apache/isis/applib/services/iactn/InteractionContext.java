@@ -42,7 +42,7 @@ public interface InteractionContext {
     
     default Interaction currentInteractionElseFail() {
     	return currentInteraction().orElseThrow(()->_Exceptions
-    			.unrecoverable("needs an InteractionSession on current thread"));
+    			.illegalState("No InteractionSession on current thread"));
     }
     
     // tag::refguide[]

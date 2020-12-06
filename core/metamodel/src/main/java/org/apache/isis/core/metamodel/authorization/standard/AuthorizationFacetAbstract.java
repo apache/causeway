@@ -52,7 +52,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
         
         val hides = authorizationManager
                 .isVisible(
-                        authenticationContext.getAuthenticationElseFail(), 
+                        authenticationContext.currentAuthenticationElseFail(), 
                         ic.getIdentifier()) 
                 ? null 
                 : "Not authorized to view";
@@ -69,7 +69,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
         
         val disables = authorizationManager
                 .isUsable(
-                        authenticationContext.getAuthenticationElseFail(), 
+                        authenticationContext.currentAuthenticationElseFail(), 
                         ic.getIdentifier()) 
                 ? null 
                 : "Not authorized to edit";

@@ -58,7 +58,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
 
         val metaModelContext = super.getResourceContext().getMetaModelContext();
 
-        addLinkToUser(getResourceContext().getAuthenticationContext().getAuthenticationElseFail());
+        addLinkToUser(getResourceContext().getAuthenticationContext().currentAuthenticationElseFail());
         addLinkToMenuBars();
         addLinkToServices(metaModelContext.streamServiceAdapters());
         addLinkToVersion();

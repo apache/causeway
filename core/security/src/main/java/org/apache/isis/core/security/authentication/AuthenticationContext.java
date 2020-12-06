@@ -40,7 +40,7 @@ public interface AuthenticationContext {
      */
     Optional<Authentication> currentAuthentication();
     
-    default Authentication getAuthenticationElseFail() {
+    default Authentication currentAuthenticationElseFail() {
         return currentAuthentication()
                 .orElseThrow(()->
                     _Exceptions.illegalState(

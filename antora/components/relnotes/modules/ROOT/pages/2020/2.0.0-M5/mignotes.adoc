@@ -201,8 +201,8 @@ CommandServiceInternal -> CommandPublisher
 | AuthenticationSessionStrategyDefault (*1*) 
 | AuthenticationStrategyDefault
 
-| AuthenticationSessionTracker
-| AuthenticationContext
+| AuthenticationSessionTracker#getInteraction : Interaction  
+| AuthenticationContext#currentInteraction : *Optional*<Interaction>
 
 | Clock (moved from applib module to fixture-applib module)
 | VirtualClock (introduced)
@@ -222,8 +222,8 @@ CommandServiceInternal -> CommandPublisher
 | MessageBroker is held by Authentication(Session)
 | MessageBroker is held by InteractionSession
 
-| UserMemento UserService.getUser();
-| *Optional*<UserMemento> UserService.getUser();
+| UserService#getUser() : UserMemento
+| UserService#currentUser() : *Optional*<UserMemento>
 
 | SudoService
 | redefined, see java doc for details
