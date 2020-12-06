@@ -79,11 +79,10 @@ public interface IResourceContext {
     RepresentationService.Intent getIntent();
     
     AuthenticationContext getAuthenticationContext();
-    
     SpecificationLoader getSpecificationLoader();
-    MetaModelContext getMetaModelContext(); // TODO derive from specLoader
-    ServiceRegistry getServiceRegistry(); // TODO derive from specLoader
-    IsisConfiguration getConfiguration(); // TODO derive from specLoader
+    MetaModelContext getMetaModelContext();
+    ServiceRegistry getServiceRegistry();
+    IsisConfiguration getConfiguration();
 
     // -- UTILITY
 

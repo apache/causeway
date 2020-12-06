@@ -34,7 +34,6 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * 
@@ -89,9 +88,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         .currentAuthentication()
         .ifPresent(authentication->{
         
-            val authenticationManager = getServiceRegistry().lookupServiceElseFail(AuthenticationManager.class);
             authenticationManager.closeSession(authentication);
-            
             interactionFactory.closeSessionStack();
             
         });
