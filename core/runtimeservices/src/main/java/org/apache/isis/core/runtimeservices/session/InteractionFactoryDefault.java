@@ -308,7 +308,7 @@ implements InteractionFactory, InteractionTracker {
     }
     
     private IsisInteraction getInternalInteractionElseFail() {
-        val interaction = getInteractionElseFail();
+        val interaction = currentInteractionElseFail();
         if(interaction instanceof IsisInteraction) {
             return (IsisInteraction) interaction;
         }

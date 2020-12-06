@@ -41,11 +41,11 @@ public interface InteractionContext {
     // -- SHORTCUTS
     
     default Interaction getInteractionIfAny() {
-    	return getInteraction().orElse(null);
+    	return currentInteraction().orElse(null);
     }
     
     default Interaction getInteractionElseFail() {
-    	return getInteraction().orElseThrow(()->_Exceptions
+    	return currentInteraction().orElseThrow(()->_Exceptions
     			.unrecoverable("needs an InteractionSession on current thread"));
     }
     

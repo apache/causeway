@@ -74,7 +74,7 @@ implements MemberExecutorService {
     
     @Override
     public Optional<InternalInteraction> getInteraction() {
-        return isisInteractionTracker.getInteraction()
+        return isisInteractionTracker.currentInteraction()
                 .map(InternalInteraction.class::cast);
     }
     

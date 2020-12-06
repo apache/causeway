@@ -77,7 +77,7 @@ class IsisTransactionManagerJdo {
 
         } else {
 
-            val interaction = interactionContextProvider.get().getInteractionElseFail();
+            val interaction = interactionContextProvider.get().currentInteractionElseFail();
 
             val command = interaction.getCommand();
             val transactionId = command.getUniqueId();

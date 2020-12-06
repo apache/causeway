@@ -215,7 +215,7 @@ implements
     }
 
     Interaction currentInteraction() {
-        return interactionContextProvider.get().getInteractionElseFail();
+        return interactionContextProvider.get().currentInteractionElseFail();
     }
 
     // -- HELPER

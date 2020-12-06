@@ -75,7 +75,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         _Assert.assertEquals(objectAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
         
-        final Interaction interaction = interactionContextProvider.get().getInteractionElseFail();
+        final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
         final Bookmark targetBookmark = targetAdapter.getRootOid()
@@ -120,7 +120,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final ManagedObject targetAdapter,
             final ManagedObject newValueAdapterIfAny) {
 
-        final Interaction interaction = interactionContextProvider.get().getInteractionElseFail();
+        final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 

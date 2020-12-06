@@ -96,7 +96,7 @@ extends InteractionContext, AuthenticationContext {
     // -- INTERACTION CONTEXT
     
     @Override
-    default Optional<Interaction> getInteraction(){
+    default Optional<Interaction> currentInteraction(){
     	return currentInteractionSession().map(InteractionSession::getInteraction);
     }
 
