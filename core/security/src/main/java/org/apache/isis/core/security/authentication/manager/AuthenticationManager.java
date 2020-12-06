@@ -55,7 +55,7 @@ public class AuthenticationManager {
 
     @Getter private final Can<Authenticator> authenticators;
     
-    private final Map<String, String> userByValidationCode = _Maps.newHashMap();
+    private final Map<String, String> userByValidationCode = _Maps.newConcurrentHashMap();
     private final RandomCodeGenerator randomCodeGenerator;
     private final Can<Registrar> registrars;
 
@@ -75,7 +75,7 @@ public class AuthenticationManager {
 
     // -- SESSION MANAGEMENT (including authenticate)
 
-    public synchronized final Authentication authenticate(AuthenticationRequest request) {
+    public final Authentication authenticate(AuthenticationRequest request) {
         
         if (request == null) {
             return null;

@@ -57,7 +57,7 @@ public class AuthenticationManager_authenticators_Test {
                 Collections.singletonList(auth), 
                 new RandomCodeGeneratorDefault());
         assertThat(authenticationManager.getAuthenticators().size(), is(1));
-        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(auth)));
+        assertThat(authenticationManager.getAuthenticators().getElseFail(0), is(sameInstance(auth)));
     }
 
 }
