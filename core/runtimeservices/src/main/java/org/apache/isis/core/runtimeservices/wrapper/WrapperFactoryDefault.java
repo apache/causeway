@@ -546,7 +546,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private AuthenticationLayer currentInteractionLayer() {
-        return interactionTracker.currentInteractionLayerElseFail();
+        return interactionTracker.currentAuthenticationLayerElseFail();
     }
 
     private ObjectManager currentObjectManager() {

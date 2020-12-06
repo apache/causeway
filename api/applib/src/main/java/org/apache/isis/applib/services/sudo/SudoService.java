@@ -24,6 +24,7 @@ import java.util.function.UnaryOperator;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
 
@@ -66,8 +67,8 @@ public interface SudoService {
     // tag::refguide[]
     default void run(                                        // <.>
             final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
-            final @NonNull Runnable runnable) {
-        call(sudoMapper, ()->{runnable.run(); return null;});
+            final @NonNull ThrowingRunnable runnable) {
+        call(sudoMapper, ThrowingRunnable.toCallable(runnable));
     }
 
     // end::refguide[]

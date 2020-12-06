@@ -71,7 +71,7 @@ public class SudoServiceDefault implements SudoService {
             final @NonNull UnaryOperator<ExecutionContext> sudoMapper, 
             final @NonNull Callable<T> callable) {
 
-        val currentInteractionLayer = interactionTracker.currentInteractionLayerElseFail();
+        val currentInteractionLayer = interactionTracker.currentAuthenticationLayerElseFail();
         val currentExecutionContext = currentInteractionLayer.getExecutionContext();
         val sudoExecutionContext = sudoMapper.apply(currentExecutionContext);
         

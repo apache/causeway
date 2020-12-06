@@ -46,7 +46,7 @@ extends InteractionContext, AuthenticationContext {
      * request- or test-scoped InteractionSession's stack*/
     Optional<AuthenticationLayer> currentAuthenticationLayer();
     
-    default AuthenticationLayer currentInteractionLayerElseFail() {
+    default AuthenticationLayer currentAuthenticationLayerElseFail() {
         return currentAuthenticationLayer()
         .orElseThrow(()->_Exceptions.illegalState("No InteractionSession available on current thread"));
     }

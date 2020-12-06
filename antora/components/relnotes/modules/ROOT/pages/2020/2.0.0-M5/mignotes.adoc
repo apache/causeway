@@ -201,6 +201,9 @@ CommandServiceInternal -> CommandPublisher
 | AuthenticationSessionStrategyDefault (*1*) 
 | AuthenticationStrategyDefault
 
+| AuthenticationSessionTracker
+| AuthenticationContext
+
 | Clock (moved from applib module to fixture-applib module)
 | VirtualClock (introduced)
 

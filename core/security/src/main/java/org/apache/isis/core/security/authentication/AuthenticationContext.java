@@ -25,10 +25,19 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
+ * Provides the current thread's {@link Authentication}.  
  * @since 2.0
  */
 public interface AuthenticationContext {
 
+    /**
+     * Optionally provides the current thread's {@link Authentication}, based
+     * on whether there is an open {@link InteractionSession}.
+     * <p>
+     * That is the {@link Authentication} that sits at the top of 
+     * the current thread's {@link InteractionSession}'s 
+     * authentication layer stack.  
+     */
     Optional<Authentication> currentAuthentication();
     
     default Authentication getAuthenticationElseFail() {

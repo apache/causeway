@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.iactn;
 
 import java.util.concurrent.Callable;
 
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.NonNull;
@@ -33,11 +34,6 @@ import lombok.NonNull;
  * The implementation is a singleton service.
  */
 public interface InteractionFactory {
-
-    @FunctionalInterface
-    interface ThrowingRunnable {
-        void run() throws Exception;
-    }
 
     /**
      * If present, reuses the current top level {@link AuthenticationLayer}, otherwise creates a new 
@@ -90,8 +86,7 @@ public interface InteractionFactory {
      * @param runnable (non-null)
      */
     default void runAuthenticated(@NonNull Authentication authentication, @NonNull ThrowingRunnable runnable) {
-        final Callable<Void> callable = ()->{runnable.run(); return null;};
-        callAuthenticated(authentication, callable);
+        callAuthenticated(authentication, ThrowingRunnable.toCallable(runnable));
     }
 
     /**
