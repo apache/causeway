@@ -28,17 +28,17 @@ import lombok.NonNull;
 /**
  * Provides the environment for an (or parts of an) user interaction to be executed.
  * <p>
- * Can be nested by pushing onto the current Thread's InteractionLayer Stack.  
+ * Can be nested by pushing onto the current thread's {@link InteractionTracker} Stack.  
  * 
  * @since 2.0
  *
  */
-public class InteractionLayer extends RuntimeContextBase {
+public class AuthenticationLayer extends RuntimeContextBase {
 
 	@Getter private final InteractionSession interactionSession;
 	@Getter private final Authentication authentication;
 	
-	public InteractionLayer(
+	public AuthenticationLayer(
 			final @NonNull InteractionSession interactionSession,
 			final @NonNull Authentication authentication) {
 

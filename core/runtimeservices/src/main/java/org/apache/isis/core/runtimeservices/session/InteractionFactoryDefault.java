@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.runtime.iactn.InteractionLayer;
+import org.apache.isis.core.runtime.iactn.AuthenticationLayer;
 import org.apache.isis.core.runtime.iactn.InteractionSession;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
@@ -143,62 +143,62 @@ implements InteractionFactory, InteractionTracker {
 
     }
 
-    private final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = 
+    private final ThreadLocal<Stack<AuthenticationLayer>> authenticationStack = 
             ThreadLocal.withInitial(Stack::new);
     
     @Override
-    public InteractionLayer openInteraction() {
+    public AuthenticationLayer openInteraction() {
         return openInteraction(new InitialisationSession());
     }
     
     @Override
-    public InteractionLayer openInteraction(final @NonNull Authentication authToUse) {
+    public AuthenticationLayer openInteraction(final @NonNull Authentication authToUse) {
 
         val interactionSession = getOrCreateInteractionSession();
-        val newInteractionClosure = new InteractionLayer(interactionSession, authToUse);
+        val authenticationLayer = new AuthenticationLayer(interactionSession, authToUse);
         
-        interactionLayerStack.get().push(newInteractionClosure);
+        authenticationStack.get().push(authenticationLayer);
 
-        if(isInTopLevelClosure()) {
+        if(isInBaseLayer()) {
         	postSessionOpened(interactionSession);
         }
         
         if(log.isDebugEnabled()) {
-            log.debug("new InteractionClosure created (conversation-id={}, total-sessions-on-stack={}, {})", 
+            log.debug("new authentication layer created (conversation-id={}, total-layers-on-stack={}, {})", 
                     conversationId.get(), 
-                    interactionLayerStack.get().size(),
+                    authenticationStack.get().size(),
                     _Probe.currentThreadId());
         }
         
-        return newInteractionClosure;
+        return authenticationLayer;
     }
     
     private InteractionSession getOrCreateInteractionSession() {
     	
-    	return interactionLayerStack.get().isEmpty()
+    	return authenticationStack.get().isEmpty()
     			? new InteractionSession(metaModelContext)
-				: interactionLayerStack.get().firstElement().getInteractionSession();
+				: authenticationStack.get().firstElement().getInteractionSession();
     }
 
     @Override
     public void closeSessionStack() {
-        log.debug("about to close IsisInteraction stack (conversation-id={}, total-sessions-on-stack={}, {})", 
+        log.debug("about to close the authentication stack (conversation-id={}, total-layers-on-stack={}, {})", 
                 conversationId.get(), 
-                interactionLayerStack.get().size(),
+                authenticationStack.get().size(),
                 _Probe.currentThreadId());
 
         closeInteractionStackDownToStackSize(0);
     }
 
 	@Override
-    public Optional<InteractionLayer> currentInteractionLayer() {
-    	val stack = interactionLayerStack.get();
+    public Optional<AuthenticationLayer> currentAuthenticationLayer() {
+    	val stack = authenticationStack.get();
     	return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
     }
 
     @Override
     public boolean isInInteractionSession() {
-        return !interactionLayerStack.get().isEmpty();
+        return !authenticationStack.get().isEmpty();
     }
 
     @Override
@@ -222,7 +222,7 @@ implements InteractionFactory, InteractionTracker {
             @NonNull final Authentication authentication, 
             @NonNull final Callable<R> callable) {
         
-        final int stackSizeWhenEntering = interactionLayerStack.get().size();
+        final int stackSizeWhenEntering = authenticationStack.get().size();
         openInteraction(authentication);
         
         try {
@@ -267,8 +267,8 @@ implements InteractionFactory, InteractionTracker {
     
     // -- HELPER
     
-    private boolean isInTopLevelClosure() {
-    	return interactionLayerStack.get().size()==1; 
+    private boolean isInBaseLayer() {
+    	return authenticationStack.get().size()==1; 
     }
     
     private void postSessionOpened(InteractionSession newIsisInteraction) {
@@ -288,12 +288,12 @@ implements InteractionFactory, InteractionTracker {
         log.debug("about to close IsisInteraction stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,
                 conversationId.get(), 
-                interactionLayerStack.get().size(),
+                authenticationStack.get().size(),
                 _Probe.currentThreadId());
         
-        val stack = interactionLayerStack.get();
+        val stack = authenticationStack.get();
         while(stack.size()>downToStackSize) {
-        	if(isInTopLevelClosure()) {
+        	if(isInBaseLayer()) {
         		// keep the stack unmodified yet, to allow for callbacks to properly operate
         		preSessionClosed(stack.peek().getInteractionSession());
         	}
@@ -301,7 +301,7 @@ implements InteractionFactory, InteractionTracker {
         }
         if(downToStackSize == 0) {
             // cleanup thread-local
-            interactionLayerStack.remove();
+            authenticationStack.remove();
             conversationId.remove();
         }
     }

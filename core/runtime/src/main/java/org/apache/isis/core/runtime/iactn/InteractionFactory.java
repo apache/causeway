@@ -26,7 +26,7 @@ import org.apache.isis.core.security.authentication.Authentication;
 import lombok.NonNull;
 
 /**
- * The factory of {@link InteractionSession}(s) and {@link InteractionLayer}(s), 
+ * The factory of {@link InteractionSession}(s) and {@link AuthenticationLayer}(s), 
  * also holding a reference to the current authentication layer stack using
  * a thread-local.
  * <p>
@@ -40,14 +40,14 @@ public interface InteractionFactory {
     }
 
     /**
-     * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new 
+     * If present, reuses the current top level {@link AuthenticationLayer}, otherwise creates a new 
      * anonymous one.
      * @see {@link #openInteraction(Authentication)}
      */
-    InteractionLayer openInteraction();
+    AuthenticationLayer openInteraction();
     
     /**
-     * Returns a new {@link InteractionLayer} that is a holder of {@link Authentication} on top 
+     * Returns a new {@link AuthenticationLayer} that is a holder of {@link Authentication} on top 
      * of the current thread's authentication layer stack.
      * <p>
      * If available reuses an existing {@link InteractionSession}, otherwise creates a new one.
@@ -58,11 +58,11 @@ public interface InteractionFactory {
      * @param authentication - the {@link Authentication} to associate with the new top of 
      * the stack (non-null)
      * 
-     * @apiNote if the current {@link InteractionLayer} (if any) has an {@link Authentication} that
+     * @apiNote if the current {@link AuthenticationLayer} (if any) has an {@link Authentication} that
      * equals that of the given one, as an optimization, no new layer is pushed onto the stack; 
      * instead the current one is returned
      */
-    InteractionLayer openInteraction(@NonNull Authentication authentication);
+    AuthenticationLayer openInteraction(@NonNull Authentication authentication);
 
     /**
      * @return whether the calling thread is within the context of an open IsisInteractionSession
@@ -110,7 +110,7 @@ public interface InteractionFactory {
     void runAnonymous(@NonNull ThrowingRunnable runnable);
 
     /**
-     * closes all open {@link InteractionLayer}(s) as stacked on the current thread
+     * closes all open {@link AuthenticationLayer}(s) as stacked on the current thread
      */
     void closeSessionStack();
 

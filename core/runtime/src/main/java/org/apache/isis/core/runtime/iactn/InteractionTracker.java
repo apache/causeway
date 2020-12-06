@@ -42,22 +42,22 @@ extends InteractionContext, AuthenticationContext {
 
     boolean isInInteractionSession();
     
-    /** @return the InteractionLayer that sits on top of the current 
-     * request- or test-scoped InteractionSession*/
-    Optional<InteractionLayer> currentInteractionLayer();
+    /** @return the AuthenticationLayer that sits on top of the current 
+     * request- or test-scoped InteractionSession's stack*/
+    Optional<AuthenticationLayer> currentAuthenticationLayer();
     
-    default InteractionLayer currentInteractionLayerElseFail() {
-        return currentInteractionLayer()
+    default AuthenticationLayer currentInteractionLayerElseFail() {
+        return currentAuthenticationLayer()
         .orElseThrow(()->_Exceptions.illegalState("No InteractionSession available on current thread"));
     }
     
     /** @return the current request- or test-scoped InteractionSession*/
     default Optional<InteractionSession> currentInteractionSession() {
-    	return currentInteractionLayer().map(InteractionLayer::getInteractionSession);
+    	return currentAuthenticationLayer().map(AuthenticationLayer::getInteractionSession);
     }
     
     default Optional<ExecutionContext> currentExecutionContext() {
-        return currentInteractionLayer().map(InteractionLayer::getExecutionContext);
+        return currentAuthenticationLayer().map(AuthenticationLayer::getExecutionContext);
     }
     
     /** @return the unique id of the current top-level request- or test-scoped IsisInteraction*/
@@ -90,7 +90,7 @@ extends InteractionContext, AuthenticationContext {
     
     @Override
     default Optional<Authentication> currentAuthentication() {
-        return currentInteractionLayer().map(InteractionLayer::getAuthentication);
+        return currentAuthenticationLayer().map(AuthenticationLayer::getAuthentication);
     }
     
     // -- INTERACTION CONTEXT

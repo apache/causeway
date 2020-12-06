@@ -93,7 +93,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.runtime.iactn.InteractionLayer;
+import org.apache.isis.core.runtime.iactn.AuthenticationLayer;
 import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -545,7 +545,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         dispatchersByEventClass.put(type, dispatcher);
     }
 
-    private InteractionLayer currentInteractionLayer() {
+    private AuthenticationLayer currentInteractionLayer() {
         return interactionTracker.currentInteractionLayerElseFail();
     }
 
