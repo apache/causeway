@@ -134,9 +134,9 @@ public class ProjectDocModel {
         }
 
         //XXX lombok issues, not using val here
-        public String toPlantUml() {
+        public String toPlantUml(String softwareSystemName) {
             val key = c4.getWorkspaceName();
-            val softwareSystem = c4.softwareSystem("package-ecosystem", null);
+            val softwareSystem = c4.softwareSystem(softwareSystemName, null);
 
             final Can<ProjectAndContainerTuple> tuples = Can.<ProjectNode>ofCollection(projectNodes)
             .map(projectNode->{
@@ -166,10 +166,10 @@ public class ProjectDocModel {
             return plantUmlSource;
         }
 
-        public String toAsciiDoc() {
+        public String toAsciiDoc(String softwareSystemName) {
             val key = c4.getWorkspaceName();
 
-            return AsciiDocFactory.SourceFactory.plantuml(toPlantUml(), key, null);
+            return AsciiDocFactory.SourceFactory.plantuml(toPlantUml(softwareSystemName), key, null);
         }
 
     }
@@ -222,7 +222,7 @@ public class ProjectDocModel {
             cell(table, row, details(module));
         });
 
-        descriptionBlock.setSource(groupDiagram.toAsciiDoc());
+        descriptionBlock.setSource(groupDiagram.toAsciiDoc(sectionName));
 
         modules.removeAll(modulesWritten);
 

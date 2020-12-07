@@ -9,7 +9,7 @@ These tables summarize all Maven artifacts available with _Apache Isis_.
 [plantuml,Base,svg]
 ----
 @startuml(id=Base)
-title package-ecosystem - Containers
+title Base - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -40,7 +40,7 @@ skinparam rectangle<<5>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Base\n[Software System]" {
   rectangle "==Apache Isis\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
   rectangle "==Apache Isis (Aggregator)\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Antora\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
@@ -118,7 +118,7 @@ Folder: \supplemental-model
 [plantuml,Commons,svg]
 ----
 @startuml(id=Commons)
-title package-ecosystem - Containers
+title Commons - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -134,7 +134,7 @@ skinparam rectangle<<2>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Commons\n[Software System]" {
   rectangle "==Apache Isis Commons\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
 }
 @enduml
@@ -180,7 +180,7 @@ _Dependencies_
 [plantuml,Core,svg]
 ----
 @startuml(id=Core)
-title package-ecosystem - Containers
+title Core - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -251,7 +251,7 @@ skinparam rectangle<<10>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Core\n[Software System]" {
   rectangle "==Apache Isis - JDK Supplemental\n<size:10>[Container: packaging: pom]</size>" <<12>> as 12
   rectangle "==Apache Isis Core\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Core - AppLib\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
@@ -663,7 +663,7 @@ _Dependencies_
 [plantuml,App,svg]
 ----
 @startuml(id=App)
-title package-ecosystem - Containers
+title App - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -679,7 +679,7 @@ skinparam rectangle<<2>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "App\n[Software System]" {
   rectangle "==Apache Isis Starter Parent\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
 @enduml
@@ -710,7 +710,7 @@ Folder: \starters
 [plantuml,Mavendeps,svg]
 ----
 @startuml(id=Mavendeps)
-title package-ecosystem - Containers
+title Mavendeps - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -751,7 +751,7 @@ skinparam rectangle<<7>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Mavendeps\n[Software System]" {
   rectangle "==Apache Isis Maven Deps\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Maven Deps - BDD Integ Spec\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
   rectangle "==Apache Isis Maven Deps - Integration Testing\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
@@ -892,7 +892,7 @@ _Dependencies_
 [plantuml,Mappings,svg]
 ----
 @startuml(id=Mappings)
-title package-ecosystem - Containers
+title Mappings - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -933,7 +933,7 @@ skinparam rectangle<<7>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Mappings\n[Software System]" {
   rectangle "==Apache Isis Ext - REST Client (applib)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Isis Ext - REST Client (parent)\n<size:10>[Container: packaging: pom]</size>" <<6>> as 6
   rectangle "==Apache Isis Map - JaxRS Client (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -1053,7 +1053,7 @@ _Dependencies_
 [plantuml,Persistence,svg]
 ----
 @startuml(id=Persistence)
-title package-ecosystem - Containers
+title Persistence - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -1094,7 +1094,7 @@ skinparam rectangle<<7>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Persistence\n[Software System]" {
   rectangle "==Apache Isis Persistence - JDO\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Persistence - JDO (applib)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Persistence - JDO (datanucleus 5)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -1245,7 +1245,7 @@ _Dependencies_
 [plantuml,Security,svg]
 ----
 @startuml(id=Security)
-title package-ecosystem - Containers
+title Security - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -1271,7 +1271,7 @@ skinparam rectangle<<4>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Security\n[Software System]" {
   rectangle "==Apache Isis Security - Bypass\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
   rectangle "==Apache Isis Security - Keycloak\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Security - Shiro\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -1364,7 +1364,7 @@ _Dependencies_
 [plantuml,Valuetypes,svg]
 ----
 @startuml(id=Valuetypes)
-title package-ecosystem - Containers
+title Valuetypes - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -1480,7 +1480,7 @@ skinparam rectangle<<10>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Valuetypes\n[Software System]" {
   rectangle "==Apache Isis Val - Asciidoctor (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
   rectangle "==Apache Isis Val - Asciidoctor (Persistence)\n<size:10>[Container: packaging: pom]</size>" <<6>> as 6
   rectangle "==Apache Isis Val - Asciidoctor (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -1905,7 +1905,7 @@ _Dependencies_
 [plantuml,Viewer,svg]
 ----
 @startuml(id=Viewer)
-title package-ecosystem - Containers
+title Viewer - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -1971,7 +1971,7 @@ skinparam rectangle<<10>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Viewer\n[Software System]" {
   rectangle "==Apache Isis Viewer - Common Model\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
   rectangle "==Apache Isis Viewer - RO\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
   rectangle "==Apache Isis Viewer - RO (AppLib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -2279,7 +2279,7 @@ _Dependencies_
 [plantuml,Testing,svg]
 ----
 @startuml(id=Testing)
-title package-ecosystem - Containers
+title Testing - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -2375,7 +2375,7 @@ skinparam rectangle<<10>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Testing\n[Software System]" {
   rectangle "==Apache Isis Testing\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Tst - FakeData (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Isis Tst - FakeData (fixtures)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
@@ -2723,7 +2723,7 @@ Folder: \testing\unittestsupport\applib
 [plantuml,Regression Tests,svg]
 ----
 @startuml(id=Regression_Tests)
-title package-ecosystem - Containers
+title Regression Tests - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -2744,7 +2744,7 @@ skinparam rectangle<<3>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Regression Tests\n[Software System]" {
   rectangle "==Apache Isis - Regression Tests\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis - Regression Tests (stable)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
 }
@@ -2828,7 +2828,7 @@ _Dependencies_
 [plantuml,Extensions,svg]
 ----
 @startuml(id=Extensions)
-title package-ecosystem - Containers
+title Extensions - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -2989,7 +2989,7 @@ skinparam rectangle<<21>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Extensions\n[Software System]" {
   rectangle "==Apache Isis Ext - @Model\n<size:10>[Container: packaging: jar]</size>" <<17>> as 17
   rectangle "==Apache Isis Ext - CORS (impl)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
   rectangle "==Apache Isis Ext - CORS (parent)\n<size:10>[Container: packaging: pom]</size>" <<8>> as 8
@@ -3609,7 +3609,7 @@ Folder: \extensions\security\shiro-realm-ldap\impl
 [plantuml,Subdomains,svg]
 ----
 @startuml(id=Subdomains)
-title package-ecosystem - Containers
+title Subdomains - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -3730,7 +3730,7 @@ skinparam rectangle<<10>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Subdomains\n[Software System]" {
   rectangle "==Apache Isis Sub - Base (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Isis Sub - Base (parent)\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
   rectangle "==Apache Isis Sub - Docx (applib)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
@@ -4158,7 +4158,7 @@ _Dependencies_
 [plantuml,Tooling,svg]
 ----
 @startuml(id=Tooling)
-title package-ecosystem - Containers
+title Tooling - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -4199,7 +4199,7 @@ skinparam rectangle<<7>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Tooling\n[Software System]" {
   rectangle "==Apache Isis - Tooling\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Tooling - C4 Modeling\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Tooling - CLI (Command Line Interface)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -4357,7 +4357,7 @@ _Dependencies_
 [plantuml,Examples,svg]
 ----
 @startuml(id=Examples)
-title package-ecosystem - Containers
+title Examples - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -4398,7 +4398,7 @@ skinparam rectangle<<7>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Examples\n[Software System]" {
   rectangle "==Demo - Domain\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Demo - JavaFX\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Demo - Parent\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -4739,7 +4739,7 @@ Folder: \examples\demo\wicket
 [plantuml,Incubator,svg]
 ----
 @startuml(id=Incubator)
-title package-ecosystem - Containers
+title Incubator - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -4800,7 +4800,7 @@ skinparam rectangle<<10>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Incubator\n[Software System]" {
   rectangle "==Apache Isis Inc - Client kroViz\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Inc - Viewer JavaFX\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
   rectangle "==Apache Isis Inc - Viewer JavaFX (Model)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
@@ -5031,7 +5031,7 @@ Folder: \incubator\viewers\vaadin\viewer
 [plantuml,Legacy,svg]
 ----
 @startuml(id=Legacy)
-title package-ecosystem - Containers
+title Legacy - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -5072,7 +5072,7 @@ skinparam rectangle<<7>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "package-ecosystem\n[Software System]" {
+package "Legacy\n[Software System]" {
   rectangle "==Apache Isis Legacy\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Legacy - Applib\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Legacy - Commons\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
