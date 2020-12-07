@@ -19,15 +19,10 @@
 package org.apache.isis.tooling.javamodel.test;
 
 import java.io.File;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
@@ -42,93 +37,71 @@ import static guru.nidi.codeassert.config.Language.JAVA;
 
 class AnalyzerTest {
 
-    File projDir;
-    
-    @BeforeEach
-    void setUp() throws Exception {
-        File projRootFolder = new File("./").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
-        projDir = new File(projRootFolder, "core/runtime");
-        System.out.println("running AnalyzerTest at " + projDir.getAbsolutePath());
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
-    }
-
     @Test
     void testSourceFileListing() {
-        
+
+        val projDir = ProjectSamples.apacheIsisRuntime();
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
-        
         val commonPath = projDir.getAbsolutePath();
-        
-        Set<String> sources = analyzerConfig.getSources(JAVA)
+
+        final Stream<String> sources = analyzerConfig.getSources(JAVA)
                 .stream()
                 .map(File::getAbsolutePath)
-                .map(sourceFile->_Files.toRelativePath(commonPath, sourceFile))
-                .map(s->s.replace("\\", "/"))
-                .map(s->s.replace("/src/main/java/org/apache/isis/", "o.a.i/"))
-                //.peek(System.out::println) //debug
-                .collect(Collectors.toSet());
-        
-        assertHasSomeSourceFiles(sources);
+                .map(sourceFile->_Files.toRelativePath(commonPath, sourceFile));
+
+        ProjectSamples.assertHasApacheIsisRuntimeSourceFiles(sources);
     }
-    
+
+    @Test @Disabled("work in progress, as of yet a proof of concept")
+    void testJavaDocMining() {
+
+        val projDir = ProjectSamples.self();
+        val analyzerConfig = AnalyzerConfigFactory.mavenTest(projDir, Language.JAVA).main();
+
+        analyzerConfig.getSources(JAVA)
+        .stream()
+        .filter(source->source.toString().contains("UserService"))
+        .peek(source->System.out.println("parsing source: " + source))
+        .forEach(source->{
+            
+            MethodProcessor.visitMethodsOf(source, md->{
+                
+                md.getJavadocComment().ifPresent(javadocComment->{
+                    val javadoc = javadocComment.parse();
+                
+                    javadoc.getBlockTags().stream()
+                    .filter(tag->tag.getTagName().equals("since"))
+                    .forEach(tag->System.out.println("--- SINCE " + tag.getContent().toText()));
+                    
+                }); 
+                
+                System.out.println("javadoc: " + md.getJavadocComment());
+                System.out.println("non private method: " + md.getDeclarationAsString());
+            });
+
+        });
+    }
+
     @Test @Disabled("fails when run with the CI pipeline")
     void testAnnotationGathering() {
 
+        val projDir = ProjectSamples.apacheIsisRuntime();
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
-        
+
         val model = Model.from(analyzerConfig.getClasses()).read();
-        
-        Set<String> components = model.getClasses()
-            .stream()
-            .filter(codeClass->codeClass
-                    .getAnnotations()
-                    .stream()
-                    .map(CodeClass::getName)
-                    .anyMatch(name->name.startsWith("org.springframework.stereotype.")))
-            .map(CodeClass::getName)
-            .map(s->s.replace("org.apache.isis.", "o.a.i."))
-            //.peek(System.out::println) //debug
-            .collect(Collectors.toSet());
-        
-        assertHasSomeComponents(components);
+
+        final Stream<String> components = model.getClasses()
+                .stream()
+                .filter(codeClass->codeClass
+                        .getAnnotations()
+                        .stream()
+                        .map(CodeClass::getName)
+                        .anyMatch(name->name.startsWith("org.springframework.stereotype.")))
+                .map(CodeClass::getName);
+
+        ProjectSamples.assertHasApacheIsisRuntimeClasses(components);
     }
-    
-    // -- HELPER
-    
-    private void assertHasSomeComponents(Set<String> components) {
-        assertTrue(components.contains("o.a.i.core.runtime.persistence.transaction.AuditerDispatchService"));
-        assertTrue(components.contains("o.a.i.core.runtime.persistence.transaction.ChangedObjectsService"));
-        assertTrue(components.contains("o.a.i.core.runtime.events.persistence.TimestampService"));
-        assertTrue(components.contains("o.a.i.core.runtime.events.RuntimeEventService"));
-    }
-    
-    private void assertHasSomeSourceFiles(Set<String> sources) {
-        assertTrue(sources.contains("o.a.i/core/runtime/context/IsisAppCommonContext.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/IsisContext.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMemento.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoCollection.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoForEmpty.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoService.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/RuntimeContext.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/RuntimeContextBase.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/app/AppLifecycleEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/iactn/IsisInteractionLifecycleEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/PostStoreEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/PreStoreEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/TimestampService.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/RuntimeEventService.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/IsisInteraction.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/IsisInteractionFactory.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/IsisInteractionTracker.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScope.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScopeBeanFactoryPostProcessor.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScopeCloseListener.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/template/AbstractIsisInteractionTemplate.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/IsisModuleCoreRuntime.java"));
-        
-    }
-    
+
+
+
 }

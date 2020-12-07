@@ -36,6 +36,10 @@ public class AnalyzerConfigFactory {
     public static Maven maven(File projDir, Language ... languages) {
         return new MavenExt(projDir, languages);
     }
+    
+    public static Maven mavenTest(File projDir, Language ... languages) {
+        return new MavenExtTest(projDir, languages);
+    }
 
     // -- HELPER
     
@@ -61,11 +65,28 @@ public class AnalyzerConfigFactory {
                     path(packages, canonicalPath("target/classes/")));
         }
         
-        private String canonicalPath(String relPath) {
+        protected String canonicalPath(String relPath) {
             return _Files.canonicalPath(new File(projDir, relPath))
                     .orElse(relPath);
         }
         
     }
+    
+    private static class MavenExtTest extends MavenExt {
+
+        public MavenExtTest(File projDir, Language[] languages) {
+            super(projDir, languages);
+        }
+        
+        @Override
+        public AnalyzerConfig main(String... packages) {
+            return new AnalyzerConfigExt(getLanguages(),
+                    path(packages, canonicalPath("src/test/$language/")),
+                    path(packages, canonicalPath("target/test-classes/")));
+        }
+
+        
+    }
+    
     
 }

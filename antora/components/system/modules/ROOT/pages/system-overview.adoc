@@ -350,10 +350,6 @@ Folder: \core\codegen-bytebuddy
 |Apache Isis Core - Code Gen (ByteBuddy)
 |Code generation using ByteBuddy.
 
-_Components_
-
-* org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy
-
 _Dependencies_
 
 * net.bytebuddy:byte-buddy:jar:<managed>
@@ -372,14 +368,6 @@ Folder: \core\config
 
 |Apache Isis Core - Configuration
 |Isis configuration library for framework internal use.
-
-_Components_
-
-* org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring
-* org.apache.isis.core.config.converters.PatternsConverter
-* org.apache.isis.core.config.environment.IsisSystemEnvironment
-* org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator
-* org.apache.isis.core.config.viewer.wicket.WebAppContextPath
 
 _Dependencies_
 
@@ -432,40 +420,7 @@ Folder: \core\metamodel
 ----
 
 |Apache Isis Core - MetaModel
-|_Components_
-
-* org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner
-* org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider
-* org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault
-* org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault
-* org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistryDefault
-* org.apache.isis.core.metamodel.services.ServiceInjectorDefault
-* org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory
-* org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault
-* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault
-* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections
-* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForDomainObjects
-* org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry
-* org.apache.isis.core.metamodel.services.events.MetamodelEventService
-* org.apache.isis.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException
-* org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault
-* org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb
-* org.apache.isis.core.metamodel.services.grid.GridServiceDefault
-* org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3
-* org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault
-* org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault
-* org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault
-* org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceDefault
-* org.apache.isis.core.metamodel.services.title.TitleServiceDefault
-* org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault
-* org.apache.isis.core.metamodel.specloader.ProgrammingModelServiceDefault
-* org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault
-* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault
-* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin
-* org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections
-* org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry
-
-_Dependencies_
+|_Dependencies_
 
 * io.swagger:swagger-core:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
@@ -486,13 +441,7 @@ Folder: \core\runtime
 ----
 
 |Apache Isis Core - Runtime
-|_Components_
-
-* org.apache.isis.core.runtime.events.RuntimeEventService
-* org.apache.isis.core.runtime.events.persistence.TimestampService
-* org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTrackerDefault
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
@@ -509,43 +458,6 @@ Folder: \core\runtimeservices
 
 |Apache Isis Core - Runtime Services
 |Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.
-
-_Components_
-
-* org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault
-* org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault
-* org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault
-* org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
-* org.apache.isis.core.runtimeservices.email.EmailServiceDefault
-* org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring
-* org.apache.isis.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault
-* org.apache.isis.core.runtimeservices.factory.FactoryServiceDefault
-* org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault
-* org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo
-* org.apache.isis.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault
-* org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault
-* org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault
-* org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3
-* org.apache.isis.core.runtimeservices.message.MessageServiceDefault
-* org.apache.isis.core.runtimeservices.publish.CommandPublisherDefault
-* org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefault
-* org.apache.isis.core.runtimeservices.publish.EntityPropertyChangePublisherDefault
-* org.apache.isis.core.runtimeservices.publish.ExecutionPublisherDefault
-* org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault
-* org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault
-* org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault
-* org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault
-* org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault
-* org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault
-* org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression
-* org.apache.isis.core.runtimeservices.user.UserServiceDefault
-* org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi
-* org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault
-* org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault
-* org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault
-* org.apache.isis.core.runtimeservices.xactn.TransactionServiceSpring
-* org.apache.isis.core.runtimeservices.xml.XmlServiceDefault
-* org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault
 
 _Dependencies_
 
@@ -565,13 +477,7 @@ Folder: \core\security
 ----
 
 |Apache Isis Core - Security
-|_Components_
-
-* org.apache.isis.core.security.authentication.manager.AuthenticationManager
-* org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault
-* org.apache.isis.core.security.authorization.manager.AuthorizationManager
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-config:jar:<managed>
@@ -593,13 +499,6 @@ Folder: \core\webapp
 |Apache Isis Core - WebApp
 |Bundles all the web specific classes a srequired by viewers.
         Introduced to keep the 'runtime' package concise.
-
-_Components_
-
-* org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService
-* org.apache.isis.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger
-* org.apache.isis.core.webapp.modules.templresources.WebModuleTemplateResources
-* org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer
 
 _Dependencies_
 
@@ -1158,19 +1057,6 @@ Folder: \persistence\jdo\datanucleus-5
 |Apache Isis Persistence - JDO (datanucleus 5)
 |JDO plugin using datanucleus.
 
-_Components_
-
-* org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings
-* org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService
-* org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDODataStoreException
-* org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
-* org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDOObjectNotFoundException
-* org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
-* org.apache.isis.persistence.jdo.datanucleus5.jdosupport.IsisJdoSupportDN5
-* org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingModelPlugin
-* org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo
-* org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5
-
 _Dependencies_
 
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
@@ -1225,10 +1111,6 @@ Folder: \persistence\jpa\model
 
 |Apache Isis Persistence - JPA (model)
 |JPA integration (metamodel)
-
-_Components_
-
-* org.apache.isis.persistence.jpa.metamodel.JpaProgrammingModelPlugin
 
 _Dependencies_
 
@@ -1293,12 +1175,7 @@ Folder: \security\bypass
 ----
 
 |Apache Isis Security - Bypass
-|_Components_
-
-* org.apache.isis.security.bypass.authentication.AuthenticatorBypass
-* org.apache.isis.security.bypass.authorization.AuthorizorBypass
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
 
@@ -1314,12 +1191,6 @@ Folder: \security\keycloak
 
 |Apache Isis Security - Keycloak
 |Authentication and Authorization using Keycloak
-
-_Components_
-
-* org.apache.isis.security.keycloak.authentication.AuthenticatorKeycloak
-* org.apache.isis.security.keycloak.authorization.AuthorizorKeycloak
-* org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak
 
 _Dependencies_
 
@@ -1340,12 +1211,6 @@ Folder: \security\shiro
 
 |Apache Isis Security - Shiro
 |Authentication and Authorization using Apache Shiro.
-
-_Components_
-
-* org.apache.isis.security.shiro.authentication.AuthenticatorShiro
-* org.apache.isis.security.shiro.authorization.AuthorizorShiro
-* org.apache.isis.security.shiro.webmodule.WebModuleShiro
 
 _Dependencies_
 
@@ -1375,12 +1240,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1586,12 +1451,7 @@ Folder: \valuetypes\asciidoc\metamodel
 ----
 
 |Apache Isis Val - Asciidoctor (MetaModel)
-|_Components_
-
-* org.apache.isis.valuetypes.asciidoc.metamodel.AsciiDocMetaModelRefiner
-* org.apache.isis.valuetypes.asciidoc.metamodel.AsciiDocValueTypeProvider
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
@@ -1658,11 +1518,7 @@ Folder: \valuetypes\asciidoc\ui\vaadin
 ----
 
 |Apache Isis Val - Asciidoctor (ui vaadin)
-|_Components_
-
-* org.apache.isis.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version}
 
@@ -1677,18 +1533,7 @@ Folder: \valuetypes\asciidoc\ui\wicket
 ----
 
 |Apache Isis Val - Asciidoctor (ui wicket)
-|_Components_
-
-* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Parented
-* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Standalone
-* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2.ChangesDtoPanelFactoriesWkt$Parented
-* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2.ChangesDtoPanelFactoriesWkt$Standalone
-* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2.CommandDtoPanelFactoriesWkt$Parented
-* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2.CommandDtoPanelFactoriesWkt$Standalone
-* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.InteractionDtoPanelFactoriesWkt$Parented
-* org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.InteractionDtoPanelFactoriesWkt$Standalone
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
 
@@ -1733,12 +1578,7 @@ Folder: \valuetypes\markdown\metamodel
 ----
 
 |Apache Isis Val - Markdown (MetaModel)
-|_Components_
-
-* org.apache.isis.valuetypes.markdown.metamodel.MarkdownMetaModelRefiner
-* org.apache.isis.valuetypes.markdown.metamodel.MarkdownValueTypeProvider
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
@@ -1849,11 +1689,7 @@ Folder: \valuetypes\sse\metamodel
 ----
 
 |Apache Isis Val - Server Sent Events (metamodel)
-|_Components_
-
-* org.apache.isis.valuetypes.sse.metamodel.facets.SseAnnotationFacetFactory$Register
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed>
@@ -1885,14 +1721,7 @@ Folder: \valuetypes\sse\ui\wicket
 ----
 
 |Apache Isis Val - Server Sent Events (ui wicket)
-|_Components_
-
-* org.apache.isis.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactoriesForWicket$Parented
-* org.apache.isis.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactoriesForWicket$Standalone
-* org.apache.isis.valuetypes.sse.ui.wkt.services.SseServiceDefault
-* org.apache.isis.valuetypes.sse.ui.wkt.webmodule.WebModuleServerSentEvents
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
@@ -2009,14 +1838,7 @@ Folder: \viewers\common
 ----
 
 |Apache Isis Viewer - Common Model
-|_Components_
-
-* org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider
-* org.apache.isis.viewer.common.model.header.HeaderUiModelProvider
-* org.apache.isis.viewer.common.model.menu.MenuUiModelProvider
-* org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
@@ -2064,11 +1886,6 @@ Folder: \viewers\restfulobjects\jaxrs-resteasy-4
 |Apache Isis Viewer - RO (JAX-RS Resteasy v4)
 |JAX-RS plugin using jboss resteasy.
 
-_Components_
-
-* org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.conneg.RestfulObjectsJaxbWriterForXml
-* org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.webmodule.WebModuleJaxrsResteasy4
-
 _Dependencies_
 
 * com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed>
@@ -2089,24 +1906,7 @@ Folder: \viewers\restfulobjects\rendering
 ----
 
 |Apache Isis Viewer - RO (Rendering)
-|_Components_
-
-* org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder
-* org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator
-* org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest
-* org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$RequestFilter
-* org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$ResponseFilter
-* org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0
-* org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1
-* org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV2
-* org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType
-* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault
-* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault
-* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator
-* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault
-* org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
@@ -2140,22 +1940,7 @@ Folder: \viewers\restfulobjects\viewer
 ----
 
 |Apache Isis Viewer - RO (Viewer)
-|_Components_
-
-* org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound
-* org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication
-* org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRuntimeException
-* org.apache.isis.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside
-* org.apache.isis.viewer.restfulobjects.viewer.resources.DomainServiceResourceServerside
-* org.apache.isis.viewer.restfulobjects.viewer.resources.DomainTypeResourceServerside
-* org.apache.isis.viewer.restfulobjects.viewer.resources.HomePageResourceServerside
-* org.apache.isis.viewer.restfulobjects.viewer.resources.ImageResourceServerside
-* org.apache.isis.viewer.restfulobjects.viewer.resources.MenuBarsResourceServerside
-* org.apache.isis.viewer.restfulobjects.viewer.resources.SwaggerSpecResource
-* org.apache.isis.viewer.restfulobjects.viewer.resources.UserResourceServerside
-* org.apache.isis.viewer.restfulobjects.viewer.resources.VersionResourceServerside
-
-_Dependencies_
+|_Dependencies_
 
 * com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed>
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
@@ -2205,12 +1990,7 @@ Folder: \viewers\wicket\ui
 ----
 
 |Apache Isis Viewer - Wicket (UI Components)
-|_Components_
-
-* org.apache.isis.viewer.wicket.ui.app.logout.LogoutHandlerWkt
-* org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault
-
-_Dependencies_
+|_Dependencies_
 
 * com.google.guava:guava:jar:<managed>
 * de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
@@ -2242,24 +2022,7 @@ Folder: \viewers\wicket\viewer
 ----
 
 |Apache Isis Viewer - Wicket (Viewer)
-|_Components_
-
-* org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault
-* org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault
-* org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault
-* org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault
-* org.apache.isis.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault
-* org.apache.isis.viewer.wicket.viewer.services.BookmarkUiServiceWicket
-* org.apache.isis.viewer.wicket.viewer.services.DeepLinkServiceWicket
-* org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession
-* org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath
-* org.apache.isis.viewer.wicket.viewer.services.LocaleProviderWicket
-* org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket
-* org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault
-* org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoServiceWicket
-* org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket
-
-_Dependencies_
+|_Dependencies_
 
 * commons-io:commons-io:jar:<managed>
 * de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
@@ -2454,11 +2217,7 @@ Folder: \testing\fakedata\applib
 ----
 
 |Apache Isis Tst - FakeData (applib)
-|_Components_
-
-* org.apache.isis.testing.fakedata.applib.services.FakeDataService
-
-_Dependencies_
+|_Dependencies_
 
 * com.github.javafaker:javafaker:jar:<managed>
 * org.apache.isis.commons:isis-commons:jar:<managed>
@@ -2526,14 +2285,7 @@ Folder: \testing\fixtures\applib
 ----
 
 |Apache Isis Tst - Fixtures (applib)
-|_Components_
-
-* org.apache.isis.testing.fixtures.applib.fixturescripts.ExecutionParametersService
-* org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService
-* org.apache.isis.testing.fixtures.applib.queryresultscache.QueryResultsCacheControlDefault
-* org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService
-
-_Dependencies_
+|_Dependencies_
 
 * joda-time:joda-time:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
@@ -2566,11 +2318,7 @@ Folder: \testing\h2console\ui
 ----
 
 |Apache Isis Tst - H2 Console (ui)
-|_Components_
-
-* org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console
-
-_Dependencies_
+|_Dependencies_
 
 * com.h2database:h2:jar:<managed>
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
@@ -2628,11 +2376,7 @@ Folder: \testing\integtestsupport\applib
 ----
 
 |Apache Isis Tst - Integ Test Support (applib)
-|_Components_
-
-* org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract$InteractionSupport
-
-_Dependencies_
+|_Dependencies_
 
 * com.approvaltests:approvaltests:jar:<managed>
 * com.h2database:h2:jar:<managed>
@@ -2803,19 +2547,7 @@ Folder: \regressiontests\stable
 ----
 
 |Apache Isis - Regression Tests (stable)
-|_Components_
-
-* org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory
-* org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory$PreCommitListener
-* org.apache.isis.testdomain.applayer.publishing.CommandSubscriberForTesting
-* org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting
-* org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting
-* org.apache.isis.testdomain.applayer.publishing.ExecutionSubscriberForTesting
-* org.apache.isis.testdomain.conf.Configuration_headless$HeadlessCommandSupport
-* org.apache.isis.testdomain.util.kv.KVStoreForTesting
-* org.apache.isis.testdomain.util.rest.RestEndpointService
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed>
 * org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
@@ -3098,15 +2830,7 @@ Folder: \extensions\core\command-log\impl
 ----
 
 |Apache Isis Ext - Command Log Implementation (JDO)
-|_Components_
-
-* org.apache.isis.extensions.commandlog.impl.CommandSubscriberForJdo
-* org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo$TableColumnOrderDefault
-* org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo$TitleProvider
-* org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository
-* org.apache.isis.extensions.commandlog.impl.ui.CommandServiceMenu
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-config:jar:<managed>
@@ -3140,11 +2864,6 @@ Folder: \extensions\core\command-replay\primary
 |Apache Isis Ext - Command Replay for Primary
 |A module for obtaining commands from a primary
 
-_Components_
-
-* org.apache.isis.extensions.commandreplay.primary.config.PrimaryConfig
-* org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand
-
 _Dependencies_
 
 * org.apache.isis.core:isis-core-config:jar:<managed>
@@ -3168,16 +2887,6 @@ Folder: \extensions\core\command-replay\secondary
 |Apache Isis Ext - Command Replay for Secondary
 |A module providing a Quartz Job to run on a secondary system,
 		for obtaining commands from a primary and saving them so that they are replayed.
-
-_Components_
-
-* org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException
-* org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult
-* org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService
-* org.apache.isis.extensions.commandreplay.secondary.clock.TickingClockService
-* org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig
-* org.apache.isis.extensions.commandreplay.secondary.executor.CommandExecutorServiceWithTime
-* org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher
 
 _Dependencies_
 
@@ -3244,11 +2953,7 @@ Folder: \extensions\vw\exceldownload\ui
 ----
 
 |Apache Isis Ext - Wicket Viewer - Excel Download (ui)
-|_Components_
-
-* org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
 * org.apache.poi:poi-ooxml:jar:<managed>
@@ -3345,10 +3050,6 @@ Folder: \extensions\core\model-annotation
 |Apache Isis Ext - @Model
 |Allows supporting methods to be annotated as @Model, to make explicit the bounds of the metamodel.
 
-_Components_
-
-* org.apache.isis.extensions.modelannotation.metamodel.services.IncubatorMetaModelPlugin
-
 _Dependencies_
 
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
@@ -3395,11 +3096,7 @@ Folder: \extensions\vw\pdfjs\metamodel
 ----
 
 |Apache Isis Ext - Wicket Viewer - pdf.js (metamodel)
-|_Components_
-
-* org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotationFactory$Register
-
-_Dependencies_
+|_Dependencies_
 
 * de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
@@ -3416,11 +3113,7 @@ Folder: \extensions\vw\pdfjs\ui
 ----
 
 |Apache Isis Ext - Wicket Viewer - pdf.js (ui)
-|_Components_
-
-* org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components.PdfJsViewerPanelComponentFactory
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.extensions:isis-extensions-pdfjs-metamodel:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
@@ -3494,11 +3187,7 @@ Folder: \extensions\security\secman\encryption-jbcrypt
 ----
 
 |Apache Isis Ext - Sec Man Encryption (Using jbcrypt)
-|_Components_
-
-* org.apache.isis.extensions.secman.encryption.jbcrypt.services.PasswordEncryptionServiceUsingJBcrypt
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
@@ -3515,11 +3204,7 @@ Folder: \extensions\security\secman\model
 ----
 
 |Apache Isis Ext - Sec Man Model
-|_Components_
-
-* org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacetFactory$Register
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
@@ -3535,15 +3220,7 @@ Folder: \extensions\security\secman\persistence-jdo
 ----
 
 |Apache Isis Ext - Sec Man Persistence (Using JDO)
-|_Components_
-
-* org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository
-* org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository
-* org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancyRepository
-* org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository
-* org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:2.0.0-SNAPSHOT
@@ -3562,11 +3239,7 @@ Folder: \extensions\security\secman\shiro-realm
 ----
 
 |Apache Isis Ext - Sec Man Realm (Using Shiro)
-|_Components_
-
-* org.apache.isis.extensions.secman.shiro.services.SecurityRealmServiceUsingShiro
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:2.0.0-SNAPSHOT
@@ -3630,12 +3303,12 @@ skinparam rectangle<<11>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<23>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3720,12 +3393,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3823,11 +3496,7 @@ Folder: \subdomains\base\applib
 ----
 
 |Apache Isis Sub - Base (applib)
-|_Components_
-
-* org.apache.isis.subdomains.base.applib.services.calendar.CalendarService
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
@@ -3889,11 +3558,7 @@ Folder: \subdomains\excel\applib
 ----
 
 |Apache Isis Sub - Excel (applib)
-|_Components_
-
-* org.apache.isis.subdomains.excel.applib.dom.ExcelService
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
@@ -4068,11 +3733,7 @@ Folder: \subdomains\spring\applib
 ----
 
 |Apache Isis Sub - Spring (applib)
-|_Components_
-
-* org.apache.isis.subdomains.spring.applib.service.SpringBeansService
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
@@ -4101,11 +3762,7 @@ Folder: \subdomains\xdocreport\applib
 ----
 
 |Apache Isis Sub - XdocReport (applib)
-|_Components_
-
-* org.apache.isis.subdomains.xdocreport.applib.service.XDocReportService
-
-_Dependencies_
+|_Dependencies_
 
 * fr.opensagres.xdocreport:fr.opensagres.xdocreport.converter.docx.xwpf:jar:<managed>
 * fr.opensagres.xdocreport:fr.opensagres.xdocreport.document.docx:jar:<managed>
@@ -4140,11 +3797,7 @@ Folder: \subdomains\zip\applib
 ----
 
 |Apache Isis Sub - Zip (applib)
-|_Components_
-
-* org.apache.isis.extensions.zip.dom.impl.ZipService
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
@@ -4456,170 +4109,7 @@ Folder: \examples\demo\domain
 ----
 
 |Demo - Domain
-|_Components_
-
-* demoapp.dom._infra.DefaultTitleProvider
-* demoapp.dom._infra.LibraryPreloadingService
-* demoapp.dom._infra.fixtures.DemoFixtureScriptSpecificationProvider
-* demoapp.dom._infra.resources.AsciiDocConverterService
-* demoapp.dom._infra.resources.AsciiDocReaderService
-* demoapp.dom._infra.resources.MarkdownReaderService
-* demoapp.dom._infra.resources.MarkupReaderService
-* demoapp.dom._infra.resources.MarkupVariableResolverService
-* demoapp.dom._infra.resources.ResourceReaderService
-* demoapp.dom._infra.samples.NameSamples
-* demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory
-* demoapp.dom.annotDomain.Action.commandPublishing.ActionCommandPublishingJdoEntities
-* demoapp.dom.annotDomain.Action.commandPublishing.ActionCommandPublishingJdoSeedService
-* demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdoEntities
-* demoapp.dom.annotDomain.Action.executionPublishing.ActionExecutionPublishingJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoSeedService
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities
-* demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoSeedService
-* demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoEntities
-* demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoSeedService
-* demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdoEntities
-* demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdoSeedService
-* demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdoEntities
-* demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdoSeedService
-* demoapp.dom.annotDomain._changes.EntityChangesSubscriberToCaptureChangesInMemory
-* demoapp.dom.annotDomain._commands.ExposePersistedCommands$TableColumnOrderDefault
-* demoapp.dom.annotDomain._interactions.ExecutionListenerToCaptureInteractionsInMemory
-* demoapp.dom.annotLayout.PropertyLayout.navigable.FileTreeNodeService
-* demoapp.dom.annotLayout.PropertyLayout.repainting.PdfJsViewerAdvisorFallback
-* demoapp.dom.error.service.DemoErrorReportingService
-* demoapp.dom.events.DemoEventSubscriber
-* demoapp.dom.events.EventLogRepository
-* demoapp.dom.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo
-* demoapp.dom.extensions.secman.apptenancy.entities.TenantedJdoEntities
-* demoapp.dom.extensions.secman.apptenancy.entities.seed.TenantedJdoSeedService
-* demoapp.dom.jee.DemoRequestScopedBean
-* demoapp.dom.jee.JeeDemoService
-* demoapp.dom.services.wrapperFactory.WrapperFactoryJdoEntities
-* demoapp.dom.services.wrapperFactory.WrapperFactoryJdoSeedService
-* demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities
-* demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoSeedService
-* demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples
-* demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities
-* demoapp.dom.types.isis.clobs.jdo.IsisClobJdoSeedService
-* demoapp.dom.types.isis.clobs.samples.IsisClobsSamples
-* demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities
-* demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoSeedService
-* demoapp.dom.types.isis.localresourcepaths.samples.IsisLocalResourcePathsSamples
-* demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoEntities
-* demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoSeedService
-* demoapp.dom.types.isis.markups.samples.IsisMarkupSamples
-* demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities
-* demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoSeedService
-* demoapp.dom.types.isis.passwords.samples.IsisPasswordsSamples
-* demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoEntities
-* demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoSeedService
-* demoapp.dom.types.isisext.asciidocs.samples.IsisAsciiDocSamples
-* demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities
-* demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoSeedService
-* demoapp.dom.types.isisext.markdowns.samples.IsisMarkdownSamples
-* demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoEntities
-* demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoSeedService
-* demoapp.dom.types.javaawt.images.samples.JavaAwtImageService
-* demoapp.dom.types.javaawt.images.samples.JavaAwtImagesSamples
-* demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities
-* demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoSeedService
-* demoapp.dom.types.javalang.booleans.samples.WrapperBooleanSamples
-* demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoEntities
-* demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoSeedService
-* demoapp.dom.types.javalang.bytes.samples.WrapperByteSamples
-* demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities
-* demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoSeedService
-* demoapp.dom.types.javalang.characters.samples.WrapperCharacterSamples
-* demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities
-* demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoSeedService
-* demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples
-* demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities
-* demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoSeedService
-* demoapp.dom.types.javalang.floats.samples.WrapperFloatSamples
-* demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoEntities
-* demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoSeedService
-* demoapp.dom.types.javalang.integers.samples.WrapperIntegerSamples
-* demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoEntities
-* demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoSeedService
-* demoapp.dom.types.javalang.longs.samples.WrapperLongSamples
-* demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoEntities
-* demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoSeedService
-* demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples
-* demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities
-* demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoSeedService
-* demoapp.dom.types.javalang.strings.samples.JavaLangStringSamples
-* demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities
-* demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoSeedService
-* demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples
-* demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities
-* demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoSeedService
-* demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples
-* demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities
-* demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoSeedService
-* demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples
-* demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities
-* demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoSeedService
-* demoapp.dom.types.javasql.javasqldate.samples.JavaSqlDateSamples
-* demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoEntities
-* demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoSeedService
-* demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples
-* demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities
-* demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoSeedService
-* demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples
-* demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities
-* demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoSeedService
-* demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples
-* demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities
-* demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoSeedService
-* demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples
-* demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities
-* demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoSeedService
-* demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples
-* demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities
-* demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoSeedService
-* demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples
-* demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities
-* demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoSeedService
-* demoapp.dom.types.javautil.javautildate.samples.JavaUtilDateSamples
-* demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities
-* demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoSeedService
-* demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples
-* demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities
-* demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoSeedService
-* demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples
-* demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities
-* demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoSeedService
-* demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples
-* demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities
-* demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoSeedService
-* demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples
-* demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities
-* demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoSeedService
-* demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities
-* demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoSeedService
-* demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities
-* demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoSeedService
-* demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoEntities
-* demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoSeedService
-* demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities
-* demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoSeedService
-* demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoEntities
-* demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoSeedService
-* demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoEntities
-* demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoSeedService
-* demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities
-* demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoSeedService
-* demoapp.dom.types.tuple.NumberConstantRepository
-* demoapp.dom.viewmodels.jaxbrefentity.ChildJdoEntities
-* demoapp.dom.viewmodels.jaxbrefentity.seed.ChildJdoSeedService
-
-_Dependencies_
+|_Dependencies_
 
 * com.h2database:h2:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed>
@@ -4696,11 +4186,7 @@ Folder: \examples\demo\web
 ----
 
 |Demo - Web
-|_Components_
-
-* demoapp.web._infra.utils.ThereCanBeOnlyOne
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.examples.apps:demo-domain:jar:${project.version}
 * org.apache.isis.extensions:isis-extensions-command-replay-primary:jar:<managed>
@@ -4901,29 +4387,7 @@ Folder: \incubator\viewers\javafx\ui
 ----
 
 |Apache Isis Inc - Viewer JavaFX (UI Components)
-|_Components_
-
-* org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx
-* org.apache.isis.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory
-* org.apache.isis.incubator.viewer.javafx.ui.components.number.NumberFieldFactory
-* org.apache.isis.incubator.viewer.javafx.ui.components.objectref.ObjectReferenceFieldFactory
-* org.apache.isis.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory
-* org.apache.isis.incubator.viewer.javafx.ui.components.temporal.TemporalFieldFactory
-* org.apache.isis.incubator.viewer.javafx.ui.components.text.TextFieldFactory
-* org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton
-* org.apache.isis.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField
-* org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForLabeled
-* org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForMenuItem
-* org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefault
-* org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton
-* org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField
-* org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider
-* org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx
-* org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandlerFx
-* org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilderFx
-* org.apache.isis.incubator.viewer.javafx.ui.main.UiContextFxDefault
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
 * org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed>
@@ -4985,22 +4449,7 @@ Folder: \incubator\viewers\vaadin\ui
 ----
 
 |Apache Isis Inc - Viewer Vaadin (UI Components)
-|_Components_
-
-* org.apache.isis.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa
-* org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler
-* org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa
-* org.apache.isis.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory
-* org.apache.isis.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory
-* org.apache.isis.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory
-* org.apache.isis.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory
-* org.apache.isis.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory
-* org.apache.isis.incubator.viewer.vaadin.ui.components.text.TextFieldFactory
-* org.apache.isis.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory
-* org.apache.isis.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa
-* org.apache.isis.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault
-
-_Dependencies_
+|_Dependencies_
 
 * com.vaadin:vaadin:jar:<managed>
 * com.vaadin:vaadin-spring:jar:<managed>
@@ -5120,10 +4569,6 @@ Folder: \legacy\extensions\core\applib
 
 |Apache Isis Legacy - Applib
 |To ease migration from Apache Isis versions 1.16+ to 2.0.0.
-
-_Components_
-
-* org.apache.isis.legacy.applib.DomainObjectContainer
 
 _Dependencies_
 

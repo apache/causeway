@@ -29,6 +29,7 @@
 
 	<properties>
 		<code-assert.version>0.9.14</code-assert.version>
+		<javaparser.version>3.18.0</javaparser.version>
 		<skipTests>true</skipTests>
 	</properties>
 
@@ -37,6 +38,12 @@
 		<dependency>
 			<groupId>org.apache.isis.commons</groupId>
 			<artifactId>isis-commons</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.github.javaparser</groupId>
+		    <artifactId>javaparser-core</artifactId>
+		    <version>${javaparser.version}</version>
 		</dependency>
 		
 		<dependency>

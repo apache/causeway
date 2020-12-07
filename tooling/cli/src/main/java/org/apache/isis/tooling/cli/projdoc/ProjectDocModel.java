@@ -321,13 +321,11 @@ public class ProjectDocModel {
 
         SortedSet<String> components = model.getClasses()
                 .stream()
-                .filter(codeClass->codeClass
-                        .getAnnotations()
-                        .stream()
-                        .map(CodeClass::getName)
-                        .anyMatch(name->name.startsWith("org.springframework.stereotype.")))
+//                .filter(CodeClasses::hasSourceFile)
+//                .filter(CodeClasses.packageNameStartsWith("org.apache.isis.applib."))
+//                .peek(CodeClasses::log) //debug
+                .filter(CodeClasses::isSpringStereoType)
                 .map(CodeClass::getName)
-                //.peek(System.out::println) //debug
                 .collect(Collectors.toCollection(TreeSet::new));
 
         return components;
