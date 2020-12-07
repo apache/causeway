@@ -65,7 +65,7 @@ public class IsisModuleExtCorsImpl {
         val isisCorsConfig = configuration.getExtensions().getCors();
         
         val corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowCredentials(isisCorsConfig.isAllowCredentials());
         corsConfiguration.setAllowedHeaders(isisCorsConfig.getAllowedHeaders());
         corsConfiguration.setAllowedMethods(isisCorsConfig.getAllowedMethods());
         corsConfiguration.setAllowedOrigins(isisCorsConfig.getAllowedOrigins());

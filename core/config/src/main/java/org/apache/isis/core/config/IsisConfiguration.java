@@ -2970,6 +2970,12 @@ public class IsisConfiguration {
         private final Cors cors = new Cors();
         @Data
         public static class Cors {
+            
+            /**
+             * TODO missing java-doc
+             */
+            private boolean allowCredentials = false;
+            
             /**
              * Which origins are allowed to make CORS requests.
              *
@@ -3022,6 +3028,8 @@ public class IsisConfiguration {
              * </p>
              */
             private List<String> exposedHeaders = listOf("Authorization");
+
+            
         }
 
         private final Quartz quartz = new Quartz();
