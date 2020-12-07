@@ -119,6 +119,11 @@ isis:
             level2:
               type: none
               mode: ENABLE_SELECTIVE
+              
+#  extensions:
+#    cors:
+#      # enables access for kroviz
+#      allowedOrigins: http://localhost:3000
 
 resteasy:
   jaxrs:
