@@ -135,15 +135,15 @@ public class AsciiDocFactory {
 
         public static String wrap(@NonNull String sourceType, @NonNull String source, @Nullable String title, Can<String> options) {
             val sb = new StringBuilder();
-            sb.append("[").append(sourceType);
-            options.stream().map(String::trim).filter(_Strings::isNotEmpty).map(s->","+s).forEach(sb::append);
-            sb.append("]\n").append("----\n");
             if(_Strings.isNotEmpty(title)) {
                 val trimmedTitle = title.trim();
                 if(!trimmedTitle.isEmpty()) {
                     sb.append(".").append(trimmedTitle).append("\n");
                 }
             }
+            sb.append("[").append(sourceType);
+            options.stream().map(String::trim).filter(_Strings::isNotEmpty).map(s->","+s).forEach(sb::append);
+            sb.append("]\n").append("----\n");
             _Text.normalize(_Text.getLines(source))
             .forEach(line->sb.append(line).append("\n"));
             sb.append("----\n");

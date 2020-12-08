@@ -16,12 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.javamodel.test.samples;
+package org.apache.isis.tooling.cli.test.doclet.samples;
 
-import lombok.Value;
+public interface SudoService {
 
-@Value
-public class UserMemento {
-    
-    private final String name; 
 }

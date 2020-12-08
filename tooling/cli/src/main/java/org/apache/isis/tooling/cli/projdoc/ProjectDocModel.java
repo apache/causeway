@@ -44,6 +44,7 @@ import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig.ProjectDoc;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
+import org.apache.isis.tooling.javamodel.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 import org.apache.isis.tooling.projectmodel.ArtifactCoordinates;

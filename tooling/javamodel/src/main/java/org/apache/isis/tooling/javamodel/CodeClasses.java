@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.projdoc;
+package org.apache.isis.tooling.javamodel;
 
 import java.util.function.Predicate;
 
@@ -28,11 +28,11 @@ import lombok.extern.log4j.Log4j2;
 import guru.nidi.codeassert.model.CodeClass;
 
 @Log4j2
-final class CodeClasses {
+public final class CodeClasses {
 
     // -- PREDICATES
     
-    static boolean isSpringStereoType(final @NonNull CodeClass codeClass) {
+    public static boolean isSpringStereoType(final @NonNull CodeClass codeClass) {
         return codeClass
         .getAnnotations()
         .stream()
@@ -40,27 +40,27 @@ final class CodeClasses {
         .anyMatch(name->name.startsWith("org.springframework.stereotype."));
     }
     
-    static Predicate<CodeClass> packageNameStartsWith(final @NonNull String packagePrefix) {
+    public static Predicate<CodeClass> packageNameStartsWith(final @NonNull String packagePrefix) {
         return codeClass->codeClass.getName().startsWith(packagePrefix);
     }
     
-    static Predicate<CodeClass> isApacheIsisPackage() {
+    public static Predicate<CodeClass> isApacheIsisPackage() {
         return packageNameStartsWith("org.apache.isis.");
     }
     
-    static boolean hasSourceFile(final @NonNull CodeClass codeClass) {
+    public static boolean hasSourceFile(final @NonNull CodeClass codeClass) {
         return _Strings.isNotEmpty(codeClass.getSourceFile())
                 && !"Unknown".equals(codeClass.getSourceFile());
     }
     
-    static boolean hasNoSourceFile(final @NonNull CodeClass codeClass) {
+    public static boolean hasNoSourceFile(final @NonNull CodeClass codeClass) {
         return !hasSourceFile(codeClass);
     }
     
     
     // -- LOGGER
     
-    static void log(final @NonNull CodeClass codeClass) {
+    public static void log(final @NonNull CodeClass codeClass) {
         log.info("codeClass: {}\n"
                 + "  methods:{}\n"
                 + "  source-file: {}", 

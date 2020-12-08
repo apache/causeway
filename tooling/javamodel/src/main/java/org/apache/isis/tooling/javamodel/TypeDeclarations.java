@@ -16,8 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.javamodel.test.samples;
+package org.apache.isis.tooling.javamodel;
 
-public interface SudoService {
+import java.util.stream.Stream;
 
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+
+import lombok.NonNull;
+
+public final class TypeDeclarations {
+
+    public static <T> Stream<MethodDeclaration> streamMethodDeclarations(
+            final @NonNull TypeDeclaration<?> typeDeclaration) {
+        return typeDeclaration.getMethods().stream();
+    }
+    
+    public static <T> Stream<MethodDeclaration> streamPublicMethodDeclarations(
+            final @NonNull TypeDeclaration<?> typeDeclaration) {
+        return streamMethodDeclarations(typeDeclaration)
+                .filter(MethodDeclarations::isEffectivePublic);
+    }
+    
+
+    
 }

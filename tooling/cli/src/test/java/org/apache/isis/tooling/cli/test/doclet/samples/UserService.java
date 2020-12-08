@@ -16,13 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.javamodel.test.samples;
+package org.apache.isis.tooling.cli.test.doclet.samples;
 
 import java.util.Optional;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import lombok.NonNull;
 
 /**
  * The {@link UserService} allows the domain object to obtain the identity of the user 
@@ -31,7 +33,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * If {@link SudoService} has been used to temporarily override the user and/or roles, 
  * then this service will report the overridden values instead.
  *
- * @since 2.0 (+doc)
+ * @since 2.0 {@index}
  */
 public interface UserService {
 
@@ -40,14 +42,19 @@ public interface UserService {
     /**
      * Optionally gets the details about the current user, 
      * based on whether an {@link ExecutionContext} can be found with the current thread's context.
-     * @since 2.0 (+doc)
      */
     Optional<UserMemento> currentUser();
 
     /**
+     * Testimonial with arguments.
+     * @param arg1 - first argument (non-null)
+     * @param arg2 - second argument (non-null)
+     */
+    Optional<UserMemento> currentUser(@NonNull String arg1, @NonNull String arg2);
+    
+    /**
      * Gets the details about the current user.
      * @apiNote for backward compatibility
-     * @since 2.0 (+doc)
      */
     @Nullable
     default UserMemento getUser() {
@@ -66,7 +73,7 @@ public interface UserService {
     }
 
     /**
-     * Optionally gets the the current user's name, 
+     * Optionally gets the current user's name, 
      * based on whether an {@link ExecutionContext} can be found with the current thread's context.
      */
     default Optional<String> currentUserName() {
@@ -74,6 +81,10 @@ public interface UserService {
                 .map(UserMemento::getName);
     }
 
+    /**
+     * Gets the current user's name if available, otherwise returns {@literal Nobody}.
+     * @hidden
+     */
     default String currentUserNameElseNobody() {
         return currentUserName()
                 .orElse("Nobody");

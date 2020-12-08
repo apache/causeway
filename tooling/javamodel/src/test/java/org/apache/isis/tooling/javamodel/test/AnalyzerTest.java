@@ -26,6 +26,8 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
+import org.apache.isis.tooling.javamodel.CompilationUnits;
+import org.apache.isis.tooling.javamodel.TypeDeclarations;
 
 import lombok.val;
 
@@ -62,22 +64,25 @@ class AnalyzerTest {
         .stream()
         .filter(source->source.toString().contains("UserService"))
         .peek(source->System.out.println("parsing source: " + source))
-        .forEach(source->{
+        .map(CompilationUnits::parse)
+        .flatMap(CompilationUnits::streamPublicTypeDeclarations)
+        .peek(td->{
             
-            MethodProcessor.visitMethodsOf(source, md->{
+            td.getJavadocComment().ifPresent(javadocComment->{
+                val javadoc = javadocComment.parse();
+            
+                javadoc.getBlockTags().stream()
+                .filter(tag->tag.getTagName().equals("since"))
+                .forEach(tag->System.out.println("--- SINCE " + tag.getContent().toText()));
                 
-                md.getJavadocComment().ifPresent(javadocComment->{
-                    val javadoc = javadocComment.parse();
-                
-                    javadoc.getBlockTags().stream()
-                    .filter(tag->tag.getTagName().equals("since"))
-                    .forEach(tag->System.out.println("--- SINCE " + tag.getContent().toText()));
-                    
-                }); 
-                
-                System.out.println("javadoc: " + md.getJavadocComment());
-                System.out.println("non private method: " + md.getDeclarationAsString());
             });
+            
+        })
+        .flatMap(TypeDeclarations::streamMethodDeclarations)
+        .forEach(md->{
+            
+            System.out.println("javadoc: " + md.getJavadocComment());
+            System.out.println("non private method: " + md.getDeclarationAsString());
 
         });
     }
