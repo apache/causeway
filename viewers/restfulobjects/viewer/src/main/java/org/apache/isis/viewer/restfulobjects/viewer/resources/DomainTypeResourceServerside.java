@@ -94,11 +94,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val resourceContext = createResourceContext(
                 RepresentationType.TYPE_LIST, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val allSpecifications = getSpecificationLoader().snapshotSpecifications();
+        val domainTypeSpecifications = getSpecificationLoader().snapshotSpecifications()
+                .filter(spec->spec.isEntityOrViewModel());
 
         final TypeListReprRenderer renderer = 
                 new TypeListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
-        renderer.with(allSpecifications).includesSelf();
+        renderer.with(domainTypeSpecifications).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }

@@ -463,9 +463,11 @@ public class FacetedMethodsBuilder {
         }
 
         // ensure we can load specs for all the params
-        if (!loadParamSpecs(actionMethod)) {
-            return false;
-        }
+//don't!! has side effect of pulling in all param types
+//even those that should be ignored by the metamodel        
+//        if (!loadParamSpecs(actionMethod)) {
+//            return false;
+//        }
         
         if(isMixinMain(actionMethod)) {
             // we are introspecting a mixin type, so accept this method for further processing
