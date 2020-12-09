@@ -28,7 +28,9 @@ import org.asciidoctor.ast.StructuralNode;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 public class SimpleStructuralNode extends ContentNodeAbstract implements StructuralNode {
 
     @Getter @Setter private String title;

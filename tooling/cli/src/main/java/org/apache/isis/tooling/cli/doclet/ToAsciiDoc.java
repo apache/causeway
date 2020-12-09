@@ -28,6 +28,8 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.javadoc.description.JavadocSnippet;
 
+import org.jsoup.Jsoup;
+
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
@@ -86,24 +88,25 @@ class ToAsciiDoc {
     }
     
     //TODO method java-doc needs further post processing when spanning multiple paragraphs
-    public String javadoc(final @NonNull Javadoc javadoc) {
+    public String javadoc(final @NonNull Javadoc javadoc, final int level) {
 
-        val adoc = new StringBuilder();
+        val javadocResolved = new StringBuilder();
 
         javadoc.getDescription().getElements()
         .forEach(e->{
 
             if(e instanceof JavadocSnippet) {
-                adoc.append(normalizeHtmlTags(e.toText()));
+                javadocResolved.append(javadocSnippet((JavadocSnippet)e));
             } else if(e instanceof JavadocInlineTag) {
-                adoc.append(inlineTag((JavadocInlineTag) e));
+                javadocResolved.append(inlineTag((JavadocInlineTag) e));
             } else {
-                adoc.append(e.toText());
+                javadocResolved.append(e.toText());
             }
 
         });
 
-        return adoc.toString();
+        val doc = Jsoup.parse(javadocResolved.toString());
+        return HtmlToAsciiDoc.body(doc.selectFirst("body"), level);
     }
 
     public String inlineTag(final @NonNull JavadocInlineTag inlineTag) {
@@ -133,14 +136,8 @@ class ToAsciiDoc {
                 .orElse(docIndexKey);
     }
     
-    // -- HELPER 
-
-    /*
-     * try to convert HTML formatting directives to normal text  
-     */
-    private static String normalizeHtmlTags(final @NonNull String s) {
-        return s.replace("<p>", "\n").replace("</p>", "");
+    public String javadocSnippet(final @NonNull JavadocSnippet snippet) {
+        return snippet.toText();
     }
-    
 
 }

@@ -18,46 +18,30 @@
  */
 package org.apache.isis.tooling.model4adoc.ast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.StructuralNode;
 
-import lombok.Getter;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+
 import lombok.ToString;
 
 @ToString(callSuper = true)
-public class SimpleBlock extends SimpleStructuralNode implements Block {
-
-    @Getter private final List<String> lines = new ArrayList<>();
+public class SimpleList extends SimpleStructuralNode implements org.asciidoctor.ast.List {
     
     @Override
-    @Deprecated
-    public List<String> lines() {
-        return getLines();
+    public List<StructuralNode> getItems() {
+        return getBlocks();
+    }
+    
+    @Override
+    public boolean hasItems() {
+        return !getItems().isEmpty();
     }
 
     @Override
-    public void setLines(List<String> lines) {
-        this.lines.clear();
-        this.lines.addAll(lines);
+    public String render() {
+        throw _Exceptions.notImplemented();
     }
 
-    @Override
-    @Deprecated
-    public String source() {
-        return getSource();
-    }
-
-    @Override
-    public String getSource() {
-        return lines.stream().collect(Collectors.joining("\n"));
-    }
-
-    @Override
-    public void setSource(String source) {
-        setLines(Arrays.asList(source.replace("\r", "").split("\n")));
-    }
 }

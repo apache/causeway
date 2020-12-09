@@ -4,29 +4,32 @@
 
 Immutable serializable value holding details about a user and its roles.
 
-
-
 * `*_system_*()` : `xref:system:generated:index/UserMemento.adoc[UserMemento]`
 +
 The framework's internal user with unrestricted privileges.
+
 
 * `*_ofName_*(String name)` : `xref:system:generated:index/UserMemento.adoc[UserMemento]`
 +
 Creates a new user with the specified name and no roles.
 
+
 * `*_ofNameAndRoles_*(String name, xref:system:generated:index/RoleMemento.adoc[RoleMemento]... roles)` : `xref:system:generated:index/UserMemento.adoc[UserMemento]`
 +
 Creates a new user with the specified name and assigned roles.
+
 
 * `*_ofNameAndRoleNames_*(String name, String... roleNames)` : `xref:system:generated:index/UserMemento.adoc[UserMemento]`
 +
 Creates a new user with the specified name and assigned role names.
 
+
 * `*_ofNameAndRoleNames_*(String name, Stream<String> roleNames)` : `xref:system:generated:index/UserMemento.adoc[UserMemento]`
 +
 Creates a new user with the specified name and assigned role names.
 
+
 * `*isCurrentUser*(String userName)` : `boolean`
 +
 Determine if the specified name is this user.
-
++

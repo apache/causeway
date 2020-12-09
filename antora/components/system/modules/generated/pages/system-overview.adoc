@@ -1,11 +1,8 @@
 = System Overview
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
 These tables summarize all Maven artifacts available with _Apache Isis_.
-
 == Base
-
 [plantuml,Base,svg]
 ----
 @startuml(id=Base)
@@ -50,7 +47,6 @@ package "Base\n[Software System]" {
 2 .[#707070].> 3 : ""
 @enduml
 ----
-
 .Projects/Modules (Base)
 [cols="3a,5a", options="header"]
 |===
@@ -114,7 +110,6 @@ Folder: \supplemental-model
 |===
 
 == Commons
-
 [plantuml,Commons,svg]
 ----
 @startuml(id=Commons)
@@ -139,7 +134,6 @@ package "Commons\n[Software System]" {
 }
 @enduml
 ----
-
 .Projects/Modules (Commons)
 [cols="3a,5a", options="header"]
 |===
@@ -176,7 +170,6 @@ _Dependencies_
 |===
 
 == Core
-
 [plantuml,Core,svg]
 ----
 @startuml(id=Core)
@@ -278,7 +271,6 @@ package "Core\n[Software System]" {
 2 .[#707070].> 11 : ""
 @enduml
 ----
-
 .Projects/Modules (Core)
 [cols="3a,5a", options="header"]
 |===
@@ -663,7 +655,6 @@ _Dependencies_
 |===
 
 == App
-
 [plantuml,App,svg]
 ----
 @startuml(id=App)
@@ -688,7 +679,6 @@ package "App\n[Software System]" {
 }
 @enduml
 ----
-
 .Projects/Modules (App)
 [cols="3a,5a", options="header"]
 |===
@@ -710,7 +700,6 @@ Folder: \starters
 |===
 
 == Mavendeps
-
 [plantuml,Mavendeps,svg]
 ----
 @startuml(id=Mavendeps)
@@ -770,7 +759,6 @@ package "Mavendeps\n[Software System]" {
 2 .[#707070].> 7 : ""
 @enduml
 ----
-
 .Projects/Modules (Mavendeps)
 [cols="3a,5a", options="header"]
 |===
@@ -892,7 +880,6 @@ _Dependencies_
 |===
 
 == Mappings
-
 [plantuml,Mappings,svg]
 ----
 @startuml(id=Mappings)
@@ -952,7 +939,6 @@ package "Mappings\n[Software System]" {
 2 .[#707070].> 3 : ""
 @enduml
 ----
-
 .Projects/Modules (Mappings)
 [cols="3a,5a", options="header"]
 |===
@@ -1053,7 +1039,6 @@ _Dependencies_
 |===
 
 == Persistence
-
 [plantuml,Persistence,svg]
 ----
 @startuml(id=Persistence)
@@ -1112,7 +1097,6 @@ package "Persistence\n[Software System]" {
 5 .[#707070].> 7 : ""
 @enduml
 ----
-
 .Projects/Modules (Persistence)
 [cols="3a,5a", options="header"]
 |===
@@ -1245,7 +1229,6 @@ _Dependencies_
 |===
 
 == Security
-
 [plantuml,Security,svg]
 ----
 @startuml(id=Security)
@@ -1282,7 +1265,6 @@ package "Security\n[Software System]" {
 }
 @enduml
 ----
-
 .Projects/Modules (Security)
 [cols="3a,5a", options="header"]
 |===
@@ -1364,7 +1346,6 @@ _Dependencies_
 |===
 
 == Valuetypes
-
 [plantuml,Valuetypes,svg]
 ----
 @startuml(id=Valuetypes)
@@ -1379,12 +1360,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1528,7 +1509,6 @@ package "Valuetypes\n[Software System]" {
 2 .[#707070].> 18 : ""
 @enduml
 ----
-
 .Projects/Modules (Valuetypes)
 [cols="3a,5a", options="header"]
 |===
@@ -1905,7 +1885,6 @@ _Dependencies_
 |===
 
 == Viewer
-
 [plantuml,Viewer,svg]
 ----
 @startuml(id=Viewer)
@@ -1998,7 +1977,6 @@ package "Viewer\n[Software System]" {
 9 .[#707070].> 12 : ""
 @enduml
 ----
-
 .Projects/Modules (Viewer)
 [cols="3a,5a", options="header"]
 |===
@@ -2279,7 +2257,6 @@ _Dependencies_
 |===
 
 == Testing
-
 [plantuml,Testing,svg]
 ----
 @startuml(id=Testing)
@@ -2416,7 +2393,6 @@ package "Testing\n[Software System]" {
 17 .[#707070].> 18 : ""
 @enduml
 ----
-
 .Projects/Modules (Testing)
 [cols="3a,5a", options="header"]
 |===
@@ -2723,7 +2699,6 @@ Folder: \testing\unittestsupport\applib
 |===
 
 == Regression Tests
-
 [plantuml,Regression Tests,svg]
 ----
 @startuml(id=Regression_Tests)
@@ -2755,7 +2730,6 @@ package "Regression Tests\n[Software System]" {
 2 .[#707070].> 3 : ""
 @enduml
 ----
-
 .Projects/Modules (Regression Tests)
 [cols="3a,5a", options="header"]
 |===
@@ -2828,7 +2802,6 @@ _Dependencies_
 |===
 
 == Extensions
-
 [plantuml,Extensions,svg]
 ----
 @startuml(id=Extensions)
@@ -3056,7 +3029,6 @@ package "Extensions\n[Software System]" {
 2 .[#707070].> 18 : ""
 @enduml
 ----
-
 .Projects/Modules (Extensions)
 [cols="3a,5a", options="header"]
 |===
@@ -3609,7 +3581,6 @@ Folder: \extensions\security\shiro-realm-ldap\impl
 |===
 
 == Subdomains
-
 [plantuml,Subdomains,svg]
 ----
 @startuml(id=Subdomains)
@@ -3624,12 +3595,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3781,7 +3752,6 @@ package "Subdomains\n[Software System]" {
 2 .[#707070].> 22 : ""
 @enduml
 ----
-
 .Projects/Modules (Subdomains)
 [cols="3a,5a", options="header"]
 |===
@@ -4158,7 +4128,6 @@ _Dependencies_
 |===
 
 == Tooling
-
 [plantuml,Tooling,svg]
 ----
 @startuml(id=Tooling)
@@ -4218,7 +4187,6 @@ package "Tooling\n[Software System]" {
 2 .[#707070].> 7 : ""
 @enduml
 ----
-
 .Projects/Modules (Tooling)
 [cols="3a,5a", options="header"]
 |===
@@ -4290,6 +4258,7 @@ _Dependencies_
 * org.apache.isis.tooling:isis-tooling-javamodel:jar:<managed>
 * org.apache.isis.tooling:isis-tooling-model4adoc:jar:<managed>
 * org.apache.isis.tooling:isis-tooling-projectmodel:jar:<managed>
+* org.jsoup:jsoup:jar:<managed>
 
 
 
@@ -4358,7 +4327,6 @@ _Dependencies_
 |===
 
 == Examples
-
 [plantuml,Examples,svg]
 ----
 @startuml(id=Examples)
@@ -4418,7 +4386,6 @@ package "Examples\n[Software System]" {
 2 .[#707070].> 7 : ""
 @enduml
 ----
-
 .Projects/Modules (Examples)
 [cols="3a,5a", options="header"]
 |===
@@ -4740,7 +4707,6 @@ Folder: \examples\demo\wicket
 |===
 
 == Incubator
-
 [plantuml,Incubator,svg]
 ----
 @startuml(id=Incubator)
@@ -4827,7 +4793,6 @@ package "Incubator\n[Software System]" {
 2 .[#707070].> 8 : ""
 @enduml
 ----
-
 .Projects/Modules (Incubator)
 [cols="3a,5a", options="header"]
 |===
@@ -5032,7 +4997,6 @@ Folder: \incubator\viewers\vaadin\viewer
 |===
 
 == Legacy
-
 [plantuml,Legacy,svg]
 ----
 @startuml(id=Legacy)
@@ -5092,7 +5056,6 @@ package "Legacy\n[Software System]" {
 2 .[#707070].> 7 : ""
 @enduml
 ----
-
 .Projects/Modules (Legacy)
 [cols="3a,5a", options="header"]
 |===

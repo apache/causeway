@@ -2,8 +2,5 @@
 
 
 
-Immutable serializable value held by  xref:system:generated:index/UserMemento.adoc[UserMemento] .
-
-
-
+Immutable serializable value held by xref:system:generated:index/UserMemento.adoc[UserMemento] .
 

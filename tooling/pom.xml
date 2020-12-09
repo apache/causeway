@@ -34,7 +34,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-	
+
 		<maven.compiler.release>11</maven.compiler.release>
 
 		<jar-plugin.automaticModuleName>org.apache.isis.tooling</jar-plugin.automaticModuleName>
@@ -44,6 +44,7 @@
 		<gradle-tooling.version>6.7.1</gradle-tooling.version>
 		<maven-model-builder.version>3.6.3</maven-model-builder.version>
 		<picocli.version>4.5.2</picocli.version>
+		<jsoup.version>1.13.1</jsoup.version>
 		<structurizr.version>1.5.0</structurizr.version>
 
 	</properties>
@@ -87,7 +88,7 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
-				
+
 				<!-- APACHE ISIS customisation 4/7: start -->
 				<configuration>
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
@@ -136,7 +137,7 @@
 					</excludes>
 					<licenses>
 						<license
-								implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+							implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
 							<licenseFamilyCategory>AL2  </licenseFamilyCategory>
 							<licenseFamilyName>Apache License 2.0</licenseFamilyName>
 							<notes />
@@ -148,7 +149,7 @@
 					</licenses>
 					<licenseFamilies>
 						<licenseFamily
-								implementation="org.apache.rat.license.SimpleLicenseFamily">
+							implementation="org.apache.rat.license.SimpleLicenseFamily">
 							<familyName>Apache License 2.0</familyName>
 						</licenseFamily>
 					</licenseFamilies>
@@ -217,6 +218,12 @@
 				<groupId>info.picocli</groupId>
 				<artifactId>picocli</artifactId>
 				<version>${picocli.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jsoup</groupId>
+				<artifactId>jsoup</artifactId>
+				<version>${jsoup.version}</version>
 			</dependency>
 
 			<dependency>

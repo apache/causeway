@@ -32,10 +32,6 @@
 
 	<build>
 		<plugins>
-
-
-			
-			
 		</plugins>
 	</build>
 
@@ -45,7 +41,7 @@
 			<groupId>org.apache.isis.commons</groupId>
 			<artifactId>isis-commons</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.tooling</groupId>
 			<artifactId>isis-tooling-model4adoc</artifactId>
@@ -55,12 +51,12 @@
 			<groupId>org.apache.isis.tooling</groupId>
 			<artifactId>isis-tooling-projectmodel</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.tooling</groupId>
 			<artifactId>isis-tooling-javamodel</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.tooling</groupId>
 			<artifactId>isis-tooling-c4modeling</artifactId>
@@ -69,6 +65,11 @@
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
 		</dependency>
 
 	</dependencies>

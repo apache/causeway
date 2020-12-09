@@ -88,7 +88,7 @@ public class Adoclet {
         // -- intro
         
         td.getJavadoc().ifPresent(javadoc->{
-            introBlock.setSource(toAdocConverter.javadoc(javadoc));    
+            introBlock.setSource(toAdocConverter.javadoc(javadoc, 0));    
         });
         
         // -- java content
@@ -124,7 +124,7 @@ public class Adoclet {
             .ifPresent(javadoc->{
                 methodDescriptions.append(String.format(docletContext.getMethodDescriptionFormat(),
                         toAdocConverter.methodDeclaration(md),
-                        toAdocConverter.javadoc(javadoc)));
+                        toAdocConverter.javadoc(javadoc, 1)));
             });
             
         });

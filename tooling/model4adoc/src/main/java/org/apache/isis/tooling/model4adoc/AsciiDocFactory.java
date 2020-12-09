@@ -24,6 +24,7 @@ import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
@@ -35,6 +36,8 @@ import org.apache.isis.tooling.model4adoc.ast.SimpleBlock;
 import org.apache.isis.tooling.model4adoc.ast.SimpleCell;
 import org.apache.isis.tooling.model4adoc.ast.SimpleColumn;
 import org.apache.isis.tooling.model4adoc.ast.SimpleDocument;
+import org.apache.isis.tooling.model4adoc.ast.SimpleList;
+import org.apache.isis.tooling.model4adoc.ast.SimpleListItem;
 import org.apache.isis.tooling.model4adoc.ast.SimpleRow;
 import org.apache.isis.tooling.model4adoc.ast.SimpleTable;
 
@@ -64,13 +67,16 @@ public class AsciiDocFactory {
     
     public static Block block(StructuralNode parent) {
         val block = new SimpleBlock();
+        block.setLevel(parent.getLevel());
         parent.getBlocks().add(block);
+        block.setParent(parent);
         return block;
     }
     
     public static Table table(StructuralNode parent) {
         val table = new SimpleTable();
         parent.getBlocks().add(table);
+        table.setParent(parent);
         return table;
     }
     
@@ -129,6 +135,28 @@ public class AsciiDocFactory {
         val row = getOrCreateFootRow(table, rowIndex);
         val col = getOrCreateColumn(table, colIndex);
         return cell(row, col, source);
+    }
+    
+    public static org.asciidoctor.ast.List list(StructuralNode parent) {
+        val list = new SimpleList();
+        list.setLevel(parent.getLevel()+1);
+        parent.getBlocks().add(list);
+        list.setParent(parent);
+        return list;
+    }
+    
+    public static ListItem listItem(org.asciidoctor.ast.List parent) {
+        val listItem = new SimpleListItem();
+        listItem.setLevel(parent.getLevel());
+        parent.getItems().add(listItem);
+        listItem.setParent(parent);
+        return listItem;
+    }
+    
+    public static ListItem listItem(org.asciidoctor.ast.List parent, String source) {
+        val listItem = listItem(parent);
+        listItem.setSource(source);
+        return listItem;
     }
     
     public static class SourceFactory {

@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.Table;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
@@ -39,6 +41,8 @@ import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.cell;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.headCell;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.list;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.listItem;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
 import lombok.val;
@@ -97,6 +101,69 @@ class AsciiDocWriterTest {
     }
     
     @Test
+    void testSimpleList() throws IOException {
+        
+        val list = list(doc);
+        list.setTitle("SimpleList");
+        
+        listItem(list, "Item-1");
+        listItem(list, "Item-2");
+        
+        String actualAdoc = AsciiDocWriter.toString(doc); 
+        
+        //System.out.println(actualAdoc); //debug
+        
+        _Text.assertTextEquals(
+                _Text.readLinesFromResource(this.getClass(), "simple-list.adoc", StandardCharsets.UTF_8), 
+                actualAdoc);
+    }
+    
+    @SuppressWarnings("unused")
+    @Test
+    void testNestedList() throws IOException {
+        
+        val list = list(doc);
+        list.setTitle("NestedList");
+        
+        val item1 = listItem(list, "Item-1");
+        val item2 = listItem(list, "Item-2");
+        
+        val list1 = list(item1);
+        
+        val item11 = listItem(list1, "Item-1-1");
+        val item12 = listItem(list1, "Item-1-2");
+        
+        val list12 = list(item12);
+        
+        val item121 = listItem(list12, "Item-1-2-1");
+        
+        String actualAdoc = AsciiDocWriter.toString(doc); 
+        
+        System.out.println(actualAdoc); //debug
+        
+        _Text.assertTextEquals(
+                _Text.readLinesFromResource(this.getClass(), "nested-list.adoc", StandardCharsets.UTF_8), 
+                actualAdoc);
+    }
+    
+    @Test @Disabled
+    void reverseTestNestedList() throws IOException {
+    
+        val adocRef = _Strings.readFromResource(this.getClass(), "nested-list.adoc", StandardCharsets.UTF_8);
+        val asciidoctor = Asciidoctor.Factory.create();
+        val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
+        
+        String actualAdoc = AsciiDocWriter.toString(refDoc);
+        
+        debug((org.asciidoctor.ast.List)refDoc.getBlocks().get(0));
+        
+        System.out.println(actualAdoc); //debug
+        
+        _Text.assertTextEquals(adocRef, actualAdoc);
+    }
+
+
+    @Test
     void testAttributedTable() throws IOException {
         
         val table = table(doc);
@@ -121,7 +188,7 @@ class AsciiDocWriterTest {
     }
     
     @Test @Disabled
-    void testSimpleTableModel() throws IOException {
+    void reverseTestSimpleTableModel() throws IOException {
     
         val adocRef = _Strings.readFromResource(this.getClass(), "simple-table.adoc", StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
@@ -129,7 +196,7 @@ class AsciiDocWriterTest {
         
         String actualAdoc = AsciiDocWriter.toString(refDoc);
         
-        //debug(refDoc);
+        //debug((Table)refDoc.getBlocks().get(0));
         
         //System.out.println(actualAdoc); //debug
         
@@ -153,8 +220,7 @@ class AsciiDocWriterTest {
     }
     
     @SuppressWarnings("unused")
-    private static void debug(Document doc) {
-        val refTable = (Table)doc.getBlocks().get(0);
+    private static void debug(Table refTable) {
         val refCol = refTable.getColumns().get(0);
         val refRow = refTable.getBody().get(0);
         val refCell = refRow.getCells().get(0);
@@ -177,6 +243,26 @@ class AsciiDocWriterTest {
         System.out.println("cell source: " + refCell.getSource());
         
         System.out.println("head source: " + refHead.getCells().get(0).getSource());
+    }
+    
+    @SuppressWarnings("unused")
+    private static void debug(org.asciidoctor.ast.List refList) {
+        System.out.println("list blocks: " + refList.getBlocks());
+        System.out.println("list items: " + refList.getItems());
+        System.out.println("list level: " + refList.getLevel());
+        for(val item0 : refList.getItems()) {
+            val item = (ListItem) item0;
+            System.out.println("\t *");
+            System.out.println("\t item level: " + item.getLevel());
+            System.out.println("\t item class: " + item.getClass());
+            System.out.println("\t item caption: " + item.getCaption());
+            System.out.println("\t item nodename: " + item.getNodeName());
+            System.out.println("\t item source: " + item.getSource());
+            System.out.println("\t item blocks: " + item.getBlocks());
+            _NullSafe.stream(item.getBlocks())
+            .forEach(block->debug((org.asciidoctor.ast.List)block));
+        }
+        
     }
     
 

@@ -83,7 +83,7 @@ public class AdocletContext {
         return AdocletContext.builder()
                 .methodFormat("`*%2$s*(%3$s)` : `%1$s`") // return-type | name | param-list)
                 .staticMethodFormat("`*_%2$s_*(%3$s)` : `%1$s`") // return-type | name | param-list)
-                .methodDescriptionFormat("\n* %s\n+\n%s\n") // method | description
+                .methodDescriptionFormat("\n* %s\n%s\n") // method | description
                 .includeJavaSource(false)
                 ;        
     }

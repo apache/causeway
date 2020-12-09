@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
 import org.apache.isis.commons.internal.base._Strings;
@@ -79,9 +81,21 @@ public class AsciiDocWriter {
         
         formatWriter.ifNonEmpty("= %s\n\n", doc.getTitle());
         
-        for(val node : doc.getBlocks()) {
+        writeChildNodes(doc.getBlocks(), formatWriter);
+        
+    }
+
+    // -- CHILDREN
+    
+    private void writeChildNodes(Iterable<StructuralNode> blocks, FormatWriter formatWriter) throws IOException {
+        
+        for(val node : blocks) {
             if(node instanceof Table) {
                 write((Table)node, formatWriter);
+                continue;
+            }
+            if(node instanceof org.asciidoctor.ast.List) {
+                write((org.asciidoctor.ast.List)node, formatWriter);
                 continue;
             }
             if(node instanceof Block) {
@@ -93,30 +107,68 @@ public class AsciiDocWriter {
         }
         
     }
-
+    
+    
     // -- PARAGRAPH
     
     private void write(Block block, FormatWriter writer) throws IOException {
+        if(block.getLevel()>0
+                && !(block.getParent() instanceof ListItem)) {
+            writer.append("+\n");
+        }
         for(val line : block.getLines()) {
             writer.append(line);
-            writer.append("\n");    
+            writer.append("\n");
         }
-        writer.append("\n"); // must finally write an empty line 
+        writeChildNodes(block.getBlocks(), writer);
+    }
+    
+    // -- LIST
+
+    //* bullet
+    //** bullet
+    //** bullet
+    //*** bullet
+    private void write(org.asciidoctor.ast.List list, FormatWriter writer) throws IOException {
+        writer.ifNonEmpty(".%s\n", list.getTitle());
+        
+        for(val item : list.getItems()) {
+            
+            val bullets = _Strings.padEnd("", item.getLevel(), '*');
+            
+            if(item instanceof ListItem) {
+                val listItem = (ListItem) item;
+                
+                if(list.getLevel()>0) {
+                    writer.append("+\n");
+                }
+                
+                writer.append("%s ", bullets);
+                writer.ifNonEmpty("%s\n", listItem.getSource());
+                writeChildNodes(listItem.getBlocks(), writer);
+                continue;
+            } 
+            
+            writer.append("%s AsciiDocWriter writing of type %s not yet implemented\n",
+                    bullets,
+                    item.getClass().getName());    
+        }
+ 
     }
     
     // -- TABLE
 
     //  |===
-//  |Name of Column 1 |Name of Column 2 |Name of Column 3 
-//
-//  |Cell in column 1, row 1
-//  |Cell in column 2, row 1
-//  |Cell in column 3, row 1
-//
-//  |Cell in column 1, row 2
-//  |Cell in column 2, row 2
-//  |Cell in column 3, row 2
-//  |===
+    //  |Name of Column 1 |Name of Column 2 |Name of Column 3 
+    //
+    //  |Cell in column 1, row 1
+    //  |Cell in column 2, row 1
+    //  |Cell in column 3, row 1
+    //
+    //  |Cell in column 1, row 2
+    //  |Cell in column 2, row 2
+    //  |Cell in column 3, row 2
+    //  |===
     private void write(Table table, FormatWriter writer) throws IOException {
         writer.ifNonEmpty(".%s\n", table.getTitle());
         
