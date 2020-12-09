@@ -19,11 +19,10 @@
 package org.apache.isis.tooling.cli.test.doclet;
 
 import java.io.File;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.tooling.cli.doclet.Doclet;
+import org.apache.isis.tooling.cli.doclet.DocletContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 
 import lombok.val;
@@ -40,17 +39,21 @@ class DocletTest {
         val projDir = new File("./").getAbsoluteFile();
         val analyzerConfig = AnalyzerConfigFactory.mavenTest(projDir, Language.JAVA).main();
 
+        val docletContext = DocletContext.builder()
+                .indexXrefRoot("system:index")
+                .build();
+        
         analyzerConfig.getSources(JAVA)
         .stream()
-        .filter(source->source.toString().contains("UserService"))
+//        .filter(source->source.toString().contains("UserService"))
         .peek(source->System.out.println("parsing source: " + source))
-        .map(Doclet::parse)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .forEach(docletContext::add);
+        
+        docletContext.streamDoclets()
         .forEach(doclet->{
             
             System.out.println("--------------------------------------------------");
-            System.out.println(doclet.toAsciiDoc());
+            System.out.println(doclet.toAsciiDoc(docletContext));
             System.out.println("--------------------------------------------------");
 
         });

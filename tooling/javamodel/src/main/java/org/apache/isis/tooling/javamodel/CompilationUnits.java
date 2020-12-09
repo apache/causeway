@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -43,14 +43,15 @@ public final class CompilationUnits {
         .orElse(false);
     }
     
-    public static <T> Stream<TypeDeclaration<?>> streamPublicTypeDeclarations(
+    public static <T> Stream<ClassOrInterfaceDeclaration> streamPublicTypeDeclarations(
             final @NonNull CompilationUnit compilationUnit) {
         
         val type = compilationUnit.getPrimaryType().orElse(null);
-        if(type==null) {
+        if(type==null
+                || !type.isClassOrInterfaceDeclaration()) {
             return Stream.empty();
         }
-        return Stream.of(type);
+        return Stream.of((ClassOrInterfaceDeclaration)type);
     }
 
     

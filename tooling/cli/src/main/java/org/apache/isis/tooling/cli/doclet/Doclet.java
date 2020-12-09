@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.tooling.javamodel.CompilationUnits;
@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Doclet {
 
-    private final TypeDeclaration<?> td;
+    private final ClassOrInterfaceDeclaration td;
 
     public static Optional<Doclet> parse(final @NonNull File sourceFile) {
 
@@ -51,7 +51,7 @@ public class Doclet {
 
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamPublicTypeDeclarations)
-            .filter(Doclets::isApacheIsisDoclet)
+            .filter(Doclets::hasIndexDirective)
             .map(Doclet::new)
             .findFirst();
 
@@ -61,8 +61,13 @@ public class Doclet {
         }
 
     }
+    
+    public String getName() {
+        return td.getNameAsString();
+    }
 
-    public String toAsciiDoc() {
+    public String toAsciiDoc(
+            final @NonNull DocletContext docletContext) {
         
         val doc = AsciiDocFactory.doc();
         
@@ -73,28 +78,34 @@ public class Doclet {
         val mds = TypeDeclarations.streamPublicMethodDeclarations(td)
                 .filter(Javadocs::presentAndNotHidden)
                 .collect(Can.toCan());
+        
+        val toAdocConverter = ToAsciiDoc.of(docletContext);
 
         // -- intro
         
         td.getJavadoc().ifPresent(javadoc->{
-            introBlock.setSource(Doclets.toAsciiDoc(javadoc));    
+            introBlock.setSource(toAdocConverter.javadoc(javadoc));    
         });
         
         // -- java content
         
         val java = new StringBuilder();
         
-        java.append(String.format("type %s {\n", td.getName().asString()));
+        java.append(String.format("%s %s {\n", 
+                getDeclarationKeyword(), 
+                td.getName().asString()));
         
         mds.forEach(md->{
 
-            java.append(String.format("\n  %s // <.>\n", Doclets.toNormalizedMethodDeclaration(md)));
+            java.append(String.format("\n  %s // <.>\n", 
+                    Doclets.toNormalizedMethodDeclaration(md)));
             
         });
 
         java.append("}\n");
         
-        javaSourceBlock.setSource(AsciiDocFactory.SourceFactory.java(java.toString(), td.getName().asString()));
+        javaSourceBlock.setSource(
+                AsciiDocFactory.SourceFactory.java(java.toString(), td.getName().asString()));
         
         // -- foot notes
         
@@ -107,7 +118,7 @@ public class Doclet {
             
                 footNotes.append(String.format("\n<.> `%s` %s\n",
                         Doclets.toNormalizedMethodDeclaration(md),
-                        Doclets.toAsciiDoc(javadoc)));
+                        toAdocConverter.javadoc(javadoc)));
                 
             });
             
@@ -125,10 +136,13 @@ public class Doclet {
         
     }
 
-
     // -- HELPER
 
-
+    private String getDeclarationKeyword() {
+        return td.isInterface()
+                ? "interface"
+                : "class";
+    }
 
 
 

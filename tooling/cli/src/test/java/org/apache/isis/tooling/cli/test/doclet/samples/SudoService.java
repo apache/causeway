@@ -18,6 +18,12 @@
  */
 package org.apache.isis.tooling.cli.test.doclet.samples;
 
+/**
+ * If {@link SudoService} has been used to temporarily override the user and/or roles, 
+ * then the {@link UserService} will report the overridden values.
+ *
+ * @since 2.0 {@index}
+ */
 public interface SudoService {
 
 }

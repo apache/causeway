@@ -20,9 +20,6 @@ package org.apache.isis.tooling.cli.doclet;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.javadoc.Javadoc;
-import com.github.javaparser.javadoc.description.JavadocInlineTag;
-import com.github.javaparser.javadoc.description.JavadocSnippet;
 
 import org.apache.isis.tooling.javamodel.Javadocs;
 
@@ -31,7 +28,13 @@ import lombok.val;
 
 final class Doclets {
 
-    static boolean isApacheIsisDoclet(final @NonNull TypeDeclaration<?> td) {
+    /**
+     * Whether to include given {@link TypeDeclaration} with the index.
+     * <p>
+     * This is decided base on whether the type's java-doc has a
+     * {@literal @since} tag that contains the literal {@literal {@index}}. 
+     */
+    static boolean hasIndexDirective(final @NonNull TypeDeclaration<?> td) {
         return td.getJavadoc()
         .map(javadoc->{
         
@@ -44,34 +47,11 @@ final class Doclets {
         .orElse(false);
     }
     
+    /**
+     * Returns given {@link MethodDeclaration} as normal text, without formatting.
+     */
     static String toNormalizedMethodDeclaration(final @NonNull MethodDeclaration md) {
         return md.getDeclarationAsString(false, false, true).trim();
-    }
-    
-    static String toAsciiDoc(final @NonNull Javadoc javadoc) {
-        
-        val adoc = new StringBuilder();
-        
-        javadoc.getDescription().getElements()
-        .forEach(e->{
-            
-            if(e instanceof JavadocSnippet) {
-                adoc.append(normalizeHtmlTags(e.toText()));
-            } else if(e instanceof JavadocInlineTag) {
-                adoc.append(" _").append(((JavadocInlineTag) e).getContent().trim()).append("_ ");
-            } else {
-                adoc.append(e.toText());
-            }
-            
-        });
-        
-        return adoc.toString();
-    }
-    
-    // -- HELPER 
-    
-    private static String normalizeHtmlTags(final @NonNull String s) {
-        return s.replace("<p>", "\n").replace("</p>", "");
     }
     
     
