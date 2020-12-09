@@ -39,7 +39,7 @@ class AdocletTest {
         val projDir = new File("./").getAbsoluteFile();
         val analyzerConfig = AnalyzerConfigFactory.mavenTest(projDir, Language.JAVA).main();
 
-        val docletContext = AdocletContext.builder()
+        val docletContext = AdocletContext.compactFormat()
                 .xrefPageIdFormat("system:generated:index/%s.adoc")
                 .build();
         

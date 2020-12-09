@@ -77,7 +77,7 @@ public class Adoclet {
         
         val introBlock = AsciiDocFactory.block(doc);
         val javaSourceBlock = AsciiDocFactory.block(doc);
-        val footNoteBlock = AsciiDocFactory.block(doc);
+        val methodDescriptionBlock = AsciiDocFactory.block(doc);
         
         val mds = TypeDeclarations.streamPublicMethodDeclarations(td)
                 .filter(Javadocs::presentAndNotHidden)
@@ -93,43 +93,50 @@ public class Adoclet {
         
         // -- java content
         
-        val java = new StringBuilder();
+        if(docletContext.isIncludeJavaSource()) {
         
-        java.append(String.format("%s %s {\n", 
-                getDeclarationKeyword(), 
-                td.getName().asString()));
-        
-        mds.forEach(md->{
-
-            java.append(String.format("\n  %s // <.>\n", 
-                    Adoclets.toNormalizedMethodDeclaration(md)));
+            val java = new StringBuilder();
             
-        });
-
-        java.append("}\n");
+            java.append(String.format("%s %s {\n", 
+                    getDeclarationKeyword(), 
+                    td.getName().asString()));
+            
+            mds.forEach(md->{
+    
+                java.append(String.format("\n  %s // <.>\n", 
+                        Adoclets.toNormalizedMethodDeclaration(md)));
+                
+            });
+    
+            java.append("}\n");
+            
+            javaSourceBlock.setSource(
+                    AsciiDocFactory.SourceFactory.java(java.toString(), td.getName().asString()));
+        }
+            
+        // -- method descriptions
         
-        javaSourceBlock.setSource(
-                AsciiDocFactory.SourceFactory.java(java.toString(), td.getName().asString()));
-        
-        // -- foot notes
-        
-        val footNotes = new StringBuilder();
+        val methodDescriptions = new StringBuilder();
         
         mds.forEach(md->{
             
             md.getJavadoc()
             .ifPresent(javadoc->{
-                footNotes.append(String.format("\n<.> %s %s\n",
+                methodDescriptions.append(String.format(docletContext.getMethodDescriptionFormat(),
                         toAdocConverter.methodDeclaration(md),
                         toAdocConverter.javadoc(javadoc)));
             });
             
         });
         
-        footNoteBlock.setSource(footNotes.toString());
+        methodDescriptionBlock.setSource(methodDescriptions.toString());
         
         try {
-            doc.setTitle(td.getName().asString());
+            val title = String.format("%s : _%s_\n\n", 
+                    td.getName().asString(),
+                    getDeclarationKeyword());
+            
+            doc.setTitle(title);
             return AsciiDocWriter.toString(doc);
         } catch (IOException e) {
             e.printStackTrace();

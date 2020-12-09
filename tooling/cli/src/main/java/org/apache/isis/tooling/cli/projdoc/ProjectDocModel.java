@@ -87,7 +87,7 @@ public class ProjectDocModel {
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
-        val docletContext = AdocletContext.builder()
+        val docletContext = AdocletContext.compactFormat()
                 .xrefPageIdFormat(cliConfig.getDocletXrefPageIdFormat())
                 .build();
         

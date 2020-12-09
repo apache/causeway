@@ -38,7 +38,7 @@ class ToAsciiDoc {
     private final AdocletContext docletContext;
 
     public String methodDeclaration(final @NonNull MethodDeclaration md) {
-        return String.format("`%s %s(%s)`", 
+        return String.format(docletContext.getMethodFormat(), 
                 type(md.getType()),
                 md.getNameAsString(), 
                 md.getParameters()

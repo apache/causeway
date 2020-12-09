@@ -1,4 +1,6 @@
-= UserService
+= UserService : _interface_
+
+
 
 The  xref:system:generated:index/UserService.adoc[UserService]  allows the domain object to obtain the identity of the user 
 interacting with said object.
@@ -7,29 +9,23 @@ interacting with said object.
 If  _SudoService_  has been used to temporarily override the user and/or roles, 
 then this service will report the overridden values instead.
 
-.UserService
-[source,java]
-----
-interface UserService {
-
-  Optional<UserMemento> currentUser() // <.>
-
-  UserMemento getUser() // <.>
-
-  UserMemento currentUserElseFail() // <.>
-
-  Optional<String> currentUserName() // <.>
-}
-----
 
 
-<.> `Optional<xref:system:generated:index/UserMemento.adoc[UserMemento]> currentUser()` Optionally gets the details about the current user, 
+* `*currentUser*()` : `Optional<xref:system:generated:index/UserMemento.adoc[UserMemento]>`
++
+Optionally gets the details about the current user, 
 based on whether an  _ExecutionContext_  can be found with the current thread's context.
 
-<.> `xref:system:generated:index/UserMemento.adoc[UserMemento] getUser()` Gets the details about the current user.
+* `*getUser*()` : `xref:system:generated:index/UserMemento.adoc[UserMemento]`
++
+Gets the details about the current user.
 
-<.> `xref:system:generated:index/UserMemento.adoc[UserMemento] currentUserElseFail()` Gets the details about the current user.
+* `*currentUserElseFail*()` : `xref:system:generated:index/UserMemento.adoc[UserMemento]`
++
+Gets the details about the current user.
 
-<.> `Optional<String> currentUserName()` Optionally gets the the current user's name, 
+* `*currentUserName*()` : `Optional<String>`
++
+Optionally gets the the current user's name, 
 based on whether an  _ExecutionContext_  can be found with the current thread's context.
 
