@@ -5,7 +5,7 @@
 
 ** Overview
 
-*** xref:system:ROOT:system-overview.adoc[System Overview]
+*** xref:system:generated:system-overview.adoc[System Overview]
 
 ** Viewers
 

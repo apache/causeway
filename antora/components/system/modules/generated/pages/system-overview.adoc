@@ -364,10 +364,6 @@ _Dependencies_
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.objenesis:objenesis:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Core - Configuration
@@ -396,10 +392,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.hibernate.validator:hibernate-validator:jar:<managed>
 * org.springframework.boot:spring-boot-configuration-processor:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -432,10 +424,6 @@ _Dependencies_
 * org.slf4j:slf4j-api:jar:${slf4j-api.version}
 * org.springframework:spring-test:jar:<managed>
 * org.springframework.boot:spring-boot-starter-test:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -491,10 +479,6 @@ _Dependencies_
 * org.hibernate.validator:hibernate-validator:jar:<managed>
 * org.jmock:jmock:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Core - Runtime
@@ -516,10 +500,6 @@ _Dependencies_
 
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -578,10 +558,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.hsqldb:hsqldb:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Core - Security
@@ -607,10 +583,6 @@ _Dependencies_
 * org.junit.jupiter:junit-jupiter-api:jar:<managed>
 * org.junit.jupiter:junit-jupiter-engine:jar:<managed>
 * org.junit.vintage:junit-vintage-engine:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -642,10 +614,6 @@ _Dependencies_
 * org.springframework.boot:spring-boot-actuator:jar:<managed>
 * org.springframework.boot:spring-boot-starter-thymeleaf:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis - JDK Supplemental
@@ -673,10 +641,6 @@ _Dependencies_
 * javax.xml.bind:jaxb-api:jar:<managed>
 * org.codehaus.woodstox:stax2-api:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Core - Schemas
@@ -694,10 +658,6 @@ _Dependencies_
 
 * joda-time:joda-time:jar:<managed>
 * org.springframework:spring-context:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -745,10 +705,6 @@ Folder: \starters
 
 |Parent pom providing dependency and plugin management for Apache Isis applications
 		built with Maven.  Builds on top of spring-boot-starter-parent.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -831,10 +787,6 @@ Folder: \mavendeps
 
 |Collection of Apache Isis Maven Dependency Bundles.
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Maven Deps - BDD Integ Spec
@@ -853,10 +805,6 @@ _Dependencies_
 * org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-specsupport-applib:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -877,10 +825,6 @@ _Dependencies_
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Maven Deps - JDK11
@@ -895,10 +839,6 @@ Folder: \mavendeps\jdk11
 |Defines a module to bring in dependencies that were part of JDK 8 but
         had been removed with JDK 11+. These dependencies are activated when the 
         consuming project is built with JDK 11 or higher.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -917,10 +857,6 @@ _Dependencies_
 
 * org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -951,10 +887,6 @@ _Dependencies_
 * org.apache.isis.viewer:isis-viewer-wicket-viewer:jar:<managed>
 * org.springframework.boot:spring-boot-starter-tomcat:jar:<managed>
 * org.springframework.boot:spring-boot-starter-web:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -1042,10 +974,6 @@ _Dependencies_
 
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Map - JaxRS Client (parent)
@@ -1058,10 +986,6 @@ Folder: \mappings\jaxrsclient
 ----
 
 |Integrates JaxRS Client Library
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1079,10 +1003,6 @@ Folder: \mappings\jaxrsclient\applib
 * javax:javaee-api:jar:<managed>
 * org.springframework:spring-context:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Map - JaxRS Client (impl)
@@ -1098,10 +1018,6 @@ Folder: \mappings\jaxrsclient\testlib
 
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - REST Client (parent)
@@ -1114,10 +1030,6 @@ Folder: \mappings\restclient
 ----
 
 |A client for the Restful Objects Viewer
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1136,10 +1048,6 @@ _Dependencies_
 
 * org.apache.isis.viewer:isis-viewer-restfulobjects-applib:jar:<managed>
 * org.springframework:spring-context:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -1221,10 +1129,6 @@ Folder: \persistence\jdo
 
 |Supplementary applib for JDO persistence
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Persistence - JDO (applib)
@@ -1244,10 +1148,6 @@ _Dependencies_
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.datanucleus:datanucleus-rdbms:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1286,10 +1186,6 @@ _Dependencies_
 * org.datanucleus:datanucleus-jodatime:jar:<managed>
 * org.datanucleus:datanucleus-rdbms:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Persistence - JPA
@@ -1302,10 +1198,6 @@ Folder: \persistence\jpa
 ----
 
 |Apache Isis JPA integration
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1324,10 +1216,6 @@ _Dependencies_
 
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1352,10 +1240,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jpa-applib:jar:<managed>
 * org.springframework.data:spring-data-jpa:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -1422,10 +1306,6 @@ _Dependencies_
 
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Security - Keycloak
@@ -1451,10 +1331,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1483,10 +1359,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
 * org.apache.shiro:shiro-core:jar:<managed>
 * org.apache.shiro:shiro-web:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -1677,10 +1549,6 @@ _Dependencies_
 
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Asciidoctor (parent)
@@ -1693,10 +1561,6 @@ Folder: \valuetypes\asciidoc
 ----
 
 |Asciidoc value type.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1714,10 +1578,6 @@ Folder: \valuetypes\asciidoc\applib
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.asciidoctor:asciidoctorj-api:jar:${asciidoctorj.version}
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1740,10 +1600,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Asciidoctor (Persistence)
@@ -1760,10 +1616,6 @@ Folder: \valuetypes\asciidoc\persistence
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Asciidoctor (persistence jdo DN5)
@@ -1778,10 +1630,6 @@ Folder: \valuetypes\asciidoc\persistence\jdo-dn5
 |_Dependencies_
 
 * org.datanucleus:datanucleus-core:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1803,10 +1651,6 @@ Folder: \valuetypes\asciidoc\ui
 * org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
 * org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version}
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Asciidoctor (ui vaadin)
@@ -1825,10 +1669,6 @@ Folder: \valuetypes\asciidoc\ui\vaadin
 _Dependencies_
 
 * org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version}
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1856,10 +1696,6 @@ _Dependencies_
 
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Markdown (parent)
@@ -1872,10 +1708,6 @@ Folder: \valuetypes\markdown
 ----
 
 |Markdown value type.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1893,10 +1725,6 @@ Folder: \valuetypes\markdown\applib
 * com.vladsch.flexmark:flexmark-all:jar:${flexmark.version}
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1919,10 +1747,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Markdown (Persistence)
@@ -1939,10 +1763,6 @@ Folder: \valuetypes\markdown\persistence
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Markdown (persistence jdo DN5)
@@ -1958,10 +1778,6 @@ Folder: \valuetypes\markdown\persistence\jdo-dn5
 
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
 * org.datanucleus:datanucleus-core:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -1981,10 +1797,6 @@ Folder: \valuetypes\markdown\ui
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
 * org.jsoup:jsoup:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Markdown (ui wicket)
@@ -2000,10 +1812,6 @@ Folder: \valuetypes\markdown\ui\wicket
 
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - Server Sent Events (parent)
@@ -2016,10 +1824,6 @@ Folder: \valuetypes\sse
 ----
 
 |Dynamically updating HTML markup
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2037,10 +1841,6 @@ Folder: \valuetypes\sse\applib
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2062,10 +1862,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Val - SSE (ui)
@@ -2081,10 +1877,6 @@ Folder: \valuetypes\sse\ui
 
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2108,10 +1900,6 @@ _Dependencies_
 
 * org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -2238,10 +2026,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.webjars:font-awesome:jar:5.15.0
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Viewer - RO
@@ -2253,11 +2037,7 @@ Type: pom
 Folder: \viewers\restfulobjects
 ----
 
-|_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
-
+|
 
 |Apache Isis Viewer - RO (AppLib)
 [source,yaml]
@@ -2274,10 +2054,6 @@ Folder: \viewers\restfulobjects\applib
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2305,10 +2081,6 @@ _Dependencies_
 * org.apache.isis.viewer:isis-viewer-restfulobjects-viewer:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
 * org.jboss.resteasy:resteasy-spring-boot-starter:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2344,10 +2116,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-restfulobjects-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Viewer - RO (Testing)
@@ -2364,10 +2132,6 @@ Folder: \viewers\restfulobjects\testing
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-restfulobjects-viewer:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2404,10 +2168,6 @@ _Dependencies_
 * org.apache.isis.viewer:isis-viewer-restfulobjects-rendering:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Viewer - Wicket
@@ -2419,11 +2179,7 @@ Type: pom
 Folder: \viewers\wicket
 ----
 
-|_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
-
+|
 
 |Apache Isis Viewer - Wicket (Model)
 [source,yaml]
@@ -2441,10 +2197,6 @@ Folder: \viewers\wicket\model
 * org.apache.isis.viewer:isis-viewer-common:jar:<managed>
 * org.apache.wicket:wicket-core:jar:<managed>
 * org.apache.wicket:wicket-extensions:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2482,10 +2234,6 @@ _Dependencies_
 * org.webjars:select2:jar:<managed>
 * org.webjars.bower:summernote:jar:<managed>
 * org.wicketstuff:wicketstuff-select2:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2526,10 +2274,6 @@ _Dependencies_
 * org.apache.wicket:wicket-spring:jar:<managed>
 * org.jmock:jmock-junit4:jar:<managed>
 * org.springframework:spring-web:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -2689,10 +2433,6 @@ Folder: \testing
 
 |A library of utilities, mini-frameworks and tools for prototyping and testing Apache Isis applications.
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - FakeData (parent)
@@ -2706,10 +2446,6 @@ Folder: \testing\fakedata
 
 |A module providing a domain service to generate fake random data
         for use in unit tests or integration tests.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2734,10 +2470,6 @@ _Dependencies_
 * org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - FakeData (fixtures)
@@ -2757,10 +2489,6 @@ Folder: \testing\fakedata\fixtures
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - FakeData (integ tests)
@@ -2778,10 +2506,6 @@ Folder: \testing\fakedata\integtests
 * org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-fakedata-fixtures:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - Fixtures (parent)
@@ -2794,10 +2518,6 @@ Folder: \testing\fixtures
 ----
 
 |Library to initialize the system under test, either for integration testing or for prototyping.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2826,10 +2546,6 @@ _Dependencies_
 * org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - H2 Console (parent)
@@ -2842,10 +2558,6 @@ Folder: \testing\h2console
 ----
 
 |Menu and configuration to open up H2 Console
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2867,10 +2579,6 @@ _Dependencies_
 * com.h2database:h2:jar:<managed>
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - HSQLDB Manager (parent)
@@ -2883,10 +2591,6 @@ Folder: \testing\hsqldbmgr
 ----
 
 |Menu and configuration to open up HSQLDB Manager
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2904,10 +2608,6 @@ Folder: \testing\hsqldbmgr\ui
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
 * org.hsqldb:hsqldb:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - Integ Test Support (parent)
@@ -2920,10 +2620,6 @@ Folder: \testing\integtestsupport
 ----
 
 |Support for writing integ tests in JUnit 5; should be added as a dependency with scope=test only
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2954,10 +2650,6 @@ _Dependencies_
 * org.springframework:spring-test:jar:<managed>
 * org.springframework.boot:spring-boot-starter-test:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - Spec/Cucumber (parent)
@@ -2970,10 +2662,6 @@ Folder: \testing\specsupport
 ----
 
 |Allows Cucumber to be used to write BDD-style specifications, generally as an alternative to integration tests.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -2994,10 +2682,6 @@ Folder: \testing\specsupport\applib
 * org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
 * org.junit.jupiter:junit-jupiter-api:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tst - Unit Test Support (parent)
@@ -3010,10 +2694,6 @@ Folder: \testing\unittestsupport
 ----
 
 |A module providing test utilities for unit testing of domain modules
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3038,10 +2718,6 @@ Folder: \testing\unittestsupport\applib
 * org.slf4j:slf4j-api:jar:<managed>
 * org.springframework:spring-test:jar:<managed>
 * org.springframework.boot:spring-boot-starter-test:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -3120,10 +2796,6 @@ _Dependencies_
 * org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis - Regression Tests (stable)
@@ -3151,10 +2823,6 @@ _Dependencies_
 
 * org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed>
 * org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -3410,10 +3078,6 @@ _Dependencies_
 
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Command Log
@@ -3426,10 +3090,6 @@ Folder: \extensions\core\command-log
 ----
 
 |Logs commands
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3458,10 +3118,6 @@ _Dependencies_
 * org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Command Replay
@@ -3474,10 +3130,6 @@ Folder: \extensions\core\command-replay
 ----
 
 |Replays commands to secondary system
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3506,10 +3158,6 @@ _Dependencies_
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-applib:jar:<managed>
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-impl:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3545,10 +3193,6 @@ _Dependencies_
 * org.apache.isis.mappings:isis-mappings-jaxrsclient-impl:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - CORS (parent)
@@ -3561,10 +3205,6 @@ Folder: \extensions\vro\cors
 ----
 
 |Implementation of CORS Filter (using ebay filter)
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3584,10 +3224,6 @@ Folder: \extensions\vro\cors\impl
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
 * org.springframework:spring-web:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Wicket Viewer - Excel Download (parent)
@@ -3600,10 +3236,6 @@ Folder: \extensions\vw\exceldownload
 ----
 
 |A component for Apache Isis' Wicket viewer, providing an alternative representation of collections to be downloaded as an Excel spreadsheet.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3626,10 +3258,6 @@ _Dependencies_
 * org.apache.poi:poi-ooxml:jar:<managed>
 * org.apache.poi:poi-ooxml-schemas:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Flyway
@@ -3642,10 +3270,6 @@ Folder: \extensions\core\flyway
 ----
 
 |Integrates Flyway when using any (relational) persistence store
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3666,10 +3290,6 @@ Folder: \extensions\core\flyway\impl
 * org.springframework:spring-jdbc:jar:<managed>
 * org.springframework.boot:spring-boot-autoconfigure:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Wicket Viewer - fullcalendar (parent)
@@ -3682,10 +3302,6 @@ Folder: \extensions\vw\fullcalendar
 ----
 
 |A component for Apache Isis' Wicket viewer, displaying collections of objects that have a date on a fullcalendar.io (javascript widget).
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3703,10 +3319,6 @@ Folder: \extensions\vw\fullcalendar\applib
 * de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Wicket Viewer - fullcalendar (ui)
@@ -3723,10 +3335,6 @@ Folder: \extensions\vw\fullcalendar\ui
 * net.ftlines.wicket-fullcalendar:wicket-fullcalendar-core:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3751,10 +3359,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Wicket Viewer - pdf.js (parent)
@@ -3767,10 +3371,6 @@ Folder: \extensions\vw\pdfjs
 ----
 
 |A component for Apache Isis' Wicket viewer, allowing BLOBs containing PDFs to be rendered in a panel using pdf.js.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3787,10 +3387,6 @@ Folder: \extensions\vw\pdfjs\applib
 
 * de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3813,10 +3409,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Wicket Viewer - pdf.js (ui)
@@ -3837,10 +3429,6 @@ _Dependencies_
 * org.apache.isis.extensions:isis-extensions-pdfjs-metamodel:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Quartz
@@ -3853,10 +3441,6 @@ Folder: \extensions\core\quartz
 ----
 
 |Integrates Quartz
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3876,10 +3460,6 @@ Folder: \extensions\core\quartz\impl
 * org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed>
 * org.springframework.boot:spring-boot-starter-quartz:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Sec Man
@@ -3896,10 +3476,6 @@ Folder: \extensions\security\secman
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.core:isis-core-security:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Sec Man API
@@ -3911,11 +3487,7 @@ Type: jar
 Folder: \extensions\security\secman\api
 ----
 
-|_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
-
+|
 
 |Apache Isis Ext - Sec Man Encryption (Using jbcrypt)
 [source,yaml]
@@ -3936,10 +3508,6 @@ _Dependencies_
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
 * org.mindrot:jbcrypt:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Sec Man Model
@@ -3959,10 +3527,6 @@ _Dependencies_
 
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -3991,10 +3555,6 @@ _Dependencies_
 * org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:2.0.0-SNAPSHOT
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Sec Man Realm (Using Shiro)
@@ -4016,10 +3576,6 @@ _Dependencies_
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:2.0.0-SNAPSHOT
 * org.apache.isis.security:isis-security-shiro:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Ext - Security - Shiro LDAP Realm (parent)
@@ -4032,10 +3588,6 @@ Folder: \extensions\security\shiro-realm-ldap
 ----
 
 |Implementation of Shiro Realm using LDAP.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4052,10 +3604,6 @@ Folder: \extensions\security\shiro-realm-ldap\impl
 
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.security:isis-security-shiro:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -4255,10 +3803,6 @@ _Dependencies_
 
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Base (parent)
@@ -4271,10 +3815,6 @@ Folder: \subdomains\base
 ----
 
 |A module providing Base utilities for other subdomain modules
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4299,10 +3839,6 @@ _Dependencies_
 * org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Docx (parent)
@@ -4315,10 +3851,6 @@ Folder: \subdomains\docx
 ----
 
 |Uses the Apache POI library for mail merge functions of .docx Word documents
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4335,10 +3867,6 @@ Folder: \subdomains\docx\applib
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Excel (parent)
@@ -4353,10 +3881,6 @@ Folder: \subdomains\excel
 |A domain service for Apache Isis', allowing collections
         of (view model) objects to be exported/imported to/from an
         Excel spreadsheet.  Also support for excel-based fixtures.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4383,10 +3907,6 @@ _Dependencies_
 * org.apache.poi:poi-ooxml-schemas:jar:<managed>
 * org.datanucleus:datanucleus-core:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Excel (Fixtures)
@@ -4407,10 +3927,6 @@ Folder: \subdomains\excel\fixture
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Excel (Integ Tests)
@@ -4430,10 +3946,6 @@ Folder: \subdomains\excel\integtests
 * org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed>
 * org.hsqldb:hsqldb:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Excel (testing support)
@@ -4450,10 +3962,6 @@ Folder: \subdomains\excel\testing
 * org.apache.isis.subdomains:isis-subdomains-excel-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Freemarker (parent)
@@ -4466,10 +3974,6 @@ Folder: \subdomains\freemarker
 ----
 
 |Integrates Freemarker Library
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4486,10 +3990,6 @@ Folder: \subdomains\freemarker\applib
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Ognl (parent)
@@ -4502,10 +4002,6 @@ Folder: \subdomains\ognl
 ----
 
 |Integrates Ognl Library
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4522,10 +4018,6 @@ Folder: \subdomains\ognl\applib
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - PDF Box (parent)
@@ -4538,10 +4030,6 @@ Folder: \subdomains\pdfbox
 ----
 
 |Integrates PDF Box Library
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4560,10 +4048,6 @@ _Dependencies_
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Spring (parent)
@@ -4576,10 +4060,6 @@ Folder: \subdomains\spring
 ----
 
 |Utility services for interacting with the Spring application context (that hosts the Apache Isis application itself)
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4601,10 +4081,6 @@ _Dependencies_
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - XdocReport (parent)
@@ -4617,10 +4093,6 @@ Folder: \subdomains\xdocreport
 ----
 
 |Integrates XDoc Report Library
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4648,10 +4120,6 @@ _Dependencies_
 * org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Sub - Zip (parent)
@@ -4664,10 +4132,6 @@ Folder: \subdomains\zip
 ----
 
 |A domain service for Apache Isis', for zipping utilities.
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4689,10 +4153,6 @@ _Dependencies_
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -4788,10 +4248,6 @@ _Dependencies_
 * org.slf4j:slf4j-api:jar:<managed>
 * org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tooling - C4 Modeling
@@ -4812,10 +4268,6 @@ _Dependencies_
 * com.structurizr:structurizr-core:jar:<managed>
 * com.structurizr:structurizr-plantuml:jar:<managed>
 * org.apache.isis.commons:isis-commons:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4839,10 +4291,6 @@ _Dependencies_
 * org.apache.isis.tooling:isis-tooling-model4adoc:jar:<managed>
 * org.apache.isis.tooling:isis-tooling-projectmodel:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tooling - Java Model (Code Mining)
@@ -4861,10 +4309,6 @@ _Dependencies_
 * com.github.javaparser:javaparser-core:jar:${javaparser.version}
 * guru.nidi:code-assert:jar:${code-assert.version}
 * org.apache.isis.commons:isis-commons:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -4891,10 +4335,6 @@ _Dependencies_
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.asciidoctor:asciidoctorj:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Tooling - Project Model (Code mining)
@@ -4913,10 +4353,6 @@ _Dependencies_
 * org.apache.isis.commons:isis-commons:jar:<managed>
 * org.apache.maven:maven-model-builder:jar:<managed>
 * org.gradle:gradle-tooling-api:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -5013,10 +4449,6 @@ Folder: \examples\demo
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo-dn5:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -5208,10 +4640,6 @@ _Dependencies_
 * org.assertj:assertj-core:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Demo - JavaFX
@@ -5240,10 +4668,6 @@ Folder: \examples\demo\javafx
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-ui:pom:${project.version}
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Demo - Vaadin
@@ -5265,10 +4689,6 @@ Folder: \examples\demo\vaadin
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -5296,10 +4716,6 @@ _Dependencies_
 * org.springframework.boot:spring-boot-starter-actuator:jar:<managed>
 * org.springframework.boot:spring-boot-starter-log4j2:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Demo - Wicket
@@ -5319,10 +4735,6 @@ Folder: \examples\demo\wicket
 * org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -5436,10 +4848,6 @@ _Dependencies_
 
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Inc - Client kroViz
@@ -5453,10 +4861,6 @@ Folder: \incubator\clients\kroviz
 
 |Initial sketches
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Inc - Viewer JavaFX
@@ -5469,10 +4873,6 @@ Folder: \incubator\viewers\javafx
 ----
 
 |Initial sketches
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -5494,10 +4894,6 @@ Folder: \incubator\viewers\javafx\model
 * org.openjfx:javafx-fxml:jar:<managed>
 * org.openjfx:javafx-swing:jar:<managed>
 * org.openjfx:javafx-web:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -5537,10 +4933,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
 * org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Inc - Viewer JavaFX (Viewer)
@@ -5556,10 +4948,6 @@ Folder: \incubator\viewers\javafx\viewer
 
 * org.apache.isis.incubator.viewer:isis-viewer-javafx-ui:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Inc - Viewer Vaadin
@@ -5572,10 +4960,6 @@ Folder: \incubator\viewers\vaadin
 ----
 
 |Initial sketches
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -5594,10 +4978,6 @@ Folder: \incubator\viewers\vaadin\model
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-webapp:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-common:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -5633,10 +5013,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
 * org.apache.isis.incubator.viewer:isis-viewer-vaadin-model:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Inc - Viewer Vaadin (Viewer)
@@ -5651,10 +5027,6 @@ Folder: \incubator\viewers\vaadin\viewer
 |_Dependencies_
 
 * org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===
@@ -5741,10 +5113,6 @@ _Dependencies_
 
 * org.projectlombok:lombok:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Legacy - Applib
@@ -5771,10 +5139,6 @@ _Dependencies_
 * org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Legacy - Commons
@@ -5796,10 +5160,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -5824,10 +5184,6 @@ _Dependencies_
 * org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
 
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
-
 
 
 |Apache Isis Legacy - REST Client
@@ -5847,10 +5203,6 @@ _Dependencies_
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-restfulobjects-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 
@@ -5876,10 +5228,6 @@ _Dependencies_
 * org.apache.isis.persistence:isis-persistence-jdo-datanucleus5:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
-
-_Doclets_
-
-xref:index:RoleMemento.adoc[RoleMemento] ,  xref:index:UserMemento.adoc[UserMemento] ,  xref:index:UserService.adoc[UserService]
 
 
 |===

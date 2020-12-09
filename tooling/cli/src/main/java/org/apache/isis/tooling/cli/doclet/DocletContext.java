@@ -48,10 +48,9 @@ public class DocletContext {
         return this;
     }
     
-    public DocletContext add(final @NonNull File sourceFile) {
-        Doclet.parse(sourceFile)
-        .ifPresent(this::add);
-        return this;
+    public Stream<Doclet> add(final @NonNull File sourceFile) {
+        return Doclet.parse(sourceFile)
+                .peek(this::add);
     }
     
     public Stream<Doclet> streamDoclets() {

@@ -18,5 +18,5 @@
 name: system
 title: "System Overview"
 version: latest
-start_page: ROOT:system-overview.adoc
+start_page: generated:system-overview.adoc
 

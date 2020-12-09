@@ -20,7 +20,6 @@ package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +42,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.cli.doclet.Doclet;
 import org.apache.isis.tooling.cli.doclet.DocletContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.CodeClasses;
@@ -295,7 +293,6 @@ public class ProjectDocModel {
         
         val docletCompactList = gatherDoclets(module.getProjectDirectory(), docletContext)
                 .stream()
-                .map(doclet->doclet.getAsciiDocXref(docletContext))
                 .collect(Collectors.joining(", "))
                 .trim();
 
@@ -328,15 +325,16 @@ public class ProjectDocModel {
         return String.format("* %s\n", element);
     }
 
-    private Collection<Doclet> gatherDoclets(File projDir, DocletContext docletContext) {
+    private SortedSet<String> gatherDoclets(File projDir, DocletContext docletContext) {
         
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 
-        analyzerConfig.getSources(JAVA)
-        .stream()
-        .forEach(docletContext::add);
+        SortedSet<String> docletXrefs = analyzerConfig.getSources(JAVA).stream()
+        .flatMap(docletContext::add)
+        .map(doclet->doclet.getAsciiDocXref(docletContext))
+        .collect(Collectors.toCollection(TreeSet::new));
         
-        return docletContext.getDocletIndex().values();
+        return docletXrefs;
     }
     
     private SortedSet<String> gatherSpringComponents(File projDir) {

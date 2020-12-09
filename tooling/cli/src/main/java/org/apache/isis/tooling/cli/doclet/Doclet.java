@@ -20,7 +20,6 @@ package org.apache.isis.tooling.cli.doclet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
@@ -44,7 +43,7 @@ public class Doclet {
 
     private final ClassOrInterfaceDeclaration td;
 
-    public static Optional<Doclet> parse(final @NonNull File sourceFile) {
+    public static Stream<Doclet> parse(final @NonNull File sourceFile) {
 
         try {
             val cu = StaticJavaParser.parse(sourceFile);
@@ -52,12 +51,11 @@ public class Doclet {
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamPublicTypeDeclarations)
             .filter(Doclets::hasIndexDirective)
-            .map(Doclet::new)
-            .findFirst();
+            .map(Doclet::new);
 
         } catch (Exception e) {
             log.error("failed to parse java source file {}", sourceFile, e);
-            return Optional.empty();
+            return Stream.empty();
         }
 
     }
