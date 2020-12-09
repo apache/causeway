@@ -39,19 +39,19 @@ import lombok.extern.log4j.Log4j2;
 
 @Value
 @Log4j2
-public class Doclet {
+public class Adoclet {
 
     private final ClassOrInterfaceDeclaration td;
 
-    public static Stream<Doclet> parse(final @NonNull File sourceFile) {
+    public static Stream<Adoclet> parse(final @NonNull File sourceFile) {
 
         try {
             val cu = StaticJavaParser.parse(sourceFile);
 
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamPublicTypeDeclarations)
-            .filter(Doclets::hasIndexDirective)
-            .map(Doclet::new);
+            .filter(Adoclets::hasIndexDirective)
+            .map(Adoclet::new);
 
         } catch (Exception e) {
             log.error("failed to parse java source file {}", sourceFile, e);
@@ -65,13 +65,13 @@ public class Doclet {
     }
 
     public String getAsciiDocXref(
-            final @NonNull DocletContext docletContext) {
+            final @NonNull AdocletContext docletContext) {
         val toAdocConverter = ToAsciiDoc.of(docletContext);
         return toAdocConverter.xref(this);
     }
     
     public String toAsciiDoc(
-            final @NonNull DocletContext docletContext) {
+            final @NonNull AdocletContext docletContext) {
         
         val doc = AsciiDocFactory.doc();
         
@@ -102,7 +102,7 @@ public class Doclet {
         mds.forEach(md->{
 
             java.append(String.format("\n  %s // <.>\n", 
-                    Doclets.toNormalizedMethodDeclaration(md)));
+                    Adoclets.toNormalizedMethodDeclaration(md)));
             
         });
 
@@ -119,11 +119,9 @@ public class Doclet {
             
             md.getJavadoc()
             .ifPresent(javadoc->{
-            
-                footNotes.append(String.format("\n<.> `%s` %s\n",
-                        Doclets.toNormalizedMethodDeclaration(md),
+                footNotes.append(String.format("\n<.> %s %s\n",
+                        toAdocConverter.methodDeclaration(md),
                         toAdocConverter.javadoc(javadoc)));
-                
             });
             
         });

@@ -19,8 +19,10 @@
 package org.apache.isis.tooling.cli.doclet;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Maps;
@@ -32,14 +34,14 @@ import lombok.Value;
 import lombok.val;
 
 @Value @Builder
-public class DocletContext {
+public class AdocletContext {
 
     private final @NonNull String xrefPageIdFormat;
     
-    private final Map<String, Doclet> docletIndex = _Maps.newTreeMap();
+    private final Map<String, Adoclet> adocletIndex = _Maps.newTreeMap();
 
-    public DocletContext add(final @NonNull Doclet doclet) {
-        val previousKey = docletIndex.put(doclet.getName(), doclet);
+    public AdocletContext add(final @NonNull Adoclet adoclet) {
+        val previousKey = adocletIndex.put(adoclet.getName(), adoclet);
         if(previousKey!=null) {
             throw _Exceptions.unrecoverableFormatted(
                     "doclet index entries must be unique (index key collision on %s)", 
@@ -48,17 +50,21 @@ public class DocletContext {
         return this;
     }
     
-    public Stream<Doclet> add(final @NonNull File sourceFile) {
-        return Doclet.parse(sourceFile)
-                .peek(this::add);
+    public Stream<Adoclet> add(final @NonNull File sourceFile) {
+        return Adoclet.parse(sourceFile)
+        .peek(this::add)
+        // ensure the stream is consumed here, 
+        // current implementation does not expect more than 1 result per source file
+        .collect(Collectors.toCollection(()->new ArrayList<>(1))) 
+        .stream();
     }
     
-    public Stream<Doclet> streamDoclets() {
-        return docletIndex.values().stream();
+    public Stream<Adoclet> streamAdoclets() {
+        return adocletIndex.values().stream();
     }
 
-    public Optional<Doclet> getDoclet(String key) {
-        return Optional.ofNullable(docletIndex.get(key));
+    public Optional<Adoclet> getAdoclet(String key) {
+        return Optional.ofNullable(adocletIndex.get(key));
     }
     
 }

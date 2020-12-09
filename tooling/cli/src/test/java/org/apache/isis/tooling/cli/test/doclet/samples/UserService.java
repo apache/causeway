@@ -50,7 +50,7 @@ public interface UserService {
      * @param arg1 - first argument (non-null)
      * @param arg2 - second argument (non-null)
      */
-    Optional<UserMemento> currentUser(@NonNull String arg1, @NonNull String arg2);
+    Optional<UserMemento> currentUser(@NonNull String arg1, @NonNull Optional<UserMemento> arg2);
     
     /**
      * Gets the details about the current user.

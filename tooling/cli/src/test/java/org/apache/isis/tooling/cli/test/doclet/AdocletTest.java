@@ -22,7 +22,7 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.tooling.cli.doclet.DocletContext;
+import org.apache.isis.tooling.cli.doclet.AdocletContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 
 import lombok.val;
@@ -31,7 +31,7 @@ import guru.nidi.codeassert.config.Language;
 
 import static guru.nidi.codeassert.config.Language.JAVA;
 
-class DocletTest {
+class AdocletTest {
 
     @Test
     void testJavaDocMining() {
@@ -39,22 +39,20 @@ class DocletTest {
         val projDir = new File("./").getAbsoluteFile();
         val analyzerConfig = AnalyzerConfigFactory.mavenTest(projDir, Language.JAVA).main();
 
-        val docletContext = DocletContext.builder()
+        val docletContext = AdocletContext.builder()
                 .xrefPageIdFormat("system:generated:index/%s.adoc")
                 .build();
         
         analyzerConfig.getSources(JAVA)
         .stream()
 //        .filter(source->source.toString().contains("UserService"))
-        .peek(source->System.out.println("parsing source: " + source))
+        //.peek(source->System.out.println("parsing source: " + source))
         .forEach(docletContext::add);
         
-        docletContext.streamDoclets()
+        docletContext.streamAdoclets()
         .forEach(doclet->{
             
-            System.out.println("--------------------------------------------------");
             System.out.println(doclet.toAsciiDoc(docletContext));
-            System.out.println("--------------------------------------------------");
 
         });
     }

@@ -20,6 +20,10 @@ package org.apache.isis.tooling.cli.test.doclet.samples;
 
 import lombok.Value;
 
+/**
+ * Immutable serializable value holding details about a user and its roles.
+ * @since 2.0 {@index}
+ */
 @Value
 public class UserMemento {
     

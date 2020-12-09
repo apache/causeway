@@ -28,7 +28,7 @@ import org.asciidoctor.ast.Document;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.cli.doclet.DocletContext;
+import org.apache.isis.tooling.cli.doclet.AdocletContext;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
@@ -41,7 +41,7 @@ final class ProjectDocWriter {
     static void write(
             final @NonNull CliConfig cliConfig, 
             final @NonNull Document doc, 
-            final @NonNull DocletContext docletContext) {
+            final @NonNull AdocletContext docletContext) {
         
         
         try {
@@ -49,12 +49,12 @@ final class ProjectDocWriter {
             
             if(cliConfig.isDryRun()) {
                 System.out.println(adoc);
-                for(val doclet : docletContext.getDocletIndex().values()) {
+                for(val doclet : docletContext.getAdocletIndex().values()) {
                     System.out.println(doclet.toAsciiDoc(docletContext));
                 }
             } else {
                 writeTo(cliConfig.getOutputFile(), adoc);
-                for(val doclet : docletContext.getDocletIndex().values()) {
+                for(val doclet : docletContext.getAdocletIndex().values()) {
                     val docletFile = new File(cliConfig.getDocletOutputFolder(), doclet.getName() + ".adoc");
                     writeTo(docletFile, doclet.toAsciiDoc(docletContext));
                 }

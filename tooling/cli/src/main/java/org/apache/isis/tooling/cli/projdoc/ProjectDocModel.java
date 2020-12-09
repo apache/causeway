@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.cli.doclet.DocletContext;
+import org.apache.isis.tooling.cli.doclet.AdocletContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
@@ -87,7 +87,7 @@ public class ProjectDocModel {
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
-        val docletContext = DocletContext.builder()
+        val docletContext = AdocletContext.builder()
                 .xrefPageIdFormat(cliConfig.getDocletXrefPageIdFormat())
                 .build();
         
@@ -179,7 +179,7 @@ public class ProjectDocModel {
             final @NonNull Document doc, 
             final @NonNull String sectionName, 
             final @Nullable String groupIdPattern, 
-            final @NonNull DocletContext docletContext) {
+            final @NonNull AdocletContext docletContext) {
 
         val titleBlock = block(doc);
 
@@ -275,7 +275,7 @@ public class ProjectDocModel {
         sb.append(String.format("%s: %s\n", key, value));
     }
     
-    private String details(ProjectNode module, DocletContext docletContext) {
+    private String details(ProjectNode module, AdocletContext docletContext) {
         val description = module.getDescription().trim();
         val dependencyList = module.getDependencies()
                 .stream()
@@ -291,7 +291,7 @@ public class ProjectDocModel {
                 .collect(Collectors.joining())
                 .trim();
         
-        val docletCompactList = gatherDoclets(module.getProjectDirectory(), docletContext)
+        val indexEntriesCompactList = gatherAdoclets(module.getProjectDirectory(), docletContext)
                 .stream()
                 .collect(Collectors.joining(", "))
                 .trim();
@@ -310,8 +310,8 @@ public class ProjectDocModel {
             sb.append(toAdocSection("Dependencies", dependencyList));
         }
         
-        if(!docletCompactList.isEmpty()) {
-            sb.append(toAdocSection("Doclets", docletCompactList));
+        if(!indexEntriesCompactList.isEmpty()) {
+            sb.append(toAdocSection("Document Index Entries", indexEntriesCompactList));
         }
 
         return sb.toString();
@@ -325,7 +325,7 @@ public class ProjectDocModel {
         return String.format("* %s\n", element);
     }
 
-    private SortedSet<String> gatherDoclets(File projDir, DocletContext docletContext) {
+    private SortedSet<String> gatherAdoclets(File projDir, AdocletContext docletContext) {
         
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 

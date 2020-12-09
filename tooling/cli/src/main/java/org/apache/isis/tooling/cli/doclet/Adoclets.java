@@ -26,7 +26,7 @@ import org.apache.isis.tooling.javamodel.Javadocs;
 import lombok.NonNull;
 import lombok.val;
 
-final class Doclets {
+final class Adoclets {
 
     /**
      * Whether to include given {@link TypeDeclaration} with the index.
