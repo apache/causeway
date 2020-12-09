@@ -66,6 +66,12 @@ public class Doclet {
         return td.getNameAsString();
     }
 
+    public String getAsciiDocXref(
+            final @NonNull DocletContext docletContext) {
+        val toAdocConverter = ToAsciiDoc.of(docletContext);
+        return toAdocConverter.xref(this);
+    }
+    
     public String toAsciiDoc(
             final @NonNull DocletContext docletContext) {
         

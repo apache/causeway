@@ -19,8 +19,8 @@
 package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -42,11 +42,12 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
-import org.apache.isis.tooling.cli.CliConfig.ProjectDoc;
+import org.apache.isis.tooling.cli.CliConfig;
+import org.apache.isis.tooling.cli.doclet.Doclet;
+import org.apache.isis.tooling.cli.doclet.DocletContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 import org.apache.isis.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.isis.tooling.projectmodel.Dependency;
 import org.apache.isis.tooling.projectmodel.ProjectNode;
@@ -67,6 +68,8 @@ import guru.nidi.codeassert.config.Language;
 import guru.nidi.codeassert.model.CodeClass;
 import guru.nidi.codeassert.model.Model;
 
+import static guru.nidi.codeassert.config.Language.JAVA;
+
 /**
  * Acts both as a model and a writer (adoc).
  * @since Sep 22, 2020
@@ -81,34 +84,33 @@ public class ProjectDocModel {
         this.projTree = projTree;
     }
 
-    public String toAsciiDoc(ProjectDoc projectDocConfig) {
-
+    public void generateAsciiDoc(final @NonNull CliConfig cliConfig) {
+        
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
+        val docletContext = DocletContext.builder()
+                .indexXrefRoot(cliConfig.getDocletXrefRoot())
+                .build();
+        
         val doc = doc();
         doc.setTitle("System Overview");
 
-        _Strings.nonEmpty(projectDocConfig.getLicenseHeader())
+        _Strings.nonEmpty(cliConfig.getProjectDoc().getLicenseHeader())
         .ifPresent(block(doc)::setSource);
         
-        _Strings.nonEmpty(projectDocConfig.getDescription())
+        _Strings.nonEmpty(cliConfig.getProjectDoc().getDescription())
         .ifPresent(block(doc)::setSource);
 
-        projectDocConfig.getArtifactGroups().forEach((section, groupId)->{
-            createSection(doc, section, groupId);
+        cliConfig.getProjectDoc().getArtifactGroups().forEach((section, groupId)->{
+            createSection(doc, section, groupId, docletContext);
         });
 
         if(!modules.isEmpty()) {
-            createSection(doc, "Other", null);
+            createSection(doc, "Other", null, docletContext);
         }
-
-        try {
-            return AsciiDocWriter.toString(doc);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "ERROR: " + e.getMessage();
-        } 
+        
+        ProjectDocWriter.write(cliConfig, doc, docletContext);
 
     }
 
@@ -178,7 +180,8 @@ public class ProjectDocModel {
     private void createSection(
             final @NonNull Document doc, 
             final @NonNull String sectionName, 
-            final @Nullable String groupIdPattern) {
+            final @Nullable String groupIdPattern, 
+            final @NonNull DocletContext docletContext) {
 
         val titleBlock = block(doc);
 
@@ -189,13 +192,12 @@ public class ProjectDocModel {
 
         val table = table(doc);
         table.setTitle(String.format("Projects/Modules (%s)", sectionName));
-        table.setAttribute("cols", "3a,2,5a", true);
+        table.setAttribute("cols", "3a,5a", true);
         table.setAttribute("header-option", "", true);
 
         val headRow = headRow(table);
 
         cell(table, headRow, "Coordinates");
-        cell(table, headRow, "Name");
         cell(table, headRow, "Description");
 
         val projRoot = _Files.canonicalPath(projTree.getProjectDirectory())
@@ -219,8 +221,7 @@ public class ProjectDocModel {
 
             val row = row(table);
             cell(table, row, coordinates(module, projRelativePath));
-            cell(table, row, module.getName());
-            cell(table, row, details(module));
+            cell(table, row, details(module, docletContext));
         });
 
         descriptionBlock.setSource(groupDiagram.toAsciiDoc(sectionName));
@@ -262,19 +263,21 @@ public class ProjectDocModel {
     //    Folder: \commons
     //    ----
     private String coordinates(ProjectNode module, String projRelativePath) {
-        val sb = new StringBuilder();
-        appendKeyValue(sb, "Group", module.getArtifactCoordinates().getGroupId());
-        appendKeyValue(sb, "Artifact", module.getArtifactCoordinates().getArtifactId());
-        appendKeyValue(sb, "Type", module.getArtifactCoordinates().getPackaging());
-        appendKeyValue(sb, "Folder", projRelativePath);
-        return AsciiDocFactory.SourceFactory.yaml(sb.toString(), null);
+        val coors = new StringBuilder();
+        appendKeyValue(coors, "Group", module.getArtifactCoordinates().getGroupId());
+        appendKeyValue(coors, "Artifact", module.getArtifactCoordinates().getArtifactId());
+        appendKeyValue(coors, "Type", module.getArtifactCoordinates().getPackaging());
+        appendKeyValue(coors, "Folder", projRelativePath);
+        return String.format("%s\n%s",
+                module.getName(),
+                AsciiDocFactory.SourceFactory.yaml(coors.toString(), null));
     }
     
     private void appendKeyValue(StringBuilder sb, String key, String value) {
         sb.append(String.format("%s: %s\n", key, value));
     }
     
-    private String details(ProjectNode module) {
+    private String details(ProjectNode module, DocletContext docletContext) {
         val description = module.getDescription().trim();
         val dependencyList = module.getDependencies()
                 .stream()
@@ -285,8 +288,15 @@ public class ProjectDocModel {
                 .trim();
         val componentList = gatherSpringComponents(module.getProjectDirectory())
                 .stream()
+                .map(s->s.replace("org.apache.isis.", "o.a.i."))
                 .map(ProjectDocModel::toAdocListItem)
                 .collect(Collectors.joining())
+                .trim();
+        
+        val docletCompactList = gatherDoclets(module.getProjectDirectory(), docletContext)
+                .stream()
+                .map(doclet->doclet.getAsciiDocXref(docletContext))
+                .collect(Collectors.joining(", "))
                 .trim();
 
         val sb = new StringBuilder();
@@ -302,6 +312,10 @@ public class ProjectDocModel {
         if(!dependencyList.isEmpty()) {
             sb.append(toAdocSection("Dependencies", dependencyList));
         }
+        
+        if(!docletCompactList.isEmpty()) {
+            sb.append(toAdocSection("Doclets", docletCompactList));
+        }
 
         return sb.toString();
     }
@@ -309,11 +323,22 @@ public class ProjectDocModel {
     private static String toAdocSection(String title, String content) {
         return String.format("_%s_\n\n%s\n\n", title, content);
     }
-
+    
     private static String toAdocListItem(String element) {
         return String.format("* %s\n", element);
     }
 
+    private Collection<Doclet> gatherDoclets(File projDir, DocletContext docletContext) {
+        
+        val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
+
+        analyzerConfig.getSources(JAVA)
+        .stream()
+        .forEach(docletContext::add);
+        
+        return docletContext.getDocletIndex().values();
+    }
+    
     private SortedSet<String> gatherSpringComponents(File projDir) {
 
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();

@@ -1,0 +1,36 @@
+= UserMemento
+
+Immutable serializable value holding details about a user and its roles.
+
+.UserMemento
+[source,java]
+----
+class UserMemento {
+
+  UserMemento system() // <.>
+
+  UserMemento ofName(@NonNull final String name) // <.>
+
+  UserMemento ofNameAndRoles(@NonNull final String name, final RoleMemento... roles) // <.>
+
+  UserMemento ofNameAndRoleNames(@NonNull final String name, final String... roleNames) // <.>
+
+  UserMemento ofNameAndRoleNames(@NonNull final String name, @NonNull final Stream<String> roleNames) // <.>
+
+  boolean isCurrentUser(@Nullable final String userName) // <.>
+}
+----
+
+
+<.> `UserMemento system()` The framework's internal user with unrestricted privileges.
+
+<.> `UserMemento ofName(@NonNull final String name)` Creates a new user with the specified name and no roles.
+
+<.> `UserMemento ofNameAndRoles(@NonNull final String name, final RoleMemento... roles)` Creates a new user with the specified name and assigned roles.
+
+<.> `UserMemento ofNameAndRoleNames(@NonNull final String name, final String... roleNames)` Creates a new user with the specified name and assigned role names.
+
+<.> `UserMemento ofNameAndRoleNames(@NonNull final String name, @NonNull final Stream<String> roleNames)` Creates a new user with the specified name and assigned role names.
+
+<.> `boolean isCurrentUser(@Nullable final String userName)` Determine if the specified name is this user.
+

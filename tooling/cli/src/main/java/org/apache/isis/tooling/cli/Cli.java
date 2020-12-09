@@ -19,12 +19,9 @@
 package org.apache.isis.tooling.cli;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.tooling.cli.projdoc.ProjectDocModel;
 import org.apache.isis.tooling.projectmodel.ProjectNodeFactory;
@@ -85,18 +82,13 @@ class Cli implements Callable<Integer> {
         @Override
         public Integer call() throws Exception {
             
-            val projTree = ProjectNodeFactory.maven(getProjectRoot());
-            val projectDocModel = new ProjectDocModel(projTree);
-            val adoc = projectDocModel.toAsciiDoc(getConfig().getProjectDoc());
-            
             if(outputFilePath!=null) {
-                try(val fos = new FileOutputStream(new File(outputFilePath))){
-                    fos.write(_Strings.toBytes(adoc, StandardCharsets.UTF_8));
-                }
-            } else {
-                System.out.println(adoc);
+                getConfig().setOutputFile(new File(outputFilePath));
             }
             
+            val projTree = ProjectNodeFactory.maven(getProjectRoot());
+            val projectDocModel = new ProjectDocModel(projTree);
+            projectDocModel.generateAsciiDoc(getConfig());
             return 0;
         }
     }

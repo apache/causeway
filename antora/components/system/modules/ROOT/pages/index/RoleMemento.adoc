@@ -1,0 +1,13 @@
+= RoleMemento
+
+Immutable serializable value held by   xref:index:UserMemento.adoc[UserMemento]  .
+
+.RoleMemento
+[source,java]
+----
+class RoleMemento {
+}
+----
+
+
+

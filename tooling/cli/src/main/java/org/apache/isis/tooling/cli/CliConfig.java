@@ -21,6 +21,7 @@ package org.apache.isis.tooling.cli;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 import org.apache.isis.commons.internal.resources._Yaml;
 
@@ -31,6 +32,21 @@ import lombok.NonNull;
 public class CliConfig {
     
     private ProjectDoc projectDoc = new ProjectDoc();
+    private File outputFile = null; // where to write eg. system-overview.adoc
+    
+    private String docletPath = "index";
+    private String docletXrefRoot = "index";
+
+    public boolean isDryRun() {
+        return getOutputFile() == null;
+    }
+    
+    public File getDocletOutputFolder() {
+        return Optional.ofNullable(getOutputFile())
+                .map(File::getParentFile)
+                .map(folder->new File(folder, getDocletPath()))
+                .orElse(null);
+    }
     
     @Data
     public static class ProjectDoc {
@@ -62,5 +78,6 @@ public class CliConfig {
             return new CliConfig();
         }
     }
+
 
 }
