@@ -26,9 +26,9 @@ class UserMemento {
 
 <.> `xref:system:generated:index/UserMemento.adoc[UserMemento] ofName(String name)` Creates a new user with the specified name and no roles.
 
-<.> `xref:system:generated:index/UserMemento.adoc[UserMemento] ofNameAndRoles(String name, xref:system:generated:index/RoleMemento.adoc[RoleMemento] roles)` Creates a new user with the specified name and assigned roles.
+<.> `xref:system:generated:index/UserMemento.adoc[UserMemento] ofNameAndRoles(String name, xref:system:generated:index/RoleMemento.adoc[RoleMemento]... roles)` Creates a new user with the specified name and assigned roles.
 
-<.> `xref:system:generated:index/UserMemento.adoc[UserMemento] ofNameAndRoleNames(String name, String roleNames)` Creates a new user with the specified name and assigned role names.
+<.> `xref:system:generated:index/UserMemento.adoc[UserMemento] ofNameAndRoleNames(String name, String... roleNames)` Creates a new user with the specified name and assigned role names.
 
 <.> `xref:system:generated:index/UserMemento.adoc[UserMemento] ofNameAndRoleNames(String name, Stream<String> roleNames)` Creates a new user with the specified name and assigned role names.
 

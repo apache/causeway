@@ -74,8 +74,9 @@ class ToAsciiDoc {
         
     
     public String parameterDeclaration(Parameter p) {
-        return String.format("%s %s",
+        return String.format("%s%s %s",
                 type(p.getType()),
+                p.isVarArgs() ? "..." : "",
                 p.getNameAsString());
     }
     
