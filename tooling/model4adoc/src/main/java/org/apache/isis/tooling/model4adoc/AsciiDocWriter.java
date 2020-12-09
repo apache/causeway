@@ -139,7 +139,8 @@ public class AsciiDocWriter {
             if(item instanceof ListItem) {
                 val listItem = (ListItem) item;
                 
-                if(list.getLevel()>0) {
+                if(list.getLevel()>0
+                        && _Strings.isNullOrEmpty(listItem.getSource())) {
                     writer.append("+\n");
                 }
                 
