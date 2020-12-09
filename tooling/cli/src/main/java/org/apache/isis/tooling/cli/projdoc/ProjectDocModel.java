@@ -88,7 +88,7 @@ public class ProjectDocModel {
         projTree.depthFirst(modules::add);
 
         val docletContext = DocletContext.builder()
-                .indexXrefRoot(cliConfig.getDocletXrefRoot())
+                .xrefPageIdFormat(cliConfig.getDocletXrefPageIdFormat())
                 .build();
         
         val doc = doc();

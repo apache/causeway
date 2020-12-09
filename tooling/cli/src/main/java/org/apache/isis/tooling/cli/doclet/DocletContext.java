@@ -34,7 +34,7 @@ import lombok.val;
 @Value @Builder
 public class DocletContext {
 
-    private final @NonNull String indexXrefRoot;
+    private final @NonNull String xrefPageIdFormat;
     
     private final Map<String, Doclet> docletIndex = _Maps.newTreeMap();
 

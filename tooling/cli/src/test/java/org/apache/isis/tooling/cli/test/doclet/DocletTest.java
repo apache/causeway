@@ -40,7 +40,7 @@ class DocletTest {
         val analyzerConfig = AnalyzerConfigFactory.mavenTest(projDir, Language.JAVA).main();
 
         val docletContext = DocletContext.builder()
-                .indexXrefRoot("system:index")
+                .xrefPageIdFormat("system:generated:index/%s.adoc")
                 .build();
         
         analyzerConfig.getSources(JAVA)

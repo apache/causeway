@@ -1,6 +1,6 @@
 = UserService
 
-The   xref:index:UserService.adoc[UserService]   allows the domain object to obtain the identity of the user 
+The   xref:system:generated:index/UserService.adoc[UserService]   allows the domain object to obtain the identity of the user 
 interacting with said object.
 
 

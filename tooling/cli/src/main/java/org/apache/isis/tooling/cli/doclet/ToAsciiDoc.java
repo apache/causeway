@@ -71,9 +71,8 @@ class ToAsciiDoc {
     
     public String xref(
             final @NonNull Doclet doclet) {
-        return String.format(" xref:%s:%s.adoc[%s] ", 
-                docletContext.getIndexXrefRoot(), 
-                doclet.getName(),
+        return String.format(" xref:%s[%s] ", 
+                String.format(docletContext.getXrefPageIdFormat(), doclet.getName()), 
                 doclet.getName()); 
     }
 

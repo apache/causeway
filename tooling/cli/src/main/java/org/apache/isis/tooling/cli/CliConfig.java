@@ -35,7 +35,7 @@ public class CliConfig {
     private File outputFile = null; // where to write eg. system-overview.adoc
     
     private String docletPath = "index";
-    private String docletXrefRoot = "index";
+    private String docletXrefPageIdFormat = "system:generated:index/%s.adoc";
 
     public boolean isDryRun() {
         return getOutputFile() == null;
