@@ -42,6 +42,9 @@ public class AdocletContext {
     private final @NonNull String methodFormat = "`%s %s(%s)`"; // return-type | name | param-list
     
     @Builder.Default
+    private final @NonNull String staticMethodFormat = "`%s _%s_(%s)`"; // return-type | name | param-list
+    
+    @Builder.Default
     private final @NonNull String methodDescriptionFormat = "\n<.> %s %s\n"; // method | description
     
     @Builder.Default
@@ -78,8 +81,8 @@ public class AdocletContext {
     
     public static AdocletContextBuilder compactFormat() {
         return AdocletContext.builder()
-                .xrefPageIdFormat("system:generated:index/%s.adoc")
                 .methodFormat("`*%2$s*(%3$s)` : `%1$s`") // return-type | name | param-list)
+                .staticMethodFormat("`*_%2$s_*(%3$s)` : `%1$s`") // return-type | name | param-list)
                 .methodDescriptionFormat("\n* %s\n+\n%s\n") // method | description
                 .includeJavaSource(false)
                 ;        

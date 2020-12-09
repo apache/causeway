@@ -38,7 +38,12 @@ class ToAsciiDoc {
     private final AdocletContext docletContext;
 
     public String methodDeclaration(final @NonNull MethodDeclaration md) {
-        return String.format(docletContext.getMethodFormat(), 
+        
+        val methodFormat = md.isStatic()
+                ? docletContext.getStaticMethodFormat()
+                : docletContext.getMethodFormat();
+        
+        return String.format(methodFormat, 
                 type(md.getType()),
                 md.getNameAsString(), 
                 md.getParameters()
