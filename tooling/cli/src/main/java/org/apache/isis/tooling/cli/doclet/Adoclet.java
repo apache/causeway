@@ -25,9 +25,9 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.tooling.javamodel.ClassOrInterfaceDeclarations;
 import org.apache.isis.tooling.javamodel.CompilationUnits;
 import org.apache.isis.tooling.javamodel.Javadocs;
-import org.apache.isis.tooling.javamodel.TypeDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
@@ -70,7 +70,7 @@ public class Adoclet {
     }
     
     public String getName() {
-        return td.getNameAsString();
+        return ClassOrInterfaceDeclarations.name(td);
     }
 
     public String getAsciiDocXref(
@@ -88,11 +88,11 @@ public class Adoclet {
         val javaSourceBlock = AsciiDocFactory.block(doc);
         val methodDescriptionBlock = AsciiDocFactory.block(doc);
         
-        val mds = TypeDeclarations.streamPublicMethodDeclarations(td)
+        val mds = ClassOrInterfaceDeclarations.streamPublicMethodDeclarations(td)
                 .filter(Javadocs::presentAndNotHidden)
                 .collect(Can.toCan());
         
-        val cds = TypeDeclarations.streamPublicConstructorDeclarations(td)
+        val cds = ClassOrInterfaceDeclarations.streamPublicConstructorDeclarations(td)
                 .filter(Javadocs::presentAndNotHidden)
                 .collect(Can.toCan());
         
@@ -166,7 +166,7 @@ public class Adoclet {
         
         try {
             val title = String.format("%s : _%s_\n\n", 
-                    td.getName().asString(),
+                    getName(),
                     getDeclarationKeyword());
             
             doc.setTitle(title);

@@ -26,8 +26,8 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
+import org.apache.isis.tooling.javamodel.ClassOrInterfaceDeclarations;
 import org.apache.isis.tooling.javamodel.CompilationUnits;
-import org.apache.isis.tooling.javamodel.TypeDeclarations;
 
 import lombok.val;
 
@@ -78,7 +78,7 @@ class AnalyzerTest {
             });
             
         })
-        .flatMap(TypeDeclarations::streamMethodDeclarations)
+        .flatMap(ClassOrInterfaceDeclarations::streamMethodDeclarations)
         .forEach(md->{
             
             System.out.println("javadoc: " + md.getJavadocComment());

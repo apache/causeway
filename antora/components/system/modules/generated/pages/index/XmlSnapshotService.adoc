@@ -1,0 +1,20 @@
+= XmlSnapshotService : _interface_
+
+
+
+This service allows an XML document to be generated capturing the data of a root entity and specified related entities. This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
+The framework provides an implementation of this service ( `XmlSnapshotServiceDefault` ) which is automatically registered and available for use; no further configuration is required.
+
+* `[teal]#*snapshotFor*#(Object domainObject)` : `Snapshot`
++
+Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).
+
+
+* `[teal]#*builderFor*#(Object domainObject)` : `Builder`
++
+Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
+
+
+* `[teal]#*getChildElementValue*#<T>(Element el, String tagname, Class<T> expectedCls)` : `T`
++
+Convenience method to extract value of an XML element, based on its type.

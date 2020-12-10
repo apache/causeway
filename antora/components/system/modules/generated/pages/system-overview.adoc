@@ -331,7 +331,7 @@ _Dependencies_
 
 _Document Index Entries_
 
-xref:system:generated:index/FactoryService.adoc[FactoryService], xref:system:generated:index/RoleMemento.adoc[RoleMemento], xref:system:generated:index/UserMemento.adoc[UserMemento], xref:system:generated:index/UserService.adoc[UserService]
+xref:system:generated:index/FactoryService.adoc[FactoryService], xref:system:generated:index/RoleMemento.adoc[RoleMemento], xref:system:generated:index/UserMemento.adoc[UserMemento], xref:system:generated:index/UserService.adoc[UserService], xref:system:generated:index/XmlSnapshotService.Snapshot.Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:system:generated:index/XmlSnapshotService.Snapshot.adoc[XmlSnapshotService.Snapshot], xref:system:generated:index/XmlSnapshotService.adoc[XmlSnapshotService]
 
 
 
@@ -1360,12 +1360,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1455,12 +1455,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3595,22 +3595,22 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<22>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<23>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3695,12 +3695,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295

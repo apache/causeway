@@ -112,6 +112,8 @@ public class AdocletContext {
         return Optional.ofNullable(adocletIndex.get(key));
     }
     
+    // -- PREDEFINED FORMATS
+    
     public static AdocletContextBuilder javaSourceWithFootNotesFormat() {
         return AdocletContext.builder();
     }

@@ -1,0 +1,14 @@
+= XmlSnapshotService.Snapshot : _interface_
+
+
+
+
+
+* `[teal]#*getXmlDocument*#()` : `Document`
++
+Converts the snapshotted state into an XML document.
+
+
+* `[teal]#*getXsdDocument*#()` : `Document`
++
+Creates a corresponding XSD that describes the structure of the exported XML.

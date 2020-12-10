@@ -53,19 +53,29 @@ public final class CompilationUnits {
                     .orElse(null));
         
         if(type==null) {
-            System.err.println("could not find a type in CompilationUnit ...\n" + 
+            System.err.println("could not find any type in CompilationUnit ...\n" + 
                     compilationUnit);
             return Stream.empty();
         }
-        if(type.isEnumDeclaration()) {
-            // as of yet silently ignore
-            return Stream.empty();
-        }
-        if(type.isClassOrInterfaceDeclaration()) {
-            return Stream.of((ClassOrInterfaceDeclaration)type);   
-        }
-        // as of yet silently ignore
-        return Stream.empty();        
+        
+        return type.findAll(ClassOrInterfaceDeclaration.class)
+                .stream();
+        
+//        return compilationUnit.getTypes().stream()
+//        .peek(t->System.out.println(String.format("%s %s %s", t.getClass(), t.getNameAsString(), t.findAll(ClassOrInterfaceDeclaration.class))))
+//        .filter(t->t.isClassOrInterfaceDeclaration())
+//        .map(ClassOrInterfaceDeclaration.class::cast);
+        
+        
+//        if(type.isEnumDeclaration()) {
+//            // as of yet silently ignore
+//            return Stream.empty();
+//        }
+//        if(type.isClassOrInterfaceDeclaration()) {
+//            return Stream.of((ClassOrInterfaceDeclaration)type);   
+//        }
+//        // as of yet silently ignore
+//        return Stream.empty();        
     }
 
     

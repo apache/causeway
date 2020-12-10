@@ -1,0 +1,19 @@
+= XmlSnapshotService.Snapshot.Builder : _interface_
+
+
+
+
+
+* `[teal]#*includePath*#(String path)` : `void`
++
+Enrich the snapshot to include the state of these referenced objects
+
+
+* `[teal]#*includePathAndAnnotation*#(String path, String annotation)` : `void`
++
+Ditto, but add an XML annotation attribute to the included element(s).
+
+
+* `[teal]#*build*#()` : `Snapshot`
++
+Builds the Snapshot.

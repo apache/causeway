@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.javamodel;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 
 import lombok.NonNull;
@@ -25,7 +26,12 @@ import lombok.NonNull;
 public final class ConstructorDeclarations {
 
     public static boolean isEffectivePublic(
-            final @NonNull ConstructorDeclaration cd) {
+            final @NonNull ConstructorDeclaration cd, final @NonNull ClassOrInterfaceDeclaration td) {
+        
+        if(td.isInterface()) {
+            return true;
+        }
+       
         //TODO effective public requires more context, eg. is the container an interface 
         return !cd.isPrivate() 
                 && !cd.isAbstract() 
