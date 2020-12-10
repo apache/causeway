@@ -44,7 +44,7 @@ import static guru.nidi.codeassert.config.Language.JAVA;
 
 class AdocletTest {
 
-    @Test @Disabled
+    @Test //@Disabled
     void testJavaDocMining() {
         
         val analyzerConfig = AnalyzerConfigFactory
@@ -72,7 +72,7 @@ class AdocletTest {
         });
     }
     
-    @Test //@Disabled
+    @Test @Disabled("DANGER!")
     void removeAdocExampleTags() throws IOException {
         
         val analyzerConfig = AnalyzerConfigFactory
