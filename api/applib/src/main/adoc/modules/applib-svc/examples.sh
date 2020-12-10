@@ -20,6 +20,13 @@ SRC_MAIN_JAVA=../../../java
 SCRIPT_DIR=$( dirname "$0" )
 cd $SCRIPT_DIR || exit 1
 
+echo "==================="
+echo "= MIGRATION NOTES ="
+echo "==================="
+echo "the java file list (below) was migrated to use the global document index instead (module system overview)"
+echo "hence this scipt is a no-op"
+exit 0
+
 SRC_APPLIB=$SRC_MAIN_JAVA/org/apache/isis/applib
 
 for dir in services
