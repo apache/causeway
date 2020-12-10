@@ -24,17 +24,17 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface SwaggerService {
 
-    String generateSwaggerSpec(             // <.>
+    String generateSwaggerSpec(
             final Visibility visibility,
             final Format format);
 
-    // end::refguide[]
-    // tag::refguide[]
     enum Visibility {
-        // end::refguide[]
         /**
          * Specification for use by third-party clients, ie public use.
          *
@@ -44,9 +44,7 @@ public interface SwaggerService {
          * of {@link NatureOfService#VIEW_REST_ONLY}.
          * </p>
          */
-        // tag::refguide[]
-        PUBLIC,                             // <.>
-        // end::refguide[]
+        PUBLIC,
         /**
          * Specification for use only by internally-managed clients, ie private internal use.
          *
@@ -54,28 +52,22 @@ public interface SwaggerService {
          * Includes specifications of domain entities as well as view models.
          * </p>
          */
-        // tag::refguide[]
-        PRIVATE,                            // <.>
-        // end::refguide[]
+        PRIVATE,
         /**
          * As {@link #PRIVATE}, also including any prototype actions (where {@link Action#restrictTo()} set to
          * {@link RestrictTo#PROTOTYPING}).
          */
-        // tag::refguide[]
-        PRIVATE_WITH_PROTOTYPING            // <.>
-        // end::refguide[]
+        PRIVATE_WITH_PROTOTYPING
         ;
 
         public boolean isPublic() {
             return this == PUBLIC;
         }
-        // tag::refguide[]
     }
 
     enum Format {
-        JSON,                               // <.>
-        YAML                                // <.>
-        // end::refguide[]
+        JSON,
+        YAML
         ;
         /**
          * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
@@ -87,8 +79,6 @@ public interface SwaggerService {
                 return "application/yaml";
             }
         }
-        // tag::refguide[]
     }
 
 }
-// end::refguide[]

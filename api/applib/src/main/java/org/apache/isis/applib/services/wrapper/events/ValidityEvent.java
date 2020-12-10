@@ -41,7 +41,7 @@ import org.apache.isis.applib.Identifier;
  * @see AccessEvent
  * @see VisibilityEvent
  * @see UsabilityEvent
- *
+ * @since 1.x {@index}
  */
 public abstract class ValidityEvent extends InteractionEvent implements ProposedHolderEvent {
 

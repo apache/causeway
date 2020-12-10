@@ -29,25 +29,20 @@ import lombok.RequiredArgsConstructor;
  * underlying domain object.
  *
  * @see WrapperFactory#wrap(Object, org.apache.isis.applib.services.wrapper.control.SyncControl)
+ * 
+ * @since 2.0 {@index}
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-// tag::refguide[]
 public enum ExecutionMode {
-    // end::refguide[]
     /**
      * Skip all business rules.
      */
-    // tag::refguide[]
     SKIP_RULE_VALIDATION,
-    // end::refguide[]
     /**
      * Skip actual execution.
      *
      * <p>
      * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; instead just invoke {@link WrapperFactory#wrap(Object, ImmutableEnumSet)}.
      */
-    // tag::refguide[]
     SKIP_EXECUTION,
-    // end::refguide[]
 }
-// end::refguide[]

@@ -24,6 +24,7 @@ import lombok.experimental.UtilityClass;
 
 /**
  * Keys used in {@link CommandDto#getUserData()} to marshall the command's results
+ * @since 2.0 {@index}
  */
 @UtilityClass
 public class UserDataKeys {

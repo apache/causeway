@@ -35,7 +35,7 @@ import lombok.With;
 /**
  * Provides the user and scenario specific environment for an {@link Interaction.Execution}
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @Value @Builder
 @RequiredArgsConstructor

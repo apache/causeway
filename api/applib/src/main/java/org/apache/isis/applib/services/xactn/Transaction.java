@@ -19,17 +19,14 @@
 
 package org.apache.isis.applib.services.xactn;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
  * Representation of the current transaction, which conceptually wraps the underlying transaction context's transaction.
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface Transaction {
 
     TransactionId getId();
 
-    // end::refguide[]
     /**
      * Flush all changes to the object store.
      *
@@ -42,10 +39,8 @@ public interface Transaction {
      *     Equivalent to {@link TransactionService#flushTransaction()}.
      * </p>
      */
-    // tag::refguide[]
     void flush();
 
     TransactionState getTransactionState();
 
 }
-// end::refguide[]

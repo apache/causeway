@@ -18,39 +18,33 @@
  */
 package org.apache.isis.applib.services.grid;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
  * Provides an implementation of {@link Grid}.
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface GridSystemService<G extends Grid> {
 
-    // end::refguide[]
     /**
      * Which grid (implementation) is defined by this service.
      */
-    // tag::refguide[]
-    Class<G> gridImplementation();                  // <.>
+    Class<G> gridImplementation();
 
-    String tns();                                   // <.>
+    String tns();
 
-    String schemaLocation();                        // <.>
+    String schemaLocation();
 
-    G defaultGrid(Class<?> domainClass);            // <.>
+    G defaultGrid(Class<?> domainClass);
 
-    // end::refguide[]
     /**
      * Validate the grid, derive any missing object members, and overwrite any facets in the metamodel based on the
      * layout.
      */
-    // tag::refguide[]
-    void normalize(G grid, Class<?> domainClass);   // <.>
+    void normalize(G grid, Class<?> domainClass);
 
-    void complete(G grid, Class<?> domainClass);    // <.>
+    void complete(G grid, Class<?> domainClass);
 
-    void minimal(G grid, Class<?> domainClass);     // <.>
+    void minimal(G grid, Class<?> domainClass);
 
 }
-// end::refguide[]

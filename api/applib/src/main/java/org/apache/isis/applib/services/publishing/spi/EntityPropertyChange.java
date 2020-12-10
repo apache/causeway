@@ -28,7 +28,7 @@ import lombok.Value;
 /**
  * Immutable data record for {@link EntityPropertyChangeSubscriber}s. 
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @Value(staticConstructor = "of")
 public class EntityPropertyChange {

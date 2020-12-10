@@ -30,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 
-
 /**
  * Domain service to (attempt) to recognize certain
  * exceptions, and return user-friendly messages instead.
@@ -57,11 +56,11 @@ import lombok.val;
  * <p>
  * Initially introduced for the Wicket viewer; check the documentation
  * of other viewers to determine whether they also support this service.
+ * 
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface ExceptionRecognizer {
 
-    // end::refguide[]
     /**
      * (Attempt to) recognize the exception and return a user-friendly
      * message to render instead.
@@ -72,75 +71,55 @@ public interface ExceptionRecognizer {
      * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category category}
      * and reason that will be included with the user-friendly message.
      */
-    // tag::refguide[]
-    Optional<Recognition> recognize(Throwable ex);  // <.>
+    Optional<Recognition> recognize(Throwable ex);
 
-    // end::refguide[]
-    // tag::refguide-1[]
     @RequiredArgsConstructor
     enum Category {
-        // end::refguide-1[]
         /**
          * A violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
          */
-        // tag::refguide-1[]
-        CONSTRAINT_VIOLATION(                                           // <.>
+        CONSTRAINT_VIOLATION(
                 "violation of some declarative constraint"),
-        // end::refguide-1[]
         /**
          * The object to be acted upon cannot be found (404)
          */
-        // tag::refguide-1[]
-        NOT_FOUND(                                                      // <.>
+        NOT_FOUND(
                 "object not found"),
-        // end::refguide-1[]
         /**
          * A concurrency exception, in other words some other user has changed this object.
          */
-        // tag::refguide-1[]
-        CONCURRENCY(                                                    // <.>
+        CONCURRENCY(
                 "concurrent modification"),
-        // end::refguide-1[]
         /**
          * Recognized, but for some other reason... 40x error
          */
-        // tag::refguide-1[]
-        CLIENT_ERROR(                                                   // <.>
+        CLIENT_ERROR(
                 "client side error"),
-        // end::refguide-1[]
         /**
          * 50x error
          */
-        // tag::refguide-1[]
-        SERVER_ERROR(                                                   // <.>
+        SERVER_ERROR(
                 "server side error"),
-        // end::refguide-1[]
         /**
          * Recognized, but uncategorized (typically: a recognizer of the original ExceptionRecognizer API).
          */
-        // tag::refguide-1[]
-        OTHER(                                                          // <.>
+        OTHER(
                 "other")
         ;
 
         @Getter
         private final String friendlyName;
     }
-    // end::refguide-1[]
 
-    // tag::refguide-2[]
     @Value
     class Recognition {
 
-        // end::refguide-2[]
         /**
          * @return optionally a recognition of the specified type, based on a whether given reason is non-null
          */
-        // tag::refguide-2[]
         public static Optional<Recognition> of(
                 @Nullable final Category category,
                 @Nullable final String reason) {
-            // end::refguide-2[]
 
             if(reason==null) {
                 return Optional.empty();
@@ -148,7 +127,6 @@ public interface ExceptionRecognizer {
 
             val nonNullCategory = category!=null? category: Category.OTHER;
             return Optional.of(new Recognition(nonNullCategory, reason));
-            // tag::refguide-2[]
             // ...
         }
 
@@ -156,22 +134,18 @@ public interface ExceptionRecognizer {
         @NonNull private final String reason;
 
         public String toMessage(@Nullable TranslationService translationService) {
-            // end::refguide-2[]
 
             val categoryLiteral = translate(getCategory().getFriendlyName(), translationService);
             val reasonLiteral = translate(getReason(), translationService);
 
             return String.format("[%s]: %s", categoryLiteral, reasonLiteral);
-            // tag::refguide-2[]
             // ...
         }
         
         public String toMessageNoCategory(@Nullable TranslationService translationService) {
-            // end::refguide-2[]
 
             val reasonLiteral = translate(getReason(), translationService);
             return String.format("%s", reasonLiteral);
-            // tag::refguide-2[]
             // ...
         }
         
@@ -186,8 +160,5 @@ public interface ExceptionRecognizer {
         }
         
     }
-    // end::refguide-2[]
 
-    // tag::refguide[]
 }
-// end::refguide[]

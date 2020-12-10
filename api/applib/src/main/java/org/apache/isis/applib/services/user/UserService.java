@@ -32,7 +32,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * If {@link SudoService} has been used to temporarily override the user and/or roles, 
  * then this service will report the overridden values instead.
  *
- * @since 2.0 {@index}
+ * @since 1.x revised in 2.0 {@index}
  */
 public interface UserService {
 
@@ -73,6 +73,9 @@ public interface UserService {
                 .map(UserMemento::getName);
     }
     
+    /**
+     * Returns either the current user's name or else {@literal Nobody}.    
+     */
     default String currentUserNameElseNobody() {
         return currentUserName()
                 .orElse("Nobody");

@@ -18,10 +18,12 @@
  */
 package org.apache.isis.applib.services.queryresultscache;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface QueryResultCacheControl {
 
     boolean isIgnoreCache();
 
 }
-// end::refguide[]

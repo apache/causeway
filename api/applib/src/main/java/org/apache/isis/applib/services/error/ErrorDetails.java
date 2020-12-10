@@ -30,26 +30,24 @@ import lombok.Getter;
  * <p>
  *     Implementation note: a class has been used here so that additional fields might be added in the future.
  * </p>
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 @AllArgsConstructor
 public class ErrorDetails {
 
     @Getter
-    private final String mainMessage;                           // <.>
+    private final String mainMessage;
     @Getter
-    private final boolean recognized;                           // <.>
+    private final boolean recognized;
     @Getter
-    private final boolean authorizationCause;                   // <.>
+    private final boolean authorizationCause;
     @Getter
-    private final List<String> stackTraceDetailListCombined;    // <.>
-    // end::refguide[]
+    private final List<String> stackTraceDetailListCombined;
     /**
      * One per exception cause.
      */
-    // tag::refguide[]
     @Getter
     private final List<List<String>> stackTraceDetailPerCause;
 
 }
-// end::refguide[]

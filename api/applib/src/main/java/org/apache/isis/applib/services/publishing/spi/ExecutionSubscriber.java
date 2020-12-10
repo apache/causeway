@@ -26,11 +26,11 @@ import org.apache.isis.commons.having.HasEnabling;
  * SPI that allows individual interactions (action invocations or property edits) to be
  * {@link #publish(Interaction.Execution) published}.
  * Note that re-publishing is not part of this SPI.
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface ExecutionSubscriber extends HasEnabling {
 
-    // end::refguide[]
     /**
      * Publish each {@link Interaction.Execution} immediately after it completes.
      * <p>
@@ -38,8 +38,6 @@ public interface ExecutionSubscriber extends HasEnabling {
      * XML representation of the execution. The easiest way to do this is using {@link InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
      * some flexibility here, though.
      */
-    // tag::refguide[]
-    void onExecution(Interaction.Execution<?, ?> execution);  // <.>
+    void onExecution(Interaction.Execution<?, ?> execution);
     
 }
-// end::refguide[]

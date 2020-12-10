@@ -25,11 +25,11 @@ package org.apache.isis.applib.services.userprof;
  *     Used by the Wicket viewer in its {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
  *     &quot;Me&quot; menu bar.
  * </p>
+ * 
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface UserProfileService {
 
-    // end::refguide[]
     /**
      * Used as the menu name of the {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
      * &quot;Me&quot; menu bar.
@@ -38,8 +38,6 @@ public interface UserProfileService {
      *     If returns <tt>null</tt>, then the current user name is used instead.
      * </p>
      */
-    // tag::refguide[]
-    String userProfileName();   // <.>
+    String userProfileName();
 
 }
-// end::refguide[]

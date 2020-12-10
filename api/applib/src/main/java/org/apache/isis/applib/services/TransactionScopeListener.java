@@ -28,9 +28,8 @@ import org.apache.isis.applib.annotation.IsisInteractionScope;
  * @apiNote Implementing services most likely need to be scoped in a way that
  * binds the scope to the current thread (eg. {@link IsisInteractionScope})
  *  
- * @since 2.0 (renamed from WithTransactionScope)
+ * @since 2.0 (renamed from WithTransactionScope) {@index}
  */
-// tag::refguide[]
 public interface TransactionScopeListener {
     
     enum PreCommitPhase {
@@ -49,4 +48,3 @@ public interface TransactionScopeListener {
     }
     
 }
-// end::refguide[]

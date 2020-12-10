@@ -19,12 +19,12 @@
 package org.apache.isis.applib.services.wrapper.control;
 
 /**
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 @FunctionalInterface
 public interface ExceptionHandler {
 
-    // end::refguide[]
     /**
      * Handle the exception in some way.
      *
@@ -35,8 +35,6 @@ public interface ExceptionHandler {
      * @param ex - the exception that has occurred
      * @return - optionally, the value to return.
      */
-    // tag::refguide[]
     Object handle(Exception ex) throws Exception;
 
 }
-// end::refguide[]

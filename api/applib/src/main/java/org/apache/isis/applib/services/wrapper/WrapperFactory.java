@@ -66,17 +66,11 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * <p>
  * If the object has (see {@link #isWrapper(Object)} already been wrapped),
  * then should just return the object back unchanged.
+ * 
+ * @since 1.x {@index}
  */
-// tag::refguide[]
-// tag::refguide-unwrap[]
-// tag::refguide-async[]
-// tag::refguide-listeners[]
 public interface WrapperFactory {
 
-    // end::refguide[]
-    // end::refguide-unwrap[]
-    // end::refguide-async[]
-    // end::refguide-listeners[]
     /**
      * Provides the &quot;wrapper&quot; of a domain object against which to invoke the action.
      *
@@ -97,20 +91,16 @@ public interface WrapperFactory {
      * Otherwise, will do all the validations (raise exceptions as required
      * etc.), but doesn't modify the model.
      */
-    // tag::refguide[]
-    <T> T wrap(T domainObject,                                      // <.>
+    <T> T wrap(T domainObject,
                SyncControl syncControl);
 
-    // end::refguide[]
     /**
      * A convenience overload for {@link #wrap(Object, SyncControl)},
      * returning a wrapper to invoke the action synchronously, enforcing business rules.
      * Any exceptions will be propagated, not swallowed.
      */
-    // tag::refguide[]
-    <T> T wrap(T domainObject);                                     // <.>
+    <T> T wrap(T domainObject);
 
-    // end::refguide[]
     /**
      * Provides the wrapper for a {@link FactoryService#mixin(Class, Object) mixin}, against which to invoke the action.
      *
@@ -119,20 +109,16 @@ public interface WrapperFactory {
      *     whether the action is executed.  See {@link #wrap(Object, SyncControl)} for more details on this.
      * </p>
      */
-    // tag::refguide[]
-    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn,            // <.>
+    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn,
                     SyncControl syncControl);
 
-    // end::refguide[]
     /**
      * A convenience overload for {@link #wrapMixin(Class, Object, SyncControl)},
      * returning a wrapper to invoke the action synchronously, enforcing business rules.
      * Any exceptions will be propagated, not swallowed.
      */
-    // tag::refguide[]
-    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);           // <.>
+    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);
 
-    // end::refguide[]
     /**
      * Obtains the underlying domain object, if wrapped.
      *
@@ -140,10 +126,8 @@ public interface WrapperFactory {
      * If the object {@link #isWrapper(Object) is not wrapped}, then
      * should just return the object back unchanged.
      */
-    // tag::refguide-unwrap[]
-    <T> T unwrap(T possibleWrappedDomainObject);                    // <.>
+    <T> T unwrap(T possibleWrappedDomainObject);
 
-    // end::refguide-unwrap[]
     /**
      * Whether the supplied object is a wrapper around a domain object.
      *
@@ -152,10 +136,8 @@ public interface WrapperFactory {
      *            - object that might or might not be a wrapper.
      * @return
      */
-    // tag::refguide-unwrap[]
-    <T> boolean isWrapper(T possibleWrappedDomainObject);           // <.>
+    <T> boolean isWrapper(T possibleWrappedDomainObject);
 
-    // end::refguide-unwrap[]
 
 
     //
@@ -174,11 +156,9 @@ public interface WrapperFactory {
      *
      * @since 2.0
      */
-    // tag::refguide-async[]
-    <T,R> T asyncWrap(T domainObject,                      // <.>
+    <T,R> T asyncWrap(T domainObject,
                       AsyncControl<R> asyncControl);
 
-    // end::refguide-async[]
     /**
      * Returns a proxy object for the provided {@code mixinClass},
      * through which can execute the action asynchronously.
@@ -190,12 +170,10 @@ public interface WrapperFactory {
      *
      * @since 2.0
      */
-    // tag::refguide-async[]
-    <T,R> T asyncWrapMixin(                                // <.>
+    <T,R> T asyncWrapMixin(
                    Class<T> mixinClass, Object mixedIn,
                    AsyncControl<R> asyncControl);
 
-    // end::refguide-async[]
 
 
     //
@@ -206,11 +184,9 @@ public interface WrapperFactory {
      * All {@link InteractionListener}s that have been registered using
      * {@link #addInteractionListener(InteractionListener)}.
      */
-    // tag::refguide-listeners[]
     // ...
-    List<InteractionListener> getListeners();                       // <.>
+    List<InteractionListener> getListeners();
 
-    // end::refguide-listeners[]
     /**
      * Registers an {@link InteractionListener}, to be notified of interactions
      * on all wrappers.
@@ -224,10 +200,8 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
-    // tag::refguide-listeners[]
-    boolean addInteractionListener(InteractionListener listener);   // <.>
+    boolean addInteractionListener(InteractionListener listener);
 
-    // end::refguide-listeners[]
     /**
      * Remove an {@link InteractionListener}, to no longer be notified of
      * interactions on wrappers.
@@ -241,18 +215,10 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
-    // tag::refguide-listeners[]
-    boolean removeInteractionListener(                              // <.>
+    boolean removeInteractionListener(
                     InteractionListener listener);
 
-    void notifyListeners(InteractionEvent ev);                      // <.>
-    // tag::refguide-async[]
-    // tag::refguide-unwrap[]
-    // tag::refguide[]
+    void notifyListeners(InteractionEvent ev);
     // ...
 
 }
-// end::refguide[]
-// end::refguide-unwrap[]
-// end::refguide-async[]
-// end::refguide-listeners[]

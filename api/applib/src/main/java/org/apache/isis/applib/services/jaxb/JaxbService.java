@@ -37,48 +37,46 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface JaxbService {
 
-    default Object fromXml(                             // <.>
+    default Object fromXml(
             JAXBContext jaxbContext,
             String xml) {
         return fromXml(jaxbContext, xml, null);
     }
 
-    Object fromXml(                                     // <.>
+    Object fromXml(
             JAXBContext jaxbContext,
             String xml,
             @Nullable Map<String,Object> unmarshallerProperties);
 
-    // end::refguide[]
     /**
      * As {@link #fromXml(JAXBContext, String)}, but downcast to a specific type.
      */
-    // tag::refguide[]
-    default <T> T fromXml(Class<T> domainClass, String xml) { // <.>
+    default <T> T fromXml(Class<T> domainClass, String xml) {
         return fromXml(domainClass, xml, null);
     }
 
-    // end::refguide[]
     /**
      * As {@link #fromXml(JAXBContext, String, Map)}, but downcast to a specific type.
      */
-    // tag::refguide[]
-    <T> T fromXml(                                      // <.>
+    <T> T fromXml(
             Class<T> domainClass,
             String xml,
             @Nullable Map<String,Object> unmarshallerProperties);
 
-    default String toXml(Object domainObject) {         // <.>
+    default String toXml(Object domainObject) {
         return toXml(domainObject, null);
     }
         
-    String toXml(                                       // <.>
+    String toXml(
             Object domainObject,
             @Nullable Map<String,Object> marshallerProperties);
 
-    // end::refguide[]
     /**
      * Controls whether, when generating {@link #toXsd(Object, IsisSchemas) XML schemas},
      * any of the common Isis schemas (in the namespace <code>http://org.apache.isis.schema</code>) should be included
@@ -92,11 +90,9 @@ public interface JaxbService {
      *     <a href="http://isis.apache.org/schema">downloaded</a> from the Isis website.
      * </p>
      */
-    // tag::refguide[]
     enum IsisSchemas {
         INCLUDE,
         IGNORE;
-        // end::refguide[]
 
         /**
          * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
@@ -108,14 +104,12 @@ public interface JaxbService {
                 return namespaceUri.matches(".*isis\\.apache\\.org.*");
             }
         }
-        // tag::refguide[]
     }
 
-    Map<String, String> toXsd(                 // <.>
+    Map<String, String> toXsd(
             Object domainObject, 
             IsisSchemas isisSchemas);
 
-    // end::refguide[]
     class Simple implements JaxbService {
 
         @Override @SneakyThrows @Nullable
@@ -237,6 +231,4 @@ public interface JaxbService {
         
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

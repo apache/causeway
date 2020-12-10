@@ -18,24 +18,22 @@
  */
 package org.apache.isis.applib.services.xactn;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public enum TransactionState {
-    // end::refguide[]
     /**
      * No transaction exists.
      */
-    // tag::refguide[]
     NONE,
-    // end::refguide[]
     /**
      * Started, still in progress.
      * <p/>
      * <p/>
      * May flush, commit or abort.
      */
-    // tag::refguide[]
     IN_PROGRESS,
-    // end::refguide[]
     /**
      * Started, but has hit an exception.
      * <p/>
@@ -46,27 +44,21 @@ public enum TransactionState {
      * <p/>
      * Similar to <tt>setRollbackOnly</tt> in EJBs.
      */
-    // tag::refguide[]
     MUST_ABORT,
-    // end::refguide[]
     /**
      * Completed, having successfully committed.
      * <p/>
      * <p/>
      * May not flush or abort or commit (will throw {@link IllegalStateException}).
      */
-    // tag::refguide[]
     COMMITTED,
-    // end::refguide[]
     /**
      * Completed, having aborted.
      * <p/>
      * <p/>
      * May not flush, commit or abort (will throw {@link IllegalStateException}).
      */
-    // tag::refguide[]
     ABORTED
-    // end::refguide[]
     ;
 
     private TransactionState() {
@@ -104,6 +96,4 @@ public enum TransactionState {
         return this == MUST_ABORT;
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

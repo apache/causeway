@@ -21,33 +21,20 @@ package org.apache.isis.applib.services;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.having.HasUsername;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 
 /**
  * An abstraction of some sort of recorded change to a domain object: commands, audit entries or published events.
+ * 
+ * @since 2.0 {@index}
  */
 public interface DomainChangeRecord extends HasUniqueId, HasUsername {
 

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.commanddto.processor;
 
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 

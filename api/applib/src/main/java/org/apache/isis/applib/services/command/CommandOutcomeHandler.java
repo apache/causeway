@@ -22,6 +22,10 @@ import java.sql.Timestamp;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface CommandOutcomeHandler {
 
     CommandOutcomeHandler NULL = new CommandOutcomeHandler() {

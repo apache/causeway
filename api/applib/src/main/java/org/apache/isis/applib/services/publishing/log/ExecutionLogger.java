@@ -33,6 +33,10 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isisApplib.ExecutionLogger")
 @Order(OrderPrecedence.LATE)

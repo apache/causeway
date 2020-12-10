@@ -21,10 +21,12 @@ package org.apache.isis.applib.services.i18n;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface TranslationService {
 
-    // end::refguide[]
     /**
      * Return a translation of the text, in the locale of the &quot;current user&quot;.
      *
@@ -36,12 +38,10 @@ public interface TranslationService {
      * @param text
      * @return
      */
-    // tag::refguide[]
-    String translate(                   // <.>
+    String translate(
             final String context,
             final String text);
 
-    // end::refguide[]
     /**
      * Return a translation of either the singular or the plural text, dependent on the <tt>num</tt> parameter,
      * in the locale of the &quot;current user&quot;.
@@ -56,42 +56,32 @@ public interface TranslationService {
      * @param num - whether to return the translation of the singular (if =1) or of the plural (if != 1)
      * @return
      */
-    // tag::refguide[]
-    String translate(                   // <.>
+    String translate(
             final String context,
             final String singularText,
             final String pluralText,
             int num);
 
-    // end::refguide[]
-    // tag::refguide-1[]
     enum Mode {
         DISABLED
-            // end::refguide-1[]
             (
                 configValue->
                     ("disable".equalsIgnoreCase(configValue) ||
                      "disabled".equalsIgnoreCase(configValue))
             )
-            // tag::refguide-1[]
         , READ
-            // end::refguide-1[]
             (
                 configValue->
                     ("read".equalsIgnoreCase(configValue) ||
                      "reader".equalsIgnoreCase(configValue))
             )
-            // tag::refguide-1[]
         , WRITE
-            // end::refguide-1[]
             (
                 configValue ->
                     !READ.matches(configValue) &&
                     !DISABLED.matches(configValue)
             )
         ;
-        // tag::refguide-1[]
-        // end::refguide-1[]
 
         // -- handle values from configuration
 
@@ -115,9 +105,7 @@ public interface TranslationService {
             return this == DISABLED;
         }
 
-        // tag::refguide-1[]
     }
-    // end::refguide-1[]
 
     /**
      * Whether this implementation is operating in read or in write mode.
@@ -137,8 +125,6 @@ public interface TranslationService {
      *     such that all pathways are exercised..
      * </p>
      */
-    // tag::refguide[]
-    Mode getMode();                     // <.>
+    Mode getMode();
 
 }
-// end::refguide[]

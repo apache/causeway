@@ -20,9 +20,10 @@ package org.apache.isis.applib.services.appfeat;
 
 import java.util.SortedSet;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface ApplicationFeatureRepository  {
 
     SortedSet<String> packageNames();
@@ -43,4 +44,3 @@ public interface ApplicationFeatureRepository  {
             ApplicationMemberType memberType);
 
 }
-// end::refguide[]

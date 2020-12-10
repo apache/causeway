@@ -20,12 +20,12 @@ package org.apache.isis.applib.services.eventbus;
 
 /**
  * A service implementing an Event Bus, allowing arbitrary events to be posted.
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface EventBusService {
 
     void post(Object event);
 
 }
-// end::refguide[]
 

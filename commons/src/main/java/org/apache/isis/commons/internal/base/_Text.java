@@ -19,9 +19,12 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -128,6 +131,21 @@ public final class _Text {
         } 
     }
 
+    // -- WRITING
+    
+    @SneakyThrows
+    public static void writeLinesToFile(
+            final @NonNull Iterable<String> lines,
+            final @NonNull File file, 
+            final @NonNull Charset charset) {
+        
+        try(val bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset))) {
+            for(val line : lines) {
+                bw.append(line).append("\n");    
+            }
+        } 
+    }
+    
     // -- NORMALIZING
     
     public static String normalize(final @Nullable String text) {

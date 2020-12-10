@@ -21,27 +21,24 @@ package org.apache.isis.applib.services.hint;
 import java.util.Set;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface HintStore {
 
-    // end::refguide[]
-    // tag::refguide-1[]
     interface HintIdProvider {
         String hintId();
     }
-    // end::refguide-1[]
-    // tag::refguide[]
 
-    String get(final Bookmark bookmark, String hintKey);                // <.>
+    String get(final Bookmark bookmark, String hintKey);
 
-    void set(final Bookmark bookmark, String hintKey, String value);    // <.>
+    void set(final Bookmark bookmark, String hintKey, String value);
 
-    void remove(final Bookmark bookmark, String hintKey);               // <.>
+    void remove(final Bookmark bookmark, String hintKey);
 
-    void removeAll(Bookmark bookmark);                                  // <.>
+    void removeAll(Bookmark bookmark);
 
-    Set<String> findHintKeys(Bookmark bookmark);                        // <.>
+    Set<String> findHintKeys(Bookmark bookmark);
 
 }
-// end::refguide[]

@@ -35,114 +35,94 @@ import lombok.extern.log4j.Log4j2;
 /**
  *
  * @param <R> - return value.
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 @Log4j2
 public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
-    public static AsyncControl<Void> returningVoid() {                        // <.>
+    public static AsyncControl<Void> returningVoid() {
         return new AsyncControl<>(Void.class);
     }
-    public static <X> AsyncControl<X> returning(final Class<X> cls) {     // <.>
+    public static <X> AsyncControl<X> returning(final Class<X> cls) {
         return new AsyncControl<X>(cls);
     }
 
     @Getter
-    private final Class<R> returnType;                                  // <.>
+    private final Class<R> returnType;
 
     private AsyncControl(final Class<R> returnType) {
         this.returnType = returnType;
-        with(exception -> {                                             // <.>
+        with(exception -> {
             log.error(logMessage(), exception);
             return null;
         });
     }
 
     @Getter @NonNull
-    private ExecutorService executorService =                           // <.>
+    private ExecutorService executorService =
                             ForkJoinPool.commonPool();
     public AsyncControl<R> with(ExecutorService executorService) {
-        // end::refguide[]
         this.executorService = executorService;
         return this;
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * Defaults to the system clock, if not overridden
      */
-    // tag::refguide[]
     @Getter
-    private VirtualClock clock;                                         // <.>
+    private VirtualClock clock;
     public AsyncControl<R> withClock(final @NonNull VirtualClock clock) {
-        // end::refguide[]
         this.clock = clock;
         return this;
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * Defaults to the system locale, if not overridden
      */
-    // tag::refguide[]
     @Getter
-    private Locale locale;                                         // <.>
+    private Locale locale;
     public AsyncControl<R> withLocale(final @NonNull Locale locale) {
-        // end::refguide[]
         this.locale = locale;
         return this;
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * Defaults to the system time zone, if not overridden
      */
-    // tag::refguide[]
     @Getter
-    private TimeZone timeZone;                                         // <.>
+    private TimeZone timeZone;
     public AsyncControl<R> withTimeZone(final @NonNull TimeZone timeZone) {
-        // end::refguide[]
         this.timeZone = timeZone;
         return this;
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
 
 
     /**
      * Defaults to user initiating the action, if not overridden
      */
-    // tag::refguide[]
     @Getter
-    private UserMemento user;                                           // <.>
+    private UserMemento user;
     public AsyncControl<R> withUser(final @NonNull UserMemento user) {
-        // end::refguide[]
         this.user = user;
         return this;
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * Set by framework.
      *
      * Contains the result of the invocation.  However, if an entity is returned, then the object is automatically
      * detached because the persistence session within which it was obtained will have been closed already.
      */
-    // tag::refguide[]
     @Getter @Setter
-    private Future<R> future;                                           // <.>
+    private Future<R> future;
 
-    // end::refguide[]
     private String logMessage() {
         StringBuilder buf = new StringBuilder("Failed to execute ");
         if(getMethod() != null) {
@@ -158,7 +138,5 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         return buf.toString();
     }
 
-    // tag::refguide[]
     // ...
 }
-// end::refguide[]

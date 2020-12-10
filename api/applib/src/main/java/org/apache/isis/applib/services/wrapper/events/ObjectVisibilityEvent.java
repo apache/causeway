@@ -28,6 +28,7 @@ import org.apache.isis.applib.Identifier;
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * object is invisible; otherwise action is visible.
  *
+ * @since 1.x {@index}
  */
 public class ObjectVisibilityEvent extends VisibilityEvent {
 

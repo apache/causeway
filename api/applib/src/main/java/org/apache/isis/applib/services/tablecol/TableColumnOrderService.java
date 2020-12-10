@@ -20,27 +20,20 @@ package org.apache.isis.applib.services.tablecol;
 
 import java.util.List;
 
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
-
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface TableColumnOrderService {
 
-    List<String> orderParented(                 // <.>
+    List<String> orderParented(
             final Object parent,
             final String collectionId,
             final Class<?> collectionType,
             final List<String> propertyIds);
 
-    List<String> orderStandalone(               // <.>
+    List<String> orderStandalone(
             final Class<?> collectionType,
             final List<String> propertyIds);
 
 }
-// end::refguide[]

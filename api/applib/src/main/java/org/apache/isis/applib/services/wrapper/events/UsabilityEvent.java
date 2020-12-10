@@ -32,7 +32,7 @@ import org.apache.isis.applib.Identifier;
  * @see AccessEvent
  * @see VisibilityEvent
  * @see ValidityEvent
- *
+ * @since 1.x {@index}
  */
 public abstract class UsabilityEvent extends InteractionEvent {
 

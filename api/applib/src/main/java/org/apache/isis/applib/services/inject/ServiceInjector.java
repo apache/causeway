@@ -31,15 +31,13 @@ import lombok.val;
  * Implementation must be thread-safe.
  * </p>
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface ServiceInjector {
 
     <T> T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable);
 
     default <T> T injectServicesInto(final T domainObject) {
-        // end::refguide[]
 
         return injectServicesInto(domainObject, injectionPoint->{
 
@@ -53,9 +51,7 @@ public interface ServiceInjector {
             throw new NoSuchElementException(msg);
         });
 
-        // tag::refguide[]
         // ...
     }
 
 }
-// end::refguide[]

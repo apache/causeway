@@ -19,22 +19,17 @@
 package org.apache.isis.applib.services.commanddto.processor.spi;
 
 import javax.annotation.Nullable;
-import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 /**
  * Optional SPI called by {@link ContentMappingServiceForCommandDto}.
  *
  * Similar to {@link CommandDtoProcessor}, but applied to all {@link CommandDto}s globally.
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface CommandDtoProcessorService {
 
     /**
@@ -48,5 +43,4 @@ public interface CommandDtoProcessorService {
 
 
 }
-// end::refguide[]
 

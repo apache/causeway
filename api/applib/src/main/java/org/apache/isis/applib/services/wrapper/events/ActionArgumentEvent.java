@@ -31,7 +31,8 @@ import org.apache.isis.applib.Identifier;
  *
  * <p>
  * Called once per argument, and before {@link ActionInvocationEvent}.
- *
+ * 
+ * @since 1.x {@index}
  */
 public class ActionArgumentEvent extends ValidityEvent {
 

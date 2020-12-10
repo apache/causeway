@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.userreg;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
  * Required API to enable users to register an account on the system (aka &quot;sign up&quot;).
  *
@@ -30,17 +28,17 @@ import org.apache.isis.applib.annotation.Programmatic;
  *     The email service (<code>EmailServiceDefault</code>) <i>does</i> require a couple of configuration properties
  *     to be set (specifying the SMTP mail server/accounts/password).
  * </p>
+ * 
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface UserRegistrationService {
 
-    boolean usernameExists(String username);                                // <.>
+    boolean usernameExists(String username);
 
-    boolean emailExists(String emailAddress);                               // <.>
+    boolean emailExists(String emailAddress);
 
-    void registerUser(UserDetails userDetails);                             // <.>
+    void registerUser(UserDetails userDetails);
 
-    boolean updatePasswordByEmail(String emailAddress, String password);    // <.>
+    boolean updatePasswordByEmail(String emailAddress, String password);
 
 }
-// end::refguide[]

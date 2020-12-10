@@ -32,62 +32,51 @@ import lombok.NonNull;
  * Intended only for use by fixture scripts and integration tests, allows a block of code to execute
  * while the {@link UserService}'s {@link UserService#currentUser() getUser()} method returns the specified user/role
  * as the effective user.
+ * @since 1.x revised for 2.0 {@index}
  */
-// tag::refguide[]
 public interface SudoService {
 
-    // end::refguide[]
     /**
      * If included in the list of roles, then will disable security checks (can view and use all object members).
      */
-    // tag::refguide[]
-    RoleMemento ACCESS_ALL_ROLE =                                // <.>
+    RoleMemento ACCESS_ALL_ROLE =
             new RoleMemento(
                     SudoService.class.getName() + "#accessAll",
                     "Sudo, can view and use all object members.");
             
 
-    // end::refguide[]
     /**
      * Executes the supplied block, with the {@link UserService} returning the specified user.
      * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T call(                                             // <.>
+    <T> T call(
             @NonNull UnaryOperator<ExecutionContext> sudoMapper,
             @NonNull Callable<T> supplier);
 
-    // end::refguide[]
     /**
      * Executes the supplied block, with the {@link UserService} returning the specified user.
      * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
      * @since 2.0
      */
-    // tag::refguide[]
-    default void run(                                        // <.>
+    default void run(
             final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
             final @NonNull ThrowingRunnable runnable) {
         call(sudoMapper, ThrowingRunnable.toCallable(runnable));
     }
 
-    // end::refguide[]
     
     
     /**
      * Allows the {@link SudoService} to notify other services/components that the effective user has been changed.
      * @since 2.0
      */
-    // tag::refguide-1[]
     interface Listener {
 
-        void beforeCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);          // <.>
+        void beforeCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);
 
-        void afterCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);          // <.>
+        void afterCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);
     }
-    // end::refguide-1[]
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

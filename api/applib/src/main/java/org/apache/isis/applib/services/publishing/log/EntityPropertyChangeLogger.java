@@ -31,6 +31,10 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscr
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isisApplib.EntityPropertyChangeLogger")
 @Order(OrderPrecedence.LATE)

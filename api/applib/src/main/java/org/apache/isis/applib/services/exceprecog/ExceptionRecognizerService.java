@@ -25,22 +25,17 @@ import org.apache.isis.commons.collections.Can;
 
 /**
  * 
- * @since 2.0
- *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface ExceptionRecognizerService {
 
-    // end::refguide[]
     /**
      *
      * @return all ExceptionRecognizer implementations as discovered by the IoC container,
      * honoring order of precedence.
      */
-    // tag::refguide[]
     Can<ExceptionRecognizer> getExceptionRecognizers();
 
-    // end::refguide[]
     /**
      * Takes into consideration ExceptionRecognizers as given by {@link #getExceptionRecognizers()}.
      *
@@ -48,12 +43,10 @@ public interface ExceptionRecognizerService {
      * @return optionally a recognition object, that describes both the category and reason,
      * that will be included with the user-friendly message.
      */
-    // tag::refguide[]
     default Optional<Recognition> recognize(Exception ex) {
         return recognizeFromSelected(getExceptionRecognizers(), ex);
     }
 
-    // end::refguide[]
     /**
      * Takes into consideration ExceptionRecognizers as given by {@code recognizers}.
      *
@@ -62,8 +55,6 @@ public interface ExceptionRecognizerService {
      * @return optionally a recognition object, that describes both the category and reason,
      * that will be included with the user-friendly message.
      */
-    // tag::refguide[]
     Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Exception ex);
 
 }
-// end::refguide[]

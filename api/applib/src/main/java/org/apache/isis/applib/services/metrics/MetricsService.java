@@ -21,10 +21,12 @@ package org.apache.isis.applib.services.metrics;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface MetricsService {
 
-    // end::refguide[]
     /**
      * The number of entities that have, so far in this request, been loaded from the database.
      * <p>
@@ -32,10 +34,8 @@ public interface MetricsService {
      * <p>
      * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#currentInteraction()}).
      */
-    // tag::refguide[]
-    int numberEntitiesLoaded();      // <.>
+    int numberEntitiesLoaded();
 
-    // end::refguide[]
     /**
      * The number of objects that have, so far in this request, been dirtied/will need updating in the database); a
      * good measure of the footprint of the interaction.
@@ -44,10 +44,8 @@ public interface MetricsService {
      * <p>
      * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#currentInteraction()}.
      */
-    // tag::refguide[]
-    int numberEntitiesDirtied();     // <.>
+    int numberEntitiesDirtied();
 
 }
-// end::refguide[]
 
 

@@ -24,21 +24,23 @@ import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.having.HasUsername;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface EntityChanges
-        extends HasUniqueId,            // <.>
-                HasUsername {           // <.>
+        extends HasUniqueId,
+                HasUsername {
 
-    Timestamp getCompletedAt();         // <.>
+    Timestamp getCompletedAt();
 
-    int getNumberLoaded();              // <.>
-    int getNumberCreated();             // <.>
-    int getNumberUpdated();             // <.>
-    int getNumberDeleted();             // <.>
+    int getNumberLoaded();
+    int getNumberCreated();
+    int getNumberUpdated();
+    int getNumberDeleted();
 
-    int getNumberPropertiesModified();  // <.>
+    int getNumberPropertiesModified();
 
-    ChangesDto getDto();                // <.>
+    ChangesDto getDto();
 
 }
-// end::refguide[]

@@ -21,16 +21,16 @@ package org.apache.isis.applib.services.confview;
 
 import java.util.Set;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface ConfigurationViewService {
 
-    // end::refguide[]
     /**
      * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).
      * Mask sensitive values if required.
      */
-    // tag::refguide[]
     Set<ConfigurationProperty> allProperties();
 
 }
-// end::refguide[]

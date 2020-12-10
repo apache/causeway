@@ -36,7 +36,6 @@ import org.w3c.dom.Element;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
@@ -49,6 +48,7 @@ import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
  * This implementation has no UI and there are no other implementations of the service API, and so it annotated
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
  * that it is automatically registered and available for use; no further configuration is required.
+ * @since 2.0 {@index}
  */
 @Service
 @Named("isisRuntimeServices.XmlSnapshotServiceDefault")

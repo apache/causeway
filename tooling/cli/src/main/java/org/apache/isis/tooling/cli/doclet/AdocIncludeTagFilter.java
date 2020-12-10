@@ -24,33 +24,63 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._Text;
 
-final class AdocIncludeTagFilter {
+import lombok.val;
+
+public final class AdocIncludeTagFilter {
     
     public static String read(File source) {
         return _Text.readLinesFromFile(source, StandardCharsets.UTF_8).stream()
         //.filter(line->!containsIncludeTag(line))
         .filter(line->!isAllLineComment(line))
-        .map(AdocIncludeTagFilter::removeFootNote)
+        .map(AdocIncludeTagFilter::removeFootNoteReference)
         .collect(Collectors.joining("\n"));
+    }
+    
+    public static void removeAdocExampleTags(File source) {
+        val fixedLines = _Text.readLinesFromFile(source, StandardCharsets.UTF_8)
+        .filter(line->!isIncludeTagComment(line))
+        .map(AdocIncludeTagFilter::removeFootNoteReference);
+        
+        _Text.writeLinesToFile(fixedLines, source, StandardCharsets.UTF_8);
     }
     
     // -- HELPER
 
-//    private static boolean containsIncludeTag(String line) {
-//        line = line.trim();
-//        if(!line.startsWith("//")) {
-//            return false;
-//        }
-//        return line.contains(" tag::")
-//                || line.contains(" end::");
-//    }
+    private static boolean isIncludeTagComment(String line) {
+        line = line.trim();
+        if(!line.startsWith("//")) {
+            return false;
+        }
+        return line.contains(" tag::")
+                || line.contains(" end::");
+    }
 
     private static boolean isAllLineComment(String line) {
         return line.trim().startsWith("//");
     }
     
-    private static String removeFootNote(String line) {
-        return line.replace("// <.>", "").stripTrailing();
+    private static String removeFootNoteReference(String line) {
+        if(!line.contains("// <")) {
+            return line;
+        }
+        return line.replace("// <.>", "")
+                .replace("// <1>", "")
+                .replace("// <2>", "")
+                .replace("// <3>", "")
+                .replace("// <4>", "")
+                .replace("// <5>", "")
+                .replace("// <6>", "")
+                .replace("// <7>", "")
+                .replace("// <8>", "")
+                .replace("// <9>", "")
+                .replace("// <10>", "")
+                .replace("// <11>", "")
+                .replace("// <12>", "")
+                .replace("// <13>", "")
+                .replace("// <14>", "")
+                .replace("// <15>", "")
+                .replace("// <16>", "")
+                .stripTrailing();
     }
     
 }

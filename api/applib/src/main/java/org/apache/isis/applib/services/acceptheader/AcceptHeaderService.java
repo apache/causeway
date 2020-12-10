@@ -22,10 +22,11 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * 
+ * 
+ * @since 1.x {@index}
+ */
 public interface AcceptHeaderService {
-    List<MediaType> getAcceptableMediaTypes();  // <1>
+    List<MediaType> getAcceptableMediaTypes();
 }
-// end::refguide[]

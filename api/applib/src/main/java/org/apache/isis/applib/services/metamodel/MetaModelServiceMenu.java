@@ -47,16 +47,18 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @Named("isisApplib.MetaModelServiceMenu")
 @DomainService(objectType = "isisApplib.MetaModelServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-// tag::refguide[]
 public class MetaModelServiceMenu {
 
-    // end::refguide[]
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServiceMenu> { }
 
     final MimeType mimeTypeTextCsv;
@@ -83,12 +85,10 @@ public class MetaModelServiceMenu {
             named = "Download Meta Model (CSV)"
             )
     @MemberOrder(sequence="500.500.2")
-    // tag::refguide[]
     // ...
     public Clob downloadMetaModelCsv(
             @ParameterLayout(named = ".csv file name")
             final String csvFileName) {
-        // end::refguide[]
 
         final DomainModel domainMembers =  metaModelService.getDomainModel();
         final List<String> list = asList(domainMembers);
@@ -98,11 +98,9 @@ public class MetaModelServiceMenu {
                 withSuffix(csvFileName, "csv"),
                 mimeTypeTextCsv, buf.toString().toCharArray());
 
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
 
     public String default0DownloadMetaModelCsv() {
         return "metamodel.csv";
@@ -119,7 +117,6 @@ public class MetaModelServiceMenu {
             named = "Download Meta Model (XML)"
             )
     @MemberOrder(sequence="500.500.2")
-    // tag::refguide[]
     // ...
     public Clob downloadMetaModelXml(
             @ParameterLayout(named = ".xml file name")
@@ -131,7 +128,6 @@ public class MetaModelServiceMenu {
             @Parameter(optionality=Optionality.MANDATORY)
             final boolean ignoreInterfaces
             ) {
-        // end::refguide[]
 
         MetaModelService.Config config =
                 new MetaModelService.Config()
@@ -152,10 +148,8 @@ public class MetaModelServiceMenu {
         final String xml = jaxbService.toXml(metamodelDto);
         return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
 
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     public String validateDownloadMetaModelXml(
             final String fileName, final List<String> packagePrefixes, final boolean ignoreInterfaces) {
@@ -243,7 +237,6 @@ public class MetaModelServiceMenu {
         return fileName;
     }
 
-    // tag::refguide[]
 
     // ...
 
@@ -253,4 +246,3 @@ public class MetaModelServiceMenu {
     JaxbService jaxbService;
 
 }
-// end::refguide[]

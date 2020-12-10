@@ -22,11 +22,11 @@ package org.apache.isis.applib.services.error;
  * Optional SPI service providing the ability to record errors occurring in the application into an external incident
  * recording system (such as JIRA) and to provide a user-friendly (jargon-free) error message to the end-user, along
  * with incident reference.
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface ErrorReportingService {
 
     Ticket reportError(final ErrorDetails errorDetails);
 
 }
-// end::refguide[]

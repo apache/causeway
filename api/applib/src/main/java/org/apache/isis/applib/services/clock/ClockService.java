@@ -26,8 +26,9 @@ import org.apache.isis.applib.clock.VirtualClock;
  * Use of this service also opens up the use of centralized
  * co-ordinated time management through a centralized time service.
  *
+ * 
+ * @since 1.x revised for 2.0 {@index}
  */
-// tag::refguide[]
 public interface ClockService {
 
     VirtualClock getClock();
@@ -76,4 +77,3 @@ public interface ClockService {
 //    }
 
 }
-// end::refguide[]

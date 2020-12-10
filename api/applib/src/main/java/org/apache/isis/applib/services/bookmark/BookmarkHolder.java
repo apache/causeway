@@ -18,8 +18,10 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface BookmarkHolder {
     Bookmark bookmark();
 }
-// end::refguide[]

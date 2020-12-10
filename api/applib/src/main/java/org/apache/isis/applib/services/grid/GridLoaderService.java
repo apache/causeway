@@ -18,52 +18,43 @@
  */
 package org.apache.isis.applib.services.grid;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface GridLoaderService {
 
-    // end::refguide[]
     /**
      * Whether dynamic reloading of layouts is enabled.
      */
-    // tag::refguide[]
-    boolean supportsReloading();                    // <.>
+    boolean supportsReloading();
 
-    // end::refguide[]
     /**
      * To support metamodel invalidation/rebuilding of spec.
      */
-    // tag::refguide[]
-    void remove(Class<?> domainClass);              // <.>
+    void remove(Class<?> domainClass);
 
-    // end::refguide[]
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
      */
-    // tag::refguide[]
-    boolean existsFor(Class<?> domainClass);        // <.>
+    boolean existsFor(Class<?> domainClass);
 
-    // end::refguide[]
     /**
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>layout.xml</code> file, else <code>null</code>.
      */
-    // tag::refguide[]
-    default Grid load(final Class<?> domainClass) { // <.>
+    default Grid load(final Class<?> domainClass) {
         return load(domainClass, null);
     }
 
-    // end::refguide[]
     /**
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>layout.xml</code> file, else <code>null</code>.
      */
-    // tag::refguide[]
-    Grid load(                                      // <.>
+    Grid load(
             final Class<?> domainClass,
             String layout);
 
 }
-// end::refguide[]

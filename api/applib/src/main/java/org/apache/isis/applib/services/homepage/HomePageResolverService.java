@@ -23,12 +23,10 @@ import org.apache.isis.applib.annotation.HomePage;
 /**
  * Returns a view model annotated with {@link HomePage}.
  *
- * @since 2.0
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface HomePageResolverService {
 
     Object getHomePage();
 
 }
-// end::refguide[]

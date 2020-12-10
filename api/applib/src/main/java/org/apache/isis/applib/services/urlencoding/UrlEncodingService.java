@@ -20,18 +20,20 @@ package org.apache.isis.applib.services.urlencoding;
 
 import java.nio.charset.StandardCharsets;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface UrlEncodingService extends EncoderDecoder {
 
     @Override
-    String encode(final byte[] bytes);                  // <.>
+    String encode(final byte[] bytes);
 
     @Override
-    byte[] decode(String str);                          // <.>
+    byte[] decode(String str);
 
     default String encodeString(final String str) {
         return encode(_Strings.toBytes(str, StandardCharsets.UTF_8));
@@ -42,4 +44,3 @@ public interface UrlEncodingService extends EncoderDecoder {
     }
 
 }
-// end::refguide[]

@@ -69,14 +69,14 @@ import lombok.extern.log4j.Log4j2;
  *     is created, and the originating {@link Command} is set to be its
  *     {@link Command#getParent() parent}.
  * </p>
+ * 
+ * @since 1.x {@index}
  */
 @RequiredArgsConstructor
 @ToString
 @Log4j2
-// tag::refguide[]
 public class Command implements HasUniqueId, HasUsername, HasCommandDto {
 
-    // end::refguide[]
     /**
      * Unique identifier for the command.
      *
@@ -84,13 +84,9 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getTransactionId()}
      * </p>
      */
-    // tag::refguide[]
     @Getter
-    // end::refguide[]
         (onMethod_ = {@Override})
-    // tag::refguide[]
-    private final UUID uniqueId;              // <.>
-    // end::refguide[]
+    private final UUID uniqueId;
     
     /**
      * The user that created the command.
@@ -100,10 +96,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * </p>
      */
     @Override
-    // tag::refguide[]
-    public String getUsername() {               // <.>
+    public String getUsername() {
         // ...
-        // end::refguide[]
         return commandDto != null
                 ? commandDto.getUser()
                 : null;
@@ -116,10 +110,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getTimestamp()}.
      * </p>
      */
-    // tag::refguide[]
-    public Timestamp getTimestamp() {           // <.>
+    public Timestamp getTimestamp() {
         // ...
-        // end::refguide[]
         return commandDto != null
                 ? JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimestamp())
                 : null;
@@ -139,34 +131,28 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * </p>
      */
     @ToString.Exclude
-    // tag::refguide[]
     @Getter
-    private CommandDto commandDto;              // <.>
-    // end::refguide[]
+    private CommandDto commandDto;
 
     /**
      * Derived from {@link #getCommandDto()}, is the {@link Bookmark} of
      * the target object (entity or service) on which this action/edit was performed.
      */
-    // tag::refguide[]
-    public Bookmark getTarget() {               // <.>
+    public Bookmark getTarget() {
         return commandDto != null
                 ? Bookmark.from(commandDto.getTargets().getOid().get(0))
                 : null;
     }
-    // end::refguide[]
 
     /**
      * Derived from {@link #getCommandDto()}, holds a string
      * representation of the invoked action, or the edited property.
      */
-    // tag::refguide[]
-    public String getLogicalMemberIdentifier() {    // <.>
+    public String getLogicalMemberIdentifier() {
         return commandDto != null
                     ? commandDto.getMember().getLogicalMemberIdentifier()
                     : null;
     }
-    // end::refguide[]
 
     /**
      * For async commands created through the {@link WrapperFactory},
@@ -181,10 +167,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *
      */
     @ToString.Exclude
-    // tag::refguide[]
     @Getter
-    private Command parent;                     // <.>
-    // end::refguide[]
+    private Command parent;
 
     /**
      * For an command that has actually been executed, holds the date/time at
@@ -193,10 +177,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * @see Interaction#getCurrentExecution()
      * @see Interaction.Execution#getStartedAt()
      */
-    // tag::refguide[]
     @Getter
-    private Timestamp startedAt;                // <.>
-    // end::refguide[]
+    private Timestamp startedAt;
 
     /**
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
@@ -211,10 +193,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * See also {@link Interaction#getCurrentExecution()} and
      * {@link Interaction.Execution#getCompletedAt()}.
      */
-    // tag::refguide[]
     @Getter
-    private Timestamp completedAt;              // <.>
-    // end::refguide[]
+    private Timestamp completedAt;
 
     /**
      * For a command that has actually been executed, holds a {@link Bookmark}
@@ -228,10 +208,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * See also  {@link Interaction#getCurrentExecution()} and
      * {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()}.
      */
-    // tag::refguide[]
     @Getter
-    private Bookmark result;                    // <.>
-    // end::refguide[]
+    private Bookmark result;
 
     /**
      * For a command that has actually been executed, holds the exception stack
@@ -245,10 +223,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * See also {@link Interaction#getCurrentExecution()} and
      * {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()}.
      */
-    // tag::refguide[]
     @Getter
-    private Throwable exception;                    // <.>
-    // end::refguide[]
+    private Throwable exception;
 
     /**
      * Whether this command resulted in a change of state to the system.
@@ -262,20 +238,16 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * </p>
      *
      */
-    // tag::refguide[]
     @Getter
-    private boolean systemStateChanged;                // <.>
-    // end::refguide[]
+    private boolean systemStateChanged;
 
 
     /**
      * Whether this command has been enabled for dispatching, 
      * that is {@link CommandSubscriber}s will be notified when this Command completes.
      */
-    // tag::refguide[]
     @Getter
     private boolean publishingEnabled;
-    // end::refguide[]
 
     private final Updater UPDATER = new Updater();
 
@@ -378,7 +350,5 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
     }
 
 
-// tag::refguide[]
 
 }
-// end::refguide[]

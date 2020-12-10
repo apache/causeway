@@ -18,14 +18,14 @@
  */
 package org.apache.isis.applib.services.health;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface HealthCheckService {
 
     Health check();
 
 }
-// end::refguide[]
 
 

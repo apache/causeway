@@ -31,6 +31,8 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
  * <p>
  *     Examples could include SPI services that persist published events and status messages.
  * </p>
+ * 
+ * @since 2.0 {@index}
  */
 public interface RepresentsInteractionMemberExecution extends HasUniqueId {
 

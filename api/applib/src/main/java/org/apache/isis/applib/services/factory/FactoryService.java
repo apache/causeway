@@ -33,10 +33,8 @@ import lombok.NonNull;
  * @since 2.x {@index}
  *
  */
-// tag::refguide[]
 public interface FactoryService {
 
-    // end::refguide[]
     /**
      * General purpose factory method, to automatically get or create an instance of
      * {@code requiredType}.
@@ -56,10 +54,8 @@ public interface FactoryService {
      * @since 2.0
      *
      */
-    // tag::refguide[]
-    <T> T getOrCreate(@NonNull Class<T> requiredType); // <.>
+    <T> T getOrCreate(@NonNull Class<T> requiredType);
 
-    // end::refguide[]
     /**
      * Gets an instance (possibly shared or independent) of the specified {@code requiredType},
      * with injection points resolved
@@ -76,10 +72,8 @@ public interface FactoryService {
      * @apiNote does not force the requiredType to be added to the meta-model
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T get(@NonNull Class<T> requiredType); // <.>
+    <T> T get(@NonNull Class<T> requiredType);
 
-    // end::refguide[]
     /**
      * Creates a new detached entity instance, with injection points resolved
      * and defaults applied.
@@ -91,10 +85,8 @@ public interface FactoryService {
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T detachedEntity(@NonNull Class<T> domainClass); // <.>
+    <T> T detachedEntity(@NonNull Class<T> domainClass);
     
-    // end::refguide[]
     /**
      * Creates a new detached entity instance, with injection points resolved.
      *
@@ -105,10 +97,8 @@ public interface FactoryService {
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T detachedEntity(@NonNull T entity); // <.>
+    <T> T detachedEntity(@NonNull T entity);
 
-    // end::refguide[]
     /**
      * Creates a new Mixin instance, with injection points resolved.
      *
@@ -119,10 +109,8 @@ public interface FactoryService {
      * @throws IllegalArgumentException if mixinClass is not a mixin type
      * @apiNote forces the mixinClass to be added to the meta-model if not already
      */
-    // tag::refguide[]
-    <T> T mixin(@NonNull Class<T> mixinClass, @NonNull Object mixedIn); // <.>
+    <T> T mixin(@NonNull Class<T> mixinClass, @NonNull Object mixedIn);
 
-    // end::refguide[]
     /**
      * Creates a new ViewModel instance, with injection points resolved,
      * and initialized according to the given {@code mementoStr}
@@ -133,10 +121,8 @@ public interface FactoryService {
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T viewModel(@NonNull Class<T> viewModelClass, @Nullable String mementoStr);  // <.>
+    <T> T viewModel(@NonNull Class<T> viewModelClass, @Nullable String mementoStr);
 
-    // end::refguide[]
     /**
      * Creates a new ViewModel instance,
      * with injection points resolved
@@ -146,12 +132,10 @@ public interface FactoryService {
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    default <T> T viewModel(@NonNull Class<T> viewModelClass) {                      // <.>
+    default <T> T viewModel(@NonNull Class<T> viewModelClass) {
         return viewModel(viewModelClass, /*mementoStr*/null);
     }
     
-    // end::refguide[]
     /**
      * Resolves injection points for given ViewModel instance.
      * @param viewModel - most likely just new-ed up, without injection points resolved
@@ -159,10 +143,8 @@ public interface FactoryService {
      * @apiNote forces the viewModel's class to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T viewModel(@NonNull T viewModel); // <.>
+    <T> T viewModel(@NonNull T viewModel);
 
-    // end::refguide[]
     /**
      * Creates a new instance of the specified class,
      * with injection points resolved
@@ -173,9 +155,7 @@ public interface FactoryService {
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T create(@NonNull Class<T> domainClass); // <.>
-    // end::refguide[]
+    <T> T create(@NonNull Class<T> domainClass);
 
     // -- DEPRECATIONS
 
@@ -215,6 +195,4 @@ public interface FactoryService {
         return getOrCreate(domainClass);
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

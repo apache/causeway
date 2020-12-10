@@ -21,38 +21,12 @@ package org.apache.isis.applib.services.xml;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-
 /**
  * This service provides a number of utility services for interacting with XML {@link Document}s
+ * 
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface XmlService {
-
-    // end::refguide[]
-
-    // tag::refguide-3[]
-    class Exception extends RuntimeException {
-
-        private static final long serialVersionUID = 1L;
-
-        public Exception() {
-            super();
-        }
-
-        public Exception(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        public Exception(String message) {
-            super(message);
-        }
-
-        public Exception(Throwable cause) {
-            super(cause);
-        }
-    }
-    // end::refguide-3[]
 
 
     /**
@@ -60,32 +34,24 @@ public interface XmlService {
      *
      * @see #asString(Document)
      */
-    // tag::refguide[]
-    Document asDocument(String xmlStr);                         // <.>
+    Document asDocument(String xmlStr);
 
-    // end::refguide[]
     /**
      * Serializes a {@link Document W3C Document} back into a string.
      *
      * @see #asDocument(String)
      */
-    // tag::refguide[]
-    public String asString(final Document doc);                 // <.>
+    public String asString(final Document doc);
 
-    // end::refguide[]
     /**
      * Convenience method to walk XML document.
      */
-    // tag::refguide[]
-    Element getChildElement(                                    // <.>
+    Element getChildElement(
                     final Element el, final String tagname);
 
-    // end::refguide[]
     /**
      * Convenience method to obtain value of child text node.
      */
-    // tag::refguide[]
-    String getChildTextValue(final Element el);                 // <.>
+    String getChildTextValue(final Element el);
 
 }
-// end::refguide[]

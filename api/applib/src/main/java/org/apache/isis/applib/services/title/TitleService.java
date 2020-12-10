@@ -19,24 +19,22 @@
 
 package org.apache.isis.applib.services.title;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface TitleService {
 
-    // end::refguide[]
     /**
      * Return the title of the object, as rendered in the UI by the
      * Isis viewers.
      */
-    // tag::refguide[]
-    String titleOf(Object domainObject);        // <.>
+    String titleOf(Object domainObject);
 
-    // end::refguide[]
     /**
      * Return the icon name of the object, as rendered in the UI by the
      * Isis viewers.
      */
-    // tag::refguide[]
-    String iconNameOf(Object domainObject);     // <.>
+    String iconNameOf(Object domainObject);
 
 }
-// end::refguide[]

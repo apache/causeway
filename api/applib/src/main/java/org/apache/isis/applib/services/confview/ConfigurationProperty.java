@@ -35,7 +35,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @XmlRootElement(name = "configurationProperty")
 @XmlType(
         propOrder = {
@@ -72,4 +75,3 @@ public class ConfigurationProperty implements Comparable<ConfigurationProperty> 
     }
 
 }
-// end::refguide[]

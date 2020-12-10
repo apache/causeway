@@ -24,16 +24,14 @@ import org.apache.isis.commons.having.HasEnabling;
  * Part of the <i>Publishing SPI</i>. A component to receive pre-post property values 
  * for each changed entity (with publishing enabled).
  *  
- * @since 2.0
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface EntityPropertyChangeSubscriber extends HasEnabling {
 
     /**
      * Receives all pre-post property values for entities (with publishing enabled) 
      * at then end of the transaction during the pre-commit phase.
      */
-    void onChanging(EntityPropertyChange entityPropertyChange);     // <.>
+    void onChanging(EntityPropertyChange entityPropertyChange);
 
 }
-// end::refguide[]

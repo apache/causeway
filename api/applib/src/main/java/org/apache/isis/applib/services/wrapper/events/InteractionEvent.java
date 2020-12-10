@@ -33,6 +33,7 @@ import org.apache.isis.applib.events.EventObjectBase;
  * Many of the interactions are checks for {@link VisibilityEvent visibility},
  * {@link UsabilityEvent usability} and {@link ValidityEvent validity}.
  *
+ * @since 2.0 {@index}
  */
 public abstract class InteractionEvent extends EventObjectBase<Object> {
 

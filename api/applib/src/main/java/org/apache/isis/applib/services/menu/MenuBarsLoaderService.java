@@ -18,25 +18,22 @@
  */
 package org.apache.isis.applib.services.menu;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface MenuBarsLoaderService {
 
-    // end::refguide[]
     /**
      * Whether dynamic reloading of layouts is enabled.
      */
-    // tag::refguide[]
-    boolean supportsReloading();    // <.>
+    boolean supportsReloading();
 
-    // end::refguide[]
     /**
      * Returns a new instance of a {@link BS3MenuBars}, else <tt>null</tt>.
      */
-    // tag::refguide[]
-    BS3MenuBars menuBars();         // <.>
+    BS3MenuBars menuBars();
 
 }
-// end::refguide[]

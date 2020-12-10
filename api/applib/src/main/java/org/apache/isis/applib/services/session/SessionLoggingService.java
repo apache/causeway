@@ -24,8 +24,8 @@ import java.util.Date;
  * Similar to the {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}, 
  * this defines an API to track
  * the status of the current sessions (&quot;users logged on&quot;) on the system.
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface SessionLoggingService {
 
     enum Type {
@@ -44,11 +44,8 @@ public interface SessionLoggingService {
             String username,
             Date date,
             CausedBy causedBy,
-            String sessionId        // <.>
+            String sessionId
     );
-    // end::refguide[]
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

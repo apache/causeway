@@ -37,17 +37,18 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @Named("isisApplib.LayoutServiceMenu")
 @DomainService(objectType = "isisApplib.LayoutServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
-// tag::refguide[]
-// ...
 public class LayoutServiceMenu {
 
-    // end::refguide[]
     public static abstract class ActionDomainEvent
     extends IsisModuleApplib.ActionDomainEvent<LayoutServiceMenu> {}
 
@@ -73,21 +74,17 @@ public class LayoutServiceMenu {
             named = "Download Object Layouts (ZIP)"
             )
     @MemberOrder(sequence="500.400.1")
-    // tag::refguide[]
     // ...
     public Blob downloadLayouts(final LayoutService.Style style) {
-        // end::refguide[]
 
         final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
 
         final byte[] zipBytes = layoutService.toZip(style);
         return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
 
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     public LayoutService.Style default0DownloadLayouts() {
         return LayoutService.Style.NORMALIZED;
     }
@@ -104,20 +101,16 @@ public class LayoutServiceMenu {
             named = "Download Menu Bars Layout (XML)"
             )
     @MemberOrder(sequence="500.400.2")
-    // tag::refguide[]
     // ...
     public Clob downloadMenuBarsLayout(
             @ParameterLayout(named = "File name") final String fileName,
             final MenuBarsService.Type type) {
-        // end::refguide[]
 
         final String xml = layoutService.toMenuBarsXml(type);
 
         return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     public String default0DownloadMenuBarsLayout() {
         return "menubars.layout.xml";
@@ -126,9 +119,7 @@ public class LayoutServiceMenu {
     public MenuBarsService.Type default1DownloadMenuBarsLayout() {
         return MenuBarsService.Type.DEFAULT;
     }
-    // tag::refguide[]
 
     @Inject LayoutService layoutService;
 
 }
-// end::refguide[]

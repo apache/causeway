@@ -20,10 +20,12 @@ package org.apache.isis.applib.services.i18n;
 
 import java.util.Locale;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface LocaleProvider {
 
     Locale getLocale();
 
 }
-// end::refguide[]

@@ -24,19 +24,16 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides the current thread's {@link Interaction}.
- *
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface InteractionContext {
 
-    // end::refguide[]
 
     /**
      * Optionally, the currently active {@link Interaction} for the calling thread.
      */
-    // tag::refguide[]
-    Optional<Interaction> currentInteraction();    // <.>
-    // end::refguide[]
+    Optional<Interaction> currentInteraction();
 
     // -- SHORTCUTS
     
@@ -45,7 +42,5 @@ public interface InteractionContext {
     			.illegalState("No InteractionSession on current thread"));
     }
     
-    // tag::refguide[]
 
 }
-// end::refguide[]

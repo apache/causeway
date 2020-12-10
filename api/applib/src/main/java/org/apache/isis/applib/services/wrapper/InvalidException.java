@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
  *
  * <p>
  *
+ * @since 1.x {@index}
  */
 public class InvalidException extends InteractionException {
 

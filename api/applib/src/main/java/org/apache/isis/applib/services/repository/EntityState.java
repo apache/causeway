@@ -23,15 +23,14 @@ package org.apache.isis.applib.services.repository;
  * 
  * @apiNote use the provided predicates rather then directly referencing the enum names
  *  
- * @since 2.0
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public enum EntityState {
     NOT_PERSISTABLE,
     PERSISTABLE_ATTACHED,
     PERSISTABLE_DETACHED,
     PERSISTABLE_DESTROYED,
-    // end::refguide[]
     ;
 
     public boolean isPersistable() {
@@ -47,6 +46,4 @@ public enum EntityState {
         return this == PERSISTABLE_DESTROYED;
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

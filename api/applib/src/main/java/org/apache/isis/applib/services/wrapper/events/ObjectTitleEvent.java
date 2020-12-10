@@ -28,6 +28,7 @@ import org.apache.isis.applib.Identifier;
  * The {@link #getReason()} will always be <tt>null</tt>; access is always
  * allowed.
  *
+ * @since 1.x {@index}
  */
 public class ObjectTitleEvent extends AccessEvent {
 

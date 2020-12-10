@@ -24,15 +24,16 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.collections._Lists;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 @Value
 public final class TranslatableString {
 
-    // end::refguide[]
     // -- tr, trn (factory methods); constructor
 
     /**
@@ -41,22 +42,18 @@ public final class TranslatableString {
      * @param pattern - pattern for all (singular and plural) form, with <code>${xxx}</code> placeholders
      * @param paramArgs - parameter/argument pairs (string and object, string and object, ...)
      */
-    // tag::refguide[]
     public static TranslatableString tr(
             final String pattern,
             final Object... paramArgs) {
-        // end::refguide[]
 
         if(pattern == null) {
             return null;
         }
         return new TranslatableString(Type.TR, pattern, null, 1, asMap(paramArgs));
 
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * A translatable string with different patterns for singular and plural forms, selected automatically by the number
      *
@@ -65,7 +62,6 @@ public final class TranslatableString {
      * @param number - whether to use singular or plural form when rendering
      * @param paramArgs - parameter/argument pairs (string and object, string and object, ...)
      */
-    // tag::refguide[]
     public static TranslatableString trn(
             final String singularPattern,
             final String pluralPattern,
@@ -74,11 +70,9 @@ public final class TranslatableString {
 
         return new TranslatableString(Type.TRN, singularPattern, pluralPattern, number, asMap(paramArgs));
 
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * Converts a list of objects [a, 1, b, 2] into a map {a -> 1; b -> 2}
      */
@@ -196,7 +190,6 @@ public final class TranslatableString {
      * @param context
      * @return
      */
-    // tag::refguide[]
     public String translate(final TranslationService translationService, final String context) {
 
         final String translatedText =
@@ -206,7 +199,6 @@ public final class TranslatableString {
                 return translated(translatedText);
     }
 
-    // end::refguide[]
     /**
      * The text to be translated; depends on whether {@link #isPluralForm()} and whether to be translated.
      *
@@ -220,11 +212,9 @@ public final class TranslatableString {
      *     {@link Exception#getMessage() message} when only a translatable message has been provided.
      * </p>
      */
-    // tag::refguide[]
     public String getPattern() {
         return !isPluralForm() || number == 1 ? getSingularText() : getPluralText();
     }
-    // end::refguide[]
 
     String translated(final String translatedText) {
         return format(translatedText, argumentsByParameterName);
@@ -287,6 +277,4 @@ public final class TranslatableString {
         return type.toString(this);
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

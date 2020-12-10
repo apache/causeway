@@ -20,13 +20,12 @@ package org.apache.isis.applib.services.routing;
 
 /**
  * Provides the ability to return (and therefore have rendered) an alternative object from an action invocation.
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface RoutingService {
 
-    boolean canRoute(Object original);  // <.>
+    boolean canRoute(Object original);
 
-    Object route(Object original);      // <.>
+    Object route(Object original);
 
 }
-// end::refguide[]

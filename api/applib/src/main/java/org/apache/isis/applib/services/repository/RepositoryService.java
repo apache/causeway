@@ -31,65 +31,55 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x revised for 2.0 {@index}
+ */
 public interface RepositoryService {
 
-    // end::refguide[]
     /**
      * Returns the EntityState of given {@code object}. Returns {@link EntityState#NOT_PERSISTABLE} for {@code object==null}.
      * @param object
      * @return (non-null)
      * @since 2.0
      */
-    // tag::refguide[]
-    EntityState getEntityState(@Nullable Object object);    // <.>
+    EntityState getEntityState(@Nullable Object object);
 
-    // end::refguide[]
     /**
      * Same as {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Object)}; provided as a
      * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T detachedEntity(@NonNull T entity);                // <.>
+    <T> T detachedEntity(@NonNull T entity);
 
-    // end::refguide[]
     /**
      * Persist the specified object (or do nothing if already persistent).
      *
      * @see #isPersistent(Object)
      */
-    // tag::refguide[]
-    <T> T persist(T domainObject);                          // <.>
+    <T> T persist(T domainObject);
 
-    // end::refguide[]
     /**
      * Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
      *
      * @see #persist(Object)
      */
-    // tag::refguide[]
-    <T> T persistAndFlush(T domainObject);                  // <.>
+    <T> T persistAndFlush(T domainObject);
 
-    // end::refguide[]
     /**
      * Deletes the domain object but only if is attached.
      *
      * @param domainObject
      */
-    // tag::refguide[]
-    void remove(Object domainObject);                       // <.>
+    void remove(Object domainObject);
 
-    // end::refguide[]
     /**
      * Deletes the domain object but only if is persistent, and flushes changes to the database.
      *
      * @param domainObject
      */
-    // tag::refguide[]
-    void removeAndFlush(Object domainObject);               // <.>
+    void removeAndFlush(Object domainObject);
 
-    // end::refguide[]
     /**
      * Removes all instances of the domain object.
      *
@@ -97,18 +87,14 @@ public interface RepositoryService {
      *     Intended primarily for testing purposes.
      * </p>
      */
-    // tag::refguide[]
-    <T> void removeAll(Class<T> cls);                       // <.>
+    <T> void removeAll(Class<T> cls);
 
-    // end::refguide[]
     /**
      * As {@link #allInstances(Class, long, long)}, but but returning all instances rather than just those
      *      * within the specified range..
      */
-    // tag::refguide[]
-    <T> List<T> allInstances(Class<T> ofType);              // <.>
+    <T> List<T> allInstances(Class<T> ofType);
 
-    // end::refguide[]
     /**
      * Returns all the instances of the specified type (including subtypes).
      * If the optional range parameters are used, the dataset returned starts
@@ -133,22 +119,18 @@ public interface RepositoryService {
      * @param <T>
      * @return
      */
-    // tag::refguide[]
-    <T> List<T> allInstances(                               // <.>
+    <T> List<T> allInstances(
             Class<T> ofType,
             long start, long count);
 
-    // end::refguide[]
     /**
      * As {@link #allMatches(Class, Predicate, long, long)}, but returning all instances rather than just those
      * within the specified range.
      */
-    // tag::refguide[]
-    <T> List<T> allMatches(                                 // <.>
+    <T> List<T> allMatches(
             Class<T> ofType,
             Predicate<? super T> predicate);
 
-    // end::refguide[]
     /**
      * Returns all the instances of the specified type (including subtypes) that
      * the predicate object accepts. If the optional range parameters are used, the
@@ -175,13 +157,11 @@ public interface RepositoryService {
      * @param <T>
      * @return
      */
-    // tag::refguide[]
-    <T> List<T> allMatches(                                 // <.>
+    <T> List<T> allMatches(
             Class<T> ofType,
             Predicate<? super T> predicate,
             long start, long count);
 
-    // end::refguide[]
     /**
      * Returns all the instances that match the given {@link Query}.
      *
@@ -196,10 +176,8 @@ public interface RepositoryService {
      *     This method is the recommended way of querying for multiple instances.
      * </p>
      */
-    // tag::refguide[]
-    <T> List<T> allMatches(Query<T> query);                 // <.>
+    <T> List<T> allMatches(Query<T> query);
 
-    // end::refguide[]
     /**
      * Find the only instance of the specified type (including subtypes) that
      * has the specified title.
@@ -214,12 +192,10 @@ public interface RepositoryService {
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
      */
-    // tag::refguide[]
-    <T> Optional<T> uniqueMatch(                            // <.>
+    <T> Optional<T> uniqueMatch(
             Class<T> ofType,
             Predicate<T> predicate);
 
-    // end::refguide[]
     /**
      * Find the only instance that matches the provided query.
      *
@@ -234,10 +210,8 @@ public interface RepositoryService {
      *
      * @see #firstMatch(Query)
      */
-    // tag::refguide[]
-    <T> Optional<T> uniqueMatch(Query<T> query);            // <.>
+    <T> Optional<T> uniqueMatch(Query<T> query);
 
-    // end::refguide[]
     /**
      * Find the only instance of the specified type (including subtypes) that
      * has the specified title.
@@ -252,12 +226,10 @@ public interface RepositoryService {
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
      */
-    // tag::refguide[]
-    <T> Optional<T> firstMatch(                             // <.>
+    <T> Optional<T> firstMatch(
             Class<T> ofType,
             Predicate<T> predicate);
 
-    // end::refguide[]
     /**
      * Find the only instance that matches the provided query, if any..
      *
@@ -268,16 +240,12 @@ public interface RepositoryService {
      *
      * @see #firstMatch(Query)
      */
-    // tag::refguide[]
-    <T> Optional<T> firstMatch(Query<T> query);             // <.>
-    // end::refguide[]
+    <T> Optional<T> firstMatch(Query<T> query);
     /**
      * Reloads the pojo.
      */
-    // tag::refguide[]
-    <T> T refresh(T pojo);                                // <.>
+    <T> T refresh(T pojo);
 
-    // end::refguide[]
     /**
      * Detach the entity from the current persistence session.
      *
@@ -286,10 +254,8 @@ public interface RepositoryService {
      *
      * @param entity - to detach
      */
-    // tag::refguide[]
-    <T> T detach(T entity);                            // <.>
+    <T> T detach(T entity);
 
-    // end::refguide[]
 
     // -- DEPRECATIONS
 
@@ -341,7 +307,5 @@ public interface RepositoryService {
         return entityState.isDestroyed();
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

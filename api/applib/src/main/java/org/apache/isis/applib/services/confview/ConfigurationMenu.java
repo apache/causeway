@@ -35,12 +35,12 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 @Named("isisApplib.ConfigurationMenu")
 @DomainService(objectType = "isisApplib.ConfigurationMenu")
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
-// tag::refguide[]
-// ...
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public class ConfigurationMenu {
 
-    // ...
-    // end::refguide[]
     public static abstract class ActionDomainEvent
             extends IsisModuleApplib.ActionDomainEvent<ConfigurationMenu> {}
 
@@ -62,10 +62,8 @@ public class ConfigurationMenu {
             cssClassFa = "fa-wrench"
     )
     @MemberOrder(sequence = "500.900.1")
-    // tag::refguide[]
     public Set<ConfigurationProperty> configuration(){
         return configurationService.allProperties();
     }
 
 }
-// end::refguide[]

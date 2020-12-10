@@ -31,13 +31,16 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isisApplib.SessionLoggingServiceLogging")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("logging")
 @Log4j2
-// tag::refguide[]
 public class SessionLoggingServiceLogging implements SessionLoggingService {
 
     @Override
@@ -66,4 +69,3 @@ public class SessionLoggingServiceLogging implements SessionLoggingService {
         }
     }
 }
-// end::refguide[]

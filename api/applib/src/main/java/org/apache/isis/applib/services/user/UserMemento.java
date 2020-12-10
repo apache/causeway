@@ -34,7 +34,7 @@ import lombok.NonNull;
 
 /**
  * Immutable serializable value holding details about a user and its roles.
- * @since 2.0 {@index}
+ * @since 1.x revised in 2.0 {@index}
  */
 public final class UserMemento implements Serializable {
     

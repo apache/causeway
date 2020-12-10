@@ -19,10 +19,10 @@
 
 package org.apache.isis.applib.services.bookmarkui;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface BookmarkUiService {
-    void clear();                       // <.>
+    void clear();
 }
-// end::refguide[]

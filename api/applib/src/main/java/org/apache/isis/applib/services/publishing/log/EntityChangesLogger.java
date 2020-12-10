@@ -33,6 +33,10 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isisApplib.EntityChangesLogger")
 @Order(OrderPrecedence.LATE)

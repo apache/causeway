@@ -71,69 +71,55 @@ import lombok.val;
  *     the {@link Command} object itself.
  * </p>
  *
+ * 
+ * @since 1.x revised for 2.0 {@index}
  */
-// tag::refguide[]
 public interface Interaction extends HasUniqueId {
 
-    Command getCommand();                  // <.>
+    Command getCommand();
 
-    // end::refguide[]
 
     /**
      * The current (most recently pushed) {@link Execution}.
      */
-    // tag::refguide[]
-    Execution<?,?> getCurrentExecution();        // <.>
+    Execution<?,?> getCurrentExecution();
 
-    // end::refguide[]
     /**
      * The execution that preceded the current one.
      */
-    // tag::refguide[]
-    Execution<?,?> getPriorExecution();          // <.>
+    Execution<?,?> getPriorExecution();
 
-    // end::refguide[]
 
     /**
      * Enumerates the different reasons why multiple occurrences of a certain type might occur within a single
      * (top-level) interaction.
      */
-    // tag::refguide-1[]
     public enum Sequence {
 
-        // end::refguide-1[]
         /**
          * Each interaction is either an action invocation or a property edit.  There could be multiple of these,
          * typically as the result of a nested calls using the {@link WrapperFactory}.  Another reason is
          * support for bulk action invocations within a single transaction.
          */
-        // tag::refguide-1[]
         INTERACTION,
 
-        // end::refguide-1[]
         /**
          * For objects: multiple such could be dirtied and thus published as separate events.  For actions
          * invocations/property edits : multiple sub-invocations could occur if sub-invocations are made through the
          * {@link WrapperFactory}.
          */
-        // tag::refguide-1[]
         PUBLISHED_EVENT,
 
-        // end::refguide-1[]
         /**
          * There may be multiple transactions within a given interaction.
          */
-        // tag::refguide-1[]
         TRANSACTION,
         ;
-        // end::refguide-1[]
 
         public String id() {
             return Interaction.Sequence.class.getName() + "#" + name();
         }
-        // tag::refguide-1[]
     }
-    // end::refguide-1[]
 
     /**
      * Generates numbers in a named sequence.
@@ -141,17 +127,14 @@ public interface Interaction extends HasUniqueId {
      * The name of the sequence can be arbitrary, though note that the framework also uses this capability to
      * generate sequence numbers corresponding to the sequences enumerated by the {@link Sequence} enum.
      */
-    // tag::refguide[]
-    int next(final String sequenceId);      // <.>
+    int next(final String sequenceId);
     
-    // end::refguide[]
 
 
     /**
      * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
      * being made by way of the {@link WrapperFactory}).
      */
-    // tag::refguide-2[]
     public static abstract class Execution<T extends MemberExecutionDto, E extends AbstractDomainEvent<?>> {
 
         @Getter
@@ -161,31 +144,24 @@ public interface Interaction extends HasUniqueId {
         @Getter
         private final String memberIdentifier;
 
-        // end::refguide-2[]
         /**
          * The target of the action invocation.  If this interaction is for a mixin action, then will be the
          * mixed-in target (not the transient mixin itself).
          */
-        // tag::refguide-2[]
         @Getter
         private final Object target;
 
-        // end::refguide-2[]
         /**
          * A human-friendly description of the class of the target object.
          */
-        // tag::refguide-2[]
         @Getter
         private final String targetClass;
 
-        // end::refguide-2[]
         /**
          * The human-friendly name of the action invoked/property edited on the target object.
          */
-        // tag::refguide-2[]
         @Getter
         private final String targetMember;
-        // end::refguide-2[]
 
 
         /**
@@ -220,11 +196,9 @@ public interface Interaction extends HasUniqueId {
         /**
          * The action/property that invoked this action/property edit (if any).
          */
-        // tag::refguide-2[]
         @Getter
         private Execution<?,?> parent;
 
-        // end::refguide-2[]
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
@@ -238,17 +212,13 @@ public interface Interaction extends HasUniqueId {
         /**
          * The actions/property edits made in turn via the {@link WrapperFactory}.
          */
-        // tag::refguide-2[]
         public List<Execution<?,?>> getChildren() {
-            // end::refguide-2[]
 
             return Collections.unmodifiableList(children);
 
-            // tag::refguide-2[]
             // ...
         }
 
-        // end::refguide-2[]
         /**
          * The domain event fired on the {@link EventBusService event bus} representing the execution of
          * this action invocation/property edit.
@@ -259,11 +229,9 @@ public interface Interaction extends HasUniqueId {
          *     {@link AbstractDomainEvent.Phase#EXECUTING executing} phase.
          * </p>
          */
-        // tag::refguide-2[]
         @Getter
         private E event;
 
-        // end::refguide-2[]
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
@@ -274,32 +242,26 @@ public interface Interaction extends HasUniqueId {
         /**
          * The date/time at which this execution started.
          */
-        // tag::refguide-2[]
         @Getter
         private Timestamp startedAt;
 
-        // end::refguide-2[]
         /**
          * The date/time at which this execution completed.
          */
-        // tag::refguide-2[]
         @Getter
         private Timestamp completedAt;
 
         public Timestamp start(
                 final ClockService clockService,
                 final MetricsService metricsService) {
-            // end::refguide-2[]
 
             val startedAt = clockService.getClock().javaSqlTimestamp();
             syncMetrics(When.BEFORE, startedAt, metricsService);
             return startedAt;
 
-            // tag::refguide-2[]
             // ...
         }
 
-        // end::refguide-2[]
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
@@ -320,11 +282,9 @@ public interface Interaction extends HasUniqueId {
          * For <tt>void</tt> methods and for actions returning collections, the value
          * will be <tt>null</tt>.
          */
-        // tag::refguide-2[]
         @Getter
         private Object returned;
 
-        // end::refguide-2[]
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
@@ -332,11 +292,9 @@ public interface Interaction extends HasUniqueId {
             this.returned = returned;
         }
 
-        // tag::refguide-2[]
         @Getter
         private Exception threw;
 
-        // end::refguide-2[]
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
@@ -356,11 +314,9 @@ public interface Interaction extends HasUniqueId {
          *     {@link Execution#getReturned()}) will (obviously) still be null.
          * </p>
          */
-        // tag::refguide-2[]
         @Getter
         private T dto;
 
-        // end::refguide-2[]
         /**
          * <b>NOT API</b>: Set by framework (implementation of {@link MemberExecutor})
          */
@@ -371,10 +327,8 @@ public interface Interaction extends HasUniqueId {
 
         // -- helpers (syncMetrics)
 
-        // tag::refguide-2a[]
         enum When {
             BEFORE {
-                // end::refguide-2a[]
 
                 @Override
                 void syncMetrics(
@@ -388,11 +342,9 @@ public interface Interaction extends HasUniqueId {
                     execution.numberObjectsDirtiedBefore = numberObjectsLoaded;
                 }
 
-                // tag::refguide-2a[]
                 // ....
             },
             AFTER {
-                // end::refguide-2a[]
 
                 @Override void syncMetrics(
                         final Execution<?, ?> execution,
@@ -416,10 +368,8 @@ public interface Interaction extends HasUniqueId {
                     numberObjectsDirtiedFor(objectCountsDto).setAfter(numberObjectsDirtied);
                 }
 
-                // tag::refguide-2a[]
                 // ....
             };
-            // end::refguide-2a[]
 
             // -- helpers
 
@@ -448,9 +398,7 @@ public interface Interaction extends HasUniqueId {
                     final Timestamp timestamp,
                     final int numberObjectsLoaded,
                     final int numberObjectsDirtied);
-            // tag::refguide-2a[]
         }
-        // end::refguide-2a[]
 
         private void syncMetrics(
                 final When when,
@@ -463,16 +411,12 @@ public interface Interaction extends HasUniqueId {
             when.syncMetrics(this, timestamp, numberObjectsLoaded, numberObjectsDirtied);
         }
 
-        // tag::refguide-2[]
     }
-    // end::refguide-2[]
 
-    // tag::refguide-3[]
     public static class ActionInvocation extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
 
         @Getter
         private final List<Object> args;
-        // end::refguide-3[]
 
         public ActionInvocation(
                 final Interaction interaction,
@@ -484,17 +428,13 @@ public interface Interaction extends HasUniqueId {
             super(interaction, InteractionType.ACTION_INVOCATION, memberId, target, targetMember, targetClass);
             this.args = args;
         }
-        // tag::refguide-3[]
         // ...
     }
-    // end::refguide-3[]
 
-    // tag::refguide-4[]
     public static class PropertyEdit extends Execution<PropertyEditDto, PropertyDomainEvent<?,?>> {
 
         @Getter
         private final Object newValue;
-        // end::refguide-4[]
 
         public PropertyEdit(
                 final Interaction interaction,
@@ -507,11 +447,7 @@ public interface Interaction extends HasUniqueId {
             this.newValue = newValue;
         }
 
-        // tag::refguide-4[]
         // ...
     }
-    // end::refguide-4[]
 
-    // tag::refguide[]
 }
-// end::refguide[]

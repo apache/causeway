@@ -20,9 +20,6 @@ package org.apache.isis.applib.services.userreg;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 
@@ -33,21 +30,18 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
  *     The framework provides a default implementation which in turn uses the
  *     {@link org.apache.isis.applib.services.email.EmailService}, namely <code>EmailServiceDefault</code>.
  * </p>
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface EmailNotificationService
         extends Serializable {
 
-    boolean send(EmailRegistrationEvent ev);    // <.>
+    boolean send(EmailRegistrationEvent ev);
 
-    boolean send(PasswordResetEvent ev);        // <.>
+    boolean send(PasswordResetEvent ev);
 
-    // end::refguide[]
     /**
      * Whether this service has been configured and thus available for use.
      */
-    // tag::refguide[]
-    boolean isConfigured();                     // <.>
+    boolean isConfigured();
 
 }
-// end::refguide[]

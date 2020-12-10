@@ -25,9 +25,8 @@ import org.apache.isis.commons.having.HasEnabling;
  * Part of the <i>Publishing SPI</i>. A component to receive {@link Command}s 
  * (with publishing enabled) that just completed.
  *  
- * @since 2.0
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface CommandSubscriber extends HasEnabling {
 
     /**
@@ -38,8 +37,6 @@ public interface CommandSubscriber extends HasEnabling {
      *     for example to persist a representation of it.
      * </p>
      */
-    // tag::refguide[]
-    void onCompleted(Command command);           // <.>
+    void onCompleted(Command command);
 
 }
-// end::refguide[]

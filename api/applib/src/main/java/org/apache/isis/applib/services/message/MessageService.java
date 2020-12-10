@@ -19,13 +19,14 @@
 
 package org.apache.isis.applib.services.message;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public interface MessageService {
 
-    // end::refguide[]
     /**
      * Make the specified message available to the user. Note this will probably
      * be displayed in transitory fashion, so is only suitable for useful but
@@ -35,10 +36,8 @@ public interface MessageService {
      * @see #warnUser(String)
      * @see #raiseError(String)
      */
-    // tag::refguide[]
-    void informUser(String message);            // <.>
+    void informUser(String message);
 
-    // end::refguide[]
     /**
      * Make the specified message available to the user, translated (if possible) to user's locale.
      *
@@ -52,22 +51,18 @@ public interface MessageService {
      * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
-    // tag::refguide[]
-    String informUser(                          // <.>
+    String informUser(
             TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod);
 
-    // end::refguide[]
     /**
      * Override of {@link MessageService#informUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
-    // tag::refguide[]
-    String informUser(                          // <.>
+    String informUser(
             TranslatableString message,
             final String translationContext);
 
-    // end::refguide[]
     /**
      * Warn the user about a situation with the specified message. The container
      * should guarantee to display this warning to the user, and will typically
@@ -77,10 +72,8 @@ public interface MessageService {
      * @see #raiseError(String)
      * @see #informUser(String)
      */
-    // tag::refguide[]
-    void warnUser(String message);              // <.>
+    void warnUser(String message);
 
-    // end::refguide[]
     /**
      * Warn the user about a situation with the specified message, translated (if possible) to user's locale.
      *
@@ -94,22 +87,18 @@ public interface MessageService {
      * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
-    // tag::refguide[]
-    String warnUser(                            // <.>
+    String warnUser(
             TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod);
 
-    // end::refguide[]
     /**
      * Override of {@link MessageService#warnUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
-    // tag::refguide[]
-    String warnUser(                            // <.>
+    String warnUser(
             TranslatableString message,
             final String translationContext);
 
-    // end::refguide[]
     /**
      * Notify the user of an application error with the specified message. Note
      * this will probably be displayed in an alarming fashion, so is only
@@ -119,10 +108,8 @@ public interface MessageService {
      * @see #warnUser(String)
      * @see #informUser(String)
      */
-    // tag::refguide[]
-    void raiseError(String message);            // <.>
+    void raiseError(String message);
 
-    // end::refguide[]
     /**
      * Notify the user of an application error with the specified message, translated (if possible) to user's locale.
      *
@@ -136,20 +123,16 @@ public interface MessageService {
      * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
-    // tag::refguide[]
-    String raiseError(                          // <.>
+    String raiseError(
             TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod);
 
-    // end::refguide[]
     /**
      * Override of {@link MessageService#raiseError(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
-    // tag::refguide[]
-    String raiseError(                          // <.>
+    String raiseError(
             TranslatableString message,
             final String translationContext);
 
 }
-// end::refguide[]

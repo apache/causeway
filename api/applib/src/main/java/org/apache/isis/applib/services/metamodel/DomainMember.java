@@ -18,7 +18,10 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface DomainMember extends Comparable<DomainMember> {
 
     String getClassType();
@@ -42,4 +45,3 @@ public interface DomainMember extends Comparable<DomainMember> {
     String getAutoComplete();
     String getDefault();
 }
-// end::refguide[]

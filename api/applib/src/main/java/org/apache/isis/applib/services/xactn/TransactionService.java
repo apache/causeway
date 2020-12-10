@@ -22,29 +22,24 @@ package org.apache.isis.applib.services.xactn;
 import java.util.function.Supplier;
 
 /**
- * @since 2.0
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface TransactionService {
 
-    // end::refguide[]
     /**
      * When called within an existing transactional boundary returns the unique identifier to the transaction,
      * {@code null} otherwise.
      *
      * @return nullable
      */
-    // tag::refguide[]
-    TransactionId currentTransactionId();                   // <.>
+    TransactionId currentTransactionId();
 
-    // end::refguide[]
     /**
      * @return - the state of the current transaction.  If there is no current transaction, then returns {@link TransactionState#NONE}.
      */
-    // tag::refguide[]
-    TransactionState currentTransactionState();             // <.>
+    TransactionState currentTransactionState();
 
-    // end::refguide[]
     /**
      * Flush all changes to the object store.
      *
@@ -53,41 +48,31 @@ public interface TransactionService {
      * are flushed to the database prior to a subsequent repository query.
      * </p>
      */
-    // tag::refguide[]
-    void flushTransaction();                                // <.>
+    void flushTransaction();
 
-    // end::refguide[]
 
     /**
      * Commits the current transaction (if there is one), and begins a new one.
      *
      * If there is no current transaction, then is a no-op.
      */
-    // tag::refguide[]
-    void nextTransaction();                                 // <.>
+    void nextTransaction();
 
-    // end::refguide[]
     /**
      * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
      * boundary creates a new one.
      *
      * @param task
      */
-    // tag::refguide[]
-    void executeWithinTransaction(Runnable task);           // <.>
+    void executeWithinTransaction(Runnable task);
 
-    // end::refguide[]
     /**
      * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
      * boundary creates a new one.
      *
      * @param task
      */
-    // tag::refguide[]
-    <T> T executeWithinTransaction(Supplier<T> task);       // <.>
-    // end::refguide[]
+    <T> T executeWithinTransaction(Supplier<T> task);
 
 
-    // tag::refguide[]
 }
-// end::refguide[]

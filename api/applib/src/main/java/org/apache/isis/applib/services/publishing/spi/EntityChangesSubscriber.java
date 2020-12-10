@@ -24,7 +24,8 @@ import org.apache.isis.commons.having.HasEnabling;
  * Part of the <i>Publishing SPI</i>. A component to receive the entire set of entities 
  * (with publishing enabled) that are about to change, serializable as ChangesDto.
  *  
- * @since 2.0
+ * 
+ * @since 2.0 {@index}
  */
 public interface EntityChangesSubscriber extends HasEnabling {
 
@@ -32,5 +33,5 @@ public interface EntityChangesSubscriber extends HasEnabling {
      * Receives all changing entities (with publishing enabled) at then end of the a 
      * transaction during the pre-commit phase.
      */
-    void onChanging(EntityChanges entityChanges);      // <.>
+    void onChanging(EntityChanges entityChanges);
 }

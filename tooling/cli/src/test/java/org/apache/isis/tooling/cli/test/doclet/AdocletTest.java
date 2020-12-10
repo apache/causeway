@@ -31,6 +31,7 @@ import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.tooling.cli.doclet.AdocIncludeTagFilter;
 import org.apache.isis.tooling.cli.doclet.AdocletContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 
@@ -72,7 +73,22 @@ class AdocletTest {
     }
     
     @Test //@Disabled
-    void testAdocDocMining() throws IOException {
+    void removeAdocExampleTags() throws IOException {
+        
+        val analyzerConfig = AnalyzerConfigFactory
+                .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
+                .main();
+        
+        analyzerConfig.getSources(JAVA)
+        .stream()
+        .peek(source->System.out.println("parsing source: " + source))
+        .filter(source->source.toString().contains("\\applib\\services\\"))
+        .forEach(AdocIncludeTagFilter::removeAdocExampleTags);
+        
+    }
+    
+    @Test @Disabled
+    void adocDocMining() throws IOException {
         
         val adocFiles = 
                 _Files.searchFiles(
@@ -97,10 +113,11 @@ class AdocletTest {
         .forEach(line->{
             //System.out.println("--- " + file);
             
-            val shortRef = line.substring(line.indexOf("/")+1);
+            //val shortRef = line.substring(line.indexOf("/")+1);
+            val shortRef = line.substring(line.lastIndexOf("/")+1);
             val shortName = shortRef.substring(0, shortRef.lastIndexOf(".java"));
             
-            onShortName.accept(shortName+".java");
+            onShortName.accept(shortName);//+".java");
         });
      
         

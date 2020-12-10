@@ -20,12 +20,12 @@ package org.apache.isis.applib.services.i18n;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface TranslationsResolver {
 
     List<String> readLines(final String file);
 
 }
-// end::refguide[]
