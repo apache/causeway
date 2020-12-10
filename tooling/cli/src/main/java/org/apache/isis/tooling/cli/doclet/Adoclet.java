@@ -19,7 +19,6 @@
 package org.apache.isis.tooling.cli.doclet;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
@@ -148,7 +147,7 @@ public class Adoclet {
             
             doc.setTitle(title);
             return AsciiDocWriter.toString(doc);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "ERROR: " + e.getMessage();
         }

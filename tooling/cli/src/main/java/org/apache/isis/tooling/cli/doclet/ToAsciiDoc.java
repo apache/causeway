@@ -30,10 +30,16 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.javadoc.description.JavadocSnippet;
 
+import org.asciidoctor.ast.Document;
 import org.jsoup.Jsoup;
+
+import org.apache.isis.tooling.javamodel.Javadocs;
+import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
+import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -46,14 +52,24 @@ class ToAsciiDoc {
 
     public String methodDeclaration(final @NonNull MethodDeclaration md) {
         
-        val methodFormat = md.isStatic()
-                ? docletContext.getStaticMethodFormat()
-                : docletContext.getMethodFormat();
+        val isDeprecated = md.getAnnotations().stream()
+                .anyMatch(a->a.getNameAsString().equals("Deprecated"))
+                || md.getJavadoc()
+                    .map(Javadocs::hasDeprecated)
+                    .orElse(false);
         
-        return String.format(methodFormat,
+        val methodNameFormat = isDeprecated
+                ? md.isStatic()
+                        ? docletContext.getDeprecatedStaticMethodNameFormat()
+                        : docletContext.getDeprecatedMethodNameFormat()
+                : md.isStatic()
+                    ? docletContext.getStaticMethodNameFormat()
+                    : docletContext.getMethodNameFormat();
+        
+        return String.format(docletContext.getMethodFormat(),
                 typeParamters(md.getTypeParameters()),
                 type(md.getType()),
-                md.getNameAsString(), 
+                String.format(methodNameFormat, md.getNameAsString()), 
                 md.getParameters()
                     .stream()
                     .map(this::parameterDeclaration)
@@ -105,28 +121,25 @@ class ToAsciiDoc {
                 p.getNameAsString());
     }
     
-    //TODO method java-doc needs further post processing when spanning multiple paragraphs
     public String javadoc(final @NonNull Javadoc javadoc, final int level) {
 
-        val javadocResolved = new StringBuilder();
+        val descriptionAdoc = javadocDescription(javadoc.getDescription(), level);
 
-        javadoc.getDescription().getElements()
-        .forEach(e->{
-
-            if(e instanceof JavadocSnippet) {
-                javadocResolved.append(javadocSnippet((JavadocSnippet)e));
-            } else if(e instanceof JavadocInlineTag) {
-                javadocResolved.append(inlineTag((JavadocInlineTag) e));
-            } else {
-                javadocResolved.append(e.toText());
-            }
-
-        });
-
-        val doc = Jsoup.parse(javadocResolved.toString());
-        return HtmlToAsciiDoc.body(doc.selectFirst("body"), level);
+        Javadocs.streamTagContent(javadoc, "deprecated")
+                .findFirst()
+                .map(javadocDescription->javadocDescription(javadocDescription, level))
+                .ifPresent(deprecatedAdoc->{
+                    
+                    val deprecatedBlock = AsciiDocFactory.block(descriptionAdoc);
+                    
+                    deprecatedBlock.setSource("[red]#_deprecated:_#");
+                    
+                    deprecatedBlock.getBlocks().addAll(deprecatedAdoc.getBlocks());
+                });
+        
+        return AsciiDocWriter.toString(descriptionAdoc);
     }
-
+    
     public String inlineTag(final @NonNull JavadocInlineTag inlineTag) {
 
         val inlineContent = inlineTag.getContent().trim();
@@ -156,6 +169,29 @@ class ToAsciiDoc {
     
     public String javadocSnippet(final @NonNull JavadocSnippet snippet) {
         return snippet.toText();
+    }
+    
+    // -- HELPER
+    
+    private Document javadocDescription(final @NonNull JavadocDescription javadocDescription, final int level) {
+        val javadocResolved = new StringBuilder();
+
+        javadocDescription.getElements()
+        .forEach(e->{
+
+            if(e instanceof JavadocSnippet) {
+                javadocResolved.append(javadocSnippet((JavadocSnippet)e));
+            } else if(e instanceof JavadocInlineTag) {
+                javadocResolved.append(inlineTag((JavadocInlineTag) e));
+            } else {
+                javadocResolved.append(e.toText());
+            }
+
+        });
+
+        val descriptionAsHtml = Jsoup.parse(javadocResolved.toString());
+        val adoc = HtmlToAsciiDoc.body(descriptionAsHtml.selectFirst("body"), level);
+        return adoc;
     }
 
 }

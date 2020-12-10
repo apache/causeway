@@ -53,6 +53,14 @@ public final class Javadocs {
         .orElse(false);
     }
     
+    public static boolean hasDeprecated(
+            final @NonNull Javadoc javadoc) {
+        
+        return streamTagsByName(javadoc, "deprecated") 
+        .findAny()
+        .isPresent();
+    }
+    
     public static boolean hasHidden(
             final @NonNull Javadoc javadoc) {
         

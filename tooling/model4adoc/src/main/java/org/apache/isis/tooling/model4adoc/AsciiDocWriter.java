@@ -35,6 +35,7 @@ import org.asciidoctor.ast.Table;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -55,9 +56,9 @@ public class AsciiDocWriter {
 
     /**
      * the inverse of {@link Asciidoctor#load(String, java.util.Map)}}
-     * @throws IOException 
      */
-    public static String toString(Document doc) throws IOException {
+    @SneakyThrows
+    public static String toString(Document doc) {
         if(doc==null) {
             return "";
         }

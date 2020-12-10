@@ -31,72 +31,14 @@ import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.SneakyThrows;
 import lombok.val;
 
 final class HtmlToAsciiDoc {
     
-    private final static class BlockHelper {
-        private final Stack<StructuralNode> stack = new Stack<StructuralNode>();
-        private final Stack<org.asciidoctor.ast.List> listStack = new Stack<org.asciidoctor.ast.List>();
-
-        BlockHelper(Document adoc){
-            stack.push(adoc);
-        }
-        
-        void pop() {
-            stack.pop();
-        }
-        
-        void popList() {
-            stack.pop();
-            listStack.pop();
-        }
-        
-        Block nextBlock() {
-            val block = AsciiDocFactory.block(stack.peek());
-            stack.push(block);
-            return block;
-        }
-        
-        Block getBlock() {
-            return (stack.peek() instanceof Block)
-                    ? (Block) stack.peek()
-                    : nextBlock();
-        }
-        
-        void blockAppend(String source) {
-            val block = getBlock();
-            block.setSource(block.getSource()+source);
-        }
-        
-        org.asciidoctor.ast.List nextList() {
-            val nextList = AsciiDocFactory.list(stack.peek());
-            stack.push(nextList);
-            listStack.push(nextList);
-            return nextList;
-        }
-
-        ListItem nextListItem() {
-            val list = listStack.isEmpty()
-                    ? nextList()
-                    : listStack.peek();
-            
-            // pop until stack top points to list
-            while(!list.equals(stack.peek())) {
-                stack.pop();
-            }
-            val listItem = AsciiDocFactory.listItem(list);
-            stack.push(listItem);
-            return listItem;
-        }
-        
-    }
-
     @SneakyThrows
-    public static String body(Element body, int level) {
+    public static Document body(Element body, int level) {
         
         val adoc = AsciiDocFactory.doc();
         adoc.setLevel(level);
@@ -169,8 +111,66 @@ final class HtmlToAsciiDoc {
             
         }, body);
 
-        return //adoc.toString();
-               AsciiDocWriter.toString(adoc);
+        return adoc;
+    }
+    
+    // -- HELPER
+    
+    private final static class BlockHelper {
+        private final Stack<StructuralNode> stack = new Stack<StructuralNode>();
+        private final Stack<org.asciidoctor.ast.List> listStack = new Stack<org.asciidoctor.ast.List>();
+
+        BlockHelper(Document adoc){
+            stack.push(adoc);
+        }
+        
+        void pop() {
+            stack.pop();
+        }
+        
+        void popList() {
+            stack.pop();
+            listStack.pop();
+        }
+        
+        Block nextBlock() {
+            val block = AsciiDocFactory.block(stack.peek());
+            stack.push(block);
+            return block;
+        }
+        
+        Block getBlock() {
+            return (stack.peek() instanceof Block)
+                    ? (Block) stack.peek()
+                    : nextBlock();
+        }
+        
+        void blockAppend(String source) {
+            val block = getBlock();
+            block.setSource(block.getSource()+source);
+        }
+        
+        org.asciidoctor.ast.List nextList() {
+            val nextList = AsciiDocFactory.list(stack.peek());
+            stack.push(nextList);
+            listStack.push(nextList);
+            return nextList;
+        }
+
+        ListItem nextListItem() {
+            val list = listStack.isEmpty()
+                    ? nextList()
+                    : listStack.peek();
+            
+            // pop until stack top points to list
+            while(!list.equals(stack.peek())) {
+                stack.pop();
+            }
+            val listItem = AsciiDocFactory.listItem(list);
+            stack.push(listItem);
+            return listItem;
+        }
+        
     }
 
 }

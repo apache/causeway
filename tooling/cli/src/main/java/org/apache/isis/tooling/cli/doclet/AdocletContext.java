@@ -44,11 +44,17 @@ public class AdocletContext {
     @Builder.Default
     private final @NonNull String methodFormat = "`%s %s %s(%s)`";
     
-    /**
-     * method-generic-type | return-type | name | param-list
-     */
     @Builder.Default
-    private final @NonNull String staticMethodFormat = "`%s %s _%s_(%s)`"; 
+    private final @NonNull String methodNameFormat = "[teal]#*%s*#";
+    
+    @Builder.Default
+    private final @NonNull String staticMethodNameFormat = "[teal]#*_%s_*#";
+    
+    @Builder.Default
+    private final @NonNull String deprecatedMethodNameFormat = "[line-through gray]#*%s*#";
+    
+    @Builder.Default
+    private final @NonNull String deprecatedStaticMethodNameFormat = "[line-through gray]#*_%s_*#";
     
     /**
      * method | description
@@ -94,8 +100,7 @@ public class AdocletContext {
     
     public static AdocletContextBuilder compactFormat() {
         return AdocletContext.builder()
-                .methodFormat("`*%3$s*%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
-                .staticMethodFormat("`*_%3$s_*%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
+                .methodFormat("`%3$s%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
                 .methodDescriptionFormat("\n* %s\n%s\n") // method | description
                 .includeJavaSource(false)
                 ;        
