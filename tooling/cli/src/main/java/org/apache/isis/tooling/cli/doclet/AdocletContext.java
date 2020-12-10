@@ -39,10 +39,16 @@ public class AdocletContext {
     private final @NonNull String xrefPageIdFormat;
     
     /**
+     * return-type | name | param-list
+     */
+    @Builder.Default
+    private final @NonNull String methodFormat = "`%s %s(%s)`";
+    
+    /**
      * method-generic-type | return-type | name | param-list
      */
     @Builder.Default
-    private final @NonNull String methodFormat = "`%s %s %s(%s)`";
+    private final @NonNull String genericMethodFormat = "`%s %s %s(%s)`";
     
     @Builder.Default
     private final @NonNull String methodNameFormat = "[teal]#*%s*#";
@@ -100,7 +106,8 @@ public class AdocletContext {
     
     public static AdocletContextBuilder compactFormat() {
         return AdocletContext.builder()
-                .methodFormat("`%3$s%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
+                .methodFormat("`%2$s(%3$s)` : `%1$s`") //  return-type | name | param-list)
+                .genericMethodFormat("`%3$s%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
                 .methodDescriptionFormat("\n* %s\n%s\n") // method | description
                 .includeJavaSource(false)
                 ;        

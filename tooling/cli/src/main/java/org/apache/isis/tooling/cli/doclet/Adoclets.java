@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.cli.doclet;
 
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 
@@ -48,11 +49,20 @@ final class Adoclets {
     }
     
     /**
+     * Returns given {@link ConstructorDeclaration} as normal text, without formatting.
+     */
+    static String toNormalizedConstructorDeclaration(final @NonNull ConstructorDeclaration cd) {
+        return cd.getDeclarationAsString(false, false, true).trim();
+    }
+    
+    /**
      * Returns given {@link MethodDeclaration} as normal text, without formatting.
      */
     static String toNormalizedMethodDeclaration(final @NonNull MethodDeclaration md) {
         return md.getDeclarationAsString(false, false, true).trim();
     }
+    
+    
     
     
 }

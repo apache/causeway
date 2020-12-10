@@ -4,3 +4,11 @@
 
 Immutable serializable value held by xref:system:generated:index/UserMemento.adoc[UserMemento] .
 
+* `[teal]#*RoleMemento*#(String name)` : `<self>`
++
+Creates a new role with the specified name. Description is left blank.
+
+
+* `[teal]#*RoleMemento*#(String name, String description)` : `<self>`
++
+Creates a new role with the specified name and description.

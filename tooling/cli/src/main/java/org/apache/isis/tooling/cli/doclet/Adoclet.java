@@ -92,6 +92,11 @@ public class Adoclet {
                 .filter(Javadocs::presentAndNotHidden)
                 .collect(Can.toCan());
         
+        val cds = TypeDeclarations.streamPublicConstructorDeclarations(td)
+                .filter(Javadocs::presentAndNotHidden)
+                .collect(Can.toCan());
+        
+        
         val toAdocConverter = ToAsciiDoc.of(docletContext);
 
         // -- intro
@@ -110,6 +115,14 @@ public class Adoclet {
                     getDeclarationKeyword(), 
                     td.getName().asString()));
             
+            
+            cds.forEach(cd->{
+                
+                java.append(String.format("\n  %s // <.>\n", 
+                        Adoclets.toNormalizedConstructorDeclaration(cd)));
+                
+            });
+            
             mds.forEach(md->{
     
                 java.append(String.format("\n  %s // <.>\n", 
@@ -123,9 +136,20 @@ public class Adoclet {
                     AsciiDocFactory.SourceFactory.java(java.toString(), td.getName().asString()));
         }
             
-        // -- method descriptions
+        // -- constructor and method descriptions
         
         val methodDescriptions = new StringBuilder();
+        
+        cds.forEach(cd->{
+            
+            cd.getJavadoc()
+            .ifPresent(javadoc->{
+                methodDescriptions.append(String.format(docletContext.getMethodDescriptionFormat(),
+                        toAdocConverter.constructorDeclaration(cd),
+                        toAdocConverter.javadoc(javadoc, 1)));
+            });
+            
+        });
         
         mds.forEach(md->{
             

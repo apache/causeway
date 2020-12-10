@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -37,6 +38,8 @@ import com.github.javaparser.javadoc.description.JavadocSnippet;
 import org.asciidoctor.ast.Document;
 import org.jsoup.Jsoup;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.tooling.javamodel.Javadocs;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
@@ -49,6 +52,40 @@ import lombok.val;
 class ToAsciiDoc {
 
     private final AdocletContext docletContext;
+    
+    public String constructorDeclaration(final @NonNull ConstructorDeclaration cd) {
+        val isDeprecated = cd.getAnnotations().stream()
+                .anyMatch(a->a.getNameAsString().equals("Deprecated"))
+                || cd.getJavadoc()
+                    .map(Javadocs::hasDeprecated)
+                    .orElse(false);
+        
+        val methodNameFormat = isDeprecated
+                ? cd.isStatic()
+                        ? docletContext.getDeprecatedStaticMethodNameFormat()
+                        : docletContext.getDeprecatedMethodNameFormat()
+                : cd.isStatic()
+                    ? docletContext.getStaticMethodNameFormat()
+                    : docletContext.getMethodNameFormat();
+
+        val isGenericMethod = cd.getTypeParameters().isNonEmpty();
+        
+        val methodFormat = isGenericMethod
+                ? docletContext.getGenericMethodFormat()
+                : docletContext.getMethodFormat();
+        
+        val args = Can.<Object>of(
+                isGenericMethod ? typeParamters(cd.getTypeParameters()) : null,  // Cans do ignored null 
+                "<self>",
+                String.format(methodNameFormat, cd.getNameAsString()), 
+                cd.getParameters()
+                    .stream()
+                    .map(this::parameterDeclaration)
+                    .collect(Collectors.joining(", "))
+                );
+       
+        return String.format(methodFormat, args.toArray(_Constants.emptyObjects));
+    }
 
     public String methodDeclaration(final @NonNull MethodDeclaration md) {
         
@@ -65,16 +102,27 @@ class ToAsciiDoc {
                 : md.isStatic()
                     ? docletContext.getStaticMethodNameFormat()
                     : docletContext.getMethodNameFormat();
+
+        val isGenericMethod = md.getTypeParameters().isNonEmpty();
         
-        return String.format(docletContext.getMethodFormat(),
-                typeParamters(md.getTypeParameters()),
+        val methodFormat = isGenericMethod
+                ? docletContext.getGenericMethodFormat()
+                : docletContext.getMethodFormat();
+        
+        val args = Can.<Object>of(
+                isGenericMethod ? typeParamters(md.getTypeParameters()) : null,  // Cans do ignored null 
                 type(md.getType()),
                 String.format(methodNameFormat, md.getNameAsString()), 
                 md.getParameters()
                     .stream()
                     .map(this::parameterDeclaration)
-                    .collect(Collectors.joining(", ")));
+                    .collect(Collectors.joining(", "))
+                );
+       
+        return String.format(methodFormat, args.toArray(_Constants.emptyObjects));
+                
     }
+
     
     public String typeParamters(final @Nullable NodeList<TypeParameter> typeParamters) {
         if(typeParamters == null

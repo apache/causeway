@@ -20,6 +20,7 @@ package org.apache.isis.tooling.javamodel;
 
 import java.util.stream.Stream;
 
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 
@@ -27,6 +28,17 @@ import lombok.NonNull;
 
 public final class TypeDeclarations {
 
+    public static <T> Stream<ConstructorDeclaration> streamConstructorDeclarations(
+            final @NonNull TypeDeclaration<?> typeDeclaration) {
+        return typeDeclaration.getConstructors().stream();
+    }
+    
+    public static <T> Stream<ConstructorDeclaration> streamPublicConstructorDeclarations(
+            final @NonNull TypeDeclaration<?> typeDeclaration) {
+        return streamConstructorDeclarations(typeDeclaration)
+                .filter(ConstructorDeclarations::isEffectivePublic);
+    }
+    
     public static <T> Stream<MethodDeclaration> streamMethodDeclarations(
             final @NonNull TypeDeclaration<?> typeDeclaration) {
         return typeDeclaration.getMethods().stream();
@@ -37,6 +49,9 @@ public final class TypeDeclarations {
         return streamMethodDeclarations(typeDeclaration)
                 .filter(MethodDeclarations::isEffectivePublic);
     }
+    
+    
+    
     
 
     
