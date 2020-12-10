@@ -16,14 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.test.doclet.samples;
+package org.apache.isis.tooling.cli.test.doclet;
 
-/**
- * If {@link SudoService} has been used to temporarily override the user and/or roles, 
- * then the {@link UserService} will report the overridden values.
- *
- * @since 2.0 {@index}
- */
-public interface SudoService {
+import java.io.File;
 
+final class ProjectSampler {
+
+    static File local() {
+        return new File("./").getAbsoluteFile();
+    }
+    
+    static File apacheIsisRoot() {
+        return new File("./").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
+    }
+    
+    static File apacheIsisApplib() {
+        return new File(apacheIsisRoot(), "api/applib");
+    }
+    
 }

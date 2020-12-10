@@ -18,8 +18,6 @@
  */
 package org.apache.isis.tooling.cli.test.doclet;
 
-import java.io.File;
-
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.tooling.cli.doclet.AdocletContext;
@@ -35,9 +33,10 @@ class AdocletTest {
 
     @Test
     void testJavaDocMining() {
-
-        val projDir = new File("./").getAbsoluteFile();
-        val analyzerConfig = AnalyzerConfigFactory.mavenTest(projDir, Language.JAVA).main();
+        
+        val analyzerConfig = AnalyzerConfigFactory
+                .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
+                .main();
 
         val docletContext = AdocletContext
                 //.javaSourceWithFootNotesFormat()
