@@ -60,31 +60,30 @@ class ToAsciiDoc {
                     .map(Javadocs::hasDeprecated)
                     .orElse(false);
         
-        val methodNameFormat = isDeprecated
+        val memberNameFormat = isDeprecated
                 ? cd.isStatic()
-                        ? docletContext.getDeprecatedStaticMethodNameFormat()
-                        : docletContext.getDeprecatedMethodNameFormat()
+                        ? docletContext.getDeprecatedStaticMemberNameFormat()
+                        : docletContext.getDeprecatedMemberNameFormat()
                 : cd.isStatic()
-                    ? docletContext.getStaticMethodNameFormat()
-                    : docletContext.getMethodNameFormat();
+                    ? docletContext.getStaticMemberNameFormat()
+                    : docletContext.getMemberNameFormat();
 
-        val isGenericMethod = cd.getTypeParameters().isNonEmpty();
+        val isGenericMember = cd.getTypeParameters().isNonEmpty();
         
-        val methodFormat = isGenericMethod
-                ? docletContext.getGenericMethodFormat()
-                : docletContext.getMethodFormat();
+        val constructorFormat = isGenericMember
+                ? docletContext.getGenericConstructorFormat()
+                : docletContext.getConstructorFormat();
         
         val args = Can.<Object>of(
-                isGenericMethod ? typeParamters(cd.getTypeParameters()) : null,  // Cans do ignored null 
-                "<self>",
-                String.format(methodNameFormat, cd.getNameAsString()), 
+                isGenericMember ? typeParamters(cd.getTypeParameters()) : null,  // Cans do ignored null 
+                String.format(memberNameFormat, cd.getNameAsString()), 
                 cd.getParameters()
                     .stream()
                     .map(this::parameterDeclaration)
                     .collect(Collectors.joining(", "))
                 );
        
-        return String.format(methodFormat, args.toArray(_Constants.emptyObjects));
+        return String.format(constructorFormat, args.toArray(_Constants.emptyObjects));
     }
 
     public String methodDeclaration(final @NonNull MethodDeclaration md) {
@@ -95,24 +94,24 @@ class ToAsciiDoc {
                     .map(Javadocs::hasDeprecated)
                     .orElse(false);
         
-        val methodNameFormat = isDeprecated
+        val memberNameFormat = isDeprecated
                 ? md.isStatic()
-                        ? docletContext.getDeprecatedStaticMethodNameFormat()
-                        : docletContext.getDeprecatedMethodNameFormat()
+                        ? docletContext.getDeprecatedStaticMemberNameFormat()
+                        : docletContext.getDeprecatedMemberNameFormat()
                 : md.isStatic()
-                    ? docletContext.getStaticMethodNameFormat()
-                    : docletContext.getMethodNameFormat();
+                    ? docletContext.getStaticMemberNameFormat()
+                    : docletContext.getMemberNameFormat();
 
-        val isGenericMethod = md.getTypeParameters().isNonEmpty();
+        val isGenericMember = md.getTypeParameters().isNonEmpty();
         
-        val methodFormat = isGenericMethod
+        val methodFormat = isGenericMember
                 ? docletContext.getGenericMethodFormat()
                 : docletContext.getMethodFormat();
         
         val args = Can.<Object>of(
-                isGenericMethod ? typeParamters(md.getTypeParameters()) : null,  // Cans do ignored null 
+                isGenericMember ? typeParamters(md.getTypeParameters()) : null,  // Cans do ignored null 
                 type(md.getType()),
-                String.format(methodNameFormat, md.getNameAsString()), 
+                String.format(memberNameFormat, md.getNameAsString()), 
                 md.getParameters()
                     .stream()
                     .map(this::parameterDeclaration)
@@ -171,21 +170,23 @@ class ToAsciiDoc {
     
     public String javadoc(final @NonNull Javadoc javadoc, final int level) {
 
-        val descriptionAdoc = javadocDescription(javadoc.getDescription(), level);
-
-        Javadocs.streamTagContent(javadoc, "deprecated")
-                .findFirst()
-                .map(javadocDescription->javadocDescription(javadocDescription, level))
-                .ifPresent(deprecatedAdoc->{
-                    
-                    val deprecatedBlock = AsciiDocFactory.block(descriptionAdoc);
-                    
-                    deprecatedBlock.setSource("[red]#_deprecated:_#");
-                    
-                    deprecatedBlock.getBlocks().addAll(deprecatedAdoc.getBlocks());
-                });
+        val adoc = AsciiDocFactory.doc();
         
-        return AsciiDocWriter.toString(descriptionAdoc);
+        Javadocs.streamTagContent(javadoc, "deprecated")
+        .findFirst()
+        .map(javadocDescription->javadocDescription(javadocDescription, level))
+        .ifPresent(deprecatedAdoc->{
+            
+            val deprecatedBlock = AsciiDocFactory.block(adoc);
+            deprecatedBlock.setSource("+\n[red]#_deprecated:_#");
+            deprecatedBlock.getBlocks().addAll(deprecatedAdoc.getBlocks());
+        });
+        
+        val descriptionAdoc = javadocDescription(javadoc.getDescription(), level);
+        
+        adoc.getBlocks().addAll(descriptionAdoc.getBlocks());
+
+        return AsciiDocWriter.toString(adoc);
     }
     
     public String inlineTag(final @NonNull JavadocInlineTag inlineTag) {

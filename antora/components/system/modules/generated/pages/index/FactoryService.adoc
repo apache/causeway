@@ -53,6 +53,10 @@ Creates a new instance of the specified class, with injection points resolved an
 
 * `[line-through gray]#*instantiate*#<T>(Class<T> domainClass)` : `T`
 +
+[red]#_deprecated:_#
++
+with semantic changes since 2.0 previous behavior is no longer guaranteed, instead consider use of @ _#detachedEntity(Class)_ or _#getOrCreate(Class)_ if applicable
++
 Creates a new instance of the specified class, but does not persist it.
 +
 It is recommended that the object be initially instantiated using this method, though the framework will also handle the case when the object is simply _new()_ ed up. The benefits of using _#instantiate(Class)_ are:
@@ -64,7 +68,3 @@ It is recommended that the object be initially instantiated using this method, t
 ** the `created()` callback will not be called.
 +
 The corollary is: if your code never uses `default _Xxx_ ()` supporting methods or the `created()` callback, then you can alternatively just _new()_ up the object rather than call this method.
-+
-[red]#_deprecated:_#
-+
-with semantic changes since 2.0 previous behavior is no longer guaranteed, instead consider use of @ _#detachedEntity(Class)_ or _#getOrCreate(Class)_ if applicable

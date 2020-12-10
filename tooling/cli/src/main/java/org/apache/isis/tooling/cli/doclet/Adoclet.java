@@ -144,7 +144,7 @@ public class Adoclet {
             
             cd.getJavadoc()
             .ifPresent(javadoc->{
-                methodDescriptions.append(String.format(docletContext.getMethodDescriptionFormat(),
+                methodDescriptions.append(String.format(docletContext.getMemberDescriptionFormat(),
                         toAdocConverter.constructorDeclaration(cd),
                         toAdocConverter.javadoc(javadoc, 1)));
             });
@@ -155,7 +155,7 @@ public class Adoclet {
             
             md.getJavadoc()
             .ifPresent(javadoc->{
-                methodDescriptions.append(String.format(docletContext.getMethodDescriptionFormat(),
+                methodDescriptions.append(String.format(docletContext.getMemberDescriptionFormat(),
                         toAdocConverter.methodDeclaration(md),
                         toAdocConverter.javadoc(javadoc, 1)));
             });

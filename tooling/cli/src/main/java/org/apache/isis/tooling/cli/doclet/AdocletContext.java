@@ -39,6 +39,18 @@ public class AdocletContext {
     private final @NonNull String xrefPageIdFormat;
     
     /**
+     * name | param-list
+     */
+    @Builder.Default
+    private final @NonNull String constructorFormat = "`%s(%s)`";
+    
+    /**
+     * constructor-generic-type | name | param-list
+     */
+    @Builder.Default
+    private final @NonNull String genericConstructorFormat = "`%s %s(%s)`";
+    
+    /**
      * return-type | name | param-list
      */
     @Builder.Default
@@ -51,22 +63,22 @@ public class AdocletContext {
     private final @NonNull String genericMethodFormat = "`%s %s %s(%s)`";
     
     @Builder.Default
-    private final @NonNull String methodNameFormat = "[teal]#*%s*#";
+    private final @NonNull String memberNameFormat = "[teal]#*%s*#";
     
     @Builder.Default
-    private final @NonNull String staticMethodNameFormat = "[teal]#*_%s_*#";
+    private final @NonNull String staticMemberNameFormat = "[teal]#*_%s_*#";
     
     @Builder.Default
-    private final @NonNull String deprecatedMethodNameFormat = "[line-through gray]#*%s*#";
+    private final @NonNull String deprecatedMemberNameFormat = "[line-through gray]#*%s*#";
     
     @Builder.Default
-    private final @NonNull String deprecatedStaticMethodNameFormat = "[line-through gray]#*_%s_*#";
+    private final @NonNull String deprecatedStaticMemberNameFormat = "[line-through gray]#*_%s_*#";
     
     /**
      * method | description
      */
     @Builder.Default
-    private final @NonNull String methodDescriptionFormat = "\n<.> %s %s\n";
+    private final @NonNull String memberDescriptionFormat = "\n<.> %s %s\n";
     
     @Builder.Default
     private final boolean includeJavaSource = true;
@@ -106,9 +118,11 @@ public class AdocletContext {
     
     public static AdocletContextBuilder compactFormat() {
         return AdocletContext.builder()
+                .constructorFormat("`%1$s(%2$s)`") // name | param-list)
+                .genericConstructorFormat("`%2$s%1$s(%3$s)`") //  method-generic-type | name | param-list)
                 .methodFormat("`%2$s(%3$s)` : `%1$s`") //  return-type | name | param-list)
                 .genericMethodFormat("`%3$s%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
-                .methodDescriptionFormat("\n* %s\n%s\n") // method | description
+                .memberDescriptionFormat("\n* %s\n%s\n") // method | description
                 .includeJavaSource(false)
                 ;        
     }
