@@ -28,6 +28,11 @@ import org.apache.isis.commons.exceptions.IsisException;
 
 import lombok.NonNull;
 
+/**
+ * 
+ * @since 2.x {@index}
+ *
+ */
 // tag::refguide[]
 public interface FactoryService {
 

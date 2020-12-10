@@ -46,12 +46,26 @@ public final class CompilationUnits {
     public static <T> Stream<ClassOrInterfaceDeclaration> streamPublicTypeDeclarations(
             final @NonNull CompilationUnit compilationUnit) {
         
-        val type = compilationUnit.getPrimaryType().orElse(null);
-        if(type==null
-                || !type.isClassOrInterfaceDeclaration()) {
+        val type = compilationUnit.getPrimaryType()
+                .orElseGet(()->
+                    compilationUnit.getTypes()
+                    .getFirst()
+                    .orElse(null));
+        
+        if(type==null) {
+            System.err.println("could not find a type in CompilationUnit ...\n" + 
+                    compilationUnit);
             return Stream.empty();
         }
-        return Stream.of((ClassOrInterfaceDeclaration)type);
+        if(type.isEnumDeclaration()) {
+            // as of yet silently ignore
+            return Stream.empty();
+        }
+        if(type.isClassOrInterfaceDeclaration()) {
+            return Stream.of((ClassOrInterfaceDeclaration)type);   
+        }
+        // as of yet silently ignore
+        return Stream.empty();        
     }
 
     

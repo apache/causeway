@@ -45,9 +45,19 @@ public class Adoclet {
 
     public static Stream<Adoclet> parse(final @NonNull File sourceFile) {
 
+        if("package-info.java".equals(sourceFile.getName())) {
+            // ignore package files
+            return Stream.empty();
+        }
+        
         try {
-            val cu = StaticJavaParser.parse(sourceFile);
+            
+            // remove 'tag::' and 'end::' lines
+            // remove '// <.>' foot note references
+            val source = AdocIncludeTagFilter.read(sourceFile);
 
+            val cu = StaticJavaParser.parse(source);
+            
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamPublicTypeDeclarations)
             .filter(Adoclets::hasIndexDirective)

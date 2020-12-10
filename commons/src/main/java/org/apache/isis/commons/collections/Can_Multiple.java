@@ -27,9 +27,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 
@@ -104,6 +107,24 @@ final class Can_Multiple<T> implements Can<T> {
     public Iterator<T> iterator() {
         return Collections.unmodifiableList(elements).iterator();
     }
+    
+    @Override
+    public Can<T> filter(@Nullable Predicate<? super T> predicate) {
+        if(predicate==null) {
+            return this; // identity
+        }
+        val filteredElements = 
+                stream()
+                .filter(predicate)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        // optimization for the case when the filter accepted all
+        if(filteredElements.size()==size()) {
+            return this; // identity
+        }
+        return Can.ofCollection(filteredElements);
+    }
+
     
     @Override
     public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {

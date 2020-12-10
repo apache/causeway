@@ -26,8 +26,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -88,6 +91,11 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public Iterator<T> iterator() {
         return Collections.<T>emptyList().iterator();
+    }
+    
+    @Override
+    public Can<T> filter(@Nullable Predicate<? super T> predicate) {
+        return this; // identity
     }
     
     @Override

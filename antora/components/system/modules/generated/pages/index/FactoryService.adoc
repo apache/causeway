@@ -4,35 +4,63 @@
 
 
 
+* `*getOrCreate*(Class<T> requiredType)` : `T`
++
+General purpose factory method, to automatically get or create an instance of _requiredType_ .
++
+Maps onto one of the specialized factory methods _#get(Class)_ or _#create(Class)_ based on the type's meta-data.
+
+
+* `*get*(Class<T> requiredType)` : `T`
++
+Gets an instance (possibly shared or independent) of the specified _requiredType_ , with injection points resolved and any life-cycle callback processed.
+
+
+* `*detachedEntity*(Class<T> domainClass)` : `T`
++
+Creates a new detached entity instance, with injection points resolved and defaults applied.
+
+
+* `*detachedEntity*(T entity)` : `T`
++
+Creates a new detached entity instance, with injection points resolved.
+
+
+* `*mixin*(Class<T> mixinClass, Object mixedIn)` : `T`
++
+Creates a new Mixin instance, with injection points resolved.
+
+
+* `*viewModel*(Class<T> viewModelClass, String mementoStr)` : `T`
++
+Creates a new ViewModel instance, with injection points resolved, and initialized according to the given _mementoStr_
+
+
+* `*viewModel*(Class<T> viewModelClass)` : `T`
++
+Creates a new ViewModel instance, with injection points resolved and defaults applied.
+
+
+* `*viewModel*(T viewModel)` : `T`
++
+Resolves injection points for given ViewModel instance.
+
+
+* `*create*(Class<T> domainClass)` : `T`
++
+Creates a new instance of the specified class, with injection points resolved and defaults applied.
 
 
 * `*instantiate*(Class<T> domainClass)` : `T`
 +
 Creates a new instance of the specified class, but does not persist it.
-
-
-
-It is recommended that the object be initially instantiated using
-this method, though the framework will also handle the case when
-the object is simply <i>new()</i>ed up.  The benefits of using
- _#instantiate(Class)_  are:
-
-
-<ul>
-<li>any services will be injected into the object immediately
-    (otherwise they will not be injected until the framework
-    becomes aware of the object, typically when it is
-     _RepositoryService#persist(Object) persist_ ed</li>
-<li>the default value for any properties (usually as specified by
-    <tt>default<i>Xxx</i>()</tt> supporting methods) will (since 2.0) be
-    used</li>
-<li>the <tt>created()</tt> callback will not be called.
-</ul>
-
-
-
-The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt>
-supporting methods or the <tt>created()</tt> callback, then you can
-alternatively just <i>new()</i> up the object rather than call this
-method.
-
++
+It is recommended that the object be initially instantiated using this method, though the framework will also handle the case when the object is simply _new()_ ed up. The benefits of using _#instantiate(Class)_ are:
++
+** any services will be injected into the object immediately (otherwise they will not be injected until the framework becomes aware of the object, typically when it is _RepositoryService#persist(Object) persist_ ed
++
+** the default value for any properties (usually as specified by `default _Xxx_ ()` supporting methods) will (since 2.0) be used
++
+** the `created()` callback will not be called.
++
+The corollary is: if your code never uses `default _Xxx_ ()` supporting methods or the `created()` callback, then you can alternatively just _new()_ up the object rather than call this method.

@@ -28,8 +28,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -90,6 +93,16 @@ final class Can_Singleton<T> implements Can<T> {
         return Collections.singletonList(element).iterator();
     }
 
+    @Override
+    public Can<T> filter(@Nullable Predicate<? super T> predicate) {
+        if(predicate==null) {
+            return this; // identity
+        }
+        return predicate.test(element)
+                ? this // identity
+                : Can.empty();
+    }
+    
     @Override
     public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
         action.accept(element, zippedIn.iterator().next());

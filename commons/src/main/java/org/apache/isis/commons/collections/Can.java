@@ -324,31 +324,7 @@ public interface Can<T> extends Iterable<T>, Serializable {
      * @param predicate - if absent accepts all
      * @return non-null
      */
-    public default Can<T> filter(@Nullable Predicate<? super T> predicate) {
-        if(predicate==null || isEmpty()) {
-            return this;
-        }
-
-        // optimization for the singleton case
-        if(isCardinalityOne()) {
-            val singleton = getSingleton().get();
-            return predicate.test(singleton)
-                    ? this
-                            : empty();
-        }
-
-        val filteredElements = 
-                stream()
-                .filter(predicate)
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        // optimization for the case when the filter accepted all
-        if(filteredElements.size()==size()) {
-            return this;
-        }
-
-        return ofCollection(filteredElements);
-    }
+    public Can<T> filter(@Nullable Predicate<? super T> predicate);
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}

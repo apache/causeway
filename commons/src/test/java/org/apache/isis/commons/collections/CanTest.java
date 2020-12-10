@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.SerializationTester;
-import org.apache.isis.commons.collections.Can;
 
 class CanTest {
 
@@ -54,5 +53,45 @@ class CanTest {
     void multiCan_shouldBeSerializable() {
         SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi", "there"));
     }
+    
+    // -- FILTERING
+    
+    @Test
+    void emptyCanFilter_isIdentity() {
+        assertEquals(Can.<String>empty(), Can.<String>empty().filter(x->false));
+        assertEquals(Can.<String>empty(), Can.<String>empty().filter(null));
+    }
+    
+    @Test
+    void singletonCanFilter_whenAccept_isIdentity() {
+        assertEquals(Can.<String>of("hi"), Can.<String>of("hi").filter(x->true));
+        assertEquals(Can.<String>of("hi"), Can.<String>of("hi").filter(null));
+    }
+    
+    @Test
+    void canFilter_whenNotAccept_isEmpty() {
+        assertEquals(Can.<String>empty(), Can.<String>of("hi").filter(x->false));
+        assertEquals(Can.<String>empty(), Can.<String>of("hi", "there").filter(x->false));
+    }
+    
+    @Test
+    void multiCanFilter_whenAccept_isIdentity() {
+        assertEquals(Can.<String>of("hi", "there"), Can.<String>of("hi", "there").filter(x->true));
+        assertEquals(Can.<String>of("hi", "there"), Can.<String>of("hi", "there").filter(null));
+    }
+    
+    @Test
+    void multiCanFilter_whenAcceptOne_isDifferentCan() {
+        assertEquals(Can.<String>of("there"), Can.<String>of("hi", "there").filter("there"::equals));
+        assertEquals(Can.<String>of("hi"), Can.<String>of("hi", "there").filter("hi"::equals));
+        assertEquals(Can.<String>of("hello"), Can.<String>of("hi", "hello", "there").filter("hello"::equals));
+    }
+    
+    @Test
+    void multiCanFilter_whenAcceptTwo_isDifferentCan() {
+        assertEquals(Can.<String>of("hi", "hello"), Can.<String>of("hi", "hello", "there").filter(x->x.startsWith("h")));
+    }
+    
+    
 
 }
