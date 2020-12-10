@@ -20,10 +20,15 @@ package org.apache.isis.tooling.cli.doclet;
 
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.javadoc.description.JavadocSnippet;
@@ -45,12 +50,25 @@ class ToAsciiDoc {
                 ? docletContext.getStaticMethodFormat()
                 : docletContext.getMethodFormat();
         
-        return String.format(methodFormat, 
+        return String.format(methodFormat,
+                typeParamters(md.getTypeParameters()),
                 type(md.getType()),
                 md.getNameAsString(), 
                 md.getParameters()
+                    .stream()
+                    .map(this::parameterDeclaration)
+                    .collect(Collectors.joining(", ")));
+    }
+    
+    public String typeParamters(final @Nullable NodeList<TypeParameter> typeParamters) {
+        if(typeParamters == null
+                || typeParamters.isEmpty()) {
+            return "";
+        }
+        return String.format("<%s>", typeParamters
                 .stream()
-                .map(this::parameterDeclaration)
+                .map(TypeParameter::getName)
+                .map(SimpleName::asString)
                 .collect(Collectors.joining(", ")));
     }
     

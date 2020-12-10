@@ -38,14 +38,23 @@ public class AdocletContext {
 
     private final @NonNull String xrefPageIdFormat;
     
+    /**
+     * method-generic-type | return-type | name | param-list
+     */
     @Builder.Default
-    private final @NonNull String methodFormat = "`%s %s(%s)`"; // return-type | name | param-list
+    private final @NonNull String methodFormat = "`%s %s %s(%s)`";
     
+    /**
+     * method-generic-type | return-type | name | param-list
+     */
     @Builder.Default
-    private final @NonNull String staticMethodFormat = "`%s _%s_(%s)`"; // return-type | name | param-list
+    private final @NonNull String staticMethodFormat = "`%s %s _%s_(%s)`"; 
     
+    /**
+     * method | description
+     */
     @Builder.Default
-    private final @NonNull String methodDescriptionFormat = "\n<.> %s %s\n"; // method | description
+    private final @NonNull String methodDescriptionFormat = "\n<.> %s %s\n";
     
     @Builder.Default
     private final boolean includeJavaSource = true;
@@ -79,10 +88,14 @@ public class AdocletContext {
         return Optional.ofNullable(adocletIndex.get(key));
     }
     
+    public static AdocletContextBuilder javaSourceWithFootNotesFormat() {
+        return AdocletContext.builder();
+    }
+    
     public static AdocletContextBuilder compactFormat() {
         return AdocletContext.builder()
-                .methodFormat("`*%2$s*(%3$s)` : `%1$s`") // return-type | name | param-list)
-                .staticMethodFormat("`*_%2$s_*(%3$s)` : `%1$s`") // return-type | name | param-list)
+                .methodFormat("`*%3$s*%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
+                .staticMethodFormat("`*_%3$s_*%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
                 .methodDescriptionFormat("\n* %s\n%s\n") // method | description
                 .includeJavaSource(false)
                 ;        
