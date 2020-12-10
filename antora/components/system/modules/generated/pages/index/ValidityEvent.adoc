@@ -1,0 +1,18 @@
+= ValidityEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check to determine whether a proposed change is valid.
+Multiple subclasses, including:
++
+* modifying a property
++
+* adding to/removing from a collection
++
+* checking a single argument for an action invocation
++
+* checking all arguments for an action invocation
++
+* checking all properties for an object before saving
+If _#getReason()_ is `null` , then is usable; otherwise is disabled.
+

@@ -1,0 +1,6 @@
+= EventBusService : _interface_
+
+
+
+A service implementing an Event Bus, allowing arbitrary events to be posted.
+

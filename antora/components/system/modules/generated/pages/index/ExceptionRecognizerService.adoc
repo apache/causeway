@@ -1,0 +1,17 @@
+= ExceptionRecognizerService : _interface_
+
+
+
+
+
+* `[teal]#*getExceptionRecognizers*#()` : `Can<xref:system:generated:index/ExceptionRecognizer.adoc[ExceptionRecognizer]>`
+
+
+* `[teal]#*recognize*#(Exception ex)` : `Optional<Recognition>`
++
+Takes into consideration ExceptionRecognizers as given by _#getExceptionRecognizers()_ .
+
+
+* `[teal]#*recognizeFromSelected*#(Can<xref:system:generated:index/ExceptionRecognizer.adoc[ExceptionRecognizer]> recognizers, Exception ex)` : `Optional<Recognition>`
++
+Takes into consideration ExceptionRecognizers as given by _recognizers_ .

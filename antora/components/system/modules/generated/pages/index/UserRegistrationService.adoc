@@ -1,0 +1,7 @@
+= UserRegistrationService : _interface_
+
+
+
+Required API to enable users to register an account on the system (aka "sign up").
+User registration also requires that the xref:system:generated:index/EmailNotificationService.adoc[EmailNotificationService] and _org.apache.isis.applib.services.email.EmailService_ to be configured. The framework provides default implementations of both of these services. The notification service requires no further configuration. The email service (EmailServiceDefault) _does_ require a couple of configuration properties to be set (specifying the SMTP mail server/accounts/password).
+

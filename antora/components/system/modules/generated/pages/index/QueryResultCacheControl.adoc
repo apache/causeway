@@ -1,0 +1,6 @@
+= QueryResultCacheControl : _interface_
+
+
+
+
+

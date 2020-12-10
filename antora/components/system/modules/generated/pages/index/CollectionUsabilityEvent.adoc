@@ -1,0 +1,7 @@
+= CollectionUsabilityEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check as to whether a collection is usable or has been disabled.
+If _#getReason()_ is not `null` then provides the reason why the collection is disabled; otherwise collection is enabled.
+

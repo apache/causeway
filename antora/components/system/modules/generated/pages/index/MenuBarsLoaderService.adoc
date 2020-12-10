@@ -1,0 +1,14 @@
+= MenuBarsLoaderService : _interface_
+
+
+
+
+
+* `[teal]#*supportsReloading*#()` : `boolean`
++
+Whether dynamic reloading of layouts is enabled.
+
+
+* `[teal]#*menuBars*#()` : `BS3MenuBars`
++
+Returns a new instance of a _BS3MenuBars_ , else `null` .

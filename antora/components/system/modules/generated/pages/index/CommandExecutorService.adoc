@@ -1,0 +1,9 @@
+= CommandExecutorService : _interface_
+
+
+
+
+
+* `[teal]#*executeCommand*#(SudoPolicy sudoPolicy, xref:system:generated:index/Command.adoc[Command] command)` : `xref:system:generated:index/Bookmark.adoc[Bookmark]`
++
+Executes the specified command.

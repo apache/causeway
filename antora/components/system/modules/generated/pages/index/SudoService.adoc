@@ -1,0 +1,14 @@
+= SudoService : _interface_
+
+
+
+Intended only for use by fixture scripts and integration tests, allows a block of code to execute while the xref:system:generated:index/UserService.adoc[UserService] 's _UserService#currentUser() getUser()_ method returns the specified user/role as the effective user.
+
+* `[teal]#*call*#<T>(UnaryOperator<xref:system:generated:index/ExecutionContext.adoc[ExecutionContext]> sudoMapper, Callable<T> supplier)` : `T`
++
+Executes the supplied block, with the xref:system:generated:index/UserService.adoc[UserService] returning the specified user.
+
+
+* `[teal]#*run*#(UnaryOperator<xref:system:generated:index/ExecutionContext.adoc[ExecutionContext]> sudoMapper, ThrowingRunnable runnable)` : `void`
++
+Executes the supplied block, with the xref:system:generated:index/UserService.adoc[UserService] returning the specified user.

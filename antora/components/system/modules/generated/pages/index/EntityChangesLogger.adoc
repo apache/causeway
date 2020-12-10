@@ -1,0 +1,6 @@
+= EntityChangesLogger : _class_
+
+
+
+
+

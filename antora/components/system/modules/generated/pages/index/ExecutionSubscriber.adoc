@@ -1,0 +1,11 @@
+= ExecutionSubscriber : _interface_
+
+
+
+SPI that allows individual interactions (action invocations or property edits) to be _#publish(Interaction.Execution) published_ . Note that re-publishing is not part of this SPI.
+
+* `[teal]#*onExecution*#(Execution<?, ?> execution)` : `void`
++
+Publish each _Interaction.Execution_ immediately after it completes.
++
+Most implementations are expected to use _Interaction.Execution#getDto()_ to create a serializable XML representation of the execution. The easiest way to do this is using _InteractionDtoUtils#newInteractionDto(Interaction.Execution)_ . There is some flexibility here, though.

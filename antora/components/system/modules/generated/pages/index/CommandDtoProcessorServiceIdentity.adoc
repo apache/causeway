@@ -1,0 +1,6 @@
+= CommandDtoProcessorServiceIdentity : _class_
+
+
+
+At least one implementation is required.
+

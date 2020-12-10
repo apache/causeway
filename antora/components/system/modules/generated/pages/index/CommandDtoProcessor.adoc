@@ -1,0 +1,11 @@
+= CommandDtoProcessor : _interface_
+
+
+
+Refine (or possibly ignore) a command when replicating from primary to secondary.
+
+* `[teal]#*process*#(CommandDto commandDto)` : `CommandDto`
++
+The implementation can if necessary refine or alter the _CommandDto_ to be replicated from primary to secondary.
++
+That said, the most common use case is to returnnull, which results in the command effectively being ignore.

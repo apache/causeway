@@ -1,0 +1,34 @@
+= TransactionService : _interface_
+
+
+
+
+
+* `[teal]#*currentTransactionId*#()` : `xref:system:generated:index/TransactionId.adoc[TransactionId]`
++
+When called within an existing transactional boundary returns the unique identifier to the transaction, _null_ otherwise.
+
+
+* `[teal]#*currentTransactionState*#()` : `TransactionState`
+
+
+* `[teal]#*flushTransaction*#()` : `void`
++
+Flush all changes to the object store.
++
+Occasionally useful to ensure that newly persisted domain objects are flushed to the database prior to a subsequent repository query.
+
+
+* `[teal]#*nextTransaction*#()` : `void`
++
+Commits the current transaction (if there is one), and begins a new one. If there is no current transaction, then is a no-op.
+
+
+* `[teal]#*executeWithinTransaction*#(Runnable task)` : `void`
++
+Runs given _task_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
+
+
+* `[teal]#*executeWithinTransaction*#<T>(Supplier<T> task)` : `T`
++
+Runs given _task_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.

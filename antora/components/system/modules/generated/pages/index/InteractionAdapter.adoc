@@ -1,0 +1,6 @@
+= InteractionAdapter : _class_
+
+
+
+Provides no-op implementations of each of the methods within xref:system:generated:index/InteractionListener.adoc[InteractionListener] , to simplify the creation of new listeners.
+

@@ -1,0 +1,9 @@
+= TransactionScopeListener : _interface_
+
+
+
+Domain services that need to be aware of transaction boundaries can implement this interface.
+
+* `[teal]#*onPreCommit*#(PreCommitPhase preCommitPhase)` : `void`
++
+triggered during the pre-commit phase in a transaction

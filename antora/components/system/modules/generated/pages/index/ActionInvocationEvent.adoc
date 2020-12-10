@@ -1,0 +1,11 @@
+= ActionInvocationEvent : _class_
+
+
+
+ _Supported only by xref:system:generated:index/WrapperFactory.adoc[WrapperFactory] service,_ represents a check as to whether a particular argument for an action is valid or not.
+If _#getReason()_ is not `null` then provides the reason why the set of arguments are invalid; otherwise the arguments are valid.
+Called after each of the xref:system:generated:index/ActionArgumentEvent.adoc[ActionArgumentEvent] s.
+
+* `[teal]#*getProposed*#()` : `Object`
++
+Does not apply

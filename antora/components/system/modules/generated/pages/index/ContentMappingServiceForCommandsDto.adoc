@@ -1,0 +1,9 @@
+= ContentMappingServiceForCommandsDto : _class_
+
+
+
+
+
+* `[teal]#*map*#(Object object)` : `CommandsDto`
++
+Not part of the xref:system:generated:index/ContentMappingService.adoc[ContentMappingService] API.

@@ -1,0 +1,10 @@
+= PropertyModifyEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check as to whether a particular value for a property is valid or not.
+If _#getReason()_ is not `null` then provides the reason why the value is invalid; otherwise the value is valid.
+
+* `[teal]#*getProposed*#()` : `Object`
++
+If `null` , then the property was cleared.

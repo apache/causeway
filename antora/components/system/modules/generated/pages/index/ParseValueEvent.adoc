@@ -1,0 +1,10 @@
+= ParseValueEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check as to whether the proposed values of the value type is valid.
+If _#getReason()_ is not `null` then provides the reason why the proposed value is invalid, otherwise the new value is acceptable.
+
+* `[teal]#*getSource*#()` : `Object`
++
+Will be the source provided in the _#ParseValueEvent(Object, Identifier, String) constructor_ if not null, otherwise will fallback to the proposed value.

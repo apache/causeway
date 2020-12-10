@@ -1,0 +1,10 @@
+= QueryResultsCache : _interface_
+
+
+
+This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction. Most commonly this allows otherwise "naive" - eg that makes a repository call many times within a loop - to be performance tuned. The benefit is that the algorithm of the business logic can remain easy to understand.
+This implementation has no UI and there is only one implementation (this class) in applib, it is annotated with _org.apache.isis.applib.annotation.DomainService_ . This means that it is automatically registered and available for use; no further configuration is required.
+
+* `[teal]#*onTransactionEnded*#()` : `void`
++
+Not API, for framework use only.

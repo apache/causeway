@@ -1,0 +1,27 @@
+= TranslationService : _interface_
+
+
+
+
+
+* `[teal]#*translate*#(String context, String text)` : `String`
++
+Return a translation of the text, in the locale of the "current user".
++
+The mechanism to determine the locale is implementation-specific.
+
+
+* `[teal]#*translate*#(String context, String singularText, String pluralText, int num)` : `String`
++
+Return a translation of either the singular or the plural text, dependent on the `num` parameter, in the locale of the "current user".
++
+The mechanism to determine the locale is implementation-specific.
+
+
+* `[teal]#*getMode*#()` : `Mode`
++
+Whether this implementation is operating in read or in write mode.
++
+If in read mode, then the translations are expected to be present. In such cases, the _#translate(String, String) translate_ _#translate(String, String, String, int) method_ s should be _lazily_ called, if only because there will (most likely) need to be a session in progress (such that the locale of the current user can be determined).
++
+If in write mode, then the implementation is saving translation keys, and will always return the untranslated translation. In such cases, the _#translate(String, String) translate_ _#translate(String, String, String, int) method_ s should be _eagerly_ called such that all pathways are exercised..

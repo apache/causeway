@@ -1,0 +1,11 @@
+= CommandSubscriber : _interface_
+
+
+
+Part of the _Publishing SPI_ . A component to receive xref:system:generated:index/Command.adoc[Command] s (with publishing enabled) that just completed.
+
+* `[teal]#*onCompleted*#(xref:system:generated:index/Command.adoc[Command] command)` : `void`
++
+Notifies that the command has completed.
++
+This is an opportunity for implementations to process the command, for example to persist a representation of it.

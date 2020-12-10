@@ -1,0 +1,7 @@
+= PropertyVisibilityEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check as to whether a property is visible or has been hidden.
+If _#getReason()_ is not `null` then provides the reason why the property is invisible; otherwise property is visible.
+

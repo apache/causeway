@@ -1,0 +1,13 @@
+= Transaction : _interface_
+
+
+
+Representation of the current transaction, which conceptually wraps the underlying transaction context's transaction.
+
+* `[teal]#*flush*#()` : `void`
++
+Flush all changes to the object store.
++
+Occasionally useful to ensure that newly persisted domain objects are flushed to the database prior to a subsequent repository query.
++
+Equivalent to _TransactionService#flushTransaction()_ .

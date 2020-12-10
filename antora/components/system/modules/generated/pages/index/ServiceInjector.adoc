@@ -1,0 +1,7 @@
+= ServiceInjector : _interface_
+
+
+
+Resolves injection points using the ServiceRegistry.
+Implementation must be thread-safe.
+

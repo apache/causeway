@@ -1,0 +1,9 @@
+= ExecutionContext : _class_
+
+
+
+Provides the user and scenario specific environment for an _Interaction.Execution_
+
+* `[teal]#*_ofUserWithSystemDefaults_*#(xref:system:generated:index/UserMemento.adoc[UserMemento] user)` : `xref:system:generated:index/ExecutionContext.adoc[ExecutionContext]`
++
+Creates a new xref:system:generated:index/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.

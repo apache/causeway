@@ -1,0 +1,6 @@
+= HiddenException : _class_
+
+
+
+Superclass of exceptions which indicate an attempt to interact with a class member that is in some way hidden or invisible.
+

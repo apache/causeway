@@ -1,0 +1,6 @@
+= EntityPropertyChangeLogger : _class_
+
+
+
+
+

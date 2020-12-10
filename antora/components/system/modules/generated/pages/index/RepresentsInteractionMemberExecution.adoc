@@ -1,0 +1,7 @@
+= RepresentsInteractionMemberExecution : _interface_
+
+
+
+Extends _HasUniqueId_ , where the _HasUniqueId#getUniqueId()_ is interpreted as an interaction (cf _InteractionDto_ ) that has at least one member execution (cf _org.apache.isis.schema.ixn.v1.MemberExecutionDto_ ) and may (by way of xref:system:generated:index/WrapperFactory.adoc[WrapperFactory] ) contain several.
+Examples could include SPI services that persist published events and status messages.
+

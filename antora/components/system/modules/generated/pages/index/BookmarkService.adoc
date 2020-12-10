@@ -1,0 +1,34 @@
+= BookmarkService : _interface_
+
+
+
+This service enables a serializable 'bookmark' to be created for an entity.
+
+* `[teal]#*bookmarkFor*#(Object domainObject)` : `xref:system:generated:index/Bookmark.adoc[Bookmark]`
++
+Returns the xref:system:generated:index/Bookmark.adoc[Bookmark] for the given domain object.
++
+ *Note* : Not every domain object is bookmark-able: only entities, view models and services (NOT values or collections)
+
+
+* `[teal]#*bookmarkForElseThrow*#(Object domainObject)` : `xref:system:generated:index/Bookmark.adoc[Bookmark]`
++
+As per _#bookmarkFor(Object)_ , but requires that a non-null xref:system:generated:index/Bookmark.adoc[Bookmark] is returned.
+
+
+* `[teal]#*bookmarkFor*#(Class<?> cls, String identifier)` : `xref:system:generated:index/Bookmark.adoc[Bookmark]`
++
+Utility method that creates a xref:system:generated:index/Bookmark.adoc[Bookmark] from the constituent parts.
+
+
+* `[teal]#*lookup*#(xref:system:generated:index/BookmarkHolder.adoc[BookmarkHolder] bookmarkHolder)` : `Object`
+
+
+* `[teal]#*lookup*#(xref:system:generated:index/Bookmark.adoc[Bookmark] bookmark)` : `Object`
++
+Reciprocal of _#bookmarkFor(Object)_
+
+
+* `[teal]#*lookup*#<T>(xref:system:generated:index/Bookmark.adoc[Bookmark] bookmark, Class<T> cls)` : `T`
++
+As _#lookup(Bookmark)_ , but down-casting to the specified type.

@@ -1,0 +1,7 @@
+= ObjectValidityEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check as to whether the current values of the properties/collections of an object are valid (for example, prior to saving that object).
+If _#getReason()_ is not `null` then provides the reason why the object is invalid, otherwise ok.
+

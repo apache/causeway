@@ -1,0 +1,7 @@
+= VisibilityEvent : _class_
+
+
+
+ _Supported only by xref:system:generated:index/WrapperFactory.adoc[WrapperFactory] service,_ represents a check to determine whether a member of an object is visible or has been hidden.
+If _#getReason()_ is `null` , then is usable; otherwise is invisible.
+

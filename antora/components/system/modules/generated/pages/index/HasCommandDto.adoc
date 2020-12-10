@@ -1,0 +1,6 @@
+= HasCommandDto : _interface_
+
+
+
+Objects implementing this interface will be processed automatically by _org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto_ .
+

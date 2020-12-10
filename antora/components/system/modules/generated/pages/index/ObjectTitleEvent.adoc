@@ -1,0 +1,7 @@
+= ObjectTitleEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an access (reading) of an object's title.
+The _#getReason()_ will always be `null` ; access is always allowed.
+

@@ -1,0 +1,6 @@
+= EntityPropertyChange : _class_
+
+
+
+Immutable data record for xref:system:generated:index/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] s.
+

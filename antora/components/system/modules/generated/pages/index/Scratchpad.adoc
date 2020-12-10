@@ -1,0 +1,15 @@
+= Scratchpad : _interface_
+
+
+
+This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same interaction. Most commonly this will be as the result of invoking a _org.apache.isis.applib.annotation.Bulk_ action.
+This implementation has only one implementation (this class) in applib, so it is annotated with _org.apache.isis.applib.annotation.DomainService_ . This means that it is automatically registered and available for use; no further configuration is required.
+
+* `[teal]#*get*#(Object key)` : `Object`
++
+Obtain user-data, as set by a previous object being acted upon.
+
+
+* `[teal]#*put*#(Object key, Object value)` : `void`
++
+Set user-data, for the use of a subsequent object being acted upon.

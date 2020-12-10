@@ -1,0 +1,9 @@
+= SyncControl : _class_
+
+
+
+
+
+* `[teal]#*getExecutionModes*#()` : `ImmutableEnumSet<ExecutionMode>`
++
+Not API.

@@ -1,0 +1,9 @@
+= ExceptionHandler : _interface_
+
+
+
+
+
+* `[teal]#*handle*#(Exception ex)` : `Object`
++
+Handle the exception in some way. Typically this will log and rethrow the exception. If necessary though it can return some other value instead (must be compatible with the expected return value of the interaction, that is, the action invocation or property edit).

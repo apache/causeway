@@ -1,0 +1,14 @@
+= TitleService : _interface_
+
+
+
+
+
+* `[teal]#*titleOf*#(Object domainObject)` : `String`
++
+Return the title of the object, as rendered in the UI by the Isis viewers.
+
+
+* `[teal]#*iconNameOf*#(Object domainObject)` : `String`
++
+Return the icon name of the object, as rendered in the UI by the Isis viewers.

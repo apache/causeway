@@ -1,0 +1,7 @@
+= ErrorDetails : _class_
+
+
+
+Details of the error (obtained from the thrown exception), passed as part of the request to the xref:system:generated:index/ErrorReportingService.adoc[ErrorReportingService] .
+Implementation note: a class has been used here so that additional fields might be added in the future.
+

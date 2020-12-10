@@ -1,0 +1,10 @@
+= CollectionAddToEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check as to whether a particular object to be added to a collection is valid or not.
+If _#getReason()_ is not `null` then provides the reason why the object is invalid; otherwise the object is valid.
+
+* `[teal]#*getProposed*#()` : `Object`
++
+The object that is being added.

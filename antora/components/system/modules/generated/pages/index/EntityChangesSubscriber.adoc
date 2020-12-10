@@ -1,0 +1,9 @@
+= EntityChangesSubscriber : _interface_
+
+
+
+Part of the _Publishing SPI_ . A component to receive the entire set of entities (with publishing enabled) that are about to change, serializable as ChangesDto.
+
+* `[teal]#*onChanging*#(xref:system:generated:index/EntityChanges.adoc[EntityChanges] entityChanges)` : `void`
++
+Receives all changing entities (with publishing enabled) at then end of the a transaction during the pre-commit phase.

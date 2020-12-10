@@ -1,0 +1,9 @@
+= MenuBarsService : _interface_
+
+
+
+
+
+* `[teal]#*menuBars*#()` : `MenuBars`
++
+Returns _#menuBars()_ with a type of _Type#DEFAULT_ .

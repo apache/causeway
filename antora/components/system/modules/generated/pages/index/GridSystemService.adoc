@@ -1,0 +1,14 @@
+= GridSystemService : _interface_
+
+
+
+Provides an implementation of _Grid_ .
+
+* `[teal]#*gridImplementation*#()` : `Class<G>`
++
+Which grid (implementation) is defined by this service.
+
+
+* `[teal]#*normalize*#(G grid, Class<?> domainClass)` : `void`
++
+Validate the grid, derive any missing object members, and overwrite any facets in the metamodel based on the layout.

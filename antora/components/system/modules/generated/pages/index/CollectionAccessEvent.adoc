@@ -1,0 +1,7 @@
+= CollectionAccessEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an access (reading) of a collection.
+Analogous to xref:system:generated:index/CollectionAddToEvent.adoc[CollectionAddToEvent] or xref:system:generated:index/CollectionRemoveFromEvent.adoc[CollectionRemoveFromEvent] , however the _#getReason()_ will always be `null` . (If access is not allowed then a vetoing _CollectionVisibilityEvent_ would have been fired).
+

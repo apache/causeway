@@ -1,0 +1,6 @@
+= UserDetails : _class_
+
+
+
+A model object for the signup page
+

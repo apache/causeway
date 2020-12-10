@@ -1,0 +1,29 @@
+= WrappingObject : _interface_
+
+
+
+Implemented by all objects that have been viewed as per _WrapperFactory#wrap(Object)_ .
+
+* `[teal]#*__isis_save*#()` : `void`
++
+Programmatic equivalent of invoking save for a transient object .
++
+NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
+
+
+* `[teal]#*__isis_wrapped*#()` : `Object`
++
+Provide access to the underlying, wrapped object.
++
+Used to unwrap objects used as arguments to actions (otherwise, end up creating a `ObjectSpecification` for the Javassist-enhanced class, not the original class).
++
+NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
++
+ *NOTE: there is a string-literal reference to this name `DomainObjectInvocationHandler` , so it should not be changed.* .
+
+
+* `[teal]#*__isis_executionModes*#()` : `ImmutableEnumSet<ExecutionMode>`
++
+The _EnumSetexecution modes_ inferred from the xref:system:generated:index/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
++
+NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.

@@ -1,0 +1,6 @@
+= EmailRegistrationEvent : _class_
+
+
+
+An event send to all services interested in user registration
+

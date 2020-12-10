@@ -1,0 +1,6 @@
+= HomePageResolverService : _interface_
+
+
+
+Returns a view model annotated with _HomePage_ .
+

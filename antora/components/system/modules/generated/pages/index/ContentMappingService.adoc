@@ -1,0 +1,9 @@
+= ContentMappingService : _interface_
+
+
+
+
+
+* `[teal]#*map*#(Object object, List<MediaType> acceptableMediaTypes)` : `Object`
++
+Typically for mapping from a domain object to a DTO.

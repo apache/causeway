@@ -1,0 +1,15 @@
+= XmlSnapshotServiceDefault : _class_
+
+
+
+This service allows an XML document to be generated capturing the data of a root entity and specified related entities. This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
+This implementation has no UI and there are no other implementations of the service API, and so it annotated with _org.apache.isis.applib.annotation.DomainService_ . Because this class is implemented in core, this means that it is automatically registered and available for use; no further configuration is required.
+
+* `[teal]#*snapshotFor*#(Object domainObject)` : `Snapshot`
++
+Creates a simple snapshot of the domain object.
+
+
+* `[teal]#*builderFor*#(Object domainObject)` : `Builder`
++
+Creates a builder that allows a custom snapshot - traversing additional associated properties or collections (using _Snapshot.Builder#includePath(String)_ and _Snapshot.Builder#includePathAndAnnotation(String, String)_ ) - to be created.

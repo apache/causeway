@@ -1,0 +1,9 @@
+= ConfigurationViewService : _interface_
+
+
+
+
+
+* `[teal]#*allProperties*#()` : `Set<xref:system:generated:index/ConfigurationProperty.adoc[ConfigurationProperty]>`
++
+Returns all properties, each as an instance of xref:system:generated:index/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.

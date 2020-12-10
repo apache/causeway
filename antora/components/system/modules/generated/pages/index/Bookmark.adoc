@@ -1,0 +1,17 @@
+= Bookmark : _class_
+
+
+
+String representation of any persistable or re-createable object managed by the framework.
+Analogous to the `RootOid` .
+
+* `[teal]#*_parse_*#(String str)` : `Optional<xref:system:generated:index/Bookmark.adoc[Bookmark]>`
++
+Round-trip with _#toString()_ representation.
+
+
+* `[teal]#*toString*#()` : `String`
++
+The canonical form of the xref:system:generated:index/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
++
+This is parseable by the _#parse(String)_ .

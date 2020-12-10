@@ -1,0 +1,7 @@
+= PropertyAccessEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an access (reading) of a property.
+Analogous to xref:system:generated:index/PropertyModifyEvent.adoc[PropertyModifyEvent] , however the _#getReason()_ will always be `null` . (If access is not allowed then a xref:system:generated:index/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent] would have been fired).
+

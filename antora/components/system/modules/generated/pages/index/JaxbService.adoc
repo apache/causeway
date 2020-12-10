@@ -1,0 +1,14 @@
+= JaxbService : _interface_
+
+
+
+
+
+* `[teal]#*fromXml*#<T>(Class<T> domainClass, String xml)` : `T`
++
+As _#fromXml(JAXBContext, String)_ , but downcast to a specific type.
+
+
+* `[teal]#*fromXml*#<T>(Class<T> domainClass, String xml, Map<String, Object> unmarshallerProperties)` : `T`
++
+As _#fromXml(JAXBContext, String, Map)_ , but downcast to a specific type.

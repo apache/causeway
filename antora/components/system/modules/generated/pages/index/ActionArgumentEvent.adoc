@@ -1,0 +1,11 @@
+= ActionArgumentEvent : _class_
+
+
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check as to whether a particular argument for an action is valid or not.
+If _#getReason()_ is not `null` then provides the reason why the argument is invalid; otherwise the argument is valid.
+Called once per argument, and before xref:system:generated:index/ActionInvocationEvent.adoc[ActionInvocationEvent] .
+
+* `[teal]#*getPosition*#()` : `int`
++
+The position (0-based) of the invalid argument.
