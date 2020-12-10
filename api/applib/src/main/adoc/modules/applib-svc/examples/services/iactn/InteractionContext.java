@@ -35,18 +35,14 @@ public interface InteractionContext {
      * Optionally, the currently active {@link Interaction} for the calling thread.
      */
     // tag::refguide[]
-    Optional<Interaction> getInteraction();    // <.>
+    Optional<Interaction> currentInteraction();    // <.>
     // end::refguide[]
 
     // -- SHORTCUTS
     
-    default Interaction getInteractionIfAny() {
-    	return currentInteraction().orElse(null);
-    }
-    
-    default Interaction getInteractionElseFail() {
+    default Interaction currentInteractionElseFail() {
     	return currentInteraction().orElseThrow(()->_Exceptions
-    			.unrecoverable("needs an InteractionSession on current thread"));
+    			.illegalState("No InteractionSession on current thread"));
     }
     
     // tag::refguide[]

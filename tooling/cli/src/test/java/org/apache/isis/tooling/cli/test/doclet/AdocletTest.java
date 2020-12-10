@@ -21,6 +21,7 @@ package org.apache.isis.tooling.cli.test.doclet;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Text;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.tooling.cli.doclet.AdocletContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
@@ -41,7 +43,7 @@ import static guru.nidi.codeassert.config.Language.JAVA;
 
 class AdocletTest {
 
-    @Test //@Disabled
+    @Test @Disabled
     void testJavaDocMining() {
         
         val analyzerConfig = AnalyzerConfigFactory
@@ -69,22 +71,25 @@ class AdocletTest {
         });
     }
     
-    @Test @Disabled
+    @Test //@Disabled
     void testAdocDocMining() throws IOException {
         
         val adocFiles = 
                 _Files.searchFiles(
-                        ProjectSampler.apacheIsisApplib(), 
+                        ProjectSampler.apacheIsisRoot(), 
                         _Predicates.alwaysTrue(), 
                         file->file.getName().endsWith(".adoc"));
      
+        val names = _Sets.<String>newTreeSet();
+        
         Can.ofCollection(adocFiles)
         .stream()
-        .forEach(this::parseAdoc);
+        .forEach(file->parseAdoc(file, names::add));
         
+        names.forEach(System.out::println);
     }
     
-    private void parseAdoc(final @NonNull File file) {
+    private void parseAdoc(final @NonNull File file, Consumer<String> onShortName) {
         val lines = _Text.readLinesFromFile(file, StandardCharsets.UTF_8);
         
         lines.stream()
@@ -92,9 +97,15 @@ class AdocletTest {
         .forEach(line->{
             //System.out.println("--- " + file);
             
-            System.out.println(line.substring(line.lastIndexOf("/")+1));
+            val shortRef = line.substring(line.indexOf("/")+1);
+            val shortName = shortRef.substring(0, shortRef.lastIndexOf(".java"));
+            
+            onShortName.accept(shortName+".java");
         });
+     
+        
         
     }
+
     
 }

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
@@ -26,12 +25,13 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import lombok.Getter;
 import lombok.Value;
 
+/**
+ * Immutable serializable value held by {@link UserMemento}.  
+ * @since 2.0 {@index}
+ */
 @Value
-// tag::refguide[]
 public final class RoleMemento implements Serializable {
 
-    // end::refguide[]
-    
     private static final long serialVersionUID = -3876856609238378274L;
     
     /**
@@ -60,17 +60,11 @@ public final class RoleMemento implements Serializable {
     }
 
     @MemberOrder(sequence = "1.1")
-    // tag::refguide[]
     @Getter
     private final String name;
 
-    // end::refguide[]
     @MemberOrder(sequence = "1.2")
-    // tag::refguide[]
     @Getter
     private final String description;
 
-    // ...
-
 }
-// end::refguide[]

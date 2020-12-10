@@ -58,24 +58,10 @@ public final class CompilationUnits {
             return Stream.empty();
         }
         
+        //TODO not processing enums yet
         return type.findAll(ClassOrInterfaceDeclaration.class)
                 .stream();
-        
-//        return compilationUnit.getTypes().stream()
-//        .peek(t->System.out.println(String.format("%s %s %s", t.getClass(), t.getNameAsString(), t.findAll(ClassOrInterfaceDeclaration.class))))
-//        .filter(t->t.isClassOrInterfaceDeclaration())
-//        .map(ClassOrInterfaceDeclaration.class::cast);
-        
-        
-//        if(type.isEnumDeclaration()) {
-//            // as of yet silently ignore
-//            return Stream.empty();
-//        }
-//        if(type.isClassOrInterfaceDeclaration()) {
-//            return Stream.of((ClassOrInterfaceDeclaration)type);   
-//        }
-//        // as of yet silently ignore
-//        return Stream.empty();        
+
     }
 
     

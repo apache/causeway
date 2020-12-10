@@ -30,7 +30,7 @@ public interface MetricsService {
      * <p>
      * Corresponds to the number of times that <code>javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)</code> (or equivalent) is fired.
      * <p>
-     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteractionIfAny()}).
+     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#currentInteraction()}).
      */
     // tag::refguide[]
     int numberEntitiesLoaded();      // <.>
@@ -42,7 +42,7 @@ public interface MetricsService {
      * <p>
      * Corresponds to the number of times that <code>javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)</code> (or equivalent) callback is fired.
      * <p>
-     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteractionIfAny()}).
+     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#currentInteraction()}.
      */
     // tag::refguide[]
     int numberEntitiesDirtied();     // <.>

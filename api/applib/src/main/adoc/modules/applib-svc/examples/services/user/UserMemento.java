@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
@@ -34,12 +33,10 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /**
- * Details about a user and his roles.
- * Read-only.
+ * Immutable serializable value holding details about a user and its roles.
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public final class UserMemento implements Serializable {
-    // end::refguide[]
     
     private static final long serialVersionUID = 7190090455587885367L;
     private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system"); 
@@ -118,21 +115,18 @@ public final class UserMemento implements Serializable {
      * The user's login name.
      */
     @MemberOrder(sequence = "1.1")
-    // tag::refguide[]
     @Getter
     private final String name;
 
-    // end::refguide[]
     /**
      * The roles associated with this user.
      */
     @MemberOrder(sequence = "1.1")
     private final List<RoleMemento> roles;
-    // tag::refguide[]
     public List<RoleMemento> getRoles() {
         return roles;
     }
-    // end::refguide[]
+
     /**
      * Determine if the specified name is this user.
      *
@@ -193,12 +187,8 @@ public final class UserMemento implements Serializable {
         return getName().hashCode(); // its good enough to hash on just the user's name
     }
     
-    // tag::refguide[]
-
-    // ...
 
 }
-// end::refguide[]
 
 // -- REMOVED
 

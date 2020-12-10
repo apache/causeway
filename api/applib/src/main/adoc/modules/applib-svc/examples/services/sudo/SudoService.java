@@ -24,12 +24,13 @@ import java.util.function.UnaryOperator;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
 
 /**
  * Intended only for use by fixture scripts and integration tests, allows a block of code to execute
- * while the {@link UserService}'s {@link UserService#getUser() getUser()} method returns the specified user/role
+ * while the {@link UserService}'s {@link UserService#currentUser() getUser()} method returns the specified user/role
  * as the effective user.
  */
 // tag::refguide[]
@@ -66,8 +67,8 @@ public interface SudoService {
     // tag::refguide[]
     default void run(                                        // <.>
             final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
-            final @NonNull Runnable runnable) {
-        call(sudoMapper, ()->{runnable.run(); return null;});
+            final @NonNull ThrowingRunnable runnable) {
+        call(sudoMapper, ThrowingRunnable.toCallable(runnable));
     }
 
     // end::refguide[]
