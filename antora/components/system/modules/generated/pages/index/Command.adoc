@@ -1,37 +1,43 @@
 = Command : _class_
-
-
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Represents the _intention to_ invoke either an action or modify a property. There can be only one such intention per (web) request, so a command is in effect interaction-scoped.
+
 Each Command holds a _CommandDto_ (see Apache Isiscmdschema) which reifies all the details in a serializable form.
+
 It also captures details of the corresponding action invocation (or property edit), specifically when that action/edit _Command#getStartedAt() started_ or _Command#getCompletedAt() completed_ , and its result, either a _Command#getResult() return value_ or an _Command#getException() exception_ . Also captures a stack of _ActionDomainEvent_ s.
+
 Note that when invoking an action, other actions may be invoked courtesy of the xref:system:generated:index/WrapperFactory.adoc[WrapperFactory] . These "sub-actions" do _not_ modify the contents of the current command object; in other words think of the command object as representing the outer-most originating action.
+
 That said, if the sub-action is invoked asynchronously (using _WrapperFactory#asyncWrap(Object, AsyncControl)_ or _WrapperFactory#asyncWrapMixin(Class, Object, AsyncControl)_ ), then a separate xref:system:generated:index/Command.adoc[Command] object is created, and the originating xref:system:generated:index/Command.adoc[Command] is set to be its _Command#getParent() parent_ .
 
 * `[teal]#*getUsername*#()` : `String`
 +
+--
 The user that created the command.
-+
+
 Derived from _#getCommandDto()_ 's _CommandDto#getUser()_
-
-
+--
 * `[teal]#*getTimestamp*#()` : `Timestamp`
 +
+--
 The date/time at which this command was created.
-+
+
 Derived from _#getCommandDto()_ 's _CommandDto#getTimestamp()_ .
-
-
+--
 * `[teal]#*getTarget*#()` : `xref:system:generated:index/Bookmark.adoc[Bookmark]`
 +
+--
 Derived from _#getCommandDto()_ , is the xref:system:generated:index/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
-
-
+--
 * `[teal]#*getLogicalMemberIdentifier*#()` : `String`
 +
+--
 Derived from _#getCommandDto()_ , holds a string representation of the invoked action, or the edited property.
-
-
+--
 * `[teal]#*updater*#()` : `Updater`
 +
+--
  *NOT API* : intended to be called only by the framework.
+--
+
