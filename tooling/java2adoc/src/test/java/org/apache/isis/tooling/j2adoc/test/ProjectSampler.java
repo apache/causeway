@@ -19,6 +19,12 @@
 package org.apache.isis.tooling.j2adoc.test;
 
 import java.io.File;
+import java.util.Set;
+
+import org.apache.isis.commons.internal.base._Files;
+import org.apache.isis.commons.internal.functions._Predicates;
+
+import lombok.SneakyThrows;
 
 final class ProjectSampler {
 
@@ -32,6 +38,14 @@ final class ProjectSampler {
     
     static File apacheIsisApplib() {
         return new File(apacheIsisRoot(), "api/applib");
+    }
+
+    @SneakyThrows
+    public static Set<File> adocFiles(File folder) {
+        return _Files.searchFiles(
+                    ProjectSampler.apacheIsisRoot(), 
+                        _Predicates.alwaysTrue(), 
+                        file->file.getName().endsWith(".adoc"));
     }
     
 }
