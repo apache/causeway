@@ -115,7 +115,7 @@ class J2AdocTest {
         });
     }
     
-    @Test
+    @Test @Disabled("DANGER!")
     void adocExampleProcessing() throws IOException {
         
         val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheIsisRoot());
