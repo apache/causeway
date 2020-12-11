@@ -16,35 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.javamodel.ast;
+package org.apache.isis.tooling.j2adoc.convert;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.javadoc.Javadoc;
+
+import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 
 import lombok.NonNull;
 
-public final class ConstructorDeclarations {
+public interface J2AdocConverter {
 
-    public static boolean isEffectivePublic(
-            final @NonNull ConstructorDeclaration cd, final @NonNull ClassOrInterfaceDeclaration td) {
-        
-        if(td.isInterface()) {
-            return true;
-        }
-       
-        //TODO effective public requires more context, eg. is the container an interface 
-        return !cd.isPrivate() 
-                && !cd.isAbstract() 
-                && !cd.isProtected()
-                //&& !md.isDefault()
-                ;
-    }
+    String javadoc(Javadoc javadoc, int level);
+
+    String constructorDeclaration(ConstructorDeclaration cd);
+
+    String methodDeclaration(MethodDeclaration md);
     
-    /**
-     * Returns given {@link ConstructorDeclaration} as normal text, without formatting.
-     */
-    public static String toNormalizedConstructorDeclaration(final @NonNull ConstructorDeclaration cd) {
-        return cd.getDeclarationAsString(false, false, true).trim();
-    }
+    String xref(@NonNull J2AdocUnit unit);
     
+    // -- FACTORIES
+    
+    public static J2AdocConverter createDefault(final @NonNull J2AdocContext context) {
+        return J2AdocConverterDefault.of(context);
+    }
+
+    
+
 }

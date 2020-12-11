@@ -16,18 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.j2adoc;
+package org.apache.isis.tooling.javamodel.ast;
 
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-
-import org.apache.isis.tooling.javamodel.ast.Javadocs;
 
 import lombok.NonNull;
 import lombok.val;
 
-final class J2AdocUnits {
+public final class TypeDeclarations {
 
     /**
      * Whether to include given {@link TypeDeclaration} with the index.
@@ -35,7 +31,7 @@ final class J2AdocUnits {
      * This is decided base on whether the type's java-doc has a
      * {@literal @since} tag that contains the literal {@literal {@index}}. 
      */
-    static boolean hasIndexDirective(final @NonNull TypeDeclaration<?> td) {
+    public static boolean hasIndexDirective(final @NonNull TypeDeclaration<?> td) {
         return td.getJavadoc()
         .map(javadoc->{
         
@@ -47,22 +43,5 @@ final class J2AdocUnits {
         }) 
         .orElse(false);
     }
-    
-    /**
-     * Returns given {@link ConstructorDeclaration} as normal text, without formatting.
-     */
-    static String toNormalizedConstructorDeclaration(final @NonNull ConstructorDeclaration cd) {
-        return cd.getDeclarationAsString(false, false, true).trim();
-    }
-    
-    /**
-     * Returns given {@link MethodDeclaration} as normal text, without formatting.
-     */
-    static String toNormalizedMethodDeclaration(final @NonNull MethodDeclaration md) {
-        return md.getDeclarationAsString(false, false, true).trim();
-    }
-    
-    
-    
     
 }

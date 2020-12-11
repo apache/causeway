@@ -52,6 +52,10 @@ public final class ClassOrInterfaceDeclarations {
                 .filter(md->MethodDeclarations.isEffectivePublic(md, typeDeclaration));
     }
 
+    /**
+     * Returns the recursively resolved (nested) type name. 
+     * Same as {@link #getSimpleName()} if type is not nested. 
+     */
     public static String name(
             final @NonNull ClassOrInterfaceDeclaration td) {
         String name = td.getNameAsString(); 

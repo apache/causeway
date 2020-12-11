@@ -64,9 +64,12 @@ class J2AdocTest {
         .forEach(j2aContext::add);
         
         j2aContext.streamUnits()
-        .forEach(unit->{
+        .map(unit->unit.toAsciiDoc(j2aContext))
+        .forEach(adoc->{
             
-            System.out.println(unit.toAsciiDoc(j2aContext));
+            System.out.println(adoc);
+            
+            //AsciiDocWriter.print(adoc);
             System.out.println();
 
         });

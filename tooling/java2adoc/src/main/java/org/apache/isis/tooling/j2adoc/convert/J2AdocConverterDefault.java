@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.j2adoc;
+package org.apache.isis.tooling.j2adoc.convert;
 
 import java.util.stream.Collectors;
 
@@ -40,6 +40,8 @@ import org.jsoup.Jsoup;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
@@ -49,10 +51,11 @@ import lombok.Value;
 import lombok.val;
 
 @Value(staticConstructor = "of")
-final class JavaToAsciiDoc {
+final class J2AdocConverterDefault implements J2AdocConverter {
 
     private final J2AdocContext j2aContext;
     
+    @Override
     public String constructorDeclaration(final @NonNull ConstructorDeclaration cd) {
         val isDeprecated = cd.getAnnotations().stream()
                 .anyMatch(a->a.getNameAsString().equals("Deprecated"))
@@ -65,14 +68,14 @@ final class JavaToAsciiDoc {
                         ? j2aContext.getDeprecatedStaticMemberNameFormat()
                         : j2aContext.getDeprecatedMemberNameFormat()
                 : cd.isStatic()
-                    ? j2aContext.getStaticMemberNameFormat()
-                    : j2aContext.getMemberNameFormat();
+                        ? j2aContext.getStaticMemberNameFormat()
+                        : j2aContext.getMemberNameFormat();
 
         val isGenericMember = cd.getTypeParameters().isNonEmpty();
         
         val constructorFormat = isGenericMember
-                ? j2aContext.getGenericConstructorFormat()
-                : j2aContext.getConstructorFormat();
+                ? j2aContext.getFormatter().getGenericConstructorFormat()
+                : j2aContext.getFormatter().getConstructorFormat();
         
         val args = Can.<Object>of(
                 isGenericMember ? typeParamters(cd.getTypeParameters()) : null,  // Cans do ignored null 
@@ -86,6 +89,7 @@ final class JavaToAsciiDoc {
         return String.format(constructorFormat, args.toArray(_Constants.emptyObjects));
     }
 
+    @Override
     public String methodDeclaration(final @NonNull MethodDeclaration md) {
         
         val isDeprecated = md.getAnnotations().stream()
@@ -99,14 +103,14 @@ final class JavaToAsciiDoc {
                         ? j2aContext.getDeprecatedStaticMemberNameFormat()
                         : j2aContext.getDeprecatedMemberNameFormat()
                 : md.isStatic()
-                    ? j2aContext.getStaticMemberNameFormat()
-                    : j2aContext.getMemberNameFormat();
+                        ? j2aContext.getStaticMemberNameFormat()
+                        : j2aContext.getMemberNameFormat();
 
         val isGenericMember = md.getTypeParameters().isNonEmpty();
         
         val methodFormat = isGenericMember
-                ? j2aContext.getGenericMethodFormat()
-                : j2aContext.getMethodFormat();
+                ? j2aContext.getFormatter().getGenericMethodFormat()
+                : j2aContext.getFormatter().getMethodFormat();
         
         val args = Can.<Object>of(
                 isGenericMember ? typeParamters(md.getTypeParameters()) : null,  // Cans do ignored null 
@@ -168,6 +172,7 @@ final class JavaToAsciiDoc {
                 p.getNameAsString());
     }
     
+    @Override
     public String javadoc(final @NonNull Javadoc javadoc, final int level) {
 
         val adoc = AsciiDocFactory.doc();
@@ -204,6 +209,7 @@ final class JavaToAsciiDoc {
         }
     }
     
+    @Override
     public String xref(final @NonNull J2AdocUnit unit) {
         return String.format("xref:%s[%s]", 
                 String.format(j2aContext.getXrefPageIdFormat(), unit.getName()), 

@@ -19,10 +19,14 @@
 package org.apache.isis.tooling.j2adoc;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.javadoc.Javadoc;
 
 import org.asciidoctor.ast.Document;
 
@@ -31,19 +35,20 @@ import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.ast.ClassOrInterfaceDeclarations;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
+import org.apache.isis.tooling.javamodel.ast.TypeDeclarations;
 
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Value
+@RequiredArgsConstructor
 @Log4j2
-public class J2AdocUnit {
+public final class J2AdocUnit {
 
     private final ClassOrInterfaceDeclaration td;
-
+    
     public static Stream<J2AdocUnit> parse(final @NonNull File sourceFile) {
 
         if("package-info.java".equals(sourceFile.getName())) {
@@ -61,7 +66,7 @@ public class J2AdocUnit {
             
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamPublicTypeDeclarations)
-            .filter(J2AdocUnits::hasIndexDirective)
+            .filter(TypeDeclarations::hasIndexDirective)
             .map(J2AdocUnit::new);
 
         } catch (Exception e) {
@@ -70,130 +75,47 @@ public class J2AdocUnit {
         }
 
     }
-    
-    public String getName() {
-        return ClassOrInterfaceDeclarations.name(td);
-    }
 
+    /**
+     * Returns the recursively resolved (nested) type name. 
+     * Same as {@link #getSimpleName()} if type is not nested. 
+     */
+    @Getter(lazy = true)
+    private final String name = ClassOrInterfaceDeclarations.name(td);
+    
+    @Getter(lazy = true)
+    private final String simpleName = td.getNameAsString();
+    
+    @Getter(lazy = true)
+    private final String declarationKeyword = td.isInterface()
+            ? "interface"
+            : "class";
+    
+    @Getter(lazy = true)
+    private final Can<ConstructorDeclaration> publicConstructorDeclarations =
+        ClassOrInterfaceDeclarations.streamPublicConstructorDeclarations(td)
+                .filter(Javadocs::presentAndNotHidden)
+                .collect(Can.toCan());
+    
+    @Getter(lazy = true)
+    private final Can<MethodDeclaration> publicMethodDeclarations =
+        ClassOrInterfaceDeclarations.streamPublicMethodDeclarations(td)
+                .filter(Javadocs::presentAndNotHidden)
+                .collect(Can.toCan());
+    
+    @Getter(lazy = true)
+    private final Optional<Javadoc> javadoc = td.getJavadoc();
+    
     public String getAsciiDocXref(
             final @NonNull J2AdocContext j2aContext) {
-        val toAdocConverter = JavaToAsciiDoc.of(j2aContext);
-        return toAdocConverter.xref(this);
+
+        return j2aContext.getConverter().xref(this);
     }
     
     public Document toAsciiDoc(
             final @NonNull J2AdocContext j2aContext) {
-        
-        val doc = AsciiDocFactory.doc();
-        
-        val introBlock = AsciiDocFactory.block(doc);
-        val javaSourceBlock = AsciiDocFactory.block(doc);
-        val methodDescriptionBlock = AsciiDocFactory.block(doc);
-        
-        val mds = ClassOrInterfaceDeclarations.streamPublicMethodDeclarations(td)
-                .filter(Javadocs::presentAndNotHidden)
-                .collect(Can.toCan());
-        
-        val cds = ClassOrInterfaceDeclarations.streamPublicConstructorDeclarations(td)
-                .filter(Javadocs::presentAndNotHidden)
-                .collect(Can.toCan());
-        
-        
-        val toAdocConverter = JavaToAsciiDoc.of(j2aContext);
-        
-        // -- title
-        
-        val title = String.format("%s : _%s_\n\n", 
-                getName(),
-                getDeclarationKeyword());
-        
-        doc.setTitle(title);
-
-        // -- intro
-        
-        td.getJavadoc().ifPresent(javadoc->{
-            introBlock.setSource(toAdocConverter.javadoc(javadoc, 0));    
-        });
-        
-        // -- java content
-        
-        if(j2aContext.isIncludeJavaSource()) {
-        
-            val java = new StringBuilder();
-            
-            java.append(String.format("%s %s {\n", 
-                    getDeclarationKeyword(), 
-                    td.getName().asString()));
-            
-            
-            cds.forEach(cd->{
-                
-                java.append(String.format("\n  %s // <.>\n", 
-                        J2AdocUnits.toNormalizedConstructorDeclaration(cd)));
-                
-            });
-            
-            mds.forEach(md->{
-    
-                java.append(String.format("\n  %s // <.>\n", 
-                        J2AdocUnits.toNormalizedMethodDeclaration(md)));
-                
-            });
-    
-            java.append("}\n");
-            
-            javaSourceBlock.setSource(
-                    AsciiDocFactory.SourceFactory.java(java.toString(), td.getName().asString()));
-        }
-            
-        // -- constructor and method descriptions
-        
-        val methodDescriptions = new StringBuilder();
-        
-        cds.forEach(cd->{
-            
-            cd.getJavadoc()
-            .ifPresent(javadoc->{
-                methodDescriptions.append(String.format(j2aContext.getMemberDescriptionFormat(),
-                        toAdocConverter.constructorDeclaration(cd),
-                        toAdocConverter.javadoc(javadoc, 1)));
-            });
-            
-        });
-        
-        mds.forEach(md->{
-            
-            md.getJavadoc()
-            .ifPresent(javadoc->{
-                methodDescriptions.append(String.format(j2aContext.getMemberDescriptionFormat(),
-                        toAdocConverter.methodDeclaration(md),
-                        toAdocConverter.javadoc(javadoc, 1)));
-            });
-            
-        });
-        
-        methodDescriptionBlock.setSource(methodDescriptions.toString());
-        
-        return doc;
-        
-//        try {
-//
-//            return AsciiDocWriter.toString(doc);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "ERROR: " + e.getMessage();
-//        }
-        
+        return j2aContext.getFormatter().apply(this);
     }
-
-    // -- HELPER
-
-    private String getDeclarationKeyword() {
-        return td.isInterface()
-                ? "interface"
-                : "class";
-    }
-
 
 
 }

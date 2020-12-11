@@ -22,13 +22,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatter;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatterCompact;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndFootNotes;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
@@ -37,30 +43,6 @@ import lombok.val;
 public class J2AdocContext {
 
     private final @NonNull String xrefPageIdFormat;
-    
-    /**
-     * name | param-list
-     */
-    @Builder.Default
-    private final @NonNull String constructorFormat = "`%s(%s)`";
-    
-    /**
-     * constructor-generic-type | name | param-list
-     */
-    @Builder.Default
-    private final @NonNull String genericConstructorFormat = "`%s %s(%s)`";
-    
-    /**
-     * return-type | name | param-list
-     */
-    @Builder.Default
-    private final @NonNull String methodFormat = "`%s %s(%s)`";
-    
-    /**
-     * method-generic-type | return-type | name | param-list
-     */
-    @Builder.Default
-    private final @NonNull String genericMethodFormat = "`%s %s %s(%s)`";
     
     @Builder.Default
     private final @NonNull String memberNameFormat = "[teal]#*%s*#";
@@ -74,17 +56,24 @@ public class J2AdocContext {
     @Builder.Default
     private final @NonNull String deprecatedStaticMemberNameFormat = "[line-through gray]#*_%s_*#";
     
-    /**
-     * method | description
-     */
-    @Builder.Default
-    private final @NonNull String memberDescriptionFormat = "\n<.> %s %s\n";
+    // -- CONVERTER
     
-    @Builder.Default
-    private final boolean includeJavaSource = true;
+    private final @NonNull Function<J2AdocContext, J2AdocConverter> converterFactory;
+    
+    @Getter(lazy=true)
+    private final J2AdocConverter converter = getConverterFactory().apply(this);
+    
+    // -- FORMATTER
+    
+    private final @NonNull Function<J2AdocContext, UnitFormatter> formatterFactory;
+    
+    @Getter(lazy=true)
+    private final UnitFormatter formatter = getFormatterFactory().apply(this);
+
+    // -- UNIT INDEX
     
     private final Map<String, J2AdocUnit> unitIndex = _Maps.newTreeMap();
-
+    
     public J2AdocContext add(final @NonNull J2AdocUnit unit) {
         val previousKey = unitIndex.put(unit.getName(), unit);
         if(previousKey!=null) {
@@ -115,17 +104,16 @@ public class J2AdocContext {
     // -- PREDEFINED FORMATS
     
     public static J2AdocContextBuilder javaSourceWithFootNotesFormat() {
-        return J2AdocContext.builder();
+        return J2AdocContext.builder()
+                .converterFactory(J2AdocConverter::createDefault)
+                .formatterFactory(UnitFormatterWithSourceAndFootNotes::new)
+                ;
     }
     
     public static J2AdocContextBuilder compactFormat() {
         return J2AdocContext.builder()
-                .constructorFormat("`%1$s(%2$s)`") // name | param-list)
-                .genericConstructorFormat("`%2$s%1$s(%3$s)`") //  method-generic-type | name | param-list)
-                .methodFormat("`%2$s(%3$s)` : `%1$s`") //  return-type | name | param-list)
-                .genericMethodFormat("`%3$s%1$s(%4$s)` : `%2$s`") //  method-generic-type | return-type | name | param-list)
-                .memberDescriptionFormat("\n* %s\n%s\n") // method | description
-                .includeJavaSource(false)
+                .converterFactory(J2AdocConverter::createDefault)
+                .formatterFactory(UnitFormatterCompact::new)
                 ;        
     }
     

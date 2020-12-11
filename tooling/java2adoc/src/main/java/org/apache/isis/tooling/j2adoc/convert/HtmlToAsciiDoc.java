@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.j2adoc;
+package org.apache.isis.tooling.j2adoc.convert;
 
 import java.util.Stack;
 
