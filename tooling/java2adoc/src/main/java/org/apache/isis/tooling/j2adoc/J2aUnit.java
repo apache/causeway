@@ -75,13 +75,13 @@ public class J2aUnit {
     }
 
     public String getAsciiDocXref(
-            final @NonNull J2aContext docletContext) {
-        val toAdocConverter = JavaToAsciiDoc.of(docletContext);
+            final @NonNull J2aContext j2aContext) {
+        val toAdocConverter = JavaToAsciiDoc.of(j2aContext);
         return toAdocConverter.xref(this);
     }
     
     public String toAsciiDoc(
-            final @NonNull J2aContext docletContext) {
+            final @NonNull J2aContext j2aContext) {
         
         val doc = AsciiDocFactory.doc();
         
@@ -98,7 +98,7 @@ public class J2aUnit {
                 .collect(Can.toCan());
         
         
-        val toAdocConverter = JavaToAsciiDoc.of(docletContext);
+        val toAdocConverter = JavaToAsciiDoc.of(j2aContext);
 
         // -- intro
         
@@ -108,7 +108,7 @@ public class J2aUnit {
         
         // -- java content
         
-        if(docletContext.isIncludeJavaSource()) {
+        if(j2aContext.isIncludeJavaSource()) {
         
             val java = new StringBuilder();
             
@@ -145,7 +145,7 @@ public class J2aUnit {
             
             cd.getJavadoc()
             .ifPresent(javadoc->{
-                methodDescriptions.append(String.format(docletContext.getMemberDescriptionFormat(),
+                methodDescriptions.append(String.format(j2aContext.getMemberDescriptionFormat(),
                         toAdocConverter.constructorDeclaration(cd),
                         toAdocConverter.javadoc(javadoc, 1)));
             });
@@ -156,7 +156,7 @@ public class J2aUnit {
             
             md.getJavadoc()
             .ifPresent(javadoc->{
-                methodDescriptions.append(String.format(docletContext.getMemberDescriptionFormat(),
+                methodDescriptions.append(String.format(j2aContext.getMemberDescriptionFormat(),
                         toAdocConverter.methodDeclaration(md),
                         toAdocConverter.javadoc(javadoc, 1)));
             });

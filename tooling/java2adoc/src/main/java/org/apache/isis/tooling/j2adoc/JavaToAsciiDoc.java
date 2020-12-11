@@ -51,7 +51,7 @@ import lombok.val;
 @Value(staticConstructor = "of")
 final class JavaToAsciiDoc {
 
-    private final J2aContext docletContext;
+    private final J2aContext j2aContext;
     
     public String constructorDeclaration(final @NonNull ConstructorDeclaration cd) {
         val isDeprecated = cd.getAnnotations().stream()
@@ -62,17 +62,17 @@ final class JavaToAsciiDoc {
         
         val memberNameFormat = isDeprecated
                 ? cd.isStatic()
-                        ? docletContext.getDeprecatedStaticMemberNameFormat()
-                        : docletContext.getDeprecatedMemberNameFormat()
+                        ? j2aContext.getDeprecatedStaticMemberNameFormat()
+                        : j2aContext.getDeprecatedMemberNameFormat()
                 : cd.isStatic()
-                    ? docletContext.getStaticMemberNameFormat()
-                    : docletContext.getMemberNameFormat();
+                    ? j2aContext.getStaticMemberNameFormat()
+                    : j2aContext.getMemberNameFormat();
 
         val isGenericMember = cd.getTypeParameters().isNonEmpty();
         
         val constructorFormat = isGenericMember
-                ? docletContext.getGenericConstructorFormat()
-                : docletContext.getConstructorFormat();
+                ? j2aContext.getGenericConstructorFormat()
+                : j2aContext.getConstructorFormat();
         
         val args = Can.<Object>of(
                 isGenericMember ? typeParamters(cd.getTypeParameters()) : null,  // Cans do ignored null 
@@ -96,17 +96,17 @@ final class JavaToAsciiDoc {
         
         val memberNameFormat = isDeprecated
                 ? md.isStatic()
-                        ? docletContext.getDeprecatedStaticMemberNameFormat()
-                        : docletContext.getDeprecatedMemberNameFormat()
+                        ? j2aContext.getDeprecatedStaticMemberNameFormat()
+                        : j2aContext.getDeprecatedMemberNameFormat()
                 : md.isStatic()
-                    ? docletContext.getStaticMemberNameFormat()
-                    : docletContext.getMemberNameFormat();
+                    ? j2aContext.getStaticMemberNameFormat()
+                    : j2aContext.getMemberNameFormat();
 
         val isGenericMember = md.getTypeParameters().isNonEmpty();
         
         val methodFormat = isGenericMember
-                ? docletContext.getGenericMethodFormat()
-                : docletContext.getMethodFormat();
+                ? j2aContext.getGenericMethodFormat()
+                : j2aContext.getMethodFormat();
         
         val args = Can.<Object>of(
                 isGenericMember ? typeParamters(md.getTypeParameters()) : null,  // Cans do ignored null 
@@ -195,23 +195,23 @@ final class JavaToAsciiDoc {
 
         switch(inlineTag.getType()) {
         case LINK:
-            val refDoclet = docletContext.getAdoclet(inlineContent).orElse(null);
-            if(refDoclet!=null) {
-                return String.format(" %s ", xref(refDoclet));
+            val referencedUnit = j2aContext.getUnit(inlineContent).orElse(null);
+            if(referencedUnit!=null) {
+                return String.format(" %s ", xref(referencedUnit));
             }
         default:
             return String.format(" _%s_ ", inlineContent);
         }
     }
     
-    public String xref(final @NonNull J2aUnit doclet) {
+    public String xref(final @NonNull J2aUnit unit) {
         return String.format("xref:%s[%s]", 
-                String.format(docletContext.getXrefPageIdFormat(), doclet.getName()), 
-                doclet.getName()); 
+                String.format(j2aContext.getXrefPageIdFormat(), unit.getName()), 
+                unit.getName()); 
     }
 
     public String xrefIfRequired(final @NonNull String docIndexKey) {
-        return docletContext.getAdoclet(docIndexKey)
+        return j2aContext.getUnit(docIndexKey)
                 .map(this::xref)
                 .orElse(docIndexKey);
     }

@@ -83,13 +83,13 @@ public class J2aContext {
     @Builder.Default
     private final boolean includeJavaSource = true;
     
-    private final Map<String, J2aUnit> adocletIndex = _Maps.newTreeMap();
+    private final Map<String, J2aUnit> unitIndex = _Maps.newTreeMap();
 
-    public J2aContext add(final @NonNull J2aUnit adoclet) {
-        val previousKey = adocletIndex.put(adoclet.getName(), adoclet);
+    public J2aContext add(final @NonNull J2aUnit unit) {
+        val previousKey = unitIndex.put(unit.getName(), unit);
         if(previousKey!=null) {
             throw _Exceptions.unrecoverableFormatted(
-                    "doclet index entries must be unique (index key collision on %s)", 
+                    "J2aUnit index entries must be unique (index key collision on %s)", 
                     previousKey);
         }
         return this;
@@ -104,12 +104,12 @@ public class J2aContext {
         .stream();
     }
     
-    public Stream<J2aUnit> streamAdoclets() {
-        return adocletIndex.values().stream();
+    public Stream<J2aUnit> streamUnits() {
+        return unitIndex.values().stream();
     }
 
-    public Optional<J2aUnit> getAdoclet(String key) {
-        return Optional.ofNullable(adocletIndex.get(key));
+    public Optional<J2aUnit> getUnit(String key) {
+        return Optional.ofNullable(unitIndex.get(key));
     }
     
     // -- PREDEFINED FORMATS

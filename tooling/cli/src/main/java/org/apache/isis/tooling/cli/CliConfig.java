@@ -34,17 +34,17 @@ public class CliConfig {
     private ProjectDoc projectDoc = new ProjectDoc();
     private File outputFile = null; // where to write eg. system-overview.adoc
     
-    private String docletPath = "index";
-    private String docletXrefPageIdFormat = "system:generated:index/%s.adoc";
+    private String documentGlobalIndexPath = "index";
+    private String documentGlobalIndexXrefPageIdFormat = "system:generated:index/%s.adoc";
 
     public boolean isDryRun() {
         return getOutputFile() == null;
     }
     
-    public File getDocletOutputFolder() {
+    public File getDocumentGlobalIndexOutputFolder() {
         return Optional.ofNullable(getOutputFile())
                 .map(File::getParentFile)
-                .map(folder->new File(folder, getDocletPath()))
+                .map(folder->new File(folder, getDocumentGlobalIndexPath()))
                 .orElse(null);
     }
     

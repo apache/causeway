@@ -87,8 +87,8 @@ public class ProjectDocModel {
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
-        val docletContext = J2aContext.compactFormat()
-                .xrefPageIdFormat(cliConfig.getDocletXrefPageIdFormat())
+        val j2aContext = J2aContext.compactFormat()
+                .xrefPageIdFormat(cliConfig.getDocumentGlobalIndexXrefPageIdFormat())
                 .build();
         
         val doc = doc();
@@ -101,14 +101,14 @@ public class ProjectDocModel {
         .ifPresent(block(doc)::setSource);
 
         cliConfig.getProjectDoc().getArtifactGroups().forEach((section, groupId)->{
-            createSection(doc, section, groupId, docletContext);
+            createSection(doc, section, groupId, j2aContext);
         });
 
         if(!modules.isEmpty()) {
-            createSection(doc, "Other", null, docletContext);
+            createSection(doc, "Other", null, j2aContext);
         }
         
-        ProjectDocWriter.write(cliConfig, doc, docletContext);
+        ProjectDocWriter.write(cliConfig, doc, j2aContext);
 
     }
 
@@ -179,7 +179,7 @@ public class ProjectDocModel {
             final @NonNull Document doc, 
             final @NonNull String sectionName, 
             final @Nullable String groupIdPattern, 
-            final @NonNull J2aContext docletContext) {
+            final @NonNull J2aContext j2aContext) {
 
         val titleBlock = block(doc);
 
@@ -219,7 +219,7 @@ public class ProjectDocModel {
 
             val row = row(table);
             cell(table, row, coordinates(module, projRelativePath));
-            cell(table, row, details(module, docletContext));
+            cell(table, row, details(module, j2aContext));
         });
 
         descriptionBlock.setSource(groupDiagram.toAsciiDoc(sectionName));
@@ -275,7 +275,7 @@ public class ProjectDocModel {
         sb.append(String.format("%s: %s\n", key, value));
     }
     
-    private String details(ProjectNode module, J2aContext docletContext) {
+    private String details(ProjectNode module, J2aContext j2aContext) {
         val description = module.getDescription().trim();
         val dependencyList = module.getDependencies()
                 .stream()
@@ -291,7 +291,7 @@ public class ProjectDocModel {
                 .collect(Collectors.joining())
                 .trim();
         
-        val indexEntriesCompactList = gatherAdoclets(module.getProjectDirectory(), docletContext)
+        val indexEntriesCompactList = gatherGlobalDocIndexXrefs(module.getProjectDirectory(), j2aContext)
                 .stream()
                 .collect(Collectors.joining(", "))
                 .trim();
@@ -325,16 +325,16 @@ public class ProjectDocModel {
         return String.format("* %s\n", element);
     }
 
-    private SortedSet<String> gatherAdoclets(File projDir, J2aContext docletContext) {
+    private SortedSet<String> gatherGlobalDocIndexXrefs(File projDir, J2aContext j2aContext) {
         
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 
-        SortedSet<String> docletXrefs = analyzerConfig.getSources(JAVA).stream()
-        .flatMap(docletContext::add)
-        .map(doclet->doclet.getAsciiDocXref(docletContext))
+        final SortedSet<String> docIndexXrefs = analyzerConfig.getSources(JAVA).stream()
+        .flatMap(j2aContext::add)
+        .map(unit->unit.getAsciiDocXref(j2aContext))
         .collect(Collectors.toCollection(TreeSet::new));
         
-        return docletXrefs;
+        return docIndexXrefs;
     }
     
     private SortedSet<String> gatherSpringComponents(File projDir) {

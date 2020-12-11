@@ -42,7 +42,7 @@ import guru.nidi.codeassert.config.Language;
 
 import static guru.nidi.codeassert.config.Language.JAVA;
 
-class AdocletTest {
+class J2aTest {
 
     @Test //@Disabled
     void testJavaDocMining() {
@@ -51,7 +51,7 @@ class AdocletTest {
                 .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
                 .main();
 
-        val docletContext = J2aContext
+        val j2aContext = J2aContext
                 //.javaSourceWithFootNotesFormat()
                 .compactFormat()
                 .xrefPageIdFormat("system:generated:index/%s.adoc")
@@ -61,12 +61,12 @@ class AdocletTest {
         .stream()
         .filter(source->source.toString().contains("XmlSnapshotService"))
         //.peek(source->System.out.println("parsing source: " + source))
-        .forEach(docletContext::add);
+        .forEach(j2aContext::add);
         
-        docletContext.streamAdoclets()
-        .forEach(doclet->{
+        j2aContext.streamUnits()
+        .forEach(unit->{
             
-            System.out.println(doclet.toAsciiDoc(docletContext));
+            System.out.println(unit.toAsciiDoc(j2aContext));
             System.out.println();
 
         });

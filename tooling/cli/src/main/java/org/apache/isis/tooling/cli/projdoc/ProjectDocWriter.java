@@ -41,7 +41,7 @@ final class ProjectDocWriter {
     static void write(
             final @NonNull CliConfig cliConfig, 
             final @NonNull Document doc, 
-            final @NonNull J2aContext docletContext) {
+            final @NonNull J2aContext j2aContext) {
         
         
         try {
@@ -49,14 +49,14 @@ final class ProjectDocWriter {
             
             if(cliConfig.isDryRun()) {
                 System.out.println(adoc);
-                for(val doclet : docletContext.getAdocletIndex().values()) {
-                    System.out.println(doclet.toAsciiDoc(docletContext));
+                for(val unit : j2aContext.getUnitIndex().values()) {
+                    System.out.println(unit.toAsciiDoc(j2aContext));
                 }
             } else {
                 writeTo(cliConfig.getOutputFile(), adoc);
-                for(val doclet : docletContext.getAdocletIndex().values()) {
-                    val docletFile = new File(cliConfig.getDocletOutputFolder(), doclet.getName() + ".adoc");
-                    writeTo(docletFile, doclet.toAsciiDoc(docletContext));
+                for(val unit : j2aContext.getUnitIndex().values()) {
+                    val adocFile = new File(cliConfig.getDocumentGlobalIndexOutputFolder(), unit.getName() + ".adoc");
+                    writeTo(adocFile, unit.toAsciiDoc(j2aContext));
                 }
             }    
             
