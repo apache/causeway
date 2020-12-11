@@ -40,11 +40,11 @@ import lombok.extern.log4j.Log4j2;
 
 @Value
 @Log4j2
-public class J2AUnit {
+public class J2AdocUnit {
 
     private final ClassOrInterfaceDeclaration td;
 
-    public static Stream<J2AUnit> parse(final @NonNull File sourceFile) {
+    public static Stream<J2AdocUnit> parse(final @NonNull File sourceFile) {
 
         if("package-info.java".equals(sourceFile.getName())) {
             // ignore package files
@@ -61,8 +61,8 @@ public class J2AUnit {
             
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamPublicTypeDeclarations)
-            .filter(J2AUnits::hasIndexDirective)
-            .map(J2AUnit::new);
+            .filter(J2AdocUnits::hasIndexDirective)
+            .map(J2AdocUnit::new);
 
         } catch (Exception e) {
             log.error("failed to parse java source file {}", sourceFile, e);
@@ -76,13 +76,13 @@ public class J2AUnit {
     }
 
     public String getAsciiDocXref(
-            final @NonNull J2AContext j2aContext) {
+            final @NonNull J2AdocContext j2aContext) {
         val toAdocConverter = JavaToAsciiDoc.of(j2aContext);
         return toAdocConverter.xref(this);
     }
     
     public Document toAsciiDoc(
-            final @NonNull J2AContext j2aContext) {
+            final @NonNull J2AdocContext j2aContext) {
         
         val doc = AsciiDocFactory.doc();
         
@@ -129,14 +129,14 @@ public class J2AUnit {
             cds.forEach(cd->{
                 
                 java.append(String.format("\n  %s // <.>\n", 
-                        J2AUnits.toNormalizedConstructorDeclaration(cd)));
+                        J2AdocUnits.toNormalizedConstructorDeclaration(cd)));
                 
             });
             
             mds.forEach(md->{
     
                 java.append(String.format("\n  %s // <.>\n", 
-                        J2AUnits.toNormalizedMethodDeclaration(md)));
+                        J2AdocUnits.toNormalizedMethodDeclaration(md)));
                 
             });
     

@@ -51,7 +51,7 @@ import lombok.val;
 @Value(staticConstructor = "of")
 final class JavaToAsciiDoc {
 
-    private final J2AContext j2aContext;
+    private final J2AdocContext j2aContext;
     
     public String constructorDeclaration(final @NonNull ConstructorDeclaration cd) {
         val isDeprecated = cd.getAnnotations().stream()
@@ -204,7 +204,7 @@ final class JavaToAsciiDoc {
         }
     }
     
-    public String xref(final @NonNull J2AUnit unit) {
+    public String xref(final @NonNull J2AdocUnit unit) {
         return String.format("xref:%s[%s]", 
                 String.format(j2aContext.getXrefPageIdFormat(), unit.getName()), 
                 unit.getName()); 

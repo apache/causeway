@@ -23,7 +23,7 @@ import java.io.File;
 import org.asciidoctor.ast.Document;
 
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.j2adoc.J2AContext;
+import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
@@ -36,7 +36,7 @@ final class ProjectDocWriter {
     static void write(
             final @NonNull CliConfig cliConfig, 
             final @NonNull Document adoc, 
-            final @NonNull J2AContext j2aContext) {
+            final @NonNull J2AdocContext j2aContext) {
         
         try {
             

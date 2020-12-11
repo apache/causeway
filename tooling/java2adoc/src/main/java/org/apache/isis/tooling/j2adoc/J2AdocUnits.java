@@ -27,7 +27,7 @@ import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import lombok.NonNull;
 import lombok.val;
 
-final class J2AUnits {
+final class J2AdocUnits {
 
     /**
      * Whether to include given {@link TypeDeclaration} with the index.

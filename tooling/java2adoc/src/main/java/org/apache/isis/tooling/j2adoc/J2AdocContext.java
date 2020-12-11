@@ -34,7 +34,7 @@ import lombok.Value;
 import lombok.val;
 
 @Value @Builder
-public class J2AContext {
+public class J2AdocContext {
 
     private final @NonNull String xrefPageIdFormat;
     
@@ -83,9 +83,9 @@ public class J2AContext {
     @Builder.Default
     private final boolean includeJavaSource = true;
     
-    private final Map<String, J2AUnit> unitIndex = _Maps.newTreeMap();
+    private final Map<String, J2AdocUnit> unitIndex = _Maps.newTreeMap();
 
-    public J2AContext add(final @NonNull J2AUnit unit) {
+    public J2AdocContext add(final @NonNull J2AdocUnit unit) {
         val previousKey = unitIndex.put(unit.getName(), unit);
         if(previousKey!=null) {
             throw _Exceptions.unrecoverableFormatted(
@@ -95,8 +95,8 @@ public class J2AContext {
         return this;
     }
     
-    public Stream<J2AUnit> add(final @NonNull File sourceFile) {
-        return J2AUnit.parse(sourceFile)
+    public Stream<J2AdocUnit> add(final @NonNull File sourceFile) {
+        return J2AdocUnit.parse(sourceFile)
         .peek(this::add)
         // ensure the stream is consumed here, 
         // current implementation does not expect more than 1 result per source file
@@ -104,22 +104,22 @@ public class J2AContext {
         .stream();
     }
     
-    public Stream<J2AUnit> streamUnits() {
+    public Stream<J2AdocUnit> streamUnits() {
         return unitIndex.values().stream();
     }
 
-    public Optional<J2AUnit> getUnit(String key) {
+    public Optional<J2AdocUnit> getUnit(String key) {
         return Optional.ofNullable(unitIndex.get(key));
     }
     
     // -- PREDEFINED FORMATS
     
-    public static J2AContextBuilder javaSourceWithFootNotesFormat() {
-        return J2AContext.builder();
+    public static J2AdocContextBuilder javaSourceWithFootNotesFormat() {
+        return J2AdocContext.builder();
     }
     
-    public static J2AContextBuilder compactFormat() {
-        return J2AContext.builder()
+    public static J2AdocContextBuilder compactFormat() {
+        return J2AdocContext.builder()
                 .constructorFormat("`%1$s(%2$s)`") // name | param-list)
                 .genericConstructorFormat("`%2$s%1$s(%3$s)`") //  method-generic-type | name | param-list)
                 .methodFormat("`%2$s(%3$s)` : `%1$s`") //  return-type | name | param-list)
