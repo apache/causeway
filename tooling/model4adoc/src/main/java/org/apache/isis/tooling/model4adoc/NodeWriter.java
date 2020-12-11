@@ -265,8 +265,6 @@ final class NodeWriter implements StructuralNodeVisitor {
     private void print(final @NonNull String line) {
         
         if(line.contains("\n")) {
-            //throw _Exceptions.illegalArgument("line cannot contain a new line character: %s", line);
-            
             val lineIter = _Text.normalize(_Text.getLines(line)).iterator();
             while(lineIter.hasNext()) {
                 val nextLine = lineIter.next(); 
@@ -281,6 +279,7 @@ final class NodeWriter implements StructuralNodeVisitor {
                     newLineCount++;
                 }
             }
+            return;
         }
         if(!line.isEmpty()) {
             writer.append(line);
@@ -306,20 +305,12 @@ final class NodeWriter implements StructuralNodeVisitor {
         printNewLine();
     }
     
-//    @SneakyThrows
-//    private void printflnPassThrough(final @NonNull String format, final Object... strings) {
-//        val formattedString = String.format(format, _Arrays.map(strings, this::nullToEmpty));
-//        writer.append(formattedString).append("\n");
-//    }
-    
     private Object nullToEmpty(Object x) {
         if(x==null) {
             return "";
         }
         return x;
     }
-
-
     
 
 }
