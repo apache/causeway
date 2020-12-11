@@ -104,7 +104,9 @@ public class AsciiDocWriter {
             return;
         }
         val adocWriter = new AsciiDocWriter();
-        adocWriter.write(doc, new PrintWriter(out));
+        try(val writer = new PrintWriter(out)) {
+            adocWriter.write(doc, writer);    
+        }
     }
     
     /**
@@ -128,6 +130,7 @@ public class AsciiDocWriter {
         val formatWriter = new FormatWriter(writer);
         formatWriter.ifNonEmpty("= %s\n\n", doc.getTitle());
         writeChildNodes(doc.getBlocks(), formatWriter);
+        writer.flush();
     }
 
     // -- CHILDREN

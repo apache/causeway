@@ -34,6 +34,7 @@ import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
+import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
 import lombok.val;
@@ -67,9 +68,9 @@ class J2AdocTest {
         .map(unit->unit.toAsciiDoc(j2aContext))
         .forEach(adoc->{
             
-            System.out.println(adoc);
+            //System.out.println(adoc);
             
-            //AsciiDocWriter.print(adoc);
+            AsciiDocWriter.print(adoc);
             System.out.println();
 
         });
