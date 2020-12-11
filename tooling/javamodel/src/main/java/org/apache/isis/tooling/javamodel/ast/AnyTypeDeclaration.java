@@ -21,6 +21,7 @@ package org.apache.isis.tooling.javamodel.ast;
 import java.util.Optional;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
@@ -44,6 +45,7 @@ import lombok.RequiredArgsConstructor;
 public final class AnyTypeDeclaration {
 
     public static enum Kind {
+        ANNOTATION,
         CLASS,
         ENUM,
         INTERFACE
@@ -55,6 +57,7 @@ public final class AnyTypeDeclaration {
     
     private final @NonNull Kind kind;
     private final TypeDeclaration<?> td;
+    private final AnnotationDeclaration annotationDeclaration;
     private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration; 
     private final EnumDeclaration enumDeclaration;
     
@@ -66,11 +69,29 @@ public final class AnyTypeDeclaration {
     
     // -- FACTORIES
     
+    
+    public static AnyTypeDeclaration of(
+            final @NonNull AnnotationDeclaration annotationDeclaration) {
+        return new AnyTypeDeclaration(
+                Kind.ANNOTATION, 
+                annotationDeclaration,
+                annotationDeclaration,
+                null,
+                null,
+                Can.empty(),
+                Can.empty(),
+                Can.empty(),
+                Can.empty()
+                //TODO add annotation processing
+                );
+    }
+    
     public static AnyTypeDeclaration of(
             final @NonNull ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
         return new AnyTypeDeclaration(
                 classOrInterfaceDeclaration.isInterface() ? Kind.INTERFACE : Kind.CLASS, 
                 classOrInterfaceDeclaration,
+                null,
                 classOrInterfaceDeclaration,
                 null,
                 Can.empty(),
@@ -92,6 +113,7 @@ public final class AnyTypeDeclaration {
                 Kind.ENUM, 
                 enumDeclaration, 
                 null, 
+                null,
                 enumDeclaration,
                 EnumDeclarations.streamEnumConstantDeclarations(enumDeclaration)
                     .filter(Javadocs::presentAndNotHidden)
@@ -116,6 +138,9 @@ public final class AnyTypeDeclaration {
         }
         if(td instanceof EnumDeclaration) {
             return of((EnumDeclaration)td);
+        }
+        if(td instanceof AnnotationDeclaration) {
+            return of((AnnotationDeclaration)td);
         }
         throw _Exceptions.unsupportedOperation("unsupported TypeDeclaration %s", td.getClass());
     }
