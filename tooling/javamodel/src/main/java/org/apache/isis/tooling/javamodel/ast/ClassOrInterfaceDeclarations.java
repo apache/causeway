@@ -20,11 +20,9 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.stream.Stream;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 
 import lombok.NonNull;
 
@@ -51,24 +49,5 @@ public final class ClassOrInterfaceDeclarations {
         return streamMethodDeclarations(typeDeclaration)
                 .filter(md->MethodDeclarations.isEffectivePublic(md, typeDeclaration));
     }
-
-    /**
-     * Returns the recursively resolved (nested) type name. 
-     * Same as {@link #getSimpleName()} if type is not nested. 
-     */
-    public static String name(
-            final @NonNull ClassOrInterfaceDeclaration td) {
-        String name = td.getNameAsString(); 
-        Node walker = td; 
-        while(walker.getParentNode().isPresent()) {
-            walker = walker.getParentNode().get();
-            if(walker instanceof NodeWithSimpleName) {
-                name = ((NodeWithSimpleName<?>)walker).getNameAsString() + "." + name;
-            } else break;
-        }
-        return name;
-    }
-    
-
     
 }

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
-import org.apache.isis.tooling.javamodel.ast.ClassOrInterfaceDeclarations;
+import org.apache.isis.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
 
 import lombok.val;
@@ -65,11 +65,10 @@ class AnalyzerTest {
         .filter(source->source.toString().contains("UserService"))
         .peek(source->System.out.println("parsing source: " + source))
         .map(CompilationUnits::parse)
-        .flatMap(CompilationUnits::streamPublicTypeDeclarations)
+        .flatMap(CompilationUnits::streamTypeDeclarations)
         .peek(td->{
             
-            td.getJavadocComment().ifPresent(javadocComment->{
-                val javadoc = javadocComment.parse();
+            td.getJavadoc().ifPresent(javadoc->{
             
                 javadoc.getBlockTags().stream()
                 .filter(tag->tag.getTagName().equals("since"))
@@ -78,7 +77,7 @@ class AnalyzerTest {
             });
             
         })
-        .flatMap(ClassOrInterfaceDeclarations::streamMethodDeclarations)
+        .flatMap(AnyTypeDeclaration::streamMethodDeclarations)
         .forEach(md->{
             
             System.out.println("javadoc: " + md.getJavadocComment());

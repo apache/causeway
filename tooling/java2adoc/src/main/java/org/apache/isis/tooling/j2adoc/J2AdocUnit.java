@@ -23,7 +23,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
@@ -32,10 +31,8 @@ import org.asciidoctor.ast.Document;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
-import org.apache.isis.tooling.javamodel.ast.ClassOrInterfaceDeclarations;
+import org.apache.isis.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
-import org.apache.isis.tooling.javamodel.ast.Javadocs;
-import org.apache.isis.tooling.javamodel.ast.TypeDeclarations;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -47,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class J2AdocUnit {
 
-    private final ClassOrInterfaceDeclaration td;
+    private final AnyTypeDeclaration atd;
     
     public static Stream<J2AdocUnit> parse(final @NonNull File sourceFile) {
 
@@ -65,8 +62,8 @@ public final class J2AdocUnit {
             val cu = StaticJavaParser.parse(source);
             
             return Stream.of(cu)
-            .flatMap(CompilationUnits::streamPublicTypeDeclarations)
-            .filter(TypeDeclarations::hasIndexDirective)
+            .flatMap(CompilationUnits::streamTypeDeclarations)
+            .filter(AnyTypeDeclaration::hasIndexDirective)
             .map(J2AdocUnit::new);
 
         } catch (Exception e) {
@@ -80,31 +77,28 @@ public final class J2AdocUnit {
      * Returns the recursively resolved (nested) type name. 
      * Same as {@link #getSimpleName()} if type is not nested. 
      */
-    @Getter(lazy = true)
-    private final String name = ClassOrInterfaceDeclarations.name(td);
+    public String getName() {
+        return atd.getName();
+    }
+    
+    public String getSimpleName() {
+        return atd.getSimpleName();
+    }
+    
+    public String getDeclarationKeyword() {
+        return atd.getKind().name().toLowerCase();
+    }
+    
+    public Can<ConstructorDeclaration> getPublicConstructorDeclarations() {
+        return atd.getPublicConstructorDeclarations();
+    }
+    
+    public Can<MethodDeclaration> getPublicMethodDeclarations() {
+        return atd.getPublicMethodDeclarations();
+    }
     
     @Getter(lazy = true)
-    private final String simpleName = td.getNameAsString();
-    
-    @Getter(lazy = true)
-    private final String declarationKeyword = td.isInterface()
-            ? "interface"
-            : "class";
-    
-    @Getter(lazy = true)
-    private final Can<ConstructorDeclaration> publicConstructorDeclarations =
-        ClassOrInterfaceDeclarations.streamPublicConstructorDeclarations(td)
-                .filter(Javadocs::presentAndNotHidden)
-                .collect(Can.toCan());
-    
-    @Getter(lazy = true)
-    private final Can<MethodDeclaration> publicMethodDeclarations =
-        ClassOrInterfaceDeclarations.streamPublicMethodDeclarations(td)
-                .filter(Javadocs::presentAndNotHidden)
-                .collect(Can.toCan());
-    
-    @Getter(lazy = true)
-    private final Optional<Javadoc> javadoc = td.getJavadoc();
+    private final Optional<Javadoc> javadoc = atd.getJavadoc();
     
     public String getAsciiDocXref(
             final @NonNull J2AdocContext j2aContext) {

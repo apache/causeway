@@ -88,7 +88,7 @@ public class J2AdocContext {
         return J2AdocUnit.parse(sourceFile)
         .peek(this::add)
         // ensure the stream is consumed here, 
-        // current implementation does not expect more than 1 result per source file
+        // optimized for 1 result per source file, but can be more
         .collect(Collectors.toCollection(()->new ArrayList<>(1))) 
         .stream();
     }

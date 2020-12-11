@@ -19,12 +19,15 @@
 package org.apache.isis.tooling.javamodel.ast;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -43,7 +46,40 @@ public final class CompilationUnits {
         .orElse(false);
     }
     
-    public static <T> Stream<ClassOrInterfaceDeclaration> streamPublicTypeDeclarations(
+    public static <T> Stream<AnyTypeDeclaration> streamTypeDeclarations(
+            final @NonNull CompilationUnit compilationUnit) {
+        
+        return getPrimaryType(compilationUnit)
+        .map(type->type
+                .findAll(TypeDeclaration.class)
+                .stream()
+                .map(AnyTypeDeclaration::auto))
+        .orElseGet(Stream::empty);
+    }
+    
+    public static <T> Stream<ClassOrInterfaceDeclaration> streamClassOrInterfaceDeclarations(
+            final @NonNull CompilationUnit compilationUnit) {
+        
+        return getPrimaryType(compilationUnit)
+        .map(type->type
+                .findAll(ClassOrInterfaceDeclaration.class)
+                .stream())
+        .orElseGet(Stream::empty);
+    }
+    
+    public static <T> Stream<EnumDeclaration> streamEnumDeclarations(
+            final @NonNull CompilationUnit compilationUnit) {
+        
+        return getPrimaryType(compilationUnit)
+        .map(type->type
+                .findAll(EnumDeclaration.class)
+                .stream())
+        .orElseGet(Stream::empty);
+    }
+    
+    // -- HELPER
+    
+    private static Optional<TypeDeclaration<?>> getPrimaryType(
             final @NonNull CompilationUnit compilationUnit) {
         
         val type = compilationUnit.getPrimaryType()
@@ -55,13 +91,10 @@ public final class CompilationUnits {
         if(type==null) {
             System.err.println("could not find any type in CompilationUnit ...\n" + 
                     compilationUnit);
-            return Stream.empty();
+            return Optional.empty();
         }
         
-        //TODO not processing enums yet
-        return type.findAll(ClassOrInterfaceDeclaration.class)
-                .stream();
-
+        return Optional.of(type);        
     }
 
     
