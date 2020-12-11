@@ -19,16 +19,11 @@
 package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.charset.StandardCharsets;
-
-import javax.annotation.Nullable;
 
 import org.asciidoctor.ast.Document;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.j2adoc.J2aContext;
+import org.apache.isis.tooling.j2adoc.J2AContext;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
@@ -40,23 +35,25 @@ final class ProjectDocWriter {
     @SneakyThrows
     static void write(
             final @NonNull CliConfig cliConfig, 
-            final @NonNull Document doc, 
-            final @NonNull J2aContext j2aContext) {
-        
+            final @NonNull Document adoc, 
+            final @NonNull J2AContext j2aContext) {
         
         try {
-            val adoc = AsciiDocWriter.toString(doc);
             
             if(cliConfig.isDryRun()) {
-                System.out.println(adoc);
+                AsciiDocWriter.print(adoc);
                 for(val unit : j2aContext.getUnitIndex().values()) {
-                    System.out.println(unit.toAsciiDoc(j2aContext));
+                    AsciiDocWriter.print(unit.toAsciiDoc(j2aContext));
                 }
             } else {
-                writeTo(cliConfig.getOutputFile(), adoc);
+                AsciiDocWriter.writeToFile(adoc, cliConfig.getOutputFile());
                 for(val unit : j2aContext.getUnitIndex().values()) {
-                    val adocFile = new File(cliConfig.getDocumentGlobalIndexOutputFolder(), unit.getName() + ".adoc");
-                    writeTo(adocFile, unit.toAsciiDoc(j2aContext));
+
+                    AsciiDocWriter.writeToFile(
+                            unit.toAsciiDoc(j2aContext), 
+                            new File(
+                                    cliConfig.getDocumentGlobalIndexOutputFolder(), 
+                                    unit.getName() + ".adoc"));
                 }
             }    
             
@@ -67,13 +64,4 @@ final class ProjectDocWriter {
         
     }
     
-    // -- HELPER
-    
-    @SneakyThrows
-    private static void writeTo(@Nullable File file, String adoc) {
-        try(val fos = new FileOutputStream(file)){
-            fos.write(_Strings.toBytes(adoc, StandardCharsets.UTF_8));
-        }
-    }
-
 }

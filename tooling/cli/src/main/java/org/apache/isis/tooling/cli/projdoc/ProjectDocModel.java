@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.j2adoc.J2aContext;
+import org.apache.isis.tooling.j2adoc.J2AContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.ast.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
@@ -87,7 +87,7 @@ public class ProjectDocModel {
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
-        val j2aContext = J2aContext.compactFormat()
+        val j2aContext = J2AContext.compactFormat()
                 .xrefPageIdFormat(cliConfig.getDocumentGlobalIndexXrefPageIdFormat())
                 .build();
         
@@ -179,7 +179,7 @@ public class ProjectDocModel {
             final @NonNull Document doc, 
             final @NonNull String sectionName, 
             final @Nullable String groupIdPattern, 
-            final @NonNull J2aContext j2aContext) {
+            final @NonNull J2AContext j2aContext) {
 
         val titleBlock = block(doc);
 
@@ -275,7 +275,7 @@ public class ProjectDocModel {
         sb.append(String.format("%s: %s\n", key, value));
     }
     
-    private String details(ProjectNode module, J2aContext j2aContext) {
+    private String details(ProjectNode module, J2AContext j2aContext) {
         val description = module.getDescription().trim();
         val dependencyList = module.getDependencies()
                 .stream()
@@ -325,7 +325,7 @@ public class ProjectDocModel {
         return String.format("* %s\n", element);
     }
 
-    private SortedSet<String> gatherGlobalDocIndexXrefs(File projDir, J2aContext j2aContext) {
+    private SortedSet<String> gatherGlobalDocIndexXrefs(File projDir, J2AContext j2aContext) {
         
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 

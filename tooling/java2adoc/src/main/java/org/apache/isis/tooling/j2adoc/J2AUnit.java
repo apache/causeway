@@ -24,13 +24,14 @@ import java.util.stream.Stream;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
+import org.asciidoctor.ast.Document;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.ast.ClassOrInterfaceDeclarations;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -39,11 +40,11 @@ import lombok.extern.log4j.Log4j2;
 
 @Value
 @Log4j2
-public class J2aUnit {
+public class J2AUnit {
 
     private final ClassOrInterfaceDeclaration td;
 
-    public static Stream<J2aUnit> parse(final @NonNull File sourceFile) {
+    public static Stream<J2AUnit> parse(final @NonNull File sourceFile) {
 
         if("package-info.java".equals(sourceFile.getName())) {
             // ignore package files
@@ -60,8 +61,8 @@ public class J2aUnit {
             
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamPublicTypeDeclarations)
-            .filter(J2aUnits::hasIndexDirective)
-            .map(J2aUnit::new);
+            .filter(J2AUnits::hasIndexDirective)
+            .map(J2AUnit::new);
 
         } catch (Exception e) {
             log.error("failed to parse java source file {}", sourceFile, e);
@@ -75,13 +76,13 @@ public class J2aUnit {
     }
 
     public String getAsciiDocXref(
-            final @NonNull J2aContext j2aContext) {
+            final @NonNull J2AContext j2aContext) {
         val toAdocConverter = JavaToAsciiDoc.of(j2aContext);
         return toAdocConverter.xref(this);
     }
     
-    public String toAsciiDoc(
-            final @NonNull J2aContext j2aContext) {
+    public Document toAsciiDoc(
+            final @NonNull J2AContext j2aContext) {
         
         val doc = AsciiDocFactory.doc();
         
@@ -99,6 +100,14 @@ public class J2aUnit {
         
         
         val toAdocConverter = JavaToAsciiDoc.of(j2aContext);
+        
+        // -- title
+        
+        val title = String.format("%s : _%s_\n\n", 
+                getName(),
+                getDeclarationKeyword());
+        
+        doc.setTitle(title);
 
         // -- intro
         
@@ -120,14 +129,14 @@ public class J2aUnit {
             cds.forEach(cd->{
                 
                 java.append(String.format("\n  %s // <.>\n", 
-                        J2aUnits.toNormalizedConstructorDeclaration(cd)));
+                        J2AUnits.toNormalizedConstructorDeclaration(cd)));
                 
             });
             
             mds.forEach(md->{
     
                 java.append(String.format("\n  %s // <.>\n", 
-                        J2aUnits.toNormalizedMethodDeclaration(md)));
+                        J2AUnits.toNormalizedMethodDeclaration(md)));
                 
             });
     
@@ -165,17 +174,15 @@ public class J2aUnit {
         
         methodDescriptionBlock.setSource(methodDescriptions.toString());
         
-        try {
-            val title = String.format("%s : _%s_\n\n", 
-                    getName(),
-                    getDeclarationKeyword());
-            
-            doc.setTitle(title);
-            return AsciiDocWriter.toString(doc);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "ERROR: " + e.getMessage();
-        }
+        return doc;
+        
+//        try {
+//
+//            return AsciiDocWriter.toString(doc);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "ERROR: " + e.getMessage();
+//        }
         
     }
 

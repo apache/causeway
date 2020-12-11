@@ -18,12 +18,19 @@
  */
 package org.apache.isis.tooling.model4adoc;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Block;
@@ -58,7 +65,7 @@ public class AsciiDocWriter {
      * the inverse of {@link Asciidoctor#load(String, java.util.Map)}}
      */
     @SneakyThrows
-    public static String toString(Document doc) {
+    public static String toString(final @Nullable Document doc) {
         if(doc==null) {
             return "";
         }
@@ -67,23 +74,60 @@ public class AsciiDocWriter {
         adocWriter.write(doc, stringWriter);
         return stringWriter.toString();
     }
+    
+    /**
+     * Print to given {@link File}
+     * @param doc
+     * @param file
+     */
+    @SneakyThrows
+    public static void writeToFile(final @Nullable Document doc, final @Nullable File file) {
+        if(doc==null
+                || file==null) {
+            return;
+        }
+        val adocWriter = new AsciiDocWriter();
+        try(val writer = new FileWriter(file, StandardCharsets.UTF_8)) {
+            adocWriter.write(doc, writer);
+        }
+    }
+
+    /**
+     * Print to given {@link PrintStream}
+     * @param doc
+     * @param out
+     */
+    @SneakyThrows
+    public static void print(final @Nullable Document doc, final @Nullable PrintStream out) {
+        if(doc==null
+                || out==null) {
+            return;
+        }
+        val adocWriter = new AsciiDocWriter();
+        adocWriter.write(doc, new PrintWriter(out));
+    }
+    
+    /**
+     * Print to {@link System#out}
+     * @param doc
+     */
+    @SneakyThrows
+    public static void print(final @Nullable Document doc) {
+        print(doc, System.out);
+    }
   
     /**
      * the inverse of {@link Asciidoctor#load(String, java.util.Map)}}
-     * @throws IOException 
      */
-    public void write(Document doc, Writer writer) throws IOException {
-        
-        if(doc==null) {
+    @SneakyThrows
+    public void write(final @Nullable Document doc, final @Nullable Writer writer) throws IOException {
+        if(doc==null
+                || writer==null) {
             return;
         }
-        
         val formatWriter = new FormatWriter(writer);
-        
         formatWriter.ifNonEmpty("= %s\n\n", doc.getTitle());
-        
         writeChildNodes(doc.getBlocks(), formatWriter);
-        
     }
 
     // -- CHILDREN

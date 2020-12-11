@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.tooling.j2adoc.J2aContext;
+import org.apache.isis.tooling.j2adoc.J2AContext;
 import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 
@@ -42,7 +42,7 @@ import guru.nidi.codeassert.config.Language;
 
 import static guru.nidi.codeassert.config.Language.JAVA;
 
-class J2aTest {
+class J2ATest {
 
     @Test //@Disabled
     void testJavaDocMining() {
@@ -51,7 +51,7 @@ class J2aTest {
                 .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
                 .main();
 
-        val j2aContext = J2aContext
+        val j2aContext = J2AContext
                 //.javaSourceWithFootNotesFormat()
                 .compactFormat()
                 .xrefPageIdFormat("system:generated:index/%s.adoc")
