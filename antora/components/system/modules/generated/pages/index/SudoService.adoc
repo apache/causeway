@@ -4,6 +4,14 @@
 
 Intended only for use by fixture scripts and integration tests, allows a block of code to execute while the xref:system:generated:index/UserService.adoc[UserService] 's _UserService#currentUser() getUser()_ method returns the specified user/role as the effective user.
 
+* `xref:system:generated:index/RoleMemento.adoc[RoleMemento] [teal]#*/**
+ * If included in the list of roles, then will disable security checks (can view and use all object members).
+ */
+RoleMemento ACCESS_ALL_ROLE = new RoleMemento(SudoService.class.getName() + "#accessAll", "Sudo, can view and use all object members.");*#`
++
+If included in the list of roles, then will disable security checks (can view and use all object members).
+
+
 * `[teal]#*call*#<T>(UnaryOperator<xref:system:generated:index/ExecutionContext.adoc[ExecutionContext]> sudoMapper, Callable<T> supplier)` : `T`
 +
 Executes the supplied block, with the xref:system:generated:index/UserService.adoc[UserService] returning the specified user.

@@ -1,0 +1,6 @@
+= EntityState : _enum_
+
+
+
+TODO lower case enums not up to standard, is this an issue?
+

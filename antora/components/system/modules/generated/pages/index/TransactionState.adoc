@@ -1,0 +1,64 @@
+= TransactionState : _enum_
+
+
+
+
+
+* `[teal]#*_NONE_*#`
++
+No transaction exists.
+
+
+* `[teal]#*_IN_PROGRESS_*#`
++
+Started, still in progress.
++
++
+May flush, commit or abort.
+
+
+* `[teal]#*_MUST_ABORT_*#`
++
+Started, but has hit an exception.
++
++
+May not flush or commit (will throw an _IllegalStateException_ ), can only abort.
++
++
+Similar to `setRollbackOnly` in EJBs.
+
+
+* `[teal]#*_COMMITTED_*#`
++
+Completed, having successfully committed.
++
++
+May not flush or abort or commit (will throw _IllegalStateException_ ).
+
+
+* `[teal]#*_ABORTED_*#`
++
+Completed, having aborted.
++
++
+May not flush, commit or abort (will throw _IllegalStateException_ ).
+
+
+* `[teal]#*canFlush*#()` : `boolean`
++
+Whether it is valid to flush the transaction.
+
+
+* `[teal]#*canCommit*#()` : `boolean`
++
+Whether it is valid to commit the transaction.
+
+
+* `[teal]#*canAbort*#()` : `boolean`
++
+Whether it is valid to mark as aborted this transaction}.
+
+
+* `[teal]#*isComplete*#()` : `boolean`
++
+Whether the transaction is complete (and so a new one can be started).

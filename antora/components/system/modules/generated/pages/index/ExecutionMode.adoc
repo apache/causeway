@@ -1,0 +1,16 @@
+= ExecutionMode : _enum_
+
+
+
+Whether interactions with the wrapper are actually passed onto the underlying domain object.
+
+* `[teal]#*_SKIP_RULE_VALIDATION_*#`
++
+Skip all business rules.
+
+
+* `[teal]#*_SKIP_EXECUTION_*#`
++
+Skip actual execution.
++
+This is not supported for _WrapperFactory#asyncWrap(Object, AsyncControl)_ ; instead just invoke _WrapperFactory#wrap(Object, ImmutableEnumSet)_ .

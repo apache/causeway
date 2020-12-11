@@ -4,7 +4,7 @@
 
 
 
-* `[teal]#*getEntityState*#(Object object)` : `EntityState`
+* `[teal]#*getEntityState*#(Object object)` : `xref:system:generated:index/EntityState.adoc[EntityState]`
 +
 Returns the EntityState of given _object_ . Returns _EntityState#NOT_PERSISTABLE_ for _object==null_ .
 

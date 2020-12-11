@@ -1,0 +1,6 @@
+= ApplicationMemberType : _enum_
+
+
+
+
+

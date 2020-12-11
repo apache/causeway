@@ -9,7 +9,7 @@
 When called within an existing transactional boundary returns the unique identifier to the transaction, _null_ otherwise.
 
 
-* `[teal]#*currentTransactionState*#()` : `TransactionState`
+* `[teal]#*currentTransactionState*#()` : `xref:system:generated:index/TransactionState.adoc[TransactionState]`
 
 
 * `[teal]#*flushTransaction*#()` : `void`

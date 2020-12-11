@@ -4,6 +4,6 @@
 
 
 
-* `[teal]#*getExecutionModes*#()` : `ImmutableEnumSet<ExecutionMode>`
+* `[teal]#*getExecutionModes*#()` : `ImmutableEnumSet<xref:system:generated:index/ExecutionMode.adoc[ExecutionMode]>`
 +
 Not API.
