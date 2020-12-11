@@ -40,7 +40,7 @@ import org.jsoup.Jsoup;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.tooling.javamodel.Javadocs;
+import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 

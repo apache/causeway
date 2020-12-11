@@ -16,28 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.javamodel;
+package org.apache.isis.tooling.javamodel.ast;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lombok.NonNull;
 
-public final class MethodDeclarations {
+import guru.nidi.codeassert.model.MemberInfo;
 
-    public static boolean isEffectivePublic(
-            final @NonNull MethodDeclaration md, final @NonNull ClassOrInterfaceDeclaration td) {
-        
-        if(td.isInterface()) {
-            return true;
-        }
-       
-        //TODO effective public requires more context, eg. is the container an interface 
-        return !md.isPrivate() 
-                && !md.isAbstract() 
-                && !md.isProtected()
-                //&& !md.isDefault()
-                ;
+public final class MemberInfos {
+
+    // -- PREDICATES
+    
+    public static boolean isPublic(final @NonNull MemberInfo memberInfo) {
+        return (memberInfo.getAccessFlags() & 1) == 1;
     }
+    
+    public static String membersToMultilineString(final Stream<MemberInfo> memberInfoStream, final String delimiter) {
+        return memberInfoStream
+                .filter(MemberInfos::isPublic)
+                .map(mInfo->delimiter + memberToString(mInfo))
+                .collect(Collectors.joining());
+    }
+    
+    // -- HELPER
+    
+    private static String memberToString(final MemberInfo memberInfo) {
+        return String.format("%s(...)", memberInfo.getName());
+    }
+    
     
 }

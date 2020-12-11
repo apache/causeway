@@ -320,6 +320,7 @@
 		<module>model4adoc</module>
 		<module>javamodel</module>
 		<module>projectmodel</module>
+		<module>java2adoc</module>
 
 		<!-- depends on all the others -->
 		<module>cli</module>

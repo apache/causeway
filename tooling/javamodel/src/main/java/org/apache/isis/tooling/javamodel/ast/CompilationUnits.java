@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.javamodel;
+package org.apache.isis.tooling.javamodel.ast;
 
 import java.io.File;
 import java.util.function.Predicate;

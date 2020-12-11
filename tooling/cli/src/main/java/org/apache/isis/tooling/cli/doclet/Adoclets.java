@@ -22,7 +22,7 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 
-import org.apache.isis.tooling.javamodel.Javadocs;
+import org.apache.isis.tooling.javamodel.ast.Javadocs;
 
 import lombok.NonNull;
 import lombok.val;

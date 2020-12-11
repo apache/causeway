@@ -25,9 +25,9 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.tooling.javamodel.ClassOrInterfaceDeclarations;
-import org.apache.isis.tooling.javamodel.CompilationUnits;
-import org.apache.isis.tooling.javamodel.Javadocs;
+import org.apache.isis.tooling.javamodel.ast.ClassOrInterfaceDeclarations;
+import org.apache.isis.tooling.javamodel.ast.Javadocs;
+import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 

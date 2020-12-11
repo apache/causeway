@@ -44,7 +44,7 @@ import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
 import org.apache.isis.tooling.cli.doclet.AdocletContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
-import org.apache.isis.tooling.javamodel.CodeClasses;
+import org.apache.isis.tooling.javamodel.ast.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.isis.tooling.projectmodel.Dependency;

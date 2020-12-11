@@ -16,26 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.javamodel;
+package org.apache.isis.tooling.javamodel.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 
 import lombok.NonNull;
 
-public final class ConstructorDeclarations {
+public final class MethodDeclarations {
 
     public static boolean isEffectivePublic(
-            final @NonNull ConstructorDeclaration cd, final @NonNull ClassOrInterfaceDeclaration td) {
+            final @NonNull MethodDeclaration md, final @NonNull ClassOrInterfaceDeclaration td) {
         
         if(td.isInterface()) {
             return true;
         }
        
         //TODO effective public requires more context, eg. is the container an interface 
-        return !cd.isPrivate() 
-                && !cd.isAbstract() 
-                && !cd.isProtected()
+        return !md.isPrivate() 
+                && !md.isAbstract() 
+                && !md.isProtected()
                 //&& !md.isDefault()
                 ;
     }
