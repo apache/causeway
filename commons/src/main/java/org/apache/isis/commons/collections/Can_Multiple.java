@@ -36,8 +36,6 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -127,9 +125,7 @@ final class Can_Multiple<T> implements Can<T> {
 
     
     @Override
-    public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
-        requires(zippedIn, "zippedIn");
-        requires(action, "action");
+    public <R> void zip(@NonNull Iterable<R> zippedIn, @NonNull BiConsumer<? super T, ? super R> action) {
         val zippedInIterator = zippedIn.iterator();
         stream().forEach(t->{
             action.accept(t, zippedInIterator.next());
@@ -137,9 +133,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
-    public <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper) {
-        requires(zippedIn, "zippedIn");
-        requires(mapper, "mapper");
+    public <R, Z> Can<R> zipMap(@NonNull Iterable<Z> zippedIn, @NonNull BiFunction<? super T, ? super Z, R> mapper) {
         val zippedInIterator = zippedIn.iterator();
         return map(t->mapper.apply(t, zippedInIterator.next()));
     }

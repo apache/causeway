@@ -31,7 +31,7 @@ import lombok.NonNull;
 
 public interface J2AdocConverter {
 
-    String javadoc(Javadoc javadoc, int level);
+    String javadoc(Javadoc javadoc);
 
     String enumConstantDeclaration(EnumConstantDeclaration ecd);
     

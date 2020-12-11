@@ -21,11 +21,15 @@ package org.apache.isis.tooling.j2adoc.format;
 import java.util.Optional;
 
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.StructuralNode;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
+
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
 
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -40,14 +44,14 @@ implements UnitFormatter {
     
     protected Optional<String> title(final J2AdocUnit unit) {
         return Optional.of(
-                String.format("%s : _%s_\n\n", 
+                String.format("%s : _%s_", 
                         unit.getName(),
                         unit.getDeclarationKeyword()));
     }
     
     protected Optional<String> intro(final J2AdocUnit unit) {
         return unit.getJavadoc()
-                .map(javadoc->getConverter().javadoc(javadoc, 0));    
+                .map(javadoc->getConverter().javadoc(javadoc));    
         
     }
     
@@ -55,16 +59,20 @@ implements UnitFormatter {
         return Optional.empty();
     }
     
-    protected Optional<String> memberDescriptions(final J2AdocUnit unit) {
+    protected abstract StructuralNode getMemberDescriptionContainer(StructuralNode parent);
+    protected abstract void appendMemberDescription(StructuralNode parent, String member, String javadoc);
+    
+    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent) {
         
-        val sb = new StringBuilder();
+        val ul = getMemberDescriptionContainer(parent);
         
         unit.getEnumConstantDeclarations().forEach(ecd->{
             ecd.getJavadoc()
             .ifPresent(javadoc->{
-                sb.append(String.format(getContext().getFormatter().getMemberDescriptionFormat(),
-                        getConverter().enumConstantDeclaration(ecd),
-                        getConverter().javadoc(javadoc, 1)));
+                
+                appendMemberDescription(ul, 
+                                getConverter().enumConstantDeclaration(ecd),
+                                getConverter().javadoc(javadoc));
             });
         });
         
@@ -72,9 +80,10 @@ implements UnitFormatter {
             
             fd.getJavadoc()
             .ifPresent(javadoc->{
-                sb.append(String.format(getContext().getFormatter().getMemberDescriptionFormat(),
+                
+                appendMemberDescription(ul,
                         getConverter().fieldDeclaration(fd),
-                        getConverter().javadoc(javadoc, 1)));
+                        getConverter().javadoc(javadoc));
             });
             
         });
@@ -83,9 +92,10 @@ implements UnitFormatter {
             
             cd.getJavadoc()
             .ifPresent(javadoc->{
-                sb.append(String.format(getContext().getFormatter().getMemberDescriptionFormat(),
+                
+                appendMemberDescription(ul,
                         getConverter().constructorDeclaration(cd),
-                        getConverter().javadoc(javadoc, 1)));
+                        getConverter().javadoc(javadoc));
             });
             
         });
@@ -94,16 +104,17 @@ implements UnitFormatter {
             
             md.getJavadoc()
             .ifPresent(javadoc->{
-                sb.append(String.format(getContext().getFormatter().getMemberDescriptionFormat(),
+                
+                appendMemberDescription(ul,
                         getConverter().methodDeclaration(md),
-                        getConverter().javadoc(javadoc, 1)));
+                        getConverter().javadoc(javadoc));
             });
             
         });
-        
-        return Optional.of(sb.toString());
     }
     
+    
+
     protected Optional<String> outro(final J2AdocUnit unit) {
         return Optional.empty();
     }
@@ -118,26 +129,30 @@ implements UnitFormatter {
         
         title(unit)
         .ifPresent(doc::setTitle);
+        
+        // -- license
+        
+        _Strings.nonEmpty(getContext().getLicenseHeader())
+        .ifPresent(notice->AsciiDocFactory.attrNotice(doc, notice));
 
         // -- intro
         
         intro(unit)
-        .ifPresent(source->AsciiDocFactory.block(doc).setSource(source));
+        .ifPresent(block(doc)::setSource);
         
         // -- java source
         
         javaSource(unit)
-        .ifPresent(source->AsciiDocFactory.block(doc).setSource(source));
+        .ifPresent(block(doc)::setSource);
             
         // -- member descriptions
         
-        memberDescriptions(unit)
-        .ifPresent(source->AsciiDocFactory.block(doc).setSource(source));
+        memberDescriptions(unit, doc);
         
         // -- outro
         
         outro(unit)
-        .ifPresent(source->AsciiDocFactory.block(doc).setSource(source));
+        .ifPresent(block(doc)::setSource);
         
         return doc;
     }

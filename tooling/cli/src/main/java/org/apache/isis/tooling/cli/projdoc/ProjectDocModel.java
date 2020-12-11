@@ -88,6 +88,7 @@ public class ProjectDocModel {
         projTree.depthFirst(modules::add);
 
         val j2aContext = J2AdocContext.compactFormat()
+                .licenseHeader(cliConfig.getProjectDoc().getLicenseHeader())
                 .xrefPageIdFormat(cliConfig.getDocumentGlobalIndexXrefPageIdFormat())
                 .build();
         
@@ -95,7 +96,7 @@ public class ProjectDocModel {
         doc.setTitle("System Overview");
 
         _Strings.nonEmpty(cliConfig.getProjectDoc().getLicenseHeader())
-        .ifPresent(block(doc)::setSource);
+        .ifPresent(notice->AsciiDocFactory.attrNotice(doc, notice));
         
         _Strings.nonEmpty(cliConfig.getProjectDoc().getDescription())
         .ifPresent(block(doc)::setSource);

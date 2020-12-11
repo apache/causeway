@@ -36,8 +36,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
+import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.attrNotice;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.cell;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.headCell;
@@ -66,11 +69,46 @@ class AsciiDocWriterTest {
         doc.setTitle("Hello World");
         
         String actualAdoc = AsciiDocWriter.toString(doc); 
-        String expectedAdoc = "= Hello World\n\n";
+        String expectedAdoc = "= Hello World\n";
         
         // System.out.println(actualAdoc); // debug
         
         assertEquals(expectedAdoc, actualAdoc);
+    }
+    
+    //= Sample
+    //:Notice: my special license
+    //
+    //hi
+    @Test
+    void testDocHeader() throws IOException {
+        
+        doc.setTitle("Sample");
+        
+        attrNotice(doc, "my special license");
+        
+        block(doc).getLines().add("hi");
+        
+        String actualAdoc = AsciiDocWriter.toString(doc);
+        
+        _Text.assertTextEquals(
+                _Text.readLinesFromResource(this.getClass(), "document-header.adoc", StandardCharsets.UTF_8), 
+                actualAdoc);
+    }
+    
+    @Test @Disabled
+    void reverseTestDocHeader() throws IOException {
+    
+        val adocRef = _Strings.readFromResource(this.getClass(), "document-header.adoc", StandardCharsets.UTF_8);
+        val asciidoctor = Asciidoctor.Factory.create();
+        val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
+        
+        Debug.debug(refDoc);
+        
+        String actualAdoc = AsciiDocWriter.toString(refDoc);
+        System.out.println(actualAdoc); //debug
+        
+        _Text.assertTextEquals(adocRef, actualAdoc);
     }
     
     @Test
@@ -93,10 +131,10 @@ class AsciiDocWriterTest {
         
         String actualAdoc = AsciiDocWriter.toString(doc); 
         
-        //System.out.println(actualAdoc); debug
+        //System.out.println(actualAdoc); //debug
         
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "simple-table.adoc", StandardCharsets.UTF_8), 
+                _Text.readLinesFromResource(this.getClass(), "table-simple.adoc", StandardCharsets.UTF_8), 
                 actualAdoc);
     }
     
@@ -111,10 +149,10 @@ class AsciiDocWriterTest {
         
         String actualAdoc = AsciiDocWriter.toString(doc); 
         
-        //System.out.println(actualAdoc); //debug
+        System.out.println(actualAdoc); //debug
         
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "simple-list.adoc", StandardCharsets.UTF_8), 
+                _Text.readLinesFromResource(this.getClass(), "list-simple.adoc", StandardCharsets.UTF_8), 
                 actualAdoc);
     }
     
@@ -142,20 +180,91 @@ class AsciiDocWriterTest {
         System.out.println(actualAdoc); //debug
         
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "nested-list.adoc", StandardCharsets.UTF_8), 
+                _Text.readLinesFromResource(this.getClass(), "list-nested.adoc", StandardCharsets.UTF_8), 
                 actualAdoc);
     }
     
     @Test @Disabled
     void reverseTestNestedList() throws IOException {
     
-        val adocRef = _Strings.readFromResource(this.getClass(), "nested-list.adoc", StandardCharsets.UTF_8);
+        val adocRef = _Strings.readFromResource(this.getClass(), "list-nested.adoc", StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
         
         String actualAdoc = AsciiDocWriter.toString(refDoc);
         
         debug((org.asciidoctor.ast.List)refDoc.getBlocks().get(0));
+        
+        System.out.println(actualAdoc); //debug
+        
+        _Text.assertTextEquals(adocRef, actualAdoc);
+    }
+
+    
+    //* ListItem 1
+    //+
+    //--
+    //Here's an example of a document title:
+    //
+    //----
+    //= Document Title
+    //----
+    //
+    //NOTE: The header is optional.
+    //--
+    //* ListItem 2
+    //+
+    //--
+    //paragr 1 
+    //
+    //paragr 2
+    //--
+    @Test
+    void testListWithOpenBlockContinuation() throws IOException {
+        
+        val list = list(doc);
+        
+        val item1 = listItem(list, "ListItem 1");
+        val item2 = listItem(list, "ListItem 2");
+        
+        val openBlock1 = AsciiDocFactory.openBlock(item1);
+        val openBlock2 = AsciiDocFactory.openBlock(item2);
+        
+        val block11 = AsciiDocFactory.block(openBlock1);
+        val block12 = AsciiDocFactory.block(openBlock1);
+        val block13 = AsciiDocFactory.block(openBlock1);
+        
+        block11.setSource("Here's an example of a document title:");
+        block12.setSource("----\n= Document Title\n----");
+        block13.setSource("NOTE: The header is optional.");
+        
+        val block21 = AsciiDocFactory.block(openBlock2);
+        val block22 = AsciiDocFactory.block(openBlock2);
+        
+        block21.setSource("paragr 1");
+        block22.setSource("paragr 2");
+        
+        String actualAdoc = AsciiDocWriter.toString(doc); 
+        
+        //System.out.println(actualAdoc); //debug
+        
+        _Text.assertTextEquals(
+                _Text.readLinesFromResource(this.getClass(), "list-open-block-continuation.adoc", StandardCharsets.UTF_8), 
+                actualAdoc);
+    }
+    
+    
+    
+    @Test @Disabled
+    void reverseTestListWithOpenBlockContinuation() throws IOException {
+    
+        val adocRef = _Strings.readFromResource(this.getClass(), "list-open-block-continuation.adoc", StandardCharsets.UTF_8);
+        val asciidoctor = Asciidoctor.Factory.create();
+        val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
+        
+        String actualAdoc = AsciiDocWriter.toString(refDoc);
+        
+        Debug.debug(refDoc);
         
         System.out.println(actualAdoc); //debug
         
@@ -179,10 +288,10 @@ class AsciiDocWriterTest {
         
         String actualAdoc = AsciiDocWriter.toString(doc); 
         
-        //System.out.println(actualAdoc); // debug
+        System.out.println(actualAdoc); // debug
         
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "attributed-table.adoc", StandardCharsets.UTF_8), 
+                _Text.readLinesFromResource(this.getClass(), "table-attributed.adoc", StandardCharsets.UTF_8), 
                 actualAdoc);
         
     }
@@ -190,7 +299,7 @@ class AsciiDocWriterTest {
     @Test @Disabled
     void reverseTestSimpleTableModel() throws IOException {
     
-        val adocRef = _Strings.readFromResource(this.getClass(), "simple-table.adoc", StandardCharsets.UTF_8);
+        val adocRef = _Strings.readFromResource(this.getClass(), "table-simple.adoc", StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
         
@@ -206,7 +315,7 @@ class AsciiDocWriterTest {
     @Test
     void testAttributedTableModel() throws IOException {
     
-        val adocRef = _Strings.readFromResource(this.getClass(), "attributed-table.adoc", StandardCharsets.UTF_8);
+        val adocRef = _Strings.readFromResource(this.getClass(), "table-attributed.adoc", StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
         

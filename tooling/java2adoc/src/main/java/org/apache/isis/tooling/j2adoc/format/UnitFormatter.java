@@ -57,10 +57,10 @@ extends Function<J2AdocUnit, Document> {
      */
     String getGenericMethodFormat();
     
-    /**
-     * member | description
-     */
-    String getMemberDescriptionFormat();
+//    /**
+//     * member | description
+//     */
+//    String getMemberDescriptionFormat();
 
     
 }

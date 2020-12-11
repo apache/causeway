@@ -222,13 +222,13 @@ final class J2AdocConverterDefault implements J2AdocConverter {
     }
     
     @Override
-    public String javadoc(final @NonNull Javadoc javadoc, final int level) {
+    public String javadoc(final @NonNull Javadoc javadoc) {
 
         val adoc = AsciiDocFactory.doc();
         
         Javadocs.streamTagContent(javadoc, "deprecated")
         .findFirst()
-        .map(javadocDescription->javadocDescription(javadocDescription, level))
+        .map(javadocDescription->javadocDescription(javadocDescription))
         .ifPresent(deprecatedAdoc->{
             
             val deprecatedBlock = AsciiDocFactory.block(adoc);
@@ -236,7 +236,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
             deprecatedBlock.getBlocks().addAll(deprecatedAdoc.getBlocks());
         });
         
-        val descriptionAdoc = javadocDescription(javadoc.getDescription(), level);
+        val descriptionAdoc = javadocDescription(javadoc.getDescription());
         
         adoc.getBlocks().addAll(descriptionAdoc.getBlocks());
 
@@ -277,7 +277,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
     
     // -- HELPER
     
-    private Document javadocDescription(final @NonNull JavadocDescription javadocDescription, final int level) {
+    private Document javadocDescription(final @NonNull JavadocDescription javadocDescription) {
         val javadocResolved = new StringBuilder();
 
         javadocDescription.getElements()
@@ -294,7 +294,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         });
 
         val descriptionAsHtml = Jsoup.parse(javadocResolved.toString());
-        val adoc = HtmlToAsciiDoc.body(descriptionAsHtml.selectFirst("body"), level);
+        val adoc = HtmlToAsciiDoc.body(descriptionAsHtml.selectFirst("body"));
         return adoc;
     }
 

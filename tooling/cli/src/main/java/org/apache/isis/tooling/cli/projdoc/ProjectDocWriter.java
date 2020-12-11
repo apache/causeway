@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
+import java.util.function.BiConsumer;
 
 import org.asciidoctor.ast.Document;
 
@@ -35,27 +36,27 @@ final class ProjectDocWriter {
     @SneakyThrows
     static void write(
             final @NonNull CliConfig cliConfig, 
-            final @NonNull Document adoc, 
+            final @NonNull Document systemSummaryAdoc, 
             final @NonNull J2AdocContext j2aContext) {
         
+        final BiConsumer<Document, File> docWriter = cliConfig.isDryRun()
+                ? (doc, file)->AsciiDocWriter.print(doc) // print to system out only (dry run)
+                : AsciiDocWriter::writeToFile;
+        
         try {
-            
-            if(cliConfig.isDryRun()) {
-                AsciiDocWriter.print(adoc);
-                for(val unit : j2aContext.getUnitIndex().values()) {
-                    AsciiDocWriter.print(unit.toAsciiDoc(j2aContext));
-                }
-            } else {
-                AsciiDocWriter.writeToFile(adoc, cliConfig.getOutputFile());
-                for(val unit : j2aContext.getUnitIndex().values()) {
 
-                    AsciiDocWriter.writeToFile(
-                            unit.toAsciiDoc(j2aContext), 
-                            new File(
-                                    cliConfig.getDocumentGlobalIndexOutputFolder(), 
-                                    unit.getName() + ".adoc"));
-                }
-            }    
+            // write system overview
+            docWriter.accept(systemSummaryAdoc, cliConfig.getOutputFile());
+
+            // write document index
+            for(val unit : j2aContext.getUnitIndex().values()) {
+                docWriter.accept(
+                        unit.toAsciiDoc(j2aContext), 
+                        new File(
+                                cliConfig.getDocumentGlobalIndexOutputFolder(), 
+                                unit.getName() + ".adoc"));
+            }
+                
             
         } catch (Exception e) {
             e.printStackTrace();

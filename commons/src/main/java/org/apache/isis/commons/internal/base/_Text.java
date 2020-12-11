@@ -282,11 +282,18 @@ public final class _Text {
         val nb = normalize(b);
         
         final int[] lineNrRef = {0};
-        
-        na.zip(nb, (left, right)->{
-            final int lineNr = ++lineNrRef[0];
-            _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
-        });
+
+        if(na.size()<=nb.size()) {
+            na.zip(nb, (left, right)->{
+                final int lineNr = ++lineNrRef[0];
+                _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
+            });
+        } else {
+            nb.zip(na, (right, left)->{
+                final int lineNr = ++lineNrRef[0];
+                _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
+            });
+        }
         
         _Assert.assertEquals(na.size(), nb.size(), ()->String.format("normalized texts differ in number of lines"));
     }

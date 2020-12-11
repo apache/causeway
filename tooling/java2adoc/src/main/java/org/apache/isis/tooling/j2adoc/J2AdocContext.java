@@ -26,6 +26,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
@@ -43,6 +45,7 @@ import lombok.val;
 public class J2AdocContext {
 
     private final @NonNull String xrefPageIdFormat;
+    private final @Nullable String licenseHeader;
     
     @Builder.Default
     private final @NonNull String memberNameFormat = "[teal]#*%s*#";

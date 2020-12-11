@@ -65,12 +65,24 @@ public class AsciiDocFactory {
         return new SimpleDocument();     
     }
     
+    // -- ATTRIBUTES
+    
+    public static void attrNotice(Document node, String value) {
+        node.setAttribute("Notice", value, true);
+    }
+    
     public static Block block(StructuralNode parent) {
         val block = new SimpleBlock();
         block.setLevel(parent.getLevel());
         parent.getBlocks().add(block);
         block.setParent(parent);
         return block;
+    }
+    
+    public static Block openBlock(ListItem listItem) {
+        val openBlock = block(listItem);
+        openBlock.setAttribute("style", "open", true);
+        return openBlock;
     }
     
     public static Table table(StructuralNode parent) {
@@ -251,6 +263,7 @@ public class AsciiDocFactory {
         }
         return table.getFooter().get(rowIndex);
     }
+
     
 
     

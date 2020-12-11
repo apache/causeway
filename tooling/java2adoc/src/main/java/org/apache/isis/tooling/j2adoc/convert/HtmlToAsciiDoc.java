@@ -22,7 +22,6 @@ import java.util.Stack;
 
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -38,10 +37,9 @@ import lombok.val;
 final class HtmlToAsciiDoc {
     
     @SneakyThrows
-    public static Document body(Element body, int level) {
+    public static Document body(Element body) {
         
         val adoc = AsciiDocFactory.doc();
-        adoc.setLevel(level);
         
         val stack = new BlockHelper(adoc);
         
@@ -157,7 +155,7 @@ final class HtmlToAsciiDoc {
             return nextList;
         }
 
-        ListItem nextListItem() {
+        void nextListItem() {
             val list = listStack.isEmpty()
                     ? nextList()
                     : listStack.peek();
@@ -167,8 +165,8 @@ final class HtmlToAsciiDoc {
                 stack.pop();
             }
             val listItem = AsciiDocFactory.listItem(list);
-            stack.push(listItem);
-            return listItem;
+            val openBlock = AsciiDocFactory.openBlock(listItem);
+            stack.push(openBlock);
         }
         
     }
