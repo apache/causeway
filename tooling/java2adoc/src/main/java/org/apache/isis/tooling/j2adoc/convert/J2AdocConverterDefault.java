@@ -19,11 +19,13 @@
 package org.apache.isis.tooling.j2adoc.convert;
 
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -42,7 +44,10 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
+import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
+import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
+import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
@@ -54,6 +59,47 @@ import lombok.val;
 final class J2AdocConverterDefault implements J2AdocConverter {
 
     private final J2AdocContext j2aContext;
+
+    @Override
+    public String enumConstantDeclaration(final @NonNull EnumConstantDeclaration ecd) {
+        val isDeprecated = ecd.getAnnotations().stream()
+                .anyMatch(a->a.getNameAsString().equals("Deprecated"))
+                || ecd.getJavadoc()
+                    .map(Javadocs::hasDeprecated)
+                    .orElse(false);
+        
+        val memberNameFormat = isDeprecated
+                ? j2aContext.getDeprecatedStaticMemberNameFormat()
+                : j2aContext.getStaticMemberNameFormat();
+        
+        val enumConstFormat =  j2aContext.getFormatter().getEnumConstantFormat();
+        
+        return String.format(enumConstFormat, 
+                String.format(memberNameFormat, ecd.getNameAsString()));
+    }
+    
+    @Override
+    public String fieldDeclaration(final @NonNull FieldDeclaration fd) {
+        val isDeprecated = fd.getAnnotations().stream()
+                .anyMatch(a->a.getNameAsString().equals("Deprecated"))
+                || fd.getJavadoc()
+                    .map(Javadocs::hasDeprecated)
+                    .orElse(false);
+        
+        val memberNameFormat = isDeprecated
+                ? fd.isStatic()
+                        ? j2aContext.getDeprecatedStaticMemberNameFormat()
+                        : j2aContext.getDeprecatedMemberNameFormat()
+                : fd.isStatic()
+                        ? j2aContext.getStaticMemberNameFormat()
+                        : j2aContext.getMemberNameFormat();
+        
+        val fieldFormat =  j2aContext.getFormatter().getFieldFormat();
+       
+        return String.format(fieldFormat,
+                type(fd.getCommonType()), 
+                String.format(memberNameFormat, FieldDeclarations.toNormalizedFieldDeclaration(fd)));
+    }
     
     @Override
     public String constructorDeclaration(final @NonNull ConstructorDeclaration cd) {
@@ -71,19 +117,18 @@ final class J2AdocConverterDefault implements J2AdocConverter {
                         ? j2aContext.getStaticMemberNameFormat()
                         : j2aContext.getMemberNameFormat();
 
-        val isGenericMember = cd.getTypeParameters().isNonEmpty();
+        val typeParams = ConstructorDeclarations.getTypeParameters(cd);
+        
+        val isGenericMember = !typeParams.isEmpty();
         
         val constructorFormat = isGenericMember
                 ? j2aContext.getFormatter().getGenericConstructorFormat()
                 : j2aContext.getFormatter().getConstructorFormat();
         
         val args = Can.<Object>of(
-                isGenericMember ? typeParamters(cd.getTypeParameters()) : null,  // Cans do ignored null 
-                String.format(memberNameFormat, cd.getNameAsString()), 
-                cd.getParameters()
-                    .stream()
-                    .map(this::parameterDeclaration)
-                    .collect(Collectors.joining(", "))
+                isGenericMember ? typeParamters(typeParams) : null,  // Cans do ignored null 
+                String.format(memberNameFormat, cd.getNameAsString()),
+                parameters(cd.getParameters().stream())
                 );
        
         return String.format(constructorFormat, args.toArray(_Constants.emptyObjects));
@@ -106,28 +151,32 @@ final class J2AdocConverterDefault implements J2AdocConverter {
                         ? j2aContext.getStaticMemberNameFormat()
                         : j2aContext.getMemberNameFormat();
 
-        val isGenericMember = md.getTypeParameters().isNonEmpty();
+        val typeParams = MethodDeclarations.getTypeParameters(md);
+        
+        val isGenericMember = !typeParams.isEmpty();
         
         val methodFormat = isGenericMember
                 ? j2aContext.getFormatter().getGenericMethodFormat()
                 : j2aContext.getFormatter().getMethodFormat();
         
         val args = Can.<Object>of(
-                isGenericMember ? typeParamters(md.getTypeParameters()) : null,  // Cans do ignored null 
+                isGenericMember ? typeParamters(typeParams) : null,  // Cans do ignored null 
                 type(md.getType()),
                 String.format(memberNameFormat, md.getNameAsString()), 
-                md.getParameters()
-                    .stream()
-                    .map(this::parameterDeclaration)
-                    .collect(Collectors.joining(", "))
+                parameters(md.getParameters().stream())
                 );
        
         return String.format(methodFormat, args.toArray(_Constants.emptyObjects));
                 
     }
-
     
-    public String typeParamters(final @Nullable NodeList<TypeParameter> typeParamters) {
+    public String parameters(final @NonNull Stream<Parameter> parameterStream) {
+        return parameterStream
+                .map(this::parameterDeclaration)
+                .collect(Collectors.joining(", "));
+    }
+    
+    public String typeParamters(final @Nullable Can<TypeParameter> typeParamters) {
         if(typeParamters == null
                 || typeParamters.isEmpty()) {
             return "";

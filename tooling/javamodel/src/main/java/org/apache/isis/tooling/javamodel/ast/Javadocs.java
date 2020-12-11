@@ -21,6 +21,8 @@ package org.apache.isis.tooling.javamodel.ast;
 import java.util.stream.Stream;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
@@ -45,6 +47,23 @@ public final class Javadocs {
         return streamTagsByName(javadoc, tagName)
         .map(tag->tag.getContent());
     }
+    
+    public static boolean presentAndNotHidden(
+            final @NonNull FieldDeclaration fd) {
+        
+        return fd.getJavadoc()
+        .map(jd->!hasHidden(jd))
+        .orElse(false);
+    }
+    
+    public static boolean presentAndNotHidden(
+            final @NonNull EnumConstantDeclaration ecd) {
+        
+        return ecd.getJavadoc()
+        .map(jd->!hasHidden(jd))
+        .orElse(false);
+    }
+    
     
     public static boolean presentAndNotHidden(
             final @NonNull ConstructorDeclaration cd) {

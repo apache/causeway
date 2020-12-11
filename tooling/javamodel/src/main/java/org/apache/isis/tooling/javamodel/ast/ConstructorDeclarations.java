@@ -20,31 +20,56 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.type.TypeParameter;
+
+import org.apache.isis.commons.collections.Can;
 
 import lombok.NonNull;
 
+//TODO effective public might require more context
 public final class ConstructorDeclarations {
 
-    public static boolean isEffectivePublic(
-            final @NonNull ConstructorDeclaration cd, final @NonNull ClassOrInterfaceDeclaration td) {
-        
-        if(td.isInterface()) {
-            return true;
-        }
-       
-        //TODO effective public requires more context, eg. is the container an interface 
-        return !cd.isPrivate() 
-                && !cd.isAbstract() 
-                && !cd.isProtected()
-                //&& !md.isDefault()
-                ;
-    }
-    
     /**
      * Returns given {@link ConstructorDeclaration} as normal text, without formatting.
      */
     public static String toNormalizedConstructorDeclaration(final @NonNull ConstructorDeclaration cd) {
         return cd.getDeclarationAsString(false, false, true).trim();
+    }
+    
+    public static Can<TypeParameter> getTypeParameters(final @NonNull ConstructorDeclaration cd) {
+        return Can.ofStream(cd.getTypeParameters().stream());
+    }
+    
+    public static boolean isEffectivePublic(
+            final @NonNull ConstructorDeclaration cd, 
+            final @NonNull ClassOrInterfaceDeclaration context) {
+        
+        if(!ClassOrInterfaceDeclarations.isEffectivePublic(context)) {
+            return false;
+        }
+        if(context.isInterface()) {
+            return true;
+        }
+       
+        return !cd.isPrivate() 
+                && !cd.isAbstract() 
+                && !cd.isProtected()
+                ;
+    }
+
+    public static boolean isEffectivePublic(
+            final @NonNull ConstructorDeclaration cd, 
+            final @NonNull EnumDeclaration context) {
+
+        if(!EnumDeclarations.isEffectivePublic(context)) {
+            return false;
+        }
+
+        return !cd.isPrivate() 
+                && !cd.isAbstract() 
+                && !cd.isProtected()
+                ;
     }
     
 }

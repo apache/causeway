@@ -59,6 +59,26 @@ implements UnitFormatter {
         
         val sb = new StringBuilder();
         
+        unit.getEnumConstantDeclarations().forEach(ecd->{
+            ecd.getJavadoc()
+            .ifPresent(javadoc->{
+                sb.append(String.format(getContext().getFormatter().getMemberDescriptionFormat(),
+                        getConverter().enumConstantDeclaration(ecd),
+                        getConverter().javadoc(javadoc, 1)));
+            });
+        });
+        
+        unit.getPublicFieldDeclarations().forEach(fd->{
+            
+            fd.getJavadoc()
+            .ifPresent(javadoc->{
+                sb.append(String.format(getContext().getFormatter().getMemberDescriptionFormat(),
+                        getConverter().fieldDeclaration(fd),
+                        getConverter().javadoc(javadoc, 1)));
+            });
+            
+        });
+        
         unit.getPublicConstructorDeclarations().forEach(cd->{
             
             cd.getJavadoc()

@@ -59,7 +59,7 @@ class J2AdocTest {
         analyzerConfig.getSources(JAVA)
         .stream()
         .filter(source->source.toString().contains("ExecutionMode"))
-        .peek(source->System.out.println("parsing source: " + source))
+        //.peek(source->System.out.println("parsing source: " + source))
         .forEach(j2aContext::add);
         
         j2aContext.streamUnits()

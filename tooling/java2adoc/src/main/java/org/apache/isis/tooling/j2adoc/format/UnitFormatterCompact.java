@@ -28,6 +28,16 @@ extends UnitFormatterAbstract {
     }
 
     @Override
+    public String getEnumConstantFormat() {
+        return "`%s`";
+    }
+    
+    @Override
+    public String getFieldFormat() {
+        return "`%1$s %2$s`";
+    }
+    
+    @Override
     public String getConstructorFormat() {
         return "`%1$s(%2$s)`";
     }
@@ -51,5 +61,7 @@ extends UnitFormatterAbstract {
     public String getMemberDescriptionFormat() {
         return "\n* %s\n%s\n";
     }
+
+
 
 }

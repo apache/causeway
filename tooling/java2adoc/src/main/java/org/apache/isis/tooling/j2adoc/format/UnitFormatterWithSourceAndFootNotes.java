@@ -23,6 +23,8 @@ import java.util.Optional;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
+import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
+import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
 import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
@@ -42,6 +44,18 @@ extends UnitFormatterAbstract {
         java.append(String.format("%s %s {\n", 
                 unit.getDeclarationKeyword(), 
                 unit.getSimpleName()));
+        
+        unit.getEnumConstantDeclarations().forEach(ecd->{
+            java.append(String.format("\n  %s // <.>\n", 
+                    EnumConstantDeclarations.toNormalizedEnumConstantDeclaration(ecd)));
+        });
+        
+        unit.getPublicFieldDeclarations().forEach(fd->{
+            
+            java.append(String.format("\n  %s // <.>\n", 
+                    FieldDeclarations.toNormalizedFieldDeclaration(fd)));
+            
+        });
         
         unit.getPublicConstructorDeclarations().forEach(cd->{
             
@@ -64,7 +78,17 @@ extends UnitFormatterAbstract {
                 AsciiDocFactory.SourceFactory.java(java.toString(), unit.getName()));
             
     }
+    
+    @Override
+    public String getEnumConstantFormat() {
+        return "`%s`";
+    }
 
+    @Override
+    public String getFieldFormat() {
+        return "`%s %s`";
+    }
+    
     @Override
     public String getConstructorFormat() {
         return "`%s(%s)`";

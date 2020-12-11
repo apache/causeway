@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 
@@ -88,6 +90,14 @@ public final class J2AdocUnit {
     public String getDeclarationKeyword() {
         return atd.getKind().name().toLowerCase();
     }
+
+    public Can<EnumConstantDeclaration> getEnumConstantDeclarations() {
+        return atd.getEnumConstantDeclarations();
+    }
+    
+    public Can<FieldDeclaration> getPublicFieldDeclarations() {
+        return atd.getPublicFieldDeclarations();
+    }
     
     public Can<ConstructorDeclaration> getPublicConstructorDeclarations() {
         return atd.getPublicConstructorDeclarations();
@@ -102,7 +112,6 @@ public final class J2AdocUnit {
     
     public String getAsciiDocXref(
             final @NonNull J2AdocContext j2aContext) {
-
         return j2aContext.getConverter().xref(this);
     }
     

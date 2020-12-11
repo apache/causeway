@@ -20,24 +20,32 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.stream.Stream;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
 import lombok.NonNull;
 
-public final class ClassOrInterfaceDeclarations {
+public final class EnumDeclarations {
 
+    // -- ENUM CONSTANTS
+    
+    public static <T> Stream<EnumConstantDeclaration> streamEnumConstantDeclarations(
+            final @NonNull EnumDeclaration typeDeclaration) {
+        return typeDeclaration.getEntries().stream();
+    }
+    
     // -- FIELDS
     
     public static <T> Stream<FieldDeclaration> streamFieldDeclarations(
-            final @NonNull ClassOrInterfaceDeclaration typeDeclaration) {
+            final @NonNull EnumDeclaration typeDeclaration) {
         return typeDeclaration.getFields().stream();
     }
     
     public static <T> Stream<FieldDeclaration> streamPublicFieldDeclarations(
-            final @NonNull ClassOrInterfaceDeclaration typeDeclaration) {
+            final @NonNull EnumDeclaration typeDeclaration) {
         return streamFieldDeclarations(typeDeclaration)
                 .filter(fd->FieldDeclarations.isEffectivePublic(fd, typeDeclaration));
     }
@@ -45,12 +53,12 @@ public final class ClassOrInterfaceDeclarations {
     // -- CONSTRUCTORS
     
     public static <T> Stream<ConstructorDeclaration> streamConstructorDeclarations(
-            final @NonNull ClassOrInterfaceDeclaration typeDeclaration) {
+            final @NonNull EnumDeclaration typeDeclaration) {
         return typeDeclaration.getConstructors().stream();
     }
     
     public static <T> Stream<ConstructorDeclaration> streamPublicConstructorDeclarations(
-            final @NonNull ClassOrInterfaceDeclaration typeDeclaration) {
+            final @NonNull EnumDeclaration typeDeclaration) {
         return streamConstructorDeclarations(typeDeclaration)
                 .filter(cd->ConstructorDeclarations.isEffectivePublic(cd, typeDeclaration));
     }
@@ -58,19 +66,19 @@ public final class ClassOrInterfaceDeclarations {
     // -- METHODS
     
     public static <T> Stream<MethodDeclaration> streamMethodDeclarations(
-            final @NonNull ClassOrInterfaceDeclaration typeDeclaration) {
+            final @NonNull EnumDeclaration typeDeclaration) {
         return typeDeclaration.getMethods().stream();
     }
     
     public static <T> Stream<MethodDeclaration> streamPublicMethodDeclarations(
-            final @NonNull ClassOrInterfaceDeclaration typeDeclaration) {
+            final @NonNull EnumDeclaration typeDeclaration) {
         return streamMethodDeclarations(typeDeclaration)
                 .filter(md->MethodDeclarations.isEffectivePublic(md, typeDeclaration));
     }
     
     // -- CONTEXT
     
-    public static boolean isEffectivePublic(final @NonNull ClassOrInterfaceDeclaration td) {
+    public static boolean isEffectivePublic(final @NonNull EnumDeclaration td) {
         return !td.isPrivate() 
                 && !td.isProtected()
                 ;

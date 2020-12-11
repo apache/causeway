@@ -28,6 +28,16 @@ public interface UnitFormatter
 extends Function<J2AdocUnit, Document> {
 
     /**
+     * name
+     */
+    String getEnumConstantFormat();
+    
+    /**
+     * type | name
+     */
+    String getFieldFormat();
+    
+    /**
      * name | param-list
      */
     String getConstructorFormat();

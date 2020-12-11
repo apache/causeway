@@ -20,7 +20,7 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.type.TypeParameter;
 
 import org.apache.isis.commons.collections.Can;
@@ -28,49 +28,47 @@ import org.apache.isis.commons.collections.Can;
 import lombok.NonNull;
 
 //TODO effective public might require more context
-public final class MethodDeclarations {
-
-
+public final class FieldDeclarations {
+    
     /**
-     * Returns given {@link MethodDeclaration} as normal text, without formatting.
+     * Returns given {@link FieldDeclaration} as normal text, without formatting.
      */
-    public static String toNormalizedMethodDeclaration(final @NonNull MethodDeclaration md) {
-        return md.getDeclarationAsString(false, false, true).trim();
+    public static String toNormalizedFieldDeclaration(final @NonNull FieldDeclaration fd) {
+        return fd.toString().trim();
     }
     
-    public static Can<TypeParameter> getTypeParameters(final @NonNull MethodDeclaration md) {
-        return Can.ofStream(md.getTypeParameters().stream());
+    public static Can<TypeParameter> getTypeParameters(final @NonNull FieldDeclaration fd) {
+        return Can.ofCollection(fd.findAll(TypeParameter.class));
     }
-
+    
+    // -- CONTEXT
+    
     public static boolean isEffectivePublic(
-            final @NonNull MethodDeclaration md, 
+            final @NonNull FieldDeclaration fd, 
             final @NonNull ClassOrInterfaceDeclaration context) {
-
+        
         if(!ClassOrInterfaceDeclarations.isEffectivePublic(context)) {
             return false;
         }
         if(context.isInterface()) {
             return true;
         }
-
-        return !md.isPrivate() 
-                && !md.isAbstract() 
-                && !md.isProtected()
+        return !fd.isPrivate() 
+                && !fd.isProtected()
                 ;
     }
-
+    
     public static boolean isEffectivePublic(
-            final @NonNull MethodDeclaration md, 
+            final @NonNull FieldDeclaration fd, 
             final @NonNull EnumDeclaration context) {
-
+        
         if(!EnumDeclarations.isEffectivePublic(context)) {
             return false;
         }
-
-        return !md.isPrivate() 
-                && !md.isAbstract() 
-                && !md.isProtected()
+       
+        return !fd.isPrivate() 
+                && !fd.isProtected()
                 ;
     }
-
+    
 }

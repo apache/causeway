@@ -16,29 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.wrapper.control;
+package org.apache.isis.tooling.javamodel.ast;
 
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.commons.collections.ImmutableEnumSet;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 
-/**
- * Whether interactions with the wrapper are actually passed onto the
- * underlying domain object.
- *
- * @see WrapperFactory#wrap(Object, org.apache.isis.applib.services.wrapper.control.SyncControl)
- * 
- * @since 2.0 {@index}
- */
-public enum ExecutionMode {
+import lombok.NonNull;
+
+public final class EnumConstantDeclarations {
+    
     /**
-     * Skip all business rules.
+     * Returns given {@link EnumConstantDeclaration} as normal text, without formatting.
      */
-    SKIP_RULE_VALIDATION,
-    /**
-     * Skip actual execution.
-     *
-     * <p>
-     * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; instead just invoke {@link WrapperFactory#wrap(Object, ImmutableEnumSet)}.
-     */
-    SKIP_EXECUTION,
+    public static String toNormalizedEnumConstantDeclaration(final @NonNull EnumConstantDeclaration ecd) {
+        return ecd.toString().trim();
+    }
+    
 }

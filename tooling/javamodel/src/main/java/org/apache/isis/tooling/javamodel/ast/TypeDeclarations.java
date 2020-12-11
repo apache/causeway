@@ -19,6 +19,9 @@
 package org.apache.isis.tooling.javamodel.ast;
 
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.type.TypeParameter;
+
+import org.apache.isis.commons.collections.Can;
 
 import lombok.NonNull;
 import lombok.val;
@@ -42,6 +45,10 @@ public final class TypeDeclarations {
             
         }) 
         .orElse(false);
+    }
+    
+    public static Can<TypeParameter> getTypeParameters(final @NonNull TypeDeclaration<?> td) {
+        return Can.ofCollection(td.findAll(TypeParameter.class));
     }
     
 }

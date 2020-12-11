@@ -19,12 +19,13 @@
 package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
@@ -40,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class AnyTypeDeclaration {
+public final class AnyTypeDeclaration {
 
     public static enum Kind {
         CLASS,
@@ -57,8 +58,11 @@ public class AnyTypeDeclaration {
     private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration; 
     private final EnumDeclaration enumDeclaration;
     
+    private final Can<EnumConstantDeclaration> enumConstantDeclarations;
+    private final Can<FieldDeclaration> publicFieldDeclarations;
     private final Can<ConstructorDeclaration> publicConstructorDeclarations;
     private final Can<MethodDeclaration> publicMethodDeclarations;
+    
     
     // -- FACTORIES
     
@@ -69,6 +73,10 @@ public class AnyTypeDeclaration {
                 classOrInterfaceDeclaration,
                 classOrInterfaceDeclaration,
                 null,
+                Can.empty(),
+                ClassOrInterfaceDeclarations.streamPublicFieldDeclarations(classOrInterfaceDeclaration)
+                    .filter(Javadocs::presentAndNotHidden)
+                    .collect(Can.toCan()),
                 ClassOrInterfaceDeclarations.streamPublicConstructorDeclarations(classOrInterfaceDeclaration)
                     .filter(Javadocs::presentAndNotHidden)
                     .collect(Can.toCan()),
@@ -85,8 +93,19 @@ public class AnyTypeDeclaration {
                 enumDeclaration, 
                 null, 
                 enumDeclaration,
-                Can.empty(),
-                Can.empty());
+                EnumDeclarations.streamEnumConstantDeclarations(enumDeclaration)
+                    .filter(Javadocs::presentAndNotHidden)
+                    .collect(Can.toCan()),
+                EnumDeclarations.streamPublicFieldDeclarations(enumDeclaration)
+                    .filter(Javadocs::presentAndNotHidden)
+                    .collect(Can.toCan()),
+                EnumDeclarations.streamPublicConstructorDeclarations(enumDeclaration)
+                    .filter(Javadocs::presentAndNotHidden)
+                    .collect(Can.toCan()),
+                EnumDeclarations.streamPublicMethodDeclarations(enumDeclaration)
+                    .filter(Javadocs::presentAndNotHidden)
+                    .collect(Can.toCan())
+                );
     }
     
     public static AnyTypeDeclaration auto(
@@ -103,10 +122,6 @@ public class AnyTypeDeclaration {
     
     // -- UTILITY
     
-    public Stream<MethodDeclaration> streamMethodDeclarations() {
-        return td.getMethods().stream();
-    }
-
     public Optional<Javadoc> getJavadoc() {
         return td.getJavadoc();
     }
@@ -139,5 +154,6 @@ public class AnyTypeDeclaration {
         }
         return name;
     }
+
     
 }

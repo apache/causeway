@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.ast.AnyTypeDeclaration;
@@ -77,7 +78,8 @@ class AnalyzerTest {
             });
             
         })
-        .flatMap(AnyTypeDeclaration::streamMethodDeclarations)
+        .map(AnyTypeDeclaration::getPublicMethodDeclarations)
+        .flatMap(Can::stream)
         .forEach(md->{
             
             System.out.println("javadoc: " + md.getJavadocComment());

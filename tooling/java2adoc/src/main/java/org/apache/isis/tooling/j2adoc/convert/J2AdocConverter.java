@@ -19,6 +19,8 @@
 package org.apache.isis.tooling.j2adoc.convert;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 
@@ -31,6 +33,10 @@ public interface J2AdocConverter {
 
     String javadoc(Javadoc javadoc, int level);
 
+    String enumConstantDeclaration(EnumConstantDeclaration ecd);
+    
+    String fieldDeclaration(FieldDeclaration fd);
+    
     String constructorDeclaration(ConstructorDeclaration cd);
 
     String methodDeclaration(MethodDeclaration md);
@@ -42,7 +48,6 @@ public interface J2AdocConverter {
     public static J2AdocConverter createDefault(final @NonNull J2AdocContext context) {
         return J2AdocConverterDefault.of(context);
     }
-
     
 
 }
