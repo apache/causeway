@@ -9,6 +9,16 @@ The `TitleService` provides methods to programmatically obtain the title and ico
 
 == API
 
+include::system:generated:page$index/TitleService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API of `TitleService` is:
 
 [source,java]
@@ -19,6 +29,9 @@ include::refguide:applib-svc:example$services/title/TitleService.java[tags="refg
 
 <.> return the icon name of the object, as rendered in the UI by the Apache Isis viewers.
 
+
+
+================================
 
 == Implementation
 

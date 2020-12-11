@@ -10,6 +10,16 @@ It is used by the framework's default implementation of xref:refguide:applib-svc
 
 == API
 
+include::system:generated:page$index/XmlService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API of `XmlService` is:
 
 [source]
@@ -22,6 +32,9 @@ include::refguide:applib-svc:example$services/xml/XmlService.java[tags="refguide
 <.> is a convenience method to obtain value of child text node.
 
 
+
+
+================================
 
 == Implementation
 

@@ -14,6 +14,16 @@ These can then be rendered back to the user as expected errors, rather than fata
 
 
 
+== API
+
+include::system:generated:page$index/ExceptionRecognizer.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -58,6 +68,9 @@ The recognizer implementation can therefore be as fine-grained or as coarse-grai
 
 
 
+
+
+================================
 
 == Implementation
 

@@ -8,6 +8,16 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 The `ExceptionRecognizerService` domain service is used by the framework to iterate over all registered xref:refguide:applib-svc:ExceptionRecognizer.adoc[`ExceptionRecognizer`]s to attempt to recognise an exception.
 
 
+== API
+
+include::system:generated:page$index/ExceptionRecognizerService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == PI
 
 The SPI defined by this service is:
@@ -18,6 +28,9 @@ include::refguide:applib-svc:example$services/exceprecog/ExceptionRecognizerServ
 ----
 
 
+
+
+================================
 
 == Implementation
 

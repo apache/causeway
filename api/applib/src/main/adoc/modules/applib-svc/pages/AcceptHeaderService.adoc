@@ -14,6 +14,16 @@ As an alternative to performing content negotiation within the domain classes, t
 
 == API
 
+include::system:generated:page$index/AcceptHeaderService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by the service is:
 
 [source,java]
@@ -25,6 +35,9 @@ include::refguide:applib-svc:example$services/acceptheader/AcceptHeaderService.j
 
 The intention is that this service only returns a list when the request is initiated through the xref:vro:ROOT:about.adoc[Restful Objects viewer].
 Otherwise the service will likely return `null`.
+
+
+================================
 
 == Implementation
 

@@ -11,6 +11,16 @@ This is useful both for xref:testing:integtestsupport:about.adoc[integration tes
 
 == API
 
+include::system:generated:page$index/SudoService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API provided by the service is:
 
 [source,java]
@@ -34,6 +44,9 @@ Note that this the "effective user" does not propagate through to the xref:secur
 See the xref:refguide:applib-svc:SudoService.adoc#access_all_role[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
 ====
 
+
+
+================================
 
 == Implementation
 
@@ -96,6 +109,16 @@ In the future this service may be used more deeply, eg to propagate permissions 
 
 
 
+== API
+
+include::system:generated:page$index/SudoService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The `SudoService.Spi` service allows implementations of `SudoService` to notify other services/components that the effective user and roles are different.
@@ -110,6 +133,9 @@ include::refguide:applib-svc:example$services/sudo/SudoService.java[tags="refgui
 
 The names of these methods were chosen based on link:https://shiro.apache.org/static/1.2.6/apidocs/org/apache/shiro/subject/Subject.html#runAs-org.apache.shiro.subject.PrincipalCollection-[similar names within Shiro].
 
+
+
+================================
 
 == Related Services
 

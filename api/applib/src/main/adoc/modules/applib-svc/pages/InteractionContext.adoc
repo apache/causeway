@@ -33,6 +33,16 @@ The `Interaction` can be used to obtain the `Command` object representing the to
 
 The `Execution` class itself is abstract; there are two subclasses, `ActionInvocation` and `PropertyEdit`.
 
+== API
+
+include::system:generated:page$index/InteractionContext.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 === `InteractionContext`
 
 The public API of the `InteractionContext` domain service itself consists of simply:
@@ -44,6 +54,19 @@ include::refguide:applib-svc:example$services/iactn/InteractionContext.java[tags
 <.> Returns the currently active {@link Interaction} for this thread.
 
 This class is concrete (that is, it is also the implementation).
+
+
+================================
+
+== API
+
+include::system:generated:page$index/Interaction.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
 
 === `Interaction`
 
@@ -62,6 +85,9 @@ Generally there will be just one entry in this list, but additional entries may 
 Used by the framework both to number successive interaction ``Execution``s and for events published by the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
 
 This class is concrete (is also the implementation).
+
+
+================================
 
 === `Interaction.Execution`
 

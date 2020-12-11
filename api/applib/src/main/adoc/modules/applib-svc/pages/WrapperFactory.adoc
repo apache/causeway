@@ -25,6 +25,16 @@ This capability is frequently used within xref:testing:integtestsupport:about.ad
 
 The API breaks into four parts, along with a number of supporting control classes.
 
+== API
+
+include::system:generated:page$index/WrapperFactory.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 === Synchronous API
 
 The synchronous API provided by the service is:
@@ -45,6 +55,9 @@ Again `SyncControl` modifies the way in which the wrapper interacts with the und
 <.> overload that instantiates and wraps a mixin with a wrapper that will validate all business rules and then execute the action if they pass.
 
 The service works by returning a "wrapper" around a supplied domain object (using link:https://bytebuddy.net/[byte buddy]), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced.
+
+
+================================
 
 ==== Domain Objects
 
@@ -75,6 +88,16 @@ Mixin wrappers only apply to actions, and so the wrapper will enforce the hidden
 In addition, any xref:refguide:applib-methods:prefixes.adoc#default[`default...()`], xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`] methods can be called.
 
 [#synccontrol]
+== API
+
+include::system:generated:page$index/SyncControl.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 ==== `SyncControl`
 
 The `SyncControl` class controls the way that a (synchronous) wrapper works.
@@ -109,6 +132,19 @@ include::refguide:applib-svc:example$services/wrapper/control/SyncControl.java[t
 
 
 
+
+================================
+
+== API
+
+include::system:generated:page$index/WrapperFactory.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 === Asynchronous API
 
 The `WrapperFactory` also allows domain objects to be interacted with in an asynchronous fashion, in other words executed in a separate thread:
@@ -128,6 +164,19 @@ If any of these are entities, they are retrieved from the database afresh; it is
 
 
 [#asynccontrol]
+
+================================
+
+== API
+
+include::system:generated:page$index/AsyncControl.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 ==== `AsyncControl`
 
 The `AsyncControl` class controls the way that an asynchronous wrapper -- as obtained by `asyncWrapXxx(...)` -- works.
@@ -154,6 +203,19 @@ The `AsyncControl` can therefore be used to check business rules or to skip them
 If business rules are checked, note that they are performed in the context of the _foreground_ session.
 
 
+
+================================
+
+== API
+
+include::system:generated:page$index/WrapperFactory.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 === Unwrap API
 
 The unwrap API provided by the service is:
@@ -168,6 +230,19 @@ If the object is not wrapped, returns back unchanged.
 <.> whether the supplied object is a wrapper around a domain object or mixin.
 
 
+
+
+================================
+
+== API
+
+include::system:generated:page$index/WrapperFactory.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
 
 === Listener API
 
@@ -192,6 +267,9 @@ One possible use case would be to autogenerate documentation, for example a sequ
 Such a feature would probably also use xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`], which builds up an execution call graph of interactions between (wrapped) objects.
 ====
 
+
+
+================================
 
 == Typical Usage
 

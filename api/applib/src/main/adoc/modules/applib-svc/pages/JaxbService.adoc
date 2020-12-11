@@ -9,6 +9,16 @@ The `JaxbService` allows instances of JAXB-annotated classes to be marshalled to
 
 == API
 
+include::system:generated:page$index/JaxbService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `JaxbService` is:
 
 [source,java]
@@ -29,6 +39,9 @@ With respect to the `IsisSchemas` enum: a JAXB-annotated domain object will live
 In particular, many JAXB domain objects will reference the
 xref:refguide:schema:about.adoc[common Isis schemas] (for example the `OidDto` class that represents a reference to a persistent entity).
 The enum indicates whether these schemas should be included or excluded from the map.
+
+
+================================
 
 == Implementation
 

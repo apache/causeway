@@ -9,9 +9,22 @@ The `MetaModelServiceMenu` service simply provides a UI to allow domain model me
 
 == API
 
+include::system:generated:page$index/MetaModelServiceMenu.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The `MetaModelServiceMenu` implementation is very simple (annotations and supporting methods omitted):
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/metamodel/MetaModelServiceMenu.java[tags="refguide"]
+
+================================
+
 ----

@@ -13,6 +13,16 @@ The mapped object used will be the first non-`null` result returned by an implem
 
 
 
+== API
+
+include::system:generated:page$index/ContentMappingService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -26,6 +36,9 @@ include::refguide:applib-svc:example$services/conmap/ContentMappingService.java[
 
 
 
+
+
+================================
 
 == Implementations
 

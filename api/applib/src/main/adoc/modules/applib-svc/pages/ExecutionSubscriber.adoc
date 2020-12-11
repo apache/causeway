@@ -16,6 +16,16 @@ The framework provides a default implementation, `PublisherServiceLogging`, that
 Only actions/properties/domain objects annotated for publishing (using xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing()`], xref:refguide:applib-ant:Property.adoc#publishing[`@Property#publishing()`] or xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) are published.
 
 
+== API
+
+include::system:generated:page$index/PublishedObjects.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by the service is:
@@ -51,6 +61,9 @@ Implementations that publish member executions can use `Interaction.Execution#ge
 The XML can either serialize a single execution, or can be a "deep" serialization of an execution and all sub-executions.
 
 
+
+
+================================
 
 == Implementations
 

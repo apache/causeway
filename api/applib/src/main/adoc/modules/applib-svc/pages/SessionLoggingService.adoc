@@ -10,6 +10,16 @@ The `SessionLoggingService` defines an SPI to keep track of (typically: to log) 
 Multiple implementations can be registered; all will be called.
 
 
+== API
+
+include::system:generated:page$index/SessionLoggingService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -22,6 +32,9 @@ include::refguide:applib-svc:example$services/session/SessionLoggingService.java
 
 
 
+
+
+================================
 
 == Implementations
 

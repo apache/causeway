@@ -8,6 +8,16 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 The `TableColumnOrderService` provides the ability to reorder (or suppress) columns in both parented- and standalone tables.
 
 
+== API
+
+include::system:generated:page$index/TableColumnOrderService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -24,6 +34,9 @@ The ordering provided by the first such service that returns a non-`null` value 
 If all provided implementations return `null`, then the framework will fallback to a default implementation.
 
 
+
+
+================================
 
 == Implementation
 

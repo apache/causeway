@@ -6,10 +6,23 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 == API
 
+include::system:generated:page$index/ServiceInjector.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 [source,java]
 ----
 include::refguide:applib-svc:example$services/inject/ServiceInjector.java[tags="refguide"]
 ----
+
+
+================================
 
 == Implementation
 

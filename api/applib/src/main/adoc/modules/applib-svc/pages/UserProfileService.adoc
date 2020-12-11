@@ -12,6 +12,16 @@ Another use case is to allow the user to switch context in some fashion or other
 
 
 
+== API
+
+include::system:generated:page$index/UserProfileService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by the service is:
@@ -27,6 +37,9 @@ If the method returns `null` or throws an exception then the framework will defa
 In the future this API may be expanded; one obvious possibility is to return a profile photo or avatar URL.
 
 
+
+
+================================
 
 == Implementation
 

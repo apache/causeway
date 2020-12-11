@@ -5,6 +5,16 @@
 
 The `ConfigurationMenu` service simply provides a UI in order to access the configuration properties available from  xref:refguide:applib-svc:ConfigurationViewService.adoc[`ConfigurationViewService`].
 
+== API
+
+include::system:generated:page$index/ConfigurationMenu.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == Implementation
 
 The `ConfigurationMenu` implementation is very simple (annotations omitted):
@@ -13,6 +23,9 @@ The `ConfigurationMenu` implementation is very simple (annotations omitted):
 ----
 include::refguide:applib-svc:example$services/confview/ConfigurationMenu.java[tags="refguide"]
 ----
+
+
+================================
 
 == Related Services
 

@@ -10,6 +10,16 @@ It simply returns a `ConfigurationProperty` (view model) instance for all known 
 
 == API
 
+include::system:generated:page$index/ConfigurationProperty.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by this service is very simple:
 
 [source,java]
@@ -23,6 +33,9 @@ where `ConfigurationProperty` is a view model:
 ----
 include::refguide:applib-svc:example$services/confview/ConfigurationProperty.java[tags="refguide"]
 ----
+
+
+================================
 
 == Implementation
 

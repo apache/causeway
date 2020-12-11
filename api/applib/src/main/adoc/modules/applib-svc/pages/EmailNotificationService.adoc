@@ -13,6 +13,16 @@ The role of this service in all of this is to format and send out emails for the
 
 The default implementation of this service uses the xref:refguide:applib-svc:EmailService.adoc[`EmailService`], which must be configured in order for user registration to be enabled.
 
+== API
+
+include::system:generated:page$index/EmailNotificationService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -26,6 +36,9 @@ include::refguide:applib-svc:example$services/userreg/EmailNotificationService.j
 <.> determines whether the implementation was configured and initialized correctly
 
 If `isConfigured()` returns false then it is _not_ valid to call `send(...)` (and doing so will result in an `IllegalStateException` being thrown).
+
+
+================================
 
 == Implementation
 

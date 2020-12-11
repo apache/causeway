@@ -10,12 +10,25 @@ The `QueryResultsCacheControl` domain service is used to enable or disable cachi
 
 == API
 
+include::system:generated:page$index/QueryResultCacheControl.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API for this service is simply:
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/queryresultscache/QueryResultCacheControl.java[tags="refguide"]
 ----
+
+
+================================
 
 == Implementation
 

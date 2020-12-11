@@ -9,6 +9,16 @@
 The `AuditerService` auditing service provides a simple mechanism to capture changes to data.
 It is called for each property that has changed on any domain object, as a set of pre- and post-values.
 
+== API
+
+include::system:generated:page$index/AuditerService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI for the service is:
@@ -28,6 +38,9 @@ If the object was created then "[NEW]" is used as the pre-value; if the object w
 <6> the user that changed the object, and the date/time that this occurred.
 
 The framework will call this for each and every domain object property that is modified within a transaction.
+
+
+================================
 
 == Implementations
 

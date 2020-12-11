@@ -10,6 +10,16 @@ The `MessageService` allows domain objects to raise information, warning or erro
 These messages can either be simple strings, or can be translated.
 
 
+== API
+
+include::system:generated:page$index/MessageService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == API and Usage
 
 The API of `MessageService` is:
@@ -30,6 +40,9 @@ include::refguide:applib-svc:example$services/message/MessageService.java[tags="
 
 The i18n versions of these methods that take `contextClass` and `contextMethod` parameters use this to create a context string, eg "com.mycompany.Customer#placeOrder".
 
+
+
+================================
 
 == Implementation
 

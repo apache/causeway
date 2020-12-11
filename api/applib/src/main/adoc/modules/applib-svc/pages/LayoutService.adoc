@@ -10,6 +10,16 @@ This functionality is surfaced through the user interface through a related xref
 
 == API
 
+include::system:generated:page$index/LayoutService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `LayoutService` is:
 
 [source,java]
@@ -67,6 +77,9 @@ You can then remove the `@MemberGroupLayout` and `@MemberOrder` annotations from
 * if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
 The grid regions will be empty in this version, and the framework will use the `@MemberOrder` annotation to bind object members to those regions.
 The only annotation that can be safely removed from the source code with this style is the `@MemberGroupLayout` annotation.
+
+
+================================
 
 == Implementation
 

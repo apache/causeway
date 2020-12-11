@@ -24,6 +24,16 @@ For further details on the user registration feature (as supported by the Wicket
 
 
 
+== API
+
+include::system:generated:page$index/UserRegistrationService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by the service is:
@@ -40,6 +50,9 @@ The username and email address must both be unique (not being used by an existin
 
 
 
+
+
+================================
 
 == Implementation
 

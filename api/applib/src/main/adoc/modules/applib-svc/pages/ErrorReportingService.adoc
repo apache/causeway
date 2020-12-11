@@ -18,6 +18,16 @@ The information in this object is used by the xref:vw:ROOT:about.adoc[Wicket Vie
 
 
 
+== API
+
+include::system:generated:page$index/Ticket.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -65,6 +75,9 @@ By default a stack trace button is not shown if a ticket is returned (but _is_ s
 
 
 
+
+
+================================
 
 == Implementation
 

@@ -10,6 +10,16 @@ The `MetaModelService` service provides access to a number of aspects of Apache 
 
 == API
 
+include::system:generated:page$index/MetaModelService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 
 The API defined by the service is:
 
@@ -66,6 +76,9 @@ include::refguide:applib-svc:example$services/metamodel/MetaModelService.java[ta
 ----
 
 
+
+
+================================
 
 == Implementation
 

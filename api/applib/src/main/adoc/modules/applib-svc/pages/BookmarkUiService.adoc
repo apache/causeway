@@ -10,6 +10,16 @@ The `BookmarkUiService` provides the ability to programmatically interact with b
 
 == API
 
+include::system:generated:page$index/BookmarkUiService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `BookmarkUiService` is:
 
 [source,java]
@@ -18,6 +28,9 @@ include::refguide:applib-svc:example$services/bookmarkui/BookmarkUiService.java[
 ----
 <.> Simply clears the current list of breadcrumbs and bookmarks.
 
+
+
+================================
 
 == Implementation
 

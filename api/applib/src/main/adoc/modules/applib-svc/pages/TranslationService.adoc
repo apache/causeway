@@ -17,6 +17,16 @@ For the "big picture" and further details on Apache Isis' i18n support, see xref
 
 
 
+== API
+
+include::system:generated:page$index/TranslationService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -38,6 +48,9 @@ If in read mode, then the translations are expected to be present.
 If in write mode, then the implementation is saving translation keys, and will always return the untranslated translation.
 
 
+
+
+================================
 
 == Implementation
 

@@ -7,6 +7,16 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `GridLoaderService` provides the ability to load the XML layout (grid) for a domain class.
 
+== API
+
+include::system:generated:page$index/GridLoaderService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -21,6 +31,9 @@ include::refguide:applib-svc:example$services/grid/GridLoaderService.java[tags="
 <.> returns a new instance of a xref:applib-classes:layout.adoc#component[`Grid`] for the specified domain class, eg as loaded from a `layout.xml` file.
 If none exists, will return null (and the calling xref:refguide:applib-svc:GridService.adoc[`GridService`] will use xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`] to obtain a default grid for the domain class).
 <.> Load a specific layout alternative, eg if specified through a `layout()` supporting method of the domain object itself.
+
+
+================================
 
 == Implementation
 

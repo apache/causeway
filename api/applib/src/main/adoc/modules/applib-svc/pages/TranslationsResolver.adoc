@@ -13,6 +13,16 @@ For the "big picture" and further details on Apache Isis' i18n support, see xref
 
 
 
+== API
+
+include::system:generated:page$index/TranslationsResolver.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -23,6 +33,9 @@ include::refguide:applib-svc:example$services/i18n/TranslationsResolver.java[tag
 ----
 
 
+
+
+================================
 
 == Implementation
 

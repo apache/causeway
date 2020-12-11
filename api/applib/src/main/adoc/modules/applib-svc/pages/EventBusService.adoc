@@ -28,12 +28,25 @@ However the events are published, the primary use case is to decoupling interact
 
 == API
 
+include::system:generated:page$index/EventBusService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `EventBusService` is:
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/eventbus/EventBusService.java[tags="refguide"]
 ----
+
+
+================================
 
 == Implementation
 

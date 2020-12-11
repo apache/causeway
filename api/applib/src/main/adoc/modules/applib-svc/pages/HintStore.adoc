@@ -12,6 +12,16 @@ The default implementation of this service uses the HTTP session.
 The service is an SPI because the amount of data stored could potentially be quite large (for large numbers of users who use the app all day).
 An SPI makes it easy to plug in an alternative implementation that is more sophisticated than the default (eg implementing MRU/LRU queue, or using a NoSQL database, or simply to disabling the functionality altogether).
 
+== API
+
+include::system:generated:page$index/HintStore.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI of `HintStore` is:
@@ -27,9 +37,22 @@ Object identity is represented by `Bookmark`, as per the xref:refguide:applib-sv
 (The value of) all hints are represented as strings.
 <.> remove a single hint for an object; <.> remove all hints <.> obtain all known hints for an object
 
+
+================================
+
 == Implementation
 
 The core framework provides a default implementation of this service (`org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession`).
+
+== API
+
+include::system:generated:page$index/HintStore.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
 
 == View models
 
@@ -69,6 +92,9 @@ public class CustomerAndOrders implements HintStore.HintIdProvider {
     @Inject BookmarkService bookmarkService;
 }
 ----
+
+
+================================
 
 == Related Services
 

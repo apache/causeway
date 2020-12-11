@@ -20,6 +20,16 @@ If running in prototype mode, any subsequent changes to the XML will be detected
 This allows for dynamic reloading of layouts, providing a far faster feedback (eg if tweaking the UI while working with end-users).
 Dynamic reloading is disabled in production mode.
 
+== API
+
+include::system:generated:page$index/GridService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -49,6 +59,9 @@ Such a grid, if persisted as the layout XML file for the domain class, requires 
 The first five methods just delegate to the corresponding methods in xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`], while the last four delegate to the  corresponding method in xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`].
 The service inspects the ``Grid``'s concrete class to determine which actual `GridSystemService` instance to delegate to.
 
+
+
+================================
 
 == Implementation
 

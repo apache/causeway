@@ -8,6 +8,16 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 The `MenuBarsService` is responsible for returning a xref:applib-classes:layout.adoc#menubars-layout[`MenuBars`] instance, a data structure representing the arrangement of domain service actions across multiple menu bars, menus and sections.
 This is used by the Wicket viewer to build up the menu, and is also served as the "menuBars" resource by the xref:vro:ROOT:about.adoc[Restful Objects] viewer.
 
+== API
+
+include::system:generated:page$index/MenuBarsService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -25,6 +35,9 @@ include::refguide:applib-svc:example$services/menu/MenuBarsService.java[tags="re
 ----
 include::refguide:applib-svc:example$services/menu/MenuBarsService.java[tags="refguide-1"]
 ----
+
+
+================================
 
 == Implementation
 

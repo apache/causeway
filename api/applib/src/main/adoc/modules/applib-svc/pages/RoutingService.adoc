@@ -30,6 +30,16 @@ The route used will be the result of the first implementation checked that decla
 ====
 
 
+== API
+
+include::system:generated:page$index/RoutingService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -44,6 +54,9 @@ The `route(...)` method is only called if this method returns `true`.
 
 
 
+
+
+================================
 
 == Implementation
 

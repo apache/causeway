@@ -19,6 +19,16 @@ When combined with Apache Isis' own xref:vro:ROOT:simplified-representations.ado
 
 == API
 
+include::system:generated:page$index/SwaggerService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `SwaggerService` is:
 
 [source,java]
@@ -36,6 +46,9 @@ This specification includes domain entities and all menu domain services (as wel
 
 <.> Generate as JSON...
 <.> \... or as YAML.
+
+
+================================
 
 === _PUBLIC_ vs _PRIVATE_ vs _PROTOTYPING_ 
 

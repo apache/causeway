@@ -14,6 +14,16 @@ Another use case is to grab raw data such that it could be merged into a report 
 
 The service offers a basic API to create a snapshot of a single object, and an more flexible API that allows the size of the graph to be customized.
 
+== API
+
+include::system:generated:page$index/XmlSnapshotService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == Standard API
 
 The (basic) API of `XmlSnapshotService` is:
@@ -48,6 +58,9 @@ include::refguide:applib-svc:example$services/xmlsnapshot/XmlSnapshotService.jav
 <.> Builds the `Snapshot`.
 
 The general xref:#usage[usage] and the usage of xref:#builder-api[builder] in particular is described below.
+
+
+================================
 
 == Implementation
 

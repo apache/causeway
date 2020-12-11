@@ -10,6 +10,16 @@ The `Scratchpad` domain service allows objects to exchange information even if t
 
 == API
 
+include::system:generated:page$index/Scratchpad.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API of `Scratchpad` service is:
 
 [source,java]
@@ -19,6 +29,9 @@ include::refguide:applib-svc:example$services/scratchpad/Scratchpad.java[tags="r
 
 The key values should obey the general contract for hash maps.
 
+
+
+================================
 
 == Implementation
 

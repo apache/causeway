@@ -13,6 +13,16 @@ The service tracks entity change metrics for those entities that have `entityCha
 
 == API
 
+include::system:generated:page$index/MetricsService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API of the service is:
 
 [source,java]
@@ -22,6 +32,9 @@ include::refguide:applib-svc:example$services/metrics/MetricsService.java[tags="
 <.> The number of objects that have, so far in this request, been loaded from the database.
 <.> The number of objects that have, so far in this request, been dirtied/will need updating in the database); a good measure of the footprint of the interaction.
 
+
+
+================================
 
 == Implementation
 

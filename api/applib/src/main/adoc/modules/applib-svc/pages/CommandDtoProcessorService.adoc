@@ -16,6 +16,16 @@ Another use case is to strip out large blobs for performance reasons.
 
 == API
 
+include::system:generated:page$index/CommandDtoProcessorService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `CommandDtoProcessorService` is:
 
 [source,java]
@@ -24,10 +34,23 @@ include::refguide:applib-svc:example$services/commanddto/processor/spi/CommandDt
 ----
 
 
+
+================================
+
 == Implementation
 
 As noted in the introduction, the framework provides a default implementation, namely `o.a.i.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto`.
 
+
+== API
+
+include::system:generated:page$index/CommandDtoProcessor.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
 
 == Related Classes
 
@@ -40,6 +63,9 @@ The main use case is to allow certain actions/property edits to be ignored:
 include::refguide:applib-svc:example$services/commanddto/processor/CommandDtoProcessor.java[tags="refguide"]
 ----
 <.> Returning `null` means that the command's DTO is effectively ignored.
+
+
+================================
 
 == Related Services
 

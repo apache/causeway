@@ -9,9 +9,22 @@ The `LayoutServiceMenu` service simply provides a UI to allow layouts (obtained 
 
 == API
 
+include::system:generated:page$index/LayoutServiceMenu.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The `LayoutServiceMenu` implementation is very simple (annotations and supporting methods omitted):
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/layout/LayoutServiceMenu.java[tags="refguide"]
+
+================================
+
 ----

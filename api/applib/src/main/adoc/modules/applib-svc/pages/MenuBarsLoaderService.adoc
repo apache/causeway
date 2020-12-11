@@ -7,6 +7,16 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `MenuBarsLoaderService` is used by the default implementation of xref:refguide:applib-svc:MenuBarsService.adoc[MenuBarsService] to return a a xref:applib-classes:layout.adoc#menubars-layout[`MenuBars`] instance deserialized from the `menubars.layout.xml` file read from the classpath.
 
+== API
+
+include::system:generated:page$index/MenuBarsLoaderService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -18,6 +28,9 @@ include::refguide:applib-svc:example$services/menu/MenuBarsLoaderService.java[ta
 <.> Whether dynamic reloading of the menu bars layout is enabled.
 If not, then the xref:refguide:applib-svc:MenuBarsService.adoc[MenuBarsService] will cache the layout once loaded.
 <.> Returns a new instance of `MenuBars` if possible, otherwise null.
+
+
+================================
 
 == Implementation
 

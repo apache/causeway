@@ -14,6 +14,16 @@ xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]).
 
 == API
 
+include::system:generated:page$index/EntityState.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API of `RepositoryService` is:
 
 [source,java]
@@ -74,6 +84,9 @@ No exception is thrown if more than one matches, so this is less strict that `un
 The `uniqueMatch(...)` methods are the recommended way of querying for (precisely) one instance.
 The `firstMatch(...)` methods are for less strict querying.
 
+
+
+================================
 
 == Usage
 

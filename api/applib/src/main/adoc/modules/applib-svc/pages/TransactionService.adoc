@@ -14,6 +14,16 @@ The `TransactionService` (and its various supertypes) allows domain objects to i
 
 == API
 
+include::system:generated:page$index/TransactionState.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API of `TransactionService` is:
 
 [source,java]
@@ -50,6 +60,9 @@ Under certain circumstances (eg actions used to perform data migration, say, or 
 
 <.> Ditto, but retrieving the task to be performed from the supplier.
 
+
+
+================================
 
 == Implementation
 

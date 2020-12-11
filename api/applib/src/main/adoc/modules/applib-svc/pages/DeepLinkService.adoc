@@ -11,6 +11,16 @@ A typical use case is to generate a clickable link for rendering in an email, PD
 
 == API
 
+include::system:generated:page$index/DeepLinkService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `DeepLinkService` is:
 
 [source,java]
@@ -19,6 +29,9 @@ include::refguide:applib-svc:example$services/linking/DeepLinkService.java[tags=
 ----
 <1> Creates a URI that can be used to obtain a representation of the provided domain object in one of the Apache Isis viewers.
 
+
+
+================================
 
 == Implementation
 

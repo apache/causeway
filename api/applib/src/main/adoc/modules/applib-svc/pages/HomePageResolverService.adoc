@@ -11,12 +11,25 @@ It was originally introduced to support the default implementation of xref:refgu
 
 == API
 
+include::system:generated:page$index/HomePageResolverService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `HomePageResolverService` is:
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/homepage/HomePageResolverService.java[tags="refguide"]
 ----
+
+
+================================
 
 == Implementation
 

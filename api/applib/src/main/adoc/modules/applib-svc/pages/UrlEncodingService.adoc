@@ -22,6 +22,16 @@ For example, each memento string could be mapped to a GUID held in some cluster-
 The framework provides a default implementation of this service, `UrlEncodingServiceWithCompression`, discussed further in the section below.
 
 
+== API
+
+include::system:generated:page$index/UrlEncodingService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by the service is:
@@ -36,6 +46,9 @@ include::refguide:applib-svc:example$services/urlencoding/UrlEncodingService.jav
 
 
 
+
+
+================================
 
 == Implementation
 

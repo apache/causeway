@@ -16,6 +16,16 @@ The role of the service itself is simply to return the `Locale` of the current u
 For the "big picture" and further details on Apache Isis' i18n support, see xref:userguide:btb:i18n.adoc[here].
 ====
 
+== API
+
+include::system:generated:page$index/LocaleProvider.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -27,6 +37,9 @@ include::refguide:applib-svc:example$services/i18n/LocaleProvider.java[tags="ref
 
 This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.
 (Note that the implementation does not required any special scoping such as xref:refguide:applib-ant:IsisSessionScope.adoc[`@IsisSessionScope`], for example).
+
+
+================================
 
 == Implementation
 

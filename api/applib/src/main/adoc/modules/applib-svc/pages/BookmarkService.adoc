@@ -21,12 +21,35 @@ Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc
 
 == API
 
+include::system:generated:page$index/BookmarkService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
+== API
+
 The API defined by `BookmarkService` is:
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/bookmark/BookmarkService.java[tags="refguide"]
 ----
+
+
+================================
+
+== API
+
+include::system:generated:page$index/Bookmark.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
 
 === `Bookmark`
 
@@ -38,10 +61,23 @@ include::refguide:applib-svc:example$services/bookmark/Bookmark.java[tags="refgu
 ----
 
 
+
+================================
+
 == Implementation
 
 The core framework (xref:core:runtime-services:about.adoc[Runtime Services] module) provides a default implementation of this API, namely `o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault`.
 
+
+== API
+
+include::system:generated:page$index/BookmarkHolder.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
 
 == Related Mixins
 
@@ -64,5 +100,8 @@ which contributes a `lookup` action to return the referenced object
 which contributes instead an `object` property, being the referenced object.
 
 Either of these can be suppressed, if required, using a vetoing subscriber that listens to the action or property domain event in order to hide the member.
+
+
+================================
 
 

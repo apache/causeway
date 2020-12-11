@@ -22,6 +22,16 @@ Note though that each concrete implementation must also provide corresponding Wi
 ====
 
 
+== API
+
+include::system:generated:page$index/GridSystemService.adoc[leveloffset=+2]
+
+TODO example migration
+
+.Deprecated Docs
+[WARNING]
+================================
+
 == SPI
 
 The SPI defined by this service is:
@@ -50,6 +60,9 @@ Such a grid, if persisted as the layout XML file for the domain class, allows al
 <.> Takes a normalized grid and strips out removes all members, leaving only the grid structure.
 Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotation is retained in the source code of said class in order to bind members to the regions of the grid.
 
+
+
+================================
 
 == Implementation
 
