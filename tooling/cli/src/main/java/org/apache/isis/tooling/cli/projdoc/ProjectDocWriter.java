@@ -28,7 +28,7 @@ import org.asciidoctor.ast.Document;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.cli.doclet.AdocletContext;
+import org.apache.isis.tooling.j2adoc.J2aContext;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
@@ -41,7 +41,7 @@ final class ProjectDocWriter {
     static void write(
             final @NonNull CliConfig cliConfig, 
             final @NonNull Document doc, 
-            final @NonNull AdocletContext docletContext) {
+            final @NonNull J2aContext docletContext) {
         
         
         try {

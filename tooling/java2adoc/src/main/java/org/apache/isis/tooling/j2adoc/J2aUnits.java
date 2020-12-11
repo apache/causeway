@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.doclet;
+package org.apache.isis.tooling.j2adoc;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -27,7 +27,7 @@ import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import lombok.NonNull;
 import lombok.val;
 
-final class Adoclets {
+final class J2aUnits {
 
     /**
      * Whether to include given {@link TypeDeclaration} with the index.

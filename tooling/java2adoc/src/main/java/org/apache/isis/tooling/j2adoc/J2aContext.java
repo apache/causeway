@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.doclet;
+package org.apache.isis.tooling.j2adoc;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import lombok.Value;
 import lombok.val;
 
 @Value @Builder
-public class AdocletContext {
+public class J2aContext {
 
     private final @NonNull String xrefPageIdFormat;
     
@@ -83,9 +83,9 @@ public class AdocletContext {
     @Builder.Default
     private final boolean includeJavaSource = true;
     
-    private final Map<String, Adoclet> adocletIndex = _Maps.newTreeMap();
+    private final Map<String, J2aUnit> adocletIndex = _Maps.newTreeMap();
 
-    public AdocletContext add(final @NonNull Adoclet adoclet) {
+    public J2aContext add(final @NonNull J2aUnit adoclet) {
         val previousKey = adocletIndex.put(adoclet.getName(), adoclet);
         if(previousKey!=null) {
             throw _Exceptions.unrecoverableFormatted(
@@ -95,8 +95,8 @@ public class AdocletContext {
         return this;
     }
     
-    public Stream<Adoclet> add(final @NonNull File sourceFile) {
-        return Adoclet.parse(sourceFile)
+    public Stream<J2aUnit> add(final @NonNull File sourceFile) {
+        return J2aUnit.parse(sourceFile)
         .peek(this::add)
         // ensure the stream is consumed here, 
         // current implementation does not expect more than 1 result per source file
@@ -104,22 +104,22 @@ public class AdocletContext {
         .stream();
     }
     
-    public Stream<Adoclet> streamAdoclets() {
+    public Stream<J2aUnit> streamAdoclets() {
         return adocletIndex.values().stream();
     }
 
-    public Optional<Adoclet> getAdoclet(String key) {
+    public Optional<J2aUnit> getAdoclet(String key) {
         return Optional.ofNullable(adocletIndex.get(key));
     }
     
     // -- PREDEFINED FORMATS
     
-    public static AdocletContextBuilder javaSourceWithFootNotesFormat() {
-        return AdocletContext.builder();
+    public static J2aContextBuilder javaSourceWithFootNotesFormat() {
+        return J2aContext.builder();
     }
     
-    public static AdocletContextBuilder compactFormat() {
-        return AdocletContext.builder()
+    public static J2aContextBuilder compactFormat() {
+        return J2aContext.builder()
                 .constructorFormat("`%1$s(%2$s)`") // name | param-list)
                 .genericConstructorFormat("`%2$s%1$s(%3$s)`") //  method-generic-type | name | param-list)
                 .methodFormat("`%2$s(%3$s)` : `%1$s`") //  return-type | name | param-list)

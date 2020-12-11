@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.doclet;
+package org.apache.isis.tooling.j2adoc;
 
 import java.io.File;
 import java.util.stream.Stream;
@@ -25,9 +25,10 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.ast.ClassOrInterfaceDeclarations;
-import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
+import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
@@ -38,11 +39,11 @@ import lombok.extern.log4j.Log4j2;
 
 @Value
 @Log4j2
-public class Adoclet {
+public class J2aUnit {
 
     private final ClassOrInterfaceDeclaration td;
 
-    public static Stream<Adoclet> parse(final @NonNull File sourceFile) {
+    public static Stream<J2aUnit> parse(final @NonNull File sourceFile) {
 
         if("package-info.java".equals(sourceFile.getName())) {
             // ignore package files
@@ -53,14 +54,14 @@ public class Adoclet {
             
             // remove 'tag::' and 'end::' lines
             // remove '// <.>' foot note references
-            val source = AdocIncludeTagFilter.read(sourceFile);
+            val source = AsciiDocIncludeTagFilter.read(sourceFile);
 
             val cu = StaticJavaParser.parse(source);
             
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamPublicTypeDeclarations)
-            .filter(Adoclets::hasIndexDirective)
-            .map(Adoclet::new);
+            .filter(J2aUnits::hasIndexDirective)
+            .map(J2aUnit::new);
 
         } catch (Exception e) {
             log.error("failed to parse java source file {}", sourceFile, e);
@@ -74,13 +75,13 @@ public class Adoclet {
     }
 
     public String getAsciiDocXref(
-            final @NonNull AdocletContext docletContext) {
-        val toAdocConverter = ToAsciiDoc.of(docletContext);
+            final @NonNull J2aContext docletContext) {
+        val toAdocConverter = JavaToAsciiDoc.of(docletContext);
         return toAdocConverter.xref(this);
     }
     
     public String toAsciiDoc(
-            final @NonNull AdocletContext docletContext) {
+            final @NonNull J2aContext docletContext) {
         
         val doc = AsciiDocFactory.doc();
         
@@ -97,7 +98,7 @@ public class Adoclet {
                 .collect(Can.toCan());
         
         
-        val toAdocConverter = ToAsciiDoc.of(docletContext);
+        val toAdocConverter = JavaToAsciiDoc.of(docletContext);
 
         // -- intro
         
@@ -119,14 +120,14 @@ public class Adoclet {
             cds.forEach(cd->{
                 
                 java.append(String.format("\n  %s // <.>\n", 
-                        Adoclets.toNormalizedConstructorDeclaration(cd)));
+                        J2aUnits.toNormalizedConstructorDeclaration(cd)));
                 
             });
             
             mds.forEach(md->{
     
                 java.append(String.format("\n  %s // <.>\n", 
-                        Adoclets.toNormalizedMethodDeclaration(md)));
+                        J2aUnits.toNormalizedMethodDeclaration(md)));
                 
             });
     

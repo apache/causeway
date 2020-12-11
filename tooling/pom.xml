@@ -193,6 +193,12 @@
 				<artifactId>isis-tooling-javamodel</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.isis.tooling</groupId>
+				<artifactId>isis-tooling-java2adoc</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- EXTERNAL -->
 

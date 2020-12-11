@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.doclet;
+package org.apache.isis.tooling.j2adoc;
 
 import java.util.stream.Collectors;
 
@@ -49,9 +49,9 @@ import lombok.Value;
 import lombok.val;
 
 @Value(staticConstructor = "of")
-class ToAsciiDoc {
+final class JavaToAsciiDoc {
 
-    private final AdocletContext docletContext;
+    private final J2aContext docletContext;
     
     public String constructorDeclaration(final @NonNull ConstructorDeclaration cd) {
         val isDeprecated = cd.getAnnotations().stream()
@@ -204,7 +204,7 @@ class ToAsciiDoc {
         }
     }
     
-    public String xref(final @NonNull Adoclet doclet) {
+    public String xref(final @NonNull J2aUnit doclet) {
         return String.format("xref:%s[%s]", 
                 String.format(docletContext.getXrefPageIdFormat(), doclet.getName()), 
                 doclet.getName()); 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.test.doclet;
+package org.apache.isis.tooling.j2adoc.test;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +31,8 @@ import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.tooling.cli.doclet.AdocIncludeTagFilter;
-import org.apache.isis.tooling.cli.doclet.AdocletContext;
+import org.apache.isis.tooling.j2adoc.J2aContext;
+import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 
 import lombok.NonNull;
@@ -51,7 +51,7 @@ class AdocletTest {
                 .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
                 .main();
 
-        val docletContext = AdocletContext
+        val docletContext = J2aContext
                 //.javaSourceWithFootNotesFormat()
                 .compactFormat()
                 .xrefPageIdFormat("system:generated:index/%s.adoc")
@@ -83,7 +83,7 @@ class AdocletTest {
         .stream()
         .peek(source->System.out.println("parsing source: " + source))
         .filter(source->source.toString().contains("\\applib\\services\\"))
-        .forEach(AdocIncludeTagFilter::removeAdocExampleTags);
+        .forEach(AsciiDocIncludeTagFilter::removeAdocExampleTags);
         
     }
     

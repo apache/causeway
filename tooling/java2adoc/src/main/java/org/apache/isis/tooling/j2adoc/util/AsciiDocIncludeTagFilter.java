@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.doclet;
+package org.apache.isis.tooling.j2adoc.util;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -26,20 +26,20 @@ import org.apache.isis.commons.internal.base._Text;
 
 import lombok.val;
 
-public final class AdocIncludeTagFilter {
+public final class AsciiDocIncludeTagFilter {
     
     public static String read(File source) {
         return _Text.readLinesFromFile(source, StandardCharsets.UTF_8).stream()
         //.filter(line->!containsIncludeTag(line))
         .filter(line->!isAllLineComment(line))
-        .map(AdocIncludeTagFilter::removeFootNoteReference)
+        .map(AsciiDocIncludeTagFilter::removeFootNoteReference)
         .collect(Collectors.joining("\n"));
     }
     
     public static void removeAdocExampleTags(File source) {
         val fixedLines = _Text.readLinesFromFile(source, StandardCharsets.UTF_8)
         .filter(line->!isIncludeTagComment(line))
-        .map(AdocIncludeTagFilter::removeFootNoteReference);
+        .map(AsciiDocIncludeTagFilter::removeFootNoteReference);
         
         _Text.writeLinesToFile(fixedLines, source, StandardCharsets.UTF_8);
     }

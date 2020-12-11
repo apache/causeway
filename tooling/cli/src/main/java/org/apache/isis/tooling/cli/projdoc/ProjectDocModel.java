@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.cli.doclet.AdocletContext;
+import org.apache.isis.tooling.j2adoc.J2aContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.ast.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
@@ -87,7 +87,7 @@ public class ProjectDocModel {
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
-        val docletContext = AdocletContext.compactFormat()
+        val docletContext = J2aContext.compactFormat()
                 .xrefPageIdFormat(cliConfig.getDocletXrefPageIdFormat())
                 .build();
         
@@ -179,7 +179,7 @@ public class ProjectDocModel {
             final @NonNull Document doc, 
             final @NonNull String sectionName, 
             final @Nullable String groupIdPattern, 
-            final @NonNull AdocletContext docletContext) {
+            final @NonNull J2aContext docletContext) {
 
         val titleBlock = block(doc);
 
@@ -275,7 +275,7 @@ public class ProjectDocModel {
         sb.append(String.format("%s: %s\n", key, value));
     }
     
-    private String details(ProjectNode module, AdocletContext docletContext) {
+    private String details(ProjectNode module, J2aContext docletContext) {
         val description = module.getDescription().trim();
         val dependencyList = module.getDependencies()
                 .stream()
@@ -325,7 +325,7 @@ public class ProjectDocModel {
         return String.format("* %s\n", element);
     }
 
-    private SortedSet<String> gatherAdoclets(File projDir, AdocletContext docletContext) {
+    private SortedSet<String> gatherAdoclets(File projDir, J2aContext docletContext) {
         
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 
