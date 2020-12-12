@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.model4adoc;
 
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -123,6 +124,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         val style = Style.parse(block);        
 
         if(style.isOpenBlock()){
+            pushNewWriter(); // write the open block to a StringWriter, such that can handle empty blocks
             println("+");
             println("--");
             isContinuation = true; // set continuation flag, so other blocks don't add newlines
@@ -157,6 +159,7 @@ final class NodeWriter implements StructuralNodeVisitor {
 
         if(style.isOpenBlock()){
             println("--");
+            popWriter();
             bulletCount = bulletCountStack.pop();
         } else if(style.isAdmonition()){
             if(block.getBlocks().size()>0) {
@@ -335,6 +338,37 @@ final class NodeWriter implements StructuralNodeVisitor {
     private boolean isContinuation = false;
     private Stack<Integer> bulletCountStack = new Stack<>();
 
+    
+    // -- EMPTY CONTINUATION BLOCK HANDLING
+
+    private final static int EMPTY_CONTINUATION_BLOCK_SIZE = 8;
+    
+    private Stack<StringWriter> stringWriterStack = new Stack<>();
+    
+    private Writer currentWriter;
+    private Writer currentWriter() {
+        if(currentWriter == null) {
+            this.currentWriter = writer;
+        }
+        return currentWriter;
+    }
+    private void pushNewWriter() {
+        val sw = new StringWriter();
+        currentWriter = sw;
+        stringWriterStack.push(sw);
+    }
+    @SneakyThrows
+    private void popWriter() {
+        val sw = stringWriterStack.pop();
+        currentWriter = stringWriterStack.isEmpty()
+                ? writer
+                : stringWriterStack.peek();
+        val continuationBlockAsString = sw.toString();
+        if(continuationBlockAsString.length()>EMPTY_CONTINUATION_BLOCK_SIZE) {
+            writer.append(continuationBlockAsString); // write directly to the master writer, no side-effects wanted    
+        }
+    }
+
     // -- PRINTING
 
     @SneakyThrows
@@ -342,7 +376,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         if(!hasWrittenAnythingYet) {
             return;
         }
-        writer.append("\n");
+        currentWriter().append("\n");
         newLineCount++;
     }
 
@@ -353,21 +387,21 @@ final class NodeWriter implements StructuralNodeVisitor {
             val lineIter = _Text.normalize(_Text.getLines(line)).iterator();
             while(lineIter.hasNext()) {
                 val nextLine = lineIter.next(); 
-                writer.append(nextLine);
+                currentWriter().append(nextLine);
                 if(!nextLine.isEmpty()) {
                     hasWrittenAnythingYet = true;
                     isContinuation = false; // clear continuation flag
                     newLineCount = 0;
                 }
                 if(lineIter.hasNext()) {
-                    writer.append("\n");
+                    currentWriter().append("\n");
                     newLineCount++;
                 }
             }
             return;
         }
         if(!line.isEmpty()) {
-            writer.append(line);
+            currentWriter().append(line);
             hasWrittenAnythingYet = true;
             isContinuation = false; // clear continuation flag
             newLineCount = 0;
