@@ -43,6 +43,7 @@ final class Debug {
         
         print(level, "node type: %s", node.getClass());
         print(level, "%s title: %s", simpleName, node.getTitle());
+        print(level, "%s style: %s", simpleName, node.getStyle());
         sourceFor(node).ifPresent(x->print(level, "%s source: %s", simpleName, x));
         print(level, "%s attributes: %d", simpleName, node.getAttributes().size());
         node.getAttributes()

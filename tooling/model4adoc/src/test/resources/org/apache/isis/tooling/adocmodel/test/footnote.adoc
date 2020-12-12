@@ -1,0 +1,21 @@
+<.> fn-1
++
+--
+[WARNING]
+====
+warn-1
+
+warn-2
+====
+
+para-1
+
+para-2
+
+* li-1
+* li-2
+
+para-3
+--
+
+TIP: Here's something worth knowing...

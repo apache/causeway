@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Stack;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -88,6 +89,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     @RequiredArgsConstructor
     private static enum Style {
         OPEN_BLOCK("open"::equals),
+        FOOTNOTE_LIST("arabic"::equals),
         ADMONITION_NOTE("NOTE"::equals),
         ADMONITION_TIP("TIP"::equals),
         ADMONITION_IMPORTANT("IMPORTANT"::equals),
@@ -97,7 +99,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         ;
         private final Predicate<String> matcher;
         public static Style parse(StructuralNode node) {
-            val styleAttribute = (String)node.getAttribute("style");
+            val styleAttribute = node.getStyle();
             return Stream.of(Style.values())
             .filter(style->style.matcher.test(styleAttribute))
             .findFirst()
@@ -105,6 +107,9 @@ final class NodeWriter implements StructuralNodeVisitor {
         }
         public boolean isOpenBlock() {
             return this==Style.OPEN_BLOCK;
+        }
+        public boolean isFootnoteList() {
+            return this==Style.FOOTNOTE_LIST;
         }
         public boolean isAdmonition() {
             return name().startsWith("ADMONITION_");
@@ -120,6 +125,8 @@ final class NodeWriter implements StructuralNodeVisitor {
             println("+");
             println("--");
             isContinuation = true; // set continuation flag, so other blocks don't add newlines
+            bulletCountStack.push(bulletCount);
+            bulletCount = 0;
         } else if(!isContinuation) {
             if(newLineCount<=1) {
                 printNewLine();
@@ -128,11 +135,11 @@ final class NodeWriter implements StructuralNodeVisitor {
         
         if(style.isAdmonition()){
             if(block.getBlocks().size()>0) {
-                printfln("[%s]", (String)block.getAttribute("style"));
+                printfln("[%s]", block.getStyle());
                 println("====");    
                 isContinuation = true; // set continuation flag, so other blocks don't add newlines
             } else {
-                printf("%s: ", (String)block.getAttribute("style"));
+                printf("%s: ", block.getStyle());
             }
         } 
         
@@ -149,6 +156,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         
         if(style.isOpenBlock()){
             println("--");
+            bulletCount = bulletCountStack.pop();
         } else if(style.isAdmonition()){
             if(block.getBlocks().size()>0) {
                 println("====");    
@@ -179,11 +187,14 @@ final class NodeWriter implements StructuralNodeVisitor {
     @Override
     public void listItemHead(ListItem listItem, int depth) {
         
-        val isFootNoteRole = bulletCount==1 
-                && listItem.getRoles().contains("footnote"); // non standard conform jack yet
+        //TODO, there is a special use case, if source is null
+        //the first block replaces the source
         
-        val bullets = isFootNoteRole
-                ? "<.> "
+        val isFootnoteStyle = Style.parse((org.asciidoctor.ast.List)(listItem.getParent()))
+                .isFootnoteList(); 
+        
+        val bullets = isFootnoteStyle
+                ? "<.>"
                 : _Strings.padEnd("", bulletCount, '*');
       
       _Strings.nonEmpty(listItem.getSource())
@@ -293,6 +304,7 @@ final class NodeWriter implements StructuralNodeVisitor {
 
     private boolean hasWrittenAnythingYet = false;
     private boolean isContinuation = false;
+    private Stack<Integer> bulletCountStack = new Stack<>();
     
     // -- PRINTING
     

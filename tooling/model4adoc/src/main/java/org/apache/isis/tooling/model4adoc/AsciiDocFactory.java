@@ -136,8 +136,20 @@ public class AsciiDocFactory {
     
     public static Block openBlock(ListItem listItem) {
         val openBlock = block(listItem);
-        openBlock.setAttribute("style", "open", true);
+        openBlock.setStyle("open");
         return openBlock;
+    }
+    
+    // -- FOOTNOTES
+    
+    public static org.asciidoctor.ast.List footnotes(StructuralNode parent) {
+        val footnoteList = list(parent);
+        footnoteList.setStyle("arabic");
+        return footnoteList;
+    }
+    
+    public static ListItem footnote(org.asciidoctor.ast.List parent, @NonNull String source) {
+        return listItem(parent, source);
     }
     
     // -- TABLE
@@ -215,15 +227,14 @@ public class AsciiDocFactory {
     }
     
     public static ListItem listItem(org.asciidoctor.ast.List parent) {
+        return listItem(parent, null);
+    }
+    
+    public static ListItem listItem(org.asciidoctor.ast.List parent, String source) {
         val listItem = new SimpleListItem();
         listItem.setLevel(parent.getLevel());
         parent.getItems().add(listItem);
         listItem.setParent(parent);
-        return listItem;
-    }
-    
-    public static ListItem listItem(org.asciidoctor.ast.List parent, String source) {
-        val listItem = listItem(parent);
         listItem.setSource(source);
         return listItem;
     }
@@ -323,11 +334,13 @@ public class AsciiDocFactory {
 
     private static Block admonition(String label, StructuralNode parent, String source) {
         val admonition = block(parent, source);
+        admonition.setStyle(label.toUpperCase());
         admonition.setAttribute("textlabel", label, true);
         admonition.setAttribute("name", label.toLowerCase(), true);
-        admonition.setAttribute("style", label.toUpperCase(), true);
         return admonition;
     }
+
+    
 
     
 }

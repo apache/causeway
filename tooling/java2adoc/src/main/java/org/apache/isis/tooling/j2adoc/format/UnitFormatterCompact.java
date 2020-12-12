@@ -18,8 +18,6 @@
  */
 package org.apache.isis.tooling.j2adoc.format;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
@@ -38,14 +36,6 @@ extends UnitFormatterAbstract {
     protected StructuralNode getMemberDescriptionContainer(StructuralNode parent) {
         val ul = AsciiDocFactory.list(parent);
         return ul;
-    }
-
-    @Override
-    protected void appendMemberDescription(StructuralNode ul, String member, Document javadoc) {
-        val li = AsciiDocFactory.listItem((List) ul, member);
-        val openBlock = AsciiDocFactory.openBlock(li);
-        val javaDocBlock = AsciiDocFactory.block(openBlock);
-        javaDocBlock.getBlocks().addAll(javadoc.getBlocks());
     }
 
 }
