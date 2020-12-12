@@ -3,7 +3,16 @@
 
 SPI that allows individual interactions (action invocations or property edits) to be _#publish(Interaction.Execution) published_ . Note that re-publishing is not part of this SPI.
 
-* `[teal]#*onExecution*#(Execution<?, ?> execution)` : `void`
+.Java Sources
+[source,java]
+----
+interface ExecutionSubscriber {
+
+  void onExecution(Interaction.Execution<?, ?> execution) // <.>
+}
+----
+
+<.> `[teal]#*onExecution*#(Execution<?, ?> execution)` : `void`
 +
 --
 Publish each _Interaction.Execution_ immediately after it completes.

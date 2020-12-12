@@ -1,38 +1,62 @@
 = ServiceRegistry : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+.Java Sources
+[source,java]
+----
+interface ServiceRegistry {
 
-* `[teal]#*select*#<T>(Class<T> type, Annotation[] qualifiers)` : `Can<T>`
+  Can<T> select(Class<T> type, Annotation[] qualifiers) // <.>
+
+  Can<T> select(final Class<T> type) // <.>
+
+  Stream<_ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) // <.>
+
+  Stream<_ManagedBeanAdapter> streamRegisteredBeans() // <.>
+
+  Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id) // <.>
+
+  _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id) // <.>
+
+  Optional<?> lookupBeanById(final String id)
+
+  Optional<T> lookupService(final Class<T> serviceClass) // <.>
+
+  T lookupServiceElseFail(final Class<T> serviceClass)
+}
+----
+
+<.> `[teal]#*select*#<T>(Class<T> type, Annotation[] qualifiers)` : `Can<T>`
 +
 --
 Obtains a _Can_ container containing any matching instances for the given required type and additional required qualifiers.
 --
-* `[teal]#*select*#<T>(Class<T> type)` : `Can<T>`
+<.> `[teal]#*select*#<T>(Class<T> type)` : `Can<T>`
 +
 --
 Obtains a _Can_ container containing any matching instances for the given required type.
 --
-* `[teal]#*streamRegisteredBeansOfType*#(Class<?> requiredType)` : `Stream<_ManagedBeanAdapter>`
+<.> `[teal]#*streamRegisteredBeansOfType*#(Class<?> requiredType)` : `Stream<_ManagedBeanAdapter>`
 +
 --
 Streams all registered bean adapters implementing the requested type.
 --
-* `[teal]#*streamRegisteredBeans*#()` : `Stream<_ManagedBeanAdapter>`
+<.> `[teal]#*streamRegisteredBeans*#()` : `Stream<_ManagedBeanAdapter>`
 +
 --
 Returns all bean adapters that have been registered.
 --
-* `[teal]#*lookupRegisteredBeanById*#(String id)` : `Optional<_ManagedBeanAdapter>`
+<.> `[teal]#*lookupRegisteredBeanById*#(String id)` : `Optional<_ManagedBeanAdapter>`
 +
 --
 Returns a registered bean of given _name_ .
 --
-* `[teal]#*lookupRegisteredBeanByIdElseFail*#(String id)` : `_ManagedBeanAdapter`
+<.> `[teal]#*lookupRegisteredBeanByIdElseFail*#(String id)` : `_ManagedBeanAdapter`
 +
 --
 Returns a registered bean of given _name_ , or throws when no such bean.
 --
-* `[teal]#*lookupService*#<T>(Class<T> serviceClass)` : `Optional<T>`
+<.> `[teal]#*lookupService*#<T>(Class<T> serviceClass)` : `Optional<T>`
 +
 --
 Returns a domain service implementing the requested type.

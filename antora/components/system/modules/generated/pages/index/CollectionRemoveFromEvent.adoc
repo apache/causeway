@@ -5,3 +5,14 @@
 
 If _#getReason()_ is not `null` then provides the reason why the object is invalid; otherwise the object is valid.
 
+.Java Sources
+[source,java]
+----
+class CollectionRemoveFromEvent {
+
+  CollectionRemoveFromEvent(final Object source, final Identifier collectionIdentifier, final Object proposed)
+
+  Object getProposed()
+}
+----
+

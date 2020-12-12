@@ -3,12 +3,25 @@
 
 Immutable serializable value held by xref:system:generated:index/UserMemento.adoc[UserMemento] .
 
-* `[teal]#*RoleMemento*#(String name)`
+.Java Sources
+[source,java]
+----
+class RoleMemento {
+
+  RoleMemento(final String name) // <.>
+
+  RoleMemento(final String name, final String description) // <.>
+
+  String title()
+}
+----
+
+<.> `[teal]#*RoleMemento*#(String name)`
 +
 --
 Creates a new role with the specified name. Description is left blank.
 --
-* `[teal]#*RoleMemento*#(String name, String description)`
+<.> `[teal]#*RoleMemento*#(String name, String description)`
 +
 --
 Creates a new role with the specified name and description.

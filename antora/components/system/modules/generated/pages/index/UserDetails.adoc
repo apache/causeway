@@ -3,3 +3,10 @@
 
 A model object for the signup page
 
+.Java Sources
+[source,java]
+----
+class UserDetails {
+}
+----
+

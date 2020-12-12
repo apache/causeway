@@ -5,26 +5,24 @@
 
 Multiple subclasses, including:
 
-+
---
-modifying a property
---
-+
---
-adding to/removing from a collection
---
-+
---
-checking a single argument for an action invocation
---
-+
---
-checking all arguments for an action invocation
---
-+
---
-checking all properties for an object before saving
---
+* modifying a property
+* adding to/removing from a collection
+* checking a single argument for an action invocation
+* checking all arguments for an action invocation
+* checking all properties for an object before saving
 
 If _#getReason()_ is `null` , then is usable; otherwise is disabled.
+
+.Java Sources
+[source,java]
+----
+class ValidityEvent {
+
+  ValidityEvent(final Object source, final Identifier identifier)
+
+  Object getSource()
+
+  String getReasonMessage()
+}
+----
 

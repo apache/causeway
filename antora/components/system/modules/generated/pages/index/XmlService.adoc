@@ -3,22 +3,37 @@
 
 This service provides a number of utility services for interacting with XML _Document_ s
 
-* `[teal]#*asDocument*#(String xmlStr)` : `Document`
+.Java Sources
+[source,java]
+----
+interface XmlService {
+
+  Document asDocument(String xmlStr) // <.>
+
+  String asString(final Document doc) // <.>
+
+  Element getChildElement(final Element el, final String tagname) // <.>
+
+  String getChildTextValue(final Element el) // <.>
+}
+----
+
+<.> `[teal]#*asDocument*#(String xmlStr)` : `Document`
 +
 --
 Converts xml string into an _Document W3C Document_ .
 --
-* `[teal]#*asString*#(Document doc)` : `String`
+<.> `[teal]#*asString*#(Document doc)` : `String`
 +
 --
 Serializes a _Document W3C Document_ back into a string.
 --
-* `[teal]#*getChildElement*#(Element el, String tagname)` : `Element`
+<.> `[teal]#*getChildElement*#(Element el, String tagname)` : `Element`
 +
 --
 Convenience method to walk XML document.
 --
-* `[teal]#*getChildTextValue*#(Element el)` : `String`
+<.> `[teal]#*getChildTextValue*#(Element el)` : `String`
 +
 --
 Convenience method to obtain value of child text node.

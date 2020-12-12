@@ -3,3 +3,14 @@
 
 Superclass of exceptions which indicate an attempt to interact with a class member that is in some way hidden or invisible.
 
+.Java Sources
+[source,java]
+----
+class HiddenException {
+
+  HiddenException(final InteractionEvent interactionEvent)
+
+  VisibilityEvent getInteractionEvent()
+}
+----
+

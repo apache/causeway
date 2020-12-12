@@ -9,17 +9,32 @@ To confuse matters slightly, historically the xref:system:generated:index/Comman
 
 NOTE: you could also think of this interface as being analogous to the (database) transaction. The name "Transaction" has not been used for the interface not chosen however because there is also the system-level transaction that manages the persistence of the xref:system:generated:index/Command.adoc[Command] object itself.
 
-* `[teal]#*getCurrentExecution*#()` : `Execution<?, ?>`
+.Java Sources
+[source,java]
+----
+interface Interaction {
+
+  Command getCommand()
+
+  Execution<?, ?> getCurrentExecution() // <.>
+
+  Execution<?, ?> getPriorExecution() // <.>
+
+  int next(final String sequenceId) // <.>
+}
+----
+
+<.> `[teal]#*getCurrentExecution*#()` : `Execution<?, ?>`
 +
 --
 The current (most recently pushed) _Execution_ .
 --
-* `[teal]#*getPriorExecution*#()` : `Execution<?, ?>`
+<.> `[teal]#*getPriorExecution*#()` : `Execution<?, ?>`
 +
 --
 The execution that preceded the current one.
 --
-* `[teal]#*next*#(String sequenceId)` : `int`
+<.> `[teal]#*next*#(String sequenceId)` : `int`
 +
 --
 Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the _Sequence_ enum.

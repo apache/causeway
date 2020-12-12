@@ -7,7 +7,22 @@ If _#getReason()_ is not `null` then provides the reason why the set of argument
 
 Called after each of the xref:system:generated:index/ActionArgumentEvent.adoc[ActionArgumentEvent] s.
 
-* `[teal]#*getProposed*#()` : `Object`
+.Java Sources
+[source,java]
+----
+class ActionInvocationEvent {
+
+  ActionInvocationEvent(final Object source, final Identifier actionIdentifier, final Object[] args)
+
+  Object[] getArgs()
+
+  void setArgs(final Object[] args)
+
+  Object getProposed() // <.>
+}
+----
+
+<.> `[teal]#*getProposed*#()` : `Object`
 +
 --
 Does not apply

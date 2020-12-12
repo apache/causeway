@@ -3,3 +3,26 @@
 
 TODO lower case enums not up to standard, is this an issue?
 
+.Java Sources
+[source,java]
+----
+enum EntityState {
+
+  NOT_PERSISTABLE
+
+  PERSISTABLE_ATTACHED
+
+  PERSISTABLE_DETACHED
+
+  PERSISTABLE_DESTROYED
+
+  boolean isPersistable()
+
+  boolean isAttached()
+
+  boolean isDetached()
+
+  boolean isDestroyed()
+}
+----
+

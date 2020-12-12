@@ -5,7 +5,16 @@ Optional API providing details about the user.
 
 Used by the Wicket viewer in its _org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary_ "Me" menu bar.
 
-* `[teal]#*userProfileName*#()` : `String`
+.Java Sources
+[source,java]
+----
+interface UserProfileService {
+
+  String userProfileName() // <.>
+}
+----
+
+<.> `[teal]#*userProfileName*#()` : `String`
 +
 --
 Used as the menu name of the _org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary_ "Me" menu bar.

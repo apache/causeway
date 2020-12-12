@@ -5,3 +5,14 @@ Resolves injection points using the ServiceRegistry.
 
 Implementation must be thread-safe.
 
+.Java Sources
+[source,java]
+----
+interface ServiceInjector {
+
+  T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable)
+
+  T injectServicesInto(final T domainObject)
+}
+----
+

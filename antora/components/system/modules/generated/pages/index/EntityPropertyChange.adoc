@@ -3,3 +3,12 @@
 
 Immutable data record for xref:system:generated:index/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] s.
 
+.Java Sources
+[source,java]
+----
+class EntityPropertyChange {
+
+  String toString()
+}
+----
+

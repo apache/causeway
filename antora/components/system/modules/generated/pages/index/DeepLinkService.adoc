@@ -5,7 +5,16 @@ A service that creates a web link to any domain object in one of the Isis viewer
 
 The implementation is specific to the viewer(s) configured for Isis. At the time of writing only one implementation is available, for the Wicket viewer.
 
-* `[teal]#*deepLinkFor*#(Object domainObject)` : `URI`
+.Java Sources
+[source,java]
+----
+interface DeepLinkService {
+
+  URI deepLinkFor(Object domainObject) // <.>
+}
+----
+
+<.> `[teal]#*deepLinkFor*#(Object domainObject)` : `URI`
 +
 --
 Creates a URI that can be used to obtain a representation of the provided domain object in one of the Isis viewers.

@@ -3,3 +3,12 @@
 
 Similar to the _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ , this defines an API to track the status of the current sessions ("users logged on") on the system.
 
+.Java Sources
+[source,java]
+----
+interface SessionLoggingService {
+
+  void log(Type type, String username, Date date, CausedBy causedBy, String sessionId)
+}
+----
+

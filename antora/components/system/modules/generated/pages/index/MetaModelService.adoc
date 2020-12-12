@@ -5,17 +5,40 @@ This service provides a formal API into Isis' metamodel.
 
 This API is currently extremely limited, but the intention is to extend it gradually as use cases emerge.
 
-* `[teal]#*fromObjectType*#(String objectType)` : `Class<?>`
+.Java Sources
+[source,java]
+----
+interface MetaModelService {
+
+  Class<?> fromObjectType(final String objectType) // <.>
+
+  String toObjectType(final Class<?> domainType) // <.>
+
+  void rebuild(final Class<?> domainType)
+
+  DomainModel getDomainModel() // <.>
+
+  BeanSort sortOf(Class<?> domainType, Mode mode)
+
+  BeanSort sortOf(Bookmark bookmark, Mode mode)
+
+  CommandDtoProcessor commandDtoProcessorFor(String logicalMemberIdentifier)
+
+  MetamodelDto exportMetaModel(final Config config)
+}
+----
+
+<.> `[teal]#*fromObjectType*#(String objectType)` : `Class<?>`
 +
 --
 Provides a reverse lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis'ObjectSpecIdFacet).
 --
-* `[teal]#*toObjectType*#(Class<?> domainType)` : `String`
+<.> `[teal]#*toObjectType*#(Class<?> domainType)` : `String`
 +
 --
 Provides a lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis'ObjectSpecIdFacet).
 --
-* `[teal]#*getDomainModel*#()` : `xref:system:generated:index/DomainModel.adoc[DomainModel]`
+<.> `[teal]#*getDomainModel*#()` : `xref:system:generated:index/DomainModel.adoc[DomainModel]`
 +
 --
 Returns a list of representations of each of member of each domain class.

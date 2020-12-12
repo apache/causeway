@@ -3,3 +3,14 @@
 
 This service allows an application to be decoupled from the system time. The most common use case is in support of testing scenarios, to "mock the clock". Use of this service also opens up the use of centralized co-ordinated time management through a centralized time service.
 
+.Java Sources
+[source,java]
+----
+interface ClockService {
+
+  VirtualClock getClock()
+
+  long getEpochMillis()
+}
+----
+

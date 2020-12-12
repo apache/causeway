@@ -5,7 +5,18 @@
 
 If _#getReason()_ is not `null` then provides the reason why the object is invalid; otherwise the object is valid.
 
-* `[teal]#*getProposed*#()` : `Object`
+.Java Sources
+[source,java]
+----
+class CollectionAddToEvent {
+
+  CollectionAddToEvent(final Object source, final Identifier collectionIdentifier, final Object proposed)
+
+  Object getProposed() // <.>
+}
+----
+
+<.> `[teal]#*getProposed*#()` : `Object`
 +
 --
 The object that is being added.

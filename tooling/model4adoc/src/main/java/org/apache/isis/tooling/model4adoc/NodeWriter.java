@@ -365,7 +365,7 @@ final class NodeWriter implements StructuralNodeVisitor {
                 : stringWriterStack.peek();
         val continuationBlockAsString = sw.toString();
         if(continuationBlockAsString.length()>EMPTY_CONTINUATION_BLOCK_SIZE) {
-            writer.append(continuationBlockAsString); // write directly to the master writer, no side-effects wanted    
+            writer.append(continuationBlockAsString); // write directly to the current writer, no side-effects wanted    
         }
     }
 

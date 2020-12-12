@@ -3,7 +3,20 @@
 
 Representation of the current transaction, which conceptually wraps the underlying transaction context's transaction.
 
-* `[teal]#*flush*#()` : `void`
+.Java Sources
+[source,java]
+----
+interface Transaction {
+
+  TransactionId getId()
+
+  void flush() // <.>
+
+  TransactionState getTransactionState()
+}
+----
+
+<.> `[teal]#*flush*#()` : `void`
 +
 --
 Flush all changes to the object store.

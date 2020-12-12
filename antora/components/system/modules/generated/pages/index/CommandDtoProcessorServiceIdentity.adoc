@@ -3,3 +3,12 @@
 
 At least one implementation is required.
 
+.Java Sources
+[source,java]
+----
+class CommandDtoProcessorServiceIdentity {
+
+  CommandDto process(final Object domainObject, final CommandDto commandDto)
+}
+----
+

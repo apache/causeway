@@ -3,7 +3,16 @@
 
 Part of the _Publishing SPI_ . A component to receive pre-post property values for each changed entity (with publishing enabled).
 
-* `[teal]#*onChanging*#(xref:system:generated:index/EntityPropertyChange.adoc[EntityPropertyChange] entityPropertyChange)` : `void`
+.Java Sources
+[source,java]
+----
+interface EntityPropertyChangeSubscriber {
+
+  void onChanging(EntityPropertyChange entityPropertyChange) // <.>
+}
+----
+
+<.> `[teal]#*onChanging*#(xref:system:generated:index/EntityPropertyChange.adoc[EntityPropertyChange] entityPropertyChange)` : `void`
 +
 --
 Receives all pre-post property values for entities (with publishing enabled) at then end of the transaction during the pre-commit phase.

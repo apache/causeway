@@ -1,52 +1,76 @@
 = GridService : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+.Java Sources
+[source,java]
+----
+interface GridService {
 
-* `[teal]#*supportsReloading*#()` : `boolean`
+  boolean supportsReloading() // <.>
+
+  void remove(Class<?> domainClass) // <.>
+
+  boolean existsFor(Class<?> domainClass) // <.>
+
+  Grid load(final Class<?> domainClass) // <.>
+
+  Grid load(Class<?> domainClass, String layout) // <.>
+
+  Grid defaultGridFor(Class<?> domainClass) // <.>
+
+  Grid normalize(final Grid grid) // <.>
+
+  Grid complete(Grid grid) // <.>
+
+  Grid minimal(Grid grid) // <.>
+}
+----
+
+<.> `[teal]#*supportsReloading*#()` : `boolean`
 +
 --
 Whether dynamic reloading of layouts is enabled.
 --
-* `[teal]#*remove*#(Class<?> domainClass)` : `void`
+<.> `[teal]#*remove*#(Class<?> domainClass)` : `void`
 +
 --
 To support metamodel invalidation/rebuilding of spec.
 --
-* `[teal]#*existsFor*#(Class<?> domainClass)` : `boolean`
+<.> `[teal]#*existsFor*#(Class<?> domainClass)` : `boolean`
 +
 --
 Whether any persisted layout metadata (eg a.layout.xmlfile) exists for this domain class.
 --
-* `[teal]#*load*#(Class<?> domainClass)` : `Grid`
+<.> `[teal]#*load*#(Class<?> domainClass)` : `Grid`
 +
 --
 Returns a new instance of a _Grid_ for the specified domain class, eg from alayout.xmlfile, elsenull.
 --
-* `[teal]#*load*#(Class<?> domainClass, String layout)` : `Grid`
+<.> `[teal]#*load*#(Class<?> domainClass, String layout)` : `Grid`
 +
 --
 Returns a new instance of a _Grid_ for the specified domain class, eg from a[domainClass].layout.[layout].xmlfile, elsenull.
 --
-* `[teal]#*defaultGridFor*#(Class<?> domainClass)` : `Grid`
+<.> `[teal]#*defaultGridFor*#(Class<?> domainClass)` : `Grid`
 +
 --
 Returns a default grid; eg where none can be loaded using _#load(Class)_ .
 --
-* `[teal]#*normalize*#(Grid grid)` : `Grid`
+<.> `[teal]#*normalize*#(Grid grid)` : `Grid`
 +
 --
 Returns a normalized grid for the domain class obtained previously using _#load(Class)_ .
 
 If a "normalized" grid is persisted as thelayout.xml, then the expectation is that the _MemberOrder_ annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( _DomainObjectLayout_ , _ActionLayout_ , _PropertyLayout_ and _CollectionLayout_ ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within thelayout.xmlfile takes precedence over any annotations.
 --
-* `[teal]#*complete*#(Grid grid)` : `Grid`
+<.> `[teal]#*complete*#(Grid grid)` : `Grid`
 +
 --
 Modifies the provided _Grid_ with additional metadata, broadly speaking corresponding to the _DomainObjectLayout_ , _ActionLayout_ , _PropertyLayout_ and _CollectionLayout_ .
 
 If a "completed" grid is persisted as thelayout.xml, then there should be no need for any of the layout annotations, nor the _MemberOrder_ annotations, to be required in the domain class itself.
 --
-* `[teal]#*minimal*#(Grid grid)` : `Grid`
+<.> `[teal]#*minimal*#(Grid grid)` : `Grid`
 +
 --
 Modifies the provided _Grid_ , removing all metadata except the basic grid structure.

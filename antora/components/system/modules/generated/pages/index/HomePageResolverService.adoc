@@ -3,3 +3,12 @@
 
 Returns a view model annotated with _HomePage_ .
 
+.Java Sources
+[source,java]
+----
+interface HomePageResolverService {
+
+  Object getHomePage()
+}
+----
+

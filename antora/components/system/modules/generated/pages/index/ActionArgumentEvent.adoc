@@ -7,7 +7,24 @@ If _#getReason()_ is not `null` then provides the reason why the argument is inv
 
 Called once per argument, and before xref:system:generated:index/ActionInvocationEvent.adoc[ActionInvocationEvent] .
 
-* `[teal]#*getPosition*#()` : `int`
+.Java Sources
+[source,java]
+----
+class ActionArgumentEvent {
+
+  ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args, final int position)
+
+  Object[] getArgs()
+
+  int getPosition() // <.>
+
+  Object getProposed()
+
+  String getReasonMessage()
+}
+----
+
+<.> `[teal]#*getPosition*#()` : `int`
 +
 --
 The position (0-based) of the invalid argument.

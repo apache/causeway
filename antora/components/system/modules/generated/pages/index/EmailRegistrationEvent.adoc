@@ -3,3 +3,12 @@
 
 An event send to all services interested in user registration
 
+.Java Sources
+[source,java]
+----
+class EmailRegistrationEvent {
+
+  EmailRegistrationEvent(final String email, final String confirmationUrl, final String applicationName)
+}
+----
+

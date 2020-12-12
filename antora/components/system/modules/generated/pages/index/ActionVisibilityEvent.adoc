@@ -5,3 +5,12 @@
 
 If _#getReason()_ is not `null` then provides the reason why the action is invisible; otherwise action is visible.
 
+.Java Sources
+[source,java]
+----
+class ActionVisibilityEvent {
+
+  ActionVisibilityEvent(final Object source, final Identifier actionIdentifier)
+}
+----
+

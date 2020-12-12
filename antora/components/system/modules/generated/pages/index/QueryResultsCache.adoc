@@ -5,7 +5,30 @@ This service (API and implementation) provides a mechanism by which idempotent q
 
 This implementation has no UI and there is only one implementation (this class) in applib, it is annotated with _org.apache.isis.applib.annotation.DomainService_ . This means that it is automatically registered and available for use; no further configuration is required.
 
-* `[teal]#*onTransactionEnded*#()` : `void`
+.Java Sources
+[source,java]
+----
+interface QueryResultsCache {
+
+  T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys)
+
+  void onTransactionEnded() // <.>
+
+  R execute(MethodReferences.Call0<? extends R> action, Class<?> callingClass, String methodName)
+
+  R execute(MethodReferences.Call1<? extends R, A0> action, Class<?> callingClass, String methodName, A0 arg0)
+
+  R execute(MethodReferences.Call2<? extends R, A0, A1> action, Class<?> callingClass, String methodName, A0 arg0, A1 arg1)
+
+  R execute(MethodReferences.Call3<? extends R, A0, A1, A2> action, Class<?> callingClass, String methodName, A0 arg0, A1 arg1, A2 arg2)
+
+  R execute(MethodReferences.Call4<? extends R, A0, A1, A2, A3> action, Class<?> callingClass, String methodName, A0 arg0, A1 arg1, A2 arg2, A3 arg3)
+
+  R execute(MethodReferences.Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass, String methodName, A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4)
+}
+----
+
+<.> `[teal]#*onTransactionEnded*#()` : `void`
 +
 --
 Not API, for framework use only.

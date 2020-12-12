@@ -5,3 +5,12 @@
 
 If _#getReason()_ is not `null` then provides the reason why the property is invisible; otherwise property is visible.
 
+.Java Sources
+[source,java]
+----
+class PropertyVisibilityEvent {
+
+  PropertyVisibilityEvent(final Object source, final Identifier propertyIdentifier)
+}
+----
+

@@ -3,7 +3,23 @@
 
 Intended only for use by fixture scripts and integration tests, allows a block of code to execute while the xref:system:generated:index/UserService.adoc[UserService] 's _UserService#currentUser() getUser()_ method returns the specified user/role as the effective user.
 
-* `xref:system:generated:index/RoleMemento.adoc[RoleMemento] [teal]#*/**
+.Java Sources
+[source,java]
+----
+interface SudoService {
+
+  /**
+ * If included in the list of roles, then will disable security checks (can view and use all object members).
+ */
+RoleMemento ACCESS_ALL_ROLE = new RoleMemento(SudoService.class.getName() + "#accessAll", "Sudo, can view and use all object members."); // <.>
+
+  T call(UnaryOperator<ExecutionContext> sudoMapper, Callable<T> supplier) // <.>
+
+  void run(final UnaryOperator<ExecutionContext> sudoMapper, final ThrowingRunnable runnable) // <.>
+}
+----
+
+<.> `xref:system:generated:index/RoleMemento.adoc[RoleMemento] [teal]#*/**
  * If included in the list of roles, then will disable security checks (can view and use all object members).
  */
 RoleMemento ACCESS_ALL_ROLE = new RoleMemento(SudoService.class.getName() + "#accessAll", "Sudo, can view and use all object members.");*#`
@@ -11,12 +27,12 @@ RoleMemento ACCESS_ALL_ROLE = new RoleMemento(SudoService.class.getName() + "#ac
 --
 If included in the list of roles, then will disable security checks (can view and use all object members).
 --
-* `[teal]#*call*#<T>(UnaryOperator<xref:system:generated:index/ExecutionContext.adoc[ExecutionContext]> sudoMapper, Callable<T> supplier)` : `T`
+<.> `[teal]#*call*#<T>(UnaryOperator<xref:system:generated:index/ExecutionContext.adoc[ExecutionContext]> sudoMapper, Callable<T> supplier)` : `T`
 +
 --
 Executes the supplied block, with the xref:system:generated:index/UserService.adoc[UserService] returning the specified user.
 --
-* `[teal]#*run*#(UnaryOperator<xref:system:generated:index/ExecutionContext.adoc[ExecutionContext]> sudoMapper, ThrowingRunnable runnable)` : `void`
+<.> `[teal]#*run*#(UnaryOperator<xref:system:generated:index/ExecutionContext.adoc[ExecutionContext]> sudoMapper, ThrowingRunnable runnable)` : `void`
 +
 --
 Executes the supplied block, with the xref:system:generated:index/UserService.adoc[UserService] returning the specified user.

@@ -3,29 +3,48 @@
 
  _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an interaction with a collection object itself.
 
-* `[teal]#*getSource*#()` : `Object`
+.Java Sources
+[source,java]
+----
+class CollectionMethodEvent {
+
+  CollectionMethodEvent(final Object source, final Identifier collectionIdentifier, final Object domainObject, final String methodName, final Object[] args, final Object returnValue)
+
+  Object getSource() // <.>
+
+  Object getDomainObject() // <.>
+
+  String getMethodName() // <.>
+
+  Object[] getArgs() // <.>
+
+  Object getReturnValue() // <.>
+}
+----
+
+<.> `[teal]#*getSource*#()` : `Object`
 +
 --
 The collection object (an instance of a `List` or a `Set` etc) that is the originator of this event.
 
 The owning domain object is available using _#getDomainObject()_ .
 --
-* `[teal]#*getDomainObject*#()` : `Object`
+<.> `[teal]#*getDomainObject*#()` : `Object`
 +
 --
 The owner of the collection (an instance of `Customer/tt> or `Order` , say).` 
 --
-* `[teal]#*getMethodName*#()` : `String`
+<.> `[teal]#*getMethodName*#()` : `String`
 +
 --
 The name of the method invoked on this collection, for example `isEmpty` .
 --
-* `[teal]#*getArgs*#()` : `Object[]`
+<.> `[teal]#*getArgs*#()` : `Object[]`
 +
 --
 The arguments with which the collection's _#getMethodName() method_ was invoked.
 --
-* `[teal]#*getReturnValue*#()` : `Object`
+<.> `[teal]#*getReturnValue*#()` : `Object`
 +
 --
 The return value from the _#getMethodName() method_ invocation.

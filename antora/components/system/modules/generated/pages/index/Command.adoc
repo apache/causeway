@@ -11,31 +11,48 @@ Note that when invoking an action, other actions may be invoked courtesy of the 
 
 That said, if the sub-action is invoked asynchronously (using _WrapperFactory#asyncWrap(Object, AsyncControl)_ or _WrapperFactory#asyncWrapMixin(Class, Object, AsyncControl)_ ), then a separate xref:system:generated:index/Command.adoc[Command] object is created, and the originating xref:system:generated:index/Command.adoc[Command] is set to be its _Command#getParent() parent_ .
 
-* `[teal]#*getUsername*#()` : `String`
+.Java Sources
+[source,java]
+----
+class Command {
+
+  String getUsername() // <.>
+
+  Timestamp getTimestamp() // <.>
+
+  Bookmark getTarget() // <.>
+
+  String getLogicalMemberIdentifier() // <.>
+
+  Updater updater() // <.>
+}
+----
+
+<.> `[teal]#*getUsername*#()` : `String`
 +
 --
 The user that created the command.
 
 Derived from _#getCommandDto()_ 's _CommandDto#getUser()_
 --
-* `[teal]#*getTimestamp*#()` : `Timestamp`
+<.> `[teal]#*getTimestamp*#()` : `Timestamp`
 +
 --
 The date/time at which this command was created.
 
 Derived from _#getCommandDto()_ 's _CommandDto#getTimestamp()_ .
 --
-* `[teal]#*getTarget*#()` : `xref:system:generated:index/Bookmark.adoc[Bookmark]`
+<.> `[teal]#*getTarget*#()` : `xref:system:generated:index/Bookmark.adoc[Bookmark]`
 +
 --
 Derived from _#getCommandDto()_ , is the xref:system:generated:index/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
 --
-* `[teal]#*getLogicalMemberIdentifier*#()` : `String`
+<.> `[teal]#*getLogicalMemberIdentifier*#()` : `String`
 +
 --
 Derived from _#getCommandDto()_ , holds a string representation of the invoked action, or the edited property.
 --
-* `[teal]#*updater*#()` : `Updater`
+<.> `[teal]#*updater*#()` : `Updater`
 +
 --
  *NOT API* : intended to be called only by the framework.

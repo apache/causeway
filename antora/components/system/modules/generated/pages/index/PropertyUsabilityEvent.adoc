@@ -5,3 +5,12 @@
 
 If _#getReason()_ is not `null` then provides the reason why the property is disabled; otherwise property is enabled.
 
+.Java Sources
+[source,java]
+----
+class PropertyUsabilityEvent {
+
+  PropertyUsabilityEvent(final Object source, final Identifier propertyIdentifier)
+}
+----
+

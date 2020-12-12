@@ -5,3 +5,12 @@
 
 Analogous to xref:system:generated:index/CollectionAddToEvent.adoc[CollectionAddToEvent] or xref:system:generated:index/CollectionRemoveFromEvent.adoc[CollectionRemoveFromEvent] , however the _#getReason()_ will always be `null` . (If access is not allowed then a vetoing _CollectionVisibilityEvent_ would have been fired).
 
+.Java Sources
+[source,java]
+----
+class CollectionAccessEvent {
+
+  CollectionAccessEvent(final Object source, final Identifier collectionIdentifier)
+}
+----
+

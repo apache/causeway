@@ -3,12 +3,32 @@
 
 Whether interactions with the wrapper are actually passed onto the underlying domain object.
 
-* `[teal]#*_SKIP_RULE_VALIDATION_*#`
+.Java Sources
+[source,java]
+----
+enum ExecutionMode {
+
+  /**
+ * Skip all business rules.
+ */
+SKIP_RULE_VALIDATION // <.>
+
+  /**
+ * Skip actual execution.
+ *
+ * <p>
+ * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; instead just invoke {@link WrapperFactory#wrap(Object, ImmutableEnumSet)}.
+ */
+SKIP_EXECUTION // <.>
+}
+----
+
+<.> `[teal]#*_SKIP_RULE_VALIDATION_*#`
 +
 --
 Skip all business rules.
 --
-* `[teal]#*_SKIP_EXECUTION_*#`
+<.> `[teal]#*_SKIP_EXECUTION_*#`
 +
 --
 Skip actual execution.

@@ -5,3 +5,12 @@ Extends _HasUniqueId_ , where the _HasUniqueId#getUniqueId()_ is interpreted as 
 
 Examples could include SPI services that persist published events and status messages.
 
+.Java Sources
+[source,java]
+----
+interface RepresentsInteractionMemberExecution {
+
+  int getSequence()
+}
+----
+

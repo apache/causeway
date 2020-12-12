@@ -3,3 +3,14 @@
 
  _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ makes it easier to process different events that hold a single proposed argument (such as xref:system:generated:index/CollectionAddToEvent.adoc[CollectionAddToEvent] and xref:system:generated:index/PropertyModifyEvent.adoc[PropertyModifyEvent] ).
 
+.Java Sources
+[source,java]
+----
+interface ProposedHolderEvent {
+
+  Object getProposed()
+
+  String getMemberNaturalName()
+}
+----
+

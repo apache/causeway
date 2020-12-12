@@ -3,3 +3,14 @@
 
 Provides the ability to return (and therefore have rendered) an alternative object from an action invocation.
 
+.Java Sources
+[source,java]
+----
+interface RoutingService {
+
+  boolean canRoute(Object original)
+
+  Object route(Object original)
+}
+----
+

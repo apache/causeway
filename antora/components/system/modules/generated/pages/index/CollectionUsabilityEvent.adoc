@@ -5,3 +5,12 @@
 
 If _#getReason()_ is not `null` then provides the reason why the collection is disabled; otherwise collection is enabled.
 
+.Java Sources
+[source,java]
+----
+class CollectionUsabilityEvent {
+
+  CollectionUsabilityEvent(final Object source, final Identifier identifier)
+}
+----
+

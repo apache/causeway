@@ -3,7 +3,88 @@
 
 Top level object classification.
 
-* `[teal]#*_VIEW_MODEL_*#`
+.Java Sources
+[source,java]
+----
+enum BeanSort {
+
+  /**
+ * Stateful object, with a state that can be marshaled and unmarshaled.
+ * <p>
+ * Includes classes annotated with {@code @DomainObject}, when *not* associated
+ * with a persistence layer. <p>  see also {@link #ENTITY}
+ */
+VIEW_MODEL // <.>
+
+  /**
+ * Persistable object, associated with a persistence layer/context.
+ * <p>
+ * Includes classes annotated with {@code @DomainObject}, when associated
+ * with a persistence layer. <p>  see also {@link #VIEW_MODEL}
+ */
+ENTITY_JDO // <.>
+
+  ENTITY_JPA
+
+  /**
+ * Injectable object, associated with a lifecycle context
+ * (application-scoped, request-scoped, ...).
+ * <p>
+ * to be introspected: YES
+ */
+MANAGED_BEAN_CONTRIBUTING // <.>
+
+  /**
+ * Injectable object, associated with a lifecycle context
+ * (application-scoped, request-scoped, ...).
+ * <p>
+ * to be introspected: NO
+ */
+MANAGED_BEAN_NOT_CONTRIBUTING // <.>
+
+  /**
+ * Object associated with an 'entity' or 'bean' to act as contributer of
+ * domain actions or properties. Might also be stateful similar to VIEW_MODEL.
+ */
+MIXIN // <.>
+
+  /**
+ * Immutable, serializable object.
+ */
+VALUE // <.>
+
+  /**
+ * Container of objects.
+ */
+COLLECTION // <.>
+
+  UNKNOWN
+
+  boolean isManagedBean()
+
+  boolean isMixin()
+
+  boolean isViewModel()
+
+  boolean isValue()
+
+  boolean isCollection()
+
+  boolean isEntityJdo()
+
+  boolean isEntityJpa()
+
+  boolean isUnknown()
+
+  boolean isToBeIntrospected()
+
+  boolean isEntity()
+
+  boolean isWrappingSupported()
+}
+----
+
+<.> `[teal]#*_VIEW_MODEL_*#`
 +
 --
 Stateful object, with a state that can be marshaled and unmarshaled.
@@ -12,7 +93,7 @@ Includes classes annotated with _@DomainObject_ , when *not* associated with a p
 
 see also _#ENTITY_
 --
-* `[teal]#*_ENTITY_JDO_*#`
+<.> `[teal]#*_ENTITY_JDO_*#`
 +
 --
 Persistable object, associated with a persistence layer/context.
@@ -21,31 +102,31 @@ Includes classes annotated with _@DomainObject_ , when associated with a persist
 
 see also _#VIEW_MODEL_
 --
-* `[teal]#*_MANAGED_BEAN_CONTRIBUTING_*#`
+<.> `[teal]#*_MANAGED_BEAN_CONTRIBUTING_*#`
 +
 --
 Injectable object, associated with a lifecycle context (application-scoped, request-scoped, ...).
 
 to be introspected: YES
 --
-* `[teal]#*_MANAGED_BEAN_NOT_CONTRIBUTING_*#`
+<.> `[teal]#*_MANAGED_BEAN_NOT_CONTRIBUTING_*#`
 +
 --
 Injectable object, associated with a lifecycle context (application-scoped, request-scoped, ...).
 
 to be introspected: NO
 --
-* `[teal]#*_MIXIN_*#`
+<.> `[teal]#*_MIXIN_*#`
 +
 --
 Object associated with an 'entity' or 'bean' to act as contributer of domain actions or properties. Might also be stateful similar to VIEW_MODEL.
 --
-* `[teal]#*_VALUE_*#`
+<.> `[teal]#*_VALUE_*#`
 +
 --
 Immutable, serializable object.
 --
-* `[teal]#*_COLLECTION_*#`
+<.> `[teal]#*_COLLECTION_*#`
 +
 --
 Container of objects.

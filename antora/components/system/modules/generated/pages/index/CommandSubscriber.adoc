@@ -3,7 +3,16 @@
 
 Part of the _Publishing SPI_ . A component to receive xref:system:generated:index/Command.adoc[Command] s (with publishing enabled) that just completed.
 
-* `[teal]#*onCompleted*#(xref:system:generated:index/Command.adoc[Command] command)` : `void`
+.Java Sources
+[source,java]
+----
+interface CommandSubscriber {
+
+  void onCompleted(Command command) // <.>
+}
+----
+
+<.> `[teal]#*onCompleted*#(xref:system:generated:index/Command.adoc[Command] command)` : `void`
 +
 --
 Notifies that the command has completed.

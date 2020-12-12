@@ -3,7 +3,18 @@
 
 Domain services that need to be aware of transaction boundaries can implement this interface.
 
-* `[teal]#*onPreCommit*#(PreCommitPhase preCommitPhase)` : `void`
+.Java Sources
+[source,java]
+----
+interface TransactionScopeListener {
+
+  void onTransactionStarted()
+
+  void onPreCommit(PreCommitPhase preCommitPhase) // <.>
+}
+----
+
+<.> `[teal]#*onPreCommit*#(PreCommitPhase preCommitPhase)` : `void`
 +
 --
 triggered during the pre-commit phase in a transaction

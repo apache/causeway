@@ -3,3 +3,12 @@
 
 A service implementing an Event Bus, allowing arbitrary events to be posted.
 
+.Java Sources
+[source,java]
+----
+interface EventBusService {
+
+  void post(Object event)
+}
+----
+

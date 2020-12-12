@@ -3,3 +3,14 @@
 
 Superclass of exceptions which indicate an attempt to interact with a class member that is disabled.
 
+.Java Sources
+[source,java]
+----
+class DisabledException {
+
+  DisabledException(final InteractionEvent interactionEvent)
+
+  UsabilityEvent getInteractionEvent()
+}
+----
+

@@ -3,9 +3,14 @@
 
 Optional SPI called by xref:system:generated:index/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] . Similar to xref:system:generated:index/CommandDtoProcessor.adoc[CommandDtoProcessor] , but applied to all _CommandDto_ s globally.
 
-* `[teal]#*process*#(Object domainObject, CommandDto commandDto)` : `CommandDto`
-+
---
+.Java Sources
+[source,java]
+----
+interface CommandDtoProcessorService {
 
---
+  CommandDto process(final Object domainObject, final CommandDto commandDto) // <.>
+}
+----
+
+<.> `[teal]#*process*#(Object domainObject, CommandDto commandDto)` : `CommandDto`
 

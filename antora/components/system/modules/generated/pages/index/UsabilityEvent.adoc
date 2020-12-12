@@ -5,3 +5,12 @@
 
 If _#getReason()_ is `null` , then is usable; otherwise is disabled.
 
+.Java Sources
+[source,java]
+----
+class UsabilityEvent {
+
+  UsabilityEvent(final Object source, final Identifier identifier)
+}
+----
+

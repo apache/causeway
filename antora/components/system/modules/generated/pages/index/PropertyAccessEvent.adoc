@@ -5,3 +5,14 @@
 
 Analogous to xref:system:generated:index/PropertyModifyEvent.adoc[PropertyModifyEvent] , however the _#getReason()_ will always be `null` . (If access is not allowed then a xref:system:generated:index/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent] would have been fired).
 
+.Java Sources
+[source,java]
+----
+class PropertyAccessEvent {
+
+  PropertyAccessEvent(final Object source, final Identifier propertyIdentifier, final Object value)
+
+  Object getValue()
+}
+----
+

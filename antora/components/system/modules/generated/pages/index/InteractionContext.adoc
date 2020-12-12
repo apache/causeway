@@ -3,7 +3,18 @@
 
 Provides the current thread's xref:system:generated:index/Interaction.adoc[Interaction] .
 
-* `[teal]#*currentInteraction*#()` : `Optional<xref:system:generated:index/Interaction.adoc[Interaction]>`
+.Java Sources
+[source,java]
+----
+interface InteractionContext {
+
+  Optional<Interaction> currentInteraction() // <.>
+
+  Interaction currentInteractionElseFail()
+}
+----
+
+<.> `[teal]#*currentInteraction*#()` : `Optional<xref:system:generated:index/Interaction.adoc[Interaction]>`
 +
 --
 Optionally, the currently active xref:system:generated:index/Interaction.adoc[Interaction] for the calling thread.

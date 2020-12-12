@@ -5,7 +5,20 @@ Provides the ability to send emails to one or more recipients.
 
 The core framework also provides a default implementation `EmailServiceDefault` that sends email as an HTML message, using an external SMTP provider. See the Isis website for further details.
 
-* `[teal]#*isConfigured*#()` : `boolean`
+.Java Sources
+[source,java]
+----
+interface EmailService {
+
+  void init()
+
+  boolean send(List<String> to, List<String> cc, List<String> bcc, String subject, String body, DataSource... attachments)
+
+  boolean isConfigured() // <.>
+}
+----
+
+<.> `[teal]#*isConfigured*#()` : `boolean`
 +
 --
 Whether this service has been configured and thus available for use.

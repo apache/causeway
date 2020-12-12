@@ -3,3 +3,12 @@
 
 Objects implementing this interface will be processed automatically by _org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto_ .
 
+.Java Sources
+[source,java]
+----
+interface HasCommandDto {
+
+  CommandDto getCommandDto()
+}
+----
+

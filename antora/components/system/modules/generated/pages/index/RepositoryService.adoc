@@ -1,50 +1,100 @@
 = RepositoryService : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+.Java Sources
+[source,java]
+----
+interface RepositoryService {
 
-* `[teal]#*getEntityState*#(Object object)` : `xref:system:generated:index/EntityState.adoc[EntityState]`
+  EntityState getEntityState(Object object) // <.>
+
+  T detachedEntity(T entity) // <.>
+
+  T persist(T domainObject) // <.>
+
+  T persistAndFlush(T domainObject) // <.>
+
+  void remove(Object domainObject) // <.>
+
+  void removeAndFlush(Object domainObject) // <.>
+
+  void removeAll(Class<T> cls) // <.>
+
+  List<T> allInstances(Class<T> ofType) // <.>
+
+  List<T> allInstances(Class<T> ofType, long start, long count) // <.>
+
+  List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate) // <.>
+
+  List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long start, long count) // <.>
+
+  List<T> allMatches(Query<T> query) // <.>
+
+  Optional<T> uniqueMatch(Class<T> ofType, Predicate<T> predicate) // <.>
+
+  Optional<T> uniqueMatch(Query<T> query) // <.>
+
+  Optional<T> firstMatch(Class<T> ofType, Predicate<T> predicate) // <.>
+
+  Optional<T> firstMatch(Query<T> query) // <.>
+
+  T refresh(T pojo) // <.>
+
+  T detach(T entity) // <.>
+
+  T detachedEntity(Class<T> ofType) // <.>
+
+  T instantiate(Class<T> ofType) // <.>
+
+  boolean isPersistent(Object domainObject) // <.>
+
+  boolean isDeleted(Object domainObject) // <.>
+}
+----
+
+<.> `[teal]#*getEntityState*#(Object object)` : `xref:system:generated:index/EntityState.adoc[EntityState]`
 +
 --
 Returns the EntityState of given _object_ . Returns _EntityState#NOT_PERSISTABLE_ for _object==null_ .
 --
-* `[teal]#*detachedEntity*#<T>(T entity)` : `T`
+<.> `[teal]#*detachedEntity*#<T>(T entity)` : `T`
 +
 --
 Same as _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Object)_ ; provided as a convenience because instantiating and _#persist(Object) persisting_ are often done together.
 --
-* `[teal]#*persist*#<T>(T domainObject)` : `T`
+<.> `[teal]#*persist*#<T>(T domainObject)` : `T`
 +
 --
 Persist the specified object (or do nothing if already persistent).
 --
-* `[teal]#*persistAndFlush*#<T>(T domainObject)` : `T`
+<.> `[teal]#*persistAndFlush*#<T>(T domainObject)` : `T`
 +
 --
 Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
 --
-* `[teal]#*remove*#(Object domainObject)` : `void`
+<.> `[teal]#*remove*#(Object domainObject)` : `void`
 +
 --
 Deletes the domain object but only if is attached.
 --
-* `[teal]#*removeAndFlush*#(Object domainObject)` : `void`
+<.> `[teal]#*removeAndFlush*#(Object domainObject)` : `void`
 +
 --
 Deletes the domain object but only if is persistent, and flushes changes to the database.
 --
-* `[teal]#*removeAll*#<T>(Class<T> cls)` : `void`
+<.> `[teal]#*removeAll*#<T>(Class<T> cls)` : `void`
 +
 --
 Removes all instances of the domain object.
 
 Intended primarily for testing purposes.
 --
-* `[teal]#*allInstances*#<T>(Class<T> ofType)` : `List<T>`
+<.> `[teal]#*allInstances*#<T>(Class<T> ofType)` : `List<T>`
 +
 --
 As _#allInstances(Class, long, long)_ , but but returning all instances rather than just those * within the specified range..
 --
-* `[teal]#*allInstances*#<T>(Class<T> ofType, long start, long count)` : `List<T>`
+<.> `[teal]#*allInstances*#<T>(Class<T> ofType, long start, long count)` : `List<T>`
 +
 --
 Returns all the instances of the specified type (including subtypes). If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
@@ -53,12 +103,12 @@ If there are no instances the list will be empty. This method creates a new _Lis
 
 This method should only be called where the number of instances is known to be relatively low, unless the optional range parameters (2 longs) are specified. The range parameters are "start" and "count".
 --
-* `[teal]#*allMatches*#<T>(Class<T> ofType, Predicate<? super T> predicate)` : `List<T>`
+<.> `[teal]#*allMatches*#<T>(Class<T> ofType, Predicate<? super T> predicate)` : `List<T>`
 +
 --
 As _#allMatches(Class, Predicate, long, long)_ , but returning all instances rather than just those within the specified range.
 --
-* `[teal]#*allMatches*#<T>(Class<T> ofType, Predicate<? super T> predicate, long start, long count)` : `List<T>`
+<.> `[teal]#*allMatches*#<T>(Class<T> ofType, Predicate<? super T> predicate, long start, long count)` : `List<T>`
 +
 --
 Returns all the instances of the specified type (including subtypes) that the predicate object accepts. If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
@@ -67,7 +117,7 @@ If there are no instances the list will be empty. This method creates a new _Lis
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#allMatches(Query)_ for production code.
 --
-* `[teal]#*allMatches*#<T>(Query<T> query)` : `List<T>`
+<.> `[teal]#*allMatches*#<T>(Query<T> query)` : `List<T>`
 +
 --
 Returns all the instances that match the given _Query_ .
@@ -76,7 +126,7 @@ If there are no instances the list will be empty. This method creates a new _Lis
 
 This method is the recommended way of querying for multiple instances.
 --
-* `[teal]#*uniqueMatch*#<T>(Class<T> ofType, Predicate<T> predicate)` : `Optional<T>`
+<.> `[teal]#*uniqueMatch*#<T>(Class<T> ofType, Predicate<T> predicate)` : `Optional<T>`
 +
 --
 Find the only instance of the specified type (including subtypes) that has the specified title.
@@ -85,7 +135,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#uniqueMatch(Query)_ for production code.
 --
-* `[teal]#*uniqueMatch*#<T>(Query<T> query)` : `Optional<T>`
+<.> `[teal]#*uniqueMatch*#<T>(Query<T> query)` : `Optional<T>`
 +
 --
 Find the only instance that matches the provided query.
@@ -94,7 +144,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 This method is the recommended way of querying for (precisely) one instance. See also _#allMatches(Query)_
 --
-* `[teal]#*firstMatch*#<T>(Class<T> ofType, Predicate<T> predicate)` : `Optional<T>`
+<.> `[teal]#*firstMatch*#<T>(Class<T> ofType, Predicate<T> predicate)` : `Optional<T>`
 +
 --
 Find the only instance of the specified type (including subtypes) that has the specified title.
@@ -103,62 +153,70 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#firstMatch(Query)_ for production code.
 --
-* `[teal]#*firstMatch*#<T>(Query<T> query)` : `Optional<T>`
+<.> `[teal]#*firstMatch*#<T>(Query<T> query)` : `Optional<T>`
 +
 --
 Find the only instance that matches the provided query, if any..
 
 If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances then the first will be returned.
 --
-* `[teal]#*refresh*#<T>(T pojo)` : `T`
+<.> `[teal]#*refresh*#<T>(T pojo)` : `T`
 +
 --
 Reloads the pojo.
 --
-* `[teal]#*detach*#<T>(T entity)` : `T`
+<.> `[teal]#*detach*#<T>(T entity)` : `T`
 +
 --
 Detach the entity from the current persistence session.
 
 This allows the entity to be read from even after the PersistenceSession that obtained it has been closed.
 --
-* `[line-through gray]#*detachedEntity*#<T>(Class<T> ofType)` : `T`
+<.> `[line-through gray]#*detachedEntity*#<T>(Class<T> ofType)` : `T`
 +
 --
-+
+[WARNING]
+====
 [red]#_deprecated:_#
 
 if applicable use _#detachedEntity(Object)_ instead ... "new is the new new", passing in a new-ed up instance is more flexible and also more error prone, eg. it allows the compiler to check validity of the used constructor rather than doing construction reflective at runtime.
+====
 
 Same as _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)_ ; provided as a convenience because instantiating and _#persist(Object) persisting_ are often done together.
 --
-* `[line-through gray]#*instantiate*#<T>(Class<T> ofType)` : `T`
+<.> `[line-through gray]#*instantiate*#<T>(Class<T> ofType)` : `T`
 +
 --
-+
+[WARNING]
+====
 [red]#_deprecated:_#
 
 if applicable use _#detachedEntity(Object)_ instead
+====
 --
-* `[line-through gray]#*isPersistent*#(Object domainObject)` : `boolean`
+<.> `[line-through gray]#*isPersistent*#(Object domainObject)` : `boolean`
 +
 --
-+
+[WARNING]
+====
 [red]#_deprecated:_#
 
 due to ambiguous semantic, use _#getEntityState(Object)_ instead
+====
 
 Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine in the object store).
 
 This method can also returntrueif the object has been _#isDeleted(Object) deleted_ from the object store.
 --
-* `[line-through gray]#*isDeleted*#(Object domainObject)` : `boolean`
+<.> `[line-through gray]#*isDeleted*#(Object domainObject)` : `boolean`
 +
 --
-+
+[WARNING]
+====
 [red]#_deprecated:_#
 
 due to ambiguous semantic, use _#getEntityState(Object)_ instead
+====
 
 Determines if the specified object has been deleted from the object store.
 --

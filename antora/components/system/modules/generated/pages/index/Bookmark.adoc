@@ -5,12 +5,33 @@ String representation of any persistable or re-createable object managed by the 
 
 Analogous to the `RootOid` .
 
-* `[teal]#*_parse_*#(String str)` : `Optional<xref:system:generated:index/Bookmark.adoc[Bookmark]>`
+.Java Sources
+[source,java]
+----
+class Bookmark {
+
+  Bookmark of(String objectType, String identifier)
+
+  Optional<Bookmark> parse(String str) // <.>
+
+  OidDto toOidDto()
+
+  Bookmark from(OidDto oidDto)
+
+  String toString() // <.>
+
+  Bookmark withHintId(String hintId)
+
+  String toStringUsingIdentifier(String id)
+}
+----
+
+<.> `[teal]#*_parse_*#(String str)` : `Optional<xref:system:generated:index/Bookmark.adoc[Bookmark]>`
 +
 --
 Round-trip with _#toString()_ representation.
 --
-* `[teal]#*toString*#()` : `String`
+<.> `[teal]#*toString*#()` : `String`
 +
 --
 The canonical form of the xref:system:generated:index/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".

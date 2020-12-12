@@ -11,7 +11,16 @@ The Isis framework also provides a default implementation of this service that r
 
 Initially introduced for the Wicket viewer; check the documentation of other viewers to determine whether they also support this service.
 
-* `[teal]#*recognize*#(Throwable ex)` : `Optional<Recognition>`
+.Java Sources
+[source,java]
+----
+interface ExceptionRecognizer {
+
+  Optional<Recognition> recognize(Throwable ex) // <.>
+}
+----
+
+<.> `[teal]#*recognize*#(Throwable ex)` : `Optional<Recognition>`
 +
 --
 (Attempt to) recognize the exception and return a user-friendly message to render instead.

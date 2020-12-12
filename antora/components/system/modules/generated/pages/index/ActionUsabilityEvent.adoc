@@ -5,3 +5,12 @@
 
 If _#getReason()_ is not `null` then provides the reason why the action is disabled; otherwise action is enabled.
 
+.Java Sources
+[source,java]
+----
+class ActionUsabilityEvent {
+
+  ActionUsabilityEvent(final Object source, final Identifier actionIdentifier)
+}
+----
+

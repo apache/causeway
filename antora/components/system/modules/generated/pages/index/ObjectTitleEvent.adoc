@@ -5,3 +5,14 @@
 
 The _#getReason()_ will always be `null` ; access is always allowed.
 
+.Java Sources
+[source,java]
+----
+class ObjectTitleEvent {
+
+  ObjectTitleEvent(final Object source, final Identifier classIdentifier, final String title)
+
+  String getTitle()
+}
+----
+
