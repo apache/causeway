@@ -58,6 +58,10 @@ public class SimpleBlock extends SimpleStructuralNode implements Block {
 
     @Override
     public void setSource(String source) {
+        if(source==null) {
+            lines.clear();
+            return;
+        }
         setLines(Arrays.asList(source.replace("\r", "").split("\n")));
     }
 }

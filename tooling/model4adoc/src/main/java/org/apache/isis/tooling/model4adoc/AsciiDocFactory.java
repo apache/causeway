@@ -71,8 +71,63 @@ public class AsciiDocFactory {
         node.setAttribute("Notice", value, true);
     }
     
+    // -- ADMONITIONS
+
+    //NOTE
+    //TIP
+    //IMPORTANT
+    //CAUTION
+    //WARNING
+    
+    public static Block note(StructuralNode parent) {
+        return admonition("Note", parent, null);
+    }
+    
+    public static Block note(StructuralNode parent, String source) {
+        return admonition("Note", parent, source);
+    }
+    
+    public static Block tip(StructuralNode parent) {
+        return admonition("Tip", parent, null);
+    }
+    
+    public static Block tip(StructuralNode parent, String source) {
+        return admonition("Tip", parent, source);
+    }
+    
+    public static Block important(StructuralNode parent) {
+        return admonition("Important", parent, null);
+    }
+    
+    public static Block important(StructuralNode parent, String source) {
+        return admonition("Important", parent, source);
+    }
+    
+    public static Block caution(StructuralNode parent) {
+        return admonition("Caution", parent, null);
+    }
+    
+    public static Block caution(StructuralNode parent, String source) {
+        return admonition("Caution", parent, source);
+    }
+    
+    public static Block warning(StructuralNode parent) {
+        return admonition("Warning", parent, null);
+    }
+    
+    public static Block warning(StructuralNode parent, String source) {
+        return admonition("Warning", parent, source);
+    }
+    
+    // -- BLOCK
+    
     public static Block block(StructuralNode parent) {
+        return block(parent, null);
+    }
+    
+    public static Block block(StructuralNode parent, String source) {
         val block = new SimpleBlock();
+        block.setSource(source);
         block.setLevel(parent.getLevel());
         parent.getBlocks().add(block);
         block.setParent(parent);
@@ -84,6 +139,8 @@ public class AsciiDocFactory {
         openBlock.setAttribute("style", "open", true);
         return openBlock;
     }
+    
+    // -- TABLE
     
     public static Table table(StructuralNode parent) {
         val table = new SimpleTable();
@@ -264,7 +321,13 @@ public class AsciiDocFactory {
         return table.getFooter().get(rowIndex);
     }
 
-    
+    private static Block admonition(String label, StructuralNode parent, String source) {
+        val admonition = block(parent, source);
+        admonition.setAttribute("textlabel", label, true);
+        admonition.setAttribute("name", label.toLowerCase(), true);
+        admonition.setAttribute("style", label.toUpperCase(), true);
+        return admonition;
+    }
 
     
 }

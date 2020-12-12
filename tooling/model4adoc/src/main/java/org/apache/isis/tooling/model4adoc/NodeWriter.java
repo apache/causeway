@@ -23,7 +23,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
@@ -83,12 +85,38 @@ final class NodeWriter implements StructuralNodeVisitor {
     
     // -- BLOCK
     
+    @RequiredArgsConstructor
+    private static enum Style {
+        OPEN_BLOCK("open"::equals),
+        ADMONITION_NOTE("NOTE"::equals),
+        ADMONITION_TIP("TIP"::equals),
+        ADMONITION_IMPORTANT("IMPORTANT"::equals),
+        ADMONITION_CAUTION("CAUTION"::equals),
+        ADMONITION_WARNING("WARNING"::equals),
+        UNKNOWN(x->false)
+        ;
+        private final Predicate<String> matcher;
+        public static Style parse(StructuralNode node) {
+            val styleAttribute = (String)node.getAttribute("style");
+            return Stream.of(Style.values())
+            .filter(style->style.matcher.test(styleAttribute))
+            .findFirst()
+            .orElse(UNKNOWN);
+        }
+        public boolean isOpenBlock() {
+            return this==Style.OPEN_BLOCK;
+        }
+        public boolean isAdmonition() {
+            return name().startsWith("ADMONITION_");
+        }
+    }
+    
     @Override
     public void blockHead(Block block, int depth) {
         
-        val isOpenBlockStyle = "open".equals(block.getAttribute("style"));
+        val style = Style.parse(block);        
         
-        if(isOpenBlockStyle){
+        if(style.isOpenBlock()){
             println("+");
             println("--");
             isContinuation = true; // set continuation flag, so other blocks don't add newlines
@@ -98,6 +126,16 @@ final class NodeWriter implements StructuralNodeVisitor {
             }    
         }
         
+        if(style.isAdmonition()){
+            if(block.getBlocks().size()>0) {
+                printfln("[%s]", (String)block.getAttribute("style"));
+                println("====");    
+                isContinuation = true; // set continuation flag, so other blocks don't add newlines
+            } else {
+                printf("%s: ", (String)block.getAttribute("style"));
+            }
+        } 
+        
         for(val line : block.getLines()) {
             println(line);
         }
@@ -106,9 +144,15 @@ final class NodeWriter implements StructuralNodeVisitor {
     
     @Override
     public void blockTail(Block block, int depth) {
-        val isOpenBlockStyle = "open".equals(block.getAttribute("style"));
-        if(isOpenBlockStyle){
+        
+        val style = Style.parse(block);
+        
+        if(style.isOpenBlock()){
             println("--");
+        } else if(style.isAdmonition()){
+            if(block.getBlocks().size()>0) {
+                println("====");    
+            }
         }
     }
     

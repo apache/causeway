@@ -18,10 +18,16 @@
  */
 package org.apache.isis.tooling.adocmodel.test;
 
+import java.util.Optional;
+
+import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
 
@@ -32,21 +38,47 @@ final class Debug {
     }
     
     static void debug(StructuralNode node, int level) {
+        
+        val simpleName = node.getClass().getSimpleName();
+        
         print(level, "node type: %s", node.getClass());
-        print(level, "node title: %s", node.getTitle());
-        print(level, "node attributes: %d", node.getAttributes().size());
-        
-        
+        print(level, "%s title: %s", simpleName, node.getTitle());
+        sourceFor(node).ifPresent(x->print(level, "%s source: %s", simpleName, x));
+        print(level, "%s attributes: %d", simpleName, node.getAttributes().size());
         node.getAttributes()
         .forEach((k, v)->{
             print(level+1, " - %s->%s", k, v);
         });
         
-        print(level, "node blocks: %d", node.getBlocks().size());
+        if(node.getBlocks().size()>0) {
+            print(level, "%s child blocks: %d ...", simpleName, node.getBlocks().size());
+        }
         
         for(val subNode : node.getBlocks()) {
             debug(subNode, level+1);
         }
+    }
+
+    private static Optional<String> sourceFor(StructuralNode node) {
+        if(node instanceof Document) {
+            //((Document)node);
+            return Optional.empty();
+        }
+        if(node instanceof Table) {
+            //((Table)node);
+            return Optional.empty();
+        }
+        if(node instanceof org.asciidoctor.ast.List) {
+            //((org.asciidoctor.ast.List)node);
+            return Optional.empty();
+        }
+        if(node instanceof ListItem) {
+            return Optional.ofNullable(((ListItem)node).getSource());
+        }
+        if(node instanceof Block) {
+            return Optional.ofNullable(((Block)node).getSource());
+        }    
+        throw _Exceptions.unsupportedOperation("node type not supported %s", node.getClass());
     }
 
     private static void print(int level, String format, Object... args) {

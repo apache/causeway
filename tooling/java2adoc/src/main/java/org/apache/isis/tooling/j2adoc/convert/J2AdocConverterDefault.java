@@ -230,7 +230,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         .map(javadocDescription->javadocDescription(javadocDescription))
         .ifPresent(deprecatedAdoc->{
             
-            val deprecatedBlock = AsciiDocFactory.block(doc);
+            val deprecatedBlock = AsciiDocFactory.warning(doc);
             deprecatedBlock.setSource("[red]#_deprecated:_#");
             deprecatedBlock.getBlocks().addAll(deprecatedAdoc.getBlocks());
         });
@@ -296,7 +296,6 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         val adoc = HtmlToAsciiDoc.body(descriptionAsHtml.selectFirst("body"));
         return adoc;
     }
-
 
 
 }
