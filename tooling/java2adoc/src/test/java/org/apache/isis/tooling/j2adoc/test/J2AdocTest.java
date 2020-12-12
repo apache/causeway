@@ -51,14 +51,15 @@ class J2AdocTest {
                 .main();
 
         val j2aContext = J2AdocContext
-                //.javaSourceWithFootNotesFormat()
-                .compactFormat()
+                .javaSourceWithFootnotesFormat()
+                //.compactFormat()
                 .xrefPageIdFormat("system:generated:index/%s.adoc")
                 .build();
         
         analyzerConfig.getSources(JAVA)
         .stream()
-        .filter(source->source.toString().contains("ExecutionMode"))
+        //.filter(source->source.toString().contains("ExecutionMode"))
+        .filter(source->source.toString().contains("FactoryService"))
         //.peek(source->System.out.println("parsing source: " + source))
         .forEach(j2aContext::add);
         

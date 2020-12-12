@@ -106,7 +106,7 @@ public class J2AdocContext {
     
     // -- PREDEFINED FORMATS
     
-    public static J2AdocContextBuilder javaSourceWithFootNotesFormat() {
+    public static J2AdocContextBuilder javaSourceWithFootnotesFormat() {
         return J2AdocContext.builder()
                 .converterFactory(J2AdocConverter::createDefault)
                 .formatterFactory(UnitFormatterWithSourceAndFootNotes::new)

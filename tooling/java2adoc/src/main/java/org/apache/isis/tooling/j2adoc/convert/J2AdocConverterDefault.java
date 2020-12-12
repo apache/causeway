@@ -49,7 +49,6 @@ import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -222,25 +221,25 @@ final class J2AdocConverterDefault implements J2AdocConverter {
     }
     
     @Override
-    public String javadoc(final @NonNull Javadoc javadoc) {
+    public Document javadoc(final @NonNull Javadoc javadoc) {
 
-        val adoc = AsciiDocFactory.doc();
+        val doc = AsciiDocFactory.doc();
         
         Javadocs.streamTagContent(javadoc, "deprecated")
         .findFirst()
         .map(javadocDescription->javadocDescription(javadocDescription))
         .ifPresent(deprecatedAdoc->{
             
-            val deprecatedBlock = AsciiDocFactory.block(adoc);
-            deprecatedBlock.setSource("+\n[red]#_deprecated:_#");
+            val deprecatedBlock = AsciiDocFactory.block(doc);
+            deprecatedBlock.setSource("[red]#_deprecated:_#");
             deprecatedBlock.getBlocks().addAll(deprecatedAdoc.getBlocks());
         });
         
         val descriptionAdoc = javadocDescription(javadoc.getDescription());
         
-        adoc.getBlocks().addAll(descriptionAdoc.getBlocks());
-
-        return AsciiDocWriter.toString(adoc);
+        doc.getBlocks().addAll(descriptionAdoc.getBlocks());
+        
+        return doc;
     }
     
     public String inlineTag(final @NonNull JavadocInlineTag inlineTag) {
@@ -297,5 +296,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         val adoc = HtmlToAsciiDoc.body(descriptionAsHtml.selectFirst("body"));
         return adoc;
     }
+
+
 
 }

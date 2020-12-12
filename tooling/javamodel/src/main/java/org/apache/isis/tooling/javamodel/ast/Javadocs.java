@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.javamodel.ast;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -48,53 +49,67 @@ public final class Javadocs {
         .map(tag->tag.getContent());
     }
     
-    public static boolean presentAndNotHidden(
-            final @NonNull FieldDeclaration fd) {
-        
-        return fd.getJavadoc()
-        .map(jd->!hasHidden(jd))
-        .orElse(false);
+    // -- PREDICATES FOR STREAMS (PRESENT AND NOT HIDDEN)
+    
+    public static boolean presentAndNotHidden(final @NonNull FieldDeclaration fd) {
+        return presentAndNotHidden(fd.getJavadoc());
     }
     
-    public static boolean presentAndNotHidden(
-            final @NonNull EnumConstantDeclaration ecd) {
-        
-        return ecd.getJavadoc()
-        .map(jd->!hasHidden(jd))
-        .orElse(false);
+    public static boolean presentAndNotHidden(final @NonNull EnumConstantDeclaration ecd) {
+        return presentAndNotHidden(ecd.getJavadoc());
     }
     
-    
-    public static boolean presentAndNotHidden(
-            final @NonNull ConstructorDeclaration cd) {
-        
-        return cd.getJavadoc()
-        .map(jd->!hasHidden(jd))
-        .orElse(false);
+    public static boolean presentAndNotHidden(final @NonNull ConstructorDeclaration cd) {
+        return presentAndNotHidden(cd.getJavadoc());
     }
     
-    public static boolean presentAndNotHidden(
-            final @NonNull MethodDeclaration md) {
-        
-        return md.getJavadoc()
-        .map(jd->!hasHidden(jd))
-        .orElse(false);
+    public static boolean presentAndNotHidden(final @NonNull MethodDeclaration md) {
+        return presentAndNotHidden(md.getJavadoc());
     }
     
-    public static boolean hasDeprecated(
-            final @NonNull Javadoc javadoc) {
-        
+    // -- PREDICATES FOR STREAMS (NOT EXPLICITLY HIDDEN)
+    
+    public static boolean notExplicitlyHidden(final @NonNull FieldDeclaration fd) {
+        return !hasHidden(fd.getJavadoc());
+    }
+    
+    public static boolean notExplicitlyHidden(final @NonNull EnumConstantDeclaration ecd) {
+        return !hasHidden(ecd.getJavadoc());
+    }
+    
+    public static boolean notExplicitlyHidden(final @NonNull ConstructorDeclaration cd) {
+        return !hasHidden(cd.getJavadoc());
+    }
+    
+    public static boolean notExplicitlyHidden(final @NonNull MethodDeclaration md) {
+        return !hasHidden(md.getJavadoc());
+    }
+    
+    // -- 
+    
+    public static boolean hasDeprecated(final @NonNull Javadoc javadoc) {
         return streamTagsByName(javadoc, "deprecated") 
         .findAny()
         .isPresent();
     }
     
-    public static boolean hasHidden(
-            final @NonNull Javadoc javadoc) {
-        
+    public static boolean hasHidden(final @NonNull Javadoc javadoc) {
         return streamTagsByName(javadoc, "hidden") 
         .findAny()
         .isPresent();
     }
+    
+    public static boolean hasHidden(final @NonNull Optional<Javadoc> javadocOptional) {
+        return javadocOptional
+        .map(Javadocs::hasHidden)
+        .orElse(false);
+    }
+    
+    public static boolean presentAndNotHidden(final @NonNull Optional<Javadoc> javadocOptional) {
+        return javadocOptional
+        .map(jd->!hasHidden(jd))
+        .orElse(false);
+    }
+    
     
 }

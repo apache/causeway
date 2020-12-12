@@ -96,13 +96,10 @@ public final class AnyTypeDeclaration {
                 null,
                 Can.empty(),
                 ClassOrInterfaceDeclarations.streamPublicFieldDeclarations(classOrInterfaceDeclaration)
-                    .filter(Javadocs::presentAndNotHidden)
                     .collect(Can.toCan()),
                 ClassOrInterfaceDeclarations.streamPublicConstructorDeclarations(classOrInterfaceDeclaration)
-                    .filter(Javadocs::presentAndNotHidden)
                     .collect(Can.toCan()),
                 ClassOrInterfaceDeclarations.streamPublicMethodDeclarations(classOrInterfaceDeclaration)
-                    .filter(Javadocs::presentAndNotHidden)
                     .collect(Can.toCan())
                 );
     }
@@ -116,16 +113,12 @@ public final class AnyTypeDeclaration {
                 null,
                 enumDeclaration,
                 EnumDeclarations.streamEnumConstantDeclarations(enumDeclaration)
-                    .filter(Javadocs::presentAndNotHidden)
                     .collect(Can.toCan()),
                 EnumDeclarations.streamPublicFieldDeclarations(enumDeclaration)
-                    .filter(Javadocs::presentAndNotHidden)
                     .collect(Can.toCan()),
                 EnumDeclarations.streamPublicConstructorDeclarations(enumDeclaration)
-                    .filter(Javadocs::presentAndNotHidden)
                     .collect(Can.toCan()),
                 EnumDeclarations.streamPublicMethodDeclarations(enumDeclaration)
-                    .filter(Javadocs::presentAndNotHidden)
                     .collect(Can.toCan())
                 );
     }

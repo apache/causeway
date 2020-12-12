@@ -31,7 +31,6 @@ import com.github.javaparser.javadoc.Javadoc;
 
 import org.asciidoctor.ast.Document;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
@@ -91,20 +90,20 @@ public final class J2AdocUnit {
         return atd.getKind().name().toLowerCase();
     }
 
-    public Can<EnumConstantDeclaration> getEnumConstantDeclarations() {
-        return atd.getEnumConstantDeclarations();
+    public Stream<EnumConstantDeclaration> streamEnumConstantDeclarations() {
+        return atd.getEnumConstantDeclarations().stream();
     }
     
-    public Can<FieldDeclaration> getPublicFieldDeclarations() {
-        return atd.getPublicFieldDeclarations();
+    public Stream<FieldDeclaration> streamPublicFieldDeclarations() {
+        return atd.getPublicFieldDeclarations().stream();
     }
     
-    public Can<ConstructorDeclaration> getPublicConstructorDeclarations() {
-        return atd.getPublicConstructorDeclarations();
+    public Stream<ConstructorDeclaration> streamPublicConstructorDeclarations() {
+        return atd.getPublicConstructorDeclarations().stream();
     }
     
-    public Can<MethodDeclaration> getPublicMethodDeclarations() {
-        return atd.getPublicMethodDeclarations();
+    public Stream<MethodDeclaration> streamPublicMethodDeclarations() {
+        return atd.getPublicMethodDeclarations().stream();
     }
     
     @Getter(lazy = true)

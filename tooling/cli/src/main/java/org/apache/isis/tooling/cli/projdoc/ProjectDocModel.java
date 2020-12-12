@@ -87,7 +87,9 @@ public class ProjectDocModel {
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
-        val j2aContext = J2AdocContext.compactFormat()
+        val j2aContext = J2AdocContext
+                //.compactFormat()
+                .javaSourceWithFootnotesFormat()
                 .licenseHeader(cliConfig.getProjectDoc().getLicenseHeader())
                 .xrefPageIdFormat(cliConfig.getDocumentGlobalIndexXrefPageIdFormat())
                 .build();

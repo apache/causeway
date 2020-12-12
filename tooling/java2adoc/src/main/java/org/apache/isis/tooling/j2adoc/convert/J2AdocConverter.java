@@ -24,6 +24,8 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 
+import org.asciidoctor.ast.Document;
+
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 
@@ -31,7 +33,7 @@ import lombok.NonNull;
 
 public interface J2AdocConverter {
 
-    String javadoc(Javadoc javadoc);
+    Document javadoc(Javadoc javadoc);
 
     String enumConstantDeclaration(EnumConstantDeclaration ecd);
     

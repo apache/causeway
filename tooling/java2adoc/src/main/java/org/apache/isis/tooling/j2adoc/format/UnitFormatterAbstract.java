@@ -27,6 +27,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
+import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
@@ -42,6 +43,36 @@ implements UnitFormatter {
     
     private final @NonNull J2AdocContext j2aContext;
     
+    @Override
+    public String getEnumConstantFormat() {
+        return "`%s`";
+    }
+    
+    @Override
+    public String getFieldFormat() {
+        return "`%1$s %2$s`";
+    }
+    
+    @Override
+    public String getConstructorFormat() {
+        return "`%1$s(%2$s)`";
+    }
+    
+    @Override
+    public String getGenericConstructorFormat() {
+        return "`%2$s%1$s(%3$s)`";
+    }
+
+    @Override
+    public String getMethodFormat() {
+        return "`%2$s(%3$s)` : `%1$s`";
+    }
+
+    @Override
+    public String getGenericMethodFormat() {
+        return "`%3$s%1$s(%4$s)` : `%2$s`";
+    }
+    
     protected Optional<String> title(final J2AdocUnit unit) {
         return Optional.of(
                 String.format("%s : _%s_", 
@@ -49,10 +80,11 @@ implements UnitFormatter {
                         unit.getDeclarationKeyword()));
     }
     
-    protected Optional<String> intro(final J2AdocUnit unit) {
-        return unit.getJavadoc()
-                .map(javadoc->getConverter().javadoc(javadoc));    
-        
+    protected void intro(final J2AdocUnit unit, final StructuralNode parent) {
+        unit.getJavadoc()
+        .filter(javadoc->!Javadocs.hasHidden(javadoc))
+        .map(javadoc->getConverter().javadoc(javadoc))
+        .ifPresent(doc->parent.getBlocks().addAll(doc.getBlocks()));
     }
     
     protected Optional<String> javaSource(final J2AdocUnit unit) {
@@ -60,13 +92,15 @@ implements UnitFormatter {
     }
     
     protected abstract StructuralNode getMemberDescriptionContainer(StructuralNode parent);
-    protected abstract void appendMemberDescription(StructuralNode parent, String member, String javadoc);
+    protected abstract void appendMemberDescription(StructuralNode parent, String member, Document javadoc);
     
     protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent) {
         
         val ul = getMemberDescriptionContainer(parent);
         
-        unit.getEnumConstantDeclarations().forEach(ecd->{
+        unit.streamEnumConstantDeclarations()
+        .filter(Javadocs::presentAndNotHidden)
+        .forEach(ecd->{
             ecd.getJavadoc()
             .ifPresent(javadoc->{
                 
@@ -76,7 +110,9 @@ implements UnitFormatter {
             });
         });
         
-        unit.getPublicFieldDeclarations().forEach(fd->{
+        unit.streamPublicFieldDeclarations()
+        .filter(Javadocs::presentAndNotHidden)
+        .forEach(fd->{
             
             fd.getJavadoc()
             .ifPresent(javadoc->{
@@ -88,7 +124,9 @@ implements UnitFormatter {
             
         });
         
-        unit.getPublicConstructorDeclarations().forEach(cd->{
+        unit.streamPublicConstructorDeclarations()
+        .filter(Javadocs::presentAndNotHidden)
+        .forEach(cd->{
             
             cd.getJavadoc()
             .ifPresent(javadoc->{
@@ -100,7 +138,9 @@ implements UnitFormatter {
             
         });
         
-        unit.getPublicMethodDeclarations().forEach(md->{
+        unit.streamPublicMethodDeclarations()
+        .filter(Javadocs::presentAndNotHidden)
+        .forEach(md->{
             
             md.getJavadoc()
             .ifPresent(javadoc->{
@@ -112,7 +152,6 @@ implements UnitFormatter {
             
         });
     }
-    
     
 
     protected Optional<String> outro(final J2AdocUnit unit) {
@@ -137,8 +176,7 @@ implements UnitFormatter {
 
         // -- intro
         
-        intro(unit)
-        .ifPresent(block(doc)::setSource);
+        intro(unit, doc);
         
         // -- java source
         

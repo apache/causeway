@@ -20,6 +20,7 @@ package org.apache.isis.tooling.j2adoc.format;
 
 import java.util.Optional;
 
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 
@@ -28,6 +29,7 @@ import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
 import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
+import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
@@ -48,28 +50,46 @@ extends UnitFormatterAbstract {
                 unit.getDeclarationKeyword(), 
                 unit.getSimpleName()));
         
-        unit.getEnumConstantDeclarations().forEach(ecd->{
-            java.append(String.format("\n  %s // <.>\n", 
+        unit.streamEnumConstantDeclarations()
+        .filter(Javadocs::notExplicitlyHidden)
+        .forEach(ecd->{
+            
+            val memberFormat = memberSourceFormat(ecd.getJavadoc().isPresent());
+            
+            java.append(String.format(memberFormat, 
                     EnumConstantDeclarations.toNormalizedEnumConstantDeclaration(ecd)));
+            
         });
         
-        unit.getPublicFieldDeclarations().forEach(fd->{
+        unit.streamPublicFieldDeclarations()
+        .filter(Javadocs::notExplicitlyHidden)
+        .forEach(fd->{
             
-            java.append(String.format("\n  %s // <.>\n", 
+            val memberFormat = memberSourceFormat(fd.getJavadoc().isPresent());
+            
+            java.append(String.format(memberFormat, 
                     FieldDeclarations.toNormalizedFieldDeclaration(fd)));
             
         });
         
-        unit.getPublicConstructorDeclarations().forEach(cd->{
+        unit.streamPublicConstructorDeclarations()
+        .filter(Javadocs::notExplicitlyHidden)
+        .forEach(cd->{
             
-            java.append(String.format("\n  %s // <.>\n", 
+            val memberFormat = memberSourceFormat(cd.getJavadoc().isPresent());
+            
+            java.append(String.format(memberFormat, 
                     ConstructorDeclarations.toNormalizedConstructorDeclaration(cd)));
             
         });
         
-        unit.getPublicMethodDeclarations().forEach(md->{
+        unit.streamPublicMethodDeclarations()
+        .filter(Javadocs::notExplicitlyHidden)
+        .forEach(md->{
+            
+            val memberFormat = memberSourceFormat(md.getJavadoc().isPresent());
 
-            java.append(String.format("\n  %s // <.>\n", 
+            java.append(String.format(memberFormat, 
                     MethodDeclarations.toNormalizedMethodDeclaration(md)));
             
         });
@@ -78,39 +98,39 @@ extends UnitFormatterAbstract {
         
         
         return Optional.of(
-                AsciiDocFactory.SourceFactory.java(java.toString(), unit.getName()));
+                AsciiDocFactory.SourceFactory.java(java.toString(), "Java Sources"));
             
     }
     
-    @Override
-    public String getEnumConstantFormat() {
-        return "`%s`";
-    }
-
-    @Override
-    public String getFieldFormat() {
-        return "`%s %s`";
-    }
-    
-    @Override
-    public String getConstructorFormat() {
-        return "`%s(%s)`";
-    }
-
-    @Override
-    public String getGenericConstructorFormat() {
-        return "`%s %s(%s)`";
-    }
-
-    @Override
-    public String getMethodFormat() {
-        return "`%s %s(%s)`";
-    }
-
-    @Override
-    public String getGenericMethodFormat() {
-        return "`%s %s %s(%s)`";
-    }
+//    @Override
+//    public String getEnumConstantFormat() {
+//        return "`%s`";
+//    }
+//
+//    @Override
+//    public String getFieldFormat() {
+//        return "`%s %s`";
+//    }
+//    
+//    @Override
+//    public String getConstructorFormat() {
+//        return "`%s(%s)`";
+//    }
+//
+//    @Override
+//    public String getGenericConstructorFormat() {
+//        return "`%s %s(%s)`";
+//    }
+//
+//    @Override
+//    public String getMethodFormat() {
+//        return "`%s %s(%s)`";
+//    }
+//
+//    @Override
+//    public String getGenericMethodFormat() {
+//        return "`%s %s %s(%s)`";
+//    }
 
     @Override
     protected StructuralNode getMemberDescriptionContainer(StructuralNode parent) {
@@ -119,12 +139,21 @@ extends UnitFormatterAbstract {
     }
 
     @Override
-    protected void appendMemberDescription(StructuralNode ul, String member, String javadoc) {
+    protected void appendMemberDescription(StructuralNode ul, String member, Document javadoc) {
         val li = AsciiDocFactory.listItem((List) ul, member);
         li.getRoles().add("footnote");
         val openBlock = AsciiDocFactory.openBlock(li);
         val javaDocBlock = AsciiDocFactory.block(openBlock);
-        javaDocBlock.setSource(javadoc);
+        javaDocBlock.getBlocks().addAll(javadoc.getBlocks());
     }
+    
+    // -- HELPER
+    
+    private String memberSourceFormat(boolean addFootnote) {
+        return addFootnote
+                ? "\n  %s // <.>\n"
+                : "\n  %s\n";
+    }
+    
 
 }

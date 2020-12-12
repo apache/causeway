@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.j2adoc.format;
 
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 
@@ -34,47 +35,17 @@ extends UnitFormatterAbstract {
     }
 
     @Override
-    public String getEnumConstantFormat() {
-        return "`%s`";
-    }
-    
-    @Override
-    public String getFieldFormat() {
-        return "`%1$s %2$s`";
-    }
-    
-    @Override
-    public String getConstructorFormat() {
-        return "`%1$s(%2$s)`";
-    }
-    
-    @Override
-    public String getGenericConstructorFormat() {
-        return "`%2$s%1$s(%3$s)`";
-    }
-
-    @Override
-    public String getMethodFormat() {
-        return "`%2$s(%3$s)` : `%1$s`";
-    }
-
-    @Override
-    public String getGenericMethodFormat() {
-        return "`%3$s%1$s(%4$s)` : `%2$s`";
-    }
-
-    @Override
     protected StructuralNode getMemberDescriptionContainer(StructuralNode parent) {
         val ul = AsciiDocFactory.list(parent);
         return ul;
     }
 
     @Override
-    protected void appendMemberDescription(StructuralNode ul, String member, String javadoc) {
+    protected void appendMemberDescription(StructuralNode ul, String member, Document javadoc) {
         val li = AsciiDocFactory.listItem((List) ul, member);
         val openBlock = AsciiDocFactory.openBlock(li);
         val javaDocBlock = AsciiDocFactory.block(openBlock);
-        javaDocBlock.setSource(javadoc);
+        javaDocBlock.getBlocks().addAll(javadoc.getBlocks());
     }
 
 }
