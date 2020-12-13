@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -44,7 +45,9 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
+import org.apache.isis.tooling.javamodel.ast.AnnotationMemberDeclarations;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
+import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
 import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
@@ -60,6 +63,25 @@ final class J2AdocConverterDefault implements J2AdocConverter {
     private final J2AdocContext j2aContext;
 
     @Override
+    public String annotationMemberDeclaration(AnnotationMemberDeclaration amd) {
+        val isDeprecated = amd.getAnnotations().stream()
+                .anyMatch(a->a.getNameAsString().equals("Deprecated"))
+                || amd.getJavadoc()
+                    .map(Javadocs::hasDeprecated)
+                    .orElse(false);
+        
+        val memberNameFormat = isDeprecated
+                ? j2aContext.getDeprecatedStaticMemberNameFormat()
+                : j2aContext.getStaticMemberNameFormat();
+        
+        val annotMemberFormat =  j2aContext.getFormatter().getAnnotationMemberFormat();
+       
+        return String.format(annotMemberFormat,
+                type(amd.getType()), 
+                String.format(memberNameFormat, AnnotationMemberDeclarations.asNormalizedName(amd)));
+    }
+    
+    @Override
     public String enumConstantDeclaration(final @NonNull EnumConstantDeclaration ecd) {
         val isDeprecated = ecd.getAnnotations().stream()
                 .anyMatch(a->a.getNameAsString().equals("Deprecated"))
@@ -74,7 +96,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         val enumConstFormat =  j2aContext.getFormatter().getEnumConstantFormat();
         
         return String.format(enumConstFormat, 
-                String.format(memberNameFormat, ecd.getNameAsString()));
+                String.format(memberNameFormat, EnumConstantDeclarations.asNormalized(ecd)));
     }
     
     @Override
@@ -97,7 +119,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
        
         return String.format(fieldFormat,
                 type(fd.getCommonType()), 
-                String.format(memberNameFormat, FieldDeclarations.toNormalizedFieldDeclaration(fd)));
+                String.format(memberNameFormat, FieldDeclarations.asNormalizedName(fd)));
     }
     
     @Override
@@ -126,7 +148,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         
         val args = Can.<Object>of(
                 isGenericMember ? typeParamters(typeParams) : null,  // Cans do ignored null 
-                String.format(memberNameFormat, cd.getNameAsString()),
+                String.format(memberNameFormat, ConstructorDeclarations.asNormalizedName(cd)),
                 parameters(cd.getParameters().stream())
                 );
        
@@ -161,7 +183,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         val args = Can.<Object>of(
                 isGenericMember ? typeParamters(typeParams) : null,  // Cans do ignored null 
                 type(md.getType()),
-                String.format(memberNameFormat, md.getNameAsString()), 
+                String.format(memberNameFormat, MethodDeclarations.asNormalizedName(md)), 
                 parameters(md.getParameters().stream())
                 );
        

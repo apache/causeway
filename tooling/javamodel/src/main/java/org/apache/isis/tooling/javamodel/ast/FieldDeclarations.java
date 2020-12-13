@@ -33,8 +33,12 @@ public final class FieldDeclarations {
     /**
      * Returns given {@link FieldDeclaration} as normal text, without formatting.
      */
-    public static String toNormalizedFieldDeclaration(final @NonNull FieldDeclaration fd) {
-        return fd.toString().trim();
+    public static String asNormalized(final @NonNull FieldDeclaration fd) {
+        return fd.toString().trim(); //TODO might miss the fields type here
+    }
+    
+    public static String asNormalizedName(final @NonNull FieldDeclaration fd) {
+        return fd.toString().trim(); //TODO might have the fields type to remove here
     }
     
     public static Can<TypeParameter> getTypeParameters(final @NonNull FieldDeclaration fd) {

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.j2adoc.convert;
 
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -35,6 +36,8 @@ public interface J2AdocConverter {
 
     Document javadoc(Javadoc javadoc);
 
+    String annotationMemberDeclaration(AnnotationMemberDeclaration amd);
+    
     String enumConstantDeclaration(EnumConstantDeclaration ecd);
     
     String fieldDeclaration(FieldDeclaration fd);

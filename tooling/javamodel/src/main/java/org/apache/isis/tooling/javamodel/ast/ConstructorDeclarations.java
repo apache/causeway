@@ -34,11 +34,15 @@ public final class ConstructorDeclarations {
     /**
      * Returns given {@link ConstructorDeclaration} as normal text, without formatting.
      */
-    public static String toNormalizedConstructorDeclaration(final @NonNull ConstructorDeclaration cd) {
+    public static String asNormalized(final @NonNull ConstructorDeclaration cd) {
         val clone = cd.clone();
         clone.getParameters()
         .forEach(p->p.getAnnotations().clear());
         return clone.getDeclarationAsString(false, false, true);
+    }
+    
+    public static String asNormalizedName(final @NonNull ConstructorDeclaration cd) {
+        return cd.getNameAsString().trim();
     }
     
     public static Can<TypeParameter> getTypeParameters(final @NonNull ConstructorDeclaration cd) {

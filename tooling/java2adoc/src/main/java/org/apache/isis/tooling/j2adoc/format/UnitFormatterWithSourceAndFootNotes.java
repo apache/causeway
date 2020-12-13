@@ -24,6 +24,7 @@ import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
+import org.apache.isis.tooling.javamodel.ast.AnnotationMemberDeclarations;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
 import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
@@ -48,47 +49,58 @@ extends UnitFormatterAbstract {
                 unit.getDeclarationKeyword(), 
                 unit.getSimpleName()));
         
-        unit.streamEnumConstantDeclarations()
+        unit.getTypeDeclaration().getEnumConstantDeclarations().stream()
         .filter(Javadocs::notExplicitlyHidden)
         .forEach(ecd->{
             
-            val memberFormat = memberSourceFormat(ecd.getJavadoc().isPresent());
+            val memberFormat = javaSourceMemberFormat(ecd.getJavadoc().isPresent());
             
             java.append(String.format(memberFormat, 
-                    EnumConstantDeclarations.toNormalizedEnumConstantDeclaration(ecd)));
+                    EnumConstantDeclarations.asNormalized(ecd)));
             
         });
         
-        unit.streamPublicFieldDeclarations()
+        unit.getTypeDeclaration().getPublicFieldDeclarations().stream()
         .filter(Javadocs::notExplicitlyHidden)
         .forEach(fd->{
             
-            val memberFormat = memberSourceFormat(fd.getJavadoc().isPresent());
+            val memberFormat = javaSourceMemberFormat(fd.getJavadoc().isPresent());
             
             java.append(String.format(memberFormat, 
-                    FieldDeclarations.toNormalizedFieldDeclaration(fd)));
+                    FieldDeclarations.asNormalized(fd)));
             
         });
         
-        unit.streamPublicConstructorDeclarations()
+        unit.getTypeDeclaration().getAnnotationMemberDeclarations().stream()
+        .filter(Javadocs::notExplicitlyHidden)
+        .forEach(fd->{
+            
+            val memberFormat = javaSourceMemberFormat(fd.getJavadoc().isPresent());
+            
+            java.append(String.format(memberFormat, 
+                    AnnotationMemberDeclarations.asNormalized(fd)));
+            
+        });
+        
+        unit.getTypeDeclaration().getPublicConstructorDeclarations().stream()
         .filter(Javadocs::notExplicitlyHidden)
         .forEach(cd->{
             
-            val memberFormat = memberSourceFormat(cd.getJavadoc().isPresent());
+            val memberFormat = javaSourceMemberFormat(cd.getJavadoc().isPresent());
             
             java.append(String.format(memberFormat, 
-                    ConstructorDeclarations.toNormalizedConstructorDeclaration(cd)));
+                    ConstructorDeclarations.asNormalized(cd)));
             
         });
         
-        unit.streamPublicMethodDeclarations()
+        unit.getTypeDeclaration().getPublicMethodDeclarations().stream()
         .filter(Javadocs::notExplicitlyHidden)
         .forEach(md->{
             
-            val memberFormat = memberSourceFormat(md.getJavadoc().isPresent());
+            val memberFormat = javaSourceMemberFormat(md.getJavadoc().isPresent());
 
             java.append(String.format(memberFormat, 
-                    MethodDeclarations.toNormalizedMethodDeclaration(md)));
+                    MethodDeclarations.asNormalized(md)));
             
         });
 
@@ -99,7 +111,9 @@ extends UnitFormatterAbstract {
                 AsciiDocFactory.SourceFactory.java(java.toString(), "Java Sources"));
             
     }
-    
+
+//XXX java language syntax (for footnote text), but not used any more
+//    
 //    @Override
 //    public String getEnumConstantFormat() {
 //        return "`%s`";
@@ -138,7 +152,7 @@ extends UnitFormatterAbstract {
     
     // -- HELPER
     
-    private String memberSourceFormat(boolean addFootnote) {
+    private String javaSourceMemberFormat(boolean addFootnote) {
         return addFootnote
                 ? "\n  %s // <.>\n"
                 : "\n  %s\n";

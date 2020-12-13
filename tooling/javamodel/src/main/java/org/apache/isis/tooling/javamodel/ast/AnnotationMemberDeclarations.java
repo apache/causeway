@@ -16,51 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.j2adoc.format;
+package org.apache.isis.tooling.javamodel.ast;
 
-import java.util.function.Function;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
-import org.asciidoctor.ast.Document;
+import lombok.NonNull;
 
-import org.apache.isis.tooling.j2adoc.J2AdocUnit;
-
-public interface UnitFormatter 
-extends Function<J2AdocUnit, Document> {
-
-    /**
-     * name
-     */
-    String getEnumConstantFormat();
+public final class AnnotationMemberDeclarations {
+    
+    private static PrettyPrinterConfiguration printingConf = new PrettyPrinterConfiguration();
+    static {
+        printingConf.setPrintJavadoc(false);
+    }
     
     /**
-     * type | name
+     * Returns given {@link AnnotationMemberDeclaration} as normal text, without formatting.
      */
-    String getAnnotationMemberFormat();
+    public static String asNormalized(final @NonNull AnnotationMemberDeclaration amd) {
+        return amd.toString(printingConf).trim();
+    }
     
-    /**
-     * type | name
-     */
-    String getFieldFormat();
-    
-    /**
-     * name | param-list
-     */
-    String getConstructorFormat();
-    
-    /**
-     * constructor-generic-type | name | param-list
-     */
-    String getGenericConstructorFormat(); 
-    
-    /**
-     * return-type | name | param-list
-     */
-    String getMethodFormat();
-    
-    /**
-     * method-generic-type | return-type | name | param-list
-     */
-    String getGenericMethodFormat();
-
+    public static String asNormalizedName(final @NonNull AnnotationMemberDeclaration amd) {
+        return amd.getNameAsString().trim();
+    }
     
 }

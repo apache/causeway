@@ -61,7 +61,7 @@ class J2AdocTest {
         //.filter(source->source.toString().contains("ExecutionMode"))
         //.filter(source->source.toString().contains("FactoryService"))
         .filter(source->source.toString().contains("Action"))
-        .peek(source->System.out.println("parsing source: " + source))
+        //.peek(source->System.out.println("parsing source: " + source))
         .forEach(j2aContext::add);
         
         j2aContext.streamUnits()

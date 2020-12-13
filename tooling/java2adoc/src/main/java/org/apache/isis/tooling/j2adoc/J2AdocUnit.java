@@ -23,14 +23,11 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 
 import org.asciidoctor.ast.Document;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
@@ -74,6 +71,10 @@ public final class J2AdocUnit {
 
     }
 
+    public AnyTypeDeclaration getTypeDeclaration() {
+        return atd;
+    }
+    
     /**
      * Returns the recursively resolved (nested) type name. 
      * Same as {@link #getSimpleName()} if type is not nested. 
@@ -86,24 +87,12 @@ public final class J2AdocUnit {
         return atd.getSimpleName();
     }
     
+    public String getDeclarationKeywordFriendlyName() {
+        return _Strings.capitalize(atd.getKind().name().toLowerCase());
+    }
+    
     public String getDeclarationKeyword() {
-        return atd.getKind().name().toLowerCase();
-    }
-
-    public Stream<EnumConstantDeclaration> streamEnumConstantDeclarations() {
-        return atd.getEnumConstantDeclarations().stream();
-    }
-    
-    public Stream<FieldDeclaration> streamPublicFieldDeclarations() {
-        return atd.getPublicFieldDeclarations().stream();
-    }
-    
-    public Stream<ConstructorDeclaration> streamPublicConstructorDeclarations() {
-        return atd.getPublicConstructorDeclarations().stream();
-    }
-    
-    public Stream<MethodDeclaration> streamPublicMethodDeclarations() {
-        return atd.getPublicMethodDeclarations().stream();
+        return atd.getKind().getJavaKeyword();
     }
     
     @Getter(lazy = true)

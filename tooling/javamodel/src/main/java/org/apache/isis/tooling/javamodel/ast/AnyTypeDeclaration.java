@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
@@ -44,12 +45,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AnyTypeDeclaration {
 
+    @RequiredArgsConstructor
     public static enum Kind {
-        ANNOTATION,
-        CLASS,
-        ENUM,
-        INTERFACE
+        ANNOTATION("@interface"),
+        CLASS("class"),
+        ENUM("enum"),
+        INTERFACE("interface")
         ;
+        @Getter private final String javaKeyword;
+        public boolean isAnnotation() { return this == ANNOTATION; }
         public boolean isClass() { return this == CLASS; }
         public boolean isEnum() { return this == ENUM; }
         public boolean isInterface() { return this == INTERFACE; }
@@ -61,6 +65,7 @@ public final class AnyTypeDeclaration {
     private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration; 
     private final EnumDeclaration enumDeclaration;
     
+    private final Can<AnnotationMemberDeclaration> annotationMemberDeclarations;
     private final Can<EnumConstantDeclaration> enumConstantDeclarations;
     private final Can<FieldDeclaration> publicFieldDeclarations;
     private final Can<ConstructorDeclaration> publicConstructorDeclarations;
@@ -78,11 +83,15 @@ public final class AnyTypeDeclaration {
                 annotationDeclaration,
                 null,
                 null,
+                //members
+                AnnotationDeclarations.streamAnnotationMemberDeclarations(annotationDeclaration)
+                    .collect(Can.toCan()),
                 Can.empty(),
+                AnnotationDeclarations.streamFieldDeclarations(annotationDeclaration)
+                    .collect(Can.toCan()),
                 Can.empty(),
-                Can.empty(),
-                Can.empty()
-                //TODO add annotation processing
+                AnnotationDeclarations.streamMethodDeclarations(annotationDeclaration)
+                    .collect(Can.toCan())
                 );
     }
     
@@ -94,6 +103,8 @@ public final class AnyTypeDeclaration {
                 null,
                 classOrInterfaceDeclaration,
                 null,
+                //members
+                Can.empty(),
                 Can.empty(),
                 ClassOrInterfaceDeclarations.streamPublicFieldDeclarations(classOrInterfaceDeclaration)
                     .collect(Can.toCan()),
@@ -112,6 +123,8 @@ public final class AnyTypeDeclaration {
                 null, 
                 null,
                 enumDeclaration,
+                //members
+                Can.empty(),
                 EnumDeclarations.streamEnumConstantDeclarations(enumDeclaration)
                     .collect(Can.toCan()),
                 EnumDeclarations.streamPublicFieldDeclarations(enumDeclaration)

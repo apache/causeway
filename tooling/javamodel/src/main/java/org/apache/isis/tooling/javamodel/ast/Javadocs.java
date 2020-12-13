@@ -21,6 +21,7 @@ package org.apache.isis.tooling.javamodel.ast;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -51,6 +52,10 @@ public final class Javadocs {
     
     // -- PREDICATES FOR STREAMS (PRESENT AND NOT HIDDEN)
     
+    public static boolean presentAndNotHidden(final @NonNull AnnotationMemberDeclaration amd) {
+        return presentAndNotHidden(amd.getJavadoc());
+    }
+    
     public static boolean presentAndNotHidden(final @NonNull FieldDeclaration fd) {
         return presentAndNotHidden(fd.getJavadoc());
     }
@@ -68,6 +73,10 @@ public final class Javadocs {
     }
     
     // -- PREDICATES FOR STREAMS (NOT EXPLICITLY HIDDEN)
+    
+    public static boolean notExplicitlyHidden(final @NonNull AnnotationMemberDeclaration amd) {
+        return !hasHidden(amd.getJavadoc());
+    }
     
     public static boolean notExplicitlyHidden(final @NonNull FieldDeclaration fd) {
         return !hasHidden(fd.getJavadoc());

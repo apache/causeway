@@ -35,11 +35,15 @@ public final class MethodDeclarations {
     /**
      * Returns given {@link MethodDeclaration} as normal text, without formatting.
      */
-    public static String toNormalizedMethodDeclaration(final @NonNull MethodDeclaration md) {
+    public static String asNormalized(final @NonNull MethodDeclaration md) {
         val clone = md.clone();
         clone.getParameters()
         .forEach(p->p.getAnnotations().clear());
         return clone.getDeclarationAsString(false, false, true);
+    }
+    
+    public static String asNormalizedName(final @NonNull MethodDeclaration md) {
+        return md.getNameAsString().trim();
     }
     
     public static Can<TypeParameter> getTypeParameters(final @NonNull MethodDeclaration md) {

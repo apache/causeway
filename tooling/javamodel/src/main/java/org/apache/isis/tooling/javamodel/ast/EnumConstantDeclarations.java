@@ -27,8 +27,8 @@ public final class EnumConstantDeclarations {
     /**
      * Returns given {@link EnumConstantDeclaration} as normal text, without formatting.
      */
-    public static String toNormalizedEnumConstantDeclaration(final @NonNull EnumConstantDeclaration ecd) {
-        return ecd.toString().trim();
+    public static String asNormalized(final @NonNull EnumConstantDeclaration ecd) {
+        return ecd.getNameAsString().trim();
     }
     
 }

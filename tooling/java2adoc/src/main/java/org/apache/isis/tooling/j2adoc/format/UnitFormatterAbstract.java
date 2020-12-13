@@ -50,8 +50,13 @@ implements UnitFormatter {
     }
     
     @Override
+    public String getAnnotationMemberFormat() {
+        return "`%2$s` : `%1$s`";
+    }
+    
+    @Override
     public String getFieldFormat() {
-        return "`%1$s %2$s`";
+        return "`%2$s` : `%1$s`";
     }
     
     @Override
@@ -78,7 +83,7 @@ implements UnitFormatter {
         return Optional.of(
                 String.format("%s : _%s_", 
                         unit.getName(),
-                        unit.getDeclarationKeyword()));
+                        unit.getDeclarationKeywordFriendlyName().toLowerCase()));
     }
     
     protected void intro(final J2AdocUnit unit, final StructuralNode parent) {
@@ -105,7 +110,8 @@ implements UnitFormatter {
         
         val ul = getMemberDescriptionContainer(parent);
         
-        unit.streamEnumConstantDeclarations()
+        
+        unit.getTypeDeclaration().getEnumConstantDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(ecd->{
             ecd.getJavadoc()
@@ -117,7 +123,7 @@ implements UnitFormatter {
             });
         });
         
-        unit.streamPublicFieldDeclarations()
+        unit.getTypeDeclaration().getPublicFieldDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(fd->{
             
@@ -131,7 +137,19 @@ implements UnitFormatter {
             
         });
         
-        unit.streamPublicConstructorDeclarations()
+        unit.getTypeDeclaration().getAnnotationMemberDeclarations().stream()
+        .filter(Javadocs::presentAndNotHidden)
+        .forEach(ecd->{
+            ecd.getJavadoc()
+            .ifPresent(javadoc->{
+                
+                appendMemberDescription(ul, 
+                                getConverter().annotationMemberDeclaration(ecd),
+                                getConverter().javadoc(javadoc));
+            });
+        });
+        
+        unit.getTypeDeclaration().getPublicConstructorDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(cd->{
             
@@ -145,7 +163,7 @@ implements UnitFormatter {
             
         });
         
-        unit.streamPublicMethodDeclarations()
+        unit.getTypeDeclaration().getPublicMethodDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(md->{
             
