@@ -24,36 +24,31 @@ import org.apache.isis.applib.util.ToString;
 import lombok.Getter;
 import lombok.Setter;
 
-// tag::refguide[]
+/**
+ * @since ? {@index}
+ */
 public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
-    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Property#domainEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.property.domain-event.post-for-default</tt>
      * configuration property.
      */
-    // tag::refguide[]
     public static class Default extends PropertyDomainEvent<Object, Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    // tag::refguide[]
     public static class Noop extends PropertyDomainEvent<Object, Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    // tag::refguide[]
     public static class Doop extends PropertyDomainEvent<Object, Object> {}
 
-    // end::refguide[]
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -64,16 +59,13 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public PropertyDomainEvent() {
     }
 
-    // end::refguide[]
     /**
      * The current (pre-modification) value of the property; populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
      * (but null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
-    // tag::refguide[]
     @Getter @Setter
     private T oldValue;
 
-    // end::refguide[]
     /**
      * The proposed (post-modification) value of the property; populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
      * (but null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
@@ -85,11 +77,9 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
      *     no sanity checks.
      * </p>
      */
-    // tag::refguide[]
     @Getter @Setter
     private T newValue;
 
-    // end::refguide[]
 
 
 
@@ -107,7 +97,5 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
         return toString.toString(this);
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

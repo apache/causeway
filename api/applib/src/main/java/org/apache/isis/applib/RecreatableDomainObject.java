@@ -27,10 +27,8 @@ package org.apache.isis.applib;
  *      Objects that are view models (logically belonging to the UI/application layer) should instead implement
  *      {@link org.apache.isis.applib.ViewModel}.
  * </p>
-
+ * @since ? {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 public interface RecreatableDomainObject {
 
     /**

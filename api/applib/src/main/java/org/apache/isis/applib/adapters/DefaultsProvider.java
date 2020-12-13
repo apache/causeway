@@ -44,16 +44,13 @@ package org.apache.isis.applib.adapters;
  * @see Parser
  * @see EncoderDecoder
  * @see ValueSemanticsProvider
+ * @since ? {@index}
  */
-// tag::refguide[]
 public interface DefaultsProvider<T> {
 
-    // tag::refguide[]
     /**
      * The default, if any (as a pojo).
      */
     T getDefaultValue();
-    // tag::refguide[]
 
 }
-// end::refguide[]

@@ -38,9 +38,8 @@ import org.apache.isis.commons.internal.functions._Functions;
  * @see RecoverableException
  * @see ApplicationException
  * @see FatalException
+ * @since 1.x {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 public class NonRecoverableException extends RuntimeException implements TranslatableException {
 
     private static final long serialVersionUID = 1L;

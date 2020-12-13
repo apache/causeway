@@ -60,6 +60,9 @@ import static org.apache.isis.commons.internal.collections._Maps.entry;
 
 import lombok.val;
 
+/**
+ * @since ? {@index}
+ */
 public final class CommonDtoUtils {
 
     // -- PARAM_DTO_TO_NAME, PARAM_DTO_TO_TYPE

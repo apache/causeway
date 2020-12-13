@@ -21,8 +21,8 @@ package org.apache.isis.applib.adapters;
 
 /**
  * Indicates that encoding or decoding has failed.
+ * @since ? {@index}
  */
-// tag::refguide[]
 public class EncodingException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
@@ -43,4 +43,3 @@ public class EncodingException extends RuntimeException {
     }
 
 }
-// end::refguide[]

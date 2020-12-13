@@ -31,10 +31,8 @@ import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Immutable value type holding pre-rendered HTML.
- *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 @Value(semanticsProviderName = 
         "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support

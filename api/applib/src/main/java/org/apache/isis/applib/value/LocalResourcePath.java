@@ -32,9 +32,8 @@ import lombok.NonNull;
 
 /**
  * Represents a local resource path, typically a relative path originating at this web-app's root or context-root.
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support

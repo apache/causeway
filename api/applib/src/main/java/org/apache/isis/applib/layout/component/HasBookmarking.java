@@ -22,6 +22,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface HasBookmarking {
     @XmlAttribute(required = false)
     BookmarkPolicy getBookmarking();

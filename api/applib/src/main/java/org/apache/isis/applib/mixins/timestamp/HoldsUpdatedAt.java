@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib.mixins.timestamp;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface HoldsUpdatedAt {
 
     void setUpdatedAt(java.sql.Timestamp updatedAt);

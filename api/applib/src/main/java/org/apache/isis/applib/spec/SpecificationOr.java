@@ -42,8 +42,8 @@ import org.apache.isis.applib.util.ReasonBuffer;
  *
  * @see SpecificationAnd
  * @see SpecificationNot
+ * @since ? {@index}
  */
-// tag::refguide[]
 public abstract class SpecificationOr implements Specification {
 
     private final Specification[] specifications;
@@ -67,4 +67,3 @@ public abstract class SpecificationOr implements Specification {
     }
 
 }
-// end::refguide[]

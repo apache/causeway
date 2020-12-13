@@ -26,6 +26,7 @@ import java.io.Serializable;
  * Although implements {@link Query} and thus is intended to be (and indeed is)
  * {@link Serializable}, it will be converted into a <tt>PersistenceQuery</tt>
  * in the runtime for remoting purposes.
+ * @since ? {@index}
  */
 public class QueryFindAllInstances<T> extends QueryAbstract<T> {
 

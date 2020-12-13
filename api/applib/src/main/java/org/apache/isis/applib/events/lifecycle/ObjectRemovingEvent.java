@@ -18,36 +18,31 @@
  */
 package org.apache.isis.applib.events.lifecycle;
 
-// tag::refguide[]
+/**
+ * @since ? {@index}
+ */
 public abstract class ObjectRemovingEvent<S> extends AbstractLifecycleEvent<S> {
 
-    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObject#removingLifecycleEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.removing-lifecycle-event.post-for-default</tt>
      * configuration property.
      */
-    // tag::refguide[]
     public static class Default extends ObjectRemovingEvent<Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    // tag::refguide[]
     public static class Noop extends ObjectRemovingEvent<Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    // tag::refguide[]
     public static class Doop extends ObjectRemovingEvent<Object> {}
 
-    // end::refguide[]
 
     public ObjectRemovingEvent() {
     }
@@ -56,7 +51,5 @@ public abstract class ObjectRemovingEvent<S> extends AbstractLifecycleEvent<S> {
         super(source);
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

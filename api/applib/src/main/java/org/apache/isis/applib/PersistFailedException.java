@@ -30,9 +30,8 @@ package org.apache.isis.applib;
  *
  * @see NonRecoverableException
  * @see RecoverableException
+ * @since 1.x {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 public class PersistFailedException extends NonRecoverableException {
 
     private static final long serialVersionUID = 1L;

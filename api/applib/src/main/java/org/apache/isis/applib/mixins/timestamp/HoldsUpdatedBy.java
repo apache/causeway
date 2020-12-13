@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib.mixins.timestamp;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface HoldsUpdatedBy {
 
     void setUpdatedBy(String updatedBy);

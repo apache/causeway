@@ -44,41 +44,32 @@ import org.apache.isis.applib.services.repository.RepositoryService;
  *
  * Note that the predicate is applied within the {@link RepositoryService}
  * (ie client-side) rather than being pushed back to the object store.
+ * @since ? {@index}
  */
-// tag::refguide[]
 public interface Query<T> extends Serializable {
 
-    // end::refguide[]
     /**
      * The {@link Class} of the objects returned by this query.
      */
-    // tag::refguide[]
     Class<T> getResultType();
 
-    // end::refguide[]
     /**
      * A human-readable representation of this query and its values.
      */
-    // tag::refguide[]
     String getDescription();
 
-    // end::refguide[]
     /**
      * The start index into the set table
      *
      * @return
      */
-    // tag::refguide[]
     long getStart();
 
-    // end::refguide[]
     /**
      * The number of items to return, starting at {@link #getStart()}
      *
      * @return
      */
-    // tag::refguide[]
     long getCount();
 
 }
-// end::refguide[]

@@ -30,9 +30,8 @@ package org.apache.isis.applib;
  *
  * @see NonRecoverableException
  * @see RecoverableException
+ * @since ? {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 public class RepositoryException extends NonRecoverableException {
 
     private static final long serialVersionUID = 1L;

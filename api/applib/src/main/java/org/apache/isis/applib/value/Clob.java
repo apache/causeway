@@ -35,8 +35,9 @@ import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 
-// tag::refguide[]
-// end::refguide[]
+/**
+ * @since 1.x {@index}
+ */
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider")
 @XmlJavaTypeAdapter(Clob.JaxbToStringAdapter.class)   // for JAXB view model support

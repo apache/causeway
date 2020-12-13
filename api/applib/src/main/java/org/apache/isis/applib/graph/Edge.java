@@ -21,11 +21,10 @@ package org.apache.isis.applib.graph;
 /**
  * Fundamental building block for graph structures. 
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  *
  * @param <T> type constraint for values contained by this edge's vertices
  */
-// tag::refguide[]
 public interface Edge<T> {
 
     Vertex<T> getFrom();
@@ -33,4 +32,3 @@ public interface Edge<T> {
     Vertex<T> getTo();
 
 }
-// end::refguide[]

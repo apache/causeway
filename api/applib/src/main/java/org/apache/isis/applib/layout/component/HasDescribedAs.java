@@ -20,6 +20,9 @@ package org.apache.isis.applib.layout.component;
 
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface HasDescribedAs {
 
     @XmlElement(required = false)

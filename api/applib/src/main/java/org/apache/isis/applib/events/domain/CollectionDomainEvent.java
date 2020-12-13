@@ -23,36 +23,31 @@ import org.apache.isis.applib.util.ToString;
 
 import lombok.Getter;
 
-// tag::refguide[]
+/**
+ * @since ? {@index}
+ */
 public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
-    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.collection.domain-event.post-for-default</tt>
      * configuration property.
      */
-    // tag::refguide[]
     public static class Default extends CollectionDomainEvent<Object, Object> { }
 
-    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    // tag::refguide[]
     public static class Noop extends CollectionDomainEvent<Object, Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    // tag::refguide[]
     public static class Doop extends CollectionDomainEvent<Object, Object> {}
 
-    // end::refguide[]
 
     /**
      * If used then the framework will set state via (non-API) setters.
@@ -70,36 +65,29 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
      * The proposed reference to either add or remove (per {@link #getOf()}), populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE}
      * and subsequent phases (is null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
-    // tag::refguide[]
     @Getter
     private T value;
 
     public static enum Of {
-        // end::refguide[]
         /**
          * The collection is being accessed
          * ({@link Phase#HIDE hide} and
          * {@link Phase#DISABLE disable}) checks.
          */
-        // tag::refguide[]
         ACCESS,
 
-        // end::refguide[]
         /**
          * The collection is being added to
          * ({@link Phase#VALIDATE validity} check and
          * {@link Phase#EXECUTED execution}).
          */
-        // tag::refguide[]
         ADD_TO,
 
-        // end::refguide[]
         /**
          * The collection is being removed from
          * ({@link Phase#VALIDATE validity} check and
          * {@link Phase#EXECUTED execution}).
          */
-        // tag::refguide[]
         REMOVE_FROM
 
     }
@@ -107,7 +95,6 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     @Getter
     private Of of;
 
-    // end::refguide[]
     /**
      * Not API, set by the framework.
      */
@@ -137,7 +124,5 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
         return toString.toString(this);
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

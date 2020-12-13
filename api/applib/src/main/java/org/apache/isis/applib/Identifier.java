@@ -28,8 +28,9 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 
-// tag::refguide[]
-// end::refguide[]
+/**
+ * @since 1.x {@index}
+ */
 public class Identifier implements Comparable<Identifier> {
 
     private static final List<String> EMPTY_LIST_OF_STRINGS = Collections.<String> emptyList();

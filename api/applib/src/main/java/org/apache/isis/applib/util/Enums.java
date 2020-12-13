@@ -25,6 +25,9 @@ import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * @since ? {@index}
+ */
 @UtilityClass
 public final class Enums {
 
