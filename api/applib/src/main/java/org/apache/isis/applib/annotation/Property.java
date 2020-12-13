@@ -39,6 +39,7 @@ import org.apache.isis.applib.value.Clob;
 
 /**
  * Domain semantics for domain object property.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

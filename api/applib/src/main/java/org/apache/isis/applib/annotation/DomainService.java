@@ -40,6 +40,7 @@ import org.springframework.stereotype.Service;
  * annotated type. 
  * For more details see {@link org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  * 
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

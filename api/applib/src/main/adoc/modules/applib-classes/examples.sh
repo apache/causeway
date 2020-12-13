@@ -20,6 +20,12 @@ SRC_MAIN_JAVA=../../../java
 SCRIPT_DIR=$( dirname "$0" )
 cd $SCRIPT_DIR || exit 1
 
+echo "==================="
+echo "= MIGRATION NOTES ="
+echo "==================="
+echo "the java file examples for antora were migrated to use the global document index" 
+echo "hence this script is a no-op"
+exit 0
 
 
 SRC_APPLIB=$SRC_MAIN_JAVA/org/apache/isis/applib

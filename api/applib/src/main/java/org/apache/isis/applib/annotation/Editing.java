@@ -20,6 +20,7 @@ package org.apache.isis.applib.annotation;
 
 /**
  * The available policies for editing properties and collections.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 public enum Editing {

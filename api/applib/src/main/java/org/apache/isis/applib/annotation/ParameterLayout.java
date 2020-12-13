@@ -27,7 +27,8 @@ import java.lang.annotation.Target;
 
 /**
  * Layout hints for action parameters.
- *
+ * 
+ * @since 1.x {@index}
  * @see org.apache.isis.applib.annotation.PropertyLayout
  */
 // tag::refguide[]

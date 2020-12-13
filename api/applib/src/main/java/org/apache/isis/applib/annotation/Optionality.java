@@ -20,6 +20,7 @@ package org.apache.isis.applib.annotation;
 
 /**
  * Whether the property or parameter is optional or is required (aka mandatory).
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 public enum Optionality {

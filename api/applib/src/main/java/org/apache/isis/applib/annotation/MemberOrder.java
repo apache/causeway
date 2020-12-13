@@ -32,6 +32,7 @@ import java.lang.annotation.Target;
  *     An alternative is to use the <code>Xxx.layout.xml</code> file, 
  *     where <code>Xxx</code> is the domain object name.
  * </p>
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

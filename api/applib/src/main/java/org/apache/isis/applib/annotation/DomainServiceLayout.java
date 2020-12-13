@@ -31,6 +31,8 @@ import java.lang.annotation.Target;
  * <p>
  * Also indicates the name, and menu ordering UI hints.
  * </p>
+ * 
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

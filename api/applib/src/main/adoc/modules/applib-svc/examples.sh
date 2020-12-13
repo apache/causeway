@@ -23,7 +23,7 @@ cd $SCRIPT_DIR || exit 1
 echo "==================="
 echo "= MIGRATION NOTES ="
 echo "==================="
-echo "the java file list (below) was migrated to use the global document index instead (module system overview)"
+echo "the java file examples for antora were migrated to use the global document index" 
 echo "hence this script is a no-op"
 exit 0
 

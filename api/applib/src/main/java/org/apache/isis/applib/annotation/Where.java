@@ -39,6 +39,7 @@ import org.apache.isis.applib.util.Enums;
  * <p>
  * This enum is also used internally within the framework.  When rendering an element,
  * the framework developer should only use those values that represent concrete locations.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @XmlType(

@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *     Note that {@link #EXTERNAL_ENTITY} and {@link #VIEW_MODEL} are implemented identically internally; the
  *     difference is one of intent.
  * </p>
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 public enum Nature {

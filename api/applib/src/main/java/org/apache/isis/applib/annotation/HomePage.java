@@ -33,6 +33,7 @@ import java.lang.annotation.Target;
  *     Typically it will use injected repositories in order to display a dashboard, and offer actions
  *     to traverse or operate on the rendered state.
  * </p>
+ * @since 2.0 {@index}
  */
 // tag::refguide[]
 @Inherited

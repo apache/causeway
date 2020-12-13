@@ -31,6 +31,7 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 
 /**
  * Layout hints for actions.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

@@ -28,6 +28,8 @@ import java.util.Comparator;
 
 /**
  * Layout hints for collections.
+ * 
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

@@ -23,6 +23,10 @@ import org.springframework.core.Ordered;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * 
+ * @since 1.x {@index}
+ */
 // tag::refguide[]
 @UtilityClass
 public class OrderPrecedence {

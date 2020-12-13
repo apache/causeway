@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * Whether a component is unchanging and so does not require repainting.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @XmlType(

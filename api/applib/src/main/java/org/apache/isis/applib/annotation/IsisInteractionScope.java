@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Scope;
  * <p>{@code @IsisInteractionScope} may be used as a meta-annotation to create custom
  * composed annotations.
  *
- * @since 2.0
+ * @since 2.0 {@index}
  * @see org.springframework.web.context.annotation.SessionScope
  * @see org.springframework.web.context.annotation.ApplicationScope
  * @see org.springframework.context.annotation.Scope

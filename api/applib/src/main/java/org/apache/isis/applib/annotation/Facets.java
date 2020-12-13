@@ -32,6 +32,7 @@ import java.lang.annotation.Target;
  * <p>
  * At least one named factory (as per {@link #facetFactoryNames()}) or one class
  * factory (as per {@link #facetFactoryClasses()}) should be specified.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

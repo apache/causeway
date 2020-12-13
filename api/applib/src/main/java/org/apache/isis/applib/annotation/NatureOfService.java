@@ -20,7 +20,7 @@ package org.apache.isis.applib.annotation;
 
 /**
  * The different sorts of domain services recognized by Isis, as specified in {@link DomainService#nature()}
- * 
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 public enum NatureOfService {

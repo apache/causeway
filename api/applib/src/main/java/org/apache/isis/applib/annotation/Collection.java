@@ -29,6 +29,8 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 
 /**
  * Domain semantics for domain object collection.
+ * 
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

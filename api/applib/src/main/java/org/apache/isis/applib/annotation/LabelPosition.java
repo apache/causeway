@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * The positioning of a label for a property or action parameter.
  *
+ * @since 1.x {@index}
  * @see org.apache.isis.applib.annotation.PropertyLayout
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */

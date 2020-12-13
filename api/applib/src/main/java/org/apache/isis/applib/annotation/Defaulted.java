@@ -47,6 +47,7 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
  * <p>
  *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
  * </p>
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

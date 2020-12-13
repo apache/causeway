@@ -48,6 +48,7 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
  * the flyweight pattern). In addition, the {@link EqualByContent} semantic
  * means that we needn't care whether value types are being shared or not.
  *
+ * @since 1.x {@index}
  * @see EqualByContent
  *
  * <p>

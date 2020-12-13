@@ -27,6 +27,7 @@ import java.lang.annotation.Target;
 /**
  * A title annotation used to annotate methods used to construct the title of a
  * domain object instance. It is used as a marker.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Retention(RetentionPolicy.RUNTIME)

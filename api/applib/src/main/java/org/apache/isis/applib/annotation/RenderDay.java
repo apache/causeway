@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * How to render days.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @XmlType(

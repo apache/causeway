@@ -33,6 +33,9 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 
 /**
  * Layout hints for domain objects.
+ * 
+ * 
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @Inherited

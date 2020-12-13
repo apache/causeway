@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * The available policies for rendering the next page if the result is the same as the target
  * (in other words, an action that returns "this").
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 @XmlType(

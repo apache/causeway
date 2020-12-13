@@ -21,6 +21,7 @@ package org.apache.isis.applib.annotation;
 import org.apache.isis.applib.util.Enums;
 
 /**
+ * @since 1.x {@index}
  * @see <a href="https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
  */
 // tag::refguide[]

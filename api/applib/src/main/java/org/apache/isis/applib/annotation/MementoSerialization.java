@@ -20,6 +20,7 @@ package org.apache.isis.applib.annotation;
 
 /**
  * Whether the property or collection is included if the domain object is serialized into a memento.
+ * @since 1.x {@index}
  */
 // tag::refguide[]
 public enum MementoSerialization {

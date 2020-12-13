@@ -21,6 +21,10 @@ package org.apache.isis.applib.annotation;
 
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * 
+ * @since 1.x {@index}
+ */
 // tag::refguide[]
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
