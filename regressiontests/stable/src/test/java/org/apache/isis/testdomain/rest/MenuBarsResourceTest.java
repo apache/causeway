@@ -101,7 +101,7 @@ class MenuBarsResourceTest {
             }
         });
         
-        val blobDemoMenu = blobDemoMenuRef.getValue();
+        val blobDemoMenu = blobDemoMenuRef.getValue().orElse(null);
         
         assertNotNull(blobDemoMenu);
         
