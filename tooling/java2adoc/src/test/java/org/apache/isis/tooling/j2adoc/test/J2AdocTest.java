@@ -60,7 +60,8 @@ class J2AdocTest {
         .stream()
         //.filter(source->source.toString().contains("ExecutionMode"))
         //.filter(source->source.toString().contains("FactoryService"))
-        .filter(source->source.toString().contains("Action"))
+        //.filter(source->source.toString().contains("Action"))
+        .filter(source->source.toString().contains("SudoService"))
         //.peek(source->System.out.println("parsing source: " + source))
         .forEach(j2aContext::add);
         

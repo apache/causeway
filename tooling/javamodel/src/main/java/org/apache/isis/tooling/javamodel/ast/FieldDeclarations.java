@@ -18,27 +18,47 @@
  */
 package org.apache.isis.tooling.javamodel.ast;
 
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
 import org.apache.isis.commons.collections.Can;
 
 import lombok.NonNull;
+import lombok.val;
 
 //TODO effective public might require more context
 public final class FieldDeclarations {
+    
+    private static PrettyPrinterConfiguration printingConf = new PrettyPrinterConfiguration();
+    static {
+        printingConf.setPrintJavadoc(false);
+    }
     
     /**
      * Returns given {@link FieldDeclaration} as normal text, without formatting.
      */
     public static String asNormalized(final @NonNull FieldDeclaration fd) {
-        return fd.toString().trim(); //TODO might miss the fields type here
+        
+        //suppress initializer printing (that is assignments)
+        val clone = fd.clone();
+        clone.getVariables().stream()
+                .forEach(vd->vd.setInitializer((Expression)null));
+        
+        return clone.toString(printingConf).trim();
     }
     
     public static String asNormalizedName(final @NonNull FieldDeclaration fd) {
-        return fd.toString().trim(); //TODO might have the fields type to remove here
+        return fd.getVariables().stream()
+                .map(VariableDeclarator::getNameAsString)
+                .collect(Collectors.joining(", "))
+                .trim();
     }
     
     public static Can<TypeParameter> getTypeParameters(final @NonNull FieldDeclaration fd) {
