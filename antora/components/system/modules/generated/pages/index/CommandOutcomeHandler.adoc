@@ -6,29 +6,7 @@
 ----
 interface CommandOutcomeHandler {
 
-  CommandOutcomeHandler NULL = new CommandOutcomeHandler() {
-
-    @Override
-    public Timestamp getStartedAt() {
-        return null;
-    }
-
-    @Override
-    public void setStartedAt(Timestamp startedAt) {
-    }
-
-    @Override
-    public void setCompletedAt(Timestamp completedAt) {
-    }
-
-    @Override
-    public void setResult(Bookmark resultBookmark) {
-    }
-
-    @Override
-    public void setException(Throwable throwable) {
-    }
-};
+  CommandOutcomeHandler NULL;
 
   Timestamp getStartedAt()
 

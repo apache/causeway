@@ -1,0 +1,71 @@
+= Nature : _enum_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The different sorts of domain objects recognized by Isis.
+
+Note that _#EXTERNAL_ENTITY_ and _#VIEW_MODEL_ are implemented identically internally; the difference is one of intent.
+
+.Java Sources
+[source,java]
+----
+enum Nature {
+
+  NOT_SPECIFIED // <.>
+
+  JDO_ENTITY // <.>
+
+  JPA_ENTITY // <.>
+
+  VIEW_MODEL // <.>
+
+  MIXIN // <.>
+
+  BEAN // <.>
+
+  boolean isEntity()
+}
+----
+
+<.> `[teal]#*_NOT_SPECIFIED_*#`
++
+--
+The default; allows the programmer to combine `@DomainObject` annotation with the _ViewModel_ annotation, or the _XmlRootElement_ annotation, or by implementing the _org.apache.isis.applib.ViewModel_ interface.
+--
+<.> `[teal]#*_JDO_ENTITY_*#`
++
+--
+A domain entity whose persistence is managed internally by Isis, using JDO as the persistence implementation. Domain entities are considered to be part of the domain model layer.
+
+Domain entities are considered to be part of the domain model layer.
+
+Currently implies no additional semantics other than documentation.
+--
+<.> `[teal]#*_JPA_ENTITY_*#`
++
+--
+A domain entity whose persistence is managed internally by Isis, using JPA as the persistence implementation. Domain entities are considered to be part of the domain model layer.
+
+Domain entities are considered to be part of the domain model layer.
+
+Currently implies no additional semantics other than documentation.
+--
+<.> `[teal]#*_VIEW_MODEL_*#`
++
+--
+An object that is conceptually part of the application layer, and which surfaces behavior and/or state that is aggregate of one or more domain entity.
+
+The identity of a view model is determined solely by the state of object's properties (that have not been set to be ignored using _org.apache.isis.applib.annotation.Property#notPersisted()_ ). Using this nature should be considered exactly equivalent to annotating with _ViewModel_ .
+
+Note that collections are ignored; if their state is required to fully identify the view model, define the view model using the JAXB _XmlRootElement_ annotation instead (where the object's state is serialized to an arbitrarily deep graph of data, with references to persistent entities transparently resolved to<oid-dto>elements).
+--
+<.> `[teal]#*_MIXIN_*#`
++
+--
+An object that acts as a mix-in to some other object, contributing behavior and/or derived state based on the domain object.
+--
+<.> `[teal]#*_BEAN_*#`
++
+--
+An object that is entirely managed by the underlying IoC container.
+--
+

@@ -6,46 +6,15 @@
 ----
 enum TransactionState {
 
-  /**
- * No transaction exists.
- */
-NONE // <.>
+  NONE // <.>
 
-  /**
- * Started, still in progress.
- * <p/>
- * <p/>
- * May flush, commit or abort.
- */
-IN_PROGRESS // <.>
+  IN_PROGRESS // <.>
 
-  /**
- * Started, but has hit an exception.
- * <p/>
- * <p/>
- * May not flush or commit (will throw an {@link IllegalStateException}),
- * can only abort.
- * <p/>
- * <p/>
- * Similar to <tt>setRollbackOnly</tt> in EJBs.
- */
-MUST_ABORT // <.>
+  MUST_ABORT // <.>
 
-  /**
- * Completed, having successfully committed.
- * <p/>
- * <p/>
- * May not flush or abort or commit (will throw {@link IllegalStateException}).
- */
-COMMITTED // <.>
+  COMMITTED // <.>
 
-  /**
- * Completed, having aborted.
- * <p/>
- * <p/>
- * May not flush, commit or abort (will throw {@link IllegalStateException}).
- */
-ABORTED // <.>
+  ABORTED // <.>
 
   boolean canFlush() // <.>
 

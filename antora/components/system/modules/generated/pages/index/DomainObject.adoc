@@ -1,0 +1,188 @@
+= DomainObject : _annotation_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Domain semantics for domain objects (entities and view models; for services see _org.apache.isis.applib.annotation.DomainService_ ).
+
+.Java Sources
+[source,java]
+----
+@interface DomainObject {
+
+  Class<?> autoCompleteRepository() default Object.class; // <.>
+
+  String autoCompleteAction() default "autoComplete"; // <.>
+
+  Bounding bounding() default Bounding.NOT_SPECIFIED; // <.>
+
+  Editing editing() default Editing.NOT_SPECIFIED; // <.>
+
+  String editingDisabledReason() default "Disabled"; // <.>
+
+  Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED; // <.>
+
+  String mixinMethod() default "$$"; // <.>
+
+  Nature nature() default Nature.NOT_SPECIFIED; // <.>
+
+  String objectType() default ""; // <.>
+
+  Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class; // <.>
+
+  Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class; // <.>
+
+  Class<? extends ObjectPersistedEvent<?>> persistedLifecycleEvent() default ObjectPersistedEvent.Default.class; // <.>
+
+  Class<? extends ObjectLoadedEvent<?>> loadedLifecycleEvent() default ObjectLoadedEvent.Default.class; // <.>
+
+  Class<? extends ObjectUpdatingEvent<?>> updatingLifecycleEvent() default ObjectUpdatingEvent.Default.class; // <.>
+
+  Class<? extends ObjectUpdatedEvent<?>> updatedLifecycleEvent() default ObjectUpdatedEvent.Default.class; // <.>
+
+  Class<? extends ObjectRemovingEvent<?>> removingLifecycleEvent() default ObjectRemovingEvent.Default.class; // <.>
+
+  Class<? extends ActionDomainEvent<?>> actionDomainEvent() default ActionDomainEvent.Default.class; // <.>
+
+  Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEvent() default PropertyDomainEvent.Default.class; // <.>
+
+  Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEvent() default CollectionDomainEvent.Default.class; // <.>
+}
+----
+
+<.> `[teal]#*_autoCompleteRepository_*#` : `Class<?>`
++
+--
+The class of the domain service that provides anautoComplete(String)method.
+
+It is sufficient to specify an interface rather than a concrete type.
+--
+<.> `[teal]#*_autoCompleteAction_*#` : `String`
++
+--
+The method (despite its name, not necessarily an action) to use in order to perform the auto-complete search (defaults to "autoComplete").
+
+The method is required to accept a single string parameter, and must return a list of the domain type.
+--
+<.> `[teal]#*_bounding_*#` : `xref:system:generated:index/Bounding.adoc[Bounding]`
++
+--
+Indicates that the class has a bounded, or finite, set of instances.
+
+Takes precedence over auto-complete.
+
+Note: this replaces bounded=true|false prior to v2.x
+--
+<.> `[teal]#*_editing_*#` : `xref:system:generated:index/Editing.adoc[Editing]`
++
+--
+Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
+
+Note that non-editable objects can nevertheless have actions invoked upon them.
+--
+<.> `[teal]#*_editingDisabledReason_*#` : `String`
++
+--
+If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
+--
+<.> `[teal]#*_entityChangePublishing_*#` : `xref:system:generated:index/Publishing.adoc[Publishing]`
++
+--
+Whether entity changes should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be dispatched to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
+--
+<.> `[teal]#*_mixinMethod_*#` : `String`
++
+--
+Equivalent to _Mixin#method()_ .
+
+Applicable only if _#nature()_ is _Nature#MIXIN_ .
+--
+<.> `[teal]#*_nature_*#` : `xref:system:generated:index/Nature.adoc[Nature]`
++
+--
+The nature of this domain object.
+--
+<.> `[teal]#*_objectType_*#` : `String`
++
+--
+Provides a unique abbreviation for the object type, eg "customer.Customer" for Customer.
+
+This value, if specified, is used in the serialized form of the object's OID. An OID is used by the framework to unique identify an object over time (same concept as a URN).
+--
+<.> `[teal]#*_createdLifecycleEvent_*#` : `Class<? extends ObjectCreatedEvent<?>>`
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent_ .
+
+This subclass must provide a no-arg constructor; the fields are set reflectively.
+--
+<.> `[teal]#*_persistingLifecycleEvent_*#` : `Class<? extends ObjectPersistingEvent<?>>`
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent_ .
+
+This subclass must provide a no-arg constructor; the fields are set reflectively.
+--
+<.> `[teal]#*_persistedLifecycleEvent_*#` : `Class<? extends ObjectPersistedEvent<?>>`
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent_ .
+
+This subclass must provide a no-arg constructor; the fields are set reflectively.
+--
+<.> `[teal]#*_loadedLifecycleEvent_*#` : `Class<? extends ObjectLoadedEvent<?>>`
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent_ .
+
+This subclass must provide a no-arg constructor; the fields are set reflectively.
+--
+<.> `[teal]#*_updatingLifecycleEvent_*#` : `Class<? extends ObjectUpdatingEvent<?>>`
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent_ .
+
+This subclass must provide a no-arg constructor; the fields are set reflectively.
+--
+<.> `[teal]#*_updatedLifecycleEvent_*#` : `Class<? extends ObjectUpdatedEvent<?>>`
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent_ .
+
+This subclass must provide a no-arg constructor; the fields are set reflectively.
+--
+<.> `[teal]#*_removingLifecycleEvent_*#` : `Class<? extends ObjectRemovingEvent<?>>`
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent_ .
+
+This subclass must provide a no-arg constructor; the fields are set reflectively.
+--
+<.> `[teal]#*_actionDomainEvent_*#` : `Class<? extends ActionDomainEvent<?>>`
++
+--
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) _ActionDomainEvent_ .
+
+For example:@DomainObject(actionDomainEvent=SomeObject.GenericActionDomainEvent.class) public class SomeObject{ public static class GenericActionDomainEvent extends ActionDomainEvent<Object> { ... } public void changeStartDate(final Date startDate) { ...} ... }
+
+This will result in all actions as a more specific type to use) to emit this event.
+
+This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
+--
+<.> `[teal]#*_propertyDomainEvent_*#` : `Class<? extends PropertyDomainEvent<?,?>>`
++
+--
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) _PropertyDomainEvent_ .
+
+For example:@DomainObject(propertyDomainEvent=SomeObject.GenericPropertyDomainEvent.class) public class SomeObject{ public LocalDate getStartDate() { ...} }
+
+This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
+--
+<.> `[teal]#*_collectionDomainEvent_*#` : `Class<? extends CollectionDomainEvent<?,?>>`
++
+--
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _CollectionDomainEvent_ .
+
+For example:@DomainObject(collectionDomainEvent=Order.GenericCollectionDomainEvent.class) public class Order { public SortedSet<OrderLine> getLineItems() { ...} }
+
+This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
+--
+

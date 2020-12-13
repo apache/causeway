@@ -8,55 +8,21 @@ Top level object classification.
 ----
 enum BeanSort {
 
-  /**
- * Stateful object, with a state that can be marshaled and unmarshaled.
- * <p>
- * Includes classes annotated with {@code @DomainObject}, when *not* associated
- * with a persistence layer. <p>  see also {@link #ENTITY}
- */
-VIEW_MODEL // <.>
+  VIEW_MODEL // <.>
 
-  /**
- * Persistable object, associated with a persistence layer/context.
- * <p>
- * Includes classes annotated with {@code @DomainObject}, when associated
- * with a persistence layer. <p>  see also {@link #VIEW_MODEL}
- */
-ENTITY_JDO // <.>
+  ENTITY_JDO // <.>
 
   ENTITY_JPA
 
-  /**
- * Injectable object, associated with a lifecycle context
- * (application-scoped, request-scoped, ...).
- * <p>
- * to be introspected: YES
- */
-MANAGED_BEAN_CONTRIBUTING // <.>
+  MANAGED_BEAN_CONTRIBUTING // <.>
 
-  /**
- * Injectable object, associated with a lifecycle context
- * (application-scoped, request-scoped, ...).
- * <p>
- * to be introspected: NO
- */
-MANAGED_BEAN_NOT_CONTRIBUTING // <.>
+  MANAGED_BEAN_NOT_CONTRIBUTING // <.>
 
-  /**
- * Object associated with an 'entity' or 'bean' to act as contributer of
- * domain actions or properties. Might also be stateful similar to VIEW_MODEL.
- */
-MIXIN // <.>
+  MIXIN // <.>
 
-  /**
- * Immutable, serializable object.
- */
-VALUE // <.>
+  VALUE // <.>
 
-  /**
- * Container of objects.
- */
-COLLECTION // <.>
+  COLLECTION // <.>
 
   UNKNOWN
 

@@ -61,20 +61,20 @@ Returns a default grid; eg where none can be loaded using _#load(Class)_ .
 --
 Returns a normalized grid for the domain class obtained previously using _#load(Class)_ .
 
-If a "normalized" grid is persisted as thelayout.xml, then the expectation is that the _MemberOrder_ annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( _DomainObjectLayout_ , _ActionLayout_ , _PropertyLayout_ and _CollectionLayout_ ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within thelayout.xmlfile takes precedence over any annotations.
+If a "normalized" grid is persisted as thelayout.xml, then the expectation is that the xref:system:generated:index/MemberOrder.adoc[MemberOrder] annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( xref:system:generated:index/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/CollectionLayout.adoc[CollectionLayout] ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within thelayout.xmlfile takes precedence over any annotations.
 --
 <.> `[teal]#*complete*#(Grid grid)` : `Grid`
 +
 --
-Modifies the provided _Grid_ with additional metadata, broadly speaking corresponding to the _DomainObjectLayout_ , _ActionLayout_ , _PropertyLayout_ and _CollectionLayout_ .
+Modifies the provided _Grid_ with additional metadata, broadly speaking corresponding to the xref:system:generated:index/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/CollectionLayout.adoc[CollectionLayout] .
 
-If a "completed" grid is persisted as thelayout.xml, then there should be no need for any of the layout annotations, nor the _MemberOrder_ annotations, to be required in the domain class itself.
+If a "completed" grid is persisted as thelayout.xml, then there should be no need for any of the layout annotations, nor the xref:system:generated:index/MemberOrder.adoc[MemberOrder] annotations, to be required in the domain class itself.
 --
 <.> `[teal]#*minimal*#(Grid grid)` : `Grid`
 +
 --
 Modifies the provided _Grid_ , removing all metadata except the basic grid structure.
 
-If a "minimal" grid is persisted as thelayout.xml, then the expectation is that most of the layout annotations ( _DomainObjectLayout_ , _ActionLayout_ , _PropertyLayout_ , _CollectionLayout_ , but also _MemberOrder_ ) will still be retained in the domain class code.
+If a "minimal" grid is persisted as thelayout.xml, then the expectation is that most of the layout annotations ( xref:system:generated:index/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/PropertyLayout.adoc[PropertyLayout] , xref:system:generated:index/CollectionLayout.adoc[CollectionLayout] , but also xref:system:generated:index/MemberOrder.adoc[MemberOrder] ) will still be retained in the domain class code.
 --
 

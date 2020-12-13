@@ -8,10 +8,7 @@ Intended only for use by fixture scripts and integration tests, allows a block o
 ----
 interface SudoService {
 
-  /**
- * If included in the list of roles, then will disable security checks (can view and use all object members).
- */
-RoleMemento ACCESS_ALL_ROLE = new RoleMemento(SudoService.class.getName() + "#accessAll", "Sudo, can view and use all object members."); // <.>
+  RoleMemento ACCESS_ALL_ROLE; // <.>
 
   T call(UnaryOperator<ExecutionContext> sudoMapper, Callable<T> supplier) // <.>
 
@@ -19,10 +16,7 @@ RoleMemento ACCESS_ALL_ROLE = new RoleMemento(SudoService.class.getName() + "#ac
 }
 ----
 
-<.> `xref:system:generated:index/RoleMemento.adoc[RoleMemento] [teal]#*/**
- * If included in the list of roles, then will disable security checks (can view and use all object members).
- */
-RoleMemento ACCESS_ALL_ROLE = new RoleMemento(SudoService.class.getName() + "#accessAll", "Sudo, can view and use all object members.");*#`
+<.> `[teal]#*ACCESS_ALL_ROLE*#` : `xref:system:generated:index/RoleMemento.adoc[RoleMemento]`
 +
 --
 If included in the list of roles, then will disable security checks (can view and use all object members).
