@@ -78,7 +78,9 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-// tag::refguide[]
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isisRuntime.EntityChangeTrackerDefault")
 @Order(OrderPrecedence.EARLY)
@@ -94,8 +96,6 @@ implements
     HasEnlistedEntityPropertyChanges,
     HasEnlistedEntityChanges {
 
-    // end::refguide[]
-
     @Inject private EntityPropertyChangePublisher entityPropertyChangePublisher;
     @Inject private EntityChangesPublisher entityChangesPublisher;
     @Inject private EventBusService eventBusService;
@@ -107,7 +107,6 @@ implements
      * When {@link #getEntityAuditEntries()} is called, then this is cleared out and
      * {@link #changedObjectProperties} is non-null, containing the actual differences.
      */
-    // tag::refguide[]
     private final Map<AdapterAndProperty, PreAndPostValues> enlistedEntityPropertiesForAuditing = _Maps.newLinkedHashMap();
 
     /**
@@ -172,8 +171,6 @@ implements
 
         return true;
     }
-
-    // end::refguide[]
 
     /**
      * @apiNote intended to be called during pre-commit of a transaction by the framework internally
@@ -422,7 +419,5 @@ implements
         .map(propertyChangeRecord->EntityPropertyChangeFactory
                 .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord));
     }
-
-
 
 }

@@ -25,8 +25,9 @@ package org.apache.isis.commons.having;
  * <p>
  * Other services can then use this username as a means to contributed actions/collections to render such additional
  * information relating to the activities of the user.
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface HasUsername {
 
     /**
@@ -36,4 +37,3 @@ public interface HasUsername {
     String getUsername();
 
 }
-// end::refguide[]

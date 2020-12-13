@@ -22,17 +22,13 @@ import java.util.UUID;
 
 
 /**
- * @since 2.0
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface HasUniqueId {
 
-    // end::refguide[]
     /**
      * The unique identifier (a GUID) of the request/interaction/transaction.
      */
-    // tag::refguide[]
     UUID getUniqueId();
 
 }
-// end::refguide[]
