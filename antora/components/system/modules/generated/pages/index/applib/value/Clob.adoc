@@ -36,13 +36,13 @@ class Clob {
 }
 ----
 
-<.> `[teal]#*_of_*#(String name, CommonMimeType mimeType, CharSequence content)` : `xref:applib/value/Clob[Clob]`
+<.> `[teal]#*_of_*#(String name, CommonMimeType mimeType, CharSequence content)` : `xref:system:generated:index/applib/value/Clob.adoc.adoc[Clob]`
 +
 --
-Returns a new xref:applib/value/Clob[Clob] of given _name_ , _mimeType_ and _content_ .
+Returns a new xref:system:generated:index/applib/value/Clob.adoc.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
 
-_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:applib/value/Clob[Clob] has the appropriate extension as constraint by the given _mimeType_ .
+_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:system:generated:index/applib/value/Clob.adoc.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
 
-For more fine-grained control use one of the xref:applib/value/Clob[Clob] constructors directly.
+For more fine-grained control use one of the xref:system:generated:index/applib/value/Clob.adoc.adoc[Clob] constructors directly.
 --
 

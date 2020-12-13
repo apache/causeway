@@ -16,7 +16,7 @@ Also indicates whether the domain service acts as a repository for an entity, an
 }
 ----
 
-<.> `[teal]#*_nature_*#` : `xref:applib/annotation/NatureOfService[NatureOfService]`
+<.> `[teal]#*_nature_*#` : `xref:system:generated:index/applib/annotation/NatureOfService.adoc.adoc[NatureOfService]`
 +
 --
 The nature of this service, eg for menus, contributed actions, repository.

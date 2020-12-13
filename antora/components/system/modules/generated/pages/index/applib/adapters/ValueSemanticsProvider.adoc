@@ -3,7 +3,7 @@
 
 Provides a mechanism for providing a set of value semantics.
 
-This interface is used by xref:applib/annotation/Value[Value] to allow these semantics to be provided through a single point. Alternatively, xref:applib/annotation/Value[Value] supports this information being provided via the configuration files.
+This interface is used by xref:system:generated:index/applib/annotation/Value.adoc.adoc[Value] to allow these semantics to be provided through a single point. Alternatively, xref:system:generated:index/applib/annotation/Value.adoc.adoc[Value] supports this information being provided via the configuration files.
 
 Whatever the class that implements this interface, it must also expose either a `public` no-arg constructor, or (for implementations that also are `Facet` s) a `public` constructor that accepts a `FacetHolder` , and `IsisConfiguration` and a `ValueSemanticsProviderContext` . This constructor is then used by the framework to instantiate the object reflectively.
 
@@ -20,20 +20,20 @@ interface ValueSemanticsProvider {
 }
 ----
 
-<.> `[teal]#*getParser*#()` : `xref:applib/adapters/Parser[Parser]<T>`
+<.> `[teal]#*getParser*#()` : `xref:system:generated:index/applib/adapters/Parser.adoc.adoc[Parser]<T>`
 +
 --
-The xref:applib/adapters/Parser[Parser] , if any.
+The xref:system:generated:index/applib/adapters/Parser.adoc.adoc[Parser] , if any.
 --
-<.> `[teal]#*getEncoderDecoder*#()` : `xref:applib/adapters/EncoderDecoder[EncoderDecoder]<T>`
+<.> `[teal]#*getEncoderDecoder*#()` : `xref:system:generated:index/applib/adapters/EncoderDecoder.adoc.adoc[EncoderDecoder]<T>`
 +
 --
-The xref:applib/adapters/EncoderDecoder[EncoderDecoder] , if any.
+The xref:system:generated:index/applib/adapters/EncoderDecoder.adoc.adoc[EncoderDecoder] , if any.
 --
-<.> `[teal]#*getDefaultsProvider*#()` : `xref:applib/adapters/DefaultsProvider[DefaultsProvider]<T>`
+<.> `[teal]#*getDefaultsProvider*#()` : `xref:system:generated:index/applib/adapters/DefaultsProvider.adoc.adoc[DefaultsProvider]<T>`
 +
 --
-The xref:applib/adapters/DefaultsProvider[DefaultsProvider] , if any.
+The xref:system:generated:index/applib/adapters/DefaultsProvider.adoc.adoc[DefaultsProvider] , if any.
 
 If not `null` , implies that the value has (or may have) a default.
 --

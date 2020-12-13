@@ -9,7 +9,7 @@ This exception should only be thrown for "recoverable" exceptions, that is, thos
 
 The framework attempts to apply some heuristics; if the underlying Isis transaction has been aborted (for example as the result of a problem persisting some data) but then the application attempts to throw this exception, the exception will be promoted to a fatal exception.
 
-Note that this exception has identical semantics to xref:applib/RecoverableException[RecoverableException] , and can be considered a synonym.
+Note that this exception has identical semantics to xref:system:generated:index/applib/RecoverableException.adoc.adoc[RecoverableException] , and can be considered a synonym.
 
 .Java Sources
 [source,java]

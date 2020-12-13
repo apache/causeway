@@ -28,7 +28,7 @@ class Markup {
 }
 ----
 
-<.> `[teal]#*_valueOfHtml_*#(String html)` : `xref:applib/value/Markup[Markup]`
+<.> `[teal]#*_valueOfHtml_*#(String html)` : `xref:system:generated:index/applib/value/Markup.adoc.adoc[Markup]`
 +
 --
 syntactic sugar

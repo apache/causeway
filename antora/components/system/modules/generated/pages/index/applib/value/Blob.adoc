@@ -32,14 +32,14 @@ class Blob {
 }
 ----
 
-<.> `[teal]#*_of_*#(String name, CommonMimeType mimeType, byte[] content)` : `xref:applib/value/Blob[Blob]`
+<.> `[teal]#*_of_*#(String name, CommonMimeType mimeType, byte[] content)` : `xref:system:generated:index/applib/value/Blob.adoc.adoc[Blob]`
 +
 --
-Returns a new xref:applib/value/Blob[Blob] of given _name_ , _mimeType_ and _content_ .
+Returns a new xref:system:generated:index/applib/value/Blob.adoc.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 
-_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:applib/value/Blob[Blob] has the appropriate extension as constraint by the given _mimeType_ .
+_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:system:generated:index/applib/value/Blob.adoc.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
 
-For more fine-grained control use one of the xref:applib/value/Blob[Blob] constructors directly.
+For more fine-grained control use one of the xref:system:generated:index/applib/value/Blob.adoc.adoc[Blob] constructors directly.
 --
 <.> `[teal]#*writeBytesTo*#(OutputStream os)` : `void`
 +

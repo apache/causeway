@@ -29,7 +29,7 @@ enum Nature {
 <.> `[teal]#*_NOT_SPECIFIED_*#`
 +
 --
-The default; allows the programmer to combine `@DomainObject` annotation with the xref:applib/ViewModel[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the _org.apache.isis.applib.ViewModel_ interface.
+The default; allows the programmer to combine `@DomainObject` annotation with the xref:system:generated:index/applib/ViewModel.adoc.adoc[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the _org.apache.isis.applib.ViewModel_ interface.
 --
 <.> `[teal]#*_JDO_ENTITY_*#`
 +
@@ -54,7 +54,7 @@ Currently implies no additional semantics other than documentation.
 --
 An object that is conceptually part of the application layer, and which surfaces behavior and/or state that is aggregate of one or more domain entity.
 
-The identity of a view model is determined solely by the state of object's properties (that have not been set to be ignored using _org.apache.isis.applib.annotation.Property#notPersisted()_ ). Using this nature should be considered exactly equivalent to annotating with xref:applib/ViewModel[ViewModel] .
+The identity of a view model is determined solely by the state of object's properties (that have not been set to be ignored using _org.apache.isis.applib.annotation.Property#notPersisted()_ ). Using this nature should be considered exactly equivalent to annotating with xref:system:generated:index/applib/ViewModel.adoc.adoc[ViewModel] .
 
 Note that collections are ignored; if their state is required to fully identify the view model, define the view model using the JAXB _XmlRootElement_ annotation instead (where the object's state is serialized to an arbitrarily deep graph of data, with references to persistent entities transparently resolved to<oid-dto>elements).
 --

@@ -18,7 +18,7 @@ class ControlAbstract {
 }
 ----
 
-<.> `[teal]#*getExecutionModes*#()` : `ImmutableEnumSet<xref:applib/services/wrapper/control/ExecutionMode[ExecutionMode]>`
+<.> `[teal]#*getExecutionModes*#()` : `ImmutableEnumSet<xref:system:generated:index/applib/services/wrapper/control/ExecutionMode.adoc.adoc[ExecutionMode]>`
 +
 --
 Not API.

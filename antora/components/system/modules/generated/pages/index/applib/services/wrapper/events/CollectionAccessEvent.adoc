@@ -3,7 +3,7 @@
 
  _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an access (reading) of a collection.
 
-Analogous to xref:applib/services/wrapper/events/CollectionAddToEvent[CollectionAddToEvent] or xref:applib/services/wrapper/events/CollectionRemoveFromEvent[CollectionRemoveFromEvent] , however the _#getReason()_ will always be `null` . (If access is not allowed then a vetoing _CollectionVisibilityEvent_ would have been fired).
+Analogous to xref:system:generated:index/applib/services/wrapper/events/CollectionAddToEvent.adoc.adoc[CollectionAddToEvent] or xref:system:generated:index/applib/services/wrapper/events/CollectionRemoveFromEvent.adoc.adoc[CollectionRemoveFromEvent] , however the _#getReason()_ will always be `null` . (If access is not allowed then a vetoing _CollectionVisibilityEvent_ would have been fired).
 
 .Java Sources
 [source,java]

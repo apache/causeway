@@ -54,18 +54,18 @@ interface TreeNode {
 }
 ----
 
-<.> `[teal]#*getTreeState*#()` : `xref:applib/graph/tree/TreeState[TreeState]`
-<.> `[teal]#*expand*#(xref:applib/graph/tree/TreePath[TreePath]... treePaths)` : `void`
+<.> `[teal]#*getTreeState*#()` : `xref:system:generated:index/applib/graph/tree/TreeState.adoc.adoc[TreeState]`
+<.> `[teal]#*expand*#(xref:system:generated:index/applib/graph/tree/TreePath.adoc.adoc[TreePath]... treePaths)` : `void`
 +
 --
 Adds _treePaths_ to the set of expanded nodes, as held by this tree's shared state object.
 --
-<.> `[teal]#*collapse*#(xref:applib/graph/tree/TreePath[TreePath]... treePaths)` : `void`
+<.> `[teal]#*collapse*#(xref:system:generated:index/applib/graph/tree/TreePath.adoc.adoc[TreePath]... treePaths)` : `void`
 +
 --
 Removes _treePaths_ from the set of expanded nodes, as held by this tree's shared state object.
 --
-<.> `[teal]#*_lazy_*#<T>(T node, Class<? extends TreeAdapter<T>> treeAdapterClass)` : `xref:applib/graph/tree/TreeNode[TreeNode]<T>`
+<.> `[teal]#*_lazy_*#<T>(T node, Class<? extends TreeAdapter<T>> treeAdapterClass)` : `xref:system:generated:index/applib/graph/tree/TreeNode.adoc.adoc[TreeNode]<T>`
 +
 --
 Convenient shortcut.

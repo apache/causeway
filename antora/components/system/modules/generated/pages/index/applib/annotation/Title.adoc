@@ -21,7 +21,7 @@ A title annotation used to annotate methods used to construct the title of a dom
 <.> `[teal]#*_sequence_*#` : `String`
 +
 --
-The order (in Dewey decimal notation) that the property annotated with xref:applib/annotation/Title[Title] appears with respect to other properties also annotated with xref:applib/annotation/Title[Title] .
+The order (in Dewey decimal notation) that the property annotated with xref:system:generated:index/applib/annotation/Title.adoc.adoc[Title] appears with respect to other properties also annotated with xref:system:generated:index/applib/annotation/Title.adoc.adoc[Title] .
 --
 <.> `[teal]#*_prepend_*#` : `String`
 +

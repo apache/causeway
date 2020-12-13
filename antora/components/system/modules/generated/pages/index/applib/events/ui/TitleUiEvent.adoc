@@ -30,7 +30,7 @@ Because the _EventObject_ superclass prohibits a null source, a dummy value is t
 --
 For subscribers to call to provide a (non-translated) title for this object.
 --
-<.> `[teal]#*setTranslatableTitle*#(xref:applib/services/i18n/TranslatableString[TranslatableString] translatableTitle)` : `void`
+<.> `[teal]#*setTranslatableTitle*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc.adoc[TranslatableString] translatableTitle)` : `void`
 +
 --
 For subscribers to call to provide a translatable (i18n) title for this object.

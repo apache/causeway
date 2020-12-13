@@ -34,7 +34,7 @@ Layout hints for domain objects.
 }
 ----
 
-<.> `[teal]#*_bookmarking_*#` : `xref:applib/annotation/BookmarkPolicy[BookmarkPolicy]`
+<.> `[teal]#*_bookmarking_*#` : `xref:system:generated:index/applib/annotation/BookmarkPolicy.adoc.adoc[BookmarkPolicy]`
 +
 --
 Whether (and how) this domain object can be bookmarked in the UI.
@@ -83,7 +83,7 @@ The plural name of the class.
 <.> `[teal]#*_cssClassUiEvent_*#` : `Class<? extends CssClassUiEvent<?>>`
 +
 --
-Which subclass of xref:applib/events/ui/CssClassUiEvent[CssClassUiEvent] should be used to obtain a CSS class.
+Which subclass of xref:system:generated:index/applib/events/ui/CssClassUiEvent.adoc.adoc[CssClassUiEvent] should be used to obtain a CSS class.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 --
@@ -97,14 +97,14 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 <.> `[teal]#*_layoutUiEvent_*#` : `Class<? extends LayoutUiEvent<?>>`
 +
 --
-Which subclass of xref:applib/events/ui/LayoutUiEvent[LayoutUiEvent] should be used to obtain a layout.
+Which subclass of xref:system:generated:index/applib/events/ui/LayoutUiEvent.adoc.adoc[LayoutUiEvent] should be used to obtain a layout.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 --
 <.> `[teal]#*_titleUiEvent_*#` : `Class<? extends TitleUiEvent<?>>`
 +
 --
-Which subclass of xref:applib/events/ui/TitleUiEvent[TitleUiEvent] should be used to obtain a title.
+Which subclass of xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc.adoc[TitleUiEvent] should be used to obtain a title.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 --

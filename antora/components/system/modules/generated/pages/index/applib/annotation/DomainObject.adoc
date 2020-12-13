@@ -62,7 +62,7 @@ The method (despite its name, not necessarily an action) to use in order to perf
 
 The method is required to accept a single string parameter, and must return a list of the domain type.
 --
-<.> `[teal]#*_bounding_*#` : `xref:applib/annotation/Bounding[Bounding]`
+<.> `[teal]#*_bounding_*#` : `xref:system:generated:index/applib/annotation/Bounding.adoc.adoc[Bounding]`
 +
 --
 Indicates that the class has a bounded, or finite, set of instances.
@@ -71,7 +71,7 @@ Takes precedence over auto-complete.
 
 Note: this replaces bounded=true|false prior to v2.x
 --
-<.> `[teal]#*_editing_*#` : `xref:applib/annotation/Editing[Editing]`
+<.> `[teal]#*_editing_*#` : `xref:system:generated:index/applib/annotation/Editing.adoc.adoc[Editing]`
 +
 --
 Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
@@ -83,7 +83,7 @@ Note that non-editable objects can nevertheless have actions invoked upon them.
 --
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
 --
-<.> `[teal]#*_entityChangePublishing_*#` : `xref:applib/annotation/Publishing[Publishing]`
+<.> `[teal]#*_entityChangePublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc.adoc[Publishing]`
 +
 --
 Whether entity changes should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be dispatched to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
@@ -95,7 +95,7 @@ Equivalent to _Mixin#method()_ .
 
 Applicable only if _#nature()_ is _Nature#MIXIN_ .
 --
-<.> `[teal]#*_nature_*#` : `xref:applib/annotation/Nature[Nature]`
+<.> `[teal]#*_nature_*#` : `xref:system:generated:index/applib/annotation/Nature.adoc.adoc[Nature]`
 +
 --
 The nature of this domain object.
@@ -159,7 +159,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 <.> `[teal]#*_actionDomainEvent_*#` : `Class<? extends ActionDomainEvent<?>>`
 +
 --
-Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:applib/events/domain/ActionDomainEvent[ActionDomainEvent] .
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc.adoc[ActionDomainEvent] .
 
 For example:
 
@@ -181,7 +181,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 <.> `[teal]#*_propertyDomainEvent_*#` : `Class<? extends PropertyDomainEvent<?,?>>`
 +
 --
-Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:applib/events/domain/PropertyDomainEvent[PropertyDomainEvent] .
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc.adoc[PropertyDomainEvent] .
 
 For example:
 
@@ -199,7 +199,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 <.> `[teal]#*_collectionDomainEvent_*#` : `Class<? extends CollectionDomainEvent<?,?>>`
 +
 --
-Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:applib/events/domain/CollectionDomainEvent[CollectionDomainEvent] .
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc.adoc[CollectionDomainEvent] .
 
 For example:
 

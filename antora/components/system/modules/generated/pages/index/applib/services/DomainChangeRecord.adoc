@@ -53,10 +53,10 @@ The time that the change occurred.
 --
 The object type of the domain object being changed.
 --
-<.> `[teal]#*getTarget*#()` : `xref:applib/services/bookmark/Bookmark[Bookmark]`
+<.> `[teal]#*getTarget*#()` : `xref:system:generated:index/applib/services/bookmark/Bookmark.adoc.adoc[Bookmark]`
 +
 --
-The xref:applib/services/bookmark/Bookmark[Bookmark] identifying the domain object that has changed.
+The xref:system:generated:index/applib/services/bookmark/Bookmark.adoc.adoc[Bookmark] identifying the domain object that has changed.
 --
 <.> `[teal]#*getTargetMember*#()` : `String`
 +

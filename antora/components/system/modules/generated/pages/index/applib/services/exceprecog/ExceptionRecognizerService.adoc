@@ -14,13 +14,13 @@ interface ExceptionRecognizerService {
 }
 ----
 
-<.> `[teal]#*getExceptionRecognizers*#()` : `Can<xref:applib/services/exceprecog/ExceptionRecognizer[ExceptionRecognizer]>`
+<.> `[teal]#*getExceptionRecognizers*#()` : `Can<xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc.adoc[ExceptionRecognizer]>`
 <.> `[teal]#*recognize*#(Exception ex)` : `Optional<Recognition>`
 +
 --
 Takes into consideration ExceptionRecognizers as given by _#getExceptionRecognizers()_ .
 --
-<.> `[teal]#*recognizeFromSelected*#(Can<xref:applib/services/exceprecog/ExceptionRecognizer[ExceptionRecognizer]> recognizers, Exception ex)` : `Optional<Recognition>`
+<.> `[teal]#*recognizeFromSelected*#(Can<xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc.adoc[ExceptionRecognizer]> recognizers, Exception ex)` : `Optional<Recognition>`
 +
 --
 Takes into consideration ExceptionRecognizers as given by _recognizers_ .

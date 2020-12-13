@@ -94,7 +94,7 @@ Convenience method.
 --
 REVIEW: why not just compare the _#toString()_ representations?
 --
-<.> `[teal]#*_fromIdentityString_*#(String asString)` : `xref:applib/Identifier[Identifier]`
+<.> `[teal]#*_fromIdentityString_*#(String asString)` : `xref:system:generated:index/applib/Identifier.adoc.adoc[Identifier]`
 +
 --
 Factory method.

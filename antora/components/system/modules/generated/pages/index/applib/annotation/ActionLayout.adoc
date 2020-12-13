@@ -30,7 +30,7 @@ Layout hints for actions.
 }
 ----
 
-<.> `[teal]#*_bookmarking_*#` : `xref:applib/annotation/BookmarkPolicy[BookmarkPolicy]`
+<.> `[teal]#*_bookmarking_*#` : `xref:system:generated:index/applib/annotation/BookmarkPolicy.adoc.adoc[BookmarkPolicy]`
 +
 --
 Whether (and how) this action can be bookmarked in the UI.
@@ -59,7 +59,7 @@ Indicates the position of theFont Awesomeicon. The icon could be rendered on the
 --
 Description of this action, eg to be rendered in a tooltip.
 --
-<.> `[teal]#*_hidden_*#` : `xref:applib/annotation/Where[Where]`
+<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc.adoc[Where]`
 +
 --
 Indicates where in the UI the action should _not_ not be visible.
@@ -76,12 +76,12 @@ For actions that are associated with a property, indicates the positioning of th
 
 Ignored if the action has not been associated with a property.
 --
-<.> `[teal]#*_promptStyle_*#` : `xref:applib/annotation/PromptStyle[PromptStyle]`
+<.> `[teal]#*_promptStyle_*#` : `xref:system:generated:index/applib/annotation/PromptStyle.adoc.adoc[PromptStyle]`
 +
 --
 How this parameters for this action are prompted, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
 --
-<.> `[teal]#*_redirectPolicy_*#` : `xref:applib/annotation/Redirect[Redirect]`
+<.> `[teal]#*_redirectPolicy_*#` : `xref:system:generated:index/applib/annotation/Redirect.adoc.adoc[Redirect]`
 +
 --
 If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).

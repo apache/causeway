@@ -39,7 +39,7 @@ public class Order {
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 --
-<.> `[teal]#*_editing_*#` : `xref:applib/annotation/Editing[Editing]`
+<.> `[teal]#*_editing_*#` : `xref:system:generated:index/applib/annotation/Editing.adoc.adoc[Editing]`
 +
 --
 Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
@@ -51,7 +51,7 @@ Note that non-editable objects can nevertheless have actions invoked upon them.
 --
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
 --
-<.> `[teal]#*_hidden_*#` : `xref:applib/annotation/Where[Where]`
+<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc.adoc[Where]`
 +
 --
 Indicates when the collection is not visible to the user.

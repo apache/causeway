@@ -34,12 +34,12 @@ class TranslatableString {
 }
 ----
 
-<.> `[teal]#*_tr_*#(String pattern, Object... paramArgs)` : `xref:applib/services/i18n/TranslatableString[TranslatableString]`
+<.> `[teal]#*_tr_*#(String pattern, Object... paramArgs)` : `xref:system:generated:index/applib/services/i18n/TranslatableString.adoc.adoc[TranslatableString]`
 +
 --
 A translatable string with a single pattern for both singular and plural forms.
 --
-<.> `[teal]#*_trn_*#(String singularPattern, String pluralPattern, int number, Object... paramArgs)` : `xref:applib/services/i18n/TranslatableString[TranslatableString]`
+<.> `[teal]#*_trn_*#(String singularPattern, String pluralPattern, int number, Object... paramArgs)` : `xref:system:generated:index/applib/services/i18n/TranslatableString.adoc.adoc[TranslatableString]`
 +
 --
 A translatable string with different patterns for singular and plural forms, selected automatically by the number
@@ -59,7 +59,7 @@ The plural text as provided in the _#trn(String, String, int, Object...) factory
 --
 The arguments; excluded from _#equals(Object)_ comparison.
 --
-<.> `[teal]#*translate*#(xref:applib/services/i18n/TranslationService[TranslationService] translationService, String context)` : `String`
+<.> `[teal]#*translate*#(xref:system:generated:index/applib/services/i18n/TranslationService.adoc.adoc[TranslationService] translationService, String context)` : `String`
 +
 --
 Translates this string using the provided _org.apache.isis.applib.services.i18n.TranslationService_ , selecting either the single or plural form as per _#getPattern()_ .

@@ -45,14 +45,14 @@ Domain semantics for domain object property.
 <.> `[teal]#*_commandDtoProcessor_*#` : `Class<? extends CommandDtoProcessor>`
 +
 --
-The xref:applib/services/commanddto/processor/CommandDtoProcessor[CommandDtoProcessor] to process this command's DTO.
+The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc.adoc[CommandDtoProcessor] to process this command's DTO.
 
-The processor itself is used by xref:applib/services/commanddto/conmap/ContentMappingServiceForCommandDto[ContentMappingServiceForCommandDto] and xref:applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
+The processor itself is used by xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc.adoc[ContentMappingServiceForCommandDto] and xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
 --
-<.> `[teal]#*_commandPublishing_*#` : `xref:applib/annotation/Publishing[Publishing]`
+<.> `[teal]#*_commandPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc.adoc[Publishing]`
 +
 --
-Whether property edits, captured as xref:applib/services/command/Command[Command] s, should be published to xref:applib/services/publishing/spi/CommandSubscriber[CommandSubscriber] s.
+Whether property edits, captured as xref:system:generated:index/applib/services/command/Command.adoc.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc.adoc[CommandSubscriber] s.
 --
 <.> `[teal]#*_domainEvent_*#` : `Class<? extends PropertyDomainEvent<?,?>>`
 +
@@ -71,7 +71,7 @@ public LocalDate getStartDate() { ...}
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 --
-<.> `[teal]#*_editing_*#` : `xref:applib/annotation/Editing[Editing]`
+<.> `[teal]#*_editing_*#` : `xref:system:generated:index/applib/annotation/Editing.adoc.adoc[Editing]`
 +
 --
 Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
@@ -83,19 +83,19 @@ Note that non-editable objects can nevertheless have actions invoked upon them.
 --
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
 --
-<.> `[teal]#*_executionPublishing_*#` : `xref:applib/annotation/Publishing[Publishing]`
+<.> `[teal]#*_executionPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc.adoc[Publishing]`
 +
 --
-Whether _Interaction.Execution_ s (triggered property edits), should be dispatched to xref:applib/services/publishing/spi/ExecutionSubscriber[ExecutionSubscriber] s.
+Whether _Interaction.Execution_ s (triggered property edits), should be dispatched to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc.adoc[ExecutionSubscriber] s.
 --
 <.> `[teal]#*_fileAccept_*#` : `String`
 +
 --
-For uploading xref:applib/value/Blob[Blob] or xref:applib/value/Clob[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For uploading xref:system:generated:index/applib/value/Blob.adoc.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 --
-<.> `[teal]#*_hidden_*#` : `xref:applib/annotation/Where[Where]`
+<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc.adoc[Where]`
 +
 --
 Indicates where the property is not visible to the user.
@@ -107,7 +107,7 @@ The maximum entry length of a field.
 
 The default value (-1) indicates that no maxLength has been specified.
 --
-<.> `[teal]#*_mementoSerialization_*#` : `xref:applib/annotation/MementoSerialization[MementoSerialization]`
+<.> `[teal]#*_mementoSerialization_*#` : `xref:system:generated:index/applib/annotation/MementoSerialization.adoc.adoc[MementoSerialization]`
 +
 --
 Indicates whether the property should be included or excluded from mementos.
@@ -121,14 +121,14 @@ The _org.apache.isis.applib.spec.Specification_ (s) to be satisfied by this prop
 
 If more than one is provided, then all must be satisfied (in effect "AND"ed together).
 --
-<.> `[teal]#*_optionality_*#` : `xref:applib/annotation/Optionality[Optionality]`
+<.> `[teal]#*_optionality_*#` : `xref:system:generated:index/applib/annotation/Optionality.adoc.adoc[Optionality]`
 +
 --
 Whether this property is optional or is mandatory (ie required).
 
 For properties the default value, _org.apache.isis.applib.annotation.Optionality#DEFAULT_ , usually means that the property is required unless it has been overridden byjavax.jdo.annotations.Columnwith itsjavax.jdo.annotations.Column#allowsNull()attribute set to true.
 --
-<.> `[teal]#*_projecting_*#` : `xref:applib/annotation/Projecting[Projecting]`
+<.> `[teal]#*_projecting_*#` : `xref:system:generated:index/applib/annotation/Projecting.adoc.adoc[Projecting]`
 +
 --
 If set to _Projecting#PROJECTED projected_ , then indicates that the owner of this property is a view model which is a projection of some other entity, and that the property holds a reference to that "underlying".

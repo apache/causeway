@@ -20,12 +20,12 @@ interface TransactionService {
 }
 ----
 
-<.> `[teal]#*currentTransactionId*#()` : `xref:applib/services/xactn/TransactionId[TransactionId]`
+<.> `[teal]#*currentTransactionId*#()` : `xref:system:generated:index/applib/services/xactn/TransactionId.adoc.adoc[TransactionId]`
 +
 --
 When called within an existing transactional boundary returns the unique identifier to the transaction, _null_ otherwise.
 --
-<.> `[teal]#*currentTransactionState*#()` : `xref:applib/services/xactn/TransactionState[TransactionState]`
+<.> `[teal]#*currentTransactionState*#()` : `xref:system:generated:index/applib/services/xactn/TransactionState.adoc.adoc[TransactionState]`
 <.> `[teal]#*flushTransaction*#()` : `void`
 +
 --

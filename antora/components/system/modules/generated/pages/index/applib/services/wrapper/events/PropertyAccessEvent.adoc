@@ -3,7 +3,7 @@
 
  _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an access (reading) of a property.
 
-Analogous to xref:applib/services/wrapper/events/PropertyModifyEvent[PropertyModifyEvent] , however the _#getReason()_ will always be `null` . (If access is not allowed then a xref:applib/services/wrapper/events/PropertyVisibilityEvent[PropertyVisibilityEvent] would have been fired).
+Analogous to xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc.adoc[PropertyModifyEvent] , however the _#getReason()_ will always be `null` . (If access is not allowed then a xref:system:generated:index/applib/services/wrapper/events/PropertyVisibilityEvent.adoc.adoc[PropertyVisibilityEvent] would have been fired).
 
 .Java Sources
 [source,java]
