@@ -5,7 +5,7 @@ Indicates that an unexpected, non-recoverable (fatal) exception has occurred wit
 
 Throwing this exception will (dependent on the viewer) result in some sort of an error page being displayed to the user.
 
-Note that this exception has identical semantics to xref:system:generated:index/applib/FatalException.adoc.adoc[FatalException] (of which it is the immediate superclass) and can be considered a synonym.
+Note that this exception has identical semantics to xref:system:generated:index/applib/FatalException.adoc[FatalException] (of which it is the immediate superclass) and can be considered a synonym.
 
 .Java Sources
 [source,java]

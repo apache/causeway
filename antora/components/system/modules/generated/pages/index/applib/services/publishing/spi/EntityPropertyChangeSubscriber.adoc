@@ -12,7 +12,7 @@ interface EntityPropertyChangeSubscriber {
 }
 ----
 
-<.> `[teal]#*onChanging*#(xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc.adoc[EntityPropertyChange] entityPropertyChange)` : `void`
+<.> `[teal]#*onChanging*#(xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] entityPropertyChange)` : `void`
 +
 --
 Receives all pre-post property values for entities (with publishing enabled) at then end of the transaction during the pre-commit phase.

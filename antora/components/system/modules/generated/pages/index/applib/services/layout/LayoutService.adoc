@@ -27,6 +27,6 @@ Obtains a zip file of the serialized XML of the layouts (grids) of all domain en
 <.> `[teal]#*toMenuBarsXml*#(Type type)` : `String`
 +
 --
-Obtains the serialized XML form of the menu bars layout ( xref:system:generated:index/applib/services/menu/MenuBarsService.adoc.adoc[MenuBarsService] ).
+Obtains the serialized XML form of the menu bars layout ( xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService] ).
 --
 

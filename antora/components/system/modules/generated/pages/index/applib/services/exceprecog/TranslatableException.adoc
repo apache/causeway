@@ -16,7 +16,7 @@ interface TranslatableException {
 }
 ----
 
-<.> `[teal]#*getTranslatableMessage*#()` : `xref:system:generated:index/applib/services/i18n/TranslatableString.adoc.adoc[TranslatableString]`
+<.> `[teal]#*getTranslatableMessage*#()` : `xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString]`
 +
 --
 In the spirit of _Exception#getLocalizedMessage()_ , but using _org.apache.isis.applib.services.i18n.TranslatableString_ instead.

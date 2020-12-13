@@ -5,11 +5,11 @@ Represents the _intention to_ invoke either an action or modify a property. Ther
 
 Each Command holds a _CommandDto_ (see Apache Isiscmdschema) which reifies all the details in a serializable form.
 
-It also captures details of the corresponding action invocation (or property edit), specifically when that action/edit _Command#getStartedAt() started_ or _Command#getCompletedAt() completed_ , and its result, either a _Command#getResult() return value_ or an _Command#getException() exception_ . Also captures a stack of xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc.adoc[ActionDomainEvent] s.
+It also captures details of the corresponding action invocation (or property edit), specifically when that action/edit _Command#getStartedAt() started_ or _Command#getCompletedAt() completed_ , and its result, either a _Command#getResult() return value_ or an _Command#getException() exception_ . Also captures a stack of xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] s.
 
-Note that when invoking an action, other actions may be invoked courtesy of the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc.adoc[WrapperFactory] . These "sub-actions" do _not_ modify the contents of the current command object; in other words think of the command object as representing the outer-most originating action.
+Note that when invoking an action, other actions may be invoked courtesy of the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] . These "sub-actions" do _not_ modify the contents of the current command object; in other words think of the command object as representing the outer-most originating action.
 
-That said, if the sub-action is invoked asynchronously (using _WrapperFactory#asyncWrap(Object, AsyncControl)_ or _WrapperFactory#asyncWrapMixin(Class, Object, AsyncControl)_ ), then a separate xref:system:generated:index/applib/services/command/Command.adoc.adoc[Command] object is created, and the originating xref:system:generated:index/applib/services/command/Command.adoc.adoc[Command] is set to be its _Command#getParent() parent_ .
+That said, if the sub-action is invoked asynchronously (using _WrapperFactory#asyncWrap(Object, AsyncControl)_ or _WrapperFactory#asyncWrapMixin(Class, Object, AsyncControl)_ ), then a separate xref:system:generated:index/applib/services/command/Command.adoc[Command] object is created, and the originating xref:system:generated:index/applib/services/command/Command.adoc[Command] is set to be its _Command#getParent() parent_ .
 
 .Java Sources
 [source,java]
@@ -42,10 +42,10 @@ The date/time at which this command was created.
 
 Derived from _#getCommandDto()_ 's _CommandDto#getTimestamp()_ .
 --
-<.> `[teal]#*getTarget*#()` : `xref:system:generated:index/applib/services/bookmark/Bookmark.adoc.adoc[Bookmark]`
+<.> `[teal]#*getTarget*#()` : `xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark]`
 +
 --
-Derived from _#getCommandDto()_ , is the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
+Derived from _#getCommandDto()_ , is the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
 --
 <.> `[teal]#*getLogicalMemberIdentifier*#()` : `String`
 +

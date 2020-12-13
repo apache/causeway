@@ -10,9 +10,9 @@ interface ConfigurationViewService {
 }
 ----
 
-<.> `[teal]#*allProperties*#()` : `Set<xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc.adoc[ConfigurationProperty]>`
+<.> `[teal]#*allProperties*#()` : `Set<xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc[ConfigurationProperty]>`
 +
 --
-Returns all properties, each as an instance of xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
+Returns all properties, each as an instance of xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
 --
 

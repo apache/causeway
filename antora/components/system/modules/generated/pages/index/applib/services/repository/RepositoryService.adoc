@@ -52,7 +52,7 @@ interface RepositoryService {
 }
 ----
 
-<.> `[teal]#*getEntityState*#(Object object)` : `xref:system:generated:index/applib/services/repository/EntityState.adoc.adoc[EntityState]`
+<.> `[teal]#*getEntityState*#(Object object)` : `xref:system:generated:index/applib/services/repository/EntityState.adoc[EntityState]`
 +
 --
 Returns the EntityState of given _object_ . Returns _EntityState#NOT_PERSISTABLE_ for _object==null_ .
@@ -117,10 +117,10 @@ If there are no instances the list will be empty. This method creates a new _Lis
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#allMatches(Query)_ for production code.
 --
-<.> `[teal]#*allMatches*#<T>(xref:system:generated:index/applib/query/Query.adoc.adoc[Query]<T> query)` : `List<T>`
+<.> `[teal]#*allMatches*#<T>(xref:system:generated:index/applib/query/Query.adoc[Query]<T> query)` : `List<T>`
 +
 --
-Returns all the instances that match the given xref:system:generated:index/applib/query/Query.adoc.adoc[Query] .
+Returns all the instances that match the given xref:system:generated:index/applib/query/Query.adoc[Query] .
 
 If there are no instances the list will be empty. This method creates a new _List_ object each time it is called so the caller is free to use or modify the returned _List_ , but the changes will not be reflected back to the repository.
 
@@ -135,7 +135,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#uniqueMatch(Query)_ for production code.
 --
-<.> `[teal]#*uniqueMatch*#<T>(xref:system:generated:index/applib/query/Query.adoc.adoc[Query]<T> query)` : `Optional<T>`
+<.> `[teal]#*uniqueMatch*#<T>(xref:system:generated:index/applib/query/Query.adoc[Query]<T> query)` : `Optional<T>`
 +
 --
 Find the only instance that matches the provided query.
@@ -153,7 +153,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#firstMatch(Query)_ for production code.
 --
-<.> `[teal]#*firstMatch*#<T>(xref:system:generated:index/applib/query/Query.adoc.adoc[Query]<T> query)` : `Optional<T>`
+<.> `[teal]#*firstMatch*#<T>(xref:system:generated:index/applib/query/Query.adoc[Query]<T> query)` : `Optional<T>`
 +
 --
 Find the only instance that matches the provided query, if any..

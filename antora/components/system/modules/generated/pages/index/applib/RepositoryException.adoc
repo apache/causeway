@@ -3,7 +3,7 @@
 
 Indicates that a repository method has failed.
 
-This exception is intended to represent an unexpected and non-recoverable condition (eg a syntax error in some JDOQL query syntax or similar), and so is a subclass of xref:system:generated:index/applib/NonRecoverableException.adoc.adoc[NonRecoverableException] . Throwing this exception will therefore result in (some sort of) error page being displayed to the user.
+This exception is intended to represent an unexpected and non-recoverable condition (eg a syntax error in some JDOQL query syntax or similar), and so is a subclass of xref:system:generated:index/applib/NonRecoverableException.adoc[NonRecoverableException] . Throwing this exception will therefore result in (some sort of) error page being displayed to the user.
 
 .Java Sources
 [source,java]

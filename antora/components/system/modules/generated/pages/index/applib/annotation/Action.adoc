@@ -55,14 +55,14 @@ For example@Action(associateWith="items", associateWithSequence="2.1")
 <.> `[teal]#*_commandDtoProcessor_*#` : `Class<? extends CommandDtoProcessor>`
 +
 --
-The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc.adoc[CommandDtoProcessor] to process this command's DTO.
+The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
 
-The processor itself is used by xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc.adoc[ContentMappingServiceForCommandDto] and xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
+The processor itself is used by xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] and xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
 --
-<.> `[teal]#*_commandPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc.adoc[Publishing]`
+<.> `[teal]#*_commandPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing]`
 +
 --
-Whether action invocations, captured as xref:system:generated:index/applib/services/command/Command.adoc.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc.adoc[CommandSubscriber] s.
+Whether action invocations, captured as xref:system:generated:index/applib/services/command/Command.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
 --
 <.> `[teal]#*_domainEvent_*#` : `Class<? extends ActionDomainEvent<?>>`
 +
@@ -84,12 +84,12 @@ public class SomeObject{
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 --
-<.> `[teal]#*_executionPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc.adoc[Publishing]`
+<.> `[teal]#*_executionPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing]`
 +
 --
-Whether _Interaction.Execution_ s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc.adoc[ExecutionSubscriber] s.
+Whether _Interaction.Execution_ s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 --
-<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc.adoc[Where]`
+<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
 +
 --
 Indicates where (in the UI) the action is not visible to the user.
@@ -98,14 +98,14 @@ It is also possible to suppress an action's visibility using _ActionLayout#hidde
 
 For _DomainService domain service_ actions, the action's visibility is dependent upon its _DomainService#nature() nature_ and for contributed actions on how it is _ActionLayout#contributed()_ .
 --
-<.> `[teal]#*_restrictTo_*#` : `xref:system:generated:index/applib/annotation/RestrictTo.adoc.adoc[RestrictTo]`
+<.> `[teal]#*_restrictTo_*#` : `xref:system:generated:index/applib/annotation/RestrictTo.adoc[RestrictTo]`
 +
 --
 Whether the action is restricted to prototyping.
 
 By default there are no restrictions, with the action being available in all environments.
 --
-<.> `[teal]#*_semantics_*#` : `xref:system:generated:index/applib/annotation/SemanticsOf.adoc.adoc[SemanticsOf]`
+<.> `[teal]#*_semantics_*#` : `xref:system:generated:index/applib/annotation/SemanticsOf.adoc[SemanticsOf]`
 +
 --
 The action semantics, either _SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached_ , _SemanticsOf#SAFE safe_ (query-only), _SemanticsOf#IDEMPOTENT idempotent_ or _SemanticsOf#NON_IDEMPOTENT non-idempotent_ .
@@ -118,7 +118,7 @@ The type-of the elements returned by the action.
 <.> `[teal]#*_fileAccept_*#` : `String`
 +
 --
-For downloading xref:system:generated:index/applib/value/Blob.adoc.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For downloading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 --

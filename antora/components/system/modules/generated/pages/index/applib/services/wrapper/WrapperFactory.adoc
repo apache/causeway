@@ -11,7 +11,7 @@ The 'wrap' is a runtime-code-generated proxy that wraps the underlying domain ob
 * a `set` method for properties
 * any action
 
-Calling any of the above methods may result in a (subclass of) _InteractionException_ if the object disallows it. For example, if a property is annotated as hidden then a xref:system:generated:index/applib/services/wrapper/HiddenException.adoc.adoc[HiddenException] will be thrown. Similarly if an action has a `validate` method and the supplied arguments are invalid then a xref:system:generated:index/applib/services/wrapper/InvalidException.adoc.adoc[InvalidException] will be thrown.
+Calling any of the above methods may result in a (subclass of) _InteractionException_ if the object disallows it. For example, if a property is annotated as hidden then a xref:system:generated:index/applib/services/wrapper/HiddenException.adoc[HiddenException] will be thrown. Similarly if an action has a `validate` method and the supplied arguments are invalid then a xref:system:generated:index/applib/services/wrapper/InvalidException.adoc[InvalidException] will be thrown.
 
 In addition, the following methods may also be called:
 
@@ -51,12 +51,12 @@ interface WrapperFactory {
 }
 ----
 
-<.> `[teal]#*wrap*#<T>(T domainObject, xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc.adoc[SyncControl] syncControl)` : `T`
+<.> `[teal]#*wrap*#<T>(T domainObject, xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] syncControl)` : `T`
 +
 --
 Provides the "wrapper" of a domain object against which to invoke the action.
 
-The provided xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. There are therefore three typical cases:
+The provided xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. There are therefore three typical cases:
 
 * check rules, execute action
 * skip rules, execute action
@@ -71,12 +71,12 @@ Otherwise, will do all the validations (raise exceptions as required etc.), but 
 --
 A convenience overload for _#wrap(Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 --
-<.> `[teal]#*wrapMixin*#<T>(Class<T> mixinClass, Object mixedIn, xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc.adoc[SyncControl] syncControl)` : `T`
+<.> `[teal]#*wrapMixin*#<T>(Class<T> mixinClass, Object mixedIn, xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] syncControl)` : `T`
 +
 --
 Provides the wrapper for a _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
 
-The provided xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
+The provided xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
 --
 <.> `[teal]#*wrapMixin*#<T>(Class<T> mixinClass, Object mixedIn)` : `T`
 +
@@ -95,32 +95,32 @@ If the object _#isWrapper(Object) is not wrapped_ , then should just return the 
 --
 Whether the supplied object is a wrapper around a domain object.
 --
-<.> `[teal]#*asyncWrap*#<T, R>(T domainObject, xref:system:generated:index/applib/services/wrapper/control/AsyncControl.adoc.adoc[AsyncControl]<R> asyncControl)` : `T`
+<.> `[teal]#*asyncWrap*#<T, R>(T domainObject, xref:system:generated:index/applib/services/wrapper/control/AsyncControl.adoc[AsyncControl]<R> asyncControl)` : `T`
 +
 --
 Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously.
 --
-<.> `[teal]#*asyncWrapMixin*#<T, R>(Class<T> mixinClass, Object mixedIn, xref:system:generated:index/applib/services/wrapper/control/AsyncControl.adoc.adoc[AsyncControl]<R> asyncControl)` : `T`
+<.> `[teal]#*asyncWrapMixin*#<T, R>(Class<T> mixinClass, Object mixedIn, xref:system:generated:index/applib/services/wrapper/control/AsyncControl.adoc[AsyncControl]<R> asyncControl)` : `T`
 +
 --
 Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously.
 --
-<.> `[teal]#*getListeners*#()` : `List<xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc.adoc[InteractionListener]>`
+<.> `[teal]#*getListeners*#()` : `List<xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener]>`
 +
 --
-All xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc.adoc[InteractionListener] s that have been registered using _#addInteractionListener(InteractionListener)_ .
+All xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] s that have been registered using _#addInteractionListener(InteractionListener)_ .
 --
-<.> `[teal]#*addInteractionListener*#(xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc.adoc[InteractionListener] listener)` : `boolean`
+<.> `[teal]#*addInteractionListener*#(xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] listener)` : `boolean`
 +
 --
-Registers an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc.adoc[InteractionListener] , to be notified of interactions on all wrappers.
+Registers an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to be notified of interactions on all wrappers.
 
 This is retrospective: the listener will be notified of interactions even on wrappers created before the listener was installed. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
 --
-<.> `[teal]#*removeInteractionListener*#(xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc.adoc[InteractionListener] listener)` : `boolean`
+<.> `[teal]#*removeInteractionListener*#(xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] listener)` : `boolean`
 +
 --
-Remove an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
+Remove an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 
 This is retrospective: the listener will no longer be notified of any interactions created on any wrappers, not just on those wrappers created subsequently. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
 --

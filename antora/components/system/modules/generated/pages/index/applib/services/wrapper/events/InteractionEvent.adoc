@@ -45,12 +45,12 @@ class InteractionEvent {
 --
 The domain object (pojo) against which the interaction occurred.
 --
-<.> `[teal]#*getIdentifier*#()` : `xref:system:generated:index/applib/Identifier.adoc.adoc[Identifier]`
+<.> `[teal]#*getIdentifier*#()` : `xref:system:generated:index/applib/Identifier.adoc[Identifier]`
 +
 --
-The xref:system:generated:index/applib/Identifier.adoc.adoc[Identifier] of the feature of the object being interacted with.
+The xref:system:generated:index/applib/Identifier.adoc[Identifier] of the feature of the object being interacted with.
 
-Will be consistent with the subclass of xref:system:generated:index/applib/services/wrapper/events/InteractionEvent.adoc.adoc[InteractionEvent] . So for example a xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc.adoc[PropertyModifyEvent] will have an xref:system:generated:index/applib/Identifier.adoc.adoc[Identifier] that identifies the property being modified.
+Will be consistent with the subclass of xref:system:generated:index/applib/services/wrapper/events/InteractionEvent.adoc[InteractionEvent] . So for example a xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent] will have an xref:system:generated:index/applib/Identifier.adoc[Identifier] that identifies the property being modified.
 --
 <.> `[teal]#*getClassName*#()` : `String`
 +
@@ -113,8 +113,8 @@ Whether this interaction has been vetoed (meaning that _#getReason()_ and _#getA
 
 The interpretation of this depends on the subclass:
 
-* for xref:system:generated:index/applib/services/wrapper/events/VisibilityEvent.adoc.adoc[VisibilityEvent] , a veto means that the feature (property, collection, action) is hidden
-* for xref:system:generated:index/applib/services/wrapper/events/UsabilityEvent.adoc.adoc[UsabilityEvent] , a veto means that the feature is disabled
-* for xref:system:generated:index/applib/services/wrapper/events/ValidityEvent.adoc.adoc[ValidityEvent] , a veto means that the proposed modification (property value, object added/removed, action argument) is invalid
+* for xref:system:generated:index/applib/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent] , a veto means that the feature (property, collection, action) is hidden
+* for xref:system:generated:index/applib/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent] , a veto means that the feature is disabled
+* for xref:system:generated:index/applib/services/wrapper/events/ValidityEvent.adoc[ValidityEvent] , a veto means that the proposed modification (property value, object added/removed, action argument) is invalid
 --
 

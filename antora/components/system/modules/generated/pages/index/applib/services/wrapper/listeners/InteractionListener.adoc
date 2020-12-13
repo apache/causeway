@@ -40,34 +40,34 @@ interface InteractionListener {
 }
 ----
 
-<.> `[teal]#*objectTitleRead*#(xref:system:generated:index/applib/services/wrapper/events/ObjectTitleEvent.adoc.adoc[ObjectTitleEvent] ev)` : `void`
+<.> `[teal]#*objectTitleRead*#(xref:system:generated:index/applib/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent] ev)` : `void`
 +
 --
 The title was read.
 --
-<.> `[teal]#*objectPersisted*#(xref:system:generated:index/applib/services/wrapper/events/ObjectValidityEvent.adoc.adoc[ObjectValidityEvent] ev)` : `void`
+<.> `[teal]#*objectPersisted*#(xref:system:generated:index/applib/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent] ev)` : `void`
 +
 --
 The object was persisted (or an attempt to persist it was made).
 --
-<.> `[teal]#*propertyVisible*#(xref:system:generated:index/applib/services/wrapper/events/PropertyVisibilityEvent.adoc.adoc[PropertyVisibilityEvent] ev)` : `void`
+<.> `[teal]#*propertyVisible*#(xref:system:generated:index/applib/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent] ev)` : `void`
 +
 --
 A check was made to determine if a property was visible.
 --
-<.> `[teal]#*propertyUsable*#(xref:system:generated:index/applib/services/wrapper/events/PropertyUsabilityEvent.adoc.adoc[PropertyUsabilityEvent] ev)` : `void`
+<.> `[teal]#*propertyUsable*#(xref:system:generated:index/applib/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent] ev)` : `void`
 +
 --
 A check was made to determine if a property was usable.
 --
-<.> `[teal]#*propertyAccessed*#(xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc.adoc[PropertyAccessEvent] ev)` : `void`
+<.> `[teal]#*propertyAccessed*#(xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] ev)` : `void`
 +
 --
 A property was read.
 
-Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc.adoc[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
+Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
 --
-<.> `[teal]#*propertyModified*#(xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc.adoc[PropertyModifyEvent] ev)` : `void`
+<.> `[teal]#*propertyModified*#(xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent] ev)` : `void`
 +
 --
 A property was modified (or an attempt to modify it was made)
@@ -81,59 +81,59 @@ A check was made to determine if a collection was visible.
 
 Will be fired prior to _#collectionUsable(CollectionUsabilityEvent)_ .
 --
-<.> `[teal]#*collectionUsable*#(xref:system:generated:index/applib/services/wrapper/events/CollectionUsabilityEvent.adoc.adoc[CollectionUsabilityEvent] ev)` : `void`
+<.> `[teal]#*collectionUsable*#(xref:system:generated:index/applib/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent] ev)` : `void`
 +
 --
 A check was made to determine if a collection was usable.
 
 Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#collectionAddedTo(CollectionAddToEvent)_ or _#collectionRemovedFrom(CollectionRemoveFromEvent)_ .
 --
-<.> `[teal]#*collectionAccessed*#(xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc.adoc[CollectionAccessEvent] ev)` : `void`
+<.> `[teal]#*collectionAccessed*#(xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] ev)` : `void`
 +
 --
 A collection was read.
 
-Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
+Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
 --
-<.> `[teal]#*collectionAddedTo*#(xref:system:generated:index/applib/services/wrapper/events/CollectionAddToEvent.adoc.adoc[CollectionAddToEvent] ev)` : `void`
+<.> `[teal]#*collectionAddedTo*#(xref:system:generated:index/applib/services/wrapper/events/CollectionAddToEvent.adoc[CollectionAddToEvent] ev)` : `void`
 +
 --
 An object was added to the collection (or an attempt to add it was made).
 --
-<.> `[teal]#*collectionRemovedFrom*#(xref:system:generated:index/applib/services/wrapper/events/CollectionRemoveFromEvent.adoc.adoc[CollectionRemoveFromEvent] ev)` : `void`
+<.> `[teal]#*collectionRemovedFrom*#(xref:system:generated:index/applib/services/wrapper/events/CollectionRemoveFromEvent.adoc[CollectionRemoveFromEvent] ev)` : `void`
 +
 --
 An object was removed from the collection (or an attempt to remove it was made).
 --
-<.> `[teal]#*collectionMethodInvoked*#(xref:system:generated:index/applib/services/wrapper/events/CollectionMethodEvent.adoc.adoc[CollectionMethodEvent] interactionEvent)` : `void`
+<.> `[teal]#*collectionMethodInvoked*#(xref:system:generated:index/applib/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent] interactionEvent)` : `void`
 +
 --
 A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
 
 Unlike the other methods in this interface, the source of these events will be an instance of a Collection (such as `java.util.List` ) rather than the domain object. (The domain object is {@link CollectionMethodEvent#getDomainObject() still available, however).
 --
-<.> `[teal]#*actionVisible*#(xref:system:generated:index/applib/services/wrapper/events/ActionVisibilityEvent.adoc.adoc[ActionVisibilityEvent] interactionEvent)` : `void`
+<.> `[teal]#*actionVisible*#(xref:system:generated:index/applib/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent] interactionEvent)` : `void`
 +
 --
 A check was made to determine if an action was visible.
 
 Will be fired prior to _#actionUsable(ActionUsabilityEvent)_ .
 --
-<.> `[teal]#*actionUsable*#(xref:system:generated:index/applib/services/wrapper/events/ActionUsabilityEvent.adoc.adoc[ActionUsabilityEvent] ev)` : `void`
+<.> `[teal]#*actionUsable*#(xref:system:generated:index/applib/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent] ev)` : `void`
 +
 --
 A check was made to determine if an action was usable.
 
 Will be fired prior to _#actionArgument(ActionArgumentEvent)_ .
 --
-<.> `[teal]#*actionArgument*#(xref:system:generated:index/applib/services/wrapper/events/ActionArgumentEvent.adoc.adoc[ActionArgumentEvent] ev)` : `void`
+<.> `[teal]#*actionArgument*#(xref:system:generated:index/applib/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent] ev)` : `void`
 +
 --
 A check was made as to whether an argument proposed for an action was valid.
 
 Will be fired prior to _#actionInvoked(ActionInvocationEvent)_ .
 --
-<.> `[teal]#*actionInvoked*#(xref:system:generated:index/applib/services/wrapper/events/ActionInvocationEvent.adoc.adoc[ActionInvocationEvent] ev)` : `void`
+<.> `[teal]#*actionInvoked*#(xref:system:generated:index/applib/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent] ev)` : `void`
 +
 --
 An action was invoked (or an attempt to invoke it was made).

@@ -38,32 +38,32 @@ class UserMemento {
 }
 ----
 
-<.> `[teal]#*UserMemento*#(String name, Stream<xref:system:generated:index/applib/services/user/RoleMemento.adoc.adoc[RoleMemento]> roles)`
+<.> `[teal]#*UserMemento*#(String name, Stream<xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento]> roles)`
 +
 --
 Creates a new user with the specified name and assigned roles.
 --
-<.> `[teal]#*_system_*#()` : `xref:system:generated:index/applib/services/user/UserMemento.adoc.adoc[UserMemento]`
+<.> `[teal]#*_system_*#()` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
 +
 --
 The framework's internal user with unrestricted privileges.
 --
-<.> `[teal]#*_ofName_*#(String name)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc.adoc[UserMemento]`
+<.> `[teal]#*_ofName_*#(String name)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
 +
 --
 Creates a new user with the specified name and no roles.
 --
-<.> `[teal]#*_ofNameAndRoles_*#(String name, xref:system:generated:index/applib/services/user/RoleMemento.adoc.adoc[RoleMemento]... roles)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc.adoc[UserMemento]`
+<.> `[teal]#*_ofNameAndRoles_*#(String name, xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento]... roles)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
 +
 --
 Creates a new user with the specified name and assigned roles.
 --
-<.> `[teal]#*_ofNameAndRoleNames_*#(String name, String... roleNames)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc.adoc[UserMemento]`
+<.> `[teal]#*_ofNameAndRoleNames_*#(String name, String... roleNames)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
 +
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> `[teal]#*_ofNameAndRoleNames_*#(String name, Stream<String> roleNames)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc.adoc[UserMemento]`
+<.> `[teal]#*_ofNameAndRoleNames_*#(String name, Stream<String> roleNames)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
 +
 --
 Creates a new user with the specified name and assigned role names.

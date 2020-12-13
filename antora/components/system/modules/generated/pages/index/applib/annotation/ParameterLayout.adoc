@@ -36,7 +36,7 @@ Indicates the css class that a parameter should have.
 --
 Description of this property, eg to be rendered in a tooltip.
 --
-<.> `[teal]#*_labelPosition_*#` : `xref:system:generated:index/applib/annotation/LabelPosition.adoc.adoc[LabelPosition]`
+<.> `[teal]#*_labelPosition_*#` : `xref:system:generated:index/applib/annotation/LabelPosition.adoc[LabelPosition]`
 +
 --
 In forms, positioning of the label (left, top or none) relative to the parameter value.
@@ -58,7 +58,7 @@ A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 --
 For string parameters (and properties), whether to render as a text area over multiple lines.
 --
-<.> `[teal]#*_renderDay_*#` : `xref:system:generated:index/applib/annotation/RenderDay.adoc.adoc[RenderDay]`
+<.> `[teal]#*_renderDay_*#` : `xref:system:generated:index/applib/annotation/RenderDay.adoc[RenderDay]`
 +
 --
 For date parameters (and properties) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.

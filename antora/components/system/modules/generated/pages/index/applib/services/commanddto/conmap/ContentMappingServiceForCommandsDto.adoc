@@ -18,6 +18,6 @@ ContentMappingServiceForCommandDto contentMappingServiceForCommandDto;
 <.> `[teal]#*map*#(Object object)` : `CommandsDto`
 +
 --
-Not part of the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc.adoc[ContentMappingService] API.
+Not part of the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[ContentMappingService] API.
 --
 

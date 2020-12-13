@@ -34,10 +34,10 @@ NOTE: domain classes may not have a method with this name. The `__isis_` prefix 
 
  *NOTE: there is a string-literal reference to this name `DomainObjectInvocationHandler` , so it should not be changed.* .
 --
-<.> `[teal]#*__isis_executionModes*#()` : `ImmutableEnumSet<xref:system:generated:index/applib/services/wrapper/control/ExecutionMode.adoc.adoc[ExecutionMode]>`
+<.> `[teal]#*__isis_executionModes*#()` : `ImmutableEnumSet<xref:system:generated:index/applib/services/wrapper/control/ExecutionMode.adoc[ExecutionMode]>`
 +
 --
-The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
+The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
 
 NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
 --

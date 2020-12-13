@@ -112,7 +112,7 @@ For example, if a property is annotated with `@Title` , then normally this shoul
 --
 Acts as the default no-op value for _PropertyLayout#hidden()_ , _CollectionLayout#hidden()_ and _ActionLayout#hidden()_ .
 --
-<.> `[teal]#*includes*#(xref:system:generated:index/applib/annotation/Where.adoc.adoc[Where] context)` : `boolean`
+<.> `[teal]#*includes*#(xref:system:generated:index/applib/annotation/Where.adoc[Where] context)` : `boolean`
 +
 --
 Whether this `Where` is a superset of the context `Where` provided.

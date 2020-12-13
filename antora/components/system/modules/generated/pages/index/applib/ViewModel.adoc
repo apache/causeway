@@ -3,7 +3,7 @@
 
 Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
 
-Objects that are part of the domain object layer should instead implement xref:system:generated:index/applib/RecreatableDomainObject.adoc.adoc[RecreatableDomainObject] .
+Objects that are part of the domain object layer should instead implement xref:system:generated:index/applib/RecreatableDomainObject.adoc[RecreatableDomainObject] .
 
 .Java Sources
 [source,java]

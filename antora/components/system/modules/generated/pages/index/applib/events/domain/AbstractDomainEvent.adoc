@@ -49,7 +49,7 @@ class AbstractDomainEvent {
 --
 If used then the framework will set state via (non-API) setters.
 
-Because the xref:system:generated:index/applib/events/EventObjectBase.adoc.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
+Because the xref:system:generated:index/applib/events/EventObjectBase.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
 --
 <.> `[teal]#*setMixedIn*#(Object mixedIn)` : `void`
 +
@@ -66,16 +66,16 @@ The subject of the event, which will be either the _#getSource() source_ for a r
 --
 Not API, set by the framework.
 --
-<.> `[teal]#*setIdentifier*#(xref:system:generated:index/applib/Identifier.adoc.adoc[Identifier] identifier)` : `void`
+<.> `[teal]#*setIdentifier*#(xref:system:generated:index/applib/Identifier.adoc[Identifier] identifier)` : `void`
 +
 --
 Not API, set by the framework if the no-arg constructor is used.
 --
 <.> `[teal]#*hide*#()` : `void`
 <.> `[teal]#*disable*#(String reason)` : `void`
-<.> `[teal]#*disable*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc.adoc[TranslatableString] reason)` : `void`
+<.> `[teal]#*disable*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] reason)` : `void`
 <.> `[teal]#*invalidate*#(String reason)` : `void`
-<.> `[teal]#*invalidate*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc.adoc[TranslatableString] reason)` : `void`
+<.> `[teal]#*invalidate*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] reason)` : `void`
 <.> `[teal]#*veto*#(String reason, Object... args)` : `void`
 +
 --
@@ -83,7 +83,7 @@ Use instead of _#hide()_ , _#disable(String)_ and _#invalidate(String)_ ; just d
 
 If hiding, just pass `null` for the parameter.
 --
-<.> `[teal]#*veto*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc.adoc[TranslatableString] translatableReason)` : `void`
+<.> `[teal]#*veto*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] translatableReason)` : `void`
 +
 --
 Use instead of _#hide()_ , _#disable(org.apache.isis.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.isis.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .

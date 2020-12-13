@@ -44,7 +44,7 @@ The only view available within the core framework is "table". However, other vie
 --
 Description of this collection, eg to be rendered in a tooltip.
 --
-<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc.adoc[Where]`
+<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
 +
 --
 Indicates where in the UI the collection should _not_ not be visible.

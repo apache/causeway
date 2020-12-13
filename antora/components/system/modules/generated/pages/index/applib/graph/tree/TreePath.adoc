@@ -24,6 +24,6 @@ interface TreePath {
 }
 ----
 
-<.> `[teal]#*append*#(int indexWithinSiblings)` : `xref:system:generated:index/applib/graph/tree/TreePath.adoc.adoc[TreePath]`
-<.> `[teal]#*getParentIfAny*#()` : `xref:system:generated:index/applib/graph/tree/TreePath.adoc.adoc[TreePath]`
+<.> `[teal]#*append*#(int indexWithinSiblings)` : `xref:system:generated:index/applib/graph/tree/TreePath.adoc[TreePath]`
+<.> `[teal]#*getParentIfAny*#()` : `xref:system:generated:index/applib/graph/tree/TreePath.adoc[TreePath]`
 

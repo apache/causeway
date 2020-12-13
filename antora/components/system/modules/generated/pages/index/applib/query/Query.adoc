@@ -7,7 +7,7 @@ The implementations of these objects are be provided by the underlying persistor
 
 Implementations are expected to implement the _#getStart()_ and _#getCount()_ methods, which are used to support range / paging the data. Returned result sets are expected to start from index "start", and no more than "count" items are expected.
 
- *Note:* that not every object store will necessarily support this interface. In particular, the in-memory object store does not. For this, you can use the _Predicate_ interface to similar effect, for example in _RepositoryService#allMatches(Class, Predicate, long, long)_ ). Note that the predicate is applied within the xref:system:generated:index/applib/services/repository/RepositoryService.adoc.adoc[RepositoryService] (ie client-side) rather than being pushed back to the object store.
+ *Note:* that not every object store will necessarily support this interface. In particular, the in-memory object store does not. For this, you can use the _Predicate_ interface to similar effect, for example in _RepositoryService#allMatches(Class, Predicate, long, long)_ ). Note that the predicate is applied within the xref:system:generated:index/applib/services/repository/RepositoryService.adoc[RepositoryService] (ie client-side) rather than being pushed back to the object store.
 
 .Java Sources
 [source,java]

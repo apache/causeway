@@ -38,12 +38,12 @@ Provides a reverse lookup of a domain class' object type, as defined by _DomainO
 --
 Provides a lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis'ObjectSpecIdFacet).
 --
-<.> `[teal]#*getDomainModel*#()` : `xref:system:generated:index/applib/services/metamodel/DomainModel.adoc.adoc[DomainModel]`
+<.> `[teal]#*getDomainModel*#()` : `xref:system:generated:index/applib/services/metamodel/DomainModel.adoc[DomainModel]`
 +
 --
 Returns a list of representations of each of member of each domain class.
 
-Used by xref:system:generated:index/applib/services/metamodel/MetaModelServiceMenu.adoc.adoc[MetaModelServiceMenu] to return a downloadable CSV.
+Used by xref:system:generated:index/applib/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu] to return a downloadable CSV.
 
 Note that _MetaModelService#exportMetaModel(Config)_ provides a superset of the functionality provided by this method.
 --

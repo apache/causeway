@@ -3,16 +3,16 @@
 
 The available policies as to whether data should be published to corresponding subscribers. The framework supports several kinds of data that are available for publishing:
 
-* *xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc.adoc[EntityChanges] ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc.adoc[EntityChangesSubscriber]*
+* *xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber]*
 
  *
-* *xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc.adoc[EntityPropertyChange] ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc.adoc[EntityPropertyChangeSubscriber]*
+* *xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber]*
 
  *
-* *xref:system:generated:index/applib/services/command/Command.adoc.adoc[Command] ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc.adoc[CommandSubscriber]*
+* *xref:system:generated:index/applib/services/command/Command.adoc[Command] ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber]*
 
  *
-* *_Interaction.Execution_ ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc.adoc[ExecutionSubscriber]*
+* *_Interaction.Execution_ ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]*
 
  ** * * * 
 
