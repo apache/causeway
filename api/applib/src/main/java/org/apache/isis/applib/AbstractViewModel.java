@@ -30,10 +30,8 @@ package org.apache.isis.applib;
  * <p>
  *     As an alternative, consider simply annotating the view model class with {@link org.apache.isis.applib.annotation.ViewModel}.
  * </p>
- *
+ * @since ? {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 public abstract class AbstractViewModel implements ViewModel {
 
     @Override

@@ -30,10 +30,11 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 
-// tag::refguide[]
+/**
+ * @since ? {@index}
+ */
 public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
-    // end::refguide[]
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -56,11 +57,9 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
      */
-    // tag::refguide[]
     @Getter
     private Object mixedIn;
 
-    // end::refguide[]
     /**
      * Not API - set by the framework.
      */
@@ -73,14 +72,11 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * The subject of the event, which will be either the {@link #getSource() source} for a regular action, or the
      * {@link #getMixedIn() mixed-in} domain object for a mixin.
      */
-    // tag::refguide[]
     public Object getSubject() {
         final Object mixedIn = getMixedIn();
         return mixedIn != null ? mixedIn : getSource();
     }
 
-    // end::refguide[]
-    // tag::refguide-1[]
     public enum Phase {
 
         HIDE,
@@ -93,7 +89,6 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
         EXECUTED
 
-        // end::refguide-1[]
         ;
 
         /**
@@ -119,20 +114,16 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         public boolean isExecuted() {
             return this == EXECUTED;
         }
-        // tag::refguide-1[]
 
     }
-    // end::refguide-1[]
 
     /**
      * Whether the framework is checking visibility, enablement, validity or actually executing (invoking action,
      * updating property or collection).
      */
-    // tag::refguide[]
     @Getter
     private Phase eventPhase;
 
-    // end::refguide[]
     /**
      * Not API, set by the framework.
      */
@@ -143,11 +134,9 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * If the no-arg constructor is used, then the framework will populate this field reflectively.
      */
-    // tag::refguide[]
     @Getter
     private Identifier identifier;
 
-    // end::refguide[]
     /**
      * Not API, set by the framework if the no-arg constructor is used.
      */
@@ -161,16 +150,12 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * @see #veto(String, Object...)
      */
-    // tag::refguide[]
     public void hide() {
-        // end::refguide[]
 
         this.hidden = true;
 
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     /**
      * If {@link #isDisabled() disabled}, then either this method returns non-null or {@link #getDisabledReasonTranslatable()} will.
@@ -193,31 +178,23 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * @see #disable(org.apache.isis.applib.services.i18n.TranslatableString)
      * @see #veto(String, Object...)
      */
-    // tag::refguide[]
     public void disable(final String reason) {
-        // end::refguide[]
 
         this.disabledReason = reason;
 
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     /**
      * @see #disable(java.lang.String)
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
      */
-    // tag::refguide[]
     public void disable(final TranslatableString reason) {
-        // end::refguide[]
 
         this.disabledReasonTranslatable = reason;
 
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
 
     /**
@@ -240,31 +217,23 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * @see #invalidate(org.apache.isis.applib.services.i18n.TranslatableString)
      * @see #veto(String, Object...)
      */
-    // tag::refguide[]
     public void invalidate(final String reason) {
-        // end::refguide[]
 
         this.invalidityReason = reason;
 
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * @see #invalidate(String)
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
      */
-    // tag::refguide[]
     public void invalidate(final TranslatableString reason) {
-        // end::refguide[]
 
         this.invalidityReasonTranslatable = reason;
 
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     /**
      * Use instead of {@link #hide()}, {@link #disable(String)} and {@link #invalidate(String)}; just delegates to
@@ -279,9 +248,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      *
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
      */
-    // tag::refguide[]
     public void veto(final String reason, final Object... args) {
-        // end::refguide[]
 
         switch (getEventPhase()) {
         case HIDE:
@@ -306,11 +273,9 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
             throw _Exceptions.unmatchedCase(getEventPhase());
         }
 
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * Use instead of {@link #hide()}, {@link #disable(org.apache.isis.applib.services.i18n.TranslatableString)} and {@link #invalidate(org.apache.isis.applib.services.i18n.TranslatableString)}; just delegates to
      * appropriate vetoing method based upon the {@link #getEventPhase() phase}.
@@ -323,9 +288,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      *
      * @see #veto(String, Object...)
      */
-    // tag::refguide[]
     public void veto(final TranslatableString translatableReason) {
-        // end::refguide[]
 
         switch (getEventPhase()) {
         case HIDE:
@@ -344,10 +307,8 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
             throw _Exceptions.unmatchedCase(getEventPhase());
         }
 
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     /**
      * Provides a mechanism to pass data to the next {@link #getEventPhase() phase}.
@@ -357,20 +318,16 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * Obtain user-data, as set by a previous {@link #getEventPhase() phase}.
      */
-    // tag::refguide[]
     public Object get(Object key) {
         return userData.get(key);
     }
 
-    // end::refguide[]
     /**
      * Set user-data, for the use of a subsequent {@link #getEventPhase() phase}.
      */
-    // tag::refguide[]
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
-    // end::refguide[]
 
     private static final ToString<AbstractDomainEvent<?>> toString =
             ObjectContracts.<AbstractDomainEvent<?>>
@@ -384,7 +341,5 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         return toString.toString(this);
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

@@ -44,6 +44,7 @@ import lombok.experimental.UtilityClass;
  * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a>
  * (non-ASF)
  * </p>
+ * @since 2.0 {@index}
  */
 @UtilityClass
 public class JaxbUtil {

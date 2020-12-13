@@ -21,6 +21,9 @@ package org.apache.isis.applib.graph.tree;
 import java.io.Serializable;
 import java.util.Set;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface TreeState extends Serializable {
 
     public static TreeState rootCollapsed() {

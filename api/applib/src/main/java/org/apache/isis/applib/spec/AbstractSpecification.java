@@ -36,6 +36,7 @@ import java.lang.reflect.Method;
  * <p>
  * Implementation note: inspired by (borrowed code from) Hamcrest's
  * <tt>TypeSafeMatcher</tt>.
+ * @since ? {@index}
  */
 public abstract class AbstractSpecification<T> implements Specification {
 

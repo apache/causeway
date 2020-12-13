@@ -19,6 +19,9 @@
 
 package org.apache.isis.applib.adapters;
 
+/**
+ * @since ? {@index}
+ */
 public abstract class AbstractValueSemanticsProvider<T> 
 implements ValueSemanticsProvider<T> {
 

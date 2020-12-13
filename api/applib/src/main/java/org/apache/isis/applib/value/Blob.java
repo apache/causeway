@@ -39,8 +39,9 @@ import org.apache.isis.commons.internal.image._Images;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-// tag::refguide[]
-// end::refguide[]
+/**
+ * @since ? {@index}
+ */
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider")
 @XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support

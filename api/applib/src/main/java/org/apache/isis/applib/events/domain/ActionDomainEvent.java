@@ -27,36 +27,31 @@ import org.apache.isis.applib.util.ToString;
 import lombok.Getter;
 import lombok.Setter;
 
-// tag::refguide[]
+/**
+ * @since ? {@index}
+ */
 public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
-    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.action.domain-event.post-for-default</tt>
      * configuration property.
      */
-    // tag::refguide[]
     public static class Default extends ActionDomainEvent<Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    // tag::refguide[]
     public static class Noop extends ActionDomainEvent<Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    // tag::refguide[]
     public static class Doop extends ActionDomainEvent<Object> {}
 
-    // end::refguide[]
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -67,7 +62,6 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public ActionDomainEvent() {
     }
 
-    // tag::refguide[]
     @Getter
     private SemanticsOf semantics;
 
@@ -77,15 +71,12 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     @Getter
     private List<Class<?>> parameterTypes;
 
-    // end::refguide[]
     /**
      * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
      */
-    // tag::refguide[]
     @Getter
     private Object mixedIn;
 
-    // end::refguide[]
     /**
      * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
      * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
@@ -97,11 +88,9 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      *     no sanity checks.
      * </p>
      */
-    // tag::refguide[]
     @Getter @Setter
     private List<Object> arguments;
 
-    // end::refguide[]
     /**
      * The value returned by the action.
      *
@@ -110,23 +99,19 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      *     {@link #getEventPhase() phase}.
      * </p>
      */
-    // tag::refguide[]
     @Getter
     private Object returnValue;
 
-    // end::refguide[]
     /**
      * Set by the framework.
      *
      * Event subscribers can replace the value with some other value if they wish, though only in the
      * {@link Phase#EXECUTED} phase.
      */
-    // tag::refguide[]
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;
     }
 
-    // end::refguide[]
     /**
      * Not API - set by the framework.
      */
@@ -165,7 +150,5 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
         return toString.toString(this);
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

@@ -36,7 +36,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 /**
  * Fundamental building block of Tree structures. 
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  *
  * @param <T> type constraint for values contained by this node
  */

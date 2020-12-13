@@ -45,7 +45,7 @@ import lombok.val;
  * <p>
  * Relates to {@link VirtualContext}
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  *
  */
 @FunctionalInterface

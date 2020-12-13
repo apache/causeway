@@ -23,10 +23,11 @@ import java.util.Map;
 
 import org.apache.isis.applib.events.EventObjectBase;
 
-// tag::refguide[]
+/**
+ * @since ? {@index}
+ */
 public abstract class AbstractUiEvent<S> extends EventObjectBase<S> {
 
-    // end::refguide[]
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -47,17 +48,14 @@ public abstract class AbstractUiEvent<S> extends EventObjectBase<S> {
     /**
      * Obtain user-data, as set by any other subscribers.
      */
-    // tag::refguide[]
     public Object get(Object key) {
         return userData.get(key);
     }
     /**
      * Set user-data, for the use of other subscribers.
      */
-    // tag::refguide[]
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
 
 }
-// end::refguide[]

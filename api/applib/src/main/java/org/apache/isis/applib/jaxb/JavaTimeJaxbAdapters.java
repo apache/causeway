@@ -25,15 +25,9 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.Period;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.function.Function;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeConstants;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import lombok.experimental.UtilityClass;
 
@@ -47,7 +41,7 @@ import lombok.experimental.UtilityClass;
  * </pre>
  * 
  *  
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @UtilityClass
 public final class JavaTimeJaxbAdapters {
