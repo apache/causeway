@@ -286,7 +286,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         .stream()
         .skip(j2aContext.getNamespacePartsSkipCount())
         .collect(Can.toCan())
-        .add(unit.getName() + ".adoc")
+        .add(unit.getName())
         .stream()
         .collect(Collectors.joining("/"));
         
