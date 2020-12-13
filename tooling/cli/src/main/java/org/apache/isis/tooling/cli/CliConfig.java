@@ -54,10 +54,12 @@ public class CliConfig {
         private String documentGlobalIndexPath = "pages/index";
         private String documentGlobalIndexXrefPageIdFormat = "system:generated:index/%s.adoc";
         
+        private boolean fixOrphandedAdocIncludeStatements = false;
+        
         private String systemOverviewFilename = "system-overview.adoc";
 
         // when 3 eg. skips first three parts of the package names 'org.apache.isis'
-        private int namespacePartsSkipCount = 3;
+        private int namespacePartsSkipCount = 0;
         
         public boolean isDryRun() {
             return getOutputRootFolder() == null;

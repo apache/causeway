@@ -85,7 +85,8 @@ final class ProjectDocWriter {
                 
                 ++writeCount;
             }
-                
+            
+            // summary
             System.out.println(
                     String.format("ProjectDocWriter: all done. (deleted: %d, written: %d)", 
                             deleteCount.getValue(),
@@ -96,7 +97,7 @@ final class ProjectDocWriter {
                     "failed to write adoc for unit %s", 
                     currentUnit.getValue().map(J2AdocUnit::getName).orElse("none")));
             e.printStackTrace();
-            return;
+            System.exit(1);
         } 
         
     }

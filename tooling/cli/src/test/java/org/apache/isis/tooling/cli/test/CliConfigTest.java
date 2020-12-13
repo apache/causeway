@@ -55,6 +55,10 @@ class CliConfigTest {
         assertEquals("These tables summarize all Maven artifacts available with _Apache Isis_.", config.getProjectDoc().getDescription());
         assertNotNull(config.getProjectDoc().getArtifactGroups());
         assertTrue(config.getProjectDoc().getArtifactGroups().size()>5);
+        
+        
+        assertEquals(true, config.getProjectDoc().isFixOrphandedAdocIncludeStatements());
+        assertEquals(3, config.getProjectDoc().getNamespacePartsSkipCount());
     }
 
 }

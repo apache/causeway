@@ -19,6 +19,8 @@
 package org.apache.isis.tooling.j2adoc.test;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
@@ -32,11 +34,12 @@ class ExampleReferenceFinder {
         int exampleRef = -1;
         int chapterStart = -1;
         int chapterEnd = -1;
+        String matchingLine;
         String name;
         String shortName;
     }
     
-    static List<ExampleReference> find(Iterable<String> lines) {
+    static List<ExampleReference> find(Iterable<String> lines, Predicate<String> matcher) {
         val eRefs = _Lists.<ExampleReference>newArrayList();
         
         ExampleReference acc = new ExampleReference();
@@ -44,12 +47,21 @@ class ExampleReferenceFinder {
         int i = 0;
         
         for(val line : lines) {
-            if(line.contains("refguide:applib-svc:example$services/")) {
+            if(matcher.test(line)) {
                 acc.exampleRef = i;
                 
                 val shortRef = line.substring(line.lastIndexOf("/")+1);
-                val name = shortRef.substring(0, shortRef.lastIndexOf(".java"));
+                
+                val name = Stream.of(
+                        ".java",
+                        ".adoc")
+                .filter(shortRef::contains)
+                .map(ext->shortRef.substring(0, shortRef.lastIndexOf(ext)))
+                .findFirst()
+                .orElse("???");
+                
                 acc.name = name;
+                acc.matchingLine = line;
                 
                 if(name.contains(".")) {
                     acc.shortName = name.substring(name.lastIndexOf(".")+1);

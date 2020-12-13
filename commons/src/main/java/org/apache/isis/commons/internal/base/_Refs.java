@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.internal.base;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.IntUnaryOperator;
 import java.util.function.LongUnaryOperator;
@@ -32,6 +33,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -63,6 +65,10 @@ public final class _Refs {
     
     public static <T> ObjectReference<T> objectRef(final T value) {
         return new ObjectReference<>(value);
+    }
+    
+    public static StringReference stringRef(final @NonNull String value) {
+        return new StringReference(value);
     }
     
     // -- IMPLEMENTATIONS
@@ -159,6 +165,75 @@ public final class _Refs {
         
         public T getValueElseFail() {
             return getValue().orElseThrow(_Exceptions::noSuchElement);
+        }
+        
+    }
+    
+    @Setter @ToString @EqualsAndHashCode @AllArgsConstructor
+    public static final class StringReference {
+        private String value;
+        
+        public String update(final @NonNull UnaryOperator<String> operator) {
+            return value = Objects.requireNonNull(operator.apply(value));
+        }
+        
+        public boolean isSet(String other) {
+            return value.equals(other);
+        }
+        
+        public String getValue() {
+            return value;
+        }
+        
+        /**
+         * Returns true if and only if this string contains the specified
+         * sequence of char values.
+         *
+         * @param s the sequence to search for
+         * @return true if this string contains {@code s}, false otherwise
+         */
+        public boolean contains(CharSequence s) {
+            return value.contains(s);
+        }
+        
+        public String cutAtIndex(int index) {
+            if(index<=0) {
+                return "";
+            }
+            if(index>=value.length()) {
+                val left = value;
+                value = "";
+                return left;
+            }
+            val left = value.substring(0, index);
+            value = value.substring(index);
+            return left;
+        }
+        
+        public String cutAtIndexOf(String s) {
+            return cutAtIndex(value.indexOf(s));
+        }
+        
+        public String cutAtLastIndexOf(String s) {
+            return cutAtIndex(value.lastIndexOf(s));
+        }
+        
+        public String cutAtIndexOfAndDrop(String s) {
+            if(!value.contains(s)) {
+                return "";
+            }
+            val left = cutAtIndex(value.indexOf(s));
+            cutAtIndex(s.length());
+            return left;
+        }
+        
+        public String cutAtLastIndexOfAndDrop(String s) {
+            if(!value.contains(s)) {
+                return "";
+            }
+            val left = cutAtIndex(value.lastIndexOf(s));
+            cutAtIndex(s.length());
+            return left;
         }
         
     }

@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -42,6 +43,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
+import org.apache.isis.tooling.cli.adocfix.IncludeStatementFixer;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.ast.CodeClasses;
@@ -86,6 +88,8 @@ public class ProjectDocModel {
         
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
+        
+        final SortedSet<File> asciiDocFiles = new TreeSet<>();
 
         val j2aContext = J2AdocContext
                 //.compactFormat()
@@ -105,14 +109,17 @@ public class ProjectDocModel {
         .ifPresent(block(doc)::setSource);
 
         cliConfig.getProjectDoc().getArtifactGroups().forEach((section, groupId)->{
-            createSection(doc, section, groupId, j2aContext);
+            createSection(doc, section, groupId, j2aContext, asciiDocFiles::add);
         });
 
         if(!modules.isEmpty()) {
-            createSection(doc, "Other", null, j2aContext);
+            createSection(doc, "Other", null, j2aContext, asciiDocFile->{ /* don't collect*/});
         }
         
         ProjectDocWriter.write(cliConfig, doc, j2aContext);
+        
+        // update include statements ...
+        IncludeStatementFixer.fixIncludeStatements(asciiDocFiles, cliConfig, j2aContext);
 
     }
 
@@ -183,7 +190,8 @@ public class ProjectDocModel {
             final @NonNull Document doc, 
             final @NonNull String sectionName, 
             final @Nullable String groupIdPattern, 
-            final @NonNull J2AdocContext j2aContext) {
+            final @NonNull J2AdocContext j2aContext,
+            final @NonNull Consumer<File> onAdocFile) {
 
         val titleBlock = block(doc);
 
@@ -210,6 +218,7 @@ public class ProjectDocModel {
         modules.stream()
         .filter(module->matchesGroupId(module, groupIdPattern))
         .forEach(module->{
+            gatherAdocFiles(module.getProjectDirectory(), onAdocFile);
 
             val projPath = _Files.canonicalPath(module.getProjectDirectory()).get();
             val projRelativePath = 
@@ -358,6 +367,16 @@ public class ProjectDocModel {
 
         return components;
     }
+    
+    private void gatherAdocFiles(File projDir, Consumer<File> onFile) {
+    
+        val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.ADOC).main();
+
+        analyzerConfig.getSources(Language.ADOC)
+                .stream()
+                .forEach(onFile::accept);
+    }
+                
 
 }
 

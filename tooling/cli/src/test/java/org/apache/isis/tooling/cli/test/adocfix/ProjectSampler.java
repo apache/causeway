@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.j2adoc.test;
+package org.apache.isis.tooling.cli.test.adocfix;
 
 import java.io.File;
 import java.util.Set;
@@ -43,9 +43,9 @@ final class ProjectSampler {
     @SneakyThrows
     public static Set<File> adocFiles(File folder) {
         return _Files.searchFiles(
-                    folder, 
-                    _Predicates.alwaysTrue(), 
-                    file->file.getName().endsWith(".adoc"));
+                folder, 
+                _Predicates.alwaysTrue(), 
+                file->file.getName().endsWith(".adoc"));
     }
     
 }

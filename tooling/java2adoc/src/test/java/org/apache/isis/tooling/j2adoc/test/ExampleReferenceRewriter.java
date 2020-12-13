@@ -33,7 +33,10 @@ class ExampleReferenceRewriter {
         
         val lines = _Text.readLinesFromFile(source, StandardCharsets.UTF_8);
         
-        val exampleRefs = ExampleReferenceFinder.find(lines);
+        val exampleRefs = ExampleReferenceFinder.find(
+                lines, 
+                line->line.contains("refguide:applib-svc:example$services/"));
+                
         if(exampleRefs.isEmpty()) {
             return;
         }

@@ -43,7 +43,7 @@ import static guru.nidi.codeassert.config.Language.JAVA;
 
 class J2AdocTest {
 
-    @Test //@Disabled
+    @Test @Disabled
     void testJavaDoc2AsciiDoc() {
         
         val analyzerConfig = AnalyzerConfigFactory
@@ -79,7 +79,7 @@ class J2AdocTest {
         });
     }
     
-    @Test @Disabled
+    @Test// @Disabled
     void adocDocMining() throws IOException {
         
         val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheIsisRoot());
@@ -88,7 +88,10 @@ class J2AdocTest {
         
         Can.ofCollection(adocFiles)
         .stream()
-        .filter(source->source.toString().contains("XmlSnapshotService"))
+        
+        .filter(source->!source.toString().contains("\\generated\\"))
+        
+        //.filter(source->source.toString().contains("XmlSnapshotService"))
         .forEach(file->parseAdoc(file, names::add));
         
         names.forEach(System.out::println);
@@ -97,9 +100,14 @@ class J2AdocTest {
     private void parseAdoc(final @NonNull File file, Consumer<String> onName) {
         val lines = _Text.readLinesFromFile(file, StandardCharsets.UTF_8);
         
-        ExampleReferenceFinder.find(lines)
+        ExampleReferenceFinder.find(
+                lines, 
+                line->line.contains("system:generated:page$")
+//               line->line.startsWith("include::")
+//                    && line.contains("[tags=")
+                    )
         .forEach(exRef->{
-            onName.accept(exRef.name);
+            onName.accept(String.format("%s in %s", exRef.name, exRef.matchingLine));
         });
     }
     

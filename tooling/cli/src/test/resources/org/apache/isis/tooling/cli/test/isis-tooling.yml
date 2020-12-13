@@ -18,6 +18,8 @@
 #
 
 projectDoc:
+  fixOrphandedAdocIncludeStatements: true
+  namespacePartsSkipCount: 3
   description: "These tables summarize all Maven artifacts available with _Apache Isis_."
   artifactGroups:
     Base: org.apache.isis

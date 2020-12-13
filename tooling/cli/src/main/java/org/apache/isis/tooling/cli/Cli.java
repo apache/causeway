@@ -81,7 +81,7 @@ class Cli implements Callable<Integer> {
 
         @Override
         public Integer call() throws Exception {
-            
+
             if(outputFilePath!=null) {
                 getConfig().getProjectDoc().setOutputRootFolder(new File(outputFilePath));
             }
