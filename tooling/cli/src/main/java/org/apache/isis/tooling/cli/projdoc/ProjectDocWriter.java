@@ -47,33 +47,49 @@ final class ProjectDocWriter {
                 : AsciiDocWriter::writeToFile;
 
         val currentUnit = _Refs.<J2AdocUnit>objectRef(null);
-                
+        val projectDoc = cliConfig.getProjectDoc();
+            
+        val rootFolder = projectDoc.getOutputRootFolder();
+        val pagesFolder = projectDoc.getDocumentPagesFolder();
+        
+        val deleteCount = _Refs.intRef(0);
+        int writeCount = 0;
+        
         try {
 
-            // write system overview
-            docWriter.accept(systemSummaryAdoc, cliConfig.getProjectDoc().getOutputFile());
-
-            // delete document index
-            
-            val globalDocIndexRootFolder = cliConfig.getProjectDoc().getDocumentGlobalIndexOutputFolder();
-            
-            _Files.searchFiles(globalDocIndexRootFolder, dir->true, file->file.getName().endsWith(".adoc"))
+            // delete all generated documents 
+            _Files.searchFiles(rootFolder, dir->true, file->file.getName().endsWith(".adoc"))
             .stream()
             .peek(adocFile->System.out.println(String.format("deleting file: %s", adocFile.getName())))
+            .peek(__->deleteCount.inc())
             .forEach(_Files::deleteFile);
+            
+            // write system overview
+            val sysovFile = new File(pagesFolder, projectDoc.getSystemOverviewFilename()); 
+            System.out.println(String.format("writing system overview: %s", sysovFile.getName()));
+            docWriter.accept(systemSummaryAdoc, sysovFile);
+            ++writeCount;
             
             // write document index
             for(val unit : j2aContext.getUnitIndex().values()) {
             
                 currentUnit.setValue(unit);
+                         
+                val adocIndexFile = adocDestinationFileForUnit(unit, projectDoc);
+                
+                System.out.println(String.format("writing file: %s", adocIndexFile.getName()));
                 
                 docWriter.accept(
                         unit.toAsciiDoc(j2aContext), 
-                        new File(
-                                cliConfig.getProjectDoc().getDocumentGlobalIndexOutputFolder(), 
-                                unit.getName() + ".adoc"));
+                        adocIndexFile);
+                
+                ++writeCount;
             }
                 
+            System.out.println(
+                    String.format("ProjectDocWriter: all done. (deleted: %d, written: %d)", 
+                            deleteCount.getValue(),
+                            writeCount));
             
         } catch (Exception e) {
             System.err.println(String.format(
@@ -82,6 +98,28 @@ final class ProjectDocWriter {
             e.printStackTrace();
             return;
         } 
+        
+    }
+    
+    // generate output file based on unit's namespace and unit's name
+    private static File adocDestinationFileForUnit(
+            final @NonNull J2AdocUnit unit,
+            final @NonNull CliConfig.ProjectDoc projectDoc) {
+        
+        val indexFolder = projectDoc.getDocumentIndexFolder();
+     
+        val destFolderBuilder = _Refs.<File>objectRef(indexFolder);
+        
+        unit.getNamespace().stream()
+        .skip(projectDoc.getNamespacePartsSkipCount()) 
+        .forEach(subDir->destFolderBuilder.update(currentDir->new File(currentDir, subDir)));
+        
+        val destFolder = destFolderBuilder.getValueElseDefault(indexFolder);
+        destFolder.mkdirs();
+        
+        return new File(
+                destFolder,
+                unit.getName() + ".adoc");
         
     }
 

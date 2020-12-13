@@ -67,6 +67,7 @@ class J2AdocTest {
         .forEach(j2aContext::add);
         
         j2aContext.streamUnits()
+        //.peek(unit->System.err.println("namespace "+unit.getNamespace()))
         .map(unit->unit.toAsciiDoc(j2aContext))
         .forEach(adoc->{
             

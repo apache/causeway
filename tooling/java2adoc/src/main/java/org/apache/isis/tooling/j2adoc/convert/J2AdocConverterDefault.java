@@ -281,8 +281,17 @@ final class J2AdocConverterDefault implements J2AdocConverter {
     
     @Override
     public String xref(final @NonNull J2AdocUnit unit) {
+
+        val xrefCoordinates = unit.getNamespace()
+        .stream()
+        .skip(j2aContext.getNamespacePartsSkipCount())
+        .collect(Can.toCan())
+        .add(unit.getName())
+        .stream()
+        .collect(Collectors.joining("/"));
+        
         return String.format("xref:%s[%s]", 
-                String.format(j2aContext.getXrefPageIdFormat(), unit.getName()), 
+                xrefCoordinates, 
                 unit.getName()); 
     }
 

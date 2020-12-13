@@ -53,7 +53,7 @@ public final class CompilationUnits {
         .map(type->type
                 .findAll(TypeDeclaration.class)
                 .stream()
-                .map(AnyTypeDeclaration::auto))
+                .map(td->AnyTypeDeclaration.auto(td, compilationUnit)))
         .orElseGet(Stream::empty);
     }
     

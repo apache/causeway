@@ -92,6 +92,7 @@ public class ProjectDocModel {
                 .javaSourceWithFootnotesFormat()
                 .licenseHeader(cliConfig.getProjectDoc().getLicenseHeader())
                 .xrefPageIdFormat(cliConfig.getProjectDoc().getDocumentGlobalIndexXrefPageIdFormat())
+                .namespacePartsSkipCount(cliConfig.getProjectDoc().getNamespacePartsSkipCount())
                 .build();
         
         val doc = doc();

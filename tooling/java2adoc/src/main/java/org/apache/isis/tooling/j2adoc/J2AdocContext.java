@@ -48,6 +48,9 @@ public class J2AdocContext {
     private final @Nullable String licenseHeader;
     
     @Builder.Default
+    private final int namespacePartsSkipCount = 0;
+    
+    @Builder.Default
     private final @NonNull String memberNameFormat = "[teal]#*%s*#";
     
     @Builder.Default

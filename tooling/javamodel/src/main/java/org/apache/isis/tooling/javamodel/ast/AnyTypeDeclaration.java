@@ -20,7 +20,9 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.Optional;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -59,6 +61,7 @@ public final class AnyTypeDeclaration {
         public boolean isInterface() { return this == INTERFACE; }
     }
     
+    private final @NonNull CompilationUnit cu;
     private final @NonNull Kind kind;
     private final TypeDeclaration<?> td;
     private final AnnotationDeclaration annotationDeclaration;
@@ -76,8 +79,11 @@ public final class AnyTypeDeclaration {
     
     
     public static AnyTypeDeclaration of(
-            final @NonNull AnnotationDeclaration annotationDeclaration) {
+            final @NonNull AnnotationDeclaration annotationDeclaration,
+            final @NonNull CompilationUnit cu) {
+        
         return new AnyTypeDeclaration(
+                cu,
                 Kind.ANNOTATION, 
                 annotationDeclaration,
                 annotationDeclaration,
@@ -96,8 +102,10 @@ public final class AnyTypeDeclaration {
     }
     
     public static AnyTypeDeclaration of(
-            final @NonNull ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+            final @NonNull ClassOrInterfaceDeclaration classOrInterfaceDeclaration,
+            final @NonNull CompilationUnit cu) {
         return new AnyTypeDeclaration(
+                cu,
                 classOrInterfaceDeclaration.isInterface() ? Kind.INTERFACE : Kind.CLASS, 
                 classOrInterfaceDeclaration,
                 null,
@@ -116,8 +124,10 @@ public final class AnyTypeDeclaration {
     }
     
     public static AnyTypeDeclaration of(
-            final @NonNull EnumDeclaration enumDeclaration) {
+            final @NonNull EnumDeclaration enumDeclaration,
+            final @NonNull CompilationUnit cu) {
         return new AnyTypeDeclaration(
+                cu,
                 Kind.ENUM, 
                 enumDeclaration, 
                 null, 
@@ -137,16 +147,17 @@ public final class AnyTypeDeclaration {
     }
     
     public static AnyTypeDeclaration auto(
-            final @NonNull TypeDeclaration<?> td) {
+            final @NonNull TypeDeclaration<?> td,
+            final @NonNull CompilationUnit cu) {
         
         if(td instanceof ClassOrInterfaceDeclaration) {
-            return of((ClassOrInterfaceDeclaration)td);
+            return of((ClassOrInterfaceDeclaration)td, cu);
         }
         if(td instanceof EnumDeclaration) {
-            return of((EnumDeclaration)td);
+            return of((EnumDeclaration)td, cu);
         }
         if(td instanceof AnnotationDeclaration) {
-            return of((AnnotationDeclaration)td);
+            return of((AnnotationDeclaration)td, cu);
         }
         throw _Exceptions.unsupportedOperation("unsupported TypeDeclaration %s", td.getClass());
     }
@@ -155,6 +166,10 @@ public final class AnyTypeDeclaration {
     
     public Optional<Javadoc> getJavadoc() {
         return td.getJavadoc();
+    }
+    
+    public Optional<PackageDeclaration> getPackageDeclaration() {
+        return cu.getPackageDeclaration();
     }
     
     public boolean hasIndexDirective() {

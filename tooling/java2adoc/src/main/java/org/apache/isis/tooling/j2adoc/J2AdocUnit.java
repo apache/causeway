@@ -27,10 +27,12 @@ import com.github.javaparser.javadoc.Javadoc;
 
 import org.asciidoctor.ast.Document;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
+import org.apache.isis.tooling.javamodel.ast.PackageDeclarations;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -59,6 +61,8 @@ public final class J2AdocUnit {
 
             val cu = StaticJavaParser.parse(source);
             
+            cu.getPackageDeclaration();
+            
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamTypeDeclarations)
             .filter(AnyTypeDeclaration::hasIndexDirective)
@@ -85,6 +89,10 @@ public final class J2AdocUnit {
     
     public String getSimpleName() {
         return atd.getSimpleName();
+    }
+    
+    public Can<String> getNamespace() {
+        return PackageDeclarations.namespace(atd.getPackageDeclaration());
     }
     
     public String getDeclarationKeywordFriendlyName() {

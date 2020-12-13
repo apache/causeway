@@ -42,7 +42,7 @@ final class HtmlToAsciiDoc {
         
         val adoc = AsciiDocFactory.doc();
         
-        val stack = new BlockHelper(adoc);
+        val helper = new BlockHelper(adoc);
         
         NodeTraversor.traverse(new NodeVisitor() {
             
@@ -55,39 +55,39 @@ final class HtmlToAsciiDoc {
                     
                     val textNode = (TextNode)node;
                     
-                    val text = stack.isPreFormatted()
+                    val text = helper.isPreFormatted()
                             ? textNode.getWholeText()
                             : textNode.text().trim();
                             
                     if(!text.isBlank()) {
-                        stack.blockAppend(text);    
+                        helper.blockAppend(text);    
                     }
                     return;
                 } 
                 
                 switch(tag) {
                 case "ul":
-                    stack.nextList();
+                    helper.nextList();
                     return;
                 case "p":
-                    stack.nextBlock();
+                    helper.nextBlock();
                     return;
                 case "pre":
-                    stack.nextListingBlock();
-                    stack.onPreHead();
+                    helper.nextListingBlock();
+                    helper.onPreHead();
                     return;
                 case "li":
-                    stack.nextListItem();
+                    helper.nextListItem();
                     return;
                 case "b":
                 case "em":
-                    stack.blockAppend(" *");
+                    helper.blockAppend(" *");
                     return;
                 case "tt":
-                    stack.blockAppend(" `");
+                    helper.blockAppend(" `");
                     return;
                 case "i":
-                    stack.blockAppend(" _");
+                    helper.blockAppend(" _");
                     return;
                 }
             }
@@ -99,23 +99,23 @@ final class HtmlToAsciiDoc {
                 
                 switch(tag) {
                 case "ul":
-                    stack.popList();
+                    helper.popList();
                     return;
                 case "pre":
-                    stack.onPreTail();
+                    helper.onPreTail();
                 case "p":
                 case "li":
-                    stack.pop();
+                    helper.pop();
                     return;
                 case "b":
                 case "em":
-                    stack.blockAppend("* ");
+                    helper.blockAppend("* ");
                     return;
                 case "tt":
-                    stack.blockAppend("` ");
+                    helper.blockAppend("` ");
                     return;
                 case "i":
-                    stack.blockAppend("_ ");
+                    helper.blockAppend("_ ");
                     return;
                 }
                 
