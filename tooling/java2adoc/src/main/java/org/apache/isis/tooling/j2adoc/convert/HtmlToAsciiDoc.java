@@ -29,6 +29,7 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
 import lombok.SneakyThrows;
@@ -48,21 +49,32 @@ final class HtmlToAsciiDoc {
             @Override
             public void head(Node node, int depth) {
                 
+                val tag = _Strings.nullToEmpty(node.nodeName()).toLowerCase();
+                
                 if(node instanceof TextNode) {
-                    val text = ((TextNode)node).text().trim();
+                    
+                    val textNode = (TextNode)node;
+                    
+                    val text = stack.isPreFormatted()
+                            ? textNode.getWholeText()
+                            : textNode.text().trim();
+                            
                     if(!text.isBlank()) {
-                        stack.blockAppend(text);
+                        stack.blockAppend(text);    
                     }
                     return;
                 } 
                 
-                switch(node.nodeName()) {
+                switch(tag) {
                 case "ul":
                     stack.nextList();
                     return;
                 case "p":
-                    stack.pop();
                     stack.nextBlock();
+                    return;
+                case "pre":
+                    stack.nextListingBlock();
+                    stack.onPreHead();
                     return;
                 case "li":
                     stack.nextListItem();
@@ -83,12 +95,15 @@ final class HtmlToAsciiDoc {
             @Override
             public void tail(Node node, int depth) {
                 
-                switch(node.nodeName()) {
+                val tag = _Strings.nullToEmpty(node.nodeName()).toLowerCase();
+                
+                switch(tag) {
                 case "ul":
                     stack.popList();
                     return;
+                case "pre":
+                    stack.onPreTail();
                 case "p":
-                    return;
                 case "li":
                     stack.pop();
                     return;
@@ -115,31 +130,43 @@ final class HtmlToAsciiDoc {
     // -- HELPER
     
     private final static class BlockHelper {
-        private final Stack<StructuralNode> stack = new Stack<StructuralNode>();
-        private final Stack<org.asciidoctor.ast.List> listStack = new Stack<org.asciidoctor.ast.List>();
+        
+        private final Stack<StructuralNode> nodeStack = new Stack<>();
+        private final Stack<org.asciidoctor.ast.List> listStack = new Stack<>();
+        
 
+        // first element on the stack is the document, that is the the root of the adoc abstract syntax tree
         BlockHelper(Document adoc){
-            stack.push(adoc);
+            nodeStack.push(adoc);  
         }
         
         void pop() {
-            stack.pop();
+            nodeStack.pop();
         }
         
         void popList() {
-            stack.pop();
+            nodeStack.pop();
             listStack.pop();
         }
         
+        // create a new block on top of the current stack
         Block nextBlock() {
-            val block = AsciiDocFactory.block(stack.peek());
-            stack.push(block);
+            val block = AsciiDocFactory.block(nodeStack.peek());
+            nodeStack.push(block);
             return block;
         }
         
+        // create a new block on top of the current stack
+        Block nextListingBlock() {
+            val block = AsciiDocFactory.listingBlock(nodeStack.peek(), "");
+            nodeStack.push(block);
+            return block;
+        }
+        
+        // if the stack top is already a block reuse it or create a new one
         Block getBlock() {
-            return (stack.peek() instanceof Block)
-                    ? (Block) stack.peek()
+            return (nodeStack.peek() instanceof Block)
+                    ? (Block) nodeStack.peek()
                     : nextBlock();
         }
         
@@ -149,8 +176,8 @@ final class HtmlToAsciiDoc {
         }
         
         org.asciidoctor.ast.List nextList() {
-            val nextList = AsciiDocFactory.list(stack.peek());
-            stack.push(nextList);
+            val nextList = AsciiDocFactory.list(nodeStack.peek());
+            nodeStack.push(nextList);
             listStack.push(nextList);
             return nextList;
         }
@@ -161,12 +188,28 @@ final class HtmlToAsciiDoc {
                     : listStack.peek();
             
             // pop until stack top points to list
-            while(!list.equals(stack.peek())) {
-                stack.pop();
+            while(!list.equals(nodeStack.peek())) {
+                nodeStack.pop();
             }
             val listItem = AsciiDocFactory.listItem(list);
             val openBlock = AsciiDocFactory.openBlock(listItem);
-            stack.push(openBlock);
+            nodeStack.push(openBlock);
+        }
+        
+        // -- PRE HANDLING
+        
+        int preDepth = 0;
+
+        void onPreHead() {
+            ++preDepth;
+        }
+        
+        void onPreTail() {
+            --preDepth;
+        }
+        
+        boolean isPreFormatted() {
+            return preDepth>0;
         }
         
     }

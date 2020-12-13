@@ -61,7 +61,8 @@ class J2AdocTest {
         //.filter(source->source.toString().contains("ExecutionMode"))
         //.filter(source->source.toString().contains("FactoryService"))
         //.filter(source->source.toString().contains("Action"))
-        .filter(source->source.toString().contains("SudoService"))
+        //.filter(source->source.toString().contains("SudoService"))
+        .filter(source->source.toString().contains("NonRecoverableException"))
         //.peek(source->System.out.println("parsing source: " + source))
         .forEach(j2aContext::add);
         
@@ -111,7 +112,7 @@ class J2AdocTest {
         analyzerConfig.getSources(JAVA)
         .stream()
         .peek(source->System.out.println("parsing source: " + source))
-        .filter(source->source.toString().contains("\\applib\\annotation\\"))
+        .filter(source->source.toString().contains("\\isis\\applib\\"))
         .forEach(AsciiDocIncludeTagFilter::removeAdocExampleTags);
         
     }

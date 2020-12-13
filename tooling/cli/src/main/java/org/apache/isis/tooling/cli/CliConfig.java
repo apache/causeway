@@ -32,22 +32,7 @@ import lombok.NonNull;
 public class CliConfig {
     
     private ProjectDoc projectDoc = new ProjectDoc();
-    private File outputFile = null; // where to write eg. system-overview.adoc
-    
-    private String documentGlobalIndexPath = "index";
-    private String documentGlobalIndexXrefPageIdFormat = "system:generated:index/%s.adoc";
-
-    public boolean isDryRun() {
-        return getOutputFile() == null;
-    }
-    
-    public File getDocumentGlobalIndexOutputFolder() {
-        return Optional.ofNullable(getOutputFile())
-                .map(File::getParentFile)
-                .map(folder->new File(folder, getDocumentGlobalIndexPath()))
-                .orElse(null);
-    }
-    
+        
     @Data
     public static class ProjectDoc {
         private String description = "These tables summarize all Maven artifacts available with this project.";
@@ -61,7 +46,24 @@ public class CliConfig {
                 + "is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express "
                 + "or implied. See the License for the specific language governing permissions and limitations under "
                 + "the License.";
-        private LinkedHashMap<String, String> artifactGroups = new LinkedHashMap<>();    
+        private LinkedHashMap<String, String> artifactGroups = new LinkedHashMap<>();
+        
+        private File outputFile = null; // where to write eg. system-overview.adoc
+        
+        private String documentGlobalIndexPath = "index";
+        private String documentGlobalIndexXrefPageIdFormat = "system:generated:index/%s.adoc";
+
+        public boolean isDryRun() {
+            return getOutputFile() == null;
+        }
+        
+        public File getDocumentGlobalIndexOutputFolder() {
+            return Optional.ofNullable(getOutputFile())
+                    .map(File::getParentFile)
+                    .map(folder->new File(folder, getDocumentGlobalIndexPath()))
+                    .orElse(null);
+        }
+        
     }
     
     // -- LOADING

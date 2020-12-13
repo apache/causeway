@@ -91,7 +91,7 @@ public class ProjectDocModel {
                 //.compactFormat()
                 .javaSourceWithFootnotesFormat()
                 .licenseHeader(cliConfig.getProjectDoc().getLicenseHeader())
-                .xrefPageIdFormat(cliConfig.getDocumentGlobalIndexXrefPageIdFormat())
+                .xrefPageIdFormat(cliConfig.getProjectDoc().getDocumentGlobalIndexXrefPageIdFormat())
                 .build();
         
         val doc = doc();

@@ -83,7 +83,7 @@ class Cli implements Callable<Integer> {
         public Integer call() throws Exception {
             
             if(outputFilePath!=null) {
-                getConfig().setOutputFile(new File(outputFilePath));
+                getConfig().getProjectDoc().setOutputFile(new File(outputFilePath));
             }
             
             val projTree = ProjectNodeFactory.maven(getProjectRoot());

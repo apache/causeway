@@ -23,8 +23,11 @@ import java.util.function.BiConsumer;
 
 import org.asciidoctor.ast.Document;
 
+import org.apache.isis.commons.internal.base._Files;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.tooling.cli.CliConfig;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.NonNull;
@@ -39,30 +42,48 @@ final class ProjectDocWriter {
             final @NonNull Document systemSummaryAdoc, 
             final @NonNull J2AdocContext j2aContext) {
         
-        final BiConsumer<Document, File> docWriter = cliConfig.isDryRun()
+        final BiConsumer<Document, File> docWriter = cliConfig.getProjectDoc().isDryRun()
                 ? (doc, file)->AsciiDocWriter.print(doc) // print to system out only (dry run)
                 : AsciiDocWriter::writeToFile;
-        
+
+        val currentUnit = _Refs.<J2AdocUnit>objectRef(null);
+                
         try {
 
             // write system overview
-            docWriter.accept(systemSummaryAdoc, cliConfig.getOutputFile());
+            docWriter.accept(systemSummaryAdoc, cliConfig.getProjectDoc().getOutputFile());
 
+            // delete document index
+            
+            val globalDocIndexRootFolder = cliConfig.getProjectDoc().getDocumentGlobalIndexOutputFolder();
+            
+            _Files.searchFiles(globalDocIndexRootFolder, dir->true, file->file.getName().endsWith(".adoc"))
+            .stream()
+            .peek(adocFile->System.out.println(String.format("deleting file: %s", adocFile.getName())))
+            .forEach(_Files::deleteFile);
+            
             // write document index
             for(val unit : j2aContext.getUnitIndex().values()) {
+            
+                currentUnit.setValue(unit);
+                
                 docWriter.accept(
                         unit.toAsciiDoc(j2aContext), 
                         new File(
-                                cliConfig.getDocumentGlobalIndexOutputFolder(), 
+                                cliConfig.getProjectDoc().getDocumentGlobalIndexOutputFolder(), 
                                 unit.getName() + ".adoc"));
             }
                 
             
         } catch (Exception e) {
+            System.err.println(String.format(
+                    "failed to write adoc for unit %s", 
+                    currentUnit.getValue().map(J2AdocUnit::getName).orElse("none")));
             e.printStackTrace();
             return;
         } 
         
     }
+
     
 }

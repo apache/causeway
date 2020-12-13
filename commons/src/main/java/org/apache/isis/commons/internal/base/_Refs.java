@@ -18,13 +18,20 @@
  */
 package org.apache.isis.commons.internal.base;
 
+import java.util.Optional;
 import java.util.function.IntUnaryOperator;
 import java.util.function.LongUnaryOperator;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <h1>- internal use only -</h1>
@@ -126,7 +133,7 @@ public final class _Refs {
         }
     }
     
-    @Data @AllArgsConstructor
+    @Setter @ToString @EqualsAndHashCode @AllArgsConstructor
     public static final class ObjectReference<T> {
         private T value;
         
@@ -137,6 +144,23 @@ public final class _Refs {
         public boolean isSet(T other) {
             return value==other;
         }
+        
+        public Optional<T> getValue() {
+            return Optional.ofNullable(value);
+        }
+        
+        public T getValueElseGet(Supplier<? extends T> other) {
+            return getValue().orElseGet(other);
+        }
+        
+        public T getValueElseDefault(T defaultValue) {
+            return getValue().orElse(defaultValue);
+        }
+        
+        public T getValueElseFail() {
+            return getValue().orElseThrow(_Exceptions::noSuchElement);
+        }
+        
     }
     
 }

@@ -51,7 +51,7 @@ public class MarkupVariableResolverService {
         constants.forEach((k, v)->{
             stringRef.update(string->string.replace(var(k), v));
         });
-        return stringRef.getValue();
+        return stringRef.getValueElseDefault(input);
     }
 
     private String var(String name) {
