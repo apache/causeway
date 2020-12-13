@@ -31,7 +31,6 @@ import java.lang.annotation.Target;
  * @since 1.x {@index}
  * @see org.apache.isis.applib.annotation.PropertyLayout
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.PARAMETER,
@@ -40,23 +39,18 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ParameterLayout {
 
-    // end::refguide[]
     /**
      * Indicates the css class that a parameter should have.
      */
-    // tag::refguide[]
-    String cssClass()                               // <.>
+    String cssClass()
             default "";
 
-    // end::refguide[]
     /**
      * Description of this property, eg to be rendered in a tooltip.
      */
-    // tag::refguide[]
-    String describedAs()                            // <.>
+    String describedAs()
             default "";
 
-    // end::refguide[]
     /**
      * In forms, positioning of the label (left, top or none) relative to the parameter value.
      *
@@ -64,35 +58,27 @@ public @interface ParameterLayout {
      * If not specified, the default depends upon the parameter value's datatype.
      * </p>
      */
-    // tag::refguide[]
-    LabelPosition labelPosition()                   // <.>
+    LabelPosition labelPosition()
             default LabelPosition.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * Name of this action parameter.
      */
-    // tag::refguide[]
-    String named()                                  // <.>
+    String named()
             default "";
 
-    // end::refguide[]
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
-    // tag::refguide[]
-    boolean namedEscaped()                          // <.>
+    boolean namedEscaped()
             default true;
 
-    // end::refguide[]
     /**
      * For string parameters (and properties), whether to render as a text area over multiple lines.
      */
-    // tag::refguide[]
-    int multiLine()                                 // <.>
+    int multiLine()
             default -1;
 
-    // end::refguide[]
     /**
      * For date parameters (and properties) only, instructs the viewer that the date should be rendered as one day
      * prior to the actually stored date.
@@ -117,17 +103,13 @@ public @interface ParameterLayout {
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
      */
-    // tag::refguide[]
-    RenderDay renderDay()                           // <.>
+    RenderDay renderDay()
             default RenderDay.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * The typical entry length of a field, use to determine the optimum width for display
      */
-    // tag::refguide[]
-    int typicalLength()                             // <.>
+    int typicalLength()
             default -1;
 
 }
-// end::refguide[]

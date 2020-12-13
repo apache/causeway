@@ -22,10 +22,8 @@ package org.apache.isis.applib.annotation;
  * Whether the property or parameter is optional or is required (aka mandatory).
  * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum Optionality {
 
-    // end::refguide[]
     /**
      * Default, usually meaning mandatory for properties and always meaning mandatory for parameters.
      *
@@ -34,17 +32,13 @@ public enum Optionality {
      * <code>javax.jdo.annotations.Column#allowsNull()</code> set to <code>true</code>.
      * </p>
      */
-    // tag::refguide[]
     DEFAULT,
 
-    // end::refguide[]
     /**
      * Indicates that the property or parameter is not required.
      */
-    // tag::refguide[]
     OPTIONAL,
 
-    // end::refguide[]
     /**
      * Indicates that the property is required (even if the JDO <code>javax.jdo.annotations.Column</code> annotation
      * says otherwise).
@@ -63,16 +57,12 @@ public enum Optionality {
      * is unable to do so.
      * </p>
      */
-    // tag::refguide[]
     MANDATORY,
 
-    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
-    // tag::refguide[]
     NOT_SPECIFIED
 
 }
-// end::refguide[]

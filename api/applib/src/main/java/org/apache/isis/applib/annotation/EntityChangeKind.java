@@ -22,7 +22,6 @@ package org.apache.isis.applib.annotation;
  * 
  * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum EntityChangeKind {
 
     CREATE,
@@ -32,4 +31,3 @@ public enum EntityChangeKind {
     DELETE,
 
 }
-// end::refguide[]

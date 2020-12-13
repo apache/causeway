@@ -24,10 +24,8 @@ import org.apache.isis.applib.util.Enums;
  * @since 1.x {@index}
  * @see <a href="https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
  */
-// tag::refguide[]
 public enum SemanticsOf {
 
-    // end::refguide[]
     /**
      * Safe, with no side effects, and caching the returned value when invoked multiple times in the same request.
      * <ul>
@@ -37,10 +35,8 @@ public enum SemanticsOf {
      * (within a given request scope).</li>
      * </ul>
      */
-    // tag::refguide[]
     SAFE_AND_REQUEST_CACHEABLE,
 
-    // end::refguide[]
     /**
      * Safe, with no side-effects. In other words, a query-only action.
      * <ul>
@@ -50,10 +46,8 @@ public enum SemanticsOf {
      * (within a given request scope).</li>
      * </ul>
      */
-    // tag::refguide[]
     SAFE,
 
-    // end::refguide[]
     /**
      * Post-conditions are always the same, irrespective as to how many times called.
      * <ul>
@@ -63,10 +57,8 @@ public enum SemanticsOf {
      * (eg sets a property or adds of same item to a Set).</li>
      * </ul>
      */
-    // tag::refguide[]
     IDEMPOTENT,
 
-    // end::refguide[]
     /**
      * Neither safe nor idempotent; every invocation is likely to change the state of the object.
      * <ul>
@@ -77,10 +69,8 @@ public enum SemanticsOf {
      * <li>Example: Increasing the quantity of a line item in an Order by 1.</li>
      * </ul>
      */
-    // tag::refguide[]
     NON_IDEMPOTENT,
 
-    // end::refguide[]
     /**
      * Post-conditions are always the same, irrespective as to how many times called.
      * <p>
@@ -92,10 +82,8 @@ public enum SemanticsOf {
      * (eg sets a property or adds of same item to a Set).</li>
      * </ul>
      */
-    // tag::refguide[]
     IDEMPOTENT_ARE_YOU_SURE,
 
-    // end::refguide[]
     /**
      * Neither safe nor idempotent; every invocation is likely to change the state of the object.
      * <p>
@@ -107,18 +95,14 @@ public enum SemanticsOf {
      * (eg increments a counter or adds to a List).</li>
      * <li>Example: Increasing the quantity of a line item in an Order by 1.</li>
      */
-    // tag::refguide[]
     NON_IDEMPOTENT_ARE_YOU_SURE,
 
-    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
-    // tag::refguide[]
     NOT_SPECIFIED
 
-    // end::refguide[]
     ;
 
     public String getFriendlyName() {
@@ -159,7 +143,5 @@ public enum SemanticsOf {
         return this == IDEMPOTENT_ARE_YOU_SURE || this == NON_IDEMPOTENT_ARE_YOU_SURE;
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

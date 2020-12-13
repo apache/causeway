@@ -25,20 +25,16 @@ package org.apache.isis.applib.annotation;
  *
  * @since 2.0 {@index}
  */
-// tag::refguide[]
 public enum Navigable {
 
     NOT_SPECIFIED,
     IGNORE,
     PARENT,
-    // end::refguide[]
     ;
 
     public boolean isParent() {
         return this == PARENT;
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

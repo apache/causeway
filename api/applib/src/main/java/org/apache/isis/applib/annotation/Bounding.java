@@ -23,10 +23,8 @@ package org.apache.isis.applib.annotation;
  * 
  * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum Bounding {
     BOUNDED,
     UNBOUNDED,
     NOT_SPECIFIED
 }
-// end::refguide[]

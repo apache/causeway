@@ -50,7 +50,6 @@ import org.springframework.context.annotation.Import;
  *             scanning more classes than are needed.  It is therefore not used within the framework code, but is
  *             provided as a convenience by domain applications.
  */
-// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
@@ -59,4 +58,3 @@ import org.springframework.context.annotation.Import;
 @ComponentScan
 public @interface Module {
 }
-// end::refguide[]

@@ -33,7 +33,6 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
  * Layout hints for actions.
  * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.METHOD,
@@ -44,7 +43,6 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "act") // meta annotation, only applies at class level
 public @interface ActionLayout {
 
-    // end::refguide[]
     /**
      * Whether (and how) this action can be bookmarked in the UI.
      *
@@ -54,11 +52,9 @@ public @interface ActionLayout {
      *     identically).
      * </p>
      */
-    // tag::refguide[]
-    BookmarkPolicy bookmarking()                        // <.>
+    BookmarkPolicy bookmarking()
             default BookmarkPolicy.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * Indicates the css class that an action should have.
      *
@@ -66,53 +62,41 @@ public @interface ActionLayout {
      *     For the Wicket viewer, this can be a bootstrap class such as <code>btn-info</code>.
      * </p>
      */
-    // tag::refguide[]
-    String cssClass()                                   // <.>
+    String cssClass()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * action (button or menu item).
      */
-    // tag::refguide[]
-    String cssClassFa()                                 // <.>
+    String cssClassFa()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
      * icon. The icon could be rendered on the left or the right of the action button
      */
-    // tag::refguide[]
-    CssClassFaPosition cssClassFaPosition()             // <.>
+    CssClassFaPosition cssClassFaPosition()
             default CssClassFaPosition.LEFT;
 
-    // end::refguide[]
     /**
      * Description of this action, eg to be rendered in a tooltip.
      */
-    // tag::refguide[]
-    String describedAs()                                // <.>
+    String describedAs()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
-    // tag::refguide[]
-    Where hidden()                                      // <.>
+    Where hidden()
             default Where.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * Name of this action (overriding the name derived from its name in code).
      */
-    // tag::refguide[]
-    String named()                                      // <.>
+    String named()
             default "";
 
-    // end::refguide[]
     /**
      * For actions that are associated with a property, indicates the positioning of the
      * action's button relative to the property.
@@ -121,11 +105,9 @@ public @interface ActionLayout {
      * Ignored if the action has not been associated with a property.
      * </p>
      */
-    // tag::refguide[]
-    Position position()                                 // <.>
+    Position position()
             default Position.NOT_SPECIFIED;
 
-    // end::refguide[]
     @XmlType(namespace = "http://isis.apache.org/applib/layout/component")
     enum Position {
         BELOW,
@@ -138,18 +120,14 @@ public @interface ActionLayout {
     /**
      * How this parameters for this action are prompted, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
-    // tag::refguide[]
-    PromptStyle promptStyle()                           // <.>
+    PromptStyle promptStyle()
             default PromptStyle.AS_CONFIGURED;
 
-    // end::refguide[]
     /**
      * If the action returns its target, then determines whether to update the page or
      * instead to redirect (forcing a re-rendering of a new page).
      */
-    // tag::refguide[]
-    Redirect redirectPolicy()                           // <.>
+    Redirect redirectPolicy()
             default Redirect.AS_CONFIGURED;
 
 }
-// end::refguide[]

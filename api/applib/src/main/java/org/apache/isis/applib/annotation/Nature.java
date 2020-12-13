@@ -29,19 +29,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * </p>
  * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum Nature {
 
-    // end::refguide[]
     /**
      * The default; allows the programmer to combine <tt>@DomainObject</tt> annotation with the
      * {@link ViewModel} annotation, or the {@link XmlRootElement} annotation, or by implementing the
      * {@link org.apache.isis.applib.ViewModel} interface.
      */
-    // tag::refguide[]
     NOT_SPECIFIED,
 
-    // end::refguide[]
     /**
      * A domain entity whose persistence is managed internally by Isis, using JDO as the persistence implementation.
      * Domain entities are considered to be part of the domain model layer.
@@ -54,10 +50,8 @@ public enum Nature {
      *    Currently implies no additional semantics other than documentation.
      * </p>
      */
-    // tag::refguide[]
     JDO_ENTITY,
     
-    // end::refguide[]
     /**
      * A domain entity whose persistence is managed internally by Isis, using JPA as the persistence implementation.
      * Domain entities are considered to be part of the domain model layer.
@@ -70,10 +64,8 @@ public enum Nature {
      *    Currently implies no additional semantics other than documentation.
      * </p>
      */
-    // tag::refguide[]
     JPA_ENTITY,
 
-    // end::refguide[]
     /**
      * An object that is conceptually part of the application layer, and which surfaces behavior and/or state that
      * is aggregate of one or more domain entity.
@@ -93,27 +85,21 @@ public enum Nature {
      *
      * @see ViewModel
      */
-    // tag::refguide[]
     VIEW_MODEL,
 
-    // end::refguide[]
     /**
      * An object that acts as a mix-in to some other object, contributing behavior and/or derived state based on the
      * domain object.
      *
      * @see Mixin
      */
-    // tag::refguide[]
     MIXIN,
 
-    // end::refguide[]
     /**
      * An object that is entirely managed by the underlying IoC container.
      * @apiNote EXPERIMENTAL
      */
-    // tag::refguide[]
     BEAN,
-    // end::refguide[]
     ;
     
     public boolean isEntity() {
@@ -122,6 +108,5 @@ public enum Nature {
     }
     
     
-    // tag::refguide[]
 }
 //end::refguide[]

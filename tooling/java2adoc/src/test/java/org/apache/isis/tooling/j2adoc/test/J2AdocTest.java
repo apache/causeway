@@ -110,7 +110,7 @@ class J2AdocTest {
         analyzerConfig.getSources(JAVA)
         .stream()
         .peek(source->System.out.println("parsing source: " + source))
-        .filter(source->source.toString().contains("\\applib\\services\\"))
+        .filter(source->source.toString().contains("\\applib\\annotation\\"))
         .forEach(AsciiDocIncludeTagFilter::removeAdocExampleTags);
         
     }

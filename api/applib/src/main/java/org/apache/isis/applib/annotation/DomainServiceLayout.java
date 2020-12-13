@@ -34,7 +34,6 @@ import java.lang.annotation.Target;
  * 
  * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.TYPE,
@@ -43,33 +42,24 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainServiceLayout {
 
-    // end::refguide[]
     /**
      * The menubar in which the menu that holds this service's actions should reside.
      */
-    // tag::refguide[]
-    MenuBar menuBar()                           // <.>
+    MenuBar menuBar()
             default MenuBar.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * Name of this class (overriding the name derived from its name in code).
      */
-    // tag::refguide[]
-    String named()                              // <.>
+    String named()
             default "";
 
-    // end::refguide[]
 
-    // tag::refguide-menu-bar[]
     public enum MenuBar {
         PRIMARY,
         SECONDARY,
         TERTIARY,
         NOT_SPECIFIED
     }
-    // end::refguide-menu-bar[]
 
-    // tag::refguide[]
 }
-// end::refguide[]

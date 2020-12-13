@@ -31,38 +31,30 @@ import java.lang.annotation.Target;
  * @since 1.x {@index}
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */
-// tag::refguide[]
 @Inherited
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
 public @interface PropertyLayout {
 
-    // end::refguide[]
     /**
      * Indicates the css class that a property should have.
      */
-    // tag::refguide[]
-    String cssClass()                               // <.>
+    String cssClass()
             default "";
 
-    // end::refguide[]
     /**
      * Description of this property, eg to be rendered in a tooltip.
      */
-    // tag::refguide[]
-    String describedAs()                            // <.>
+    String describedAs()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates where in the UI the property should <i>not</i>not be visible.
      */
-    // tag::refguide[]
-    Where hidden()                                  // <.>
+    Where hidden()
             default Where.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * In forms, positioning of the label (left, top or none) relative to the property value.
      *
@@ -70,35 +62,27 @@ public @interface PropertyLayout {
      * If not specified, the default depends upon the property value's datatype.
      * </p>
      */
-    // tag::refguide[]
-    LabelPosition labelPosition()                   // <.>
+    LabelPosition labelPosition()
             default LabelPosition.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * For string properties (and parameters), render as a text area over specified number of lines.
      */
-    // tag::refguide[]
-    int multiLine()                                 // <.>
+    int multiLine()
             default -1;
 
-    // end::refguide[]
     /**
      * Name of this property (overriding the name derived from its name in code).
      */
-    // tag::refguide[]
-    String named()                                  // <.>
+    String named()
             default "";
 
-    // end::refguide[]
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
-    // tag::refguide[]
-    boolean namedEscaped()                          // <.>
+    boolean namedEscaped()
             default true;
 
-    // end::refguide[]
     /**
      * Whether this property should be used to construct the navigable chain of breadcrumbs in the UI.
      *
@@ -108,19 +92,15 @@ public @interface PropertyLayout {
      *
      * @return
      */
-    // tag::refguide[]
-    Navigable navigable()                           // <.>
+    Navigable navigable()
             default Navigable.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * How the properties of this domain object are be edited, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
-    // tag::refguide[]
-    PromptStyle promptStyle()                       // <.>
+    PromptStyle promptStyle()
             default PromptStyle.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day
      * prior to the actually stored date.
@@ -146,11 +126,9 @@ public @interface PropertyLayout {
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
      */
-    // tag::refguide[]
-    RenderDay renderDay()                           // <.>
+    RenderDay renderDay()
             default RenderDay.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * Indicates that the value held by the property never changes over time, even when other properties of the object
      * do change.
@@ -173,18 +151,14 @@ public @interface PropertyLayout {
      *     within the framework than simply a hint for rendering.
      * </p>
      */
-    // tag::refguide[]
-    Repainting repainting()                         // <.>
+    Repainting repainting()
             default Repainting.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * The typical entry length of a field, use to determine the optimum width for display
      */
-    // tag::refguide[]
-    int typicalLength()                             // <.>
+    int typicalLength()
             default -1;
 
 }
-// end::refguide[]
 

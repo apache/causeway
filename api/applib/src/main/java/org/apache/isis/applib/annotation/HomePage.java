@@ -35,10 +35,8 @@ import java.lang.annotation.Target;
  * </p>
  * @since 2.0 {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HomePage {
 }
-// end::refguide[]

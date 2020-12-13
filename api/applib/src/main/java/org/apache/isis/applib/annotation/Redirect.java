@@ -25,24 +25,18 @@ import javax.xml.bind.annotation.XmlType;
  * (in other words, an action that returns "this").
  * @since 1.x {@index}
  */
-// tag::refguide[]
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
         )
 public enum Redirect {
-    // end::refguide[]
     /**
      * As defined by configuration property <code>isis.viewer.wicket.redirectEvenIfSameObject</code>
      */
-    // tag::refguide[]
     AS_CONFIGURED,
-    // end::refguide[]
     /**
      * Redirect (meaning render a new page) even if the result of the action is the same as the target.
      */
-    // tag::refguide[]
     EVEN_IF_SAME,
-    // end::refguide[]
     /**
      * Don't redirect if the result is the same as the target, instead just update the existing page.
      *
@@ -50,7 +44,5 @@ public enum Redirect {
      *     Of course, a redirect is still performed if the result of the action is different from the target.
      * </p>
      */
-    // tag::refguide[]
     ONLY_IF_DIFFERS,
 }
-// end::refguide[]

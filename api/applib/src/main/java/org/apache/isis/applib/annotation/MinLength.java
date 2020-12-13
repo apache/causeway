@@ -29,11 +29,9 @@ import java.lang.annotation.Target;
  * Specify the minimum number of characters for an autocomplete search argument.
  * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MinLength {
     int value();
 }
-// end::refguide[]

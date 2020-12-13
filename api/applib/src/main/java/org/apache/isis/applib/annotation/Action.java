@@ -38,7 +38,6 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
  * Domain semantics for domain object collection.
  * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.METHOD,
@@ -49,7 +48,6 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "act") // meta annotation, only applies at class level
 public @interface Action {
 
-    // end::refguide[]
     /**
      * Associates this action with a property or collection, specifying its id.
      *
@@ -69,11 +67,9 @@ public @interface Action {
      *     (in the Wicket UI, at least).
      * </p>
      */
-    // tag::refguide[]
-    String associateWith()                                          // <.>
+    String associateWith()
             default "";
 
-    // end::refguide[]
     /**
      * Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
      *
@@ -86,11 +82,9 @@ public @interface Action {
      *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
      * </p>
      */
-    // tag::refguide[]
-    String associateWithSequence()                                  // <.>
+    String associateWithSequence()
             default "1";
 
-    // end::refguide[]
     /**
      * The {@link CommandDtoProcessor} to process this command's DTO.
      *
@@ -99,20 +93,16 @@ public @interface Action {
      *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends CommandDtoProcessor> commandDtoProcessor()      // <.>
+    Class<? extends CommandDtoProcessor> commandDtoProcessor()
             default CommandDtoProcessor.class;
 
-    // end::refguide[]
     /**
      * Whether action invocations, captured as {@link Command}s,
      * should be published to {@link CommandSubscriber}s.
      */
-    // tag::refguide[]
-    Publishing commandPublishing()                                  // <.>
+    Publishing commandPublishing()
             default Publishing.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * Indicates that an invocation of the action should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -135,20 +125,16 @@ public @interface Action {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ActionDomainEvent<?>> domainEvent()             // <.>
+    Class<? extends ActionDomainEvent<?>> domainEvent()
             default ActionDomainEvent.Default.class;
 
-    // end::refguide[]
     /**
      * Whether {@link Interaction.Execution}s (triggered by action invocations), should
      * be published to {@link ExecutionSubscriber}s.
      */
-    // tag::refguide[]
-    Publishing executionPublishing()                                // <.>
+    Publishing executionPublishing()
             default Publishing.NOT_SPECIFIED;
     
-    // end::refguide[]
     /**
      * Indicates where (in the UI) the action is not visible to the user.
      *
@@ -162,11 +148,9 @@ public @interface Action {
      *     {@link ActionLayout#contributed()}.
      * </p>
      */
-    // tag::refguide[]
-    Where hidden()                                                  // <.>
+    Where hidden()
             default Where.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * Whether the action is restricted to prototyping.
      *
@@ -174,30 +158,24 @@ public @interface Action {
      *     By default there are no restrictions, with the action being available in all environments.
      * </p>
      */
-    // tag::refguide[]
-    RestrictTo restrictTo()                                         // <.>
+    RestrictTo restrictTo()
             default RestrictTo.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * The action semantics, either {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached}, {@link SemanticsOf#SAFE safe} (query-only),
      * {@link SemanticsOf#IDEMPOTENT idempotent} or
      * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
      */
-    // tag::refguide[]
-    SemanticsOf semantics()                                         // <.>
+    SemanticsOf semantics()
             default SemanticsOf.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * The type-of the elements returned by the action.
      * @return
      */
-    // tag::refguide[]
-    Class<?> typeOf()                                               // <.>
+    Class<?> typeOf()
             default Object.class;
 
-    // end::refguide[]
     /**
      * For downloading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
      *
@@ -208,9 +186,7 @@ public @interface Action {
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
      *
      */
-    // tag::refguide[]
-    String fileAccept()                                             // <.>
+    String fileAccept()
             default "";
 
 }
-// end::refguide[]

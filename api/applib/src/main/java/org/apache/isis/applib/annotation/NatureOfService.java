@@ -22,9 +22,7 @@ package org.apache.isis.applib.annotation;
  * The different sorts of domain services recognized by Isis, as specified in {@link DomainService#nature()}
  * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum NatureOfService {
-    // end::refguide[]
     /**
      * The service's actions appear in the REST API and in 'viewers', eg. in the menu bar.
      *
@@ -32,15 +30,11 @@ public enum NatureOfService {
      * Contributing actions to the 'viewer' implies, that these must also be exposed to the REST API,
      * simply because alternative viewers might be solely based on the provided REST end-points.
      */
-    // tag::refguide[]
     VIEW,
-    // end::refguide[]
     /**
      * The service's actions should only be visible in the REST API exposed by the Restful Objects viewer.
      */
-    // tag::refguide[]
     REST,
-    // end::refguide[]
 
     ;
 
@@ -62,7 +56,5 @@ public enum NatureOfService {
         return this == REST;
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

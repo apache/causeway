@@ -34,13 +34,11 @@ import java.lang.annotation.Target;
  * factory (as per {@link #facetFactoryClasses()}) should be specified.
  * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Facets {
 
-    // end::refguide[]
     /**
      * Array of fully qualified names of classes each implementing
      * <tt>org.apache.isis.core.metamodel.facets.FacetFactory</tt>.
@@ -49,10 +47,8 @@ public @interface Facets {
      * Either the array provided by this method or by
      * {@link #facetFactoryClasses()} should be non-empty.
      */
-    // tag::refguide[]
     String[] facetFactoryNames() default {};
 
-    // end::refguide[]
     /**
      * Array of {@link Class}s, each indicating a class implementing
      * <tt>org.apache.isis.core.metamodel.facets.FacetFactory</tt>.
@@ -61,8 +57,6 @@ public @interface Facets {
      * Either the array provided by this method or by
      * {@link #facetFactoryNames()} should be non-empty.
      */
-    // tag::refguide[]
     Class<?>[] facetFactoryClasses() default {};
 
 }
-// end::refguide[]

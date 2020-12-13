@@ -39,10 +39,8 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
  * </ul>
  * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum Publishing {
 
-    // end::refguide[]
     /**
      * Publishing of data triggered by interaction with this object 
      * should be handled as per the default publishing policy 
@@ -50,31 +48,23 @@ public enum Publishing {
      * <p>
      * If no publishing policy is configured, then publishing is disabled.
      */
-    // tag::refguide[]
     AS_CONFIGURED,
 
-    // end::refguide[]
     /**
      * Do publish data triggered by interaction with this object.
      */
-    // tag::refguide[]
     ENABLED,
 
-    // end::refguide[]
     /**
      * Do <b>not</b> publish data triggered by interaction with this object
      * (even if otherwise configured to enable publishing).
      */
-    // tag::refguide[]
     DISABLED,
 
-    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or super-classes/interfaces).
      */
-    // tag::refguide[]
     NOT_SPECIFIED
 
 }
-// end::refguide[]
