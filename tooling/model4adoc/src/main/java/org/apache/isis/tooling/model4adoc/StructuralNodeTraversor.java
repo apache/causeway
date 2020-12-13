@@ -21,20 +21,23 @@ package org.apache.isis.tooling.model4adoc;
 import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Refs.BooleanReference;
 
 import lombok.val;
 
 /**
- * Depth-first node traversor. Use to iterate through all nodes under and including the specified root node.
+ * Depth-first node traversing. Use to iterate through all nodes under and including the specified root node.
  */
 final class StructuralNodeTraversor {
+    
     /**
      * Start a depth-first traverse of the root and all of its descendants.
      * @param visitor Node visitor.
      * @param root the root node point to traverse.
      */
-    public static void traverse(StructuralNodeVisitor visitor, StructuralNode root) {
-        traverse(visitor, root, 0);
+    public static void depthFirst(StructuralNodeVisitor visitor, StructuralNode root) {
+        traverse(visitor, root, 0, _Refs.booleanRef(true));
     }
     
     // -- HELPER
@@ -42,15 +45,26 @@ final class StructuralNodeTraversor {
     private static void traverse(
             final StructuralNodeVisitor visitor, 
             final StructuralNode node, 
-            final int depth) {
+            final int depth,
+            final BooleanReference continueTraverse) {
         
-        visitor.head(node, depth);
+        if(continueTraverse.isFalse()) {
+            return;
+        }
+        
+        val continueVisit = visitor.head(node, depth);
+        if(!continueVisit) {
+            continueTraverse.update(__->false);
+        }
         
         val blocks = node.getBlocks();
         
         if(!_NullSafe.isEmpty(blocks)) {
             for(val subNode : blocks) {
-                traverse(visitor, subNode, depth+1);
+                traverse(visitor, subNode, depth+1, continueTraverse);
+                if(continueTraverse.isFalse()) {
+                    break;
+                }
             }
         }
         

@@ -24,39 +24,33 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.attrNotice;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
 
-import lombok.val;
-
-class AdmonitionTest extends AbstractAsciiDocWriterTest {
+class DocumentHeaderTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "admonition.adoc";
+        super.adocSourceResourceLocation = "document-header.adoc";
         super.debugEnabled = false;
     }
 
-    //[NOTE]
-    //====
-    //the note is multiple paragraphs, and can have all the usual styling
+    //= Sample
+    //:Notice: my special license
     //
-    //also note
-    //====
-    //
-    //TIP: Here's something worth knowing...
+    //hi
     @Test
-    void testAdmonition() throws IOException {
+    void testDocHeader() throws IOException {
         
-        val note = AsciiDocFactory.note(doc);
-        AsciiDocFactory.block(note, "the note is multiple paragraphs, and can have all the usual styling");
-        AsciiDocFactory.block(note, "also note");
+        doc.setTitle("Sample");
         
-        AsciiDocFactory.tip(doc, "Here's something worth knowing...");
+        attrNotice(doc, "my special license");
+        
+        block(doc).getLines().add("hi");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

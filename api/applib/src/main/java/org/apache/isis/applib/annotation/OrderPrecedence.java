@@ -25,7 +25,7 @@ import lombok.experimental.UtilityClass;
 
 /**
  * 
- * @since 1.x {@index}
+ * @since 2.0 {@index}
  */
 @UtilityClass
 public class OrderPrecedence {

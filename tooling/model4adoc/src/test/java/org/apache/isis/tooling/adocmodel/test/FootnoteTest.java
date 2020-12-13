@@ -19,32 +19,29 @@
 package org.apache.isis.tooling.adocmodel.test;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
-import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
 
 import lombok.val;
 
-class FootnoteTest {
+class FootnoteTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
+        super.adocSourceResourceLocation = "footnote.adoc";
+        super.debugEnabled = false;
     }
 
+    
     //<.> fn-1
     //+
     //--
@@ -87,29 +84,10 @@ class FootnoteTest {
         
         AsciiDocFactory.tip(doc, "Here's something worth knowing...");
         
-        String actualAdoc = AsciiDocWriter.toString(doc);
-        System.out.println(actualAdoc); //debug
-        
-        _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "footnote.adoc", StandardCharsets.UTF_8), 
-                actualAdoc);
+        assertDocumentIsCorrectlyWritten(doc);
     }
-    
-    @Test //@Disabled
-    void reverseTestFootnote() throws IOException {
-    
-        val adocRef = _Strings.readFromResource(this.getClass(), "footnote.adoc", StandardCharsets.UTF_8);
-        val asciidoctor = Asciidoctor.Factory.create();
-        val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
-        
-        Debug.debug(refDoc);
-        
-        String actualAdoc = AsciiDocWriter.toString(refDoc);
-        System.out.println(actualAdoc); //debug
-        
-        _Text.assertTextEquals(adocRef, actualAdoc);
-    }
-    
     
 
+
 }
+

@@ -36,6 +36,7 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -51,24 +52,13 @@ final class NodeWriter implements StructuralNodeVisitor {
 
     private final Writer writer;
 
-    @Override
-    public void head(StructuralNode node, int depth) {
-        StructuralNodeVisitor.super.head(node, depth);
-    }
-
-    @Override
-    public void tail(StructuralNode node, int depth) {
-        StructuralNodeVisitor.super.tail(node, depth);
-
-    }
-
     // -- DOCUMENT
 
     private static final List<String> knownDocAttributes = _Lists.of(
             "Notice");
 
     @Override
-    public void documentHead(Document doc, int depth) {
+    public boolean documentHead(Document doc, int depth) {
 
         _Strings.nonEmpty(doc.getTitle())
         .ifPresent(title->printChapterTitle(title, depth+1));
@@ -76,21 +66,24 @@ final class NodeWriter implements StructuralNodeVisitor {
         val attr = doc.getAttributes();
         if(!attr.isEmpty()) {
             for(val knownAttrKey : knownDocAttributes) {
-                Optional.ofNullable(attr.get(knownAttrKey))
+                Optional.ofNullable(attr.get(knownAttrKey.toLowerCase()))
                 .ifPresent(attrValue->printfln(":%s: %s", knownAttrKey, attrValue));
             }
         }
+        
+        return true; // continue visit
     }
 
-    @Override
-    public void documentTail(Document doc, int depth) {
-    }
+//    @Override
+//    public void documentTail(Document doc, int depth) {
+//    }
 
     // -- BLOCK
 
     @RequiredArgsConstructor
     private static enum Style {
         OPEN_BLOCK("open"::equals),
+        LISTING_BLOCK("listing"::equals),
         FOOTNOTE_LIST("arabic"::equals),
         ADMONITION_NOTE("NOTE"::equals),
         ADMONITION_TIP("TIP"::equals),
@@ -110,6 +103,9 @@ final class NodeWriter implements StructuralNodeVisitor {
         public boolean isOpenBlock() {
             return this==Style.OPEN_BLOCK;
         }
+        public boolean isListingBlock() {
+            return this==Style.LISTING_BLOCK;
+        }
         public boolean isFootnoteList() {
             return this==Style.FOOTNOTE_LIST;
         }
@@ -119,11 +115,11 @@ final class NodeWriter implements StructuralNodeVisitor {
     }
 
     @Override
-    public void blockHead(Block block, int depth) {
+    public boolean blockHead(Block block, int depth) {
 
         val style = Style.parse(block);        
 
-        if(style.isOpenBlock()){
+        if(style.isOpenBlock()) {
             pushNewWriter(); // write the open block to a StringWriter, such that can handle empty blocks
             println("+");
             println("--");
@@ -136,7 +132,7 @@ final class NodeWriter implements StructuralNodeVisitor {
             }    
         }
 
-        if(style.isAdmonition()){
+        if(style.isAdmonition()) {
             if(block.getBlocks().size()>0) {
                 printfln("[%s]", block.getStyle());
                 println("====");    
@@ -144,12 +140,15 @@ final class NodeWriter implements StructuralNodeVisitor {
             } else {
                 printf("%s: ", block.getStyle());
             }
-        } 
+        } else if(style.isListingBlock()) {
+            println("----");
+        }
 
         for(val line : block.getLines()) {
             println(line);
         }
 
+        return true; // continue visit
     }
 
     @Override
@@ -165,13 +164,15 @@ final class NodeWriter implements StructuralNodeVisitor {
             if(block.getBlocks().size()>0) {
                 println("====");    
             }
+        } else if(style.isListingBlock()) {
+            println("----");
         }
     }
 
     // -_ LIST 
 
     @Override
-    public void listHead(org.asciidoctor.ast.List list, int depth) {
+    public boolean listHead(org.asciidoctor.ast.List list, int depth) {
         if(bulletCount==0) {
             if(newLineCount<=1) {
                 printNewLine();
@@ -181,6 +182,8 @@ final class NodeWriter implements StructuralNodeVisitor {
 
         _Strings.nonEmpty(list.getTitle())
         .ifPresent(this::printBlockTitle);
+        
+        return true; // continue visit
     }
 
     @Override
@@ -189,7 +192,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     }
 
     @Override
-    public void listItemHead(ListItem listItem, int depth) {
+    public boolean listItemHead(ListItem listItem, int depth) {
 
         val isFootnoteStyle = Style.parse((org.asciidoctor.ast.List)(listItem.getParent()))
                 .isFootnoteList(); 
@@ -201,12 +204,12 @@ final class NodeWriter implements StructuralNodeVisitor {
         val listItemSource = _Strings.nullToEmpty(listItem.getSource()).trim();
         if(!listItemSource.isEmpty()) {
             printfln("%s %s", bullets, listItemSource);
-            return;
+            return true; // continue visit
         }
         
         if(_NullSafe.isEmpty(listItem.getBlocks())) {
             printfln("%s _missing listitem text_", bullets);
-            return; 
+            return true; // continue visit
         }
         
         //there is a special case, if source is blank
@@ -214,24 +217,24 @@ final class NodeWriter implements StructuralNodeVisitor {
         
         //find the first block that has a source, use it and blank it out, so is not written twice
         
-        boolean isFixed[] = {false};
+        val isFixed = _Refs.booleanRef(false); 
         
-        StructuralNodeTraversor.traverse(new BlockVisitor(block->{
+        StructuralNodeTraversor.depthFirst(new BlockVisitor(block->{
             val blockSource = _Strings.nullToEmpty(block.getSource()).trim();
             if(!blockSource.isEmpty()) {
                 block.setSource(null);
                 printfln("%s %s", bullets, blockSource);
-                isFixed[0] = true;
+                isFixed.setValue(true);
                 return false; // terminate the visit
             }
             return true; // continue the visit
         }), listItem);
         
-        if(!isFixed[0]) {
+        if(isFixed.isFalse()) {
             printfln("%s _missing listitem text_", bullets);
         }
 
-
+        return true; // continue visit
     }
 
     @Override
@@ -253,7 +256,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     //  |Cell in column 3, row 2
     //  |===
     @Override
-    public void tableHead(Table table, int depth) {
+    public boolean tableHead(Table table, int depth) {
 
         _Strings.nonEmpty(table.getTitle())
         .ifPresent(this::printBlockTitle);
@@ -280,12 +283,14 @@ final class NodeWriter implements StructuralNodeVisitor {
         }
 
         println("|===");
+        
+        return true; // continue visit
     }
 
-    @Override
-    public void tableTail(Table table, int depth) {
-
-    }
+//    @Override
+//    public void tableTail(Table table, int depth) {
+//
+//    }
 
     // -- HELPER
 

@@ -24,39 +24,37 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.cell;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.headCell;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
 import lombok.val;
 
-class AdmonitionTest extends AbstractAsciiDocWriterTest {
+class AttributedTableTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "admonition.adoc";
+        super.adocSourceResourceLocation = "table-attributed.adoc";
         super.debugEnabled = false;
     }
 
-    //[NOTE]
-    //====
-    //the note is multiple paragraphs, and can have all the usual styling
-    //
-    //also note
-    //====
-    //
-    //TIP: Here's something worth knowing...
     @Test
-    void testAdmonition() throws IOException {
+    void testTable() throws IOException {
         
-        val note = AsciiDocFactory.note(doc);
-        AsciiDocFactory.block(note, "the note is multiple paragraphs, and can have all the usual styling");
-        AsciiDocFactory.block(note, "also note");
+        val table = table(doc);
+        table.setTitle("Some table");
+        table.setAttribute("cols", "3m,2a", true);
+        table.setAttribute("header-option", "", true);
         
-        AsciiDocFactory.tip(doc, "Here's something worth knowing...");
+        headCell(table, 0, 0, "Col-1");
+        headCell(table, 0, 1, "Col-2");
+        
+        cell(table, 0, 0, "1-1");
+        cell(table, 0, 1, "1-2");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

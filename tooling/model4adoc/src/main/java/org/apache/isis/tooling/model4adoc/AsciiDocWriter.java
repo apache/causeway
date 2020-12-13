@@ -117,7 +117,7 @@ public class AsciiDocWriter {
         }
         
         val nodeWriter = new NodeWriter(writer);
-        StructuralNodeTraversor.traverse(nodeWriter, doc);
+        StructuralNodeTraversor.depthFirst(nodeWriter, doc);
         writer.flush();
     }
     

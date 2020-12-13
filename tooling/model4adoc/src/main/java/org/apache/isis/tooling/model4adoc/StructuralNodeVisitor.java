@@ -45,41 +45,36 @@ interface StructuralNodeVisitor {
      * @param depth the depth of the node, relative to the root node. E.g., the root node has depth 0, and a child node
      * of that will have depth 1.
      */
-    default void head(StructuralNode node, int depth) {
+    default boolean head(StructuralNode node, int depth) {
         if(node instanceof Document) {
-            documentHead((Document)node, depth);
-            return;
+            return documentHead((Document)node, depth);
         }
         if(node instanceof Table) {
-            tableHead((Table)node, depth);
-            return;
+            return tableHead((Table)node, depth);
         }
         if(node instanceof org.asciidoctor.ast.List) {
-            listHead((org.asciidoctor.ast.List)node, depth);
-            return;
+            return listHead((org.asciidoctor.ast.List)node, depth);
         }
         if(node instanceof ListItem) {
-            listItemHead((ListItem)node, depth);
-            return;
+            return listItemHead((ListItem)node, depth);
         }
         if(node instanceof Block) {
-            blockHead((Block)node, depth);
-            return;
+            return blockHead((Block)node, depth);
         }    
         throw _Exceptions.unsupportedOperation("node type not supported %s", node.getClass());
     }
 
     // -- HEAD SPECIALISATIONS
     
-    void documentHead(Document doc, int depth);
+    default boolean documentHead(Document doc, int depth) { return true; }
 
-    void blockHead(Block block, int depth);
+    default boolean blockHead(Block block, int depth) { return true; }
 
-    void listHead(org.asciidoctor.ast.List list, int depth);
+    default boolean listHead(org.asciidoctor.ast.List list, int depth) { return true; }
     
-    void listItemHead(ListItem listItem, int depth);
+    default boolean listItemHead(ListItem listItem, int depth) { return true; }
 
-    void tableHead(Table table, int depth);
+    default boolean tableHead(Table table, int depth) { return true; }
     
    // -- TAIL
 
@@ -116,15 +111,15 @@ interface StructuralNodeVisitor {
     
     // -- TAIL SPECIALISATIONS
     
-    void documentTail(Document doc, int depth);
+    default void documentTail(Document doc, int depth) {}
 
-    void blockTail(Block block, int depth);
+    default void blockTail(Block block, int depth) {}
 
-    void listTail(org.asciidoctor.ast.List list, int depth);
+    default void listTail(org.asciidoctor.ast.List list, int depth) {}
     
-    void listItemTail(ListItem listItem, int depth);
+    default void listItemTail(ListItem listItem, int depth) {}
 
-    void tableTail(Table table, int depth);
+    default void tableTail(Table table, int depth) {}
     
     
 }

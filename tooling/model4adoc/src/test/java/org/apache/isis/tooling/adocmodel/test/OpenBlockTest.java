@@ -26,37 +26,61 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.list;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.listItem;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.openBlock;
 
 import lombok.val;
 
-class AdmonitionTest extends AbstractAsciiDocWriterTest {
+class OpenBlockTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "admonition.adoc";
-        super.debugEnabled = false;
+        super.adocSourceResourceLocation = "list-open-block-continuation.adoc";
+        super.debugEnabled = true;
     }
 
-    //[NOTE]
-    //====
-    //the note is multiple paragraphs, and can have all the usual styling
+    //* ListItem 1
+    //+
+    //--
+    //Here's an example of a document title:
     //
-    //also note
-    //====
+    //----
+    //= Document Title
+    //----
     //
-    //TIP: Here's something worth knowing...
+    //NOTE: The header is optional.
+    //--
+    //* ListItem 2
+    //+
+    //--
+    //paragr 1 
+    //
+    //paragr 2
+    //--
+    @SuppressWarnings("unused")
     @Test
-    void testAdmonition() throws IOException {
+    void testOpenBlock() throws IOException {
         
-        val note = AsciiDocFactory.note(doc);
-        AsciiDocFactory.block(note, "the note is multiple paragraphs, and can have all the usual styling");
-        AsciiDocFactory.block(note, "also note");
+        val list = list(doc);
         
-        AsciiDocFactory.tip(doc, "Here's something worth knowing...");
+        val item1 = listItem(list, "ListItem 1");
+        val item2 = listItem(list, "ListItem 2");
+        
+        val openBlock1 = openBlock(item1);
+        val openBlock2 = openBlock(item2);
+        
+        val block11 = block(openBlock1, "Here's an example of a document title:");
+        val block12 = AsciiDocFactory.listingBlock(openBlock1, "= Document Title");
+        val block13 = block(openBlock1, "NOTE: The header is optional.");
+        
+        val block21 = block(openBlock2, "paragr 1");
+        val block22 = block(openBlock2, "paragr 2");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

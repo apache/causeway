@@ -21,10 +21,6 @@ package org.apache.isis.tooling.model4adoc;
 import java.util.function.Predicate;
 
 import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.List;
-import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.Table;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,50 +29,10 @@ final class BlockVisitor
 implements StructuralNodeVisitor {
 
     private final Predicate<Block> blockConsumer;
-    private boolean continueVisit = true;
-    
+   
     @Override
-    public void documentHead(Document doc, int depth) {
-    }
-
-    @Override
-    public void blockHead(Block block, int depth) {
-        if(!continueVisit) {
-            return;
-        }
-        continueVisit = blockConsumer.test(block);
-    }
-
-    @Override
-    public void listHead(List list, int depth) {
-    }
-
-    @Override
-    public void listItemHead(ListItem listItem, int depth) {
-    }
-
-    @Override
-    public void tableHead(Table table, int depth) {
-    }
-
-    @Override
-    public void documentTail(Document doc, int depth) {
-    }
-
-    @Override
-    public void blockTail(Block block, int depth) {
-    }
-
-    @Override
-    public void listTail(List list, int depth) {
-    }
-
-    @Override
-    public void listItemTail(ListItem listItem, int depth) {
-    }
-
-    @Override
-    public void tableTail(Table table, int depth) {
+    public boolean blockHead(Block block, int depth) {
+        return blockConsumer.test(block);
     }
 
 }

@@ -68,7 +68,7 @@ public class AsciiDocFactory {
     // -- ATTRIBUTES
     
     public static void attrNotice(Document node, String value) {
-        node.setAttribute("Notice", value, true);
+        node.setAttribute("notice", value, true);
     }
     
     // -- ADMONITIONS
@@ -138,6 +138,12 @@ public class AsciiDocFactory {
         val openBlock = block(listItem);
         openBlock.setStyle("open");
         return openBlock;
+    }
+    
+    public static Block listingBlock(StructuralNode parent, @NonNull String source) {
+        val listingBlock = block(parent, source);
+        listingBlock.setStyle("listing");
+        return listingBlock;
     }
     
     // -- FOOTNOTES
