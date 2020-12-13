@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -190,7 +191,7 @@ public class BookmarkTreeNode implements Serializable {
 
     private boolean addToGraphIfParented(BookmarkableModel candidateBookmarkableModel) {
 
-        final boolean whetherAdded[] = {false}; // simply a fast non-thread-safe value reference
+        val whetherAdded = _Refs.booleanRef(false); 
 
         // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
         if(candidateBookmarkableModel instanceof EntityModel) {
@@ -219,11 +220,11 @@ public class BookmarkTreeNode implements Serializable {
             .forEach(parentOidStr->{
                 if(Objects.equals(this.oidNoVerStr, parentOidStr)) {
                     this.addChild(candidateBookmarkableModel);
-                    whetherAdded[0] = true;
+                    whetherAdded.setValue(true);
                 }
             });
         }
-        return whetherAdded[0];
+        return whetherAdded.isTrue();
     }
 
     public void appendGraphTo(List<BookmarkTreeNode> list) {
