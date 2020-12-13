@@ -1,0 +1,56 @@
+= NonRecoverableException : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Indicates that an unexpected, non-recoverable (fatal) exception has occurred within the application logic.
+
+Throwing this exception will (dependent on the viewer) result in some sort of an error page being displayed to the user.
+
+Note that this exception has identical semantics to xref:applib/FatalException[FatalException] (of which it is the immediate superclass) and can be considered a synonym.
+
+.Java Sources
+[source,java]
+----
+class NonRecoverableException {
+
+  NonRecoverableException(final String msg)
+
+  NonRecoverableException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod)
+
+  NonRecoverableException(final Throwable cause)
+
+  NonRecoverableException(final String msg, final Throwable cause)
+
+  NonRecoverableException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod, final Throwable cause)
+
+  String getMessage()
+
+  TranslatableString getTranslatableMessage()
+
+  String getTranslationContext()
+
+  void tryRun(_Functions.CheckedRunnable checkedRunnable) // <.>
+}
+----
+
+<.> `[teal]#*_tryRun_*#(CheckedRunnable checkedRunnable)` : `void`
++
+--
+----
+
+Path path = ...
+
+## OLD
+
+try {
+    Files.createDirectories(path);
+} catch (IOException e) {
+    throw new NonRecoverableException(e);
+}
+
+## NEW
+
+NonRecoverableException.tryRun(()->Files.createDirectories(path));
+----
+
+--
+

@@ -1,0 +1,141 @@
+= InteractionListener : _interface_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Java Sources
+[source,java]
+----
+interface InteractionListener {
+
+  void objectTitleRead(ObjectTitleEvent ev) // <.>
+
+  void objectPersisted(ObjectValidityEvent ev) // <.>
+
+  void propertyVisible(PropertyVisibilityEvent ev) // <.>
+
+  void propertyUsable(PropertyUsabilityEvent ev) // <.>
+
+  void propertyAccessed(PropertyAccessEvent ev) // <.>
+
+  void propertyModified(PropertyModifyEvent ev) // <.>
+
+  void collectionVisible(CollectionVisibilityEvent ev) // <.>
+
+  void collectionUsable(CollectionUsabilityEvent ev) // <.>
+
+  void collectionAccessed(CollectionAccessEvent ev) // <.>
+
+  void collectionAddedTo(CollectionAddToEvent ev) // <.>
+
+  void collectionRemovedFrom(CollectionRemoveFromEvent ev) // <.>
+
+  void collectionMethodInvoked(CollectionMethodEvent interactionEvent) // <.>
+
+  void actionVisible(ActionVisibilityEvent interactionEvent) // <.>
+
+  void actionUsable(ActionUsabilityEvent ev) // <.>
+
+  void actionArgument(ActionArgumentEvent ev) // <.>
+
+  void actionInvoked(ActionInvocationEvent ev) // <.>
+}
+----
+
+<.> `[teal]#*objectTitleRead*#(xref:applib/services/wrapper/events/ObjectTitleEvent[ObjectTitleEvent] ev)` : `void`
++
+--
+The title was read.
+--
+<.> `[teal]#*objectPersisted*#(xref:applib/services/wrapper/events/ObjectValidityEvent[ObjectValidityEvent] ev)` : `void`
++
+--
+The object was persisted (or an attempt to persist it was made).
+--
+<.> `[teal]#*propertyVisible*#(xref:applib/services/wrapper/events/PropertyVisibilityEvent[PropertyVisibilityEvent] ev)` : `void`
++
+--
+A check was made to determine if a property was visible.
+--
+<.> `[teal]#*propertyUsable*#(xref:applib/services/wrapper/events/PropertyUsabilityEvent[PropertyUsabilityEvent] ev)` : `void`
++
+--
+A check was made to determine if a property was usable.
+--
+<.> `[teal]#*propertyAccessed*#(xref:applib/services/wrapper/events/PropertyAccessEvent[PropertyAccessEvent] ev)` : `void`
++
+--
+A property was read.
+
+Unlike most other events, a xref:applib/services/wrapper/events/PropertyAccessEvent[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
+--
+<.> `[teal]#*propertyModified*#(xref:applib/services/wrapper/events/PropertyModifyEvent[PropertyModifyEvent] ev)` : `void`
++
+--
+A property was modified (or an attempt to modify it was made)
+
+Use _PropertyModifyEvent#getProposed()_ to determine whether the property was being set or cleared.
+--
+<.> `[teal]#*collectionVisible*#(CollectionVisibilityEvent ev)` : `void`
++
+--
+A check was made to determine if a collection was visible.
+
+Will be fired prior to _#collectionUsable(CollectionUsabilityEvent)_ .
+--
+<.> `[teal]#*collectionUsable*#(xref:applib/services/wrapper/events/CollectionUsabilityEvent[CollectionUsabilityEvent] ev)` : `void`
++
+--
+A check was made to determine if a collection was usable.
+
+Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#collectionAddedTo(CollectionAddToEvent)_ or _#collectionRemovedFrom(CollectionRemoveFromEvent)_ .
+--
+<.> `[teal]#*collectionAccessed*#(xref:applib/services/wrapper/events/CollectionAccessEvent[CollectionAccessEvent] ev)` : `void`
++
+--
+A collection was read.
+
+Unlike most other events, a xref:applib/services/wrapper/events/CollectionAccessEvent[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
+--
+<.> `[teal]#*collectionAddedTo*#(xref:applib/services/wrapper/events/CollectionAddToEvent[CollectionAddToEvent] ev)` : `void`
++
+--
+An object was added to the collection (or an attempt to add it was made).
+--
+<.> `[teal]#*collectionRemovedFrom*#(xref:applib/services/wrapper/events/CollectionRemoveFromEvent[CollectionRemoveFromEvent] ev)` : `void`
++
+--
+An object was removed from the collection (or an attempt to remove it was made).
+--
+<.> `[teal]#*collectionMethodInvoked*#(xref:applib/services/wrapper/events/CollectionMethodEvent[CollectionMethodEvent] interactionEvent)` : `void`
++
+--
+A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
+
+Unlike the other methods in this interface, the source of these events will be an instance of a Collection (such as `java.util.List` ) rather than the domain object. (The domain object is {@link CollectionMethodEvent#getDomainObject() still available, however).
+--
+<.> `[teal]#*actionVisible*#(xref:applib/services/wrapper/events/ActionVisibilityEvent[ActionVisibilityEvent] interactionEvent)` : `void`
++
+--
+A check was made to determine if an action was visible.
+
+Will be fired prior to _#actionUsable(ActionUsabilityEvent)_ .
+--
+<.> `[teal]#*actionUsable*#(xref:applib/services/wrapper/events/ActionUsabilityEvent[ActionUsabilityEvent] ev)` : `void`
++
+--
+A check was made to determine if an action was usable.
+
+Will be fired prior to _#actionArgument(ActionArgumentEvent)_ .
+--
+<.> `[teal]#*actionArgument*#(xref:applib/services/wrapper/events/ActionArgumentEvent[ActionArgumentEvent] ev)` : `void`
++
+--
+A check was made as to whether an argument proposed for an action was valid.
+
+Will be fired prior to _#actionInvoked(ActionInvocationEvent)_ .
+--
+<.> `[teal]#*actionInvoked*#(xref:applib/services/wrapper/events/ActionInvocationEvent[ActionInvocationEvent] ev)` : `void`
++
+--
+An action was invoked (or an attempt to invoke it was made).
+--
+

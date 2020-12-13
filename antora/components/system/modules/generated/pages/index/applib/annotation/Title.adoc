@@ -1,0 +1,41 @@
+= Title : _annotation_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A title annotation used to annotate methods used to construct the title of a domain object instance. It is used as a marker.
+
+.Java Sources
+[source,java]
+----
+@interface Title {
+
+  String sequence() default "1.0"; // <.>
+
+  String prepend() default " "; // <.>
+
+  String append() default ""; // <.>
+
+  int abbreviatedTo() default Integer.MAX_VALUE; // <.>
+}
+----
+
+<.> `[teal]#*_sequence_*#` : `String`
++
+--
+The order (in Dewey decimal notation) that the property annotated with xref:applib/annotation/Title[Title] appears with respect to other properties also annotated with xref:applib/annotation/Title[Title] .
+--
+<.> `[teal]#*_prepend_*#` : `String`
++
+--
+The string to use to separate this property from any preceding properties in the title.
+--
+<.> `[teal]#*_append_*#` : `String`
++
+--
+The string to append to this property if non-empty.
+--
+<.> `[teal]#*_abbreviatedTo_*#` : `int`
++
+--
+The length to abbreviate this title element to.
+--
+

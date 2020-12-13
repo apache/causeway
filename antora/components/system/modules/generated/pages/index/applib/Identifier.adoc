@@ -1,0 +1,102 @@
+= Identifier : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Java Sources
+[source,java]
+----
+class Identifier {
+
+  public static final Depth CLASS;
+
+  public static final Depth CLASS_MEMBERNAME;
+
+  public static final Depth CLASS_MEMBERNAME_PARAMETERS;
+
+  public static final Depth MEMBERNAME_ONLY;
+
+  public static final Depth PARAMETERS_ONLY;
+
+  Identifier classIdentifier(final Class<?> cls)
+
+  Identifier classIdentifier(final String className)
+
+  Identifier propertyOrCollectionIdentifier(final Class<?> declaringClass, final String propertyOrCollectionName)
+
+  Identifier propertyOrCollectionIdentifier(final String declaringClassName, final String propertyOrCollectionName)
+
+  Identifier actionIdentifier(final Class<?> declaringClass, final String actionName, final Class<?>... parameterClasses)
+
+  Identifier actionIdentifier(final String declaringClassName, final String actionName, final Class<?>... parameterClasses)
+
+  Identifier actionIdentifier(final String declaringClassName, final String actionName, final List<String> parameterClassNames)
+
+  String getClassName()
+
+  String getClassNaturalName()
+
+  String getMemberName()
+
+  String getMemberNaturalName()
+
+  List<String> getMemberParameterNames()
+
+  List<String> getMemberParameterNaturalNames()
+
+  Type getType()
+
+  boolean isPropertyOrCollection() // <.>
+
+  String toIdentityString(final Depth depth)
+
+  String toClassIdentityString()
+
+  StringBuilder toClassIdentityString(final StringBuilder buf)
+
+  String toNameIdentityString()
+
+  StringBuilder toNameIdentityString(final StringBuilder buf)
+
+  String toClassAndNameIdentityString()
+
+  StringBuilder toClassAndNameIdentityString(final StringBuilder buf)
+
+  String toParmsIdentityString()
+
+  StringBuilder toParmsIdentityString(final StringBuilder buf)
+
+  String toNameParmsIdentityString()
+
+  StringBuilder toNameParmsIdentityString(final StringBuilder buf)
+
+  String toFullIdentityString()
+
+  int compareTo(final Identifier o2)
+
+  boolean equals(final Object obj) // <.>
+
+  boolean equals(final Identifier other)
+
+  int hashCode()
+
+  String toString()
+
+  Identifier fromIdentityString(final String asString) // <.>
+}
+----
+
+<.> `[teal]#*isPropertyOrCollection*#()` : `boolean`
++
+--
+Convenience method.
+--
+<.> `[teal]#*equals*#(Object obj)` : `boolean`
++
+--
+REVIEW: why not just compare the _#toString()_ representations?
+--
+<.> `[teal]#*_fromIdentityString_*#(String asString)` : `xref:applib/Identifier[Identifier]`
++
+--
+Factory method.
+--
+

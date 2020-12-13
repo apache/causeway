@@ -1,0 +1,50 @@
+= UserService : _interface_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The xref:applib/services/user/UserService[UserService] allows the domain object to obtain the identity of the user interacting with said object.
+
+If xref:applib/services/sudo/SudoService[SudoService] has been used to temporarily override the user and/or roles, then this service will report the overridden values instead.
+
+.Java Sources
+[source,java]
+----
+interface UserService {
+
+  Optional<UserMemento> currentUser() // <.>
+
+  UserMemento getUser() // <.>
+
+  UserMemento currentUserElseFail() // <.>
+
+  Optional<String> currentUserName() // <.>
+
+  String currentUserNameElseNobody() // <.>
+}
+----
+
+<.> `[teal]#*currentUser*#()` : `Optional<xref:applib/services/user/UserMemento[UserMemento]>`
++
+--
+Optionally gets the details about the current user, based on whether an xref:applib/services/iactn/ExecutionContext[ExecutionContext] can be found with the current thread's context.
+--
+<.> `[teal]#*getUser*#()` : `xref:applib/services/user/UserMemento[UserMemento]`
++
+--
+Gets the details about the current user.
+--
+<.> `[teal]#*currentUserElseFail*#()` : `xref:applib/services/user/UserMemento[UserMemento]`
++
+--
+Gets the details about the current user.
+--
+<.> `[teal]#*currentUserName*#()` : `Optional<String>`
++
+--
+Optionally gets the the current user's name, based on whether an xref:applib/services/iactn/ExecutionContext[ExecutionContext] can be found with the current thread's context.
+--
+<.> `[teal]#*currentUserNameElseNobody*#()` : `String`
++
+--
+Returns either the current user's name or else _Nobody_ .
+--
+

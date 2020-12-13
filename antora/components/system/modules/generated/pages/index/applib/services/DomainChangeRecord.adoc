@@ -1,0 +1,82 @@
+= DomainChangeRecord : _interface_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+An abstraction of some sort of recorded change to a domain object: commands, audit entries or published events.
+
+.Java Sources
+[source,java]
+----
+interface DomainChangeRecord {
+
+  ChangeType getType() // <.>
+
+  UUID getUniqueId() // <.>
+
+  String getUsername() // <.>
+
+  Timestamp getTimestamp() // <.>
+
+  String getTargetObjectType() // <.>
+
+  Bookmark getTarget() // <.>
+
+  String getTargetMember() // <.>
+
+  String getPreValue() // <.>
+
+  String getPostValue() // <.>
+}
+----
+
+<.> `[teal]#*getType*#()` : `ChangeType`
++
+--
+Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
+--
+<.> `[teal]#*getUniqueId*#()` : `UUID`
++
+--
+The unique identifier (a GUID) of the transaction in which this change occurred.
+--
+<.> `[teal]#*getUsername*#()` : `String`
++
+--
+The user that caused the change.
+--
+<.> `[teal]#*getTimestamp*#()` : `Timestamp`
++
+--
+The time that the change occurred.
+--
+<.> `[teal]#*getTargetObjectType*#()` : `String`
++
+--
+The object type of the domain object being changed.
+--
+<.> `[teal]#*getTarget*#()` : `xref:applib/services/bookmark/Bookmark[Bookmark]`
++
+--
+The xref:applib/services/bookmark/Bookmark[Bookmark] identifying the domain object that has changed.
+--
+<.> `[teal]#*getTargetMember*#()` : `String`
++
+--
+The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
+
+Populated for commands and for published events that represent action invocations or property edits.
+--
+<.> `[teal]#*getPreValue*#()` : `String`
++
+--
+The value of the property prior to it being changed.
+
+Populated only for audit entries.
+--
+<.> `[teal]#*getPostValue*#()` : `String`
++
+--
+The value of the property after it has changed.
+
+Populated only for audit entries.
+--
+

@@ -1,0 +1,38 @@
+= TitleUiEvent : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Emitted for subscribers to obtain a cssClass hint (equivalent to the `title()` supporting method).
+
+.Java Sources
+[source,java]
+----
+class TitleUiEvent {
+
+  TitleUiEvent() // <.>
+
+  TitleUiEvent(final S source)
+
+  void setTitle(final String title) // <.>
+
+  void setTranslatableTitle(final TranslatableString translatableTitle) // <.>
+}
+----
+
+<.> `[teal]#*TitleUiEvent*#()`
++
+--
+If used then the framework will set state via (non-API) setters.
+
+Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
+--
+<.> `[teal]#*setTitle*#(String title)` : `void`
++
+--
+For subscribers to call to provide a (non-translated) title for this object.
+--
+<.> `[teal]#*setTranslatableTitle*#(xref:applib/services/i18n/TranslatableString[TranslatableString] translatableTitle)` : `void`
++
+--
+For subscribers to call to provide a translatable (i18n) title for this object.
+--
+

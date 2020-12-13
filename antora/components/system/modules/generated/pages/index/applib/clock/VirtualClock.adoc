@@ -1,0 +1,112 @@
+= VirtualClock : _interface_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Works in connection with _InteractionFactory_ , such that it allows an xref:applib/services/iactn/Interaction[Interaction] to run with its own simulated (or actual) time.
+
+Relates to _VirtualContext_
+
+.Java Sources
+[source,java]
+----
+interface VirtualClock {
+
+  Instant now() // <.>
+
+  VirtualClock system() // <.>
+
+  VirtualClock nowAt(Instant virtualNow) // <.>
+
+  VirtualClock frozenAt(Instant frozenAt) // <.>
+
+  VirtualClock frozenTestClock() // <.>
+
+  long getEpochMillis() // <.>
+
+  LocalDate localDate(final ZoneId zoneId) // <.>
+
+  LocalDateTime localDateTime(final ZoneId zoneId) // <.>
+
+  OffsetDateTime offsetDateTime(final ZoneId zoneId) // <.>
+
+  java.util.Date javaUtilDate()
+
+  java.sql.Timestamp javaSqlTimestamp()
+
+  XMLGregorianCalendar xmlGregorianCalendar()
+
+  org.joda.time.DateTime asJodaDateTime(final ZoneId zoneId) // <.>
+
+  org.joda.time.LocalDate asJodaLocalDate(final ZoneId zoneId) // <.>
+}
+----
+
+<.> `[teal]#*now*#()` : `Instant`
++
+--
+Returns the (virtual) time as an _Instant_ .
+--
+<.> `[teal]#*_system_*#()` : `xref:applib/clock/VirtualClock[VirtualClock]`
++
+--
+Returns a the system's default ticking clock.
+--
+<.> `[teal]#*_nowAt_*#(Instant virtualNow)` : `xref:applib/clock/VirtualClock[VirtualClock]`
++
+--
+Returns a ticking clock set to virtual time _Instant_ _virtualNow_
+--
+<.> `[teal]#*_frozenAt_*#(Instant frozenAt)` : `xref:applib/clock/VirtualClock[VirtualClock]`
++
+--
+Always returns the time _Instant_ as given by _frozenAt_
+--
+<.> `[teal]#*_frozenTestClock_*#()` : `xref:applib/clock/VirtualClock[VirtualClock]`
++
+--
+Always returns the time _Instant_ 2003/8/17 21:30:25 (UTC)
+--
+<.> `[teal]#*getEpochMillis*#()` : `long`
++
+--
+Returns the (virtual) time as the number of milliseconds since the epoch start.
+--
+<.> `[teal]#*localDate*#(ZoneId zoneId)` : `LocalDate`
++
+--
+Returns the (virtual) time as _LocalDate_ , using the _ZoneId_ timezone.
+--
+<.> `[teal]#*localDateTime*#(ZoneId zoneId)` : `LocalDateTime`
++
+--
+Returns the (virtual) time as _LocalDateTime_ , using the _ZoneId_ timezone.
+--
+<.> `[teal]#*offsetDateTime*#(ZoneId zoneId)` : `OffsetDateTime`
++
+--
+Returns the (virtual) time as _OffsetDateTime_ , using the _ZoneId_ timezone.
+--
+<.> `[line-through gray]#*asJodaDateTime*#(ZoneId zoneId)` : `DateTime`
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+please migrate to java.time.*
+====
+
+Returns the time as a Joda _org.joda.time.DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
+--
+<.> `[line-through gray]#*asJodaLocalDate*#(ZoneId zoneId)` : `LocalDate`
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+please migrate to java.time.*
+====
+
+Returns the time as a Joda _DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
+--
+
