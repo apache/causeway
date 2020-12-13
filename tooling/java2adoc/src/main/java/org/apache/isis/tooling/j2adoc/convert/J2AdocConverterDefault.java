@@ -286,12 +286,12 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         .stream()
         .skip(j2aContext.getNamespacePartsSkipCount())
         .collect(Can.toCan())
-        .add(unit.getName())
+        .add(unit.getName() + ".adoc")
         .stream()
         .collect(Collectors.joining("/"));
         
         return String.format("xref:%s[%s]", 
-                xrefCoordinates, 
+                String.format(j2aContext.getXrefPageIdFormat(), xrefCoordinates), 
                 unit.getName()); 
     }
 
