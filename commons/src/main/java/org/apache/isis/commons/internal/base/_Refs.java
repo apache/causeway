@@ -94,6 +94,14 @@ public final class _Refs {
         public boolean isSet(int other) {
             return value==other;
         }
+
+        public int inc() {
+            return ++value;
+        }
+        
+        public int dec() {
+            return --value;
+        }
         
     }
     
@@ -107,6 +115,14 @@ public final class _Refs {
         
         public boolean isSet(long other) {
             return value==other;
+        }
+        
+        public long inc() {
+            return ++value;
+        }
+        
+        public long dec() {
+            return --value;
         }
     }
     

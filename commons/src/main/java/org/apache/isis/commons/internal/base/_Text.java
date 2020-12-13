@@ -281,16 +281,16 @@ public final class _Text {
         val na = normalize(a);
         val nb = normalize(b);
         
-        final int[] lineNrRef = {0};
+        val lineNrRef = _Refs.intRef(0);
 
         if(na.size()<=nb.size()) {
             na.zip(nb, (left, right)->{
-                final int lineNr = ++lineNrRef[0];
+                final int lineNr = lineNrRef.inc();
                 _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
             });
         } else {
             nb.zip(na, (right, left)->{
-                final int lineNr = ++lineNrRef[0];
+                final int lineNr = lineNrRef.inc();
                 _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
             });
         }
