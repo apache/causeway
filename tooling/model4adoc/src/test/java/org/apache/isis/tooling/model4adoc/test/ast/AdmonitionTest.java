@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel.test;
+package org.apache.isis.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 
@@ -24,41 +24,39 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
+
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.list;
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.listItem;
 
 import lombok.val;
 
-class NestedListTest extends AbstractAsciiDocWriterTest {
+class AdmonitionTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "list-nested.adoc";
+        super.adocSourceResourceLocation = "admonition.adoc";
         super.debugEnabled = false;
     }
 
-    @SuppressWarnings("unused")
+    //[NOTE]
+    //====
+    //the note is multiple paragraphs, and can have all the usual styling
+    //
+    //also note
+    //====
+    //
+    //TIP: Here's something worth knowing...
     @Test
-    void testList() throws IOException {
+    void testAdmonition() throws IOException {
         
-        val list = list(doc);
-        list.setTitle("NestedList");
+        val note = AsciiDocFactory.note(doc);
+        AsciiDocFactory.block(note, "the note is multiple paragraphs, and can have all the usual styling");
+        AsciiDocFactory.block(note, "also note");
         
-        val item1 = listItem(list, "Item-1");
-        val item2 = listItem(list, "Item-2");
-        
-        val list1 = list(item1);
-        
-        val item11 = listItem(list1, "Item-1-1");
-        val item12 = listItem(list1, "Item-1-2");
-        
-        val list12 = list(item12);
-        
-        val item121 = listItem(list12, "Item-1-2-1");
+        AsciiDocFactory.tip(doc, "Here's something worth knowing...");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

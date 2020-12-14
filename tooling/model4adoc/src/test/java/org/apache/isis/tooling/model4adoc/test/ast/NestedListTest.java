@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel.test;
+package org.apache.isis.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 
@@ -24,63 +24,41 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.list;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.listItem;
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.openBlock;
 
 import lombok.val;
 
-class OpenBlockTest extends AbstractAsciiDocWriterTest {
+class NestedListTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "list-open-block-continuation.adoc";
-        super.debugEnabled = true;
+        super.adocSourceResourceLocation = "list-nested.adoc";
+        super.debugEnabled = false;
     }
 
-    //* ListItem 1
-    //+
-    //--
-    //Here's an example of a document title:
-    //
-    //----
-    //= Document Title
-    //----
-    //
-    //NOTE: The header is optional.
-    //--
-    //* ListItem 2
-    //+
-    //--
-    //paragr 1 
-    //
-    //paragr 2
-    //--
     @SuppressWarnings("unused")
     @Test
-    void testOpenBlock() throws IOException {
+    void testList() throws IOException {
         
         val list = list(doc);
+        list.setTitle("NestedList");
         
-        val item1 = listItem(list, "ListItem 1");
-        val item2 = listItem(list, "ListItem 2");
+        val item1 = listItem(list, "Item-1");
+        val item2 = listItem(list, "Item-2");
         
-        val openBlock1 = openBlock(item1);
-        val openBlock2 = openBlock(item2);
+        val list1 = list(item1);
         
-        val block11 = block(openBlock1, "Here's an example of a document title:");
-        val block12 = AsciiDocFactory.listingBlock(openBlock1, "= Document Title");
-        val block13 = block(openBlock1, "NOTE: The header is optional.");
+        val item11 = listItem(list1, "Item-1-1");
+        val item12 = listItem(list1, "Item-1-2");
         
-        val block21 = block(openBlock2, "paragr 1");
-        val block22 = block(openBlock2, "paragr 2");
+        val list12 = list(item12);
+        
+        val item121 = listItem(list12, "Item-1-2-1");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

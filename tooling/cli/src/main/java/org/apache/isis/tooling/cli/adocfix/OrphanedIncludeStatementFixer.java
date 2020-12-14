@@ -24,10 +24,10 @@ import java.util.SortedSet;
 
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Text;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.cli.adocfix.IncludeStatements.IncludeStatement;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.model4adoc.include.IncludeStatement;
+import org.apache.isis.tooling.model4adoc.include.IncludeStatements;
 
 import lombok.NonNull;
 import lombok.val;

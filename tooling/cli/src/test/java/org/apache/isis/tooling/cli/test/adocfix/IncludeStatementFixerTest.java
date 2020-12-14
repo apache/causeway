@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.tooling.cli.adocfix.IncludeStatements;
+import org.apache.isis.tooling.model4adoc.include.IncludeStatements;
 
 import lombok.NonNull;
 import lombok.val;

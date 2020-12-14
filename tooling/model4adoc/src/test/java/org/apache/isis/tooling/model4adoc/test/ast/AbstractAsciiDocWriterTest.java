@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel.test;
+package org.apache.isis.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

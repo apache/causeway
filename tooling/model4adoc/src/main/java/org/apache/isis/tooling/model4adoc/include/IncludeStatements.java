@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.cli.adocfix;
+package org.apache.isis.tooling.model4adoc.include;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -24,51 +24,12 @@ import java.util.function.UnaryOperator;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import lombok.Builder;
 import lombok.NonNull;
-import lombok.Value;
 import lombok.val;
 
 public final class IncludeStatements {
-    
-    @Value @Builder
-    public static class IncludeStatement {
-        int zeroBasedLineIndex;
-        String matchingLine;
-        String referencePath;
-        String referenceShortName;
-        
-        String version;
-        String component;
-        String module;
-        String type; // usually 'page'
-        String ext;
-        String options;
-        
-        public boolean isLocal() {
-            return _Strings.isNullOrEmpty(component);
-        }
-        
-        public String toAdocAsString() {
-            //TODO if local might look slightly different 
-            if(isLocal()) {
-                throw _Exceptions.notImplemented();
-            }
-            
-            return String.format("include::%s%s:%s:%s$%s%s", 
-                    _Strings.nullToEmpty(version).isEmpty() ? "" : version + "@",
-                    _Strings.nullToEmpty(component),
-                    _Strings.nullToEmpty(module),
-                    type,
-                    referencePath,
-                    _Strings.nullToEmpty(options));
-        }
-        
-    }
     
     // -- UTILITIES
     

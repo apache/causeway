@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel.test;
+package org.apache.isis.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 
@@ -24,39 +24,31 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.list;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.listItem;
 
 import lombok.val;
 
-class AdmonitionTest extends AbstractAsciiDocWriterTest {
+class SimpleListTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "admonition.adoc";
+        super.adocSourceResourceLocation = "list-simple.adoc";
         super.debugEnabled = false;
     }
 
-    //[NOTE]
-    //====
-    //the note is multiple paragraphs, and can have all the usual styling
-    //
-    //also note
-    //====
-    //
-    //TIP: Here's something worth knowing...
     @Test
-    void testAdmonition() throws IOException {
+    void testList() throws IOException {
         
-        val note = AsciiDocFactory.note(doc);
-        AsciiDocFactory.block(note, "the note is multiple paragraphs, and can have all the usual styling");
-        AsciiDocFactory.block(note, "also note");
+        val list = list(doc);
+        list.setTitle("SimpleList");
         
-        AsciiDocFactory.tip(doc, "Here's something worth knowing...");
+        listItem(list, "Item-1");
+        listItem(list, "Item-2");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

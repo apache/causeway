@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel.test;
+package org.apache.isis.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 
@@ -24,31 +24,37 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.cell;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.list;
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.listItem;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.headCell;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
 import lombok.val;
 
-class SimpleListTest extends AbstractAsciiDocWriterTest {
+class AttributedTableTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "list-simple.adoc";
+        super.adocSourceResourceLocation = "table-attributed.adoc";
         super.debugEnabled = false;
     }
 
     @Test
-    void testList() throws IOException {
+    void testTable() throws IOException {
         
-        val list = list(doc);
-        list.setTitle("SimpleList");
+        val table = table(doc);
+        table.setTitle("Some table");
+        table.setAttribute("cols", "3m,2a", true);
+        table.setAttribute("header-option", "", true);
         
-        listItem(list, "Item-1");
-        listItem(list, "Item-2");
+        headCell(table, 0, 0, "Col-1");
+        headCell(table, 0, 1, "Col-2");
+        
+        cell(table, 0, 0, "1-1");
+        cell(table, 0, 1, "1-2");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

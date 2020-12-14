@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel.test;
+package org.apache.isis.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 
@@ -24,37 +24,33 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.cell;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.attrNotice;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.headCell;
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
-import lombok.val;
-
-class AttributedTableTest extends AbstractAsciiDocWriterTest {
+class DocumentHeaderTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "table-attributed.adoc";
+        super.adocSourceResourceLocation = "document-header.adoc";
         super.debugEnabled = false;
     }
 
+    //= Sample
+    //:Notice: my special license
+    //
+    //hi
     @Test
-    void testTable() throws IOException {
+    void testDocHeader() throws IOException {
         
-        val table = table(doc);
-        table.setTitle("Some table");
-        table.setAttribute("cols", "3m,2a", true);
-        table.setAttribute("header-option", "", true);
+        doc.setTitle("Sample");
         
-        headCell(table, 0, 0, "Col-1");
-        headCell(table, 0, 1, "Col-2");
+        attrNotice(doc, "my special license");
         
-        cell(table, 0, 0, "1-1");
-        cell(table, 0, 1, "1-2");
+        block(doc).getLines().add("hi");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

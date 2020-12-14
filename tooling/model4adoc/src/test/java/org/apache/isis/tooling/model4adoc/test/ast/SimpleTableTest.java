@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.adocmodel.test;
+package org.apache.isis.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 
@@ -24,70 +24,44 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.cell;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.headCell;
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
 import lombok.val;
 
-class FootnoteTest extends AbstractAsciiDocWriterTest {
+class SimpleTableTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "footnote.adoc";
+        super.adocSourceResourceLocation = "table-simple.adoc";
         super.debugEnabled = false;
     }
 
-    
-    //<.> fn-1
-    //+
-    //--
-    //[WARNING]
-    //====
-    //warn-1
-    //
-    //warn-2
-    //====
-    //
-    //para-1
-    //
-    //para-2
-    //
-    //* li-1
-    //* li-2
-    //
-    //para-3
-    //--
     @Test
-    void testFootnote() throws IOException {
+    void testTable() throws IOException {
         
-        val footnotes = AsciiDocFactory.footnotes(doc);
-        val footnoteLI = AsciiDocFactory.footnote(footnotes, "fn-1");
-        val footnote = AsciiDocFactory.openBlock(footnoteLI);
+        val table = table(doc);
+        table.setTitle("Table");
         
+        headCell(table, 0, 0, "Col-1");
+        headCell(table, 0, 1, "Col-2");
+        headCell(table, 0, 2, "Col-3");
         
-        val note = AsciiDocFactory.warning(footnote);
-        AsciiDocFactory.block(note, "warn-1");
-        AsciiDocFactory.block(note, "warn-2");
+        cell(table, 0, 0, "1-1");
+        cell(table, 0, 1, "1-2");
+        cell(table, 0, 2, "1-3");
         
-        AsciiDocFactory.block(footnote, "para-1");
-        AsciiDocFactory.block(footnote, "para-2");
-        
-        val nestedList = AsciiDocFactory.list(footnote);
-        AsciiDocFactory.listItem(nestedList, "li-1");
-        AsciiDocFactory.listItem(nestedList, "li-2");
-        
-        AsciiDocFactory.block(footnote, "para-3");
-        
-        AsciiDocFactory.tip(doc, "Here's something worth knowing...");
+        cell(table, 1, 0, "2-1");
+        cell(table, 1, 1, "2-2");
+        cell(table, 1, 2, "2-3");
         
         assertDocumentIsCorrectlyWritten(doc);
     }
     
 
-
 }
-
