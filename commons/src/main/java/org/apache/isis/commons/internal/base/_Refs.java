@@ -25,6 +25,8 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.AllArgsConstructor;
@@ -63,7 +65,7 @@ public final class _Refs {
         return new LongReference(value);
     }
     
-    public static <T> ObjectReference<T> objectRef(final T value) {
+    public static <T> ObjectReference<T> objectRef(final @Nullable T value) {
         return new ObjectReference<>(value);
     }
     
@@ -78,7 +80,10 @@ public final class _Refs {
         boolean applyAsBoolean(boolean value);
     }
     
-    
+    /**
+     * Holder of a mutable primitive {@code boolean} value.
+     * @since 2.0  
+     */
     @Data @AllArgsConstructor
     public static final class BooleanReference {
         private boolean value;
@@ -96,6 +101,10 @@ public final class _Refs {
         }
     }
     
+    /**
+     * Holder of a mutable primitive {@code int} value.
+     * @since 2.0  
+     */
     @Data @AllArgsConstructor
     public static final class IntReference {
         private int value;
@@ -118,6 +127,10 @@ public final class _Refs {
         
     }
     
+    /**
+     * Holder of a mutable primitive {@code long} value.
+     * @since 2.0  
+     */
     @Data @AllArgsConstructor
     public static final class LongReference {
         private long value;
@@ -139,15 +152,19 @@ public final class _Refs {
         }
     }
     
+    /**
+     * Holder of a nullable and mutable {@link Object} value.
+     * @since 2.0  
+     */
     @Setter @ToString @EqualsAndHashCode @AllArgsConstructor
     public static final class ObjectReference<T> {
-        private T value;
+        private @Nullable T value;
         
         public T update(final @NonNull UnaryOperator<T> operator) {
             return value = operator.apply(value);
         }
         
-        public boolean isSet(T other) {
+        public boolean isSet(final @Nullable T other) {
             return value==other;
         }
         
@@ -169,9 +186,13 @@ public final class _Refs {
         
     }
     
+    /**
+     * Holder of a non-null and mutable {@link String} value.
+     * @since 2.0  
+     */
     @Setter @ToString @EqualsAndHashCode @AllArgsConstructor
     public static final class StringReference {
-        private String value;
+        private @NonNull String value;
         
         public String update(final @NonNull UnaryOperator<String> operator) {
             return value = Objects.requireNonNull(operator.apply(value));
@@ -196,6 +217,17 @@ public final class _Refs {
             return value.contains(s);
         }
         
+        /**
+         * At given {@code index} cuts the held {@link String} value into <i>left</i> and <i>right</i> 
+         * parts, returns the <i>left</i> part and replaces the held string value with the <i>right</i>
+         * part.
+         * <ul>
+         * <li>Index underflow returns an empty string and leaves the held value unmodified.</li> 
+         * <li>Index overflow returns the currently held value 'then' assigns the held value an empty string.</li>
+         * </ul>   
+         * @param index - zero based cutting point 
+         * @return left - cut off - part of held value (non-null)
+         */
         public String cutAtIndex(int index) {
             if(index<=0) {
                 return "";
@@ -210,14 +242,63 @@ public final class _Refs {
             return left;
         }
         
+        /**
+         * Shortcut to {@code cutAtIndex(value.indexOf(s))}.
+         * <p>
+         * At calculated {@code value.indexOf(s)} cuts the held {@link String} value into 
+         * <i>left</i> and <i>right</i> parts, returns the <i>left</i> part and replaces the held 
+         * string value with the <i>right</i> part.
+         * <p>
+         * When the substring is not found, returns an empty string and leaves the held value unmodified.
+         * 
+         * @param   s   the substring to search for.
+         * @return  left - cut off - part of held value (non-null) at the index of the first 
+         *          occurrence of the specified substring,
+         *          or an empty string if there is no such occurrence.
+         * @see {@link #cutAtIndex(int)}
+         * @see {@link String#indexOf(String)}
+         */
         public String cutAtIndexOf(String s) {
             return cutAtIndex(value.indexOf(s));
         }
         
+        /**
+         * Shortcut to {@code cutAtIndex(value.lastIndexOf(s))}.
+         * <p>
+         * At calculated {@code value.lastIndexOf(s)} cuts the held {@link String} value into 
+         * <i>left</i> and <i>right</i> parts, returns the <i>left</i> part and replaces the held 
+         * string value with the <i>right</i> part.
+         * <p>
+         * When the substring is not found, returns an empty string and leaves the held value unmodified.
+         * 
+         * @param   s   the substring to search for.
+         * @return  left - cut off - part of held value (non-null) at the index of the last 
+         *          occurrence of the specified substring,
+         *          or an empty string if there is no such occurrence.
+         * @see {@link #cutAtIndex(int)}
+         * @see {@link String#lastIndexOf(String)}
+         */
         public String cutAtLastIndexOf(String s) {
             return cutAtIndex(value.lastIndexOf(s));
         }
         
+        /**
+         * Variant of to {@link #cutAtIndexOf(String)}, that drops the specified substring {@code s}. 
+         * <p>
+         * At calculated {@code value.indexOf(s)} cuts the held {@link String} value into 
+         * <i>left</i>, <i>dropped</i> and <i>right</i> parts, returns the <i>left</i> part and 
+         * replaces the held string value with the <i>right</i> part. Where the <i>dropped</i> part
+         * identifies as the matching part, that equals the specified substring {@code s}.
+         * <p>
+         * When the substring is not found, returns an empty string and leaves the held value unmodified.
+         * 
+         * @param   s   the substring to search for.
+         * @return  left - cut off - part of held value (non-null) at the index of the first 
+         *          occurrence of the specified substring,
+         *          or an empty string if there is no such occurrence.
+         * @see {@link #cutAtIndex(int)}
+         * @see {@link String#indexOf(String)}
+         */
         public String cutAtIndexOfAndDrop(String s) {
             if(!value.contains(s)) {
                 return "";
@@ -227,6 +308,23 @@ public final class _Refs {
             return left;
         }
         
+        /**
+         * Variant of to {@link #cutAtLastIndexOf(String)}, that drops the specified substring {@code s}. 
+         * <p>
+         * At calculated {@code value.lastIndexOf(s)} cuts the held {@link String} value into 
+         * <i>left</i>, <i>dropped</i> and <i>right</i> parts, returns the <i>left</i> part and 
+         * replaces the held string value with the <i>right</i> part. Where the <i>dropped</i> part
+         * identifies as the matching part, that equals the specified substring {@code s}.
+         * <p>
+         * When the substring is not found, returns an empty string and leaves the held value unmodified.
+         * 
+         * @param   s   the substring to search for.
+         * @return  left - cut off - part of held value (non-null) at the index of the last 
+         *          occurrence of the specified substring,
+         *          or an empty string if there is no such occurrence.
+         * @see {@link #cutAtIndex(int)}
+         * @see {@link String#lastIndexOf(String)}
+         */
         public String cutAtLastIndexOfAndDrop(String s) {
             if(!value.contains(s)) {
                 return "";
