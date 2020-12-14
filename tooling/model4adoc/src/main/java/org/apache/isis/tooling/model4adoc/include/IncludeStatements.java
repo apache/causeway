@@ -24,6 +24,7 @@ import java.util.function.UnaryOperator;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.NonNull;
@@ -103,13 +104,13 @@ public final class IncludeStatements {
                     referencePath = acc.getValue();
                 }
                 
-                incl.referencePath(referencePath);
-                
                 acc.setValue(referencePath);
                 
-                acc.cutAtLastIndexOfAndDrop("/");
+                val namespaceAsString = acc.cutAtLastIndexOfAndDrop("/");
                 
-                incl.referenceShortName(acc.cutAtLastIndexOfAndDrop("."));
+                incl.namespace(Can.ofStream(_Strings.splitThenStream(namespaceAsString, "/")));
+                
+                incl.canonicalName(acc.cutAtLastIndexOfAndDrop("."));
                 incl.ext(acc.getValue());
                 
                 onLine.accept(line, Optional.of(incl.build()));

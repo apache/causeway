@@ -22,10 +22,12 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.SortedSet;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.tooling.cli.CliConfig;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.J2AdocUnit.LookupKey;
 import org.apache.isis.tooling.model4adoc.include.IncludeStatement;
 import org.apache.isis.tooling.model4adoc.include.IncludeStatements;
 
@@ -65,20 +67,50 @@ public final class OrphanedIncludeStatementFixer {
                                 && "generated".equals(include.getModule()))) { // TODO should be reasoned from config
                     return null; // keep original line, don't mangle
                 }
+
+                val correctedIncludeStatement = _Refs.<IncludeStatement>objectRef(null);
+                val typeSimpleName = include.getCanonicalName();
                 
-                if(isOrphaned(include, j2aContext)) {
+                j2aContext.getUnit(LookupKey.typeSimpleName(typeSimpleName))
+                .ifPresent(unit->{
+
+                    val expected = IncludeStatement.builder()
+                    .component("system")
+                    .module("generated")
+                    .type("page")
+                    .namespace(unit.getNamespace().stream()
+                            .skip(j2aContext.getNamespacePartsSkipCount())
+                            .collect(Can.toCan())
+                            .add(0, "index") //TODO this is antora config specific 
+                            )
+                    .canonicalName(typeSimpleName)
+                    .ext(".adoc")
+                    .options("[leveloffset=+2]")
+                    .build();
                     
-                                       
-                }
+                    val includeLineShouldBe = expected.toAdocAsString();
+                    
+                    if(!includeLineShouldBe.equals(include.getMatchingLine())) {
+                        System.out.printf("mismatch\n %s\n %s\n", includeLineShouldBe, include.getMatchingLine());
+                        correctedIncludeStatement.setValue(expected);   
+                        fixedCounter.inc();
+                    }
+                    
+                });
                 
-                //TODO lookup j2aContext wheh
-                
-                return null; // keep original line, don't mangle
+                return correctedIncludeStatement
+                        .getValue()
+                        .orElse(null); // keep original line, don't mangle
+                 
             });
             
-            totalFixed.update(n->n + fixedCounter.getValue());
-            
-            // TODO write lines to file
+            if(fixedCounter.getValue()>0) {
+                
+                // write lines to file
+                _Text.writeLinesToFile(lines, adocFile, StandardCharsets.UTF_8);
+                
+                totalFixed.update(n->n + fixedCounter.getValue());
+            }
             
         });
         
@@ -87,18 +119,6 @@ public final class OrphanedIncludeStatementFixer {
     }
 
     // -- HELPER
-    
-    private static boolean isOrphaned(IncludeStatement include, J2AdocContext j2aContext) {
-        
-        val simpleName = include.getReferenceShortName();
-        
-        j2aContext.getUnitIndex(); // TODO we need a better map index (wip)
-        
-        
-        // TODO Auto-generated method stub
-        return false;
-    }
-    
 
 
 }

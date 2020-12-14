@@ -18,18 +18,22 @@
  */
 package org.apache.isis.tooling.model4adoc.include;
 
+import java.util.stream.Collectors;
+
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.val;
 
 @Value @Builder
 public final class IncludeStatement {
     int zeroBasedLineIndex;
     String matchingLine;
-    String referencePath;
-    String referenceShortName;
+    Can<String> namespace;
+    String canonicalName;
     
     String version;
     String component;
@@ -43,18 +47,28 @@ public final class IncludeStatement {
     }
     
     public String toAdocAsString() {
-        //TODO if local might look slightly different 
+        //TODO local might look slightly different 
         if(isLocal()) {
             throw _Exceptions.notImplemented();
         }
         
-        return String.format("include::%s%s:%s:%s$%s%s", 
-                _Strings.nullToEmpty(version).isEmpty() ? "" : version + "@",
-                _Strings.nullToEmpty(component),
-                _Strings.nullToEmpty(module),
-                type,
-                referencePath,
-                _Strings.nullToEmpty(options));
+        val sb = new StringBuilder();
+        
+        sb.append("include::")
+        .append(_Strings.nullToEmpty(version).isEmpty() ? "" : version + "@")
+        .append(_Strings.nullToEmpty(component))
+        .append(":")
+        .append(_Strings.nullToEmpty(module))
+        .append(":")
+        .append(type)
+        .append("$")
+        .append(namespace.stream().map(s->s+"/").collect(Collectors.joining()))
+        .append(canonicalName)
+        .append(ext)
+        .append(_Strings.nullToEmpty(options));
+        
+        return sb.toString();
+
     }
     
 }
