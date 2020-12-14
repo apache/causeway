@@ -33,23 +33,33 @@
 		<skipTests>true</skipTests>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 
 		<dependency>
 			<groupId>org.apache.isis.commons</groupId>
 			<artifactId>isis-commons</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>com.github.javaparser</groupId>
-		    <artifactId>javaparser-core</artifactId>
-		    <version>${javaparser.version}</version>
+			<groupId>com.github.javaparser</groupId>
+			<artifactId>javaparser-core</artifactId>
+			<version>${javaparser.version}</version>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>guru.nidi</groupId>
-			<artifactId>code-assert</artifactId>
-			<version>${code-assert.version}</version>
+		    <groupId>com.github.andi-huber</groupId>
+		    <artifactId>code-assert</artifactId>
+		    <version>-SNAPSHOT</version>
+<!-- 			<groupId>guru.nidi</groupId> -->
+<!-- 			<artifactId>code-assert</artifactId> -->
+<!-- 			<version>${code-assert.version}</version> -->
 			<exclusions>
 				<exclusion>
 					<groupId>com.pinterest.ktlint</groupId>
