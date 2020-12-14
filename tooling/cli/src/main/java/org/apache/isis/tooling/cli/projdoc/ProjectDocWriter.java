@@ -95,7 +95,7 @@ final class ProjectDocWriter {
         } catch (Exception e) {
             System.err.println(String.format(
                     "failed to write adoc for unit %s", 
-                    currentUnit.getValue().map(J2AdocUnit::getName).orElse("none")));
+                    currentUnit.getValue().map(J2AdocUnit::getCanonicalName).orElse("none")));
             e.printStackTrace();
             System.exit(1);
         } 
@@ -120,7 +120,7 @@ final class ProjectDocWriter {
         
         return new File(
                 destFolder,
-                unit.getName() + ".adoc");
+                unit.getCanonicalName()+ ".adoc");
         
     }
 

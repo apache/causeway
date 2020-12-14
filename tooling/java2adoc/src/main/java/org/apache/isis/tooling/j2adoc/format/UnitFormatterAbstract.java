@@ -82,7 +82,7 @@ implements UnitFormatter {
     protected Optional<String> title(final J2AdocUnit unit) {
         return Optional.of(
                 String.format("%s : _%s_", 
-                        unit.getName(),
+                        unit.getFriendlyName(),
                         unit.getDeclarationKeywordFriendlyName().toLowerCase()));
     }
     

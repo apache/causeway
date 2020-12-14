@@ -45,6 +45,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
+import org.apache.isis.tooling.j2adoc.J2AdocUnit.LookupKey;
 import org.apache.isis.tooling.javamodel.ast.AnnotationMemberDeclarations;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
@@ -270,7 +271,7 @@ final class J2AdocConverterDefault implements J2AdocConverter {
 
         switch(inlineTag.getType()) {
         case LINK:
-            val referencedUnit = j2aContext.getUnit(inlineContent).orElse(null);
+            val referencedUnit = j2aContext.getUnit(LookupKey.javadocLink(inlineContent)).orElse(null);
             if(referencedUnit!=null) {
                 return String.format(" %s ", xref(referencedUnit));
             }
@@ -286,19 +287,19 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         .stream()
         .skip(j2aContext.getNamespacePartsSkipCount())
         .collect(Can.toCan())
-        .add(unit.getName())
+        .add(unit.getCanonicalName()) 
         .stream()
         .collect(Collectors.joining("/"));
         
         return String.format("xref:%s[%s]", 
                 String.format(j2aContext.getXrefPageIdFormat(), xrefCoordinates), 
-                unit.getName()); 
+                unit.getFriendlyName()); 
     }
 
-    public String xrefIfRequired(final @NonNull String docIndexKey) {
-        return j2aContext.getUnit(docIndexKey)
+    private String xrefIfRequired(final @NonNull String typeSimpleName) {
+        return j2aContext.getUnit(LookupKey.typeSimpleName(typeSimpleName))
                 .map(this::xref)
-                .orElse(docIndexKey);
+                .orElse(typeSimpleName);
     }
     
     public String javadocSnippet(final @NonNull JavadocSnippet snippet) {

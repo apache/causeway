@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.projectmodel;
+package org.apache.isis.commons.resource;
 
 import java.util.Comparator;
 
@@ -28,9 +28,12 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Value @Builder
-public class ProjectResourceCoordinates 
-implements Comparable<ProjectResourceCoordinates> {
+public class ResourceCoordinates 
+implements Comparable<ResourceCoordinates> {
 
     /**
      * multi-part top level location specifier 
@@ -50,6 +53,11 @@ implements Comparable<ProjectResourceCoordinates> {
      * or a nested class name {@code A$B},       
      */
     private final @NonNull Can<String> name;
+
+    /**
+     * String representation of {@link #getName()}; 
+     */
+    private final @NonNull String nameAsString;
     
     /**
      * usually part of the multi-part name;  
@@ -64,13 +72,13 @@ implements Comparable<ProjectResourceCoordinates> {
      */
     private final @NonNull String friendlyName;
 
-    private final static Comparator<ProjectResourceCoordinates> comparator =
-            Comparator.comparing(ProjectResourceCoordinates::getLocation)
-           .thenComparing(ProjectResourceCoordinates::getNamespace)
-           .thenComparing(ProjectResourceCoordinates::getName);
+    private final static Comparator<ResourceCoordinates> comparator =
+            Comparator.comparing(ResourceCoordinates::getLocation)
+           .thenComparing(ResourceCoordinates::getNamespace)
+           .thenComparing(ResourceCoordinates::getName);
     
     @Override
-    public int compareTo(final @Nullable ProjectResourceCoordinates other) {
+    public int compareTo(final @Nullable ResourceCoordinates other) {
      // when returning
         // -1 ... this is before other 
         // +1 ... this is after other

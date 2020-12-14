@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.tooling.j2adoc.J2AdocUnit.LookupKey;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.j2adoc.format.UnitFormatter;
 import org.apache.isis.tooling.j2adoc.format.UnitFormatterCompact;
@@ -78,10 +79,10 @@ public class J2AdocContext {
 
     // -- UNIT INDEX
     
-    private final Map<String, J2AdocUnit> unitIndex = _Maps.newTreeMap();
+    private final Map<LookupKey, J2AdocUnit> unitIndex = _Maps.newTreeMap();
     
     public J2AdocContext add(final @NonNull J2AdocUnit unit) {
-        val previousKey = unitIndex.put(unit.getName(), unit);
+        val previousKey = unitIndex.put(LookupKey.of(unit.getResourceCoordinates()), unit);
         if(previousKey!=null) {
             throw _Exceptions.unrecoverableFormatted(
                     "J2AUnit index entries must be unique (index key collision on %s)", 
@@ -103,7 +104,11 @@ public class J2AdocContext {
         return unitIndex.values().stream();
     }
 
-    public Optional<J2AdocUnit> getUnit(String key) {
+    /**
+     * @param key - unique key for types 
+     * @return optionally the unit available for given key
+     */
+    public Optional<J2AdocUnit> getUnit(final @NonNull LookupKey key) {
         return Optional.ofNullable(unitIndex.get(key));
     }
     

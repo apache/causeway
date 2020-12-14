@@ -82,7 +82,7 @@ public final class OrphanedIncludeStatementFixer {
             
         });
         
-        System.out.println(String.format("IncludeStatementFixer: all done. (%d orphanded inlcudes fixed)", totalFixed));
+        System.out.println(String.format("IncludeStatementFixer: all done. (%d orphanded inlcudes fixed)", totalFixed.getValue()));
         
     }
 

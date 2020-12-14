@@ -36,12 +36,14 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.javadoc.Javadoc;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -146,7 +148,7 @@ public final class AnyTypeDeclaration {
                 );
     }
     
-    public static AnyTypeDeclaration auto(
+      public static AnyTypeDeclaration auto(
             final @NonNull TypeDeclaration<?> td,
             final @NonNull CompilationUnit cu) {
         
@@ -181,7 +183,7 @@ public final class AnyTypeDeclaration {
      * Same as {@link #getSimpleName()} if type is not nested. 
      */
     @Getter(lazy = true)
-    private final String name = createName();
+    private final Can<String> name = createName();
     
     public String getSimpleName() {
         return td.getNameAsString();
@@ -189,16 +191,17 @@ public final class AnyTypeDeclaration {
     
     // -- HELPER 
     
-    private String createName() {
-        String name = td.getNameAsString(); 
+    private Can<String> createName() {
+        val nameParts = _Lists.<String>newLinkedList();
+        nameParts.push(td.getNameAsString());
         Node walker = td; 
         while(walker.getParentNode().isPresent()) {
             walker = walker.getParentNode().get();
             if(walker instanceof NodeWithSimpleName) {
-                name = ((NodeWithSimpleName<?>)walker).getNameAsString() + "." + name;
+                nameParts.addFirst(((NodeWithSimpleName<?>)walker).getNameAsString());
             } else break;
         }
-        return name;
+        return Can.ofCollection(nameParts);
     }
 
     

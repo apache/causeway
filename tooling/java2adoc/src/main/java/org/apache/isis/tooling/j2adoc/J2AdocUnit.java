@@ -20,6 +20,7 @@ package org.apache.isis.tooling.j2adoc;
 
 import java.io.File;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
@@ -29,6 +30,7 @@ import org.asciidoctor.ast.Document;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.resource.ResourceCoordinates;
 import org.apache.isis.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.isis.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.isis.tooling.javamodel.ast.CompilationUnits;
@@ -37,15 +39,40 @@ import org.apache.isis.tooling.javamodel.ast.PackageDeclarations;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
 @Log4j2
 public final class J2AdocUnit {
-
-    private final AnyTypeDeclaration atd;
     
+    //TODO not namespace aware yet
+    @Value
+    public static class LookupKey implements Comparable<LookupKey> {
+        private final @NonNull String key;
+
+        //XXX resco has all the info, to make keys namespace aware
+        public static LookupKey of(final @NonNull ResourceCoordinates resco) {
+            return new LookupKey(resco.getName().stream().collect(Collectors.joining(".")));
+        }
+        //XXX in a better world we would resolve these types to fqn type names
+        public static @NonNull LookupKey typeSimpleName(final @NonNull String typeSimpleName) {
+            return new LookupKey(typeSimpleName);
+        }
+        //XXX in a better world we would resolve these links to fqn type names
+        public static @NonNull LookupKey javadocLink(final @NonNull String javadocLink) {
+            return new LookupKey(javadocLink);
+        }
+        @Override
+        public int compareTo(LookupKey other) {
+            return _Strings.compareNullsFirst(this.key, other==null ? null : other.key);
+        }
+    }
+
+    @Getter private final ResourceCoordinates resourceCoordinates;
+    @Getter private final AnyTypeDeclaration typeDeclaration;
+
     public static Stream<J2AdocUnit> parse(final @NonNull File sourceFile) {
 
         if("package-info.java".equals(sourceFile.getName())) {
@@ -63,10 +90,26 @@ public final class J2AdocUnit {
             
             cu.getPackageDeclaration();
             
+            
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamTypeDeclarations)
             .filter(AnyTypeDeclaration::hasIndexDirective)
-            .map(J2AdocUnit::new);
+            .map(atd->{
+               
+                val resourceCoordinates = ResourceCoordinates.builder()
+                .friendlyName(atd.getName().stream()
+                        .collect(Collectors.joining(".")))
+                .nameAsString(atd.getName().stream()
+                        .collect(Collectors.joining("~")))
+                .simpleName(atd.getSimpleName())
+                .location(Can.empty()) //TODO get from file name
+                .namespace(PackageDeclarations.namespace(atd.getPackageDeclaration()))
+                .name(atd.getName())
+                .build();
+                
+                return new J2AdocUnit(resourceCoordinates, atd);
+                
+            });
 
         } catch (Exception e) {
             log.error("failed to parse java source file {}", sourceFile, e);
@@ -74,37 +117,41 @@ public final class J2AdocUnit {
         }
 
     }
-
-    public AnyTypeDeclaration getTypeDeclaration() {
-        return atd;
+    
+    public String getCanonicalName() {
+        return resourceCoordinates.getNameAsString();
     }
     
     /**
      * Returns the recursively resolved (nested) type name. 
      * Same as {@link #getSimpleName()} if type is not nested. 
      */
-    public String getName() {
-        return atd.getName();
+    public Can<String> getName() {
+        return resourceCoordinates.getName();
+    }
+    
+    public String getFriendlyName() {
+        return resourceCoordinates.getFriendlyName();
     }
     
     public String getSimpleName() {
-        return atd.getSimpleName();
+        return resourceCoordinates.getSimpleName();
     }
     
     public Can<String> getNamespace() {
-        return PackageDeclarations.namespace(atd.getPackageDeclaration());
+        return resourceCoordinates.getNamespace();
     }
     
     public String getDeclarationKeywordFriendlyName() {
-        return _Strings.capitalize(atd.getKind().name().toLowerCase());
+        return _Strings.capitalize(typeDeclaration.getKind().name().toLowerCase());
     }
     
     public String getDeclarationKeyword() {
-        return atd.getKind().getJavaKeyword();
+        return typeDeclaration.getKind().getJavaKeyword();
     }
     
     @Getter(lazy = true)
-    private final Optional<Javadoc> javadoc = atd.getJavadoc();
+    private final Optional<Javadoc> javadoc = typeDeclaration.getJavadoc();
     
     public String getAsciiDocXref(
             final @NonNull J2AdocContext j2aContext) {
@@ -115,6 +162,8 @@ public final class J2AdocUnit {
             final @NonNull J2AdocContext j2aContext) {
         return j2aContext.getFormatter().apply(this);
     }
+
+
 
 
 }

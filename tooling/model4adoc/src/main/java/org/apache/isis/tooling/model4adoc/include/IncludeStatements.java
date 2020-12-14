@@ -53,10 +53,14 @@ public final class IncludeStatements {
         
         val processedLines = _Lists.<String>newArrayList();
         visit(lines, (originalLine, inclOptional)->{
-            inclOptional.ifPresentOrElse(
-                    incl->processedLines.add(rewriter.apply(incl).toAdocAsString()),
-                    ()->processedLines.add(originalLine)
-            );
+            
+            val incl = inclOptional.map(rewriter::apply).orElse(null);
+            if(incl!=null) {
+                processedLines.add(incl.toAdocAsString());
+            } else {
+                processedLines.add(originalLine);
+            }
+            
         });
         return Can.ofCollection(processedLines); 
     }
