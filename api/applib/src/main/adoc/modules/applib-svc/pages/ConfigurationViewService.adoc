@@ -10,7 +10,7 @@ It simply returns a `ConfigurationProperty` (view model) instance for all known 
 
 == API
 
-include::system:generated:page$index/ConfigurationProperty.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/confview/ConfigurationProperty.adoc[leveloffset=+2]
 
 TODO example migration
 

@@ -10,7 +10,7 @@ The `QueryResultsCacheControl` domain service is used to enable or disable cachi
 
 == API
 
-include::system:generated:page$index/QueryResultCacheControl.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/queryresultscache/QueryResultCacheControl.adoc[leveloffset=+2]
 
 TODO example migration
 

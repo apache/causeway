@@ -9,7 +9,7 @@ The `ApplicationFeatureRepository` provides the access to string representations
 
 == API
 
-include::system:generated:page$index/ApplicationMemberType.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/appfeat/ApplicationMemberType.adoc[leveloffset=+2]
 
 TODO example migration
 

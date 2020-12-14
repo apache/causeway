@@ -24,7 +24,7 @@ Note though that each concrete implementation must also provide corresponding Wi
 
 == API
 
-include::system:generated:page$index/GridSystemService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/grid/GridSystemService.adoc[leveloffset=+2]
 
 TODO example migration
 

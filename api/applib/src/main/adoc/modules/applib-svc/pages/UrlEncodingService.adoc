@@ -24,7 +24,7 @@ The framework provides a default implementation of this service, `UrlEncodingSer
 
 == API
 
-include::system:generated:page$index/UrlEncodingService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/urlencoding/UrlEncodingService.adoc[leveloffset=+2]
 
 TODO example migration
 

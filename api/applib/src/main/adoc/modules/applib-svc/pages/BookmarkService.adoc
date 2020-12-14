@@ -21,7 +21,7 @@ Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc
 
 == API
 
-include::system:generated:page$index/BookmarkService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/bookmark/BookmarkService.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -43,7 +43,7 @@ include::refguide:applib-svc:example$services/bookmark/BookmarkService.java[tags
 
 == API
 
-include::system:generated:page$index/Bookmark.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/bookmark/Bookmark.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -71,7 +71,7 @@ The core framework (xref:core:runtime-services:about.adoc[Runtime Services] modu
 
 == API
 
-include::system:generated:page$index/BookmarkHolder.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/bookmark/BookmarkHolder.adoc[leveloffset=+2]
 
 TODO example migration
 

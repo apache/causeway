@@ -10,7 +10,7 @@ The `FactoryService` collects together methods for instantiating domain objects.
 
 == API
 
-include::system:generated:page$index/FactoryService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/factory/FactoryService.adoc[leveloffset=+2]
 
 TODO example migration
 

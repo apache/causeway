@@ -14,7 +14,7 @@ xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]).
 
 == API
 
-include::system:generated:page$index/EntityState.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/repository/EntityState.adoc[leveloffset=+2]
 
 TODO example migration
 

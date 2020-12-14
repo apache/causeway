@@ -12,7 +12,7 @@ Multiple implementations can be registered; all will be called.
 
 == API
 
-include::system:generated:page$index/SessionLoggingService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/session/SessionLoggingService.adoc[leveloffset=+2]
 
 TODO example migration
 

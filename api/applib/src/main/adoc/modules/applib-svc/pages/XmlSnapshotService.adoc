@@ -16,7 +16,7 @@ The service offers a basic API to create a snapshot of a single object, and an m
 
 == API
 
-include::system:generated:page$index/XmlSnapshotService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/xmlsnapshot/XmlSnapshotService.adoc[leveloffset=+2]
 
 TODO example migration
 

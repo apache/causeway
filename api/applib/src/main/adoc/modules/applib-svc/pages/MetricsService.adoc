@@ -13,7 +13,7 @@ The service tracks entity change metrics for those entities that have `entityCha
 
 == API
 
-include::system:generated:page$index/MetricsService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/metrics/MetricsService.adoc[leveloffset=+2]
 
 TODO example migration
 

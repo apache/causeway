@@ -16,7 +16,7 @@ These can then be rendered back to the user as expected errors, rather than fata
 
 == API
 
-include::system:generated:page$index/ExceptionRecognizer.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/exceprecog/ExceptionRecognizer.adoc[leveloffset=+2]
 
 TODO example migration
 

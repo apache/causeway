@@ -15,7 +15,7 @@ The default implementation of this service uses the xref:refguide:applib-svc:Ema
 
 == API
 
-include::system:generated:page$index/EmailNotificationService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/userreg/EmailNotificationService.adoc[leveloffset=+2]
 
 TODO example migration
 

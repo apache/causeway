@@ -16,7 +16,7 @@ Another use case is to strip out large blobs for performance reasons.
 
 == API
 
-include::system:generated:page$index/CommandDtoProcessorService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -44,7 +44,7 @@ As noted in the introduction, the framework provides a default implementation, n
 
 == API
 
-include::system:generated:page$index/CommandDtoProcessor.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[leveloffset=+2]
 
 TODO example migration
 

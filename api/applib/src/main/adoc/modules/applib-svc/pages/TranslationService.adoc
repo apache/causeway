@@ -19,7 +19,7 @@ For the "big picture" and further details on Apache Isis' i18n support, see xref
 
 == API
 
-include::system:generated:page$index/TranslationService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/i18n/TranslationService.adoc[leveloffset=+2]
 
 TODO example migration
 

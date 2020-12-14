@@ -9,7 +9,7 @@ The `TitleService` provides methods to programmatically obtain the title and ico
 
 == API
 
-include::system:generated:page$index/TitleService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/title/TitleService.adoc[leveloffset=+2]
 
 TODO example migration
 

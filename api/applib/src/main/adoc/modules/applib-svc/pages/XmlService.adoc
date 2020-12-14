@@ -10,7 +10,7 @@ It is used by the framework's default implementation of xref:refguide:applib-svc
 
 == API
 
-include::system:generated:page$index/XmlService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/xml/XmlService.adoc[leveloffset=+2]
 
 TODO example migration
 

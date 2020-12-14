@@ -19,7 +19,7 @@ When combined with Apache Isis' own xref:vro:ROOT:simplified-representations.ado
 
 == API
 
-include::system:generated:page$index/SwaggerService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/swagger/SwaggerService.adoc[leveloffset=+2]
 
 TODO example migration
 

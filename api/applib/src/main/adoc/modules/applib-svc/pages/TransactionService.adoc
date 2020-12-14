@@ -14,7 +14,7 @@ The `TransactionService` (and its various supertypes) allows domain objects to i
 
 == API
 
-include::system:generated:page$index/TransactionState.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/xactn/TransactionState.adoc[leveloffset=+2]
 
 TODO example migration
 

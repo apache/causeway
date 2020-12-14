@@ -27,7 +27,7 @@ The API breaks into four parts, along with a number of supporting control classe
 
 == API
 
-include::system:generated:page$index/WrapperFactory.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/wrapper/WrapperFactory.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -90,7 +90,7 @@ In addition, any xref:refguide:applib-methods:prefixes.adoc#default[`default...(
 [#synccontrol]
 == API
 
-include::system:generated:page$index/SyncControl.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/wrapper/control/SyncControl.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -137,7 +137,7 @@ include::refguide:applib-svc:example$services/wrapper/control/SyncControl.java[t
 
 == API
 
-include::system:generated:page$index/WrapperFactory.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/wrapper/WrapperFactory.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -169,7 +169,7 @@ If any of these are entities, they are retrieved from the database afresh; it is
 
 == API
 
-include::system:generated:page$index/AsyncControl.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/wrapper/control/AsyncControl.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -208,7 +208,7 @@ If business rules are checked, note that they are performed in the context of th
 
 == API
 
-include::system:generated:page$index/WrapperFactory.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/wrapper/WrapperFactory.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -236,7 +236,7 @@ If the object is not wrapped, returns back unchanged.
 
 == API
 
-include::system:generated:page$index/WrapperFactory.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/wrapper/WrapperFactory.adoc[leveloffset=+2]
 
 TODO example migration
 

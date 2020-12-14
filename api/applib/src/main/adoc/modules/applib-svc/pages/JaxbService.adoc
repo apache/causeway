@@ -9,7 +9,7 @@ The `JaxbService` allows instances of JAXB-annotated classes to be marshalled to
 
 == API
 
-include::system:generated:page$index/JaxbService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/jaxb/JaxbService.adoc[leveloffset=+2]
 
 TODO example migration
 

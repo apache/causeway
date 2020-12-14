@@ -6,7 +6,7 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 == API
 
-include::system:generated:page$index/ServiceInjector.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/inject/ServiceInjector.adoc[leveloffset=+2]
 
 TODO example migration
 

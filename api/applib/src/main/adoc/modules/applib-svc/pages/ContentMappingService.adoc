@@ -15,7 +15,7 @@ The mapped object used will be the first non-`null` result returned by an implem
 
 == API
 
-include::system:generated:page$index/ContentMappingService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/conmap/ContentMappingService.adoc[leveloffset=+2]
 
 TODO example migration
 

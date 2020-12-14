@@ -11,7 +11,7 @@ A typical use case is to generate a clickable link for rendering in an email, PD
 
 == API
 
-include::system:generated:page$index/DeepLinkService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/linking/DeepLinkService.adoc[leveloffset=+2]
 
 TODO example migration
 

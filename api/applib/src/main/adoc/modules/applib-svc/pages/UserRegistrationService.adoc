@@ -26,7 +26,7 @@ For further details on the user registration feature (as supported by the Wicket
 
 == API
 
-include::system:generated:page$index/UserRegistrationService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/userreg/UserRegistrationService.adoc[leveloffset=+2]
 
 TODO example migration
 

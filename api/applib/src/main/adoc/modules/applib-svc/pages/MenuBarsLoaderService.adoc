@@ -9,7 +9,7 @@ The `MenuBarsLoaderService` is used by the default implementation of xref:refgui
 
 == API
 
-include::system:generated:page$index/MenuBarsLoaderService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/menu/MenuBarsLoaderService.adoc[leveloffset=+2]
 
 TODO example migration
 

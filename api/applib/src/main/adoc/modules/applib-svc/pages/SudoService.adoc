@@ -11,7 +11,7 @@ This is useful both for xref:testing:integtestsupport:about.adoc[integration tes
 
 == API
 
-include::system:generated:page$index/SudoService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/sudo/SudoService.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -111,7 +111,7 @@ In the future this service may be used more deeply, eg to propagate permissions 
 
 == API
 
-include::system:generated:page$index/SudoService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/sudo/SudoService.adoc[leveloffset=+2]
 
 TODO example migration
 

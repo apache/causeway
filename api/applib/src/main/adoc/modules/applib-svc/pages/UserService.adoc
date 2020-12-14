@@ -14,7 +14,7 @@ If xref:refguide:applib-svc:SudoService.adoc[`SudoService`] has been used to tem
 
 == API
 
-include::system:generated:page$index/RoleMemento.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/user/RoleMemento.adoc[leveloffset=+2]
 
 TODO example migration
 

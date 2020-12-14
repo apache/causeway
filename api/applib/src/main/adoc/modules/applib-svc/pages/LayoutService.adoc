@@ -10,7 +10,7 @@ This functionality is surfaced through the user interface through a related xref
 
 == API
 
-include::system:generated:page$index/LayoutService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/layout/LayoutService.adoc[leveloffset=+2]
 
 TODO example migration
 

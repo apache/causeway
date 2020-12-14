@@ -10,7 +10,7 @@ The `TableColumnOrderService` provides the ability to reorder (or suppress) colu
 
 == API
 
-include::system:generated:page$index/TableColumnOrderService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/tablecol/TableColumnOrderService.adoc[leveloffset=+2]
 
 TODO example migration
 

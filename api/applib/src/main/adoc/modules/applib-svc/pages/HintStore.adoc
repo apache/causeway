@@ -14,7 +14,7 @@ An SPI makes it easy to plug in an alternative implementation that is more sophi
 
 == API
 
-include::system:generated:page$index/HintStore.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/hint/HintStore.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -46,7 +46,7 @@ The core framework provides a default implementation of this service (`org.apach
 
 == API
 
-include::system:generated:page$index/HintStore.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/hint/HintStore.adoc[leveloffset=+2]
 
 TODO example migration
 

@@ -10,7 +10,7 @@ The `BookmarkUiService` provides the ability to programmatically interact with b
 
 == API
 
-include::system:generated:page$index/BookmarkUiService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/bookmarkui/BookmarkUiService.adoc[leveloffset=+2]
 
 TODO example migration
 

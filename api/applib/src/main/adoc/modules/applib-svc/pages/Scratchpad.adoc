@@ -10,7 +10,7 @@ The `Scratchpad` domain service allows objects to exchange information even if t
 
 == API
 
-include::system:generated:page$index/Scratchpad.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/scratchpad/Scratchpad.adoc[leveloffset=+2]
 
 TODO example migration
 

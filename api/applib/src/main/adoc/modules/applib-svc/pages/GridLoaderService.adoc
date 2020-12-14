@@ -9,7 +9,7 @@ The `GridLoaderService` provides the ability to load the XML layout (grid) for a
 
 == API
 
-include::system:generated:page$index/GridLoaderService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/grid/GridLoaderService.adoc[leveloffset=+2]
 
 TODO example migration
 

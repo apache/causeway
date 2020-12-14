@@ -18,7 +18,7 @@ This service was inspired by similar functionality that exists in relational dat
 
 == API
 
-include::system:generated:page$index/QueryResultsCache.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/queryresultscache/QueryResultsCache.adoc[leveloffset=+2]
 
 TODO example migration
 

@@ -9,7 +9,7 @@ The `LayoutServiceMenu` service simply provides a UI to allow layouts (obtained 
 
 == API
 
-include::system:generated:page$index/LayoutServiceMenu.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/layout/LayoutServiceMenu.adoc[leveloffset=+2]
 
 TODO example migration
 

@@ -16,7 +16,7 @@ For example, if deploying to Docker then both Docker Swarm and Kubernetes are or
 
 == API
 
-include::system:generated:page$index/HealthCheckService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/health/HealthCheckService.adoc[leveloffset=+2]
 
 TODO example migration
 

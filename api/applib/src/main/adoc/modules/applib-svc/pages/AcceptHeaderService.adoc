@@ -14,7 +14,7 @@ As an alternative to performing content negotiation within the domain classes, t
 
 == API
 
-include::system:generated:page$index/AcceptHeaderService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/acceptheader/AcceptHeaderService.adoc[leveloffset=+2]
 
 TODO example migration
 

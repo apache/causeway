@@ -14,7 +14,7 @@ Another use case is to allow the user to switch context in some fashion or other
 
 == API
 
-include::system:generated:page$index/UserProfileService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/userprof/UserProfileService.adoc[leveloffset=+2]
 
 TODO example migration
 

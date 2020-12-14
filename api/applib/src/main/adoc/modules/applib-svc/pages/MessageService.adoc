@@ -12,7 +12,7 @@ These messages can either be simple strings, or can be translated.
 
 == API
 
-include::system:generated:page$index/MessageService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/message/MessageService.adoc[leveloffset=+2]
 
 TODO example migration
 

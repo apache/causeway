@@ -10,7 +10,7 @@ The `MetaModelService` service provides access to a number of aspects of Apache 
 
 == API
 
-include::system:generated:page$index/MetaModelService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/metamodel/MetaModelService.adoc[leveloffset=+2]
 
 TODO example migration
 

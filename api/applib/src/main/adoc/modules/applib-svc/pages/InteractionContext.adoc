@@ -35,7 +35,7 @@ The `Execution` class itself is abstract; there are two subclasses, `ActionInvoc
 
 == API
 
-include::system:generated:page$index/InteractionContext.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/iactn/InteractionContext.adoc[leveloffset=+2]
 
 TODO example migration
 
@@ -60,7 +60,7 @@ This class is concrete (that is, it is also the implementation).
 
 == API
 
-include::system:generated:page$index/Interaction.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/iactn/Interaction.adoc[leveloffset=+2]
 
 TODO example migration
 

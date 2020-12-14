@@ -22,7 +22,7 @@ Dynamic reloading is disabled in production mode.
 
 == API
 
-include::system:generated:page$index/GridService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/grid/GridService.adoc[leveloffset=+2]
 
 TODO example migration
 

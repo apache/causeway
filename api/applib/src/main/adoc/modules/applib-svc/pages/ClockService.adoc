@@ -21,7 +21,7 @@ Apache Isis provides such a facade through the `ClockService`.
 
 == API
 
-include::system:generated:page$index/ClockService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/clock/ClockService.adoc[leveloffset=+2]
 
 TODO example migration
 
