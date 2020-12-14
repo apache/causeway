@@ -295,7 +295,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     // -- HELPER
 
     private void printChapterTitle(final String title, final int symbolCount) {
-        print(_Strings.padStart("", symbolCount, '='));
+        print(_Strings.of(symbolCount, '='));
         printfln(" %s", title);
     }
 

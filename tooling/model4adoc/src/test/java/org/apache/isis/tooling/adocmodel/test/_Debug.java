@@ -134,7 +134,7 @@ final class _Debug {
     }
     
     private static void print(int level, String format, Object... args) {
-        val indent = _Strings.padEnd("", level*2, ' ');
+        val indent = _Strings.of(level*2, ' ');
         System.out.println(String.format("%s%s", indent, String.format(format, args)));
     }
     

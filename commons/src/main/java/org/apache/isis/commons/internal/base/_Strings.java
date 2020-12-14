@@ -23,7 +23,9 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Spliterator;
@@ -108,6 +110,58 @@ public final class _Strings {
         final char[] chars = new char[length];
         Arrays.fill(chars, c);
         return String.valueOf(chars);
+    }
+    
+    // -- COMPARE
+    
+    /**
+     * Compares two strings lexicographically (and nulls-frist).
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
+     * {@link Comparator#nullsFirst(Comparator)}. 
+     * @implNote this utility method does not produce objects on the heap   
+     * @param a
+     * @param b
+     * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
+     * @see {@link String#compareTo(String)} 
+     */
+    public static int compareNullsFirst(final @Nullable String a, final @Nullable String b) {
+        if(Objects.equals(a, b)) {
+            return 0;
+        }
+        // at this point not both can be null, so which ever is null wins 
+        if(a==null) {
+            return -1;
+        }
+        if(b==null) {
+            return 1;
+        }
+        // at this point neither can be null
+        return a.compareTo(b);
+    }
+    
+    /**
+     * Compares two strings lexicographically (and nulls-last).
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
+     * {@link Comparator#nullsFirst(Comparator)}. 
+     * @implNote this utility method does not produce objects on the heap   
+     * @param a
+     * @param b
+     * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
+     * @see {@link String#compareTo(String)} 
+     */
+    public static int compareNullsLast(final @Nullable String a, final @Nullable String b) {
+        if(Objects.equals(a, b)) {
+            return 0;
+        }
+        // at this point not both can be null, so which ever is null wins 
+        if(a==null) {
+            return 1;
+        }
+        if(b==null) {
+            return -1;
+        }
+        // at this point neither can be null
+        return a.compareTo(b);
     }
 
     // -- BASIC PREDICATES

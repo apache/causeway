@@ -19,17 +19,20 @@
 package org.apache.isis.tooling.cli.adocfix;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.SortedSet;
 
 import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.tooling.cli.CliConfig;
+import org.apache.isis.tooling.cli.adocfix.IncludeStatements.IncludeStatement;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 
 import lombok.NonNull;
 import lombok.val;
 
-public final class IncludeStatementFixer {
+public final class OrphanedIncludeStatementFixer {
 
     public static void fixIncludeStatements(
             final @NonNull SortedSet<File> adocFiles,
@@ -48,16 +51,54 @@ public final class IncludeStatementFixer {
         
         System.out.println(String.format("IncludeStatementFixer: about to process %d adoc files", adocFiles.size()));
         
-        val fixedCounter = _Refs.intRef(0); 
+        val totalFixed = _Refs.intRef(0);
         
-        adocFiles.forEach(f->{
-            _Probe.errOut("adoc file found: %s", f);    
+        adocFiles.forEach(adocFile->{
+            //_Probe.errOut("adoc file found: %s", adocFile);    
+        
+            val fixedCounter = _Refs.intRef(0);
+            val originLines = _Text.readLinesFromFile(adocFile, StandardCharsets.UTF_8);
+            
+            val lines = IncludeStatements.rewrite(originLines, include->{
+                if(include.isLocal()
+                        || !( "system".equals(include.getComponent()) // TODO should be reasoned from config
+                                && "generated".equals(include.getModule()))) { // TODO should be reasoned from config
+                    return null; // keep original line, don't mangle
+                }
+                
+                if(isOrphaned(include, j2aContext)) {
+                    
+                                       
+                }
+                
+                //TODO lookup j2aContext wheh
+                
+                return null; // keep original line, don't mangle
+            });
+            
+            totalFixed.update(n->n + fixedCounter.getValue());
+            
+            // TODO write lines to file
+            
         });
         
-        System.out.println(String.format("IncludeStatementFixer: all done. (%d adoc files fixed)", fixedCounter.getValue()));
+        System.out.println(String.format("IncludeStatementFixer: all done. (%d orphanded inlcudes fixed)", totalFixed));
         
     }
-    
+
     // -- HELPER
+    
+    private static boolean isOrphaned(IncludeStatement include, J2AdocContext j2aContext) {
+        
+        val simpleName = include.getReferenceShortName();
+        
+        j2aContext.getUnitIndex(); // TODO we need a better map index (wip)
+        
+        
+        // TODO Auto-generated method stub
+        return false;
+    }
+    
+
 
 }

@@ -26,6 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -54,6 +55,10 @@ public final class IncludeStatements {
         
         public String toAdocAsString() {
             //TODO if local might look slightly different 
+            if(isLocal()) {
+                throw _Exceptions.notImplemented();
+            }
+            
             return String.format("include::%s%s:%s:%s$%s%s", 
                     _Strings.nullToEmpty(version).isEmpty() ? "" : version + "@",
                     _Strings.nullToEmpty(component),
@@ -75,6 +80,12 @@ public final class IncludeStatements {
         return Can.ofCollection(matches); 
     }
     
+    /**
+     * @param lines input from eg. a file
+     * @param rewriter - receives all include statements found, 
+     *          when returning null, means the current line stays unmodified
+     * @return updated lines ready to be eg. written to file
+     */
     public static Can<String> rewrite(
             final @NonNull Iterable<String> lines, 
             final @NonNull UnaryOperator<IncludeStatement> rewriter) {

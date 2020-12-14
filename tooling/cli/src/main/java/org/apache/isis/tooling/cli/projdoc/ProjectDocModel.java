@@ -43,7 +43,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
-import org.apache.isis.tooling.cli.adocfix.IncludeStatementFixer;
+import org.apache.isis.tooling.cli.adocfix.OrphanedIncludeStatementFixer;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.ast.CodeClasses;
@@ -119,7 +119,7 @@ public class ProjectDocModel {
         ProjectDocWriter.write(cliConfig, doc, j2aContext);
         
         // update include statements ...
-        IncludeStatementFixer.fixIncludeStatements(asciiDocFiles, cliConfig, j2aContext);
+        OrphanedIncludeStatementFixer.fixIncludeStatements(asciiDocFiles, cliConfig, j2aContext);
 
     }
 
