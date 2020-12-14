@@ -42,7 +42,7 @@ class OpenBlockTest extends AbstractAsciiDocWriterTest {
     void setUp() throws Exception {
         doc = doc();
         super.adocSourceResourceLocation = "list-open-block-continuation.adoc";
-        super.debugEnabled = true;
+        super.debugEnabled = false;
     }
 
     //* ListItem 1
