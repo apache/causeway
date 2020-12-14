@@ -53,6 +53,11 @@
 			<version>${javaparser.version}</version>
 		</dependency>
 
+		<!--
+			as a workaround for code-assert-core not having an option to add 'adoc' as a language
+			we use repo jitpack.io (as declared above) to pull a fork on github
+			see	https://github.com/nidi3/code-assert/pull/47 
+		 -->
 		<dependency>
 		    <groupId>com.github.andi-huber</groupId>
 		    <artifactId>code-assert</artifactId>
