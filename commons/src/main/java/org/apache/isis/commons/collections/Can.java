@@ -62,7 +62,8 @@ import lombok.val;
  * @param <T>
  * @since 2.0
  */
-public interface Can<T> extends Iterable<T>, Serializable {
+public interface Can<T> 
+extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * @return this Can's cardinality
@@ -96,6 +97,14 @@ public interface Can<T> extends Iterable<T>, Serializable {
                 .orElseThrow(()->new NoSuchElementException(
                         "no element with elementIndex = " + elementIndex));
     }
+    
+    /**
+     * For convenience allows the argument to be {@code null} treating {@code null} 
+     * equivalent to {@link Can#empty()}.
+     * @see {@link Comparable#compareTo(Object)}
+     */
+    @Override
+    int compareTo(final @Nullable Can<T> o);
 
     /**
      * @return Stream of elements this Can contains

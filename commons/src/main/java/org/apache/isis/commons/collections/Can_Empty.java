@@ -153,7 +153,7 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final @Nullable Object obj) {
         if(INSTANCE == obj) {
             return true; // optimization not strictly necessary
         }
@@ -167,6 +167,17 @@ final class Can_Empty<T> implements Can<T> {
         return 0;
     }
 
+    @Override
+    public int compareTo(final @Nullable Can<T> other) {
+        if(other==null) {
+            return 0; 
+        }
+        // when returning
+        // -1 ... this is before other 
+        // +1 ... this is after other
+        return Integer.compare(0, other.size()); // all empty Cans are same and come first
+    }
+    
     @Override
     public List<T> toList() {
         return Collections.emptyList(); // serializable and immutable

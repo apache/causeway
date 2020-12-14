@@ -35,6 +35,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Objects;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -207,6 +208,53 @@ final class Can_Multiple<T> implements Can<T> {
     @Override
     public int hashCode() {
         return elements.hashCode();
+    }
+    
+    @Override
+    public int compareTo(final @Nullable Can<T> other) {
+        // when returning
+        // -1 ... this (multi-can) is before other 
+        // +1 ... this (multi-can) is after other
+        if(other==null
+                || other.isEmpty()) {
+            return 1; // all empty Cans are same and come first
+        }
+        if(other.isCardinalityOne()) {
+            final int firstElementComparison = _Objects.compareNonNull(
+                    this.elements.get(0), 
+                    other.getSingletonOrFail());
+            if(firstElementComparison!=0) {
+                return firstElementComparison;
+            }
+        }
+        // at this point firstElementComparison is 0 and other is a multi-can
+        // XXX we already compared the first elements, could skip ahead for performance reasons
+        if(this.size()>=other.size()) {
+            val otherIterator = other.iterator();
+            for(T left: this) {
+                if(!otherIterator.hasNext()) {
+                    return 1; // the other has fewer elements hence comes first
+                }
+                val right = otherIterator.next();
+                int c = _Objects.compareNonNull(left, right);
+                if(c!=0) {
+                    return c;
+                }
+            }
+        } else {
+            val thisIterator = this.iterator();
+            for(T right: other) {
+                if(!thisIterator.hasNext()) {
+                    return -1; // this has fewer elements hence comes first
+                }
+                val left = thisIterator.next();
+                int c = _Objects.compareNonNull(left, right);
+                if(c!=0) {
+                    return c;
+                }
+            }
+        }
+        return 0; // we compared all elements and found no difference
     }
     
     @Override

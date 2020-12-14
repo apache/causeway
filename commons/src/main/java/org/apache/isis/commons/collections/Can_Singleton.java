@@ -35,6 +35,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
@@ -191,6 +192,26 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public int hashCode() {
         return element.hashCode();
+    }
+    
+    @Override
+    public int compareTo(final @Nullable Can<T> other) {
+        // when returning
+        // -1 ... this (singleton) is before other 
+        // +1 ... this (singleton) is after other
+        if(other==null
+                || other.isEmpty()) {
+            return 1; // all empty Cans are same and come first
+        }
+        final int firstElementComparison = _Objects.compareNonNull(
+                this.element, 
+                other.getFirstOrFail());
+        if(firstElementComparison!=0
+                || other.isCardinalityOne()) {
+            return firstElementComparison; // when both Cans are singletons, just compare by their contained values
+        }
+        // at this point firstElementComparison is 0 and other is of cardinality MULTIPLE
+        return -1; // singletons come before multi-cans 
     }
     
     @Override

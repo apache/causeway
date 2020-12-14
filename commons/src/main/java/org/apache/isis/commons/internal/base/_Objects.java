@@ -48,7 +48,8 @@ public final class _Objects {
      * @param a
      * @param b
      * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
-     * @see {@link Comparable#compareTo(String)} 
+     * @see {@link Comparable#compareTo(Object)}
+     * @throws UnsupportedOperationException if neither object is comparable
      */
     public static <T> int compareNullsFirst(final @Nullable T a, final @Nullable T b) {
         if(Objects.equals(a, b)) {
@@ -80,7 +81,8 @@ public final class _Objects {
      * @param a
      * @param b
      * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
-     * @see {@link Comparable#compareTo(String)} 
+     * @see {@link Comparable#compareTo(Object)}
+     * @throws UnsupportedOperationException if neither object is comparable 
      */
     public static <T> int compareNullsLast(final @Nullable T a, final @Nullable T b) {
         if(Objects.equals(a, b)) {
@@ -94,6 +96,29 @@ public final class _Objects {
             return 1;
         }
         // at this point neither can be null
+        if (a instanceof Comparable<?>) {
+            return _Casts.<Comparable<T>>uncheckedCast(a).compareTo(b);
+        }
+        if (b instanceof Comparable<?>) {
+            return -_Casts.<Comparable<T>>uncheckedCast(b).compareTo(a);
+        }
+        throw _Exceptions.unsupportedOperation("cannot compare objects if non of them is 'comparable'");
+    }
+
+    /**
+     * Compares two objects in natural order, both assumed to be non-null.
+     * 
+     * @apiNote consider using {@link Comparator#naturalOrder()}. 
+     * @implNote this utility method does not produce objects on the heap
+     * @implNote for performance reasons we don't check for non-null arguments on method entry   
+     * 
+     * @param a - nun-null
+     * @param b - nun-null
+     * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
+     * @see {@link Comparable#compareTo(Object)}
+     * @throws UnsupportedOperationException if neither object is comparable or both are {@code null} 
+     */
+    public static <T> int compareNonNull(final /*@NonNull*/ T a, final /*@NonNull*/ T b) {
         if (a instanceof Comparable<?>) {
             return _Casts.<Comparable<T>>uncheckedCast(a).compareTo(b);
         }
