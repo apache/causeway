@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -199,13 +200,13 @@ public final class ManagedObjects {
     // -- PREDEFINED COMPARATOR
 
     private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
-        @SuppressWarnings({ "unchecked", "rawtypes" })
+        @SuppressWarnings({"rawtypes" })
         @Override
         public int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
             val pPojo = UnwrapUtil.single(p);
             val qPojo = UnwrapUtil.single(q);
             if(pPojo instanceof Comparable && qPojo instanceof Comparable) {
-                return _NullSafe.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
+                return _Objects.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
             }
             if(Objects.equals(pPojo, qPojo)) {
                 return 0;

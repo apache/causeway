@@ -40,7 +40,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 public final class _Objects {
 
     /**
-     * Compares two objects (nulls-frist) in natural order.
+     * Compares two objects (nulls-first) in natural order.
      * <p>
      * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
      * {@link Comparator#nullsFirst(Comparator)}. 

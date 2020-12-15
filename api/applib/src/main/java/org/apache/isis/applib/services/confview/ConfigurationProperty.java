@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Objects;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -71,7 +71,7 @@ public class ConfigurationProperty implements Comparable<ConfigurationProperty> 
 
     @Override
     public int compareTo(final ConfigurationProperty other) {
-        return _NullSafe.compareNullsLast(getKey(), other.getKey());
+        return _Objects.compareNullsLast(getKey(), other.getKey());
     }
 
 }
