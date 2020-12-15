@@ -67,7 +67,7 @@ public final class _Objects {
             return _Casts.<Comparable<T>>uncheckedCast(a).compareTo(b);
         }
         if (b instanceof Comparable<?>) {
-            return -_Casts.<Comparable<T>>uncheckedCast(b).compareTo(a);
+            return negate(_Casts.<Comparable<T>>uncheckedCast(b).compareTo(a));
         }
         throw _Exceptions.unsupportedOperation("cannot compare objects if non of them is 'comparable'");
     }
@@ -100,7 +100,7 @@ public final class _Objects {
             return _Casts.<Comparable<T>>uncheckedCast(a).compareTo(b);
         }
         if (b instanceof Comparable<?>) {
-            return -_Casts.<Comparable<T>>uncheckedCast(b).compareTo(a);
+            return negate(_Casts.<Comparable<T>>uncheckedCast(b).compareTo(a));
         }
         throw _Exceptions.unsupportedOperation("cannot compare objects if non of them is 'comparable'");
     }
@@ -123,9 +123,21 @@ public final class _Objects {
             return _Casts.<Comparable<T>>uncheckedCast(a).compareTo(b);
         }
         if (b instanceof Comparable<?>) {
-            return -_Casts.<Comparable<T>>uncheckedCast(b).compareTo(a);
+            return negate(_Casts.<Comparable<T>>uncheckedCast(b).compareTo(a));
         }
         throw _Exceptions.unsupportedOperation("cannot compare objects if non of them is 'comparable'");
+    }
+    
+    // -- HELPER
+    
+    private final static int negate(int x) {
+        // guard against integer overflow
+        if(x==Integer.MIN_VALUE) {
+            return 1; 
+        }
+        /*sonar-ignore-on*/
+        return -x;
+        /*sonar-ignore-off*/
     }
     
 }
