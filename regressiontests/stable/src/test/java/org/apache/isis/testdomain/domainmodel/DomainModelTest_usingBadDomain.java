@@ -61,7 +61,7 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 @DirtiesContext // because of the temporary installed 'bad' domain
-//@Incubating("does not work, when executed in sequence with other smoketests")
+//@Incubating("does not work, when executed in sequence with other regressiontests")
 class DomainModelTest_usingBadDomain {
     
     @Inject private IsisConfiguration configuration;

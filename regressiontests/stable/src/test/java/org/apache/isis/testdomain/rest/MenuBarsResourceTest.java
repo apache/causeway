@@ -96,7 +96,7 @@ class MenuBarsResourceTest {
         
         // find service action by object-type
         menuBars.visit(actionLayoutData->{
-            if("smoketests.BlobDemoMenu".equals(actionLayoutData.getObjectType())) {
+            if("regressiontests.BlobDemoMenu".equals(actionLayoutData.getObjectType())) {
                 blobDemoMenuRef.setValue(actionLayoutData);
             }
         });

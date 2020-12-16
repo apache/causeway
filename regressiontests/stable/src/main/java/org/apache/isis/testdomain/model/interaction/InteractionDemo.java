@@ -43,7 +43,7 @@ import lombok.Setter;
 @XmlRootElement(name = "InteractionDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType="smoketests.InteractionDemo", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType="regressiontests.InteractionDemo", editing=Editing.ENABLED)
 public class InteractionDemo {
 
     @Property(

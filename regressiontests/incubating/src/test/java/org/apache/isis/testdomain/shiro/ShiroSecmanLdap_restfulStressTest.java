@@ -78,7 +78,7 @@ import lombok.val;
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
-//XXX "does not work, when executed in sequence with other smoketests
+//XXX "does not work, when executed in sequence with other regressiontests
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;

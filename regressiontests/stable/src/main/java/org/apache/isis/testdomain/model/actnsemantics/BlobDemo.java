@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @XmlRootElement(name = "BlobDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType="smoketests.BlobDemo")
+@DomainObject(nature=Nature.VIEW_MODEL, objectType="regressiontests.BlobDemo")
 @Log4j2
 public class BlobDemo {
 
