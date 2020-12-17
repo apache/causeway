@@ -54,7 +54,7 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- dependency convergence with org.apache.cxf:cxf-core:3.4.0 (used by 
+			<!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used by 
 				isis-mappings-jaxrsclient-impl) -->
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
@@ -65,6 +65,16 @@
 				<groupId>org.codehaus.woodstox</groupId>
 				<artifactId>stax2-api</artifactId>
 				<version>4.2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>org.eclipse.persistence.moxy</artifactId>
+				<version>2.7.7</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>org.eclipse.persistence.sdo</artifactId>
+				<version>2.7.7</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -88,6 +98,18 @@
 				<exclusion>
 					<groupId>com.sun.xml.ws</groupId>
 					<artifactId>jaxws-rt</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- version clash org.eclipse.persistence:org.eclipse.persistence.core: 
+						2.7.6 vs 2.7.7 -->
+					<groupId>org.eclipse.persistence</groupId>
+					<artifactId>org.eclipse.persistence.moxy</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- version clash org.eclipse.persistence:org.eclipse.persistence.core: 
+						2.7.6 vs 2.7.7 -->
+					<groupId>org.eclipse.persistence</groupId>
+					<artifactId>org.eclipse.persistence.sdo</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -113,6 +135,14 @@
 		<dependency>
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>stax2-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>org.eclipse.persistence.moxy</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>org.eclipse.persistence.sdo</artifactId>
 		</dependency>
 
 		<dependency>
