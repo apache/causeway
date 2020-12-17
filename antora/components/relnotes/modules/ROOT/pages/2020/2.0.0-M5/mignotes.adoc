@@ -207,9 +207,6 @@ CommandServiceInternal -> CommandPublisher
 | Clock (moved from applib module to fixture-applib module)
 | VirtualClock (introduced)
 
-| TestClock (removed)
-| use factories of VirtualClock.frozenTestClock() instead
-
 | IsisInteractionFactory
 | InteractionFactory
 
@@ -221,6 +218,17 @@ CommandServiceInternal -> CommandPublisher
 
 | MessageBroker is held by Authentication(Session)
 | MessageBroker is held by InteractionSession
+
+| QueryDefault removed
+| 
+[line-through]#new QueryDefault<>(CommandJdo.class, "findByParent",
+                        "parent", parent));#
+                        
+Query.named(CommandJdo.class, "findByParent") +
+    .withParameter("parent", parent));
+
+| TestClock (removed)
+| use factories of VirtualClock.frozenTestClock() instead
 
 | UserService#getUser() : UserMemento
 | UserService#currentUser() : *Optional*<UserMemento>
