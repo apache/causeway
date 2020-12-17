@@ -197,14 +197,14 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @Override
     public <T> Optional<T> firstMatch(final Class<T> type, final Predicate<T> predicate) {
-        final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
+        final List<T> instances = allMatches(type, predicate);
         return firstInstanceElseEmpty(instances);
     }
 
 
     @Override
     public <T> Optional<T> firstMatch(final Query<T> query) {
-        final List<T> instances = allMatches(query); // No need to fetch more than 2.
+        final List<T> instances = allMatches(query);
         return firstInstanceElseEmpty(instances);
     }
 

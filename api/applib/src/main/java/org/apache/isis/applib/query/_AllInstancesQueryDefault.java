@@ -58,8 +58,8 @@ implements AllInstancesQuery<T> {
 
     @Override
     public _AllInstancesQueryDefault<T> withCount(final long count) {
-        if(count<=0) {
-            throw _Exceptions.illegalArgument("require count>0, got %d", count);
+        if(count<0) {
+            throw _Exceptions.illegalArgument("require count>=0, got %d", count);
         }
         return new _AllInstancesQueryDefault<>(getResultType(), getStart(), count);
     }

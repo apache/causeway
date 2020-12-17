@@ -41,7 +41,7 @@ class NamedQueryTest_withStart_or_withCount {
     @Test
     public void defaults() throws Exception {
         assertThat(namedQuery.getStart(), is(0L));
-        assertThat(namedQuery.getCount(), is(0L));
+        assertThat(namedQuery.getCount(), is(Query.UNLIMITED_COUNT));
     }
 
     @Test
@@ -59,7 +59,7 @@ class NamedQueryTest_withStart_or_withCount {
         final NamedQuery<Customer> q = namedQuery.withStart(10L);
 
         assertThat(q.getStart(), is(10L));
-        assertThat(q.getCount(), is(0L));
+        assertThat(q.getCount(), is(Query.UNLIMITED_COUNT));
     }
 
     @Test
@@ -80,7 +80,6 @@ class NamedQueryTest_withStart_or_withCount {
     public void happyCase_countOnly() throws Exception {
         final NamedQuery<Customer> q = namedQuery.withCount(20L);
 
-        assertThat(q, is(namedQuery));
         assertThat(q.getStart(), is(0L));
         assertThat(q.getCount(), is(20L));
     }
@@ -93,10 +92,9 @@ class NamedQueryTest_withStart_or_withCount {
     }
 
     @Test
-    public void countZero() throws Exception {
-        assertThrows(IllegalArgumentException.class, ()->{
-            namedQuery.withCount(0);
-        });
+    public void countUnlimited() throws Exception {
+        final NamedQuery<Customer> q = namedQuery.withCount(Query.UNLIMITED_COUNT);
+        assertThat(q.getCount(), is(Query.UNLIMITED_COUNT));
     }
 
 

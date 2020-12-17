@@ -50,6 +50,9 @@ import lombok.NonNull;
  * @since 1.x revised for 2.0 {@index}
  */
 public interface Query<T> extends Serializable {
+    
+    public static long UNLIMITED_COUNT = 0L;
+    
 
     /**
      * The {@link Class} of the objects returned by this query.
@@ -84,13 +87,13 @@ public interface Query<T> extends Serializable {
     
     public static <T> Query<T> allInstances(
             final @NonNull Class<T> resultType) {
-        return new _AllInstancesQueryDefault<>(resultType, 0, Long.MAX_VALUE);
+        return new _AllInstancesQueryDefault<>(resultType, 0, UNLIMITED_COUNT);
     }
     
     public static <T> NamedQuery<T> named(
             final @NonNull Class<T> resultType, 
             final @NonNull String queryName) {
-        return new _NamedQueryDefault<>(resultType, queryName, 0, Long.MAX_VALUE, null);
+        return new _NamedQueryDefault<>(resultType, queryName, 0, UNLIMITED_COUNT, null);
     }
 
 }

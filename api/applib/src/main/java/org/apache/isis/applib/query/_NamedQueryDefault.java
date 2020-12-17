@@ -72,8 +72,8 @@ implements NamedQuery<T> {
 
     @Override
     public _NamedQueryDefault<T> withCount(final long count) {
-        if(count<=0) {
-            throw _Exceptions.illegalArgument("require count>0, got %d", count);
+        if(count<0) {
+            throw _Exceptions.illegalArgument("require count>=0, got %d", count);
         }
         return new _NamedQueryDefault<>(getResultType(), getName(), getStart(), count, getParametersByName());
     }
