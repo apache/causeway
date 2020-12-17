@@ -408,14 +408,14 @@ public final class ManagedObjects {
             return entityFacet.getEntityState(pojo);
         }
         
-        public static void persistInTransaction(ManagedObject managedObject) {
+        public static void persistInCurrentTransaction(ManagedObject managedObject) {
             requiresEntity(managedObject);
             val spec = managedObject.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
             entityFacet.persist(spec, managedObject.getPojo());
         }
         
-        public static void destroyInTransaction(ManagedObject managedObject) {
+        public static void destroyInCurrentTransaction(ManagedObject managedObject) {
             requiresEntity(managedObject);
             val spec = managedObject.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);

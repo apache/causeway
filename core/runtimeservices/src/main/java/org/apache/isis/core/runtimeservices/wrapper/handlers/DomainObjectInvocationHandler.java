@@ -328,7 +328,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         val spec = targetAdapter.getSpecification();
         if(spec.isEntity()) {
             return runExecutionTask(()->{
-                EntityUtil.persistInTransaction(targetAdapter);
+                EntityUtil.persistInCurrentTransaction(targetAdapter);
                 return null;
             }); 
         }

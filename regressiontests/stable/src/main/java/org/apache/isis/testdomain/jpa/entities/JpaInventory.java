@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.jpa.entities;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,7 +70,7 @@ public class JpaInventory {
 
     // 1:n relation
     @Property
-    @OneToMany @JoinColumn(nullable = true)
+    @OneToMany(cascade = CascadeType.PERSIST) @JoinColumn(nullable = true)
     private @Getter @Setter Set<JpaProduct> products;
 }
 

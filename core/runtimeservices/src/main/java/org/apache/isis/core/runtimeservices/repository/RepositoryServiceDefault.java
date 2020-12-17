@@ -101,7 +101,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if(!EntityUtil.isDetached(adapter)) {
             return domainObject;
         }
-        EntityUtil.persistInTransaction(adapter);
+        EntityUtil.persistInCurrentTransaction(adapter);
         return domainObject;
     }
 
@@ -120,7 +120,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
         if(EntityUtil.isAttached(adapter)) {
-            EntityUtil.destroyInTransaction(adapter);   
+            EntityUtil.destroyInCurrentTransaction(adapter);   
         }
     }
 

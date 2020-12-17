@@ -137,7 +137,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
         }
 
-        EntityUtil.persistInTransaction(adapter);
+        EntityUtil.persistInCurrentTransaction(adapter);
         
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, adapter);
 
