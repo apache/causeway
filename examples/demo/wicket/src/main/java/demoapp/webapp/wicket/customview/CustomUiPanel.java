@@ -19,18 +19,25 @@
 
 package demoapp.webapp.wicket.customview;
 
+import org.apache.wicket.markup.html.link.InlineFrame;
+
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class MyEntityPanel extends PanelAbstract<EntityModel>  {
+import lombok.val;
+
+import demoapp.dom.ui.custom.CustomUiVm;
+
+public class CustomUiPanel extends PanelAbstract<EntityModel>  {
 
 
     private static final long serialVersionUID = 1L;
 
 
-    public MyEntityPanel(
+    public CustomUiPanel(
             final String id,
             final EntityModel model,
             final ComponentFactory componentFactory) {
@@ -51,6 +58,25 @@ public class MyEntityPanel extends PanelAbstract<EntityModel>  {
     @Override
     public void onInitialize() {
         super.onInitialize();
+
+        val managedObject = (ManagedObject) getModelObject();
+        val customUiVm = (CustomUiVm) managedObject.getPojo();
+
+        val iframe = new InlineFrame("iframe", getPage()) {
+            @Override
+            protected CharSequence getURL() {
+                val boundingBox = customUiVm.getBoundingBox();
+                val url = boundingBox.toUrl();
+                return String.format(
+                        "https://www.openstreetmap.org/export/embed.html?bbox=%s&layer=%s"
+                        , url
+                        , "mapnik");
+            }
+        };
+
+        addOrReplace(iframe);
     }
+
+
 
 }

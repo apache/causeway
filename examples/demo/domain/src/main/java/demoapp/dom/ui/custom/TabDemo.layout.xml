@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
+	language governing permissions and limitations under the License. -->
+<bs3:grid xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+          xmlns:cpt="http://isis.apache.org/applib/layout/component"
+>
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject/>
+            <cpt:action id="clearHints"/>
+            <cpt:action id="downloadLayoutXml"/>
+            <cpt:action id="openRestApi"/>
+            <cpt:action id="rebuildMetamodel"/>
+
+            <cpt:action id="doHideField"/>
+            <cpt:action id="doShowField"/>
+
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="6">
+
+        	<bs3:tabGroup>
+
+				<bs3:tab name="Tab 1">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet id="fs1" name="Hideable Field">
+								<cpt:property id="field1"/>
+							</cpt:fieldSet>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+
+				<bs3:tab name="Tab 2">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet id="fs2">
+								<cpt:property id="field2"/>
+							</cpt:fieldSet>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+			</bs3:tabGroup>
+
+<!--         	<cpt:fieldSet name="Tabs" id="tabs"> -->
+<!--                 <cpt:property id="field"/> -->
+<!--             </cpt:fieldSet> -->
+
+        </bs3:col>
+        <bs3:col span="6" unreferencedCollections="true">
+
+            <cpt:fieldSet name="Description" id="description" unreferencedProperties="true">
+                <cpt:property id="description" labelPosition="NONE"/>
+
+            </cpt:fieldSet>
+
+        </bs3:col>
+    </bs3:row>
+</bs3:grid>

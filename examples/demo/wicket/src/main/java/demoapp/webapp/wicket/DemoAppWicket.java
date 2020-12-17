@@ -18,6 +18,11 @@
  */
 package demoapp.webapp.wicket;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
@@ -26,13 +31,9 @@ import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMark
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Import;
 
 import demoapp.web.DemoAppManifest;
-import demoapp.webapp.wicket.customview.MyEntityPanelFactory;
+import demoapp.webapp.wicket.customview.CustomUiPanelFactory;
 
 /**
  * Bootstrap the application.
@@ -56,24 +57,24 @@ import demoapp.webapp.wicket.customview.MyEntityPanelFactory;
     IsisModuleValMarkdownPersistenceJdoDn5.class,
 
     // @Component's
-    MyEntityPanelFactory.class
+    CustomUiPanelFactory.class
 })
 //@Log4j2
 public class DemoAppWicket extends SpringBootServletInitializer {
 
     /**
-     * 
+     *
      * @param args
-     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
+     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
         //IsisPresets.prototyping();
         //DebugLoggingPreset.PERSISTENCE.apply();
         //DebugLoggingPreset.ISIS_SESSION.apply();
-        
+
         SpringApplication.run(new Class[] { DemoAppWicket.class }, args);
-        
+
     }
 
 

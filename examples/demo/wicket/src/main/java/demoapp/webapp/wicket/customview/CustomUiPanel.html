@@ -20,8 +20,17 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <div class="myEntityPanel">
-        <div><p>MY CUSTOM ENTITY</p></div>
+    <div class="customUiPanel">
+        <div>
+            <p>Where in the world?</p>
+            <iframe wicket:id="iframe"
+                    id="inlineFrameExample"
+                    title="Where in the world ?"
+                    width="1200"
+                    height="800"
+                    >
+            </iframe>
+        </div>
     </div>
 </wicket:panel>
 </body>

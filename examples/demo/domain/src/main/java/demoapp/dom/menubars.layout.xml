@@ -225,6 +225,10 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>Tabs</mb3:named>
                 <mb3:serviceAction objectType="demo.TabMenu" id="tabDemo" />
             </mb3:section>
+            <mb3:section>
+                <mb3:named>Custom UI</mb3:named>
+                <mb3:serviceAction objectType="demo.CustomUiMenu" id="customUiVm" />
+            </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
