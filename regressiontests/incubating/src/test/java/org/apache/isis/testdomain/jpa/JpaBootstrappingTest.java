@@ -58,7 +58,7 @@ import lombok.val;
         classes = { 
                 Configuration_usingJpa.class,
         }
-)
+        )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //XXX JPA support is under construction
@@ -66,7 +66,6 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
     @Inject private RepositoryService repository;
-    @Inject private InteractionFactory isisInteractionFactory;
     @Inject private SpecificationLoader specLoader;
     //@Inject private TransactionService transactionService;
 
@@ -96,59 +95,54 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
         products.add(JpaBook.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
                 "Sample Publisher"));
 
-        val inventory = JpaInventory.of("Sample Inventory", products);
-        repository.persist(inventory);
+        val inventory = new JpaInventory("Sample Inventory", products);
+        repository.persistAndFlush(inventory);
 
         System.out.println("!!! SETUP DONE");
     }
-    
+
     @Test @Order(0) 
     void platformTransactionManager_shouldBeAvailable() {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
-            assertEquals("JdbcTransactionManager", ptm.getClass().getSimpleName());
+            assertEquals("JpaTransactionManager", ptm.getClass().getSimpleName());
         });
     }
-    
+
     @Test @Order(1) 
     void jpaEntities_shouldBeRecognisedAsSuch() {
         val spec = specLoader.loadSpecification(JpaProduct.class);
         assertTrue(spec.isEntity());
         assertNotNull(spec.getFacet(EntityFacet.class));
     }
-    
-    
+
+
     @Test @Order(2) @Rollback(false) 
     void sampleInventoryShouldBeSetUp() {
-        
-        //isisInteractionFactory.runAnonymous(()->{
-
-            // given - expected pre condition: no inventories
-
-            cleanUp();
-            assertEquals(0, repository.allInstances(JpaInventory.class).size());
-            System.out.println("!!! VERIFY CLEANUP DONE");
-
-            // when
-
-            setUp();
-
-            // then - expected post condition: ONE inventory
-
-            val inventories = repository.allInstances(JpaInventory.class);
-            assertEquals(1, inventories.size());
-
-            val inventory = inventories.get(0);
-            assertNotNull(inventory);
-            assertNotNull(inventory.getProducts());
-            assertEquals(1, inventory.getProducts().size());
-
-            val product = inventory.getProducts().iterator().next();
-            assertEquals("Sample Book", product.getName());
-            
-        //});
 
 
+        // given - expected pre condition: no inventories
+
+        cleanUp();
+        assertEquals(0, repository.allInstances(JpaInventory.class).size());
+        System.out.println("!!! VERIFY CLEANUP DONE");
+
+        // when
+
+        setUp();
+
+        // then - expected post condition: ONE inventory
+
+        val inventories = repository.allInstances(JpaInventory.class);
+        assertEquals(1, inventories.size());
+
+        val inventory = inventories.get(0);
+        assertNotNull(inventory);
+        assertNotNull(inventory.getProducts());
+        assertEquals(1, inventory.getProducts().size());
+
+        val product = inventory.getProducts().iterator().next();
+        assertEquals("Sample Book", product.getName());
 
     }
 
@@ -157,7 +151,7 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
         sampleInventoryShouldBeSetUp();
     }
 
-    
+
 
 
 }

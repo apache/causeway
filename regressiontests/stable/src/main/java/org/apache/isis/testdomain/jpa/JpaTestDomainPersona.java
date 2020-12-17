@@ -82,7 +82,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                             "Sample Book", "A sample book for testing.", 99.,
                             "Sample Author", "Sample ISBN", "Sample Publisher"));
 
-                    val inventory = JpaInventory.of("Sample Inventory", products);
+                    val inventory = new JpaInventory("Sample Inventory", products);
                     repository.persist(inventory);
                     
                     return inventory;

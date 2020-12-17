@@ -41,6 +41,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.commons.internal.primitives._Longs;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -84,6 +85,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
 
         private final Class<?> entityClass;
         private final ServiceRegistry serviceRegistry;
+        private final static _Longs.Range NON_NEGATIVE_INTS = _Longs.rangeClosed(0L, Integer.MAX_VALUE);
         
         protected JpaEntityFacet(
                 final FacetHolder holder,
@@ -165,7 +167,8 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                     .createQuery("SELECT t FROM " + entityClass.getSimpleName() + " t", entityClass);
             
             final int startPosition = Math.toIntExact(queryFindAllInstances.getStart());
-            final int maxResult = Math.toIntExact(queryFindAllInstances.getCount());
+            final int maxResult = Math.toIntExact(
+                    NON_NEGATIVE_INTS.bounded(queryFindAllInstances.getCount()));
             typedQuery.setFirstResult(startPosition);
             typedQuery.setMaxResults(maxResult);
             

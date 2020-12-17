@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.jpa.entities;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -33,8 +34,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-//@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
-//@Discriminator(value="Book")
+@DiscriminatorValue("Book")
 @DomainObject(
         objectType = "testdomain.jpa.Book",
         nature = Nature.JPA_ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI 

@@ -22,6 +22,10 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -30,35 +34,42 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-//@PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
-//@DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
-//@Version(strategy= VersionStrategy.DATE_TIME, column="version")
 @DomainObject(
         objectType = "testdomain.jdo.Inventory",
         nature = Nature.JPA_ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
         entityChangePublishing = Publishing.ENABLED)
-@DomainObjectLayout()  // causes UI events to be triggered
+@DomainObjectLayout()  // causes UI events to be triggered ???
 @NoArgsConstructor(access = AccessLevel.PROTECTED) 
-@AllArgsConstructor(staticName = "of") 
 @ToString
 public class JpaInventory {
+
+    public JpaInventory(String name, Set<JpaProduct> products) {
+        super();
+        this.name = name;
+        this.products = products;
+    }
 
     public String title() {
         return toString();
     }
+    
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @Property
-    @Getter @Setter @Column(nullable = true)
-    private String name;
+    @Column(nullable = true)
+    private @Getter @Setter String name;
 
+    // 1:n relation
     @Property
-    @Getter @Setter @Column(nullable = true)
-    private Set<JpaProduct> products;
+    @OneToMany @JoinColumn(nullable = true)
+    private @Getter @Setter Set<JpaProduct> products;
 }
+
