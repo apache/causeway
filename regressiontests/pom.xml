@@ -350,6 +350,11 @@
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-common</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>

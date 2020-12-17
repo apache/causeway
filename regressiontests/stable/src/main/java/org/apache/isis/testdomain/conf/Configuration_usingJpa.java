@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jpa.IsisModuleJpa;
+import org.apache.isis.persistence.jpa.eclipselink.IsisModuleJpaEclipseLink;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jpa.JpaTestDomainModule;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -41,7 +41,7 @@ import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 @Import({
     IsisModuleCoreRuntimeServices.class
     ,IsisModuleSecurityBypass.class
-    ,IsisModuleJpa.class,
+    ,IsisModuleJpaEclipseLink.class,
     //,IsisModuleTestingFixturesApplib.class
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
