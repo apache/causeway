@@ -40,7 +40,6 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -80,23 +79,19 @@ public class CommandJdoRepository {
         final Query<CommandJdo> query;
         if(from != null) {
             if(to != null) {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTimestampBetween", 
-                        "from", fromTs,
-                        "to", toTs);
+                query = Query.named(CommandJdo.class, "findByTimestampBetween")
+                        .withParameter("from", fromTs)
+                        .withParameter("to", toTs);
             } else {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTimestampAfter", 
-                        "from", fromTs);
+                query = Query.named(CommandJdo.class, "findByTimestampAfter") 
+                        .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTimestampBefore", 
-                        "to", toTs);
+                query = Query.named(CommandJdo.class, "findByTimestampBefore") 
+                        .withParameter("to", toTs);
             } else {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "find");
+                query = Query.named(CommandJdo.class, "find");
             }
         }
         return repositoryService.allMatches(query);
@@ -105,28 +100,26 @@ public class CommandJdoRepository {
 
     public Optional<CommandJdo> findByUniqueId(final UUID uniqueId) {
         return repositoryService.firstMatch(
-                new QueryDefault<>(CommandJdo.class,
-                        "findByUniqueIdStr",
-                        "uniqueIdStr", uniqueId.toString()));
+                Query.named(CommandJdo.class, "findByUniqueIdStr")
+                    .withParameter("uniqueIdStr", uniqueId.toString()));
     }
 
     public List<CommandJdo> findByParent(final CommandJdo parent) {
         return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class,
-                        "findByParent",
-                        "parent", parent));
+                Query.named(CommandJdo.class, "findByParent")
+                    .withParameter("parent", parent));
     }
 
 
     public List<CommandJdo> findCurrent() {
         return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class, "findCurrent"));
+                Query.named(CommandJdo.class, "findCurrent"));
     }
 
 
     public List<CommandJdo> findCompleted() {
         return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class, "findCompleted"));
+                Query.named(CommandJdo.class, "findCompleted"));
     }
 
 
@@ -141,27 +134,23 @@ public class CommandJdoRepository {
         final Query<CommandJdo> query;
         if(from != null) {
             if(to != null) {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTargetAndTimestampBetween", 
-                        "target", target,
-                        "from", fromTs,
-                        "to", toTs);
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampBetween") 
+                        .withParameter("target", target)
+                        .withParameter("from", fromTs)
+                        .withParameter("to", toTs);
             } else {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTargetAndTimestampAfter", 
-                        "target", target,
-                        "from", fromTs);
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampAfter") 
+                        .withParameter("target", target)
+                        .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTargetAndTimestampBefore", 
-                        "target", target,
-                        "to", toTs);
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampBefore") 
+                        .withParameter("target", target)
+                        .withParameter("to", toTs);
             } else {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTarget", 
-                        "target", target);
+                query = Query.named(CommandJdo.class, "findByTarget") 
+                        .withParameter("target", target);
             }
         }
         return repositoryService.allMatches(query);
@@ -179,19 +168,15 @@ public class CommandJdoRepository {
 
     public List<CommandJdo> findRecentByUsername(final String username) {
         return repositoryService.allMatches(
-                new QueryDefault<>(
-                        CommandJdo.class,
-                        "findRecentByUsername",
-                        "username", username));
+                Query.named(CommandJdo.class, "findRecentByUsername")
+                    .withParameter("username", username));
     }
 
 
     public List<CommandJdo> findRecentByTarget(final Bookmark target) {
         return repositoryService.allMatches(
-                new QueryDefault<>(
-                        CommandJdo.class,
-                        "findRecentByTarget",
-                        "target", target));
+                Query.named(CommandJdo.class, "findRecentByTarget")
+                    .withParameter("target", target));
     }
 
 
@@ -240,7 +225,7 @@ public class CommandJdoRepository {
 
     private List<CommandJdo> findFirst() {
         Optional<CommandJdo> firstCommandIfAny = repositoryService.firstMatch(
-                new QueryDefault<>(CommandJdo.class, "findFirst"));
+                Query.named(CommandJdo.class, "findFirst"));
         return firstCommandIfAny
                 .map(Collections::singletonList)
                 .orElse(Collections.emptyList());
@@ -260,10 +245,8 @@ public class CommandJdoRepository {
     private List<CommandJdo> findSince(
             final Timestamp timestamp,
             final Integer batchSize) {
-        val q = new QueryDefault<>(
-                CommandJdo.class,
-                "findSince",
-                "timestamp", timestamp);
+        val q = Query.named(CommandJdo.class, "findSince")
+                .withParameter("timestamp", timestamp);
 
         // DN generates incorrect SQL for SQL Server if count set to 1; so we set to 2 and then trim
         if(batchSize != null) {
@@ -288,8 +271,7 @@ public class CommandJdoRepository {
     public Optional<CommandJdo> findMostRecentReplayed() {
 
         return repositoryService.firstMatch(
-                new QueryDefault<>(
-                        CommandJdo.class, "findMostRecentReplayed"));
+                Query.named(CommandJdo.class, "findMostRecentReplayed"));
     }
 
     /**
@@ -305,21 +287,20 @@ public class CommandJdoRepository {
      */
     public Optional<CommandJdo> findMostRecentCompleted() {
         return repositoryService.firstMatch(
-                new QueryDefault<>(CommandJdo.class, "findMostRecentCompleted"));
+                Query.named(CommandJdo.class, "findMostRecentCompleted"));
     }
 
 
     public List<CommandJdo> findNotYetReplayed() {
         return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class,
-                        "findNotYetReplayed"));
+                Query.named(CommandJdo.class, "findNotYetReplayed"));
     }
 
 
 
     public List<CommandJdo> findReplayedOnSecondary() {
         return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class, "findReplayableMostRecentStarted"));
+                Query.named(CommandJdo.class, "findReplayableMostRecentStarted"));
     }
 
 

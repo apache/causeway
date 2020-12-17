@@ -19,30 +19,49 @@
 
 package org.apache.isis.applib.query;
 
-import java.io.Serializable;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+import lombok.NonNull;
 
-/**
- * Although implements {@link Query} and thus is intended to be (and indeed is)
- * {@link Serializable}, it will be converted into a <tt>PersistenceQuery</tt>
- * in the runtime for remoting purposes.
- * @since ? {@index}
- */
-public class QueryFindAllInstances<T> extends QueryAbstract<T> {
+final class _AllInstancesQueryDefault<T> 
+extends QueryAbstract<T> 
+implements AllInstancesQuery<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public QueryFindAllInstances(final Class<T> type, final long start, final long count) {
+    protected _AllInstancesQueryDefault(
+            final @NonNull Class<T> type, 
+            final long start, 
+            final long count) {
         super(type, start, count);
     }
 
-    public QueryFindAllInstances(final String typeName, final long start, final long count) {
+    @Deprecated
+    protected _AllInstancesQueryDefault(final String typeName, final long start, final long count) {
         super(typeName, start, count);
     }
 
     @Override
     public String getDescription() {
         return getResultTypeName() + " (all instances)";
+    }
+
+    // -- WITHERS
+    
+    @Override
+    public _AllInstancesQueryDefault<T> withStart(final long start) {
+        if(start<0) {
+            throw _Exceptions.illegalArgument("require start>=0, got %d", start);
+        }
+        return new _AllInstancesQueryDefault<>(getResultType(), start, getCount());
+    }
+
+    @Override
+    public _AllInstancesQueryDefault<T> withCount(final long count) {
+        if(count<=0) {
+            throw _Exceptions.illegalArgument("require count>0, got %d", count);
+        }
+        return new _AllInstancesQueryDefault<>(getResultType(), getStart(), count);
     }
 
 }

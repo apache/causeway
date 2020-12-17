@@ -28,8 +28,8 @@ import javax.persistence.metamodel.EntityType;
 
 import org.springframework.data.jpa.repository.JpaContext;
 
+import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -149,11 +149,11 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         @Override
         public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
             
-            if(!(query instanceof QueryFindAllInstances)) {
+            if(!(query instanceof AllInstancesQuery)) {
                 throw _Exceptions.notImplemented();
             }
             
-            val queryFindAllInstances = (QueryFindAllInstances<?>) query;
+            val queryFindAllInstances = (AllInstancesQuery<?>) query;
             val queryEntityType = queryFindAllInstances.getResultType();
             
             // guard against misuse

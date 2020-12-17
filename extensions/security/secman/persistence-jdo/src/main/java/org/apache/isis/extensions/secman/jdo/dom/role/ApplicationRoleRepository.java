@@ -28,7 +28,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -68,7 +68,8 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
         if(name == null) {
             return Optional.empty();
         }
-        return repository.uniqueMatch(new QueryDefault<>(ApplicationRole.class, "findByName", "name", name));
+        return repository.uniqueMatch(Query.named(ApplicationRole.class, "findByName")
+                .withParameter("name", name));
     }
 
     @Override
@@ -77,8 +78,8 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
         if(search != null && search.length() > 0) {
             String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
             return repository.allMatches(
-                    new QueryDefault<>(ApplicationRole.class, 
-                            "findByNameContaining", "nameRegex", nameRegex))
+                    Query.named(ApplicationRole.class, "findByNameContaining")
+                    .withParameter("nameRegex", nameRegex))
                     .stream()
                     .collect(_Sets.toUnmodifiableSorted());
         }

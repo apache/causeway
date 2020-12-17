@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -67,17 +67,15 @@ public class ExcelDemoToDoItemMenu {
 
     public List<ExcelDemoToDoItem> notYetCompleteNoUi() {
         return repositoryService.allMatches(
-                new QueryDefault<>(ExcelDemoToDoItem.class,
-                        "todo_notYetComplete", 
-                        "ownedBy", currentUserName()));
+                Query.named(ExcelDemoToDoItem.class, "todo_notYetComplete") 
+                .withParameter("ownedBy", currentUserName()));
     }
 
     public ExcelDemoToDoItem findToDoItemsByDescription(final String description) {
         return repositoryService.firstMatch(
-                new QueryDefault<>(ExcelDemoToDoItem.class,
-                        "findByDescription",
-                        "description", description,
-                        "ownedBy", currentUserName()))
+                Query.named(ExcelDemoToDoItem.class, "findByDescription")
+                .withParameter("description", description)
+                .withParameter("ownedBy", currentUserName()))
                 .orElse(null);
     }
 
@@ -94,9 +92,8 @@ public class ExcelDemoToDoItemMenu {
     @Programmatic
     public List<ExcelDemoToDoItem> completeNoUi() {
         return repositoryService.allMatches(
-            new QueryDefault<>(ExcelDemoToDoItem.class,
-                    "todo_complete", 
-                    "ownedBy", currentUserName()));
+            Query.named(ExcelDemoToDoItem.class, "todo_complete")
+            .withParameter("ownedBy", currentUserName()));
     }
 
 
@@ -151,10 +148,9 @@ public class ExcelDemoToDoItemMenu {
     @Programmatic
     public List<ExcelDemoToDoItem> autoComplete(@MinLength(1) final String description) {
         return repositoryService.allMatches(
-                new QueryDefault<>(ExcelDemoToDoItem.class,
-                        "todo_autoComplete", 
-                        "ownedBy", currentUserName(), 
-                        "description", description));
+                Query.named(ExcelDemoToDoItem.class, "todo_autoComplete") 
+                .withParameter("ownedBy", currentUserName()) 
+                .withParameter("description", description));
     }
 
 

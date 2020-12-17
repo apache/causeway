@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices;
 
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -35,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -99,21 +103,24 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
         return "Bounded";
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SneakyThrows
     @Override
     public Can<ManagedObject> getChoices(
             ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val query = new QueryFindAllChoices(
-                getObjectSpecification().getFullIdentifier(), 
-                ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy), 
-                0L, 
-                Long.MAX_VALUE);
+        //TODO[2033] if assert is always true just use type = getObjectSpecification().getCorrespondingClass()
+        val resulType = _Context.loadClassAndInitialize(getObjectSpecification().getFullIdentifier());
+        _Assert.assertEquals(
+                getObjectSpecification().getCorrespondingClass().getName(), 
+                getObjectSpecification().getFullIdentifier());
         
-        val resultTypeSpec = getObjectManager().loadSpecification(query.getResultType());
+        val query = Query.allInstances(resulType);
+        
+        val resultTypeSpec = getObjectManager().loadSpecification(resulType);
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
-        val allMatching = getObjectManager().queryObjects(queryRequest);
+        val allMatching = getObjectManager().queryObjects(queryRequest)
+                .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy));
         
         return allMatching;
     }

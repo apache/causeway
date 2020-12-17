@@ -39,7 +39,6 @@ import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -135,12 +134,14 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @Override
     public <T> List<T> allInstances(final Class<T> type) {
-        return allMatches(new QueryFindAllInstances<T>(type, 0L, Long.MAX_VALUE));
+        return allMatches(Query.<T>allInstances(type));
     }
 
     @Override
     public <T> List<T> allInstances(final Class<T> type, long start, long count) {
-        return allMatches(new QueryFindAllInstances<T>(type, start, count));
+        return allMatches(Query.<T>allInstances(type)
+                .withStart(start)
+                .withCount(count));
     }
 
 

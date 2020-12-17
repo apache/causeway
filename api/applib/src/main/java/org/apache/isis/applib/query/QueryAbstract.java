@@ -25,7 +25,6 @@ import lombok.Getter;
 
 /**
  * Convenience adapter class for {@link Query}.
- *
  * <p>
  * Handles implementation of {@link #getResultType()}
  */
@@ -36,17 +35,14 @@ public abstract class QueryAbstract<T> implements Query<T> {
     /**
      * The start index within the retrieved result set.
      */
-    @Getter
-    protected long start;
+    @Getter private final long start;
 
     /**
      * The number of items to return
      */
-    @Getter
-    protected long count;
+    @Getter private final long count;
 
-    @Getter
-    private final String resultTypeName;
+    @Getter private final String resultTypeName;
 
     /**
      * Derived from {@link #getResultTypeName()}, with respect to the
@@ -59,13 +55,13 @@ public abstract class QueryAbstract<T> implements Query<T> {
      *
      * @param type
      */
-    public QueryAbstract(final Class<T> type, final long start, final long count) {
+    protected QueryAbstract(final Class<T> type, final long start, final long count) {
         this.resultTypeName = type.getName();
         this.start = start;
         this.count = count;
     }
 
-    public QueryAbstract(final String typeName, final long start, final long count) {
+    protected QueryAbstract(final String typeName, final long start, final long count) {
         this.resultTypeName = typeName;
         this.start = start;
         this.count = count;
@@ -88,5 +84,5 @@ public abstract class QueryAbstract<T> implements Query<T> {
         }
         return resultType;
     }
-
+    
 }

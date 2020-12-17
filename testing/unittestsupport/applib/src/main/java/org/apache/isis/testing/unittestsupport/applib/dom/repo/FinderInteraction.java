@@ -20,8 +20,8 @@ package org.apache.isis.testing.unittestsupport.applib.dom.repo;
 
 import java.util.Map;
 
+import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryDefault;
 
 public class FinderInteraction {
     public enum FinderMethod {
@@ -30,14 +30,14 @@ public class FinderInteraction {
         ALL_INSTANCES,
         UNIQUE_MATCH
     }
-    private QueryDefault<?> queryDefault;
+    private NamedQuery<?> queryDefault;
     private FinderInteraction.FinderMethod finderMethod;
     public FinderInteraction(Query<?> query, FinderInteraction.FinderMethod finderMethod) {
         super();
-        this.queryDefault = (QueryDefault<?>) query;
+        this.queryDefault = (NamedQuery<?>) query;
         this.finderMethod = finderMethod;
     }
-    public QueryDefault<?> getQueryDefault() {
+    public NamedQuery<?> getQueryDefault() {
         return queryDefault;
     }
     public FinderInteraction.FinderMethod getFinderMethod() {
@@ -47,12 +47,12 @@ public class FinderInteraction {
         return queryDefault.getResultType();
     }
     public String getQueryName() {
-        return queryDefault.getQueryName();
+        return queryDefault.getName();
     }
     public Map<String, Object> getArgumentsByParameterName() {
-        return queryDefault.getArgumentsByParameterName();
+        return queryDefault.getParametersByName();
     }
     public int numArgs() {
-        return queryDefault.getArgumentsByParameterName().size();
+        return queryDefault.getParametersByName().size();
     }
 }

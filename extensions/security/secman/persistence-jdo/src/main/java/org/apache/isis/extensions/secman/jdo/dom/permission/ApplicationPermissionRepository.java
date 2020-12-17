@@ -29,7 +29,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -40,8 +40,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
@@ -80,9 +80,8 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     public List<ApplicationPermission> findByRole(@NonNull final ApplicationRole role) {
         return repository.allMatches(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByRole",
-                        "role", role));
+                Query.named(ApplicationPermission.class, "findByRole")
+                    .withParameter("role", role));
     }
 
 
@@ -98,9 +97,8 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     private List<ApplicationPermission> findByUser(final String username) {
         return repository.allMatches(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByUser",
-                        "username", username));
+                Query.named(ApplicationPermission.class, "findByUser")
+                    .withParameter("username", username));
     }
 
 
@@ -162,12 +160,11 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             org.apache.isis.extensions.secman.api.role.ApplicationRole role, 
             final ApplicationPermissionRule rule,
             final ApplicationFeatureType type) {
-        return repository.allMatches(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByRoleAndRuleAndFeatureType",
-                        "role", role,
-                        "rule", rule,
-                        "featureType", type))
+        return repository.allMatches(Query.named(
+                        ApplicationPermission.class, "findByRoleAndRuleAndFeatureType")
+                    .withParameter("role", role)
+                    .withParameter("rule", rule)
+                    .withParameter("featureType", type))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -193,13 +190,12 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final String featureFqn) {
 
         return repository
-                .uniqueMatch(
-                        new QueryDefault<>(
-                                ApplicationPermission.class, "findByRoleAndRuleAndFeature",
-                                "role", role,
-                                "rule", rule,
-                                "featureType", type,
-                                "featureFqn", featureFqn ));
+                .uniqueMatch(Query.named(
+                                ApplicationPermission.class, "findByRoleAndRuleAndFeature")
+                        .withParameter("role", role)
+                        .withParameter("rule", rule)
+                        .withParameter("featureType", type)
+                        .withParameter("featureFqn", featureFqn ));
     }
 
 
@@ -214,10 +210,10 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     public Collection<ApplicationPermission> findByFeature(final ApplicationFeatureId featureId) {
         return repository.allMatches(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByFeature",
-                        "featureType", featureId.getType(),
-                        "featureFqn", featureId.getFullyQualifiedName()))
+                Query.named(
+                        ApplicationPermission.class, "findByFeature")
+                .withParameter("featureType", featureId.getType())
+                .withParameter("featureFqn", featureId.getFullyQualifiedName()))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }

@@ -24,6 +24,8 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
+import lombok.NonNull;
+
 
 /**
  * For use by repository implementations, representing the values of a query.
@@ -37,14 +39,15 @@ import org.apache.isis.applib.services.repository.RepositoryService;
  * the data. Returned result sets are expected to start from index "start",
  * and no more than "count" items are expected.
  * <p>
- * <b>Note:</b> that not every object store will necessarily support this
+ * <b>Note:</b> not every object store will necessarily support this
  * interface. In particular, the in-memory object store does not. For this, you
  * can use the {@link Predicate} interface to similar effect, for example in
  * {@link RepositoryService#allMatches(Class, Predicate, long, long)}).
  *
- * Note that the predicate is applied within the {@link RepositoryService}
+ * <b>Note:</b> that the predicate is applied within the {@link RepositoryService}
  * (ie client-side) rather than being pushed back to the object store.
- * @since ? {@index}
+ * 
+ * @since 1.x revised for 2.0 {@index}
  */
 public interface Query<T> extends Serializable {
 
@@ -71,5 +74,23 @@ public interface Query<T> extends Serializable {
      * @return
      */
     long getCount();
+    
+    // -- WITHERS
+    
+    Query<T> withStart(long start);
+    Query<T> withCount(long count);
+    
+    // -- FACTORIES
+    
+    public static <T> Query<T> allInstances(
+            final @NonNull Class<T> resultType) {
+        return new _AllInstancesQueryDefault<>(resultType, 0, Long.MAX_VALUE);
+    }
+    
+    public static <T> NamedQuery<T> named(
+            final @NonNull Class<T> resultType, 
+            final @NonNull String queryName) {
+        return new _NamedQueryDefault<>(resultType, queryName, 0, Long.MAX_VALUE, null);
+    }
 
 }

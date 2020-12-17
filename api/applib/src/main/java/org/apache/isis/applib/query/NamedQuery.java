@@ -16,19 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.query;
+
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import lombok.NonNull;
 
 /**
- * This package defines the {@link org.apache.isis.applib.query.Query} interface
- * and supporting implementations.
- *
- * <p>
- * The {@link org.apache.isis.applib.query.Query} concept is provided as a
- * standardized mechanism by which
- * {@link org.apache.isis.applib.AbstractFactoryAndRepository repositories}
- * or indeed any {@link org.apache.isis.applib.AbstractDomainObject domain object}
- * can submit.  Object store implementation are generally expected to support
- * the {@link org.apache.isis.applib.query.QueryBuiltInAbstract built-in queries},
- * meaning that there may not be any need to provide different implementations
- * of the repositories.
+ * @since 2.0 {@index}
  */
-package org.apache.isis.applib.query;
+public interface NamedQuery<T> extends Query<T> {
+
+    String getName();
+    Map<String, Object> getParametersByName();
+
+    // -- WITHERS
+    
+    @Override NamedQuery<T> withStart(long start);
+    @Override NamedQuery<T> withCount(long count);
+    
+    NamedQuery<T> withParameter(@NonNull String parameterName, @Nullable Object parameterValue);
+    
+}

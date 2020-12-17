@@ -27,7 +27,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -68,7 +68,8 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
         if (search == null) {
             return Collections.emptySortedSet();
         }
-        return repository.allMatches(new QueryDefault<>(ApplicationTenancy.class, "findByNameOrPathMatching", "regex", String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."))))
+        return repository.allMatches(Query.named(ApplicationTenancy.class, "findByNameOrPathMatching")
+                .withParameter("regex", String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."))))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -85,7 +86,8 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     }
 
     public ApplicationTenancy findByName(final String name) {
-        return repository.uniqueMatch(new QueryDefault<>(ApplicationTenancy.class, "findByName", "name", name)).orElse(null);
+        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, "findByName")
+                .withParameter("name", name)).orElse(null);
     }
 
 
@@ -104,7 +106,9 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
         if (path == null) {
             return null;
         }
-        return repository.uniqueMatch(new QueryDefault<>(ApplicationTenancy.class, "findByPath", "path", path)).orElse(null);
+        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, "findByPath")
+                .withParameter("path", path))
+                .orElse(null);
     }
 
 

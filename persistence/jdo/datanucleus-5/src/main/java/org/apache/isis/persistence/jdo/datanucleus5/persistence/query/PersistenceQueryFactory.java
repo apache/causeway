@@ -21,10 +21,11 @@ package org.apache.isis.persistence.jdo.datanucleus5.persistence.query;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.apache.isis.applib.query.AllInstancesQuery;
+import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -43,24 +44,28 @@ public class PersistenceQueryFactory {
      * Converts the {@link org.apache.isis.applib.query.Query applib representation of a query} into the
      * {@link PersistenceQuery NOF-internal representation}.
      */
-    public final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
+    public final PersistenceQuery createPersistenceQueryFor(
+            final Query<?> query, 
+            final QueryCardinality cardinality) {
+        
         if (log.isDebugEnabled()) {
             log.debug("createPersistenceQueryFor: {}", query.getDescription());
         }
         final ObjectSpecification noSpec = specFor(query);
-        if (query instanceof QueryFindAllInstances) {
-            final QueryFindAllInstances<?> queryFindAllInstances = (QueryFindAllInstances<?>) query;
+        if (query instanceof AllInstancesQuery) {
+            final AllInstancesQuery<?> queryFindAllInstances = (AllInstancesQuery<?>) query;
             return new PersistenceQueryFindAllInstances(noSpec, queryFindAllInstances.getStart(), queryFindAllInstances.getCount());
 
-        } else {
-            // query instanceof QueryDefault
-
-            final QueryDefault<?> queryDefault = (QueryDefault<?>) query;
-            final String queryName = queryDefault.getQueryName();
-            final Map<String, ObjectAdapter> argumentsAdaptersByParameterName = wrap(queryDefault.getArgumentsByParameterName());
-            return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, argumentsAdaptersByParameterName, cardinality,
+        } if (query instanceof NamedQuery) {
+            final NamedQuery<?> queryDefault = (NamedQuery<?>) query;
+            final String queryName = queryDefault.getName();
+            final Map<String, ObjectAdapter> parametersByName = 
+                    wrap(queryDefault.getParametersByName());
+            return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, parametersByName, cardinality,
                     specificationLoader, queryDefault.getStart(), queryDefault.getCount());
         }
+        throw _Exceptions.unsupportedOperation("query type %s not supported by this persistence implementation",
+                query.getClass());
     }
 
     /**
