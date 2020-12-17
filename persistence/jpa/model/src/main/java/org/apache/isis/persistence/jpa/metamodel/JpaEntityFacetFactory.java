@@ -237,12 +237,12 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             }
             
             val entityManager = getEntityManager();
-            val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
             
-            if(persistenceUnitUtil.isLoaded(pojo)) {
+            if(entityManager.contains(pojo)) {
                 return EntityState.PERSISTABLE_ATTACHED;
             }
-            //TODO how to determine whether deleted? (even relevant?)
+
+            //TODO[2033] how to determine whether deleted? (even relevant?)
 //            if(isDeleted) {
 //                return EntityState.PERSISTABLE_DESTROYED;
 //            }
