@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.bootstrapping;
+package org.apache.isis.testdomain.jpa;
 
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -50,6 +50,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -61,7 +62,7 @@ import lombok.val;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //XXX JPA support is under construction
-class JpaBootstrappingTest /*extends IsisIntegrationTestAbstract*/ {
+class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
     @Inject private RepositoryService repository;
@@ -104,9 +105,12 @@ class JpaBootstrappingTest /*extends IsisIntegrationTestAbstract*/ {
     @Test @Order(0) 
     void platformTransactionManager_shouldBeAvailable() {
         assertTrue(platformTransactionManager.isPresent());
+        platformTransactionManager.ifPresent(ptm->{
+            assertEquals("JdbcTransactionManager", ptm.getClass().getSimpleName());
+        });
     }
     
-    @Test @Order(0) 
+    @Test @Order(1) 
     void jpaEntities_shouldBeRecognisedAsSuch() {
         val spec = specLoader.loadSpecification(JpaProduct.class);
         assertTrue(spec.isEntity());
@@ -114,10 +118,10 @@ class JpaBootstrappingTest /*extends IsisIntegrationTestAbstract*/ {
     }
     
     
-    @Test @Order(1) @Rollback(false) 
+    @Test @Order(2) @Rollback(false) 
     void sampleInventoryShouldBeSetUp() {
         
-        isisInteractionFactory.runAnonymous(()->{
+        //isisInteractionFactory.runAnonymous(()->{
 
             // given - expected pre condition: no inventories
 
@@ -142,13 +146,13 @@ class JpaBootstrappingTest /*extends IsisIntegrationTestAbstract*/ {
             val product = inventory.getProducts().iterator().next();
             assertEquals("Sample Book", product.getName());
             
-        });
+        //});
 
 
 
     }
 
-    @Test @Order(2) @Rollback(false)
+    @Test @Order(3) @Rollback(false)
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();
     }
