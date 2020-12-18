@@ -66,15 +66,11 @@ public interface Query<T> extends Serializable {
 
     /**
      * The start index into the set table
-     *
-     * @return
      */
     long getStart();
 
     /**
      * The number of items to return, starting at {@link #getStart()}
-     *
-     * @return
      */
     long getCount();
     

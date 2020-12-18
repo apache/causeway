@@ -106,7 +106,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
     @SneakyThrows
     @Override
     public Can<ManagedObject> getChoices(
-            ManagedObject adapter,
+            final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         //TODO[2033] if assert is always true just use type = getObjectSpecification().getCorrespondingClass()

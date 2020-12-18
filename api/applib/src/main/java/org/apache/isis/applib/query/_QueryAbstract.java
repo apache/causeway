@@ -19,44 +19,24 @@
 
 package org.apache.isis.applib.query;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-
+import lombok.Getter;
 import lombok.NonNull;
 
-final class _AllInstancesQueryDefault<T> 
-extends _QueryAbstract<T> 
-implements AllInstancesQuery<T> {
+abstract class _QueryAbstract<T> implements Query<T> {
 
     private static final long serialVersionUID = 1L;
 
-    protected _AllInstancesQueryDefault(
-            final @NonNull Class<T> type, 
+    @Getter(onMethod_ = {@Override}) private final long start;
+    @Getter(onMethod_ = {@Override}) private final long count;
+    @Getter(onMethod_ = {@Override}) private final Class<T> resultType;
+
+    protected _QueryAbstract(
+            final @NonNull Class<T> resultType, 
             final long start, 
             final long count) {
-        super(type, start, count);
+        this.resultType = resultType;
+        this.start = start;
+        this.count = count;
     }
-
-    @Override
-    public String getDescription() {
-        return getResultType().getName() + " (all instances)";
-    }
-
-    // -- WITHERS
     
-    @Override
-    public _AllInstancesQueryDefault<T> withStart(final long start) {
-        if(start<0) {
-            throw _Exceptions.illegalArgument("require start>=0, got %d", start);
-        }
-        return new _AllInstancesQueryDefault<>(getResultType(), start, getCount());
-    }
-
-    @Override
-    public _AllInstancesQueryDefault<T> withCount(final long count) {
-        if(count<0) {
-            throw _Exceptions.illegalArgument("require count>=0, got %d", count);
-        }
-        return new _AllInstancesQueryDefault<>(getResultType(), getStart(), count);
-    }
-
 }

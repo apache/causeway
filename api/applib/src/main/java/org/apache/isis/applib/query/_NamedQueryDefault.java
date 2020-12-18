@@ -31,7 +31,7 @@ import lombok.NonNull;
 import lombok.val;
 
 final class _NamedQueryDefault<T> 
-extends QueryAbstract<T>
+extends _QueryAbstract<T>
 implements NamedQuery<T> {
 
     private static final long serialVersionUID = 1L;
