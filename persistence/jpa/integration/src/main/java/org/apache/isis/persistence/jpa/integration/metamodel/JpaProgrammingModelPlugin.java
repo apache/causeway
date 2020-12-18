@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa.metamodel;
+package org.apache.isis.persistence.jpa.integration.metamodel;
 
 import javax.inject.Inject;
 

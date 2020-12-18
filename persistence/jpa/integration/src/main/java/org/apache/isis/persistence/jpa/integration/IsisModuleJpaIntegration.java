@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa;
+package org.apache.isis.persistence.jpa.integration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
-import org.apache.isis.persistence.jpa.metamodel.JpaProgrammingModelPlugin;
+import org.apache.isis.persistence.jpa.integration.metamodel.JpaProgrammingModelPlugin;
+import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
 
 @Configuration
 @Import({
@@ -33,7 +34,9 @@ import org.apache.isis.persistence.jpa.metamodel.JpaProgrammingModelPlugin;
         // @Component's
         JpaProgrammingModelPlugin.class,
         
-//        // @Service's
+        // @Service's
+        JpaSupportServiceUsingSpring.class,
+        
 //        DataNucleusSettings.class,
 //        ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
 //        ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
@@ -52,6 +55,6 @@ import org.apache.isis.persistence.jpa.metamodel.JpaProgrammingModelPlugin;
 //        Persistable_datanucleusVersionTimestamp.class,
 //        Persistable_downloadJdoMetadata.class,
 })
-public class IsisModuleJpa {
+public class IsisModuleJpaIntegration {
 
 }

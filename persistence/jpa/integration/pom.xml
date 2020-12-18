@@ -19,16 +19,16 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-persistence-jpa-model</artifactId>
+	<artifactId>isis-persistence-jpa-integration</artifactId>
 
-	<name>Apache Isis Persistence - JPA (model)</name>
+	<name>Apache Isis Persistence - JPA (integration)</name>
 	<description>
-        JPA integration (metamodel)
+        JPA integration (metamodel)d
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jpa.model</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jpa/model</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jpa.integration</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/persistence/jpa/integration</git-plugin.propertiesDir>
 	</properties>
 
 	<build>

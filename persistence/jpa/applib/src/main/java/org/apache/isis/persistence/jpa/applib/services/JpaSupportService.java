@@ -24,6 +24,8 @@ import javax.persistence.EntityManager;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+import lombok.NonNull;
+
 /**
  * Provides access to the current interaction's {@link EntityManager} 
  * 
@@ -36,14 +38,14 @@ public interface JpaSupportService {
      * based on whether an open interaction is available and a persistence layer 
      * is configured in support of JPA.
      */
-    Optional<EntityManager> getEntityManager();
+    Optional<EntityManager> getEntityManager(Class<?> entityClass);
     
-    default EntityManager getEntityManagerElseFail() {
-        return getEntityManager()
+    default EntityManager getEntityManagerElseFail(final @NonNull Class<?> entityClass) {
+        return getEntityManager(entityClass)
                 .orElseThrow(()->_Exceptions.illegalState(
                         "Current thread either has no open interaction or"
                         + " no persistence layer "
-                        + " in support of JPA is configured."));
+                        + " in support of given JPA entity class %s is configured.", entityClass));
     }
     
 }

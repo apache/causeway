@@ -32,7 +32,7 @@
 
 	<modules>
 		<module>applib</module>
-		<module>model</module>
+		<module>integration</module>
 		<module>eclipselink</module>
 	</modules>
 

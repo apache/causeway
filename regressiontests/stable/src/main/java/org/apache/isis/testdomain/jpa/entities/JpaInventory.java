@@ -26,6 +26,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -46,6 +47,9 @@ import lombok.ToString;
         nature = Nature.JPA_ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
         entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()  // causes UI events to be triggered ???
+@NamedQuery(
+        name = "JpaInventory.findAffordableProducts", 
+        query = "SELECT p FROM JpaInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")
 @NoArgsConstructor(access = AccessLevel.PROTECTED) 
 @ToString
 public class JpaInventory {

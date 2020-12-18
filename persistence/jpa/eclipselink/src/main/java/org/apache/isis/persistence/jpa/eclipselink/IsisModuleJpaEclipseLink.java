@@ -33,7 +33,7 @@ import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-import org.apache.isis.persistence.jpa.IsisModuleJpa;
+import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
 
 /**
  * EclipseLink integration. 
@@ -43,7 +43,7 @@ import org.apache.isis.persistence.jpa.IsisModuleJpa;
  */
 @Configuration 
 @Import({
-    IsisModuleJpa.class
+    IsisModuleJpaIntegration.class
 })
 public class IsisModuleJpaEclipseLink extends JpaBaseConfiguration { 
 

@@ -20,13 +20,10 @@ package org.apache.isis.testdomain.jpa;
 
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Root;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -66,8 +63,7 @@ import lombok.val;
 class JpaQueryTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
-    /*TODO[2033] @Inject*/ 
-    private JpaSupportService jpaSupport;
+    @Inject private JpaSupportService jpaSupport;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -160,27 +156,33 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
                 2);
     }
     
-    //TODO[2033]
-    @Test @Order(4) @Disabled("not implemetned yet")
+    //TODO[2033] no implementation of named queries for JPA yet
+    @Test @Order(4) @Disabled("no implementation of named queries for JPA yet")
     void sampleInventory_shouldSupportNamedQueries() {
         
         setUp3Books();
+        
+        val query = Query.named(JpaBook.class, "JpaInventory.findAffordableProducts")
+                .withParameter("priceUpperBound", 60.);
+        
+        val affordableBooks = repository.allMatches(query);
+        assertInventoryHasBooks(affordableBooks, 1, 2);
     }
     
-    //TODO[2033]
-    @Test @Order(5) @Disabled("no implementation of jpaSupport yet")
+    @Test @Order(5) 
     void sampleInventory_shouldSupportJpaCriteria() {
         
         setUp3Books();
 
-        val em = jpaSupport.getEntityManagerElseFail();
+        val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
         
         val cb = em.getCriteriaBuilder();
         val cr = cb.createQuery(JpaBook.class);
         val root = cr.from(JpaBook.class);
         
-        cr.select(root).where(cb.between(root.get("price"), 0., 60. ));
-        val affordableBooks = em.createQuery(cr).getResultList();
+        val affordableBooks = em
+                .createQuery(cr.select(root).where(cb.between(root.get("price"), 0., 60. )))
+                .getResultList();
         
         assertInventoryHasBooks(affordableBooks, 1, 2);
     }

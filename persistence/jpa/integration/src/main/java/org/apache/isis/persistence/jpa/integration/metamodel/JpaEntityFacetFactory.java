@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa.metamodel;
+package org.apache.isis.persistence.jpa.integration.metamodel;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -29,6 +29,7 @@ import javax.persistence.metamodel.EntityType;
 import org.springframework.data.jpa.repository.JpaContext;
 
 import org.apache.isis.applib.query.AllInstancesQuery;
+import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -149,32 +150,43 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         @Override
         public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
             
-            if(!(query instanceof AllInstancesQuery)) {
-                throw _Exceptions.notImplemented();
+            if(query instanceof AllInstancesQuery) {
+
+                val queryFindAllInstances = (AllInstancesQuery<?>) query;
+                val queryEntityType = queryFindAllInstances.getResultType();
+                
+                // guard against misuse
+                if(!entityClass.isAssignableFrom(queryEntityType)) {
+                    throw _Exceptions.unexpectedCodeReach();
+                }
+
+                val entityManager = getEntityManager();
+                
+                val cb = entityManager.getCriteriaBuilder();
+                val cr = cb.createQuery(entityClass);
+
+                cr.select(_Casts.uncheckedCast(cr.from(entityClass)));
+                
+                val typedQuery = entityManager
+                        .createQuery(cr)
+                        .setFirstResult(Math.toIntExact(queryFindAllInstances.getStart()))
+                        .setMaxResults(Math.toIntExact(
+                                NON_NEGATIVE_INTS.bounded(queryFindAllInstances.getCount())));
+                
+                return Can.ofStream(
+                    typedQuery.getResultStream()
+                    .map(entity->ManagedObject.of(spec, entity)));
+                
+            } else if(query instanceof NamedQuery) {
+                
+                val queryNamed = (NamedQuery<?>) query;
+                val queryResultType = queryNamed.getResultType();
+                
+                
+                
             }
             
-            val queryFindAllInstances = (AllInstancesQuery<?>) query;
-            val queryEntityType = queryFindAllInstances.getResultType();
-            
-            // guard against misuse
-            if(!entityClass.isAssignableFrom(queryEntityType)) {
-                throw _Exceptions.unexpectedCodeReach();
-            }
-            
-            val entityManager = getEntityManager();
-            
-            val typedQuery = entityManager
-                    .createQuery("SELECT t FROM " + entityClass.getSimpleName() + " t", entityClass);
-            
-            final int startPosition = Math.toIntExact(queryFindAllInstances.getStart());
-            final int maxResult = Math.toIntExact(
-                    NON_NEGATIVE_INTS.bounded(queryFindAllInstances.getCount()));
-            typedQuery.setFirstResult(startPosition);
-            typedQuery.setMaxResults(maxResult);
-            
-            return Can.ofStream(
-                typedQuery.getResultStream()
-                .map(entity->ManagedObject.of(spec, entity)));
+            throw _Exceptions.notImplemented();
         }
 
         @Override
