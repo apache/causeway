@@ -156,8 +156,7 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
                 2);
     }
     
-    //TODO[2033] no implementation of named queries for JPA yet
-    @Test @Order(4) @Disabled("no implementation of named queries for JPA yet")
+    @Test @Order(4)
     void sampleInventory_shouldSupportNamedQueries() {
         
         setUp3Books();

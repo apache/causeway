@@ -179,14 +179,30 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 
             } else if(query instanceof NamedQuery) {
                 
-                val queryNamed = (NamedQuery<?>) query;
-                val queryResultType = queryNamed.getResultType();
+                val applibNamedQuery = (NamedQuery<?>) query;
+                val queryResultType = applibNamedQuery.getResultType();
                 
+                val entityManager = getEntityManager();
                 
+                val namedQuery = entityManager
+                        .createNamedQuery(applibNamedQuery.getName(), queryResultType)
+                        .setFirstResult(Math.toIntExact(applibNamedQuery.getStart()))
+                        .setMaxResults(Math.toIntExact(
+                                NON_NEGATIVE_INTS.bounded(applibNamedQuery.getCount())));
+                
+                applibNamedQuery
+                    .getParametersByName()
+                    .forEach((paramName, paramValue)->
+                        namedQuery.setParameter(paramName, paramValue));
+
+                return Can.ofStream(
+                        namedQuery.getResultStream()
+                        .map(entity->ManagedObject.of(spec, entity)));
                 
             }
             
-            throw _Exceptions.notImplemented();
+            throw _Exceptions.unsupportedOperation(
+                    "Support for Query of type %s not implemented.", query.getClass());
         }
 
         @Override
