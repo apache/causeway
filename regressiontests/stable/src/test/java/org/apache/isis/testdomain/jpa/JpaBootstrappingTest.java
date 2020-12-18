@@ -19,9 +19,9 @@
 package org.apache.isis.testdomain.jpa;
 
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -58,8 +58,7 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJpa.class,
-        }
-        )
+        })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
@@ -80,25 +79,21 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
     }
 
     void cleanUp() {
-
         repository.allInstances(JpaInventory.class).forEach(repository::remove);
         repository.allInstances(JpaBook.class).forEach(repository::remove);
         repository.allInstances(JpaProduct.class).forEach(repository::remove);
-        System.out.println("!!! CLEANUP DONE");
     }
 
     void setUp() {
 
         // setup sample Inventory
-        Set<JpaProduct> products = new HashSet<>();
+        SortedSet<JpaProduct> products = new TreeSet<>();
 
         products.add(JpaBook.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
                 "Sample Publisher"));
 
         val inventory = new JpaInventory("Sample Inventory", products);
         repository.persistAndFlush(inventory);
-        
-        System.out.println("!!! SETUP DONE");
     }
 
     @Test @Order(0) 
@@ -140,7 +135,6 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
         cleanUp();
         assertEquals(0, repository.allInstances(JpaInventory.class).size());
-        System.out.println("!!! VERIFY CLEANUP DONE");
 
         // when
 

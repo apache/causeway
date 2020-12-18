@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testdomain.jpa.entities;
 
-import java.util.Set;
+import java.util.SortedSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -50,7 +50,7 @@ import lombok.ToString;
 @ToString
 public class JpaInventory {
 
-    public JpaInventory(String name, Set<JpaProduct> products) {
+    public JpaInventory(String name, SortedSet<JpaProduct> products) {
         super();
         this.name = name;
         this.products = products;
@@ -71,6 +71,6 @@ public class JpaInventory {
     // 1:n relation
     @Property
     @OneToMany(cascade = CascadeType.PERSIST) @JoinColumn(nullable = true)
-    private @Getter @Setter Set<JpaProduct> products;
+    private @Getter @Setter SortedSet<JpaProduct> products;
 }
 

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testdomain.jpa;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -76,7 +76,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                 @Override
                 protected JpaInventory buildResult(ExecutionContext ec) {
 
-                    val products = new HashSet<JpaProduct>();
+                    val products = new TreeSet<JpaProduct>();
 
                     products.add(JpaBook.of(
                             "Sample Book", "A sample book for testing.", 99.,

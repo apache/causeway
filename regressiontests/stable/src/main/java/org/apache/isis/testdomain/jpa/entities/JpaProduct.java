@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -59,7 +60,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED) 
 @ToString
-public class JpaProduct {
+public class JpaProduct implements Comparable<JpaProduct> {
 
     public String title() {
         return toString();
@@ -90,5 +91,10 @@ public class JpaProduct {
     @Collection 
     @OneToMany(mappedBy = "product") @JoinColumn(nullable = true)  
     private @Getter @Setter List<JpaProductComment> comments;
+
+    @Override
+    public int compareTo(JpaProduct other) {
+        return _Strings.compareNullsFirst(this.getName(), other==null ? null : other.getName());
+    }
 
 }
