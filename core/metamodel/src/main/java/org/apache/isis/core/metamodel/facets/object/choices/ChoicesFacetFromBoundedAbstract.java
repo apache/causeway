@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.choices;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -109,12 +107,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        //TODO[2033] if assert is always true just use type = getObjectSpecification().getCorrespondingClass()
-        val resulType = _Context.loadClassAndInitialize(getObjectSpecification().getFullIdentifier());
-        _Assert.assertEquals(
-                getObjectSpecification().getCorrespondingClass().getName(), 
-                getObjectSpecification().getFullIdentifier());
-        
+        val resulType = getObjectSpecification().getCorrespondingClass();
         val query = Query.allInstances(resulType);
         
         val resultTypeSpec = getObjectManager().loadSpecification(resulType);
