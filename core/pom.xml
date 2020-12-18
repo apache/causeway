@@ -177,7 +177,7 @@
 		<wicket-webjars.version>2.0.15</wicket-webjars.version>
 
 		<wicketstuff.version>8.11.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
-		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
+		<wicketstuff-gmap3.version>9.2.0</wicketstuff-gmap3.version>
 
 		<xdocreport.version>1.0.6</xdocreport.version>
 
