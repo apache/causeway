@@ -71,6 +71,6 @@ public class JpaInventory {
     // 1:n relation
     @Property
     @OneToMany(cascade = CascadeType.PERSIST) @JoinColumn(nullable = true)
-    private @Getter @Setter SortedSet<JpaProduct> products;
+    private @Getter @Setter java.util.Collection<JpaProduct> products;
 }
 

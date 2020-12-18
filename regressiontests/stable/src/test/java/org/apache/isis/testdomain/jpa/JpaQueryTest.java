@@ -87,6 +87,10 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
 
     void setUp3Books() {
 
+        cleanUp();
+        // given - expected pre condition: no inventories
+        assertEquals(0, repository.allInstances(JpaInventory.class).size());
+        
         // setup sample Inventory with 3 Books
         SortedSet<JpaProduct> products = new TreeSet<>();
 
@@ -106,10 +110,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(1) 
     void sampleInventory_shouldBeSetUpWith3Books() {
 
-        // given - expected pre condition: no inventories
-
-        cleanUp();
-        assertEquals(0, repository.allInstances(JpaInventory.class).size());
         setUp3Books();
 
         // when
@@ -131,8 +131,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(2) 
     void sampleInventory_shouldSupportQueryCount() {
 
-        cleanUp();
-        assertEquals(0, repository.allInstances(JpaInventory.class).size());
         setUp3Books();
         
         assertInventoryHasBooks(repository
@@ -148,8 +146,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(3) @Disabled("start not supported, should throw unsupported exception maybe?") 
     void sampleInventory_shouldSupportQueryStart() {
         
-        cleanUp();
-        assertEquals(0, repository.allInstances(JpaInventory.class).size());
         setUp3Books();
         
         assertInventoryHasBooks(repository
@@ -168,14 +164,13 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(4) @Disabled("not implemetned yet")
     void sampleInventory_shouldSupportNamedQueries() {
         
+        setUp3Books();
     }
     
     //TODO[2033]
     @Test @Order(5) @Disabled("no implementation of jpaSupport yet")
     void sampleInventory_shouldSupportJpaCriteria() {
         
-        cleanUp();
-        assertEquals(0, repository.allInstances(JpaInventory.class).size());
         setUp3Books();
 
         val em = jpaSupport.getEntityManagerElseFail();
