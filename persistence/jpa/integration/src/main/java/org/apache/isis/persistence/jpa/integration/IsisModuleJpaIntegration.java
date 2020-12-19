@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
-import org.apache.isis.persistence.jpa.integration.metamodel.JpaProgrammingModelPlugin;
+import org.apache.isis.persistence.jpa.integration.metamodel.JpaProgrammingModel;
 import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
 
 @Configuration
@@ -32,7 +32,7 @@ import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsi
 //        IsisModulePersistenceJpaApplib.class,
 
         // @Component's
-        JpaProgrammingModelPlugin.class,
+        JpaProgrammingModel.class,
         
         // @Service's
         JpaSupportServiceUsingSpring.class,

@@ -76,11 +76,13 @@
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jdbc</artifactId>
+		    <scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-web</artifactId>
+		    <scope>provided</scope>
 		</dependency>
 
 		<!-- JDO API (providing compile dependency) -->

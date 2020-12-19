@@ -18,16 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -38,10 +33,6 @@ import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixed
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
@@ -53,8 +44,6 @@ import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.column
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.column.MaxLengthDerivedFromJdoColumnAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 

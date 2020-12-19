@@ -82,22 +82,6 @@
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-api-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-jdo-query</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-rdbms</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-jodatime</artifactId>
-		</dependency>
 
 		<!-- TESTING -->
 		

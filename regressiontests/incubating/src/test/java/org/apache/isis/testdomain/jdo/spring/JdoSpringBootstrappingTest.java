@@ -125,7 +125,7 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
     }
 
     @Test @Order(0) 
-    void jpaEntities_shouldBeRecognisedAsSuch() {
+    void jdoEntities_shouldBeRecognisedAsSuch() {
         val spec = specLoader.loadSpecification(JdoInventory.class);
         assertTrue(spec.isEntity());
         assertNotNull(spec.getFacet(EntityFacet.class));

@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
 import lombok.val;
 
 @Component
-public class JpaProgrammingModelPlugin implements MetaModelRefiner {
+public class JpaProgrammingModel implements MetaModelRefiner {
     
     @Inject private IsisConfiguration config;
 
