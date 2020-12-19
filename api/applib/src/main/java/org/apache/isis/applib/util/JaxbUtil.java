@@ -25,6 +25,7 @@ import java.io.StringReader;
 import java.io.Writer;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.resources._Resources;
@@ -55,7 +56,7 @@ public class JaxbUtil {
             final @NonNull Reader reader,
             final @NonNull Class<T> dtoClass) {
         
-        return _Xml.readXml(dtoClass, reader, ReadOptions.builder()
+        return _Xml._readXml(dtoClass, reader, ReadOptions.builder()
                 .useContextCache(true)
                 .build());
     }
@@ -96,7 +97,7 @@ public class JaxbUtil {
 
     public static <T> void toXml(
             final @NonNull T dto, 
-            final @NonNull Writer writer) {
+            final @NonNull Writer writer) throws JAXBException {
         _Xml.writeXml(dto, writer, WriteOptions.builder()
                 .useContextCache(true)
                 .formattedOutput(true)
