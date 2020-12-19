@@ -77,8 +77,8 @@ implements AutoCompleteFacet {
         val resultAdapter = getPublisherDispatchService()
         .withPublishingSuppressed(()->{
                 final Object list = _Reflect.invokeMethodOn(repositoryMethod, getRepository(), search)
-                        .onFailure(e->log.warn("failure while executing auto-complete", e))
-                        .getOrElse(Collections::emptyList);
+                        .ifFailure(e->log.warn("failure while executing auto-complete", e))
+                        .orElseGet(Collections::emptyList);
                 return getObjectManager().adapt(list);
         });
 

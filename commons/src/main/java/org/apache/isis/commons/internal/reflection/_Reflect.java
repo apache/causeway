@@ -46,8 +46,8 @@ import javax.annotation.Nullable;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -470,13 +470,13 @@ public final class _Reflect {
     }
     
     
-    public static _Result<Object> invokeMethodOn(
+    public static Result<Object> invokeMethodOn(
             @NonNull final Method method, 
             @NonNull final Object target, 
             final Object... args) {
         
         /*sonar-ignore-on*/
-        return _Result.ofNullable(()->{
+        return Result.ofNullable(()->{
             if(method.isAccessible()) {
                 return method.invoke(target, args);
             }
@@ -490,12 +490,12 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
     
-    public static <T> _Result<T> invokeConstructor(
+    public static <T> Result<T> invokeConstructor(
             @NonNull final Constructor<T> constructor, 
             final Object... args) {
         
         /*sonar-ignore-on*/
-        return _Result.of(()->{
+        return Result.of(()->{
             if(constructor.isAccessible()) {
                 return constructor.newInstance(args);
             }

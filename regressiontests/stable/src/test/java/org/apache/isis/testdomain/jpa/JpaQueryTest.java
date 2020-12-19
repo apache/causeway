@@ -25,7 +25,6 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
@@ -69,38 +68,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
     static void beforeAll() throws SQLException {
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
-    }
-
-    @AfterAll
-    static void afterAll() throws SQLException {
-    }
-
-    void cleanUp() {
-        repository.allInstances(JpaInventory.class).forEach(repository::remove);
-        repository.allInstances(JpaBook.class).forEach(repository::remove);
-        repository.allInstances(JpaProduct.class).forEach(repository::remove);
-    }
-
-    void setUp3Books() {
-
-        cleanUp();
-        // given - expected pre condition: no inventories
-        assertEquals(0, repository.allInstances(JpaInventory.class).size());
-        
-        // setup sample Inventory with 3 Books
-        SortedSet<JpaProduct> products = new TreeSet<>();
-
-        products.add(JpaBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
-                "Sample Publisher"));
-
-        products.add(JpaBook.of("Sample Book-2", "A sample book for testing.", 29., "Sample Author", "ISBN-B",
-                "Sample Publisher"));
-        
-        products.add(JpaBook.of("Sample Book-3", "A sample book for testing.", 99., "Sample Author", "ISBN-C",
-                "Sample Publisher"));
-        
-        val inventory = new JpaInventory("Sample Inventory", products);
-        repository.persistAndFlush(inventory);
     }
 
     @Test @Order(1) 
@@ -186,7 +153,40 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
         assertInventoryHasBooks(affordableBooks, 1, 2);
     }
     
+    @Test @Order(99) 
+    void previousTest_shouldHaveRolledBack() {
+        assertEquals(0, repository.allInstances(JpaInventory.class).size());
+        assertEquals(0, repository.allInstances(JpaProduct.class).size());
+    }
+    
     // -- HELPER 
+    
+    private void cleanUp() {
+        repository.allInstances(JpaInventory.class).forEach(repository::remove);
+        repository.allInstances(JpaProduct.class).forEach(repository::remove);
+    }
+
+    private void setUp3Books() {
+
+        cleanUp();
+        // given - expected pre condition: no inventories
+        assertEquals(0, repository.allInstances(JpaInventory.class).size());
+        
+        // setup sample Inventory with 3 Books
+        SortedSet<JpaProduct> products = new TreeSet<>();
+
+        products.add(JpaBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
+                "Sample Publisher"));
+
+        products.add(JpaBook.of("Sample Book-2", "A sample book for testing.", 29., "Sample Author", "ISBN-B",
+                "Sample Publisher"));
+        
+        products.add(JpaBook.of("Sample Book-3", "A sample book for testing.", 99., "Sample Author", "ISBN-C",
+                "Sample Publisher"));
+        
+        val inventory = new JpaInventory("Sample Inventory", products);
+        repository.persistAndFlush(inventory);
+    }
     
     private void assertInventoryHasBooks(Collection<? extends JpaProduct> products, int...expectedBookIndices) {
         val actualBookIndices = products.stream()

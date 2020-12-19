@@ -18,13 +18,12 @@
  */
 package org.apache.isis.persistence.jpa.integration.services;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import org.springframework.data.jpa.repository.JpaContext;
 
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.NonNull;
@@ -38,13 +37,13 @@ public class JpaSupportServiceUsingSpring implements JpaSupportService {
 
     private final JpaContext jpaContextSpring;
     
-    public Optional<EntityManager> getEntityManager(final @NonNull Class<?> entityClass) {
+    public Result<EntityManager> getEntityManager(final @NonNull Class<?> entityClass) {
         try {
             val em = jpaContextSpring.getEntityManagerByManagedType(entityClass);
-            return Optional.ofNullable(em);
+            return Result.success(em);
         } catch (Exception e) {
             log.error("failed to get an EntityManager for entity type %s", entityClass, e);
-            return Optional.empty();
+            return Result.failure(e);
         }
     }
     

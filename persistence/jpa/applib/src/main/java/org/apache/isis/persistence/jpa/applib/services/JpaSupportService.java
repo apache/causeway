@@ -18,34 +18,45 @@
  */
 package org.apache.isis.persistence.jpa.applib.services;
 
-import java.util.Optional;
-
 import javax.persistence.EntityManager;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.functional.Result;
 
 import lombok.NonNull;
 
 /**
- * Provides access to the current interaction's {@link EntityManager} 
+ * Provides access to the current interaction's {@link EntityManager}(s) 
  * 
  * @since 2.0 {@index}
  */
 public interface JpaSupportService {
 
     /**
-     * Optionally returns the current interaction's {@link EntityManager},
+     * Optionally returns the current interaction's {@link EntityManager}, 
+     * that is bound to given {@code entityClass},
      * based on whether an open interaction is available and a persistence layer 
      * is configured in support of JPA.
+     * @param entityType - (non-null)
+     * @throws NullPointerException when given {@code entityType} is {@code null}
      */
-    Optional<EntityManager> getEntityManager(Class<?> entityClass);
+    Result<EntityManager> getEntityManager(@NonNull Class<?> entityType);
     
-    default EntityManager getEntityManagerElseFail(final @NonNull Class<?> entityClass) {
-        return getEntityManager(entityClass)
-                .orElseThrow(()->_Exceptions.illegalState(
+    /**
+     * Returns the current interaction's {@link EntityManager} that is managing the given domain type 
+     * {@code entityType}.
+     * @param entityType - (non-null)
+     * 
+     * @throws NullPointerException when given {@code entityType} is {@literal null}
+     * @throws IllegalStateException when no open interaction is available or when the given type is not 
+     * JPA managed or no unique {@link EntityManager} managing this type can be resolved.
+     */
+    default EntityManager getEntityManagerElseFail(final @NonNull Class<?> entityType) {
+        
+        return getEntityManager(entityType)
+                .orElseThrow(cause->new IllegalStateException(
+                        String.format(
                         "Current thread either has no open interaction or"
-                        + " no persistence layer "
-                        + " in support of given JPA entity class %s is configured.", entityClass));
+                        + " or no unique EntityManager managing type %s can be resolved.", entityType), cause));
     }
     
 }

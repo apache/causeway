@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.base;
+package org.apache.isis.commons.functional;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -37,26 +37,23 @@ import lombok.ToString;
 import lombok.val;
 
 /**
- * <h1>- internal use only -</h1>
- * <p>
- * A specialization of the {@link _Either} monad.
- * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
- * These may be changed or removed without notice!
- *
- * @since 2.0
+ * The {@link Result} type represents a value of one of two possible types (a disjoint union). 
+ * The data constructors {@link Result#success(Object)} and {@link Result#failure(Throwable)}
+ * represent the two possible values.
+ * 
+ * @since 2.0 {@index}
  */
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE, staticName="of")
 @ToString @EqualsAndHashCode
-public final class _Result<L> {
+public final class Result<L> {
 
     private final L value;
-    private final Throwable exception;
+    private final Throwable throwable;
     private final boolean isSuccess;
     
     // -- FACTORIES
 
-    public static <L> _Result<L> of(@NonNull Callable<L> callable) {
+    public static <L> Result<L> of(final @NonNull Callable<L> callable) {
         try {
             return success(callable.call());
         } catch (Throwable e) {
@@ -64,7 +61,7 @@ public final class _Result<L> {
         }
     }
     
-    public static <L> _Result<L> ofNullable(@NonNull Callable<L> callable) {
+    public static <L> Result<L> ofNullable(final @NonNull Callable<L> callable) {
         try {
             return successNullable(callable.call());
         } catch (Throwable e) {
@@ -72,16 +69,26 @@ public final class _Result<L> {
         }
     }
     
-    public static <L> _Result<L> success(@NonNull L value) {
+    public static <L> Result<L> success(final @NonNull L value) {
         return of(value, null, true);
     }
 
-    public static <L> _Result<L> successNullable(@Nullable L value) {
+    public static <L> Result<L> successNullable(final @Nullable L value) {
         return of(value, null, true);
     }
     
-    public static <L> _Result<L> failure(@NonNull Throwable exception) {
-        return of(null, exception, false);
+    public static <L> Result<L> failure(final @NonNull Throwable throwable) {
+        return of(null, throwable, false);
+    }
+    
+    // -- FACTORY SHORTCUTS
+    
+    public static <L> Result<L> failure(final @NonNull String message) {
+        return failure(new Error(message));
+    }
+    
+    public static <L> Result<L> failure(final @NonNull String message, final @NonNull Throwable cause) {
+        return failure(new Error(message, cause));
     }
     
     // -- PREDICATES
@@ -101,7 +108,7 @@ public final class _Result<L> {
     }
 
     public Optional<Throwable> exception() {
-        return Optional.ofNullable(exception); 
+        return Optional.ofNullable(throwable); 
     }
 
 //    public L valueIfAny() {
@@ -114,34 +121,34 @@ public final class _Result<L> {
     
     // -- PEEKING
     
-    public _Result<L> onSuccess(final @NonNull Consumer<L> valueConsumer){
+    public Result<L> ifSuccess(final @NonNull Consumer<L> valueConsumer){
         if(isSuccess()) {
             valueConsumer.accept(value);
         }
         return this;
     }
     
-    public _Result<L> onFailure(final @NonNull Consumer<Throwable> exceptionConsumer){
+    public Result<L> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer){
         if(isFailure()) {
-            exceptionConsumer.accept(exception);
+            exceptionConsumer.accept(throwable);
         }
         return this;
     }
     
     // -- MAPPING
 
-    public <T> _Result<T> mapValue(final @NonNull Function<L, T> valueMapper){
+    public <T> Result<T> mapSuccess(final @NonNull Function<L, T> successMapper){
         return isSuccess()
-                ? _Result.of(()->valueMapper.apply(value))
-                : _Result.failure(exception);
+                ? Result.of(()->successMapper.apply(value))
+                : Result.failure(throwable);
     }
 
-    public _Result<L> mapException(final @NonNull UnaryOperator<Throwable> exceptionMapper){
+    public Result<L> mapFailure(final @NonNull UnaryOperator<Throwable> failureMapper){
         if (isSuccess()) {
             return this;
         }
         try {
-            return _Result.failure(exceptionMapper.apply(exception));
+            return Result.failure(failureMapper.apply(throwable));
         } catch (Throwable e) {
             return failure(e);
         }
@@ -150,35 +157,54 @@ public final class _Result<L> {
     // -- FOLDING
     
     public <T> T fold(
-            final @NonNull Function<L, T> valueMapper,
-            final @NonNull Function<Throwable, T> exceptionMapper){
+            final @NonNull Function<L, T> successMapper,
+            final @NonNull Function<Throwable, T> failureMapper){
         return isSuccess()
-                ? valueMapper.apply(value)
-                : exceptionMapper.apply(exception);
+                ? successMapper.apply(value)
+                : failureMapper.apply(throwable);
     }
     
-    // -- REDUCTION
+    // -- EXTRACTION
     
     @SneakyThrows
-    public L getOrThrow() {
+    public L orElseFail() {
         if (isSuccess()) {
             if(value==null) {
                 throw new NoSuchElementException();
             }
             return value;
         }
-        throw exception;
+        throw throwable;
     }
     
     @SneakyThrows
-    public @Nullable L getNullableOrThrow() {
+    public @Nullable L nullableOrElseFail() {
         if (isSuccess()) {
             return value;
         }
-        throw exception;
+        throw throwable;
     }
     
-    public L getOrDefault(final @NonNull L defaultValue) {
+    @SneakyThrows
+    public L orElseThrow(final @NonNull UnaryOperator<Throwable> toThrowable) {
+        if (isSuccess()) {
+            if(value==null) {
+                throw toThrowable.apply(new NoSuchElementException());
+            }
+            return value;
+        }
+        throw toThrowable.apply(throwable);
+    }
+    
+    @SneakyThrows
+    public @Nullable L nullableOrElseThrow(final @NonNull UnaryOperator<Throwable> toThrowable) {
+        if (isSuccess()) {
+            return value;
+        }
+        throw toThrowable.apply(throwable);
+    }
+    
+    public L orDefault(final @NonNull L defaultValue) {
         if (isSuccess()) {
             if(value!=null) {
                 return value;
@@ -187,14 +213,14 @@ public final class _Result<L> {
         return defaultValue;
     }
     
-    public @Nullable L getNullableOrDefault(final @Nullable L defaultValue) {
+    public @Nullable L nullableOrDefault(final @Nullable L defaultValue) {
         if (isSuccess()) {
             return value;
         }
         return defaultValue;
     }
     
-    public L getOrElse(final @NonNull Supplier<L> defaultValueSupplier) {
+    public L orElseGet(final @NonNull Supplier<L> defaultValueSupplier) {
         if (isSuccess()) {
             if(value!=null) {
                 return value;
@@ -207,7 +233,7 @@ public final class _Result<L> {
         throw new NoSuchElementException();
     }
     
-    public @Nullable L getNullableOrElse(final @NonNull Supplier<L> defaultValueSupplier) {
+    public @Nullable L nullableOrElseGet(final @NonNull Supplier<L> defaultValueSupplier) {
         if (isSuccess()) {
             return value;
         }

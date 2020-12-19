@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.commons.internal.base._Result;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -59,7 +59,7 @@ public class ObjectActionArgHelper {
             val paramMeta = parameters.getElseFail(argIndex);
             val paramSpec = paramMeta.getSpecification();
             
-            val objectOrVeto = _Result.of(()->
+            val objectOrVeto = Result.of(()->
                     (paramMeta.isOptional() && argRepr == null) 
                     ? ManagedObject.empty(paramSpec)
                     : new JsonParserHelper(resourceContext, paramSpec)
