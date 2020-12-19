@@ -26,6 +26,7 @@ import java.io.Writer;
 
 import javax.xml.bind.JAXBContext;
 
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.commons.internal.resources._Xml.ReadOptions;
@@ -38,7 +39,6 @@ import lombok.experimental.UtilityClass;
 
 /**
  * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.
- * Intended primarily for test use only (the {@link JAXBContext} is not cached).
  *
  * <p>
  * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a>
@@ -51,7 +51,7 @@ public class JaxbUtil {
 
     // -- READ
 
-    public static <T> T fromXml(
+    private static <T> T _fromXml(
             final @NonNull Reader reader,
             final @NonNull Class<T> dtoClass) {
         
@@ -59,22 +59,39 @@ public class JaxbUtil {
                 .useContextCache(true)
                 .build());
     }
+    
+    public static <T> Result<T> fromXml(
+            final @NonNull Reader reader,
+            final @NonNull Class<T> dtoClass) {
+        
+        return Result.of(()->_fromXml(reader, dtoClass));
+    }
 
-    public static <T> T fromXml(
+    private static <T> T _fromXml(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName,
             final @NonNull Class<T> dtoClass) throws IOException {
 
         val xmlString = _Resources.loadAsStringUtf8(contextClass, resourceName);
-        return fromXml(new StringReader(xmlString), dtoClass);
+        return _fromXml(new StringReader(xmlString), dtoClass);
+    }
+    
+    public static <T> Result<T> fromXml(
+            final @NonNull Class<?> contextClass,
+            final @NonNull String resourceName,
+            final @NonNull Class<T> dtoClass) throws IOException {
+
+        return Result.of(()->_fromXml(contextClass, resourceName, dtoClass));
     }
 
     // -- WRITE
 
-    public static <T> String toXml(final @NonNull T dto) {
-        final CharArrayWriter caw = new CharArrayWriter();
-        toXml(dto, caw);
-        return caw.toString();
+    public static Result<String> toXml(final @NonNull Object dto) {
+        return Result.of(()->{
+            val caw = new CharArrayWriter();
+            toXml(dto, caw);
+            return caw.toString();    
+        });
     }
 
     public static <T> void toXml(
