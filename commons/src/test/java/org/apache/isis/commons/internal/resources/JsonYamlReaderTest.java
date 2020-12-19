@@ -58,7 +58,8 @@ class JsonYamlReaderTest {
 
     @Test
     void loadCustomerFromYaml() {
-        val customer = _Yaml.readYaml(Customer.class, this.getClass().getResourceAsStream("customer.yml"));
+        val customer = _Yaml.readYaml(Customer.class, this.getClass().getResourceAsStream("customer.yml"))
+                .nullableOrElse(null);
         assertCustomerIsJohnDoe(customer);
     }
     

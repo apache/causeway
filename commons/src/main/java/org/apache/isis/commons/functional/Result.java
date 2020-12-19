@@ -204,7 +204,7 @@ public final class Result<L> {
         throw toThrowable.apply(throwable);
     }
     
-    public L orDefault(final @NonNull L defaultValue) {
+    public L orElse(final @NonNull L defaultValue) {
         if (isSuccess()) {
             if(value!=null) {
                 return value;
@@ -213,7 +213,7 @@ public final class Result<L> {
         return defaultValue;
     }
     
-    public @Nullable L nullableOrDefault(final @Nullable L defaultValue) {
+    public @Nullable L nullableOrElse(final @Nullable L defaultValue) {
         if (isSuccess()) {
             return value;
         }

@@ -19,7 +19,6 @@
 package org.apache.isis.tooling.cli;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
@@ -82,16 +81,11 @@ public class CliConfig {
     // -- LOADING
 
     public static CliConfig read(final @NonNull File file) {
-        if(!file.canRead()) {
+        return _Yaml.readYaml(CliConfig.class, file)
+        .ifFailure(e->{
             System.err.println(String.format("config file '%s' not readable, using defaults", file.getAbsolutePath()));
-            return new CliConfig();
-        }
-        try {
-            return _Yaml.readYaml(CliConfig.class, new FileInputStream(file));
-        } catch (Exception e) {
-            System.err.println(String.format("config file '%s' not readable, using defaults", file.getAbsolutePath()));
-            return new CliConfig();
-        }
+        })
+        .orElseGet(CliConfig::new);
     }
 
 

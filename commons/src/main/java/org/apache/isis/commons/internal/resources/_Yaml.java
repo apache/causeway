@@ -47,15 +47,7 @@ public class _Yaml {
 
     // -- FROM INPUT STREAM
     
-    /**
-     * Deserialize YAML content from given YAML content InputStream into an instance of 
-     * given {@code clazz} type.
-     * @param <T>
-     * @param clazz
-     * @param content
-     * @return
-     */
-    public static <T> T readYaml(final Class<T> clazz, InputStream content) {
+    private static <T> T _readYaml(final Class<T> clazz, InputStream content) {
         val yaml = new Yaml(new Constructor(clazz));
         return yaml.load(content);
     }
@@ -68,21 +60,13 @@ public class _Yaml {
      * @param content
      * @return
      */
-    public static <T> Result<T> tryReadYaml(final Class<T> clazz, InputStream content) {
-        return Result.of(()->readYaml(clazz, content));
+    public static <T> Result<T> readYaml(final Class<T> clazz, InputStream content) {
+        return Result.of(()->_readYaml(clazz, content));
     }
     
     // -- FROM STRING
     
-    /**
-     * Deserialize YAML content from given YAML content String into an instance of 
-     * given {@code clazz} type.
-     * @param <T>
-     * @param clazz
-     * @param content
-     * @return
-     */
-    public static <T> T readYaml(final Class<T> clazz, String content) {
+    private static <T> T _readYaml(final Class<T> clazz, String content) {
         val yaml = new Yaml(new Constructor(clazz));
         return yaml.load(content);
     }
@@ -95,23 +79,13 @@ public class _Yaml {
      * @param content
      * @return
      */
-    public static <T> Result<T> tryReadYaml(final Class<T> clazz, String content) {
-        return Result.of(()->readYaml(clazz, content));
+    public static <T> Result<T> readYaml(final Class<T> clazz, String content) {
+        return Result.of(()->_readYaml(clazz, content));
     }
     
     // -- FROM FILE
     
-    /**
-     * Deserialize YAML content from given YAML content File into an instance of 
-     * given {@code clazz} type.
-     * @param <T>
-     * @param clazz
-     * @param content
-     * @return
-     * @throws IOException 
-     * @throws FileNotFoundException 
-     */
-    public static <T> T readYaml(final Class<T> clazz, File content) throws FileNotFoundException, IOException {
+    private static <T> T _readYaml(final Class<T> clazz, File content) throws FileNotFoundException, IOException {
         try(val fis = new FileInputStream(content)) {
             val yaml = new Yaml(new Constructor(clazz));
             return yaml.load(fis);
@@ -126,22 +100,13 @@ public class _Yaml {
      * @param content
      * @return
      */
-    public static <T> Result<T> tryReadYaml(final Class<T> clazz, File content) {
-        return Result.of(()->readYaml(clazz, content));
+    public static <T> Result<T> readYaml(final Class<T> clazz, File content) {
+        return Result.of(()->_readYaml(clazz, content));
     }
     
     // -- FROM BYTE ARRAY
     
-    /**
-     * Deserialize YAML content from given YAML content byte[] into an instance of 
-     * given {@code clazz} type.
-     * @param <T>
-     * @param clazz
-     * @param content
-     * @return
-     * @throws IOException 
-     */
-    public static <T> T readYaml(final Class<T> clazz, byte[] content) throws IOException {
+    private static <T> T _readYaml(final Class<T> clazz, byte[] content) throws IOException {
         try(val bais = new ByteArrayInputStream(content)) {
             val yaml = new Yaml(new Constructor(clazz));
             return yaml.load(bais);
@@ -156,8 +121,8 @@ public class _Yaml {
      * @param content
      * @return
      */
-    public static <T> Result<T> tryReadYaml(final Class<T> clazz, byte[] content) {
-        return Result.of(()->readYaml(clazz, content));
+    public static <T> Result<T> readYaml(final Class<T> clazz, byte[] content) {
+        return Result.of(()->_readYaml(clazz, content));
     }
     
 }
