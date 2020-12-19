@@ -23,8 +23,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.SerializationTester;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.collections.CanVector;
 
 import lombok.val;
 
@@ -48,7 +46,5 @@ class CanVectorTest {
         vector.set(1, Can.<String>of("hi", "there"));
         SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi"));
     }
-    
-
 
 }

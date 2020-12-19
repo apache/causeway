@@ -26,8 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
-
 import lombok.val;
 
 class VersionedListTest {

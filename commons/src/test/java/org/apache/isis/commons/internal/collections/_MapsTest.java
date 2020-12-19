@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Maps;
 
 import lombok.val;
 
