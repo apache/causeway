@@ -35,7 +35,7 @@
     </description>
 
 	<properties>
-	
+
 		<isis.skipTests>false</isis.skipTests>
 		<maven.test.skip>${isis.skipTests}</maven.test.skip>
 
@@ -57,20 +57,30 @@
 		<checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
 		<pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
 
-		<license.additional-notes>In addition, Apache Isis uses some Javascript libraries:
+		<license.additional-notes>In addition, Apache Isis uses some
+			Javascript libraries:
 
 			* Twitter Bootstrap, licensed under MIT [1]
-			* Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
-			* LiveQuery (JQuery plugin), licensed under MIT license [3]
-			* Wicket Bootstrap, licenced under ASL 2 [4]
-			* Bootstrap Datetimepicker, licensed under MIT licence [5]
-			* Moment.js, licenced under MIT licence [6]
+			*
+			Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
+			*
+			LiveQuery (JQuery plugin), licensed under MIT license [3]
+			* Wicket
+			Bootstrap, licenced under ASL 2 [4]
+			* Bootstrap Datetimepicker,
+			licensed under MIT licence [5]
+			* Moment.js, licenced under MIT licence
+			[6]
 
 			[1] https://github.com/twbs/bootstrap/blob/master/LICENSE
-			[2] https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
-			[3] https://github.com/brandonaaron/livequery#license
-			[4] https://github.com/l0rdn1kk0n/wicket-bootstrap
-			[5] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
+			[2]
+			https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
+			[3]
+			https://github.com/brandonaaron/livequery#license
+			[4]
+			https://github.com/l0rdn1kk0n/wicket-bootstrap
+			[5]
+			https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
 			[6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
 
@@ -141,8 +151,9 @@
 
 		<maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
-		
-		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
+
+		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) 
+			versions -->
 		<node.version>v12.14.0</node.version>
 		<npm.version>6.13.1</npm.version>
 
@@ -161,7 +172,7 @@
 		<shiro.version>1.7.0</shiro.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
-		<spring-boot.version>2.4.0</spring-boot.version> <!--  has no effect here, needs to be set in isis-parent/pom.xml -->
+		<spring-boot.version>2.4.0</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.2</swagger-core.version>
 
@@ -198,7 +209,7 @@
 			<id>central</id>
 			<name>Central Repository</name>
 			<url>https://repo.maven.apache.org/maven2</url>
-            <snapshots>
+			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
@@ -209,16 +220,9 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-<!--
- 		<repository>
- 			<id>Spring Milestones</id>
- 			<url>https://repo.spring.io/milestone/</url>
- 			<snapshots>
- 				<enabled>false</enabled>
- 			</snapshots>
- 		</repository>
--->
-		
+		<!-- <repository> <id>Spring Milestones</id> <url>https://repo.spring.io/milestone/</url> 
+			<snapshots> <enabled>false</enabled> </snapshots> </repository> -->
+
 		<!-- required for RestEasy -->
 		<repository>
 			<id>JBoss Public Release</id>
@@ -227,7 +231,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		
+
 		<repository>
 			<id>sonatype-snapshots</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -266,7 +270,7 @@
 		<pluginManagement>
 			<plugins>
 
-				<!-- IDE support for Eclipse (if not using m2e). (NetBeans 6.7+ and IDEA
+				<!-- IDE support for Eclipse (if not using m2e). (NetBeans 6.7+ and IDEA 
 					7.0+ also have built-in support -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -292,8 +296,8 @@
 						<source>1.8</source>
 						<target>1.8</target>
 						<compilerArgs>
-					        <arg>${maven.compiler.arg}</arg>
-					    </compilerArgs>
+							<arg>${maven.compiler.arg}</arg>
+						</compilerArgs>
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
@@ -328,7 +332,7 @@
 				</plugin>
 
 
-				<!-- Artifacts derived from code: javadoc; supports both build and report
+				<!-- Artifacts derived from code: javadoc; supports both build and report 
 					goals; not included as a build plugin except through profiles (to speed up 
 					the build) -->
 				<plugin>
@@ -360,11 +364,7 @@
 						<linksource>true</linksource>
 						<!-- http://jira.codehaus.org/browse/MJAVADOC-268 and http://jira.codehaus.org/browse/MJAVADOC-284 -->
 						<detectOfflineLinks>false</detectOfflineLinks>
-<!--
-						<additionalparam>
-							-Xdoclint:none
-						</additionalparam>
--->
+						<!-- <additionalparam> -Xdoclint:none </additionalparam> -->
 					</configuration>
 					<!-- goal:aggregate (for aggregator modules) has no binding; explicitly 
 						bound in profiles -->
@@ -382,7 +382,7 @@
 						<includePom>true</includePom>
 					</configuration>
 					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
-					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
+					<!-- goal:jar and goal:test-jar are meant to bind to phase:package, 
 						but doesn't seem to so bound explicitly -->
 					<executions>
 						<execution>
@@ -470,7 +470,7 @@
 								<!-- required for DN plugin.xml loading -->
 								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
 								<!-- no requirement as of yet. <Bundle-ManifestVersion>2</Bundle-ManifestVersion> 
-									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>2.0.0-SNAPSHOT</Bundle-Version>
+									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>2.0.0-SNAPSHOT</Bundle-Version> 
 									<Bundle-Vendor>Apache Isis™ Project</Bundle-Vendor> -->
 							</manifestEntries>
 						</archive>
@@ -533,7 +533,7 @@
 							<requireJavaVersion>
 								<version>[1.8.0,)</version>
 							</requireJavaVersion>
-							<!-- seemingly not compatible with use of 2.0.0-SNAPSHOT placeholders
+							<!-- seemingly not compatible with use of 2.0.0-SNAPSHOT placeholders 
 								<requirePluginVersions> <message>All plugin versions must be defined!</message> 
 								<banLatest>true</banLatest> <banRelease>true</banRelease> </requirePluginVersions> -->
 							<DependencyConvergence />
@@ -635,9 +635,9 @@
 
 			<!-- CHILD MODULES -->
 			<dependency>
-				<!-- meant to be imported only when on JDK 11 or newer;
-					usually by wrapping this dependency within a profile,
-					that activates based on the JDK version in use-->
+				<!-- meant to be imported only when on JDK 11 or newer; usually by wrapping 
+					this dependency within a profile, that activates based on the JDK version 
+					in use -->
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-jdk-supplemental</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
@@ -758,6 +758,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.persistence</groupId>
+				<artifactId>isis-persistence-jdo-spring</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.persistence</groupId>
 				<artifactId>isis-persistence-jpa-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -830,11 +835,11 @@
 				<artifactId>hibernate-validator</artifactId>
 				<version>${hibernate-validator.version}</version>
 			</dependency>
-			
+
 			<dependency>
-			    <groupId>joda-time</groupId>
-			    <artifactId>joda-time</artifactId>
-			    <version>${joda-time.version}</version>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>${joda-time.version}</version>
 			</dependency>
 
 			<dependency>
@@ -993,9 +998,9 @@
 			</dependency>
 
 			<dependency>
-			    <groupId>javax.jdo</groupId>
-			    <artifactId>jdo-api</artifactId>
-			    <version>${jdo-api.version}</version>
+				<groupId>javax.jdo</groupId>
+				<artifactId>jdo-api</artifactId>
+				<version>${jdo-api.version}</version>
 			</dependency>
 
 			<dependency>
@@ -1141,12 +1146,12 @@
 			</dependency>
 
 			<dependency>
-	            <groupId>com.vaadin</groupId>
-	            <artifactId>vaadin-bom</artifactId>
-	            <version>${vaadin.version}</version>
-	            <type>pom</type>
-	            <scope>import</scope>
-	        </dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>${vaadin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
@@ -1682,11 +1687,8 @@
 					<name>isis-app-starter-datanucleusenhance</name>
 					<value>true</value>
 				</property>
-<!--
-				<file>
-					<exists>${basedir}/logging-dn-enhance.properties</exists>
-				</file>
--->
+				<!-- <file> <exists>${basedir}/logging-dn-enhance.properties</exists> 
+					</file> -->
 			</activation>
 			<properties>
 				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
@@ -1748,7 +1750,7 @@
 	</profiles>
 
 	<modules>
-	
+
 		<module>../supplemental-model</module>
 
 		<module>jdk-supplemental</module>

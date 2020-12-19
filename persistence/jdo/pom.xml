@@ -33,7 +33,7 @@
 	<modules>
 		<module>applib</module>
 		<module>datanucleus-5</module>
+		<module>spring</module>
 	</modules>
-
 
 </project>

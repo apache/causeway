@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.assertNotNull;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.jdo.entities.JdoProductComment;
@@ -39,7 +39,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class
+                Configuration_usingJdoIsis.class
         }, 
         properties = {
 //                "logging.config=log4j2-debug-persistence.xml",

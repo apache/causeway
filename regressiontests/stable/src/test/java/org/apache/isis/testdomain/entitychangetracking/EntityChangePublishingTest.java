@@ -35,7 +35,7 @@ import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEn
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
 import org.apache.isis.testdomain.commons.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.commons.InteractionTestAbstract;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
@@ -46,7 +46,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdo.class,
+                Configuration_usingJdoIsis.class,
                 Configuration_usingEntityPropertyChangePublishing.class,
                 Configuration_usingEntityChangesPublishing.class,
                 InteractionBoundaryProbe.class,

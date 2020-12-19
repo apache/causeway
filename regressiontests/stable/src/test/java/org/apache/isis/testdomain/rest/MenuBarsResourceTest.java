@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.model.actnsemantics.Configuration_usingActionSemantics;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -47,7 +47,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class,
+                Configuration_usingJdoIsis.class,
                 Configuration_usingActionSemantics.class,
                 MenuBarsResourceTest.TestSetup.class
         }, 

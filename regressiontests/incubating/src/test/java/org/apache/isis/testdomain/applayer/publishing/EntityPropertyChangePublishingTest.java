@@ -35,7 +35,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -44,7 +44,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdo.class,
+                Configuration_usingJdoIsis.class,
                 Configuration_usingEntityPropertyChangePublishing.class,
                 ApplicationLayerTestFactory.class
         }, 

@@ -40,7 +40,7 @@ import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 
 import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
 import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;
@@ -51,7 +51,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class, 
+                Configuration_usingJdoIsis.class, 
         },
         properties = {
                 // "isis.core.meta-model.introspector.parallelize=false",

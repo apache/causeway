@@ -32,14 +32,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class,
+                Configuration_usingJdoIsis.class,
                 Configuration_usingValidDomain.class,
                 
         }, 

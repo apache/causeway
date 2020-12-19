@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -40,7 +40,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class,
+                Configuration_usingJdoIsis.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 class TransactionRollbackTest extends IsisIntegrationTestAbstract {

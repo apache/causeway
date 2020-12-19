@@ -39,7 +39,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.model.actnsemantics.BlobDemo;
 import org.apache.isis.testdomain.model.actnsemantics.Configuration_usingActionSemantics;
 import org.apache.isis.testdomain.model.layout.Configuration_usingLayout;
@@ -54,7 +54,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class,
+                Configuration_usingJdoIsis.class,
                 Configuration_usingLayout.class,
                 Configuration_usingActionSemantics.class,
                 DomainObjectResourceTest.TestSetup.class

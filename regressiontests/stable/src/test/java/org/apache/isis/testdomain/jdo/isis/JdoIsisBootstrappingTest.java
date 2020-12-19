@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.bootstrapping;
+package org.apache.isis.testdomain.jdo.isis;
 
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -50,12 +50,12 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class,
+                Configuration_usingJdoIsis.class,
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
+class JdoIsisBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
     //@Inject private TransactionService transactionService;
