@@ -23,7 +23,7 @@
 
 	<name>Apache Isis Persistence - JPA (integration)</name>
 	<description>
-        JPA integration (metamodel)d
+        JPA integration (facets, jpa-context)
     </description>
 
 	<properties>
