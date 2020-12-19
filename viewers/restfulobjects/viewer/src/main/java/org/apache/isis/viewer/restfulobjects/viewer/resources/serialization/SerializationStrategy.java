@@ -22,7 +22,6 @@ import java.util.Collection;
 
 import javax.ws.rs.core.MediaType;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
@@ -46,11 +45,9 @@ public enum SerializationStrategy {
                     .registerModule(jaxbAnnotationModule)
                     .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
                     .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-            try {
-                return _Json.toString(objectMapper, jaxbAnnotatedObject);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+            
+            return _Json.toString(objectMapper, jaxbAnnotatedObject)
+                    .orElseFail();
         }
 
     },
@@ -63,11 +60,9 @@ public enum SerializationStrategy {
                     .enable(SerializationFeature.INDENT_OUTPUT)
                     .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
                     .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-            try {
-                return _Json.toString(objectMapper, jaxbAnnotatedObject);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+            
+            return _Json.toString(objectMapper, jaxbAnnotatedObject)
+                    .orElseFail();
         }
 
     },

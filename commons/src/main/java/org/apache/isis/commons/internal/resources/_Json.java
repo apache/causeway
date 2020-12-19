@@ -48,7 +48,7 @@ public class _Json {
 
     // -- STREAM CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, InputStream content) 
+    private static <T> T _readJson(final Class<T> clazz, final InputStream content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
@@ -62,11 +62,11 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> Result<T> readJson(final Class<T> clazz, InputStream content) {
+    public static <T> Result<T> readJson(final Class<T> clazz, final InputStream content) {
         return Result.of(()->_readJson(clazz, content));
     }
 
-    private static <T> List<T> _readJsonList(final Class<T> elementType, InputStream content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final InputStream content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
@@ -82,14 +82,14 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, InputStream content) {
+    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final InputStream content) {
         return Result.of(()->_readJsonList(clazz, content));
     }
 
 
     // -- STRING CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, String content) 
+    private static <T> T _readJson(final Class<T> clazz, final String content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
@@ -103,11 +103,11 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> Result<T> readJson(final Class<T> clazz, String content) {
+    public static <T> Result<T> readJson(final Class<T> clazz, final String content) {
         return Result.of(()->_readJson(clazz, content));
     }
 
-    private static <T> List<T> _readJsonList(final Class<T> elementType, String content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final String content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
@@ -123,14 +123,14 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, String content) {
+    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final String content) {
         return Result.of(()->_readJsonList(clazz, content));
     }
 
 
     // -- FILE CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, File content) 
+    private static <T> T _readJson(final Class<T> clazz, final File content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
@@ -144,7 +144,7 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> Result<T> readJson(final Class<T> clazz, File content) {
+    public static <T> Result<T> readJson(final Class<T> clazz, final File content) {
         return Result.of(()->_readJson(clazz, content));
     }
 
@@ -164,13 +164,13 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, File content) {
+    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final File content) {
         return Result.of(()->_readJsonList(clazz, content));
     }
 
     // -- BYTE CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, byte[] content) 
+    private static <T> T _readJson(final Class<T> clazz, final byte[] content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
@@ -184,11 +184,11 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> Result<T> readJson(final Class<T> clazz, byte[] content) {
+    public static <T> Result<T> readJson(final Class<T> clazz, final byte[] content) {
         return Result.of(()->_readJson(clazz, content));
     }
 
-    private static <T> List<T> _readJsonList(final Class<T> elementType, byte[] content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final byte[] content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
@@ -204,29 +204,28 @@ public class _Json {
      * @param content
      * @return
      */
-    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, byte[] content) {
+    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final byte[] content) {
         return Result.of(()->_readJsonList(clazz, content));
     }
     
     // -- WRITING
 
-    public static String toString(ObjectMapper objectMapper, Object pojo) throws JsonProcessingException {
+    private static String _toString(ObjectMapper objectMapper, Object pojo) throws JsonProcessingException {
         return objectMapper.writeValueAsString(pojo);
     }
     
+    public static Result<String> toString(ObjectMapper objectMapper, Object pojo) {
+        return Result.of(()->_toString(objectMapper, pojo));
+    }
     
-    public static String toString(Object pojo) throws JsonProcessingException {
+    private static String _toString(Object pojo) throws JsonProcessingException {
         val objectMapper = new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT);
-        return toString(objectMapper, pojo);
+        return _toString(objectMapper, pojo);
     }
-    
-    public static <T> Result<String> tryToString(ObjectMapper objectMapper, Object pojo) {
-        return Result.of(()->toString(objectMapper, pojo));
-    }
-    
-    public static <T> Result<String> tryToString(Object pojo) {
-        return Result.of(()->toString(pojo));
+        
+    public static Result<String> toString(Object pojo) {
+        return Result.of(()->_toString(pojo));
     }
 
 }
