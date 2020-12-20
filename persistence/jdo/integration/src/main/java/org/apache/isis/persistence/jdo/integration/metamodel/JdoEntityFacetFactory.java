@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.applib.PersistenceManagerFactoryProvider;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -167,7 +168,8 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
                             .longValueExact();
                 
                 val typedQuery = persistenceManager.newJDOQLTypedQuery(entityClass)
-                        .range(rangeLower, rangeUpper);
+                        //.range(rangeLower, rangeUpper)
+                        ;
                 
                 return _NullSafe.stream(typedQuery.executeList())
                     .map(entity->ManagedObject.of(spec, entity))
@@ -188,7 +190,8 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
                             .longValueExact();
                 
                 val namedQuery = persistenceManager.newJDOQLTypedQuery(entityClass)
-                        .range(rangeLower, rangeUpper);
+                        //.range(rangeLower, rangeUpper)
+                        ;
                 
                 applibNamedQuery
                     .getParametersByName()
@@ -306,7 +309,9 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
         // -- DEPENDENCIES
         
         protected PersistenceManagerFactory getPersistenceManagerFactory() {
-            return serviceRegistry.lookupServiceElseFail(PersistenceManagerFactory.class);
+            return serviceRegistry
+                    .lookupServiceElseFail(PersistenceManagerFactoryProvider.class)
+                    .getPersistenceManagerFactory();
         }
         
         protected PersistenceManager getPersistenceManager() {

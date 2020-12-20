@@ -22,12 +22,15 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+
+import org.apache.isis.persistence.jdo.applib.PersistenceManagerFactoryProvider;
 
 /**
  * Proxy for a target JDO {@link javax.jdo.PersistenceManagerFactory},
@@ -62,7 +65,9 @@ import org.springframework.util.ClassUtils;
  * @see PersistenceManagerFactoryUtils#releasePersistenceManager
  */
 public class TransactionAwarePersistenceManagerFactoryProxy 
-implements FactoryBean<PersistenceManagerFactory> {
+implements 
+    FactoryBean<PersistenceManagerFactory>, 
+    PersistenceManagerFactoryProvider {
 
 	private PersistenceManagerFactory target;
 
@@ -215,5 +220,10 @@ implements FactoryBean<PersistenceManagerFactory> {
 			}
 		}
 	}
+
+    @Override
+    public PersistenceManagerFactory getPersistenceManagerFactory() {
+        return getObject();
+    }
 
 }
