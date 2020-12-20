@@ -16,9 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-/**
- * Package providing integration of JDO (Java Date Objects) with Spring concepts.
- * Contains PersistenceManagerFactory helper classes, a template plus callback for JDO
- * access, and an implementation of Spring's transaction SPI for local JDO transactions.
- */
-package org.apache.isis.persistence.jdo.spring;
+package org.apache.isis.persistence.jdo.applib.services;
+
+import javax.jdo.PersistenceManagerFactory;
+
+public interface JdoSupportService {
+
+    PersistenceManagerFactory getPersistenceManagerFactory();
+    
+}

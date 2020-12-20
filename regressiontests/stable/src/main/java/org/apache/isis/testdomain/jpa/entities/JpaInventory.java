@@ -44,9 +44,8 @@ import lombok.ToString;
 @Entity
 @DomainObject(
         objectType = "testdomain.jdo.Inventory",
-        nature = Nature.JPA_ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
+        nature = Nature.JPA_ENTITY, //TODO[2033] should not be required, when using JPA quick classify SPI
         entityChangePublishing = Publishing.ENABLED)
-@DomainObjectLayout()  // causes UI events to be triggered ???
 @NamedQuery(
         name = "JpaInventory.findAffordableProducts", 
         query = "SELECT p FROM JpaInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")

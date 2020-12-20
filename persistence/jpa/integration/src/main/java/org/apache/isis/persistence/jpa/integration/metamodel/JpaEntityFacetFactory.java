@@ -150,6 +150,10 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         @Override
         public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
             
+            final int start = Math.toIntExact(query.getStart());
+            final int count = Math.toIntExact(
+                    NON_NEGATIVE_INTS.bounded(query.getCount()));
+            
             if(query instanceof AllInstancesQuery) {
 
                 val queryFindAllInstances = (AllInstancesQuery<?>) query;
@@ -169,9 +173,8 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 
                 val typedQuery = entityManager
                         .createQuery(cr)
-                        .setFirstResult(Math.toIntExact(queryFindAllInstances.getStart()))
-                        .setMaxResults(Math.toIntExact(
-                                NON_NEGATIVE_INTS.bounded(queryFindAllInstances.getCount())));
+                        .setFirstResult(start)
+                        .setMaxResults(count);
                 
                 return Can.ofStream(
                     typedQuery.getResultStream()
@@ -186,9 +189,8 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 
                 val namedQuery = entityManager
                         .createNamedQuery(applibNamedQuery.getName(), queryResultType)
-                        .setFirstResult(Math.toIntExact(applibNamedQuery.getStart()))
-                        .setMaxResults(Math.toIntExact(
-                                NON_NEGATIVE_INTS.bounded(applibNamedQuery.getCount())));
+                        .setFirstResult(start)
+                        .setMaxResults(count);
                 
                 applibNamedQuery
                     .getParametersByName()

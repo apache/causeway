@@ -30,8 +30,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
 
-import org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils;
-import org.apache.isis.persistence.jdo.spring.PersistenceManagerHolder;
+import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
+import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerHolder;
 
 /**
  * Spring web request interceptor that binds a JDO PersistenceManager to the
@@ -41,7 +41,7 @@ import org.apache.isis.persistence.jdo.spring.PersistenceManagerHolder;
  *
  * <p>This interceptor makes JDO PersistenceManagers available via the current thread,
  * which will be autodetected by transaction managers. It is suitable for service
- * layer transactions via {@link org.apache.isis.persistence.jdo.spring.JdoTransactionManager}
+ * layer transactions via {@link org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager}
  * or {@link org.springframework.transaction.jta.JtaTransactionManager} as well
  * as for non-transactional read-only execution.
  *
@@ -50,8 +50,8 @@ import org.apache.isis.persistence.jdo.spring.PersistenceManagerHolder;
  * bean wiring.
  *
  * @see OpenPersistenceManagerInViewFilter
- * @see org.apache.isis.persistence.jdo.spring.JdoTransactionManager
- * @see org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils#getPersistenceManager
+ * @see org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager
+ * @see org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils#getPersistenceManager
  * @see org.springframework.transaction.support.TransactionSynchronizationManager
  */
 public class OpenPersistenceManagerInViewInterceptor implements WebRequestInterceptor {

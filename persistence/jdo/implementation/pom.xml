@@ -19,16 +19,16 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-persistence-jdo-spring</artifactId>
+	<artifactId>isis-persistence-jdo-implementation</artifactId>
 
-	<name>Apache Isis Persistence - JDO (Spring)</name>
+	<name>Apache Isis Persistence - JDO (implementation)</name>
 	<description>
-		JDO Spring integration. (EXPERIMENTAL)
+        JDO Implementation (powered by DataNucleus)
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.spring</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo/spring</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.implementation</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo/implementation</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -68,38 +68,44 @@
 
 	<dependencies>
 
-		<!-- ISIS -->
-
-		<dependency>
-			<groupId>org.apache.isis.commons</groupId>
-			<artifactId>isis-commons</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-applib</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jdo-applib</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-implementation</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
-		<!-- SPRING -->
-		
 		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-jdbc</artifactId>
-		    <scope>provided</scope>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-core</artifactId>
 		</dependency>
-		
 		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-web</artifactId>
-		    <scope>provided</scope>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-api-jdo</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-jdo-query</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-rdbms</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-jodatime</artifactId>
+		</dependency>
+
+		<!-- TESTING -->
+		
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 	</dependencies>
 

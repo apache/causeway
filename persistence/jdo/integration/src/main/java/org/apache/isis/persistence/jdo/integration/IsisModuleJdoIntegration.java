@@ -54,4 +54,8 @@ import org.apache.isis.persistence.jdo.integration.metamodel.JdoProgrammingModel
 //    Persistable_downloadJdoMetadata.class,
 })
 public class IsisModuleJdoIntegration {
+    
+    
+    
+    
 }

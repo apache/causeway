@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -52,10 +53,11 @@ import lombok.ToString;
 @DomainObject(
         objectType = "testdomain.jdo.Product"
         )
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED) 
 @ToString
-public class JdoProduct {
+public class JdoProduct implements Comparable<JdoProduct> {
 
     public String title() {
         return toString();
@@ -84,5 +86,10 @@ public class JdoProduct {
     @Persistent(mappedBy="product") @Column(allowsNull = "true") 
     @Getter @Setter 
     private List<JdoProductComment> comments;
+
+    @Override
+    public int compareTo(JdoProduct other) {
+        return _Strings.compareNullsFirst(this.getName(), other==null ? null : other.getName());
+    }
 
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.spring;
+package org.apache.isis.persistence.jdo.spring.integration;
 
 import java.sql.Connection;
 import java.sql.SQLException;

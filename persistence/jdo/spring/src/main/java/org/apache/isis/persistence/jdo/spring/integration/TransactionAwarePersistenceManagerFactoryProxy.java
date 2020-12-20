@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.spring;
+package org.apache.isis.persistence.jdo.spring.integration;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +30,7 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import org.apache.isis.persistence.jdo.applib.PersistenceManagerFactoryProvider;
+import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 
 /**
  * Proxy for a target JDO {@link javax.jdo.PersistenceManagerFactory},
@@ -67,7 +67,7 @@ import org.apache.isis.persistence.jdo.applib.PersistenceManagerFactoryProvider;
 public class TransactionAwarePersistenceManagerFactoryProxy 
 implements 
     FactoryBean<PersistenceManagerFactory>, 
-    PersistenceManagerFactoryProvider {
+    JdoSupportService {
 
 	private PersistenceManagerFactory target;
 
@@ -80,7 +80,7 @@ implements
 	 * Set the target JDO PersistenceManagerFactory that this proxy should
 	 * delegate to. This should be the raw PersistenceManagerFactory, as
 	 * accessed by JdoTransactionManager.
-	 * @see org.apache.isis.persistence.jdo.spring.JdoTransactionManager
+	 * @see org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager
 	 */
 	public void setTargetPersistenceManagerFactory(PersistenceManagerFactory target) {
 		Assert.notNull(target, "Target PersistenceManagerFactory must not be null");
@@ -221,6 +221,8 @@ implements
 		}
 	}
 
+	// -- JDO SUPPORT SERVICE
+	
     @Override
     public PersistenceManagerFactory getPersistenceManagerFactory() {
         return getObject();

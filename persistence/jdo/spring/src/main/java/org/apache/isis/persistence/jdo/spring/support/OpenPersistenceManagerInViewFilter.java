@@ -31,8 +31,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils;
-import org.apache.isis.persistence.jdo.spring.PersistenceManagerHolder;
+import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
+import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerHolder;
 
 /**
  * Servlet Filter that binds a JDO PersistenceManager to the thread for the
@@ -42,7 +42,7 @@ import org.apache.isis.persistence.jdo.spring.PersistenceManagerHolder;
  *
  * <p>This filter makes JDO PersistenceManagers available via the current thread,
  * which will be autodetected by transaction managers. It is suitable for service
- * layer transactions via {@link org.apache.isis.persistence.jdo.spring.JdoTransactionManager}
+ * layer transactions via {@link org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager}
  * or {@link org.springframework.transaction.jta.JtaTransactionManager} as well
  * as for non-transactional read-only execution.
  *
@@ -51,8 +51,8 @@ import org.apache.isis.persistence.jdo.spring.PersistenceManagerHolder;
  * the default bean name is "persistenceManagerFactory".
  *
  * @see OpenPersistenceManagerInViewInterceptor
- * @see org.apache.isis.persistence.jdo.spring.JdoTransactionManager
- * @see org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils#getPersistenceManager
+ * @see org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager
+ * @see org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils#getPersistenceManager
  * @see org.springframework.transaction.support.TransactionSynchronizationManager
  */
 public class OpenPersistenceManagerInViewFilter extends OncePerRequestFilter {

@@ -79,15 +79,12 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
     }
 
     void cleanUp() {
-
         repository.allInstances(JdoInventory.class).forEach(repository::remove);
         repository.allInstances(JdoBook.class).forEach(repository::remove);
         repository.allInstances(JdoProduct.class).forEach(repository::remove);
-        System.out.println("!!! CLEANUP DONE");
     }
 
     void setUp() {
-
         // setup sample Inventory
         Set<JdoProduct> products = new HashSet<>();
 
@@ -96,8 +93,6 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
 
         val inventory = JdoInventory.of("Sample Inventory", products);
         repository.persist(inventory);
-
-        System.out.println("!!! SETUP DONE");
     }
 
     @Test @Order(0) 

@@ -70,13 +70,10 @@ class JdoIsisBootstrappingTest extends IsisIntegrationTestAbstract {
     static void afterAll() throws SQLException {
     }
 
-
     void cleanUp() {
-
         repository.allInstances(JdoInventory.class).forEach(repository::remove);
         repository.allInstances(JdoBook.class).forEach(repository::remove);
         repository.allInstances(JdoProduct.class).forEach(repository::remove);
-        System.out.println("!!! CLEANUP DONE");
     }
 
     void setUp() {
@@ -89,8 +86,6 @@ class JdoIsisBootstrappingTest extends IsisIntegrationTestAbstract {
 
         val inventory = JdoInventory.of("Sample Inventory", products);
         repository.persist(inventory);
-
-        System.out.println("!!! SETUP DONE");
     }
 
     @Test @Order(1) @Rollback(false) 
@@ -100,7 +95,6 @@ class JdoIsisBootstrappingTest extends IsisIntegrationTestAbstract {
 
         cleanUp();
         assertEquals(0, repository.allInstances(JdoInventory.class).size());
-        System.out.println("!!! VERIFY CLEANUP DONE");
 
         // when
 

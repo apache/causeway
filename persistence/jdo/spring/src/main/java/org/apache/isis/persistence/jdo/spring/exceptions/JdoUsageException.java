@@ -23,7 +23,7 @@ import javax.jdo.JDOUserException;
 
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-import org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils;
+import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 
 /**
  * JDO-specific subclass of InvalidDataAccessApiUsageException.

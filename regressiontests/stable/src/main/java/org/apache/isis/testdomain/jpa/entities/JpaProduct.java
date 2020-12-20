@@ -55,7 +55,7 @@ import lombok.ToString;
         discriminatorType = DiscriminatorType.STRING)
 @DomainObject(
         objectType = "testdomain.jpa.Product",
-        nature = Nature.JPA_ENTITY //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
+        nature = Nature.JPA_ENTITY //TODO[2033] should not be required, when using JPA quick classify SPI
         )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED) 

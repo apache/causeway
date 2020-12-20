@@ -32,9 +32,14 @@
 
 	<modules>
 		<module>applib</module>
-		<module>datanucleus-5</module>
+		
 		<module>integration</module>
+		<module>implementation</module>
 		<module>spring</module>
+
+		<!-- original implementation -->		
+		<module>datanucleus-5</module>
+		
 	</modules>
 
 </project>

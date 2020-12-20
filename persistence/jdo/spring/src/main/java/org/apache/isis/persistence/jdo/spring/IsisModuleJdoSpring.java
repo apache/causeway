@@ -27,6 +27,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
+import org.apache.isis.persistence.jdo.implementation.config.JdoPmfUtil;
+import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
+import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
+
 import lombok.val;
 
 @Configuration
@@ -47,10 +52,16 @@ public class IsisModuleJdoSpring {
      */
     @Bean @Named("transaction-aware-pmf-proxy")
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
-            final LocalPersistenceManagerFactoryBean lpmfBean) {
+            final LocalPersistenceManagerFactoryBean lpmfBean,
+            final IsisBeanTypeRegistry beanTypeRegistry,
+            final @Named("dn-settings") Map<String, String> dnSettings) {
+        
+        val pmf = lpmfBean.getObject();
+        
+        JdoPmfUtil.createSchema(pmf, beanTypeRegistry.getEntityTypesJdo(), dnSettings);
         
         val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
-        tapmfProxy.setTargetPersistenceManagerFactory(lpmfBean.getObject());
+        tapmfProxy.setTargetPersistenceManagerFactory(pmf);
         tapmfProxy.setAllowCreate(false);
         return tapmfProxy;
     }
@@ -66,6 +77,6 @@ public class IsisModuleJdoSpring {
         lpmfBean.setJdoPropertyMap(jdoPropertyMap);
         return lpmfBean; 
     }
-    
+
     
 }

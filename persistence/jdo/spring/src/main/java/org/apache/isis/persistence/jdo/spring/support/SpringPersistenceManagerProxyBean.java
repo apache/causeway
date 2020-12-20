@@ -31,9 +31,9 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import org.apache.isis.persistence.jdo.spring.DefaultJdoDialect;
-import org.apache.isis.persistence.jdo.spring.JdoDialect;
-import org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils;
+import org.apache.isis.persistence.jdo.spring.integration.DefaultJdoDialect;
+import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
+import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 
 /**
  * Proxy that implements the {@link javax.jdo.PersistenceManager} interface,
@@ -55,8 +55,8 @@ import org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils;
  *
  * @see StandardPersistenceManagerProxyBean
  * @see javax.jdo.PersistenceManagerFactory#getPersistenceManagerProxy()
- * @see org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils#getPersistenceManager
- * @see org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils#releasePersistenceManager
+ * @see org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils#getPersistenceManager
+ * @see org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils#releasePersistenceManager
  */
 public class SpringPersistenceManagerProxyBean implements FactoryBean<PersistenceManager>, InitializingBean {
 
@@ -128,7 +128,7 @@ public class SpringPersistenceManagerProxyBean implements FactoryBean<Persistenc
 	 * written to get a PersistenceManager without explicit closing
 	 * (i.e. a {@code PersistenceManagerFactory.getPersistenceManager()}
 	 * call without corresponding {@code PersistenceManager.close()} call).
-	 * @see org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils#getPersistenceManager(javax.jdo.PersistenceManagerFactory, boolean)
+	 * @see org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils#getPersistenceManager(javax.jdo.PersistenceManagerFactory, boolean)
 	 */
 	public void setAllowCreate(boolean allowCreate) {
 		this.allowCreate = allowCreate;

@@ -22,7 +22,7 @@ import javax.jdo.JDOException;
 
 import org.springframework.dao.UncategorizedDataAccessException;
 
-import org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils;
+import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 
 /**
  * JDO-specific subclass of UncategorizedDataAccessException,

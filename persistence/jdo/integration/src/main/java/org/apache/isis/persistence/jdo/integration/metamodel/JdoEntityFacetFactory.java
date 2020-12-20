@@ -39,9 +39,11 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.commons.internal.primitives._Longs;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -50,7 +52,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.applib.PersistenceManagerFactoryProvider;
+import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -83,6 +85,8 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
     public static class JdoEntityFacet
     extends FacetAbstract
     implements EntityFacet {
+        
+        private final static _Longs.Range NON_NEGATIVE_INTS = _Longs.rangeClosed(0L, Integer.MAX_VALUE);
 
         private final Class<?> entityClass;
         private final ServiceRegistry serviceRegistry;
@@ -148,6 +152,14 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
         @Override
         public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
             
+            final long rangeLower = query.getStart();
+            final long rangeUpper = query.getCount() == Query.UNLIMITED_COUNT
+                    ? (long) Integer.MAX_VALUE
+                    : (long) NON_NEGATIVE_INTS.bounded(
+                        BigInteger.valueOf(query.getStart())
+                        .add(BigInteger.valueOf(query.getCount()))
+                        .longValueExact());
+            
             if(query instanceof AllInstancesQuery) {
 
                 val queryFindAllInstances = (AllInstancesQuery<?>) query;
@@ -160,16 +172,8 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
 
                 val persistenceManager = getPersistenceManager();
                 
-                final long rangeLower = queryFindAllInstances.getStart();
-                final long rangeUpper = queryFindAllInstances.getCount() == Query.UNLIMITED_COUNT
-                        ? Long.MAX_VALUE
-                        : BigInteger.valueOf(queryFindAllInstances.getStart())
-                            .add(BigInteger.valueOf(queryFindAllInstances.getCount()))
-                            .longValueExact();
-                
                 val typedQuery = persistenceManager.newJDOQLTypedQuery(entityClass)
-                        //.range(rangeLower, rangeUpper)
-                        ;
+                        .range(rangeLower, rangeUpper);
                 
                 return _NullSafe.stream(typedQuery.executeList())
                     .map(entity->ManagedObject.of(spec, entity))
@@ -182,21 +186,14 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
                 
                 val persistenceManager = getPersistenceManager();
                 
-                final long rangeLower = applibNamedQuery.getStart();
-                final long rangeUpper = applibNamedQuery.getCount() == Query.UNLIMITED_COUNT
-                        ? Long.MAX_VALUE
-                        : BigInteger.valueOf(applibNamedQuery.getStart())
-                            .add(BigInteger.valueOf(applibNamedQuery.getCount()))
-                            .longValueExact();
-                
-                val namedQuery = persistenceManager.newJDOQLTypedQuery(entityClass)
-                        //.range(rangeLower, rangeUpper)
-                        ;
+                val namedParams = _Maps.<String, Object>newHashMap();
+                val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
+                        .setNamedParameters(namedParams)
+                        .range(rangeLower, rangeUpper);
                 
                 applibNamedQuery
                     .getParametersByName()
-                    .forEach((paramName, paramValue)->
-                        namedQuery.setParameter(paramName, paramValue));
+                    .forEach(namedParams::put);
 
                 return _NullSafe.stream(namedQuery.executeList())
                         .map(entity->ManagedObject.of(spec, entity))
@@ -302,7 +299,7 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
         }
         
         protected JdoObjectIdSerializer<Object> createObjectIdSerializer() {
-            val primaryKeyType = getPersistenceManager().getObjectIdClass(entityClass);
+            final Class<?> primaryKeyType = getPersistenceManager().getObjectIdClass(entityClass);
             return _Casts.uncheckedCast(createJdoObjectIdSerializer(primaryKeyType, serviceRegistry));
         }
         
@@ -310,7 +307,7 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
         
         protected PersistenceManagerFactory getPersistenceManagerFactory() {
             return serviceRegistry
-                    .lookupServiceElseFail(PersistenceManagerFactoryProvider.class)
+                    .lookupServiceElseFail(JdoSupportService.class)
                     .getPersistenceManagerFactory();
         }
         

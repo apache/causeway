@@ -21,9 +21,8 @@ package org.apache.isis.testdomain.jdo.entities;
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Discriminator;
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Query;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
@@ -40,11 +39,23 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @PersistenceCapable
-@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
+//@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
 @Discriminator(value="Book")
 @DomainObject(
         objectType = "testdomain.jdo.Book",
         entityChangePublishing = Publishing.ENABLED)
+
+//@NamedQuery(
+//name = "JdoInventory.findAffordableProducts", 
+//query = "SELECT p FROM JdoInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")
+@Query(
+      name = "findAffordableBooks",
+      language = "JDOQL",
+      value = "SELECT "
+              + "FROM org.apache.isis.testdomain.jdo.entities.JdoBook "
+              + "WHERE price <= :priceUpperBound")
+
+
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
 @Log4j2

@@ -130,7 +130,6 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
     @Test @Order(1) @Rollback(false) 
     void sampleInventoryShouldBeSetUp() {
 
-
         // given - expected pre condition: no inventories
 
         cleanUp();

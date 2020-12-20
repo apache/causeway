@@ -29,7 +29,6 @@ import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
@@ -45,7 +44,7 @@ import lombok.ToString;
 @DomainObject(
         objectType = "testdomain.jdo.Inventory",
         entityChangePublishing = Publishing.ENABLED)
-@DomainObjectLayout()  // causes UI events to be triggered
+
 @NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString
 public class JdoInventory {
 

@@ -47,7 +47,7 @@ public class StandardPersistenceManagerProxyBean implements FactoryBean<Persiste
 	 * Set the target JDO PersistenceManagerFactory that this proxy should
 	 * delegate to. This should be the raw PersistenceManagerFactory, as
 	 * accessed by JdoTransactionManager.
-	 * @see org.apache.isis.persistence.jdo.spring.JdoTransactionManager
+	 * @see org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager
 	 */
 	public void setPersistenceManagerFactory(PersistenceManagerFactory pmf) {
 		Assert.notNull(pmf, "PersistenceManagerFactory must not be null");

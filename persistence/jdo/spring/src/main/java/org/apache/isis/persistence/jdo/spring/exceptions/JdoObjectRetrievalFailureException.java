@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.spring.exceptions;
 import javax.jdo.JDOHelper;
 import javax.jdo.JDOObjectNotFoundException;
 
-import org.apache.isis.persistence.jdo.spring.PersistenceManagerFactoryUtils;
+import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 
 /**
  * JDO-specific subclass of ObjectRetrievalFailureException.
