@@ -68,7 +68,7 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
      * @throws Exception
      */
     @Disabled("TODO - reinstate")
-    @Test
+    //@Test
     public void export_then_import() throws Exception {
 
         // given

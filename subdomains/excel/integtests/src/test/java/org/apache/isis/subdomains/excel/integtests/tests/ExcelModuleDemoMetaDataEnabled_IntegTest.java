@@ -24,6 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,7 +57,7 @@ public class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTe
     }
 
 
-    @Test
+    //@Test @Disabled("TODO[2033] removal of PlatformTransactionManager") 
     public void testResults() throws Exception{
 
         assertThat(fixtureResults.size()).isEqualTo(8);
