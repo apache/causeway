@@ -18,38 +18,19 @@
  */
 package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
-import java.lang.reflect.Method;
-import java.math.BigInteger;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
+import javax.inject.Inject;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.query.AllInstancesQuery;
-import org.apache.isis.applib.query.NamedQuery;
-import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.commons.internal.primitives._Longs;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
@@ -59,6 +40,9 @@ import lombok.val;
 
 public class JdoEntityFacetFactory extends FacetFactoryAbstract {
 
+    @Inject private JdoFacetContext jdoFacetContext;
+    @Inject private JdoSupportService jdoSupportService;
+    
     public JdoEntityFacetFactory() {
         super(ImmutableEnumSet.of(FeatureType.OBJECT));
     }
@@ -73,247 +57,19 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
         }
         
         val facetHolder = processClassContext.getFacetHolder();
-        val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
-        val jdoEntityFacet = new JdoEntityFacet(facetHolder, cls, serviceRegistry);
+        val mmc = facetHolder.getMetaModelContext();
+        val jdoEntityFacet = new JdoEntityFacet(facetHolder, cls, 
+                mmc, jdoFacetContext, jdoSupportService);
             
         addFacet(jdoEntityFacet);
     }
     
-    // -- 
-    
-    public static class JdoEntityFacet
-    extends FacetAbstract
-    implements EntityFacet {
-        
-        private final static _Longs.Range NON_NEGATIVE_INTS = _Longs.rangeClosed(0L, Integer.MAX_VALUE);
-
-        private final Class<?> entityClass;
-        private final ServiceRegistry serviceRegistry;
-        
-        protected JdoEntityFacet(
-                final FacetHolder holder,
-                final Class<?> entityClass, 
-                final @NonNull ServiceRegistry serviceRegistry) {
-            
-            super(EntityFacet.class, holder);
-            this.entityClass = entityClass;
-            this.serviceRegistry = serviceRegistry;
-        }
-        
-        @Override public boolean isDerived() { return false;}
-        @Override public boolean isFallback() { return false;}
-        @Override public boolean alwaysReplace() { return true;}
-        
-        // -- ENTITY FACET 
-
-        @Override
-        public String identifierFor(ObjectSpecification spec, Object pojo) {
-
-            if(pojo==null) {
-                throw _Exceptions.illegalArgument(
-                        "The persistence layer cannot identify a pojo that is null (given type %s)",
-                        spec.getCorrespondingClass().getName());
-            }
-            
-            if(!spec.isEntity()) {
-                throw _Exceptions.illegalArgument(
-                        "The persistence layer does not recognize given type %s",
-                        pojo.getClass().getName());
-            }
-
-            val persistenceManager = getPersistenceManager();
-            val primaryKey = persistenceManager.getObjectId(pojo);
-            
-            if(primaryKey==null) {
-                throw _Exceptions.illegalArgument(
-                        "The persistence layer does not recognize given object of type %s, "
-                        + "meaning the object has no identifier that associates it with the persistence layer. "
-                        + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)", 
-                        pojo.getClass().getName());
-            }
-            
-            return getObjectIdSerializer().stringify(primaryKey);
-
-        }
-
-        @Override
-        public ManagedObject fetchByIdentifier(
-                final @NonNull ObjectSpecification entitySpec, 
-                final @NonNull String identifier) {
-            
-            val primaryKey = getObjectIdSerializer().parse(identifier);
-            val persistenceManager = getPersistenceManager();
-            val entity = persistenceManager.getObjectById(entityClass, primaryKey); 
-            
-            return ManagedObject.of(entitySpec, entity);
-        }
-
-        @Override
-        public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
-            
-            final long rangeLower = query.getStart();
-            final long rangeUpper = query.getCount() == Query.UNLIMITED_COUNT
-                    ? (long) Integer.MAX_VALUE
-                    : (long) NON_NEGATIVE_INTS.bounded(
-                        BigInteger.valueOf(query.getStart())
-                        .add(BigInteger.valueOf(query.getCount()))
-                        .longValueExact());
-            
-            if(query instanceof AllInstancesQuery) {
-
-                val queryFindAllInstances = (AllInstancesQuery<?>) query;
-                val queryEntityType = queryFindAllInstances.getResultType();
-                
-                // guard against misuse
-                if(!entityClass.isAssignableFrom(queryEntityType)) {
-                    throw _Exceptions.unexpectedCodeReach();
-                }
-
-                val persistenceManager = getPersistenceManager();
-                
-                val typedQuery = persistenceManager.newJDOQLTypedQuery(entityClass)
-                        .range(rangeLower, rangeUpper);
-                
-                return _NullSafe.stream(typedQuery.executeList())
-                    .map(entity->ManagedObject.of(spec, entity))
-                    .collect(Can.toCan());
-                
-            } else if(query instanceof NamedQuery) {
-                
-                val applibNamedQuery = (NamedQuery<?>) query;
-                val queryResultType = applibNamedQuery.getResultType();
-                
-                val persistenceManager = getPersistenceManager();
-                
-                val namedParams = _Maps.<String, Object>newHashMap();
-                val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
-                        .setNamedParameters(namedParams)
-                        .range(rangeLower, rangeUpper);
-                
-                applibNamedQuery
-                    .getParametersByName()
-                    .forEach(namedParams::put);
-
-                return _NullSafe.stream(namedQuery.executeList())
-                        .map(entity->ManagedObject.of(spec, entity))
-                        .collect(Can.toCan());
-                
-            }
-            
-            throw _Exceptions.unsupportedOperation(
-                    "Support for Query of type %s not implemented.", query.getClass());
-        }
-
-        @Override
-        public void persist(ObjectSpecification spec, Object pojo) {
-            if(pojo==null) {
-                return; // nothing to do
-            }
-            
-            // guard against misuse
-            if(!entityClass.isAssignableFrom(pojo.getClass())) {
-                throw _Exceptions.unexpectedCodeReach();
-            }
-            
-            val persistenceManager = getPersistenceManager();
-            persistenceManager.makePersistent(pojo);
-        }
-
-        @Override
-        public void refresh(Object pojo) {
-            if(pojo==null) {
-                return; // nothing to do
-            }
-            
-            // guard against misuse
-            if(!entityClass.isAssignableFrom(pojo.getClass())) {
-                throw _Exceptions.unexpectedCodeReach();
-            }
-            
-            val persistenceManager = getPersistenceManager();
-            persistenceManager.refresh(pojo);
-        }
-
-        @Override
-        public void delete(ObjectSpecification spec, Object pojo) {
-            
-            if(pojo==null) {
-                return; // nothing to do
-            }
-            
-            // guard against misuse
-            if(!entityClass.isAssignableFrom(pojo.getClass())) {
-                throw _Exceptions.unexpectedCodeReach();
-            }
-            
-            val persistenceManager = getPersistenceManager();
-            persistenceManager.deletePersistent(pojo);
-        }
-
-        @Override
-        public EntityState getEntityState(Object pojo) {
-            
-            if(pojo==null) {
-                return EntityState.NOT_PERSISTABLE;
-            }
-            
-            // guard against misuse
-            if(!entityClass.isAssignableFrom(pojo.getClass())) {
-                //throw _Exceptions.unexpectedCodeReach();
-                return EntityState.NOT_PERSISTABLE;
-            }
-            
-            return getJdoEntityStateProvider().getEntityState(pojo);
-        }
-
-        @Override
-        public boolean isProxyEnhancement(Method method) {
-            return false;
-        }
-
-        @Override
-        public <T> T detach(T pojo) {
-            val persistenceManager = getPersistenceManager();
-            return persistenceManager.detachCopy(pojo);
-        }
-        
-        // -- OBJECT ID SERIALIZATION
-        
-        private final _Lazy<JdoObjectIdSerializer<Object>> objectIdSerializerRef = _Lazy.threadSafe(this::createObjectIdSerializer);
-        
-        protected JdoObjectIdSerializer<Object> getObjectIdSerializer() {
-            return objectIdSerializerRef.get();
-        }
-        
-        protected JdoObjectIdSerializer<Object> createObjectIdSerializer() {
-            final Class<?> primaryKeyType = getPersistenceManager().getObjectIdClass(entityClass);
-            return _Casts.uncheckedCast(createJdoObjectIdSerializer(primaryKeyType, serviceRegistry));
-        }
-        
-        // -- DEPENDENCIES
-        
-        protected JdoFacetContext getJdoEntityStateProvider() {
-            return serviceRegistry
-                    .lookupServiceElseFail(JdoFacetContext.class);
-        }
-        
-        protected PersistenceManager getPersistenceManager() {
-            return getPersistenceManagerFactory().getPersistenceManager();
-        }
-        
-        protected PersistenceManagerFactory getPersistenceManagerFactory() {
-            return serviceRegistry
-                    .lookupServiceElseFail(JdoSupportService.class)
-                    .getPersistenceManagerFactory();
-        }
-        
-    }
     
     // -- HELPER - OBJECT ID SERIALIZATION
     
 
     @SuppressWarnings("rawtypes")
-    private static JdoObjectIdSerializer createJdoObjectIdSerializer(
+    static JdoObjectIdSerializer createJdoObjectIdSerializer(
             final @NonNull Class<?> primaryKeyType,
             final @NonNull ServiceRegistry serviceRegistry) {
         
@@ -345,7 +101,7 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
     
     
     @RequiredArgsConstructor
-    private static abstract class JdoObjectIdSerializer<T> {
+    static abstract class JdoObjectIdSerializer<T> {
         @SuppressWarnings("unused")
         final Class<T> primaryKeyType;
         abstract String stringify(T id);
