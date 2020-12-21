@@ -69,6 +69,12 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtimeservices</artifactId>
         </dependency>
+        
+        <!-- PERSISTENCE -->
+        <dependency>
+            <groupId>org.apache.isis.legacy</groupId>
+            <artifactId>isis-legacy-jdo-datanucleus</artifactId>
+        </dependency>
 
     </dependencies>
 

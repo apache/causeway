@@ -26,6 +26,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDataNucleus;
 import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.persistence.jdo.spring.IsisModuleJdoSpring;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
@@ -41,6 +42,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     IsisModuleSecurityBypass.class,
     IsisModuleJdoIntegration.class,
     IsisModuleJdoSpring.class,
+    IsisModuleJdoProviderDataNucleus.class,
     IsisModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })

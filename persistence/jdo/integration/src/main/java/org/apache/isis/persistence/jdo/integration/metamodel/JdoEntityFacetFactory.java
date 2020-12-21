@@ -25,8 +25,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.datanucleus.enhancement.Persistable;
-
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
@@ -52,7 +50,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
+import org.apache.isis.persistence.jdo.provider.entities.JdoEntityStateProvider;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -264,19 +263,7 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
                 return EntityState.NOT_PERSISTABLE;
             }
             
-            if (pojo!=null && pojo instanceof Persistable) {
-                val persistable = (Persistable) pojo;
-                val isDeleted = persistable.dnIsDeleted();
-                if(isDeleted) {
-                    return EntityState.PERSISTABLE_DESTROYED;
-                }
-                val isPersistent = persistable.dnIsPersistent();
-                if(isPersistent) {
-                    return EntityState.PERSISTABLE_ATTACHED;
-                }
-                return EntityState.PERSISTABLE_DETACHED;
-            }
-            return EntityState.NOT_PERSISTABLE;
+            return getJdoEntityStateProvider().getEntityState(pojo);
         }
 
         @Override
@@ -305,14 +292,19 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
         
         // -- DEPENDENCIES
         
-        protected PersistenceManagerFactory getPersistenceManagerFactory() {
+        protected JdoEntityStateProvider getJdoEntityStateProvider() {
             return serviceRegistry
-                    .lookupServiceElseFail(JdoSupportService.class)
-                    .getPersistenceManagerFactory();
+                    .lookupServiceElseFail(JdoEntityStateProvider.class);
         }
         
         protected PersistenceManager getPersistenceManager() {
             return getPersistenceManagerFactory().getPersistenceManager();
+        }
+        
+        protected PersistenceManagerFactory getPersistenceManagerFactory() {
+            return serviceRegistry
+                    .lookupServiceElseFail(JdoSupportService.class)
+                    .getPersistenceManagerFactory();
         }
         
     }

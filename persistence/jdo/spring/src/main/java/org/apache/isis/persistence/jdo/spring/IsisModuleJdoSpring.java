@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.spring;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Named;
@@ -27,8 +28,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
-import org.apache.isis.persistence.jdo.implementation.config.JdoPmfUtil;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.persistence.jdo.provider.config.JdoEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
@@ -54,11 +56,15 @@ public class IsisModuleJdoSpring {
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
             final LocalPersistenceManagerFactoryBean lpmfBean,
             final IsisBeanTypeRegistry beanTypeRegistry,
-            final @Named("dn-settings") Map<String, String> dnSettings) {
+            final @Named("dn-settings") Map<String, String> dnSettings,
+            final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners) {
         
         val pmf = lpmfBean.getObject();
         
-        JdoPmfUtil.createSchema(pmf, beanTypeRegistry.getEntityTypesJdo(), dnSettings);
+        _NullSafe.stream(jdoEntityDiscoveryListeners)
+        .forEach(listener->{
+            listener.onEntitiesDiscovered(pmf, beanTypeRegistry.getEntityTypesJdo(), dnSettings);    
+        });
         
         val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);

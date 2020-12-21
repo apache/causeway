@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+        <groupId>org.apache.isis.legacy</groupId>
+        <artifactId>isis-legacy</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+	<artifactId>isis-legacy-jdo-datanucleus</artifactId>
+
+	<name>Apache Isis Legacy - JDO (DataNucleus)</name>
+	<description>
+		JDO DataNucleus (legacy) integration.
+    </description>
+
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.legacy.jdo.datanucleus</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/legacy/jdo/datanucleus</git-plugin.propertiesDir>
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<testResources>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+	</build>
+
+	<dependencies>
+
+		<!-- ISIS -->
+
+		<dependency>
+			<groupId>org.apache.isis.commons</groupId>
+			<artifactId>isis-commons</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.legacy</groupId>
+			<artifactId>isis-legacy-jdo-applib</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-applib</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+		</dependency>
+
+
+		<!-- TESTING -->
+		
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+	</dependencies>
+
+
+</project>

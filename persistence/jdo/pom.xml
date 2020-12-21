@@ -34,11 +34,9 @@
 		<module>applib</module>
 		
 		<module>integration</module>
-		<module>implementation</module>
 		<module>spring</module>
-
-		<!-- original implementation -->		
-		<module>datanucleus-5</module>
+		<module>provider</module>
+		<module>datanucleus</module>
 		
 	</modules>
 

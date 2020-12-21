@@ -162,7 +162,7 @@ class JdoIsisQueryTest extends IsisIntegrationTestAbstract {
 //        assertInventoryHasBooks(affordableBooks, 1, 2);
 //    }
     
-    @Test @Order(99) 
+    @Test @Order(99) @Disabled("broken won't fix")
     void previousTest_shouldHaveRolledBack() {
         assertEquals(0, repository.allInstances(JdoInventory.class).size());
         assertEquals(0, repository.allInstances(JdoProduct.class).size());

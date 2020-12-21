@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoSpring;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;

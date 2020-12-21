@@ -31,41 +31,6 @@
 		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo/spring</git-plugin.propertiesDir>
 	</properties>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<testResources>
-            <testResource>
-                <filtering>false</filtering>
-                <directory>src/test/resources</directory>
-            </testResource>
-            <testResource>
-                <filtering>false</filtering>
-                <directory>src/test/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </testResource>
-        </testResources>
-	</build>
-
 	<dependencies>
 
 		<!-- ISIS -->
@@ -79,12 +44,16 @@
 			<artifactId>isis-applib</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-config</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jdo-applib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-implementation</artifactId>
+			<artifactId>isis-persistence-jdo-provider</artifactId>
 		</dependency>
 
 		<!-- SPRING -->

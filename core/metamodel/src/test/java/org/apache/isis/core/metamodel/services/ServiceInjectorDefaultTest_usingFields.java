@@ -39,7 +39,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 
 import lombok.Getter;
@@ -47,7 +46,6 @@ import lombok.Getter;
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
         IsisBeanFactoryPostProcessorForSpring.class,
-        IsisBeanTypeRegistryDefault.class,
         IsisModuleCoreConfig.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,

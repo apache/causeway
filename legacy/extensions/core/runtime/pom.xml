@@ -73,8 +73,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
+			<groupId>org.apache.isis.legacy</groupId>
+			<artifactId>isis-legacy-jdo-datanucleus</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

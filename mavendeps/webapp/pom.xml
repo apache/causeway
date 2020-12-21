@@ -128,7 +128,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
+			<artifactId>isis-persistence-jdo-integration</artifactId>
 		</dependency>
 
 		<dependency>

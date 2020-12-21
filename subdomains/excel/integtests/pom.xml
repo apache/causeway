@@ -71,6 +71,13 @@ under the License.
 
     <dependencies>
 
+		<!-- PERSISTENCE -->
+        <dependency>
+            <groupId>org.apache.isis.legacy</groupId>
+            <artifactId>isis-legacy-jdo-datanucleus</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.subdomains</groupId>
             <artifactId>isis-subdomains-excel-fixtures</artifactId>
@@ -92,7 +99,7 @@ under the License.
 
         <dependency>
             <groupId>org.apache.isis.persistence</groupId>
-            <artifactId>isis-persistence-jdo-datanucleus5</artifactId>
+            <artifactId>isis-persistence-jdo-applib</artifactId>
             <scope>test</scope>
         </dependency>
 

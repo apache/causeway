@@ -30,7 +30,7 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 
 /**
  * Proxy for a target JDO {@link javax.jdo.PersistenceManagerFactory},

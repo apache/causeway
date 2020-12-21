@@ -107,7 +107,11 @@ under the License.
 
         <dependency>
             <groupId>org.apache.isis.persistence</groupId>
-            <artifactId>isis-persistence-jdo-datanucleus5</artifactId>
+            <artifactId>isis-persistence-jdo-applib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.persistence</groupId>
+            <artifactId>isis-persistence-jdo-datanucleus</artifactId>
         </dependency>
 
 

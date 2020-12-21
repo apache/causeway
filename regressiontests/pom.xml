@@ -362,7 +362,15 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jdo-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.legacy</groupId>
+			<artifactId>isis-legacy-jdo-datanucleus</artifactId>
 		</dependency>
 
 		<dependency>
