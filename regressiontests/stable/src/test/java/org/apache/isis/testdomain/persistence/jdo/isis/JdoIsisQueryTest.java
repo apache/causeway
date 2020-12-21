@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo.isis;
+package org.apache.isis.testdomain.persistence.jdo.isis;
 
 import java.sql.SQLException;
 import java.util.Collection;

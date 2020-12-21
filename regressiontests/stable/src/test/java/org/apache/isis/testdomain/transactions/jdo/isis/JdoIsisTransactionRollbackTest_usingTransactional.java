@@ -16,66 +16,70 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.timestamping;
+package org.apache.isis.testdomain.transactions.jdo.isis;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.jdo.entities.JdoProduct;
-import org.apache.isis.testdomain.jdo.entities.JdoProductComment;
+import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import lombok.val;
-
+/**
+ * These tests use the {@code @Transactional} annotation as provided by Spring.
+ * <p> 
+ * We test whether JUnit Tests are automatically rolled back by Spring. 
+ */
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoIsis.class
-        }, 
-        properties = {
-//                "logging.config=log4j2-debug-persistence.xml",
-//                IsisPresets.DebugPersistence,
+                Configuration_usingJdoIsis.class,
         })
 @Transactional
-class TimestampingTest extends IsisIntegrationTestAbstract {
-
+@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class JdoIsisTransactionRollbackTest_usingTransactional extends IsisIntegrationTestAbstract {
+    
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
-
-    @BeforeEach
-    void setUp() {
-
-        // cleanup
+    
+    @Test @Order(1) @Commit
+    void cleanup_justInCase() {
+        // cleanup just in case
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
-        // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
-
-    @Test
-    void updatedByAt_shouldBeFilledInByTheTimestampingService() {
+    
+    @Test @Order(2)
+    void happyCaseTx_shouldCommit() {
         
-        val product = repository.allInstances(JdoProduct.class).listIterator().next();
-        assertNotNull(product);
-
-        val comment = new JdoProductComment();
-        comment.setProduct(product);
-        comment.setComment("Awesome Book!");
-
-        repository.persist(comment);
+        // expected pre condition
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
             
-        assertNotNull(comment.getUpdatedAt());
-        assertNotNull(comment.getUpdatedBy());
+        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
         
+        // expected post condition
+        assertEquals(1, repository.allInstances(JdoBook.class).size());
+        
+    }
+    
+    @Test @Order(3)
+    void previousTest_shouldHaveBeenRolledBack() {
+        
+        // expected condition
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
     }
 
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.transactions;
+package org.apache.isis.testdomain.transactions.jdo.isis;
 
 import javax.inject.Inject;
 
@@ -47,7 +47,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 /**
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
  */
-class TransactionScopeListenerTest {
+class JdoIsisTransactionScopeListenerTest {
     
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;

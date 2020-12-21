@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo.spring;
+package org.apache.isis.testdomain.persistence.jpa;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -41,39 +41,33 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoSpring;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testdomain.jdo.entities.JdoInventory;
-import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
+import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.jpa.entities.JpaInventory;
+import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoSpring.class,
-        })
+                Configuration_usingJpa.class,
+        }
+        )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoSpringQueryTest extends IsisIntegrationTestAbstract {
+class JpaQueryTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
-    @Inject private JdoSupportService jdoSupport;
+    @Inject private JpaSupportService jpaSupport;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
-    }
-    
-    @Test @Order(0) 
-    void firstTest_shouldHaveAnEmptyDB() {
-        assertEquals(0, repository.allInstances(JdoInventory.class).size());
-        assertEquals(0, repository.allInstances(JdoProduct.class).size());
     }
 
     @Test @Order(1) 
@@ -83,7 +77,7 @@ class JdoSpringQueryTest extends IsisIntegrationTestAbstract {
 
         // when
         
-        val inventories = repository.allInstances(JdoInventory.class);
+        val inventories = repository.allInstances(JpaInventory.class);
 
         // then - expected post condition: ONE inventory with 3 books
         
@@ -103,111 +97,100 @@ class JdoSpringQueryTest extends IsisIntegrationTestAbstract {
         setUp3Books();
         
         assertInventoryHasBooks(repository
-                .allMatches(Query.allInstances(JdoBook.class)), 
+                .allMatches(Query.allInstances(JpaBook.class)), 
                 1, 2, 3);
         
         assertInventoryHasBooks(repository
-                .allMatches(Query.allInstances(JdoBook.class)
+                .allMatches(Query.allInstances(JpaBook.class)
                         .withCount(2)), 
                 1, 2);
     }
     
-    @Test @Order(3) //@Disabled("start not supported, should throw unsupported exception maybe?") 
+    @Test @Order(3) @Disabled("start not supported, should throw unsupported exception maybe?") 
     void sampleInventory_shouldSupportQueryStart() {
         
         setUp3Books();
         
         assertInventoryHasBooks(repository
-                .allMatches(Query.allInstances(JdoBook.class)
+                .allMatches(Query.allInstances(JpaBook.class)
                         .withStart(1)), 
                 2, 3);
         
         assertInventoryHasBooks(repository
-                .allMatches(Query.allInstances(JdoBook.class)
+                .allMatches(Query.allInstances(JpaBook.class)
                         .withStart(1)
                         .withCount(1)), 
                 2);
     }
     
     @Test @Order(4)
-    void sampleInventory_shouldSupportNamedQueriesThroughApplib() {
+    void sampleInventory_shouldSupportNamedQueries() {
         
         setUp3Books();
         
-        val query = Query.named(JdoBook.class, "findAffordableBooks")
+        val query = Query.named(JpaBook.class, "JpaInventory.findAffordableProducts")
                 .withParameter("priceUpperBound", 60.);
         
         val affordableBooks = repository.allMatches(query);
         assertInventoryHasBooks(affordableBooks, 1, 2);
     }
     
-    @Test @Order(4)
-    void sampleInventory_shouldSupportNamedQueriesDirectly() {
-        
-        setUp3Books();
-        
-        val namedParams = _Maps.<String, Object>newHashMap();
-        
-        val pm = jdoSupport.getPersistenceManagerFactory().getPersistenceManager();
-        val query = pm.newNamedQuery(JdoBook.class, "findAffordableBooks")
-                .setNamedParameters(namedParams);
-        namedParams.put("priceUpperBound", 60.);
-        
-        val affordableBooks = query.executeList();
-        assertInventoryHasBooks(affordableBooks, 1, 2);
-    }
-    
     @Test @Order(5) 
-    void sampleInventory_shouldSupportJdoQuery() {
+    void sampleInventory_shouldSupportJpaCriteria() {
         
         setUp3Books();
 
-        val pm = jdoSupport.getPersistenceManagerFactory().getPersistenceManager();
-        val query = pm.newQuery(JdoBook.class)
-                .filter("price <= 60.");
+        val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
         
-        val affordableBooks = query.executeList();
+        val cb = em.getCriteriaBuilder();
+        val cr = cb.createQuery(JpaBook.class);
+        val root = cr.from(JpaBook.class);
+        
+        val affordableBooks = em
+                .createQuery(cr.select(root).where(cb.between(root.get("price"), 0., 60. )))
+                .getResultList();
+        
         assertInventoryHasBooks(affordableBooks, 1, 2);
     }
     
-    @Test @Order(99) @Disabled("does not roll back") //FIXME[2033] does not roll back
+    @Test @Order(99) 
     void previousTest_shouldHaveRolledBack() {
-        assertEquals(0, repository.allInstances(JdoInventory.class).size());
-        assertEquals(0, repository.allInstances(JdoProduct.class).size());
+        assertEquals(0, repository.allInstances(JpaInventory.class).size());
+        assertEquals(0, repository.allInstances(JpaProduct.class).size());
     }
     
     // -- HELPER 
     
     private void cleanUp() {
-        repository.allInstances(JdoInventory.class).forEach(repository::remove);
-        repository.allInstances(JdoProduct.class).forEach(repository::remove);
+        repository.allInstances(JpaInventory.class).forEach(repository::remove);
+        repository.allInstances(JpaProduct.class).forEach(repository::remove);
     }
 
     private void setUp3Books() {
 
         cleanUp();
         // given - expected pre condition: no inventories
-        assertEquals(0, repository.allInstances(JdoInventory.class).size());
+        assertEquals(0, repository.allInstances(JpaInventory.class).size());
         
         // setup sample Inventory with 3 Books
-        SortedSet<JdoProduct> products = new TreeSet<>();
+        SortedSet<JpaProduct> products = new TreeSet<>();
 
-        products.add(JdoBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
+        products.add(JpaBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
                 "Sample Publisher"));
 
-        products.add(JdoBook.of("Sample Book-2", "A sample book for testing.", 29., "Sample Author", "ISBN-B",
+        products.add(JpaBook.of("Sample Book-2", "A sample book for testing.", 29., "Sample Author", "ISBN-B",
                 "Sample Publisher"));
         
-        products.add(JdoBook.of("Sample Book-3", "A sample book for testing.", 99., "Sample Author", "ISBN-C",
+        products.add(JpaBook.of("Sample Book-3", "A sample book for testing.", 99., "Sample Author", "ISBN-C",
                 "Sample Publisher"));
         
-        val inventory = JdoInventory.of("Sample Inventory", products);
+        val inventory = new JpaInventory("Sample Inventory", products);
         repository.persistAndFlush(inventory);
     }
     
-    private void assertInventoryHasBooks(Collection<? extends JdoProduct> products, int...expectedBookIndices) {
+    private void assertInventoryHasBooks(Collection<? extends JpaProduct> products, int...expectedBookIndices) {
         val actualBookIndices = products.stream()
-                .map(JdoProduct::getName)
+                .map(JpaProduct::getName)
                 .map(name->name.substring(name.length()-1))
                 .mapToInt(index->_Ints.parseInt(index, 10).orElse(-1))
                 .sorted()

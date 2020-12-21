@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.domainmodel;
+package org.apache.isis.testdomain.domainmodel.jdo.isis;
 
 import javax.inject.Inject;
 
@@ -39,7 +39,8 @@ import org.apache.isis.core.metamodel.facets.members.publish.execution.Execution
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
-import org.apache.isis.testdomain.conf.Configuration_headless;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
@@ -48,7 +49,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_headless.class,
+                Configuration_usingJdoIsis.class,
                 Configuration_usingValidDomain.class,
                 
         }, 
@@ -67,7 +68,7 @@ import lombok.val;
 @DirtiesContext // because of the temporary installed 'good' domain
 //@Transactional
 //@Incubating("might fail when run with surefire")
-class DomainModelTest_usingGoodDomain {
+class DomainModelTest_jdoIsisMixins {
     
     @Inject private MetaModelService metaModelService;
     @Inject private JaxbService jaxbService;
@@ -156,6 +157,16 @@ class DomainModelTest_usingGoodDomain {
         assertNotNull(mx_openRestApi);
         
         assertThrows(Exception.class, ()->holderSpec.getAssociationElseFail("openRestApi")); // should not be picked up as a property
+        
+    }
+    
+    @Test
+    void pluginProvidedMixins_shouldBePickedUp() {
+        
+        val holderSpec = specificationLoader.loadSpecification(JdoProduct.class);
+        
+        val mx_datanucleusIdLong = holderSpec.getAssociationElseFail("datanucleusIdLong"); // plugged in mixin
+        assertNotNull(mx_datanucleusIdLong);
         
     }
     

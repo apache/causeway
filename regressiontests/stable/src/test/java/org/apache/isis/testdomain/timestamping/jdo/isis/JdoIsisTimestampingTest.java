@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo.isis;
+package org.apache.isis.testdomain.timestamping.jdo.isis;
 
 import javax.inject.Inject;
 
@@ -26,13 +26,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.jdo.entities.JdoInventory;
+import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.jdo.entities.JdoProductComment;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
@@ -40,15 +39,14 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                IsisBeanFactoryPostProcessorForSpring.class,
-                Configuration_usingJdoIsis.class, 
+                Configuration_usingJdoIsis.class
         }, 
         properties = {
-                "logging.config=log4j2-debug-persistence.xml",
-                //IsisPresets.DebugPersistence,
+//                "logging.config=log4j2-debug-persistence.xml",
+//                IsisPresets.DebugPersistence,
         })
 @Transactional
-class JdoIsisBootstrappingTest_usingFixtures extends IsisIntegrationTestAbstract {
+class JdoIsisTimestampingTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
@@ -64,19 +62,20 @@ class JdoIsisBootstrappingTest_usingFixtures extends IsisIntegrationTestAbstract
     }
 
     @Test
-    void sampleInventoryShouldBeSetUp() {
+    void updatedByAt_shouldBeFilledInByTheTimestampingService() {
+        
+        val product = repository.allInstances(JdoProduct.class).listIterator().next();
+        assertNotNull(product);
 
-        val inventories = repository.allInstances(JdoInventory.class);
-        assertEquals(1, inventories.size());
+        val comment = new JdoProductComment();
+        comment.setProduct(product);
+        comment.setComment("Awesome Book!");
 
-        val inventory = inventories.get(0);
-        assertNotNull(inventory);
-        assertNotNull(inventory.getProducts());
-        assertEquals(1, inventory.getProducts().size());
-
-        val product = inventory.getProducts().iterator().next();
-        assertEquals("Sample Book", product.getName());
-
+        repository.persist(comment);
+            
+        assertNotNull(comment.getUpdatedAt());
+        assertNotNull(comment.getUpdatedBy());
+        
     }
 
 }

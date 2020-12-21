@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.transactions;
+package org.apache.isis.testdomain.transactions.jdo.isis;
 
 import javax.inject.Inject;
 
@@ -43,7 +43,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
                 Configuration_usingJdoIsis.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-class TransactionRollbackTest extends IsisIntegrationTestAbstract {
+class JdoIsisTransactionRollbackTest extends IsisIntegrationTestAbstract {
     
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;

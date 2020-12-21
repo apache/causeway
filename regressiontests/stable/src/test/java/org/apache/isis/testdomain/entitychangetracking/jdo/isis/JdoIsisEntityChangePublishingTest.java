@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.entitychangetracking;
+package org.apache.isis.testdomain.entitychangetracking.jdo.isis;
 
 import javax.inject.Inject;
 
@@ -59,7 +59,7 @@ import lombok.val;
     IsisPresets.SilenceWicket
     ,IsisPresets.UseLog4j2Test
 })
-class EntityChangePublishingTest extends InteractionTestAbstract {
+class JdoIsisEntityChangePublishingTest extends InteractionTestAbstract {
 
     @Inject protected FixtureScripts fixtureScripts;
 
@@ -74,7 +74,7 @@ class EntityChangePublishingTest extends InteractionTestAbstract {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
         // each test runs in its own interaction context (check)
-        val testRunNr = (long)kvStoreForTesting.incrementCounter(EntityChangePublishingTest.class, "test-run");
+        val testRunNr = (long)kvStoreForTesting.incrementCounter(JdoIsisEntityChangePublishingTest.class, "test-run");
         assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
 
         assertJdoBookCreatePropertyChanges();

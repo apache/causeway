@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo.spring;
+package org.apache.isis.testdomain.persistence.jpa;
 
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -47,21 +47,21 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoSpring;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testdomain.jdo.entities.JdoInventory;
-import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.jpa.entities.JpaInventory;
+import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoSpring.class,
+                Configuration_usingJpa.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
+class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
     @Inject private RepositoryService repository;
@@ -79,27 +79,28 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
     }
 
     void cleanUp() {
-        repository.allInstances(JdoInventory.class).forEach(repository::remove);
-        repository.allInstances(JdoBook.class).forEach(repository::remove);
-        repository.allInstances(JdoProduct.class).forEach(repository::remove);
+        repository.allInstances(JpaInventory.class).forEach(repository::remove);
+        repository.allInstances(JpaBook.class).forEach(repository::remove);
+        repository.allInstances(JpaProduct.class).forEach(repository::remove);
     }
 
     void setUp() {
-        // setup sample Inventory
-        Set<JdoProduct> products = new HashSet<>();
 
-        products.add(JdoBook.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
+        // setup sample Inventory
+        SortedSet<JpaProduct> products = new TreeSet<>();
+
+        products.add(JpaBook.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
                 "Sample Publisher"));
 
-        val inventory = JdoInventory.of("Sample Inventory", products);
-        repository.persist(inventory);
+        val inventory = new JpaInventory("Sample Inventory", products);
+        repository.persistAndFlush(inventory);
     }
 
     @Test @Order(0) 
     void platformTransactionManager_shouldBeAvailable() {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
-            assertEquals("JdbcTransactionManager", ptm.getClass().getSimpleName());
+            assertEquals("JpaTransactionManager", ptm.getClass().getSimpleName());
         });
     }
     
@@ -120,8 +121,8 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
     }
 
     @Test @Order(0) 
-    void jdoEntities_shouldBeRecognisedAsSuch() {
-        val spec = specLoader.loadSpecification(JdoInventory.class);
+    void jpaEntities_shouldBeRecognisedAsSuch() {
+        val spec = specLoader.loadSpecification(JpaProduct.class);
         assertTrue(spec.isEntity());
         assertNotNull(spec.getFacet(EntityFacet.class));
     }
@@ -129,11 +130,10 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
     @Test @Order(1) @Rollback(false) 
     void sampleInventoryShouldBeSetUp() {
 
-
         // given - expected pre condition: no inventories
 
         cleanUp();
-        assertEquals(0, repository.allInstances(JdoInventory.class).size());
+        assertEquals(0, repository.allInstances(JpaInventory.class).size());
 
         // when
 
@@ -141,7 +141,7 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
 
         // then - expected post condition: ONE inventory
 
-        val inventories = repository.allInstances(JdoInventory.class);
+        val inventories = repository.allInstances(JpaInventory.class);
         assertEquals(1, inventories.size());
 
         val inventory = inventories.get(0);
