@@ -16,13 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.provider.entities;
+package org.apache.isis.persistence.jdo.integration.metamodel.facets.prop.notpersistent;
 
-import org.apache.isis.applib.services.repository.EntityState;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-//XXX if there is a way to do this more directly given a PersistenceManager, we can remove this
-public interface JdoEntityStateProvider {
 
-    EntityState getEntityState(Object pojo);
-    
+public abstract class JdoNotPersistentFacetAbstract 
+extends FacetAbstract 
+implements JdoNotPersistentFacet {
+
+    public static Class<? extends Facet> type() {
+        return JdoNotPersistentFacet.class;
+    }
+
+    public JdoNotPersistentFacetAbstract(final FacetHolder holder) {
+        super(JdoNotPersistentFacetAbstract.type(), holder);
+    }
 }

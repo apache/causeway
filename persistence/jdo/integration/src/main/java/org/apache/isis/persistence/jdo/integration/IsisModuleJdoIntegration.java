@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoProgrammingModel;
+import org.apache.isis.persistence.jdo.integration.services.DnJdoSupport;
 
 @Configuration
 @Import({
@@ -34,7 +35,9 @@ import org.apache.isis.persistence.jdo.integration.metamodel.JdoProgrammingModel
     // @Component's
     JdoProgrammingModel.class,
     
-//    // @Service's
+    // @Service's
+    DnJdoSupport.class
+    
 //    DataNucleusSettings.class,
 //    ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
 //    ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.metamodel;
+package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
 import java.math.BigInteger;
@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
-import org.apache.isis.persistence.jdo.provider.entities.JdoEntityStateProvider;
+import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -292,9 +292,9 @@ public class JdoEntityFacetFactory extends FacetFactoryAbstract {
         
         // -- DEPENDENCIES
         
-        protected JdoEntityStateProvider getJdoEntityStateProvider() {
+        protected JdoFacetContext getJdoEntityStateProvider() {
             return serviceRegistry
-                    .lookupServiceElseFail(JdoEntityStateProvider.class);
+                    .lookupServiceElseFail(JdoFacetContext.class);
         }
         
         protected PersistenceManager getPersistenceManager() {

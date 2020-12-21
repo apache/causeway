@@ -18,16 +18,23 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.entities;
 
+import java.lang.reflect.Method;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import org.datanucleus.enhancement.Persistable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.repository.EntityState;
-import org.apache.isis.persistence.jdo.provider.entities.JdoEntityStateProvider;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
 
 @Component
-public class DnEntityStateProvider implements JdoEntityStateProvider {
+public class DnEntityStateProvider implements JdoFacetContext {
 
     @Override
     public EntityState getEntityState(Object pojo) {
@@ -49,6 +56,40 @@ public class DnEntityStateProvider implements JdoEntityStateProvider {
             return EntityState.PERSISTABLE_DETACHED;
         }
         return EntityState.NOT_PERSISTABLE;
+    }
+    
+    @Override
+    public boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
+        if(cls==null) {
+            return false;
+        }
+        return org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls);
+    }
+
+    @Override
+    public boolean isMethodProvidedByEnhancement(@Nullable Method method) {
+        if(method==null) {
+            return false;
+        }
+        ensureInit();
+        return /*methodStartsWith(method, "jdo") || */ 
+                jdoMethodsProvidedByEnhancement.contains(method.toString());
+    }
+    
+    // -- HELPER
+
+    private static final Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
+    
+    private static Method[] getMethodsProvidedByEnhancement() {
+        return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
+    }
+
+    private static void ensureInit() {
+        if(jdoMethodsProvidedByEnhancement.isEmpty()) {
+            _NullSafe.stream(getMethodsProvidedByEnhancement())
+            .map(Method::toString)
+            .forEach(jdoMethodsProvidedByEnhancement::add);
+        }
     }
     
 }
