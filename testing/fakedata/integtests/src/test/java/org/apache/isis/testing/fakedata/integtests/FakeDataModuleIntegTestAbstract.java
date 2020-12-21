@@ -30,7 +30,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.legacy.jdo.datanucleus.IsisModuleJdoDataNucleus5;
+import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testing.fakedata.fixtures.IsisModuleTestingFakeDataFixtures;
 import org.apache.isis.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
@@ -53,7 +53,7 @@ public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTes
         @Import({
                 IsisModuleCoreRuntimeServices.class,
                 IsisModuleSecurityBypass.class,
-                IsisModuleJdoDataNucleus5.class,
+                IsisModulePersistenceJdoApplib.class,
                 IsisModuleTestingFixturesApplib.class,
                 IsisModuleTestingFakeDataFixtures.class
         })

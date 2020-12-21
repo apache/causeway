@@ -72,8 +72,8 @@
         
         <!-- PERSISTENCE -->
         <dependency>
-            <groupId>org.apache.isis.legacy</groupId>
-            <artifactId>isis-legacy-jdo-datanucleus</artifactId>
+            <groupId>org.apache.isis.persistence</groupId>
+            <artifactId>isis-persistence-jdo-datanucleus</artifactId>
         </dependency>
 
     </dependencies>
