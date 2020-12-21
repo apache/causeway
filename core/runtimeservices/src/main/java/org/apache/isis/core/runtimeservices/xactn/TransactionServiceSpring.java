@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtimeservices.xactn;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.annotation.Nonnull;
@@ -38,6 +39,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
@@ -62,8 +64,12 @@ public class TransactionServiceSpring implements TransactionService {
     private final TransactionTemplate transactionTemplate;
 
     @Inject
-    public TransactionServiceSpring(PlatformTransactionManager platformTransactionManager) {
-        this.platformTransactionManager = platformTransactionManager;
+    public TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers) {
+        this.platformTransactionManager = 
+                _GlobalPlatformTransactionManager.of(Can.ofCollection(platformTransactionManagers));
+        
+        log.info("platformTransactionManagers: {}", platformTransactionManager);
+        
         this.transactionTemplate = new TransactionTemplate(platformTransactionManager);
     }
 

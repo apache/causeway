@@ -27,10 +27,12 @@ import javax.inject.Named;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.persistence.jdo.provider.config.JdoEntityDiscoveryListener;
+import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
@@ -68,7 +70,7 @@ public class IsisModuleJdoSpring {
         
         val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);
-        tapmfProxy.setAllowCreate(false);
+        tapmfProxy.setAllowCreate(true);
         return tapmfProxy;
     }
     
@@ -84,5 +86,9 @@ public class IsisModuleJdoSpring {
         return lpmfBean; 
     }
 
+    @Bean @Primary
+    public JdoTransactionManager getJdoTransactionManager(TransactionAwarePersistenceManagerFactoryProxy tapmfProxy) {
+        return new JdoTransactionManager(tapmfProxy.getPersistenceManagerFactory());
+    }
     
 }

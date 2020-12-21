@@ -18,12 +18,17 @@
  */
 package org.apache.isis.persistence.jdo.applib.integration;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
 public interface JdoSupportService {
 
     PersistenceManagerFactory getPersistenceManagerFactory();
     
-    //JdoDialect getJdoDialect();
+    // -- SHORTCUTS
+    
+    default PersistenceManager getPersistenceManager() {
+        return getPersistenceManagerFactory().getPersistenceManager();
+    }
     
 }

@@ -132,9 +132,6 @@
 
 	<dependencies>
 
-		<!-- WEB APPLICATION DEPENDENCY BUNDLE -->
-
-
 		<!-- JDK11+ SUPPORT -->
 
 		<dependency>
@@ -144,11 +141,17 @@
 		</dependency>
 
 		<!-- PERSISTENCE -->
+		
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jdo</artifactId>
+			<type>pom</type>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.legacy</groupId>
-            <artifactId>isis-legacy-jdo-datanucleus</artifactId>
-        </dependency>
+<!--         <dependency> -->
+<!--             <groupId>org.apache.isis.legacy</groupId> -->
+<!--             <artifactId>isis-legacy-jdo-datanucleus</artifactId> -->
+<!--         </dependency> -->
 
 		<!-- EXTENSIONS -->
 

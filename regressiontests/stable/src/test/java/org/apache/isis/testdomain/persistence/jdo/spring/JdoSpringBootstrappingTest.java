@@ -99,7 +99,7 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
     void platformTransactionManager_shouldBeAvailable() {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
-            assertEquals("JdbcTransactionManager", ptm.getClass().getSimpleName());
+            assertEquals("JdoTransactionManager", ptm.getClass().getSimpleName());
         });
     }
     
