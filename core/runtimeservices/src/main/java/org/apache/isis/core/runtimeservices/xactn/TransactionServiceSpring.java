@@ -126,15 +126,17 @@ public class TransactionServiceSpring implements TransactionService {
     @Override
     public <T> Result<T> executeWithinTransaction(final @NonNull Callable<T> callable) {
 
-        if(currentTransactionState() != TransactionState.NONE) {
-            Result.of(()->{
+        return Result.ofNullable(()->{
+
+            if(currentTransactionState() != TransactionState.NONE) {
                 val t = callable.call();
                 flushTransaction();
                 return t;
-            });
-        }
-
-        return Result.of(()->executeWithinNewTransaction(callable));
+            }
+            
+            return executeWithinNewTransaction(callable);
+            
+        });
     }
 
     // -- HELPER

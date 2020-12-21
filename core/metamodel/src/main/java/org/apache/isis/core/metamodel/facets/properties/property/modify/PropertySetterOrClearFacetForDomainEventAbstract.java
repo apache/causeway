@@ -156,7 +156,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                             InteractionHead.simple(targetAdapter), 
                             newValueAdapter, 
                             interactionInitiatedBy))
-                .orElseFail();
+                .nullableOrElseFail();
         }
 
     @RequiredArgsConstructor

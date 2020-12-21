@@ -114,7 +114,7 @@ implements ImperativeFacet {
         //PersistableTypeGuard.instate(executionResult);
 
         return executionResult
-                .orElseFail();
+                .nullableOrElseFail();
     }
 
     @Override 

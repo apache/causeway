@@ -36,6 +36,6 @@ public class IsTickingClockInitialized implements Callable<Boolean> {
     public Boolean call() {
         return transactionService.executeWithinTransaction(
                 () -> tickingClockService.isInitialized())
-                .orElseFail();
+                .nullableOrElseFail();
     }
 }

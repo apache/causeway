@@ -390,7 +390,7 @@ public class FixtureScripts {
                 runBuilderScriptNonTransactional(builderScript)
             )
         )
-        .orElseFail();
+        .nullableOrElseFail();
     }
 
     /**

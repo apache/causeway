@@ -589,7 +589,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                         }
                         return entity;
                     })
-                        .orElseFail();
+                        .nullableOrElseFail();
             });
         }
     }
