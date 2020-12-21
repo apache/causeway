@@ -22,27 +22,17 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
-import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
@@ -60,42 +50,14 @@ import lombok.val;
                 "logging.level.DependentArgUtils=DEBUG"
         })
 @TestPropertySource({
-    //IsisPresets.DebugMetaModel,
-    //IsisPresets.DebugProgrammingModel,
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-@DirtiesContext // because of the temporary installed 'good' domain
-//@Transactional
-//@Incubating("might fail when run with surefire")
 class DomainModelTest_jdoIsisMixins {
     
-    @Inject private MetaModelService metaModelService;
-    @Inject private JaxbService jaxbService;
     @Inject private ServiceRegistry serviceRegistry;
-//    @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specificationLoader;
-
-    void debug() {
-        val config = new MetaModelService.Config()
-//              .withIgnoreNoop()
-//              .withIgnoreAbstractClasses()
-//              .withIgnoreBuiltInValueTypes()
-//              .withIgnoreInterfaces()
-                //.withPackagePrefix("*")
-                .withPackagePrefix("org.apache.isis.testdomain.")
-                ;
-
-        System.out.println("!!! listing MM");
-        val metamodelDto = metaModelService.exportMetaModel(config);
-        for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
-            System.out.println("dc: " + domainClass.getId());
-            val xmlString = jaxbService.toXml(domainClass);
-            System.out.println(xmlString);
-        }
-        System.out.println("!!! ---");
-    }
-    
+   
     @Test
     void goodDomain_shouldPassValidation() {
         //debug();
@@ -106,61 +68,6 @@ class DomainModelTest_jdoIsisMixins {
     }
     
     @Test
-    void typeLevelAnnotations_shouldBeHonored_onMixins() {
-        
-        val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class, 
-                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        
-        val mx_action = holderSpec.getObjectActionElseFail("action"); // when @Action at type level
-        assertNotNull(mx_action);
-        assertEquals("action", mx_action.getId());
-        assertEquals("foo", mx_action.getName());
-        assertEquals("bar", mx_action.getDescription());
-        assertHasPublishedActionFacet(mx_action);
-        
-        val mx_action2 = holderSpec.getObjectActionElseFail("action2"); // proper mixed-in action support
-        assertNotNull(mx_action2);
-        assertHasPublishedActionFacet(mx_action2);
-        
-        val mx_property = holderSpec.getAssociationElseFail("property"); // when @Property at type level
-        assertNotNull(mx_property);
-        assertEquals("property", mx_property.getId());
-        assertEquals("foo", mx_property.getName());
-        assertEquals("bar", mx_property.getDescription());
-        
-        val mx_property2 = holderSpec.getAssociationElseFail("property2"); // when @Property at method level
-        assertNotNull(mx_property2);
-        assertEquals("property2", mx_property2.getId());
-        assertEquals("foo", mx_property2.getName());
-        assertEquals("bar", mx_property2.getDescription());
-        
-        val mx_collection = holderSpec.getAssociationElseFail("collection"); // when @Collection at type level
-        assertNotNull(mx_collection);
-        assertEquals("collection", mx_collection.getId());
-        assertEquals("foo", mx_collection.getName());
-        assertEquals("bar", mx_collection.getDescription());
-        
-        val mx_collection2 = holderSpec.getAssociationElseFail("collection2"); // when @Collection at method level
-        assertNotNull(mx_collection2);
-        assertEquals("collection2", mx_collection2.getId());
-        assertEquals("foo", mx_collection2.getName());
-        assertEquals("bar", mx_collection2.getDescription());
-        
-    }
-
-    @Test
-    void memberLevelAnnotations_shouldResolveUnambiguous_onMixins() {
-        
-        val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class);
-        
-        val mx_openRestApi = holderSpec.getObjectAction("openRestApi"); // built-in mixin support
-        assertNotNull(mx_openRestApi);
-        
-        assertThrows(Exception.class, ()->holderSpec.getAssociationElseFail("openRestApi")); // should not be picked up as a property
-        
-    }
-    
-    @Test
     void pluginProvidedMixins_shouldBePickedUp() {
         
         val holderSpec = specificationLoader.loadSpecification(JdoProduct.class);
@@ -168,13 +75,6 @@ class DomainModelTest_jdoIsisMixins {
         val mx_datanucleusIdLong = holderSpec.getAssociationElseFail("datanucleusIdLong"); // plugged in mixin
         assertNotNull(mx_datanucleusIdLong);
         
-    }
-    
-    // -- HELPER
-    
-    private void assertHasPublishedActionFacet(FacetHolder facetHolder) {
-        val facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
-        assertNotNull(facet);
     }
     
 

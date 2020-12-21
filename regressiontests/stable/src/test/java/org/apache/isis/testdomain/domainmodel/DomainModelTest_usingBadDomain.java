@@ -23,7 +23,6 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -60,15 +59,11 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-@DirtiesContext // because of the temporary installed 'bad' domain
-//@Incubating("does not work, when executed in sequence with other regressiontests")
 class DomainModelTest_usingBadDomain {
     
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
-    //@Inject private ApplicationContext applicationContext;
-    
     
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {

@@ -56,7 +56,6 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-//@Incubating("does not work, when executed in sequence with other regressiontests")
 class DomainModelTest_usingBadDomain_noActionEnforced {
     
     @Inject private IsisConfiguration configuration;

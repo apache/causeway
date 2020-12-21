@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,9 +63,6 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-@DirtiesContext // because of the temporary installed 'good' domain
-//@Transactional
-//@Incubating("might fail when run with surefire")
 class DomainModelTest_usingGoodDomain {
     
     @Inject private MetaModelService metaModelService;
