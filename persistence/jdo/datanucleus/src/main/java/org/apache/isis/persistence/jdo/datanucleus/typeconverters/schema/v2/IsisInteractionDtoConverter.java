@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus.typeconverters.schema.v2;
 import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.applib.value.Markup;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 public class IsisInteractionDtoConverter implements TypeConverter<InteractionDto, String>{

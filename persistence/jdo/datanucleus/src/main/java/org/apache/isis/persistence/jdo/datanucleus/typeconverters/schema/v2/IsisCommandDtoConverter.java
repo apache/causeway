@@ -21,9 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus.typeconverters.schema.v2;
 import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 public class IsisCommandDtoConverter implements TypeConverter<CommandDto, String>{
 

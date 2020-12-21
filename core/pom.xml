@@ -1800,10 +1800,6 @@
 		<module>../persistence/jdo</module>
 		<module>../persistence/jpa</module>
 		
-		<!-- LEGACY -->
-		<module>../legacy/jdo/applib</module>
-		<module>../legacy/jdo/datanucleus</module>
-		
 	</modules>
 
 </project>

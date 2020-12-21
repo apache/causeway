@@ -21,8 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus.typeconverters.schema.v2;
 import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.common.v2.OidDto;
 
 public class IsisOidDtoConverter implements TypeConverter<OidDto, String>{
