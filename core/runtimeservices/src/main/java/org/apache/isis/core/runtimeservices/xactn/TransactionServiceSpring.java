@@ -127,7 +127,11 @@ public class TransactionServiceSpring implements TransactionService {
     public <T> Result<T> executeWithinTransaction(final @NonNull Callable<T> callable) {
 
         if(currentTransactionState() != TransactionState.NONE) {
-            return Result.of(callable);
+            Result.of(()->{
+                val t = callable.call();
+                flushTransaction();
+                return t;
+            });
         }
 
         return Result.of(()->executeWithinNewTransaction(callable));

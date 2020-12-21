@@ -35,7 +35,6 @@ import org.apache.isis.extensions.commandreplay.secondary.StatusException;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
 import org.apache.isis.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
-import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
