@@ -21,44 +21,26 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-mavendeps-webapp</artifactId>
+	<artifactId>isis-mavendeps-jpa</artifactId>
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis Maven Deps - Webapp</name>
+	<name>Apache Isis Maven Deps - JPA</name>
 	<description>
-        Defines a module that can be almost used as a single dependency for running 
-        an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
-        
-        Note: Also requires a persistence provider.
+        Defines a module that provides the default JPA persistence layer integration 
+        for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
     </description>
 
 	<dependencies>
-		<!-- SPRING -->
-
+	
+		<!-- PERSISTENCE -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.validation</groupId>
-					<artifactId>validation-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-jcl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jpa-integration</artifactId>
 		</dependency>
-		
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
 		</dependency>
 
 		<!-- ISIS API -->
@@ -91,42 +73,6 @@
 					<artifactId>jaxb-impl</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-viewer</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-restfulobjects-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-bypass</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-shiro</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-keycloak</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtimeservices</artifactId>
 		</dependency>
 
 	</dependencies>
