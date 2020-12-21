@@ -389,7 +389,8 @@ public class FixtureScripts {
             transactionService.executeWithinTransaction(()->
                 runBuilderScriptNonTransactional(builderScript)
             )
-        );
+        )
+        .orElseFail();
     }
 
     /**

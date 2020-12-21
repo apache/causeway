@@ -577,7 +577,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
             return isisInteractionFactory.callAuthenticated(authentication, () -> {
                 val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
                 childCommand.updater().setParent(parentCommand);
-                return transactionService.executeWithinTransaction(() -> {
+                return transactionService
+                        .executeWithinTransaction(() -> {
                         val bookmark = commandExecutorService.executeCommand(commandDto, CommandOutcomeHandler.NULL);
                         if (bookmark == null) {
                             return null;
@@ -587,7 +588,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
                             entity = repositoryService.detach(entity);
                         }
                         return entity;
-                    });
+                    })
+                        .orElseFail();
             });
         }
     }

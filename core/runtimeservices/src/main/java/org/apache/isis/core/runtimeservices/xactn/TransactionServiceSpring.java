@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtimeservices.xactn;
 
 import java.util.concurrent.Callable;
-import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -33,17 +32,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -123,14 +123,21 @@ public class TransactionServiceSpring implements TransactionService {
         platformTransactionManager.getTransaction(transactionTemplate);
     }
 
-    private void executeWithinNewTransaction(Runnable task) {
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            // the code in this method executes in a transactional context
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                task.run();
-            }
-        });
+    @Override
+    public <T> Result<T> executeWithinTransaction(final @NonNull Callable<T> callable) {
+
+        if(currentTransactionState() != TransactionState.NONE) {
+            return Result.of(callable);
+        }
+
+        return Result.of(()->executeWithinNewTransaction(callable));
+    }
+
+    // -- HELPER
+
+    enum WarnIfNonePolicy {
+        IGNORE,
+        LOG
     }
 
     private <T> T executeWithinNewTransaction(Callable<T> callable) {
@@ -144,51 +151,7 @@ public class TransactionServiceSpring implements TransactionService {
             }
         });
     }
-
-    private <T> T executeWithinNewTransaction(Supplier<T> task) {
-
-        return transactionTemplate.execute(new TransactionCallback<T>() {
-            // the code in this method executes in a transactional context
-            @Override
-            public T doInTransaction(TransactionStatus status) {
-                return task.get();
-            }
-        });
-    }
-
-    @Override
-    public void executeWithinTransaction(Runnable task) {
-
-        val txState = currentTransactionState();
-        if(txState != TransactionState.NONE) {
-            task.run();
-            flushTransaction();
-            return;
-        }
-
-        executeWithinNewTransaction(task);
-    }
-
-    @Override
-    public <T> T executeWithinTransaction(Supplier<T> task) {
-
-        val txState = currentTransactionState();
-        if(txState != TransactionState.NONE) {
-            val result = task.get();
-            flushTransaction();
-            return result;
-        }
-
-        return executeWithinNewTransaction(task);
-    }
-
-    // -- HELPER
-
-    enum WarnIfNonePolicy {
-        IGNORE,
-        LOG
-    }
-
+    
     private IsisTransactionObject currentTransactionObject(WarnIfNonePolicy warnIfNonePolicy) {
 
         val txObject = IsisTransactionAspectSupport.currentTransactionObject().orElse(null);

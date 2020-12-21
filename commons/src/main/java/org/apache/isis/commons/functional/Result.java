@@ -107,7 +107,7 @@ public final class Result<L> {
         return Optional.ofNullable(value); 
     }
 
-    public Optional<Throwable> exception() {
+    public Optional<Throwable> failure() {
         return Optional.ofNullable(throwable); 
     }
 

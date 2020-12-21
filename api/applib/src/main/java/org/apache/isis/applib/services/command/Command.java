@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.having.HasUsername;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -310,17 +311,11 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         @Override
-        public void setResult(final Bookmark result) {
-            Command.this.result = result;
+        public void setResult(final Result<Bookmark> resultBookmark) {
+            Command.this.result = resultBookmark.value().orElse(null);
+            Command.this.exception = resultBookmark.failure().orElse(null);
         }
 
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         */
-        @Override
-        public void setException(final Throwable exception) {
-            Command.this.exception = exception;
-        }
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          *

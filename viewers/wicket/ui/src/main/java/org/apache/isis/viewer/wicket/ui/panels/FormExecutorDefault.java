@@ -42,6 +42,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
@@ -246,7 +247,7 @@ implements FormExecutor {
             // irrespective, capture error in the Command, and propagate
             if (command != null) {
                 
-                command.updater().setException(ex);
+                command.updater().setResult(Result.failure(ex));
                 
                 //XXX legacy of
                 //command.internal().setException(Throwables.getStackTraceAsString(ex));

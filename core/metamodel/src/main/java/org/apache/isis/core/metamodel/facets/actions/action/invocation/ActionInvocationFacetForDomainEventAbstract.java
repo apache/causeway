@@ -107,13 +107,14 @@ implements ImperativeFacet {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ManagedObject executionResult = 
+        val executionResult = 
                 getTransactionService().executeWithinTransaction(()->
                     doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy));
 
         //PersistableTypeGuard.instate(executionResult);
 
-        return executionResult;
+        return executionResult
+                .orElseFail();
     }
 
     @Override 

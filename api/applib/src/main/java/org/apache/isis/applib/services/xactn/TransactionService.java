@@ -19,10 +19,17 @@
 
 package org.apache.isis.applib.services.xactn;
 
-import java.util.function.Supplier;
+import java.util.Optional;
+import java.util.concurrent.Callable;
+
+import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.ThrowingRunnable;
+
+import lombok.val;
 
 /**
- * 
+ * Handles <i>global</i> transactions. 
+ * Global transactions enable you to work with multiple transactional resources, typically relational databases.
  * @since 2.0 {@index}
  */
 public interface TransactionService {
@@ -50,7 +57,6 @@ public interface TransactionService {
      */
     void flushTransaction();
 
-
     /**
      * Commits the current transaction (if there is one), and begins a new one.
      *
@@ -59,20 +65,24 @@ public interface TransactionService {
     void nextTransaction();
 
     /**
-     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
+     * Runs given {@code callable} within an existing transactional boundary, or in the absence of such a
      * boundary creates a new one.
      *
-     * @param task
+     * @param callable
      */
-    void executeWithinTransaction(Runnable task);
-
+    <T> Result<T> executeWithinTransaction(Callable<T> callable);
+    
     /**
-     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
+     * Runs given {@code runnable} within an existing transactional boundary, or in the absence of such a
      * boundary creates a new one.
      *
-     * @param task
+     * @param runnable
      */
-    <T> T executeWithinTransaction(Supplier<T> task);
+    default Optional<Throwable> executeWithinTransaction(ThrowingRunnable runnable) {
+        val callable = ThrowingRunnable.toCallable(runnable);
+        return executeWithinTransaction(callable)
+                .failure();
+    }
 
 
 }

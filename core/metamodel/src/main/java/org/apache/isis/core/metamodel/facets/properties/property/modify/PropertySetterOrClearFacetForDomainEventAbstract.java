@@ -148,8 +148,15 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return getTransactionService().executeWithinTransaction(() ->
-                doSetOrClearProperty(style, owningProperty, InteractionHead.simple(targetAdapter), newValueAdapter, interactionInitiatedBy));
+        return getTransactionService()
+                .executeWithinTransaction(() ->
+                    doSetOrClearProperty(
+                            style, 
+                            owningProperty, 
+                            InteractionHead.simple(targetAdapter), 
+                            newValueAdapter, 
+                            interactionInitiatedBy))
+                .orElseFail();
         }
 
     @RequiredArgsConstructor

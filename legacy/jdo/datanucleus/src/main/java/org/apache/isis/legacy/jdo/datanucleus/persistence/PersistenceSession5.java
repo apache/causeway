@@ -232,8 +232,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
 
-        final Can<ManagedObject> instances = transactionService.executeWithinTransaction(
-                ()->processPersistenceQuery(processor, persistenceQuery) );
+        final Can<ManagedObject> instances = transactionService
+                .executeWithinTransaction(
+                        ()->processPersistenceQuery(processor, persistenceQuery) )
+                .orElseFail();
         
         return instances;
         

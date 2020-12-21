@@ -53,6 +53,7 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTyp
 import org.apache.isis.applib.types.MemberIdentifierType;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
@@ -626,14 +627,11 @@ public class CommandJdo
             }
 
             @Override
-            public void setResult(final Bookmark resultBookmark) {
-                CommandJdo.this.setResult(resultBookmark);
+            public void setResult(final Result<Bookmark> resultBookmark) {
+                CommandJdo.this.setResult(resultBookmark.value().orElse(null));
+                CommandJdo.this.setException(resultBookmark.failure().orElse(null));
             }
-
-            @Override
-            public void setException(Throwable throwable) {
-                CommandJdo.this.setException(throwable);
-            }
+            
         };
     }
 

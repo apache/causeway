@@ -49,6 +49,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -147,23 +148,19 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         copyStartedAtFromInteractionExecution(commandUpdater);
 
-        try {
-            val result = transactionService.executeWithinTransaction(
-                () -> sudoPolicy == SudoPolicy.SWITCH
-                    ? sudoService.call(
-                            context->context.withUser(UserMemento.ofName(dto.getUser())),
-                            () -> doExecuteCommand(dto))
-                    : doExecuteCommand(dto));
+        val result = transactionService.executeWithinTransaction(
+            () -> sudoPolicy == SudoPolicy.SWITCH
+                ? sudoService.call(
+                        context->context.withUser(UserMemento.ofName(dto.getUser())),
+                        () -> doExecuteCommand(dto))
+                : doExecuteCommand(dto));
 
-            return handleOutcomeAndSetCompletedAt(commandUpdater, result, null);
-
-        } catch (Exception ex) {
-
+        result.ifFailure(ex->{
             log.warn("Exception when executing : {}",
                     dto.getMember().getLogicalMemberIdentifier(), ex);
-
-            return handleOutcomeAndSetCompletedAt(commandUpdater, null, ex);
-        }
+        });
+        
+        return handleOutcomeAndSetCompletedAt(commandUpdater, result);
     }
 
     private void copyStartedAtFromInteractionExecution(
@@ -256,13 +253,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Bookmark handleOutcomeAndSetCompletedAt(
             final CommandOutcomeHandler outcomeHandler,
-            Bookmark resultIfAny, final Exception exceptionIfAny) {
+            final Result<Bookmark> result) {
 
+        
         //
         // copy over the outcome
         //
-        outcomeHandler.setResult(resultIfAny);
-        outcomeHandler.setException(exceptionIfAny);
+        outcomeHandler.setResult(result);
 
         //
         // also, copy over the completedAt at to the command.
@@ -286,7 +283,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             outcomeHandler.setCompletedAt(completedAt);
         }
 
-        return resultIfAny;
+        return result.value().orElse(null);
     }
 
     // //////////////////////////////////////
