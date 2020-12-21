@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing;
+package org.apache.isis.testdomain.applayer.publishing.jdo.isis;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -30,25 +28,27 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.commons.collections.Can;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingCommandPublishing;
+import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityChangesPublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
-import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import lombok.val;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.clearPublishedEntries;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getCreated;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getDeleted;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getLoaded;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getModified;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getUpdated;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJdoIsis.class,
-                Configuration_usingCommandPublishing.class,
+                Configuration_usingEntityChangesPublishing.class,
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
@@ -59,7 +59,7 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class CommandPublishingTest extends IsisIntegrationTestAbstract {
+class JdoIsisEntityChangesPublishingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
@@ -70,62 +70,30 @@ class CommandPublishingTest extends IsisIntegrationTestAbstract {
     }
 
     private void given() {
-        CommandSubscriberForTesting.clearPublishedCommands(kvStore);
+        clearPublishedEntries(kvStore);
     }
     
     private void verify(VerificationStage verificationStage) {
         switch(verificationStage) {
-        
+        case PRE_COMMIT:
         case FAILURE_CASE:
-            assertHasCommandEntries(Can.empty());
+            assertEquals(0, getCreated(kvStore));
+            assertEquals(0, getDeleted(kvStore));
+            assertEquals(0, getLoaded(kvStore));
+            assertEquals(0, getUpdated(kvStore));
+            assertEquals(0, getModified(kvStore));
             break;
-        case POST_INTERACTION:
-        
-            
-//            Interaction interaction = null;
-//            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
-//            Object target = null;
-//            Object argValue = "Book #2";
-//            String targetMemberName = "name???";
-//            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
-            
-            val propertyDto = new PropertyDto();
-            propertyDto.setLogicalMemberIdentifier("testdomain.jdo.Book#name");
-            
-            val command = new Command(UUID.randomUUID());
-            val commandDto = new CommandDto();
-            commandDto.setTransactionId(command.getUniqueId().toString());
-            commandDto.setMember(propertyDto);
-
-            command.updater().setCommandDto(commandDto);
-            
-            assertHasCommandEntries(Can.of(command));
+        case POST_COMMIT_WHEN_PROGRAMMATIC:
+        case POST_COMMIT:
+            assertEquals(0, getCreated(kvStore));
+            assertEquals(0, getDeleted(kvStore));
+            //assertEquals(1, getLoaded()); // not reproducible
+            assertEquals(1, getUpdated(kvStore));
+            assertEquals(1, getModified(kvStore));
             break;
         default:
             // ignore ... no checks
         }
     }
-    
-    // -- HELPER
-
-    private void assertHasCommandEntries(Can<Command> expectedCommands) {
-        val actualCommands = CommandSubscriberForTesting.getPublishedCommands(kvStore);
-        CollectionAssertions.assertComponentWiseEquals(
-                expectedCommands, actualCommands, this::commandDifference);
-    }
-    
-    private String commandDifference(Command a, Command b) {
-        if(!Objects.equals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier())) {
-            return String.format("differing member identifier %s != %s", 
-                    a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
-        }
-        if(!Objects.equals(a.getResult(), b.getResult())) {
-            return String.format("differing results %s != %s", 
-                    a.getResult(), b.getResult());
-        }
-        return null; // no difference
-    }
-    
-
 
 }

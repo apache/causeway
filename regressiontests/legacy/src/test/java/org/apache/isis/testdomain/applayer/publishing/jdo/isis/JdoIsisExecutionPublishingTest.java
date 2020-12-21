@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing;
+package org.apache.isis.testdomain.applayer.publishing.jdo.isis;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +36,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
+import org.apache.isis.testdomain.applayer.publishing.ExecutionSubscriberForTesting;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingExecutionPublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -58,7 +59,7 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class ExecutionPublishingTest extends IsisIntegrationTestAbstract {
+class JdoIsisExecutionPublishingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
