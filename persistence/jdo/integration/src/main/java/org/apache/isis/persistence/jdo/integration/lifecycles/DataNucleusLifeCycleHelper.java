@@ -22,7 +22,7 @@ import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.enhancer.EnhancementHelper;
 
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.commons.internal.context._Context;
 
 /**
  *
@@ -39,7 +39,7 @@ public class DataNucleusLifeCycleHelper {
 
         try {
 
-            final ClassLoader cl = IsisContext.getClassLoader();
+            final ClassLoader cl = _Context.getDefaultClassLoader();
 
             persistenceManagerFactory.close();
 

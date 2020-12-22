@@ -14,9 +14,7 @@ interface CommandOutcomeHandler {
 
   void setCompletedAt(Timestamp completedAt)
 
-  void setResult(Bookmark resultBookmark)
-
-  void setException(Throwable throwable)
+  void setResult(Result<Bookmark> resultBookmark)
 }
 ----
 

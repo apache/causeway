@@ -37,11 +37,11 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.persistence.jdo.integration.config.DataNucleusPropertiesAware;
 import org.apache.isis.persistence.jdo.integration.lifecycles.DataNucleusLifeCycleHelper;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.query.JdoNamedQuery;
@@ -94,7 +94,7 @@ public class DataNucleusApplicationComponents5 {
             // this is where DN will throw an exception if we pass it any config props it doesn't like the look of.
             // we want to fail, but let's make sure that the error is visible to help the developer
             
-            return JDOHelper.getPersistenceManagerFactory(datanucleusProps, IsisContext.getClassLoader());
+            return JDOHelper.getPersistenceManagerFactory(datanucleusProps, _Context.getDefaultClassLoader());
         } catch(JDOUserException ex) {
             log.fatal(ex);
             throw ex;
