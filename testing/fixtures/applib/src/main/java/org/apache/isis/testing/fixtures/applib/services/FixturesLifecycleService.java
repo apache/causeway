@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
+import org.apache.isis.core.runtime.events.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;

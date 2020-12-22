@@ -22,10 +22,11 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
+import org.springframework.context.event.EventListener;
+
+import org.apache.isis.core.runtime.events.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.springframework.context.event.EventListener;
 
 public abstract class SeedServiceAbstract implements SeedService {
 

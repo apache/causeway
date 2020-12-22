@@ -21,19 +21,18 @@ package org.apache.isis.core.runtime.events;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.interaction.session.InteractionSession;
-import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
-import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
-import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
-import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.interaction.events.IsisInteractionLifecycleEvent;
+import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
+import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 
 import lombok.val;
 
