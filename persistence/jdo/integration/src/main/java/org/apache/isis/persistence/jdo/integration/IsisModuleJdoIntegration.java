@@ -40,7 +40,6 @@ import org.apache.isis.persistence.jdo.integration.metamodel.JdoIntegrationProgr
 import org.apache.isis.persistence.jdo.integration.persistence.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSessionFactory5;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
-import org.apache.isis.persistence.jdo.metamodel.menu.JdoMetamodelMenu;
 
 @Configuration
 @Import({
@@ -64,8 +63,6 @@ import org.apache.isis.persistence.jdo.metamodel.menu.JdoMetamodelMenu;
         IsisPlatformTransactionManagerForJdo.class,
         JdoPersistenceLifecycleService.class,
         PersistenceSessionFactory5.class,
-        JdoMetamodelMenu.class,
-
 
 })
 public class IsisModuleJdoIntegration {

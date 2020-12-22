@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
+import org.apache.isis.persistence.jdo.metamodel.menu.JdoMetamodelMenu;
 
 @Configuration
 @Import({
@@ -32,27 +33,10 @@ import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 
     // @Component's
     JdoProgrammingModel.class,
+    JdoMetamodelMenu.class,
     
     // @Service's
-//    DnJdoSupport.class
-    
-//    DataNucleusSettings.class,
-//    ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
-//    ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
-//    ExceptionRecognizerForJDOObjectNotFoundException.class,
-//    ExceptionRecognizerForJDODataStoreException.class,
-//    
-//    IsisJdoSupportDN5.class,
-//    IsisPlatformTransactionManagerForJdo.class,
-//    JdoPersistenceLifecycleService.class,
-//    PersistenceSessionFactory5.class,
-//    JdoMetamodelMenu.class,
-//
-//    // @Mixin's
-//    Persistable_datanucleusIdLong.class,
-//    Persistable_datanucleusVersionLong.class,
-//    Persistable_datanucleusVersionTimestamp.class,
-//    Persistable_downloadJdoMetadata.class,
+
 })
 public class IsisModuleJdoMetamodel {
     
