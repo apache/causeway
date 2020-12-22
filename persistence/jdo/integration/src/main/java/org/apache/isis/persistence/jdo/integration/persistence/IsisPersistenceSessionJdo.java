@@ -20,7 +20,6 @@ package org.apache.isis.persistence.jdo.integration.persistence;
 
 import java.util.List;
 
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapterProvider;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 
 /**
@@ -28,7 +27,7 @@ import org.apache.isis.persistence.jdo.integration.persistence.command.Persisten
  * @since 2.0
  */
 public interface IsisPersistenceSessionJdo 
-extends PersistenceSession, ObjectAdapterProvider {
+extends PersistenceSession {
 
     void execute(List<PersistenceCommand> persistenceCommandList);
     

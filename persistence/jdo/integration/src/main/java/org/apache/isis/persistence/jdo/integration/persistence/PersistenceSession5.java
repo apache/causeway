@@ -50,7 +50,6 @@ import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindExceptio
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapterContext;
 import org.apache.isis.persistence.jdo.integration.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DestroyObjectCommand;
@@ -76,7 +75,6 @@ import lombok.extern.log4j.Log4j2;
 public class PersistenceSession5 extends IsisPersistenceSessionJdoBase
 implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
-    private ObjectAdapterContext objectAdapterContext;
     @Getter private final TransactionService transactionService;
     private Runnable unregisterLifecycleListeners;
 
@@ -120,8 +118,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindUsingApplibQueryDefault.class,
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
-
-        objectAdapterContext = ObjectAdapterContext.openContext(super.metaModelContext, this);
 
         // install JDO specific entity change listeners ...
         
@@ -173,8 +169,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             log.error(
                     "close: failed to close JDO persistenceManager; continuing to avoid memory leakage");
         }
-
-        objectAdapterContext.close();
 
         this.state = State.CLOSED;
     }
@@ -575,8 +569,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 //        // viewModel's #viewModelMemento might need to use services
 //        serviceInjector.injectServicesInto(pojo); //redundant
 
-        final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-        final ManagedObject entity = objectAdapterContext.recreatePojo(originalOid, pojo);
+        final RootOid originalOid = _Utils.createRootOid(getMetaModelContext(), this, pojo);
+        final ManagedObject entity = _Utils.recreatePojo(getMetaModelContext(), originalOid, pojo);
 
         getEntityChangeTracker().recognizeLoaded(entity);
 
@@ -629,7 +623,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        val entity = objectAdapterContext.fetchPersistent(pojo);
+        val entity = _Utils.fetchPersistent(getMetaModelContext(), this, pojo);
         if (entity == null) {
             throw _Exceptions
                 .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
@@ -639,7 +633,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void invokeIsisUpdatedCallback(Persistable pojo) {
-        val entity = objectAdapterContext.fetchPersistent(pojo);
+        val entity = _Utils.fetchPersistent(getMetaModelContext(), this, pojo);
         if (entity == null) {
             throw _Exceptions
                 .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
@@ -681,11 +675,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             }
         }
         return false;
-    }
-
-    @Override
-    public ManagedObject adapterFor(Object pojo) {
-        return objectAdapterContext.getObjectAdapterProvider().adapterFor(pojo);
     }
     
     // -- HELPER

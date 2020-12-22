@@ -21,10 +21,13 @@ package org.apache.isis.persistence.jdo.integration.persistence;
 import java.rmi.NoSuchObjectException;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -35,6 +38,7 @@ public interface PersistenceSession {
     // -------------------------------------------------------------------------------------------------
 
     TransactionService getTransactionService();
+    MetaModelContext getMetaModelContext();
 
     void open();
     void close();
@@ -43,6 +47,10 @@ public interface PersistenceSession {
         getTransactionService().flushTransaction();
     }
 
+    default ManagedObject adapterFor(@Nullable Object pojo) {
+        return _Utils.adapterFor(getMetaModelContext(), pojo);
+    }
+    
     /**
      * Forces a reload (refresh in JDO terminology) of the domain object
      */
