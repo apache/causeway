@@ -23,10 +23,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.interaction.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.events.persistence.TimestampService;
-import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 
 @Configuration
 @Import({

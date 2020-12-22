@@ -676,6 +676,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-core-interaction</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-core-metamodel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>jar</type>
@@ -1799,6 +1804,7 @@
 
 		<module>codegen-bytebuddy</module>
 		<module>config</module>
+		<module>interaction</module>
 		<module>internaltestsupport</module>
 		<module>metamodel</module>
 		<module>runtime</module>

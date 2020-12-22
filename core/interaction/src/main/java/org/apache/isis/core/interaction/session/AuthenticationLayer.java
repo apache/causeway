@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.iactn;
+package org.apache.isis.core.interaction.session;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
-import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.Getter;
@@ -33,7 +32,7 @@ import lombok.NonNull;
  * @since 2.0
  *
  */
-public class AuthenticationLayer extends RuntimeContextBase {
+public class AuthenticationLayer /*extends RuntimeContextBase */{
 
 	@Getter private final InteractionSession interactionSession;
 	@Getter private final Authentication authentication;
@@ -42,7 +41,7 @@ public class AuthenticationLayer extends RuntimeContextBase {
 			final @NonNull InteractionSession interactionSession,
 			final @NonNull Authentication authentication) {
 
-		super(interactionSession.getMetaModelContext());
+		//super(interactionSession.getMetaModelContext());
 		
 		// current thread's InteractionSession which this layer belongs to, 
 		// meaning the InteractionSession that holds the stack containing this layer 

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.iactn;
+package org.apache.isis.core.interaction.session;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,13 +25,10 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.xactn.TransactionId;
-import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.context.RuntimeContextBase;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -52,7 +49,7 @@ import lombok.Setter;
  *
  * @see InteractionFactory
  */
-public class InteractionSession extends RuntimeContextBase {
+public class InteractionSession {
 
     @Getter private final long lifecycleStartedAtSystemNanos;
     
@@ -61,10 +58,15 @@ public class InteractionSession extends RuntimeContextBase {
      */
     @Getter private final MessageBroker messageBroker = new MessageBroker();
 
+    /**
+     * The {@link MetaModelContext} that holds services for this session.
+     */
+    @Getter private final MetaModelContext metaModelContext;
+    
     public InteractionSession(
             @NonNull final MetaModelContext mmc) {
 
-        super(mmc);
+        this.metaModelContext = mmc;
         this.lifecycleStartedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.interaction = new IsisInteraction(UUID.randomUUID());
     }
@@ -76,13 +78,13 @@ public class InteractionSession extends RuntimeContextBase {
 
     // -- TRANSACTION
 
-    public TransactionId getCurrentTransactionId() {
-        return transactionService.currentTransactionId();
-    }
-
-    public TransactionState getCurrentTransactionState() {
-        return transactionService.currentTransactionState();
-    }
+//    public TransactionId getCurrentTransactionId() {
+//        return transactionService.currentTransactionId();
+//    }
+//
+//    public TransactionState getCurrentTransactionState() {
+//        return transactionService.currentTransactionState();
+//    }
 
     // -- INTERACTION ON CLOSE HANDLER
     
@@ -156,7 +158,7 @@ public class InteractionSession extends RuntimeContextBase {
     @Override
     public String toString() {
         final ToString asString = new ToString(this);
-        asString.append("transaction", getCurrentTransactionId());
+//        asString.append("transaction", getCurrentTransactionId());
         return asString.toString();
     }
 

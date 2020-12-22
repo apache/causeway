@@ -20,11 +20,11 @@ package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
 
 

@@ -59,9 +59,14 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-transaction</artifactId>
-		</dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-transaction</artifactId>
+        </dependency>
+
+		<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-interaction</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>

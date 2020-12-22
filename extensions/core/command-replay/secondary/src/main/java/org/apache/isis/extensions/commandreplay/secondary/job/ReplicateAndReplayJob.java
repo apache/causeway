@@ -26,7 +26,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;

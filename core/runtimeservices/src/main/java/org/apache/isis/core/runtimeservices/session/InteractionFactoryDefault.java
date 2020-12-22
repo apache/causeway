@@ -37,6 +37,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -50,17 +51,17 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.interaction.scope.IsisInteractionScopeBeanFactoryPostProcessor;
+import org.apache.isis.core.interaction.scope.IsisInteractionScopeCloseListener;
+import org.apache.isis.core.interaction.session.AuthenticationLayer;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
-import org.apache.isis.core.runtime.iactn.AuthenticationLayer;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.InteractionTracker;
-import org.apache.isis.core.runtime.iactn.IsisInteraction;
-import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
-import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeCloseListener;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
@@ -222,16 +223,18 @@ implements InteractionFactory, InteractionTracker {
 
     @Override
     public boolean isInTransaction() {
+        
+        return TransactionSynchronizationManager.isActualTransactionActive();
 
-        return currentInteractionSession().map(isisInteraction->{
-            if (isisInteraction.getCurrentTransactionId() != null) {
-                if (!isisInteraction.getCurrentTransactionState().isComplete()) {
-                    return true;
-                }
-            }
-            return false;
-        })
-        .orElse(false);
+//        return currentInteractionSession().map(isisInteraction->{
+//            if (isisInteraction.getCurrentTransactionId() != null) {
+//                if (!isisInteraction.getCurrentTransactionState().isComplete()) {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        })
+//        .orElse(false);
 
     }
 

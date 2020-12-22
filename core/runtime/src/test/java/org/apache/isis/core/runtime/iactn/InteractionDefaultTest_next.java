@@ -26,6 +26,8 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.core.interaction.session.IsisInteraction;
+
 import lombok.val;
 
 public class InteractionDefaultTest_next {

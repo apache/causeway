@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtime.events.iactn;
 
-import org.apache.isis.core.runtime.iactn.InteractionSession;
+import org.apache.isis.core.interaction.session.InteractionSession;
 
 import lombok.Getter;
 import lombok.ToString;

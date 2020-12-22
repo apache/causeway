@@ -30,6 +30,8 @@ import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -37,8 +39,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
-import org.apache.isis.core.runtime.iactn.InteractionTracker;
-import org.apache.isis.core.runtime.iactn.MessageBroker;
 
 import lombok.AccessLevel;
 import lombok.Getter;

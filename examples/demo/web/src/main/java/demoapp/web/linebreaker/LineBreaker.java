@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.runtime.iactn.InteractionTracker;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -30,8 +30,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.iactn.InteractionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;

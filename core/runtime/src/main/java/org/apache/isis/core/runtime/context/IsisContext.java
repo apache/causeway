@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.runtime.iactn.InteractionSession;
+import org.apache.isis.core.interaction.session.InteractionSession;
 
 import lombok.experimental.UtilityClass;
 

@@ -32,7 +32,7 @@ import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 
 import lombok.Getter;
 import lombok.val;

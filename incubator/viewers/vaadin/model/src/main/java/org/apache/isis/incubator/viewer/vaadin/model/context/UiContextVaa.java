@@ -24,8 +24,8 @@ import java.util.function.Supplier;
 
 import com.vaadin.flow.component.Component;
 
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
 
 public interface UiContextVaa {
 

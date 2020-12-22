@@ -34,7 +34,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

@@ -23,12 +23,13 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtime.events.persistence.PostStoreEvent;
 import org.apache.isis.core.runtime.events.persistence.PreStoreEvent;
-import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.InteractionTracker;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;

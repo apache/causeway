@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.session;
+package org.apache.isis.core.interaction.integration;
 
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.RequiredArgsConstructor;

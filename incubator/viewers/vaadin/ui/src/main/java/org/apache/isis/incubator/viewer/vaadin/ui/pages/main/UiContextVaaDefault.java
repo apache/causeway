@@ -28,8 +28,8 @@ import com.vaadin.flow.component.Component;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 
 import lombok.Getter;

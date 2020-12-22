@@ -35,8 +35,8 @@ import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.runtime.iactn.InteractionTracker;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

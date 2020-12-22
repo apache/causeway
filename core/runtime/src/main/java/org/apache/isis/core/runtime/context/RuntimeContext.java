@@ -21,9 +21,9 @@ package org.apache.isis.core.runtime.context;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.iactn.InteractionTracker;
 
 /**
  * TODO [2033] this was introduced when refactoring, maybe use MetaModelContext instead if possible
