@@ -26,7 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -38,63 +38,63 @@ import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
+import lombok.val;
+
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoIsis.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 class JdoIsisTransactionRollbackTest_usingTransactionService extends IsisIntegrationTestAbstract {
-    
+
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
-    
+
     @BeforeEach
     void setUp() {
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
     }
-    
+
     @Test
     void happyCaseTx_shouldCommit() {
-        
+
         // expected pre condition
         assertEquals(0, repository.allInstances(JdoBook.class).size());
-        
-        
+
+
         transactionService.executeWithinTransaction(()->{
-            
+
             fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-            
+
         });
-        
+
         // expected post condition
         assertEquals(1, repository.allInstances(JdoBook.class).size());
 
     }
-    
+
     @Test
     void whenExceptionWithinTx_shouldRollback() {
-        
+
         // expected pre condition
         assertEquals(0, repository.allInstances(JdoBook.class).size());
-            
-        assertThrows(RuntimeException.class, ()->{
-            
-            transactionService.executeWithinTransaction(()->{
-                
-                fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
-                throw _Exceptions.unrecoverable("Test: force current tx to rollback");            
-                
-            });    
-            
-        });
+        val result = transactionService.executeWithinTransaction(()->{
+
+            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+
+            throw _Exceptions.unrecoverable("Test: force current tx to rollback");            
+
+        });    
         
+        assertTrue(result.isFailure());
+
         // expected post condition
         assertEquals(0, repository.allInstances(JdoBook.class).size());
-        
+
     }
-    
+
 
 }
