@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.integration.persistence;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -54,7 +53,6 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListe
 import org.apache.isis.persistence.jdo.integration.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DestroyObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
@@ -535,26 +533,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return new DataNucleusDeleteObjectCommand(adapter, persistenceManager);
     }
 
-
-    // -- execute
-    @Override
-    public void execute(final List<PersistenceCommand> commands) {
-
-        // previously we used to check that there were some commands, and skip processing otherwise.
-        // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that
-        // don't have commands wrapped around them...
-
-        executeCommands(commands);
-    }
-
-    private void executeCommands(final List<PersistenceCommand> commands) {
-
-        for (final PersistenceCommand command : commands) {
-            command.execute();
-        }
-        persistenceManager.flush();
-    }
-
     // -- FrameworkSynchronizer delegate methods
 
     @Override
@@ -567,7 +545,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public ManagedObject initializeEntity(final Persistable pojo) {
 
         final ManagedObject entity = _Utils
-                .identify(getMetaModelContext(), getJdoPersistenceManager(), pojo);
+                .identify(getMetaModelContext(), getPersistenceManager(), pojo);
 
         getEntityChangeTracker().recognizeLoaded(entity);
 
@@ -576,7 +554,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public String identifierFor(final Object pojo) {
-        return JdoObjectIdSerializer.identifierForElseFail(getJdoPersistenceManager(), pojo);
+        return JdoObjectIdSerializer.identifierForElseFail(getPersistenceManager(), pojo);
     }
 
     /**
@@ -619,13 +597,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        val entity = _Utils.fetchEntityElseFail(getMetaModelContext(), getJdoPersistenceManager(), pojo);
+        val entity = _Utils.fetchEntityElseFail(getMetaModelContext(), getPersistenceManager(), pojo);
         getEntityChangeTracker().enlistUpdating(entity);
     }
 
     @Override
     public void invokeIsisUpdatedCallback(Persistable pojo) {
-        val entity = _Utils.fetchEntityElseFail(getMetaModelContext(), getJdoPersistenceManager(), pojo);
+        val entity = _Utils.fetchEntityElseFail(getMetaModelContext(), getPersistenceManager(), pojo);
         // the callback and transaction.enlist are done in the preStore callback
         // (can't be done here, as the enlist requires to capture the 'before' values)
         getEntityChangeTracker().recognizeUpdating(entity);
@@ -657,7 +635,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public boolean isRecognized(Object pojo) {
         if (pojo!=null && pojo instanceof Persistable) {
-            final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
+            final Object jdoOid = getPersistenceManager().getObjectId(pojo);
             if(jdoOid!=null) {
                 return true;
             }

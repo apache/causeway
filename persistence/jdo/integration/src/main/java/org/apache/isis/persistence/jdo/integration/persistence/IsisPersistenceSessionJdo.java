@@ -18,21 +18,13 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
-import java.util.List;
-
-import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
-import org.apache.isis.persistence.jdo.integration.transaction.TxHelper;
-
 /**
  * 
  * @since 2.0
  */
 public interface IsisPersistenceSessionJdo 
-extends PersistenceSession, TxHelper {
+extends PersistenceSession, HasPersistenceManager {
 
-    void execute(List<PersistenceCommand> persistenceCommandList);
-
-    
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
      * @param cls
@@ -40,7 +32,7 @@ extends PersistenceSession, TxHelper {
      * @return
      */
     default <T> javax.jdo.Query<T> newJdoNamedQuery(Class<T> cls, String queryName){
-        return getJdoPersistenceManager().newNamedQuery(cls, queryName);
+        return getPersistenceManager().newNamedQuery(cls, queryName);
     }
 
     /**
@@ -49,7 +41,7 @@ extends PersistenceSession, TxHelper {
      * @return
      */
     default <T> javax.jdo.Query<T> newJdoQuery(Class<T> cls){
-        return getJdoPersistenceManager().newQuery(cls);
+        return getPersistenceManager().newQuery(cls);
     }
 
     /**
@@ -59,9 +51,7 @@ extends PersistenceSession, TxHelper {
      * @return
      */
     default <T> javax.jdo.Query<T> newJdoQuery(Class<T> cls, String filter){
-        return getJdoPersistenceManager().newQuery(cls, filter);
+        return getPersistenceManager().newQuery(cls, filter);
     }
-    
-    javax.jdo.PersistenceManager getJdoPersistenceManager();
     
 }

@@ -47,7 +47,8 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJdo {
+abstract class IsisPersistenceSessionJdoBase 
+implements IsisPersistenceSessionJdo {
 
     // -- FIELDS
 
@@ -130,7 +131,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
      * Only populated once {@link #open()}'d
      */
     @Override
-    public PersistenceManager getJdoPersistenceManager() {
+    public PersistenceManager getPersistenceManager() {
         return persistenceManager;
     }
 
@@ -166,40 +167,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
     }
 
-    // -- TRANSACTIONS
-
-    @Override
-    public void startTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            throw new IllegalStateException("Transaction already active");
-        }
-        transaction.begin();
-    }
-
-    @Override
-    public void endTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            transaction.commit();
-        }
-    }
-
-    @Override
-    public void abortTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            transaction.rollback();
-        }
-    }
-    
-    @Override
-    public void flushTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            transaction.getPersistenceManager().flush();
-        }
-    }
     
     // -- OID
     

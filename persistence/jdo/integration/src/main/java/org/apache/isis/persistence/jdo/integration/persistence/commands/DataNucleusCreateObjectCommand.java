@@ -33,7 +33,7 @@ implements CreateObjectCommand {
     private final IsisPersistenceSessionJdo persistenceSession;
 
     public DataNucleusCreateObjectCommand(ManagedObject adapter, IsisPersistenceSessionJdo persistenceSession) {
-        super(adapter, persistenceSession.getJdoPersistenceManager());
+        super(adapter, persistenceSession.getPersistenceManager());
         this.persistenceSession = persistenceSession;
     }
 

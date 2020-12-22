@@ -16,28 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.transaction;
+package org.apache.isis.persistence.jdo.integration.persistence;
 
-public interface TxHelper {
-
-    /**
-     * to tell the underlying object store to start a transaction.
-     */
-    void startTransaction();
-
-    /**
-     * to tell the underlying object store to commit a transaction.
-     */
-    void endTransaction();
-
-    /**
-     * to tell the underlying object store to abort a transaction.
-     */
-    void abortTransaction();
+public interface HasPersistenceManager {
     
-    /**
-     * to tell the underlying object store to flush a transaction.
-     */
-    void flushTransaction();
-    
+    javax.jdo.PersistenceManager getPersistenceManager();
 }

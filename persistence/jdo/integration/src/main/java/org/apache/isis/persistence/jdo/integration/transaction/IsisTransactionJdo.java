@@ -27,7 +27,6 @@ import javax.enterprise.inject.Vetoed;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.TransactionScopeListener.PreCommitPhase;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
@@ -38,6 +37,7 @@ import org.apache.isis.commons.internal.collections._Inbox;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.commons.ToString;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionFlushException;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
@@ -156,6 +156,8 @@ public class IsisTransactionJdo implements Transaction {
 
     private final _Inbox<PersistenceCommand> persistenceCommands = new _Inbox<>();
 
+    private final _TxHelper txHelper;
+    
     private final InteractionTracker isisInteractionTracker;
 
     private final Can<TransactionScopeListener> transactionScopeListeners;
@@ -163,14 +165,16 @@ public class IsisTransactionJdo implements Transaction {
     private IsisException abortCause;
 
     public IsisTransactionJdo(
-            final ServiceRegistry serviceRegistry,
+            final MetaModelContext mmc,
+            final _TxHelper txHelper,
             final UUID interactionId,
             final int sequence) {
 
         id = TransactionId.of(interactionId, sequence);
         
-        this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
-        this.transactionScopeListeners = serviceRegistry.select(TransactionScopeListener.class);
+        this.txHelper = txHelper;
+        this.isisInteractionTracker = mmc.getServiceRegistry().lookupServiceElseFail(InteractionTracker.class);
+        this.transactionScopeListeners = mmc.getServiceRegistry().select(TransactionScopeListener.class);
 
         this.state = State.IN_PROGRESS;
 
@@ -338,7 +342,7 @@ public class IsisTransactionJdo implements Transaction {
             if(!pc_snapshot.isEmpty()) {
                 try {
                     
-                    getPersistenceSession().execute(pc_snapshot);
+                    txHelper.execute(pc_snapshot);
                     
                 } catch (RuntimeException ex) {
                     // if there's an exception, we want to make sure that
@@ -352,7 +356,7 @@ public class IsisTransactionJdo implements Transaction {
     }
     
     private void flushTransaction() {
-        getPersistenceSession().flushTransaction();
+        txHelper.flushTransaction();
     }
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {

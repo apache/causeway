@@ -123,7 +123,7 @@ public class JdoEntityFacet extends JdoEntityFacetAbstract {
 
     @Override
     public <T> T detach(T pojo) {
-        return super.getPersistenceSessionJdo().getJdoPersistenceManager().detachCopy(pojo);
+        return super.getPersistenceSessionJdo().getPersistenceManager().detachCopy(pojo);
     }
 
     // -- HELPER

@@ -25,38 +25,37 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
+import org.apache.isis.persistence.jdo.integration.persistence.HasPersistenceManager;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
 
-import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
-class _IsisTransactionManagerJdo implements PersistenceCommandQueue {
+class _IsisTransactionManagerJdo 
+implements 
+    PersistenceCommandQueue {
 
     // -- constructor, fields
 
-    @Getter
-    private final TxHelper persistenceSession;
-
-    private final ServiceRegistry serviceRegistry;
+    private final MetaModelContext mmc;
     private final Supplier<InteractionContext> interactionContextProvider;
+    private final _TxHelper txHelper;
 
     _IsisTransactionManagerJdo(
             MetaModelContext mmc, 
-            TxHelper persistenceSession) {
+            HasPersistenceManager pmProvider) {
 
-        this.serviceRegistry = mmc.getServiceRegistry();
-        this.persistenceSession = persistenceSession;
-        this.interactionContextProvider = ()->serviceRegistry.lookupServiceElseFail(InteractionContext.class);
+        this.mmc = mmc;
+        this.interactionContextProvider = ()->mmc.getServiceRegistry().lookupServiceElseFail(InteractionContext.class);
+        this.txHelper = _TxHelper.create(pmProvider);
     }
 
     public IsisTransactionJdo beginTransaction() {
@@ -86,10 +85,13 @@ class _IsisTransactionManagerJdo implements PersistenceCommandQueue {
             val command = interaction.getCommand();
             val transactionId = command.getUniqueId();
 
-            val currentTransaction = new IsisTransactionJdo(serviceRegistry, transactionId,
+            val currentTransaction = new IsisTransactionJdo(
+                    mmc,
+                    txHelper,
+                    transactionId,
                     interaction.next(Interaction.Sequence.TRANSACTION.id()));
 
-            persistenceSession.startTransaction();
+            txHelper.startTransaction();
 
             if (log.isDebugEnabled()) {
                 log.debug("startTransaction: top-level");
@@ -260,7 +262,7 @@ class _IsisTransactionManagerJdo implements PersistenceCommandQueue {
         if(abortCause == null) {
             try {
                 
-                persistenceSession.endTransaction();
+                txHelper.endTransaction();
             } catch(Exception ex) {
                 // just in case any new exception was raised...
                 abortCause = ex instanceof RuntimeException ? (RuntimeException) ex : new RuntimeException(ex);
@@ -312,7 +314,7 @@ class _IsisTransactionManagerJdo implements PersistenceCommandQueue {
         val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction();
         if (transaction != null) {
             transaction.markAsAborted();
-            persistenceSession.abortTransaction();
+            txHelper.abortTransaction();
             txObject.clear();
         }
     }
