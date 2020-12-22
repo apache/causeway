@@ -21,6 +21,7 @@ package org.apache.isis.extensions.commandlog.impl.jdo;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -157,11 +158,11 @@ public class CommandJdoRepository {
     }
 
     private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, int daysOffset) {
+        
+        val timestamp = dt.atStartOfDay().plusDays(daysOffset).atZone(ZoneId.systemDefault());
+        
         return dt!=null
-                ?new java.sql.Timestamp(
-                        Instant.from(
-                                dt.atStartOfDay().plusDays(daysOffset))
-                        .toEpochMilli())
+                ?new java.sql.Timestamp(Instant.from(timestamp).toEpochMilli())
                 :null;
     }
 
