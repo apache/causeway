@@ -61,7 +61,7 @@ import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.events.RuntimeEventService;
+import org.apache.isis.core.runtime.events.AppLifecycleEventService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
@@ -92,7 +92,7 @@ public class InteractionFactoryDefault
 implements InteractionFactory, InteractionTracker {
 
     @Inject AuthenticationManager authenticationManager;
-    @Inject RuntimeEventService runtimeEventService;
+    @Inject AppLifecycleEventService runtimeEventService;
     @Inject SpecificationLoader specificationLoader;
     @Inject MetaModelContext metaModelContext;
     @Inject IsisConfiguration configuration;

@@ -47,7 +47,7 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-public class RuntimeEventService {
+public class AppLifecycleEventService {
     
     @Inject private EventBusService eventBusService;
     @Inject private InteractionTracker interactionTracker;

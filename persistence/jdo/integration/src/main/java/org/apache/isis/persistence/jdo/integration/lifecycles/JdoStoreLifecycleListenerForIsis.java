@@ -22,7 +22,7 @@ import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
-import org.apache.isis.core.runtime.events.RuntimeEventService;
+import org.apache.isis.core.runtime.events.AppLifecycleEventService;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 
 import lombok.val;
@@ -38,7 +38,7 @@ import lombok.val;
 public class JdoStoreLifecycleListenerForIsis 
 implements javax.jdo.listener.StoreLifecycleListener {
     
-    @Inject private RuntimeEventService runtimeEventService;
+    @Inject private AppLifecycleEventService runtimeEventService;
 
     @Override
     public void preStore(InstanceLifecycleEvent instanceEvent) {

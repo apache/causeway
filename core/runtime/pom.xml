@@ -28,6 +28,9 @@
 
     <artifactId>isis-core-runtime</artifactId>
     <name>Apache Isis Core - Runtime</name>
+    <description>
+    	Bundles framework internal services, utilities and events.
+    </description>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>

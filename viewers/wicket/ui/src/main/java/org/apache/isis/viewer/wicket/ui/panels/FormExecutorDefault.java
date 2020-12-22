@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.memento.ObjectMemento;
-import org.apache.isis.core.runtime.events.RuntimeEventService;
+import org.apache.isis.core.runtime.events.AppLifecycleEventService;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -141,7 +141,7 @@ implements FormExecutor {
                 val commonContext = targetEntityModel.getCommonContext();
                 commonContext.getInteractionTracker().currentInteractionSession()
                 .ifPresent(interaction->{
-                    commonContext.lookupServiceElseFail(RuntimeEventService.class)
+                    commonContext.lookupServiceElseFail(AppLifecycleEventService.class)
                     .fireInteractionFlushRequest(interaction);
                 });
             }
