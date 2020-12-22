@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.events.persistence;
+package org.apache.isis.core.transaction.changetracking.events;
 
 import lombok.Value;
 
@@ -26,7 +26,7 @@ import lombok.Value;
  *
  */
 @Value(staticConstructor = "of")
-public class PreStoreEvent {
+public class PostStoreEvent {
     
     private final Object persistableObject;
 }

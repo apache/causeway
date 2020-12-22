@@ -21,6 +21,7 @@ package org.apache.isis.core.interaction.scope;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.context._Context;
@@ -31,6 +32,7 @@ import lombok.val;
 /**
  * @since 2.0
  */
+@Component
 public class IsisInteractionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
     @Override

@@ -27,8 +27,8 @@ import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
-import org.apache.isis.core.runtime.events.persistence.PostStoreEvent;
-import org.apache.isis.core.runtime.events.persistence.PreStoreEvent;
+import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
+import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;

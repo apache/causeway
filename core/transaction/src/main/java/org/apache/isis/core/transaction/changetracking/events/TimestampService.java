@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.events.persistence;
+package org.apache.isis.core.transaction.changetracking.events;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.user.UserService;
 import lombok.val;
 
 @Service
-@Named("isisRuntime.TimestampService")
+@Named("isisTransaction.TimestampService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

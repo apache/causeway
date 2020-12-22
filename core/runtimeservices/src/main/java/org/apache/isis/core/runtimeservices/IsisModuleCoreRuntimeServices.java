@@ -64,13 +64,11 @@ import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.isis.core.runtimeservices.xactn.TransactionServiceSpring;
 import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
 import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
-import org.apache.isis.core.transaction.IsisModuleCoreTransaction;
 
 @Configuration
 @Import({
         // modules
         IsisModuleCoreRuntime.class,
-        IsisModuleCoreTransaction.class,
         IsisModuleCoreCodegenByteBuddy.class,
 
         // @Service's
