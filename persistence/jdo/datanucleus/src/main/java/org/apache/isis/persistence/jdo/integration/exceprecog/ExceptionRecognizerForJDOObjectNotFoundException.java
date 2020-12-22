@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.integration.exceprecog;
 
 import javax.inject.Named;
-import javax.jdo.JDODataStoreException;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -28,19 +27,17 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Service
-@Named("isisJdoDn5.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException")
+@Named("isisJdoDn.ExceptionRecognizerForJDOObjectNotFoundException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
+public class ExceptionRecognizerForJDOObjectNotFoundException 
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
-        super(Category.CONSTRAINT_VIOLATION,
-                ofTypeIncluding(
-                        JDODataStoreException.class,
-                        JdoNestedExceptionResolver::streamNestedExceptionsOf,
-                        "integrity constraint violation: foreign key no action"),
-                prefix("Related data exists"));
+    public ExceptionRecognizerForJDOObjectNotFoundException() {
+        super(Category.NOT_FOUND,
+                javax.jdo.JDOObjectNotFoundException.class,
+                prefix("Unable to load object.  " +
+                        "Has it been deleted by someone else?"));
     }
 
 }

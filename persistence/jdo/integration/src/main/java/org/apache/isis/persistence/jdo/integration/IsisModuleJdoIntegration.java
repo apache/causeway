@@ -49,10 +49,7 @@ import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
         
         // @Service's
         DataNucleusSettings.class,
-        ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
-        ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
-        ExceptionRecognizerForJDOObjectNotFoundException.class,
-        ExceptionRecognizerForJDODataStoreException.class,
+        
         
         IsisJdoSupportDN5.class,
         IsisPlatformTransactionManagerForJdo.class,

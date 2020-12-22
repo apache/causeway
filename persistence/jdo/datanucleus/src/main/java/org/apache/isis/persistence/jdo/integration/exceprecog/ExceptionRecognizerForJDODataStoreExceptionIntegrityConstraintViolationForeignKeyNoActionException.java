@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.integration.exceprecog;
 
 import javax.inject.Named;
+import javax.jdo.JDODataStoreException;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -27,21 +28,19 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Service
-@Named("isisJdoDn5.ExceptionRecognizerForJDODataStoreException")
+@Named("isisJdoDn.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDODataStoreException 
+public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForJDODataStoreException() {
-        super(Category.SERVER_ERROR,
-                ofTypeExcluding(
-                        javax.jdo.JDODataStoreException.class,
+    public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
+        super(Category.CONSTRAINT_VIOLATION,
+                ofTypeIncluding(
+                        JDODataStoreException.class,
                         JdoNestedExceptionResolver::streamNestedExceptionsOf,
-                        "NOT NULL check constraint"),
-                prefix("Unable to save changes.  " +
-                        "Does similar data already exist, or has referenced data been deleted?"));
+                        "integrity constraint violation: foreign key no action"),
+                prefix("Related data exists"));
     }
-
 
 }

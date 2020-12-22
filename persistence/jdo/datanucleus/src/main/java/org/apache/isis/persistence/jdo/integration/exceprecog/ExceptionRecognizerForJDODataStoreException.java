@@ -27,17 +27,21 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Service
-@Named("isisJdoDn5.ExceptionRecognizerForJDOObjectNotFoundException")
+@Named("isisJdoDn.ExceptionRecognizerForJDODataStoreException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDOObjectNotFoundException 
+public class ExceptionRecognizerForJDODataStoreException 
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForJDOObjectNotFoundException() {
-        super(Category.NOT_FOUND,
-                javax.jdo.JDOObjectNotFoundException.class,
-                prefix("Unable to load object.  " +
-                        "Has it been deleted by someone else?"));
+    public ExceptionRecognizerForJDODataStoreException() {
+        super(Category.SERVER_ERROR,
+                ofTypeExcluding(
+                        javax.jdo.JDODataStoreException.class,
+                        JdoNestedExceptionResolver::streamNestedExceptionsOf,
+                        "NOT NULL check constraint"),
+                prefix("Unable to save changes.  " +
+                        "Does similar data already exist, or has referenced data been deleted?"));
     }
+
 
 }

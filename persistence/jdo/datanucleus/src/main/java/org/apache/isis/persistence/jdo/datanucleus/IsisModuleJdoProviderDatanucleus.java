@@ -32,6 +32,10 @@ import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleu
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
+import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDODataStoreException;
+import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException;
+import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDOObjectNotFoundException;
+import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 
 @Configuration
 @Import({
@@ -43,6 +47,12 @@ import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJd
     Persistable_datanucleusVersionLong.class,
     Persistable_datanucleusVersionTimestamp.class,
     Persistable_downloadJdoMetadata.class,
+    
+    // @Service's
+    ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
+    ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
+    ExceptionRecognizerForJDOObjectNotFoundException.class,
+    ExceptionRecognizerForJDODataStoreException.class,
     
 })
 public class IsisModuleJdoProviderDatanucleus {
