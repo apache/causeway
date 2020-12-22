@@ -18,10 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.objectadapter;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.NonNull;
@@ -36,23 +33,23 @@ final class _Factories {
         return PojoAdapter.of(pojo, rootOid, specificationLoader);
     }
 
-    public static ObjectAdapter createCollectionAdapter(
-            final Object pojo,
-            final @NonNull ParentedOid collectionOid, 
-            final @NonNull SpecificationLoader specificationLoader) {
-        return PojoAdapter.of(pojo, collectionOid, specificationLoader);
-    }
+//    public static ObjectAdapter createCollectionAdapter(
+//            final Object pojo,
+//            final @NonNull ParentedOid collectionOid, 
+//            final @NonNull SpecificationLoader specificationLoader) {
+//        return PojoAdapter.of(pojo, collectionOid, specificationLoader);
+//    }
 
-    public static ObjectAdapter createCollectionAdapter(
-            final @NonNull Object pojo,
-            final RootOid parentOid,
-            final OneToManyAssociation otma, 
-            final @NonNull SpecificationLoader specificationLoader) {
-
-        // persistence of collection follows the parent
-        final ParentedOid collectionOid = Oid.Factory.parented(parentOid, otma);
-        return createCollectionAdapter(pojo, collectionOid, specificationLoader);
-    }
+//    private static ObjectAdapter createCollectionAdapter(
+//            final @NonNull Object pojo,
+//            final RootOid parentOid,
+//            final OneToManyAssociation otma, 
+//            final @NonNull SpecificationLoader specificationLoader) {
+//
+//        // persistence of collection follows the parent
+//        final ParentedOid collectionOid = Oid.Factory.parented(parentOid, otma);
+//        return createCollectionAdapter(pojo, collectionOid, specificationLoader);
+//    }
 
     
 }

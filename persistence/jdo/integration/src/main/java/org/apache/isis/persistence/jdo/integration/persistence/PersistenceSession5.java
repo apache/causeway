@@ -19,32 +19,22 @@
 package org.apache.isis.persistence.jdo.integration.persistence;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.FetchGroup;
-import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.identity.SingleFieldIdentity;
 
 import org.datanucleus.enhancement.Persistable;
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
-import org.datanucleus.identity.DatastoreIdImpl;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -74,8 +64,6 @@ import org.apache.isis.persistence.jdo.integration.persistence.queries.Persisten
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -345,6 +333,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         } catch (final RuntimeException e) {
 
             //XXX this idiom could be delegated to a service
+            //or remodel the method to return a Result<T>
             for (val exceptionRecognizer : lookupServices(ExceptionRecognizer.class)) {
                 val recognition = exceptionRecognizer.recognize(e).orElse(null);
                 if(recognition != null) {
@@ -364,71 +353,71 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return result;
     }
 
-    @Override
-    public Map<RootOid,Object> fetchPersistentPojos(final List<RootOid> rootOids) {
-
-        if(rootOids.isEmpty()) {
-            return Collections.emptyMap();
-        }
-
-        val specLoader = super.getSpecificationLoader();
-        
-        final List<Object> dnOids = new ArrayList<>(rootOids.size());
-        for (val rootOid : rootOids) {
-            final Object id = JdoObjectIdSerializer.toJdoObjectId(specLoader, rootOid);
-            if(id instanceof SingleFieldIdentity) {
-                dnOids.add(id);
-            } else if (id instanceof String && ((String) id).contains("[OID]")) {
-                final DatastoreIdImpl datastoreId = new DatastoreIdImpl((String)id);
-                dnOids.add(datastoreId);
-            } else {
-                // application identity
-                final DatastoreIdImpl datastoreId = new DatastoreIdImpl(clsOf(rootOid).getName(), id);
-                dnOids.add(datastoreId);
-            }
-        }
-        FetchPlan fetchPlan = persistenceManager.getFetchPlan();
-        fetchPlan.addGroup(FetchGroup.DEFAULT);
-        final List<Object> persistentPojos = new ArrayList<>(rootOids.size());
-        try {
-            final Collection<Object> pojos = uncheckedCast(persistenceManager.getObjectsById(dnOids, true));
-            for (final Object pojo : pojos) {
-                try {
-                    persistentPojos.add(pojo);
-                } catch(Exception ex) {
-                    persistentPojos.add(null);
-                }
-            }
-        } catch(NucleusObjectNotFoundException nonfe) {
-            // at least one not found; fall back to loading one by one
-            for (final Object dnOid : dnOids) {
-                try {
-                    final Object persistentPojo = persistenceManager.getObjectById(dnOid);
-                    persistentPojos.add(persistentPojo);
-                } catch(Exception ex) {
-                    persistentPojos.add(null);
-                }
-            }
-        }
-        Map<RootOid, Object> pojoByOid = zip(rootOids, persistentPojos);
-        return pojoByOid;
-    }
-
-    private static Map<RootOid, Object> zip(final List<RootOid> rootOids, final Collection<Object> pojos) {
-        final Map<RootOid,Object> pojoByOid = _Maps.newLinkedHashMap();
-        int i = 0;
-        for (final Object pojo : pojos) {
-            final RootOid rootOid = rootOids.get(i++);
-            pojoByOid.put(rootOid, pojo);
-        }
-        return pojoByOid;
-    }
-
-    @Deprecated
-    private Class<?> clsOf(final RootOid oid) {
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getObjectSpecId());
-        return objectSpec.getCorrespondingClass();
-    }
+//    @Override
+//    public Map<RootOid,Object> fetchPersistentPojos(final List<RootOid> rootOids) {
+//
+//        if(rootOids.isEmpty()) {
+//            return Collections.emptyMap();
+//        }
+//
+//        val specLoader = super.getSpecificationLoader();
+//        
+//        final List<Object> dnOids = new ArrayList<>(rootOids.size());
+//        for (val rootOid : rootOids) {
+//            final Object id = JdoObjectIdSerializer.toJdoObjectId(specLoader, rootOid);
+//            if(id instanceof SingleFieldIdentity) {
+//                dnOids.add(id);
+//            } else if (id instanceof String && ((String) id).contains("[OID]")) {
+//                final DatastoreIdImpl datastoreId = new DatastoreIdImpl((String)id);
+//                dnOids.add(datastoreId);
+//            } else {
+//                // application identity
+//                final DatastoreIdImpl datastoreId = new DatastoreIdImpl(clsOf(rootOid).getName(), id);
+//                dnOids.add(datastoreId);
+//            }
+//        }
+//        FetchPlan fetchPlan = persistenceManager.getFetchPlan();
+//        fetchPlan.addGroup(FetchGroup.DEFAULT);
+//        final List<Object> persistentPojos = new ArrayList<>(rootOids.size());
+//        try {
+//            final Collection<Object> pojos = uncheckedCast(persistenceManager.getObjectsById(dnOids, true));
+//            for (final Object pojo : pojos) {
+//                try {
+//                    persistentPojos.add(pojo);
+//                } catch(Exception ex) {
+//                    persistentPojos.add(null);
+//                }
+//            }
+//        } catch(NucleusObjectNotFoundException nonfe) {
+//            // at least one not found; fall back to loading one by one
+//            for (final Object dnOid : dnOids) {
+//                try {
+//                    final Object persistentPojo = persistenceManager.getObjectById(dnOid);
+//                    persistentPojos.add(persistentPojo);
+//                } catch(Exception ex) {
+//                    persistentPojos.add(null);
+//                }
+//            }
+//        }
+//        Map<RootOid, Object> pojoByOid = zip(rootOids, persistentPojos);
+//        return pojoByOid;
+//    }
+//
+//    private static Map<RootOid, Object> zip(final List<RootOid> rootOids, final Collection<Object> pojos) {
+//        final Map<RootOid,Object> pojoByOid = _Maps.newLinkedHashMap();
+//        int i = 0;
+//        for (final Object pojo : pojos) {
+//            final RootOid rootOid = rootOids.get(i++);
+//            pojoByOid.put(rootOid, pojo);
+//        }
+//        return pojoByOid;
+//    }
+//
+//    @Deprecated
+//    private Class<?> clsOf(final RootOid oid) {
+//        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getObjectSpecId());
+//        return objectSpec.getCorrespondingClass();
+//    }
 
 
     // -- REFRESH
@@ -661,19 +650,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         getEntityChangeTracker().recognizeUpdating(entity);
     }
 
-    /**
-     * makes sure the entity is known to Isis and is a root
-     * @param pojo
-     */
-    @Override
-    public void ensureRootObject(final Persistable pojo) {
-        final Oid oid = adapterFor(pojo).getOid();
-        if (!(oid instanceof RootOid)) {
-            throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
-        }
-    }
-
-    @Override
+    @Override //XXX also provided by 'provider' module
     public EntityState getEntityState(@Nullable Object pojo) {
 
         // guard against misuse

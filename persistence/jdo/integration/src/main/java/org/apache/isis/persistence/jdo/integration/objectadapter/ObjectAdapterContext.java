@@ -19,8 +19,7 @@
 package org.apache.isis.persistence.jdo.integration.objectadapter;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -107,7 +106,7 @@ final public class ObjectAdapterContext {
         return adapter;
     }
 
-    public ObjectAdapter recreatePojo(Oid oid, Object recreatedPojo) {
+    public ObjectAdapter recreatePojo(RootOid oid, Object recreatedPojo) {
         final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
         return injectServices(createdAdapter);
     }
@@ -124,19 +123,13 @@ final public class ObjectAdapterContext {
         return adapter;
     }
 
-    // package private
-    ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
-        final ObjectAdapter createdAdapter;
+    private ObjectAdapter createRootOrAggregatedAdapter(final RootOid oid, final Object pojo) {
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;
-            createdAdapter = _Factories.createRootAdapter(pojo, rootOid, getSpecificationLoader());
-        } else /*if (oid instanceof CollectionOid)*/ {
-            final ParentedOid collectionOid = (ParentedOid) oid;
-            createdAdapter = _Factories.createCollectionAdapter(pojo, collectionOid, getSpecificationLoader());
-        }
-        return createdAdapter;
+            return _Factories.createRootAdapter(pojo, rootOid, getSpecificationLoader());
+        } 
+        throw _Exceptions.illegalArgument("Parented Oids are no longer supported.");
     }
-
 
     // -- OBJECT ADAPTER PROVIDER SUPPORT
 

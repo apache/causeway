@@ -36,16 +36,6 @@ public class OidMarshallerTest_roundtripping {
         final RootOid deString = RootOid.deString(enString);
         assertThat(deString, is(oid));
     }
-
-    @Test
-    public void collectionOid() {
-        RootOid parentOid = Oid.Factory.root(ObjectSpecId.of("CUS"), "123");
-        ParentedOid oid = Oid.Factory.parentedForTesting(parentOid, "items");
-
-        final String enString = oid.enString();
-        final ParentedOid deString = ParentedOid.deString(enString);
-        assertThat(deString, is(oid));
-    }
     
     @Test
     public void rootOid_withLegacyVersionIgnored() {

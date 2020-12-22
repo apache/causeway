@@ -19,15 +19,12 @@
 package org.apache.isis.persistence.jdo.integration.persistence;
 
 import java.rmi.NoSuchObjectException;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -83,9 +80,6 @@ public interface PersistenceSession {
      * @throws NoSuchObjectException if not found
      */
     ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier);
-
-    /**@since 2.0*/
-    Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
 
     Can<ManagedObject> allMatchingQuery(final Query<?> query);
     Optional<ManagedObject> firstMatchingQuery(final Query<?> query);

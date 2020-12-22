@@ -43,9 +43,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.persistence.jdo.integration.oid._JdoObjectIdDecoder.JdoObjectIdDecodingRequest;
 
 import lombok.NonNull;
@@ -84,12 +82,6 @@ public final class JdoObjectIdSerializer {
             // the JDO spec (5.4.3) requires that OIDs are serializable toString and
             // re-create-able through the constructor
             jdoOid.getClass().getName() + SEPARATOR + jdoOid.toString());
-    }
-
-    @Deprecated
-    public static Object toJdoObjectId(SpecificationLoader specificationLoader, RootOid oid) {
-        val spec = specificationLoader.lookupBySpecIdElseLoad(oid.getObjectSpecId());
-        return toJdoObjectId(spec, oid);
     }
     
     public static Object toJdoObjectId(ObjectSpecification spec, RootOid oid) {

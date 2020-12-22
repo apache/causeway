@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.integration.testing;
 import java.util.Iterator;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -72,7 +73,7 @@ public class PojoAdapterBuilder {
         }, COLLECTION {
             @Override
             Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String collectionId) {
-                return Oid.Factory.parentedForTesting(rootOid, collectionId);
+                throw _Exceptions.illegalArgument("Parented Oids are no longer supported.");
             }
         }, VALUE {
             @Override

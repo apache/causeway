@@ -44,7 +44,6 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
      */
     interface PersistenceSessionLifecycleManagement {
 
-        void ensureRootObject(Persistable pojo);
         ObjectAdapter initializeEntity(Persistable pojo);
 
         void invokeIsisPersistingCallback(Persistable pojo);
@@ -75,25 +74,25 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preAttach(final InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
-        persistenceSession.ensureRootObject(pojo);
+        final Persistable pojo = _Utils.persistableFor(event);
+        _Utils.ensureRootObject(pojo);
     }
 
     @Override
     public void postAttach(final InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
-        persistenceSession.ensureRootObject(pojo);
+        final Persistable pojo = _Utils.persistableFor(event);
+        _Utils.ensureRootObject(pojo);
     }
 
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
+        final Persistable pojo = _Utils.persistableFor(event);
         persistenceSession.initializeEntity(pojo);
     }
 
     @Override
     public void preStore(InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
+        final Persistable pojo = _Utils.persistableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
             persistenceSession.invokeIsisPersistingCallback(pojo);
         }
@@ -101,7 +100,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void postStore(InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
+        final Persistable pojo = _Utils.persistableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
             persistenceSession.enlistCreatedAndInvokeIsisPersistedCallback(pojo);
         } else {
@@ -111,7 +110,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
+        final Persistable pojo = _Utils.persistableFor(event);
         persistenceSession.enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
     }
 
@@ -127,7 +126,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
+        final Persistable pojo = _Utils.persistableFor(event);
         persistenceSession.enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
 
 
@@ -162,14 +161,14 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preDetach(InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
-        persistenceSession.ensureRootObject(pojo);
+        final Persistable pojo = _Utils.persistableFor(event);
+        _Utils.ensureRootObject(pojo);
     }
 
     @Override
     public void postDetach(InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistenceCapableFor(event);
-        persistenceSession.ensureRootObject(pojo);
+        final Persistable pojo = _Utils.persistableFor(event);
+        _Utils.ensureRootObject(pojo);
     }
 
     // /////////////////////////////////////////////////////////

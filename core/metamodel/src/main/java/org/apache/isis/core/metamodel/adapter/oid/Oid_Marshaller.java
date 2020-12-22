@@ -176,17 +176,9 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
                 throw _Exceptions.illegalArgument("Aggregated Oids are no longer supported");
             }
         } else {
-            final String oidStrWithoutCollectionName = getGroup(matcher, 1);
-
-            final String parentOidStr = oidStrWithoutCollectionName;
-
-            RootOid parentOid = this.unmarshal(parentOidStr, RootOid.class);
-            ensureCorrectType(oidStr, requestedType, ParentedOid.class);
-            return _Casts.uncheckedCast( Oid_Parented.ofOneToManyId(parentOid, oneToManyId) );
+            throw _Exceptions.illegalArgument("Parented Oids are no longer supported.");
         }
     }
-
-
 
     private static class AggregateOidPart {
         AggregateOidPart(String objectType, String localId) {
@@ -229,11 +221,5 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
         _Assert.assertFalse(rootOid.isValue(), "cannot marshal values");
         return rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
     }
-
-    @Override
-    public String marshal(ParentedOid parentedOid) {
-        return parentedOid.getParentOid().enString() + SEPARATOR_PARENTED + parentedOid.getName();
-    }
-
 
 }

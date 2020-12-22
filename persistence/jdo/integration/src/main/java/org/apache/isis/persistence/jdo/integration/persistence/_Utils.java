@@ -18,21 +18,40 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
+import javax.annotation.Nullable;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
+
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
+import org.apache.isis.persistence.jdo.integration.objectadapter.PojoAdapter;
+
+import lombok.NonNull;
+import lombok.val;
 
 final class _Utils {
 
     @SuppressWarnings("unused")
     private static Object jdoObjectIdFor(InstanceLifecycleEvent event) {
-        Persistable persistenceCapable = _Utils.persistenceCapableFor(event);
+        Persistable persistenceCapable = _Utils.persistableFor(event);
         Object jdoObjectId = persistenceCapable.dnGetObjectId();
         return jdoObjectId;
     }
 
-    static Persistable persistenceCapableFor(InstanceLifecycleEvent event) {
+    static Persistable persistableFor(InstanceLifecycleEvent event) {
         return (Persistable)event.getSource();
+    }
+    
+    static boolean ensureRootObject(final Persistable pojo) {
+//        final Oid oid = adapterFor(pojo).getOid();
+//        if (!(oid instanceof RootOid)) {
+//            throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
+//        }
+        return pojo!=null; // why would a Persistable ever be something different?
     }
     
     static boolean isJUnitTest() {
@@ -44,4 +63,42 @@ final class _Utils {
         return false;
     }
 
+    // -- LOW LEVEL
+    
+    @Nullable
+    static ObjectAdapter adapterFor(
+            final @NonNull ObjectManager objectManager, 
+            final @Nullable Object pojo) {
+
+        if(pojo == null) {
+            return null;
+        }
+
+        val adapter = objectManager.adapt(pojo);
+        val rootOid = objectManager.identifyObject(adapter);
+        val newAdapter = PojoAdapter.of(pojo, rootOid, 
+                objectManager.getMetaModelContext().getSpecificationLoader()); 
+                
+        injectServices(objectManager.getMetaModelContext().getServiceInjector(), newAdapter);
+        return newAdapter;
+    }
+    
+    @Nullable
+    static ManagedObject injectServices(
+            final @NonNull ServiceInjector serviceInjector,
+            final @Nullable ManagedObject adapter) {
+        
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
+            return adapter; 
+        }
+        
+        val spec = adapter.getSpecification();
+        if(spec==null 
+                || spec.isValue()) {
+            return adapter; // guard against value objects
+        }
+        serviceInjector.injectServicesInto(adapter.getPojo());
+        return adapter;
+    }
+    
 }
