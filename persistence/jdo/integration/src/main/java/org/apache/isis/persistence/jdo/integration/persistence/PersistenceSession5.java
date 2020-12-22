@@ -569,7 +569,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 //        // viewModel's #viewModelMemento might need to use services
 //        serviceInjector.injectServicesInto(pojo); //redundant
 
-        final RootOid originalOid = _Utils.createRootOid(getMetaModelContext(), this, pojo);
+        final RootOid originalOid = _Utils.createRootOid(getMetaModelContext(), getJdoPersistenceManager(), pojo);
         final ManagedObject entity = _Utils.recreatePojo(getMetaModelContext(), originalOid, pojo);
 
         getEntityChangeTracker().recognizeLoaded(entity);
@@ -623,7 +623,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        val entity = _Utils.fetchPersistent(getMetaModelContext(), this, pojo);
+        val entity = _Utils.fetchPersistent(getMetaModelContext(), getJdoPersistenceManager(), pojo);
         if (entity == null) {
             throw _Exceptions
                 .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
@@ -633,7 +633,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void invokeIsisUpdatedCallback(Persistable pojo) {
-        val entity = _Utils.fetchPersistent(getMetaModelContext(), this, pojo);
+        val entity = _Utils.fetchPersistent(getMetaModelContext(), getJdoPersistenceManager(), pojo);
         if (entity == null) {
             throw _Exceptions
                 .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);

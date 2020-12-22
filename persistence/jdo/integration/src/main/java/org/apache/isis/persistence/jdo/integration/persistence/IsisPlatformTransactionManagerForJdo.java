@@ -87,7 +87,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         
         if(!isInInteraction) {
             
-            if(_Utils.isJUnitTest()) {
+            if(_ContextUtil.isJUnitTest()) {
 
                 throw _Exceptions.illegalState("No InteractionSession available. "
                         + "Transactions are expected to be within scope of an InteractionSession."

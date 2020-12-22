@@ -19,18 +19,18 @@
 package org.apache.isis.persistence.jdo.integration.persistence;
 
 import javax.annotation.Nullable;
+import javax.jdo.PersistenceManager;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.integration.oid.JdoObjectIdSerializer;
 
 import lombok.NonNull;
 import lombok.val;
@@ -45,15 +45,6 @@ final class _Utils {
         return pojo!=null; // why would a Persistable ever be something different?
     }
     
-    static boolean isJUnitTest() {
-        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
-            if (element.getClassName().startsWith("org.junit.")) {
-                return true;
-            }           
-        }
-        return false;
-    }
-
     @Nullable
     static ManagedObject adapterFor(
             final MetaModelContext mmc,
@@ -88,12 +79,12 @@ final class _Utils {
     
     static RootOid createRootOid(
             final @NonNull MetaModelContext mmc,
-            final @NonNull IsisPersistenceSessionJdo persistenceSession, // TODO don't depend on session
+            final @NonNull PersistenceManager pm,
             final @NonNull Object pojo) {
 
         val spec = mmc.getSpecification(pojo.getClass());
 
-        final String identifier = persistenceSession.identifierFor(pojo);
+        final String identifier = JdoObjectIdSerializer.identifierForElseFail(pm, pojo);
 
         final ObjectSpecId objectSpecId = spec.getSpecId();
         return Oid.Factory.root(objectSpecId, identifier);
@@ -101,38 +92,27 @@ final class _Utils {
 
     static ManagedObject recreatePojo(
             final @NonNull MetaModelContext mmc,
-            final @NonNull RootOid oid,
+            final @NonNull RootOid rootOid,
             final @NonNull Object recreatedPojo) {
         
         val spec = mmc.getSpecification(recreatedPojo.getClass());
         
-        final ManagedObject createdAdapter = createRootOrAggregatedAdapter(spec, oid, recreatedPojo);
+        final ManagedObject createdAdapter = ManagedObject.identified(spec, recreatedPojo, rootOid);
         return injectServices(mmc, createdAdapter);
     }
 
     static ManagedObject fetchPersistent(
             final @NonNull MetaModelContext mmc,
-            final @NonNull IsisPersistenceSessionJdo persistenceSession, // TODO don't depend on session
+            final @NonNull PersistenceManager pm,
             final Object pojo) {
-        if (persistenceSession.getJdoPersistenceManager().getObjectId(pojo) == null) {
+        if (pm.getObjectId(pojo) == null) {
             return null;
         }
-        final RootOid oid = createRootOid(mmc, persistenceSession, pojo);
+        final RootOid oid = createRootOid(mmc, pm, pojo);
         final ManagedObject adapter = recreatePojo(mmc, oid, pojo);
         return adapter;
     }
-    
-    private static ManagedObject createRootOrAggregatedAdapter(
-            final @NonNull ObjectSpecification spec,
-            final RootOid oid, 
-            final Object pojo) {
-        
-        if(oid instanceof RootOid) {
-            final RootOid rootOid = (RootOid) oid;
-            return ManagedObject.identified(spec, pojo, rootOid);
-        } 
-        throw _Exceptions.illegalArgument("Parented Oids are no longer supported, or cannot use Value Oid.");
-    }
+   
     
 //  @SuppressWarnings("unused")
 //  private static Object jdoObjectIdFor(InstanceLifecycleEvent event) {
