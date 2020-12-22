@@ -17,21 +17,8 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.test.dom;
+package org.apache.isis.core.metamodel.objects.dom;
 
-public class TestObjectAsService {
+public interface Interface1 {
 
-    public String getId() {
-        return null;
-    }
-
-    public void init() {
-    }
-
-    public void action() {
-    }
-
-    public String title() {
-        return null;
-    }
 }

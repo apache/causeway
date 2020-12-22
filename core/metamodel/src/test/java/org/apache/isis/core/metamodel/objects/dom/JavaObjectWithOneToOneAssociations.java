@@ -17,13 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.test.dom;
+package org.apache.isis.core.metamodel.objects.dom;
 
-// import org.apache.isis.applib.Aggregated;
+public class JavaObjectWithOneToOneAssociations {
+    boolean available = false;
+    private JavaReferencedObject object;
+    boolean valid = false;
+    boolean visible = false;
 
-public class TestObjectAsAggregated { // implements Aggregated {
+    public String availableReferencedObject(final JavaReferencedObject object) {
+        return available ? null : "not available";
+    }
 
-    public Object getAggregate() {
-        return null;
+    public JavaReferencedObject getReferencedObject() {
+        return object;
+    }
+
+    public void setReferencedObject(final JavaReferencedObject object) {
+        this.object = object;
+    }
+
+    public String validReferencedObject(final JavaReferencedObject object) {
+        return valid ? null : "not valid";
+    }
+
+    public boolean hideReferencedObject(final JavaReferencedObject object) {
+        return !visible;
     }
 }

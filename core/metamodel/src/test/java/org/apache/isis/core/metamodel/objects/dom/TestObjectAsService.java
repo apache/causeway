@@ -17,19 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.test.dom;
+package org.apache.isis.core.metamodel.objects.dom;
 
-public class JavaReferencedObject {
-    private static int next;
-    private final int id = next++;
+public class TestObjectAsService {
 
-    public JavaReferencedObject() {
-        super();
+    public String getId() {
+        return null;
     }
 
-    @Override
-    public String toString() {
-        return "JavaReferencedObject#" + id;
+    public void init() {
     }
 
+    public void action() {
+    }
+
+    public String title() {
+        return null;
+    }
 }

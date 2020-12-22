@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.test;
+package org.apache.isis.core.metamodel.objects;
 
 import java.lang.reflect.Method;
 import java.util.List;

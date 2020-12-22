@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.test.dom;
+package org.apache.isis.core.metamodel.objects.dom;
 
 public class JavaActionTestObject {
     private boolean actionCalled = false;

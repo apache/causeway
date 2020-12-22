@@ -17,8 +17,8 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.test.dom;
+package org.apache.isis.core.metamodel.objects.dom;
 
-public interface Interface1 {
+public class TestDomainObject {
 
 }
