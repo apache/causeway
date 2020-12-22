@@ -22,6 +22,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
@@ -97,22 +98,22 @@ final public class ObjectAdapterContext {
 
     // -- ADAPTER MANAGER LEGACY
 
-    public ObjectAdapter fetchPersistent(final Object pojo) {
+    public ManagedObject fetchPersistent(final Object pojo) {
         if (persistenceSession.getJdoPersistenceManager().getObjectId(pojo) == null) {
             return null;
         }
         final RootOid oid = createPersistentOrViewModelOid(pojo);
-        final ObjectAdapter adapter = recreatePojo(oid, pojo);
+        final ManagedObject adapter = recreatePojo(oid, pojo);
         return adapter;
     }
 
-    public ObjectAdapter recreatePojo(RootOid oid, Object recreatedPojo) {
-        final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
+    public ManagedObject recreatePojo(RootOid oid, Object recreatedPojo) {
+        final ManagedObject createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
         return injectServices(createdAdapter);
     }
 
     // package private
-    ObjectAdapter injectServices(final @NonNull ObjectAdapter adapter) {
+    ManagedObject injectServices(final @NonNull ManagedObject adapter) {
         val spec = adapter.getSpecification();
         if(spec==null 
                 || spec.isValue()) {
@@ -123,10 +124,10 @@ final public class ObjectAdapterContext {
         return adapter;
     }
 
-    private ObjectAdapter createRootOrAggregatedAdapter(final RootOid oid, final Object pojo) {
+    private ManagedObject createRootOrAggregatedAdapter(final RootOid oid, final Object pojo) {
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;
-            return _Factories.createRootAdapter(pojo, rootOid, getSpecificationLoader());
+            return PojoAdapter.of(pojo, rootOid, getSpecificationLoader());
         } 
         throw _Exceptions.illegalArgument("Parented Oids are no longer supported.");
     }

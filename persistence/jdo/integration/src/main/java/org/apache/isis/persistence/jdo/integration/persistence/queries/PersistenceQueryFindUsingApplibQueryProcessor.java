@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoPropertyUtils;
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSession5;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
@@ -147,10 +146,10 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
                         : results.subList(0, 1);
     }
 
-    private static Map<String, Object> unwrap(final Map<String, ObjectAdapter> argumentAdaptersByParameterName) {
+    private static Map<String, Object> unwrap(final Map<String, ManagedObject> argumentAdaptersByParameterName) {
         final Map<String, Object> argumentsByParameterName = _Maps.newHashMap();
         for (final String parameterName : argumentAdaptersByParameterName.keySet()) {
-            final ObjectAdapter argumentAdapter = argumentAdaptersByParameterName.get(parameterName);
+            final ManagedObject argumentAdapter = argumentAdaptersByParameterName.get(parameterName);
             final Object argument = ManagedObjects.UnwrapUtil.single(argumentAdapter);
             argumentsByParameterName.put(parameterName, argument);
         }

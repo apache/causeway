@@ -20,6 +20,8 @@ package org.apache.isis.persistence.jdo.integration.objectadapter;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+
 /**
  * 
  * @since 2.0
@@ -30,6 +32,6 @@ public interface ObjectAdapterProvider {
     /**
      * @return standalone (value) or root adapter
      */
-    @Nullable ObjectAdapter adapterFor(@Nullable Object pojo);
+    @Nullable ManagedObject adapterFor(@Nullable Object pojo);
 
 }

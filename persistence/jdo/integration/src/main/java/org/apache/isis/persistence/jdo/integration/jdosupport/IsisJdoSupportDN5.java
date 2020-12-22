@@ -47,8 +47,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -69,7 +69,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     
     @Override
     public <T> T refresh(final T domainObject) {
-        final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
+        final ManagedObject adapter = getPersistenceSession().adapterFor(domainObject);
         getPersistenceSession().refreshRoot(adapter);
         return domainObject;
     }

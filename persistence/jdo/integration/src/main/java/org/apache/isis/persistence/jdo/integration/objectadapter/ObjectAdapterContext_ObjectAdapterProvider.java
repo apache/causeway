@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.integration.objectadapter;
 
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.RuntimeContext;
 
 import lombok.val;
@@ -44,7 +45,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     }
 
     @Override
-    public ObjectAdapter adapterFor(Object pojo) {
+    public ManagedObject adapterFor(Object pojo) {
 
         if(pojo == null) {
             return null;
@@ -52,8 +53,9 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
 
         val adapter = objectManager.adapt(pojo);
         val rootOid = objectManager.identifyObject(adapter);
-        val newAdapter = _Factories.createRootAdapter(pojo, rootOid, objectAdapterContext.getSpecificationLoader());
-        return objectAdapterContext.injectServices(newAdapter);
+        val newAdapter = PojoAdapter.of(pojo, rootOid, objectAdapterContext.getSpecificationLoader());
+        objectAdapterContext.injectServices(newAdapter);
+        return newAdapter;
     }
 
 

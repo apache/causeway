@@ -25,9 +25,9 @@ import java.util.Map;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
 
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.
@@ -36,12 +36,12 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
 
     private final String queryName;
     private final QueryCardinality cardinality;
-    private final Map<String, ObjectAdapter> argumentsAdaptersByParameterName;
+    private final Map<String, ManagedObject> argumentsAdaptersByParameterName;
 
     public PersistenceQueryFindUsingApplibQueryDefault(
             final ObjectSpecification specification,
             final String queryName,
-            final Map<String, ObjectAdapter> argumentsAdaptersByParameterName,
+            final Map<String, ManagedObject> argumentsAdaptersByParameterName,
             final QueryCardinality cardinality,
             final SpecificationLoader specificationLoader,
             final long... range) {
@@ -57,7 +57,7 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
         return queryName;
     }
 
-    public Map<String, ObjectAdapter> getArgumentsAdaptersByParameterName() {
+    public Map<String, ManagedObject> getArgumentsAdaptersByParameterName() {
         return Collections.unmodifiableMap(argumentsAdaptersByParameterName);
     }
 

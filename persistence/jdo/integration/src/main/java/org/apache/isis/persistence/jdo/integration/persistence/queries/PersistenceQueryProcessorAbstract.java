@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.integration.persistence.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSession5;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
@@ -58,7 +57,7 @@ implements PersistenceQueryProcessor<T> {
         for (val pojo : pojos) {
             // ought not to be necessary, however for some queries it seems that the
             // lifecycle listener is not called
-            ObjectAdapter adapter;
+            ManagedObject adapter;
             if(pojo instanceof Persistable) {
                 // an entity
                 adapter = persistenceSession.initializeEntity((Persistable) pojo);

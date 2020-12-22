@@ -27,6 +27,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ToString;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -35,12 +36,12 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.Getter;
 import lombok.val;
 
-public final class PojoAdapter implements ObjectAdapter {
+final class PojoAdapter implements ManagedObject {
 
     private final SpecificationLoader specificationLoader;
 
     @Getter(onMethod = @__(@Override)) private final Object pojo;
-    @Getter(onMethod = @__(@Override)) private final Oid oid;
+    @Getter private final Oid oid;
 
     // -- FACTORIES
 
@@ -60,7 +61,7 @@ public final class PojoAdapter implements ObjectAdapter {
 
         this.specificationLoader = specificationLoader;
 
-        if (pojo instanceof ObjectAdapter) {
+        if (pojo instanceof ManagedObject) {
             throw new IsisException("ObjectAdapter can't be used to wrap an ObjectAdapter: " + pojo);
         }
         if (pojo instanceof Oid) {

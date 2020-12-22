@@ -24,11 +24,8 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
-import org.apache.isis.persistence.jdo.integration.objectadapter.PojoAdapter;
 
 import lombok.NonNull;
 import lombok.val;
@@ -64,24 +61,6 @@ final class _Utils {
     }
 
     // -- LOW LEVEL
-    
-    @Nullable
-    static ObjectAdapter adapterFor(
-            final @NonNull ObjectManager objectManager, 
-            final @Nullable Object pojo) {
-
-        if(pojo == null) {
-            return null;
-        }
-
-        val adapter = objectManager.adapt(pojo);
-        val rootOid = objectManager.identifyObject(adapter);
-        val newAdapter = PojoAdapter.of(pojo, rootOid, 
-                objectManager.getMetaModelContext().getSpecificationLoader()); 
-                
-        injectServices(objectManager.getMetaModelContext().getServiceInjector(), newAdapter);
-        return newAdapter;
-    }
     
     @Nullable
     static ManagedObject injectServices(

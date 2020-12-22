@@ -50,7 +50,6 @@ import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindExceptio
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapterContext;
 import org.apache.isis.persistence.jdo.integration.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
@@ -570,14 +569,14 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public ObjectAdapter initializeEntity(final Persistable pojo) {
+    public ManagedObject initializeEntity(final Persistable pojo) {
 
 //        // need to do eagerly, because (if a viewModel then) a
 //        // viewModel's #viewModelMemento might need to use services
 //        serviceInjector.injectServicesInto(pojo); //redundant
 
         final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-        final ObjectAdapter entity = objectAdapterContext.recreatePojo(originalOid, pojo);
+        final ManagedObject entity = objectAdapterContext.recreatePojo(originalOid, pojo);
 
         getEntityChangeTracker().recognizeLoaded(entity);
 
@@ -654,7 +653,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public EntityState getEntityState(@Nullable Object pojo) {
 
         // guard against misuse
-        if(pojo instanceof ObjectAdapter) {
+        if(pojo instanceof ManagedObject) {
             throw _Exceptions.unexpectedCodeReach();
         }
 
@@ -685,7 +684,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public ObjectAdapter adapterFor(Object pojo) {
+    public ManagedObject adapterFor(Object pojo) {
         return objectAdapterContext.getObjectAdapterProvider().adapterFor(pojo);
     }
     

@@ -27,9 +27,9 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor(staticName = "of") @Log4j2
 public class PersistenceQueryFactory {
 
-    private final Function<Object, ObjectAdapter> adapterProvider;
+    private final Function<Object, ManagedObject> adapterProvider;
     private final SpecificationLoader specificationLoader;
 
     /**
@@ -59,7 +59,7 @@ public class PersistenceQueryFactory {
         } if (query instanceof NamedQuery) {
             final NamedQuery<?> queryDefault = (NamedQuery<?>) query;
             final String queryName = queryDefault.getName();
-            final Map<String, ObjectAdapter> parametersByName = 
+            final Map<String, ManagedObject> parametersByName = 
                     wrap(queryDefault.getParametersByName());
             return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, parametersByName, cardinality,
                     specificationLoader, queryDefault.getStart(), queryDefault.getCount());
@@ -72,12 +72,12 @@ public class PersistenceQueryFactory {
      * Converts a map of pojos keyed by string to a map of adapters keyed by the
      * same strings.
      */
-    private Map<String, ObjectAdapter> wrap(final Map<String, Object> argumentsByParameterName) {
-        final Map<String, ObjectAdapter> argumentsAdaptersByParameterName = _Maps.newHashMap();
+    private Map<String, ManagedObject> wrap(final Map<String, Object> argumentsByParameterName) {
+        final Map<String, ManagedObject> argumentsAdaptersByParameterName = _Maps.newHashMap();
         for (final Map.Entry<String, Object> entry : argumentsByParameterName.entrySet()) {
             final String parameterName = entry.getKey();
             final Object argument = argumentsByParameterName.get(parameterName);
-            final ObjectAdapter argumentAdapter = argument != null ? adapterProvider.apply(argument) : null;
+            final ManagedObject argumentAdapter = argument != null ? adapterProvider.apply(argument) : null;
             argumentsAdaptersByParameterName.put(parameterName, argumentAdapter);
         }
         return argumentsAdaptersByParameterName;
