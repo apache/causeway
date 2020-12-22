@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
-import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMementoService;
 
 import lombok.AccessLevel;
 import lombok.Getter;

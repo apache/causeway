@@ -22,7 +22,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

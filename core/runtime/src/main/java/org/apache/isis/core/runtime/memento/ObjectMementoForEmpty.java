@@ -16,47 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.context.memento;
-
-import java.util.ArrayList;
+package org.apache.isis.core.runtime.memento;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.Getter;
-import lombok.Value;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-/**
- * 
- * @since 2.0
- *
- */
-@Value(staticConstructor = "of")
-public final class ObjectMementoCollection implements ObjectMemento {
+@RequiredArgsConstructor
+public class ObjectMementoForEmpty implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
-
-    private final ArrayList<ObjectMemento> container; 
-    @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
+    
+    @Getter(onMethod = @__(@Override))
+    @NonNull private ObjectSpecId objectSpecId;
 
     @Override
     public String asString() {
-        return getContainer().toString();
-    }
-
-    @Override
-    public Bookmark asHintingBookmarkIfSupported() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
+        return getObjectSpecId().asString();
     }
 
     @Override
     public Bookmark asBookmarkIfSupported() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
-    }    
+        return null;
+    }
 
-    public ArrayList<ObjectMemento> unwrapList() {
-        return getContainer();
+    @Override
+    public Bookmark asHintingBookmarkIfSupported() {
+        return null;
     }
 
 

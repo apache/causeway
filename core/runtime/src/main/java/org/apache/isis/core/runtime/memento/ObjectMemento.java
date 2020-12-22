@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.context.memento;
+package org.apache.isis.core.runtime.memento;
 
 import java.io.Serializable;
 import java.util.ArrayList;
