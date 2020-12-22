@@ -36,11 +36,11 @@ import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognize
 import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 import org.apache.isis.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoPersistenceLifecycleService;
-import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelMenu;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel;
 import org.apache.isis.persistence.jdo.integration.persistence.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSessionFactory5;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
+import org.apache.isis.persistence.jdo.metamodel.menu.JdoMetamodelMenu;
 
 @Configuration
 @Import({

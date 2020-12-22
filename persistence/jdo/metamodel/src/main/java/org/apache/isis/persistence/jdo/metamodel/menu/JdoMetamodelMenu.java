@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.metamodel;
+package org.apache.isis.persistence.jdo.metamodel.menu;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,6 +36,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
+import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
 
@@ -49,6 +50,7 @@ public class JdoMetamodelMenu {
 
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
     @Inject private IsisJdoSupport jdoSupport;
+    @Inject private JdoFacetContext jdoFacetContext;
     
     public static abstract class ActionDomainEvent
     extends IsisModuleApplib.ActionDomainEvent<JdoMetamodelMenu> {}
@@ -80,7 +82,7 @@ public class JdoMetamodelMenu {
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of jdo metamodels");
         
         isisBeanTypeRegistry.getEntityTypesJdo().stream()
-        .filter(JdoMetamodelUtil::isPersistenceEnhanced)
+        .filter(jdoFacetContext::isPersistenceEnhanced)
         .map(Class::getName)
         .map(pmFactory::getMetadata)
         .forEach(metadata->{
