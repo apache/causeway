@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
@@ -91,10 +92,10 @@ public class AppTenancyVm implements HasAsciiDocDescription {
     //end::disableRegex[]
 
 
-    @Inject
+    @Inject @XmlTransient
     TenantedJdoEntities tenantedJdoEntities;
 
-    @Inject
+    @Inject @XmlTransient
     ApplicationTenancyEvaluatorForDemo applicationTenancyEvaluatorForDemo;
 
 }

@@ -121,7 +121,7 @@ public enum BeanSort {
     }
 
     public boolean isWrappingSupported() {
-        return isMixin() || isViewModel() || isEntity();
+        return isMixin() || isViewModel() || isEntity() || isManagedBean();
     }
 
 
