@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusIdLong;
@@ -49,6 +50,8 @@ import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognize
     Persistable_downloadJdoMetadata.class,
     
     // @Service's
+    DnSettings.class,
+    
     ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
     ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
     ExceptionRecognizerForJDOObjectNotFoundException.class,

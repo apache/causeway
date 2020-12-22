@@ -20,7 +20,6 @@ package org.apache.isis.persistence.jdo.lightweight;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Named;
 
@@ -34,6 +33,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.lightweight.metamodel.JdoLightweightProgrammingModel;
 import org.apache.isis.persistence.jdo.lightweight.services.LightweightJdoSupport;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
@@ -73,14 +73,14 @@ public class IsisModuleJdoLightweight {
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
             final LocalPersistenceManagerFactoryBean lpmfBean,
             final IsisBeanTypeRegistry beanTypeRegistry,
-            final @Named("dn-settings") Map<String, String> dnSettings,
+            final DnSettings dnSettings,
             final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners) {
         
         val pmf = lpmfBean.getObject();
         
         _NullSafe.stream(jdoEntityDiscoveryListeners)
         .forEach(listener->{
-            listener.onEntitiesDiscovered(pmf, beanTypeRegistry.getEntityTypesJdo(), dnSettings);    
+            listener.onEntitiesDiscovered(pmf, beanTypeRegistry.getEntityTypesJdo(), dnSettings.getAsMap());    
         });
         
         val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
@@ -91,10 +91,10 @@ public class IsisModuleJdoLightweight {
     
     @Bean 
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
-            final @Named("dn-settings") Map<String, String> dnSettings) {
+            final DnSettings dnSettings) {
         
         val jdoPropertyMap = new HashMap<String, Object>();
-        dnSettings.forEach(jdoPropertyMap::put);
+        dnSettings.getAsMap().forEach(jdoPropertyMap::put);
         
         val lpmfBean = new LocalPersistenceManagerFactoryBean();
         lpmfBean.setJdoPropertyMap(jdoPropertyMap);

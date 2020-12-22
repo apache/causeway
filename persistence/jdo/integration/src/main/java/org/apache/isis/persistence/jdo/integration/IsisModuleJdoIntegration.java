@@ -24,11 +24,6 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
-import org.apache.isis.persistence.jdo.integration.config.DataNucleusSettings;
-import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDODataStoreException;
-import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException;
-import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDOObjectNotFoundException;
-import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 import org.apache.isis.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoPersistenceLifecycleService;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel;
@@ -46,10 +41,6 @@ import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
 
         // @Component's
         JdoIntegrationProgrammingModel.class,
-        
-        // @Service's
-        DataNucleusSettings.class,
-        
         
         IsisJdoSupportDN5.class,
         IsisPlatformTransactionManagerForJdo.class,

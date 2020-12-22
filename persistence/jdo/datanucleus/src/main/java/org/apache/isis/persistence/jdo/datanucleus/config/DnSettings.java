@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.config;
+package org.apache.isis.persistence.jdo.datanucleus.config;
 
 import java.util.Map;
 
@@ -34,11 +34,11 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
  * @since 2.0
  */
 @Service
-@Named("isisJdoDn5.DataNucleusSettings")
+@Named("isisJdoDn.DnSettings")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-public class DataNucleusSettings {
+public class DnSettings {
 
     @Inject @Named("dn-settings") 
     private Map<String, String> dnSettings;

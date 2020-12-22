@@ -43,7 +43,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledState;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
-import org.apache.isis.persistence.jdo.integration.config.DataNucleusSettings;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.integration.config.JdoEntityTypeRegistry;
 
 import lombok.Getter;
@@ -97,7 +97,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
 
     private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
-        val dnSettings = metaModelContext.getServiceRegistry().lookupServiceElseFail(DataNucleusSettings.class);
+        val dnSettings = metaModelContext.getServiceRegistry().lookupServiceElseFail(DnSettings.class);
         val datanucleusProps = addDataNucleusPropertiesAsRequired(dnSettings);
         val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(isisBeanTypeRegistry);
 
@@ -123,7 +123,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
                 metaModelContext.getSpecificationLoader());
     }
 
-    private Map<String, Object> addDataNucleusPropertiesAsRequired(DataNucleusSettings dnSettings) {
+    private Map<String, Object> addDataNucleusPropertiesAsRequired(DnSettings dnSettings) {
         
         val props = _Maps.<String, Object>newHashMap();
         props.putAll(dnSettings.getAsMap());
