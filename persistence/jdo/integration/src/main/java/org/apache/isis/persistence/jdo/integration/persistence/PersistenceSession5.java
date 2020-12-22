@@ -565,12 +565,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public ManagedObject initializeEntity(final Persistable pojo) {
 
-//        // need to do eagerly, because (if a viewModel then) a
-//        // viewModel's #viewModelMemento might need to use services
-//        serviceInjector.injectServicesInto(pojo); //redundant
-
-        final RootOid originalOid = _Utils.createRootOid(getMetaModelContext(), getJdoPersistenceManager(), pojo);
-        final ManagedObject entity = _Utils.recreatePojo(getMetaModelContext(), originalOid, pojo);
+        final ManagedObject entity = _Utils
+                .identify(getMetaModelContext(), getJdoPersistenceManager(), pojo);
 
         getEntityChangeTracker().recognizeLoaded(entity);
 
@@ -581,7 +577,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public String identifierFor(final Object pojo) {
         return JdoObjectIdSerializer.identifierForElseFail(getJdoPersistenceManager(), pojo);
     }
-
 
     /**
      * Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
@@ -623,21 +618,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        val entity = _Utils.fetchPersistent(getMetaModelContext(), getJdoPersistenceManager(), pojo);
-        if (entity == null) {
-            throw _Exceptions
-                .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
-        }
+        val entity = _Utils.fetchEntityElseFail(getMetaModelContext(), getJdoPersistenceManager(), pojo);
         getEntityChangeTracker().enlistUpdating(entity);
     }
 
     @Override
     public void invokeIsisUpdatedCallback(Persistable pojo) {
-        val entity = _Utils.fetchPersistent(getMetaModelContext(), getJdoPersistenceManager(), pojo);
-        if (entity == null) {
-            throw _Exceptions
-                .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
-        }
+        val entity = _Utils.fetchEntityElseFail(getMetaModelContext(), getJdoPersistenceManager(), pojo);
         // the callback and transaction.enlist are done in the preStore callback
         // (can't be done here, as the enlist requires to capture the 'before' values)
         getEntityChangeTracker().recognizeUpdating(entity);

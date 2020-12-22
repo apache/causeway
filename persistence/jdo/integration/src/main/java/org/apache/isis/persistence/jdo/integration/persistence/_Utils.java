@@ -24,6 +24,8 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -77,48 +79,39 @@ final class _Utils {
         return adapter;
     }
     
-    static RootOid createRootOid(
+    static ManagedObject fetchEntityElseFail(
             final @NonNull MetaModelContext mmc,
             final @NonNull PersistenceManager pm,
-            final @NonNull Object pojo) {
+            final @Nullable Object pojo) {
+    
+        return Result.of(()->{
+            
+            if (pm.getObjectId(pojo) == null) {
+                throw _Exceptions
+                    .noSuchElement("DN could not find objectId for pojo (unexpected); pojo=[%s]", pojo);
+            }
+            final ManagedObject adapter = identify(mmc, pm, pojo);
+            return adapter;
+            
+        })
+        .orElseFail();
+    }
 
+    static ManagedObject identify(
+            final @NonNull MetaModelContext mmc,
+            final @NonNull PersistenceManager pm, 
+            final @NonNull Object pojo) {
+        
         val spec = mmc.getSpecification(pojo.getClass());
 
         final String identifier = JdoObjectIdSerializer.identifierForElseFail(pm, pojo);
 
         final ObjectSpecId objectSpecId = spec.getSpecId();
-        return Oid.Factory.root(objectSpecId, identifier);
-    }
-
-    static ManagedObject recreatePojo(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull RootOid rootOid,
-            final @NonNull Object recreatedPojo) {
+        final RootOid rootOid = Oid.Factory.root(objectSpecId, identifier);
         
-        val spec = mmc.getSpecification(recreatedPojo.getClass());
-        
-        final ManagedObject createdAdapter = ManagedObject.identified(spec, recreatedPojo, rootOid);
+        final ManagedObject createdAdapter = ManagedObject.identified(spec, pojo, rootOid);
         return injectServices(mmc, createdAdapter);
     }
 
-    static ManagedObject fetchPersistent(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull PersistenceManager pm,
-            final Object pojo) {
-        if (pm.getObjectId(pojo) == null) {
-            return null;
-        }
-        final RootOid oid = createRootOid(mmc, pm, pojo);
-        final ManagedObject adapter = recreatePojo(mmc, oid, pojo);
-        return adapter;
-    }
-   
-    
-//  @SuppressWarnings("unused")
-//  private static Object jdoObjectIdFor(InstanceLifecycleEvent event) {
-//      final Persistable persistable = persistableFor(event);
-//      final Object jdoObjectId = persistable.dnGetObjectId();
-//      return jdoObjectId;
-//  }
     
 }
