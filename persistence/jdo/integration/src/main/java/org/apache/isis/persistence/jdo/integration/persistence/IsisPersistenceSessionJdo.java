@@ -21,35 +21,17 @@ package org.apache.isis.persistence.jdo.integration.persistence;
 import java.util.List;
 
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
+import org.apache.isis.persistence.jdo.integration.transaction.TxHelper;
 
 /**
  * 
  * @since 2.0
  */
 public interface IsisPersistenceSessionJdo 
-extends PersistenceSession {
+extends PersistenceSession, TxHelper {
 
     void execute(List<PersistenceCommand> persistenceCommandList);
-    
-    /**
-     * to tell the underlying object store to start a transaction.
-     */
-    void startTransaction();
 
-    /**
-     * to tell the underlying object store to commit a transaction.
-     */
-    void endTransaction();
-
-    /**
-     * to tell the underlying object store to abort a transaction.
-     */
-    void abortTransaction();
-    
-    /**
-     * to tell the underlying object store to flush a transaction.
-     */
-    void flushTransaction();
     
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}

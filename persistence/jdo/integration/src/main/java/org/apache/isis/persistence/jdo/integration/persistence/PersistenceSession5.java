@@ -48,6 +48,7 @@ import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
+import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.oid.JdoObjectIdSerializer;
@@ -62,6 +63,7 @@ import org.apache.isis.persistence.jdo.integration.persistence.queries.Persisten
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
+import org.apache.isis.persistence.jdo.integration.transaction.IsisTransactionJdo;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -467,12 +469,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         transactionService.executeWithinTransaction(()->{
             log.debug("persist {}", adapter);               
             val createObjectCommand = newCreateObjectCommand(adapter);
-            transactionManager.addCommand(createObjectCommand);
+            commandQueue.addCommand(createObjectCommand);
         });
     }
     
     // -- destroyObjectInTransaction
-
 
     @Override
     public void destroyObjectInTransaction(final ManagedObject adapter) {
@@ -483,7 +484,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         log.debug("destroyObject {}", adapter);
         transactionService.executeWithinTransaction(()->{
             val destroyObjectCommand = newDestroyObjectCommand(adapter);
-            transactionManager.addCommand(destroyObjectCommand);
+            commandQueue.addCommand(destroyObjectCommand);
         });
     }
 

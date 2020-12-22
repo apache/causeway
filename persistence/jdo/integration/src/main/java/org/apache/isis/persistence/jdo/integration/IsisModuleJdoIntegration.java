@@ -27,8 +27,8 @@ import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucl
 import org.apache.isis.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoPersistenceLifecycleService;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel;
-import org.apache.isis.persistence.jdo.integration.persistence.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSessionFactory5;
+import org.apache.isis.persistence.jdo.integration.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
 
 @Configuration

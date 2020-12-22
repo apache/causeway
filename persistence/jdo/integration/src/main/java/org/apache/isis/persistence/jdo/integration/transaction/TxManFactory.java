@@ -16,42 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.transaction;
 
-import java.util.Map;
-import java.util.Optional;
-
-import org.datanucleus.ExecutionContext;
-
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
 
 import lombok.val;
 
-/**
- * 
- * @since 2.0
- *
- */
-final class _ContextUtil {
-    
-    // required to be lower-case for DN to be accepted
-    private static final String METAMODELCONTEXT_PROPERTY_KEY = "isis.metamodelcontext"; 
+public class TxManFactory {
 
-    public static void putMetaModelContext(
-            Map<String, Object> map, 
-            MetaModelContext metaModelContext) {
-
-        map.put(METAMODELCONTEXT_PROPERTY_KEY, metaModelContext);
-    }
-    
-    public static Optional<MetaModelContext> extractMetaModelContext(ExecutionContext ec) {
-
-        val metaModelContext = (MetaModelContext) ec.getNucleusContext()
-                .getConfiguration()
-                .getPersistenceProperties()
-                .get(METAMODELCONTEXT_PROPERTY_KEY);
+    public static PersistenceCommandQueue newCommandQueue(
+            MetaModelContext mmc,
+            TxHelper txHelper) {
         
-        return Optional.ofNullable(metaModelContext);
+        val txMan = new _IsisTransactionManagerJdo(mmc, txHelper);
+        
+        val isisInteractionTracker = mmc.getServiceRegistry()
+                .lookupServiceElseFail(InteractionTracker.class);
+        
+        isisInteractionTracker.currentInteractionSession()
+                .map(interaction->interaction.putAttribute(_IsisTransactionManagerJdo.class, txMan));
+        
+        return txMan;
+        
     }
-    
+
 }

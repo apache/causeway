@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.transaction;
 
 import java.util.function.Supplier;
 
@@ -28,29 +28,33 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
+import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
 
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
-class _IsisTransactionManagerJdo {
+class _IsisTransactionManagerJdo implements PersistenceCommandQueue {
 
     // -- constructor, fields
 
     @Getter
-    private final IsisPersistenceSessionJdo persistenceSession;
+    private final TxHelper persistenceSession;
 
     private final ServiceRegistry serviceRegistry;
     private final Supplier<InteractionContext> interactionContextProvider;
 
-    _IsisTransactionManagerJdo(ServiceRegistry serviceRegistry, IsisPersistenceSessionJdo persistenceSession) {
+    _IsisTransactionManagerJdo(
+            MetaModelContext mmc, 
+            TxHelper persistenceSession) {
 
-        this.serviceRegistry = serviceRegistry;
+        this.serviceRegistry = mmc.getServiceRegistry();
         this.persistenceSession = persistenceSession;
         this.interactionContextProvider = ()->serviceRegistry.lookupServiceElseFail(InteractionContext.class);
     }
@@ -313,6 +317,7 @@ class _IsisTransactionManagerJdo {
         }
     }
 
+    @Override
     public void addCommand(PersistenceCommand command) {
         val transaction = getCurrentTransaction();
         if (transaction != null && command != null) {

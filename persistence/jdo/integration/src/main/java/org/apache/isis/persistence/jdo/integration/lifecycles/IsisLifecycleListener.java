@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.lifecycles;
 
 import java.util.Map;
 
@@ -42,7 +42,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     /**
      * The internal contract between PersistenceSession and this class.
      */
-    interface PersistenceSessionLifecycleManagement {
+    public interface PersistenceSessionLifecycleManagement {
 
         ManagedObject initializeEntity(Persistable pojo);
 

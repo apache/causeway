@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.transaction;
 
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionFlushException;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
+import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DestroyObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;

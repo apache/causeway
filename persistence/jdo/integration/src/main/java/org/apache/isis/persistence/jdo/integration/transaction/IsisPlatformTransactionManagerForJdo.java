@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.transaction;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,6 +32,7 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
@@ -45,6 +46,7 @@ import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject.IsisInteractionScopeType;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -53,25 +55,15 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("JdoDN5")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransactionManager {
-
 
     private static final long serialVersionUID = 1L;
 
     private final InteractionFactory isisInteractionFactory;
     private final EventBusService eventBusService;
     private final InteractionTracker isisInteractionTracker;
-
-    @Inject
-    public IsisPlatformTransactionManagerForJdo(
-            final InteractionFactory isisInteractionFactory,
-            final EventBusService eventBusService,
-            final InteractionTracker isisInteractionTracker) {
-        this.isisInteractionFactory = isisInteractionFactory;
-        this.eventBusService = eventBusService;
-        this.isisInteractionTracker = isisInteractionTracker;
-    }
 
     @Override
     protected Object doGetTransaction() throws TransactionException {
@@ -87,7 +79,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         
         if(!isInInteraction) {
             
-            if(_ContextUtil.isJUnitTest()) {
+            if(_Context.isJUnitTest()) {
 
                 throw _Exceptions.illegalState("No InteractionSession available. "
                         + "Transactions are expected to be within scope of an InteractionSession."
@@ -162,10 +154,8 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     
     private _IsisTransactionManagerJdo transactionManagerJdo() {
         return isisInteractionTracker.currentInteractionSession()
-                .map(interaction->interaction.getAttribute(IsisPersistenceSessionJdo.class))
-                .map(IsisPersistenceSessionJdoBase.class::cast)
-                .map(ps->ps.transactionManager)
-                .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdoBase available"));
+                .map(interaction->interaction.getAttribute(_IsisTransactionManagerJdo.class))
+                .orElseThrow(()->_Exceptions.unrecoverable("no current _IsisTransactionManagerJdo available"));
     }
 
 }

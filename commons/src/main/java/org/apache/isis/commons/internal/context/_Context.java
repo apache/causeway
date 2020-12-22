@@ -349,6 +349,15 @@ public final class _Context {
         return Class.forName(className, true, getDefaultClassLoader());
     }
 
+    public static boolean isJUnitTest() {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                return true;
+            }           
+        }
+        return false;
+    }
+    
     // -- HELPER
 
     private static void tryClose(Object singleton) {

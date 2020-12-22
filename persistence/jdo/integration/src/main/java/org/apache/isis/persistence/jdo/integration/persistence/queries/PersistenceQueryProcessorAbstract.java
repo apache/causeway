@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
-import org.apache.isis.persistence.jdo.integration.persistence.IsisLifecycleListener;
+import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSession5;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 

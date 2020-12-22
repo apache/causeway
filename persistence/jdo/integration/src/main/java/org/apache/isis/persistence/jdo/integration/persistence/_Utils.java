@@ -20,9 +20,6 @@ package org.apache.isis.persistence.jdo.integration.persistence;
 
 import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;
-import javax.jdo.listener.InstanceLifecycleEvent;
-
-import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -39,14 +36,6 @@ import lombok.val;
 
 final class _Utils {
 
-    static Persistable persistableFor(InstanceLifecycleEvent event) {
-        return (Persistable)event.getSource();
-    }
-    
-    static boolean ensureRootObject(final Persistable pojo) {
-        return pojo!=null; // why would a Persistable ever be something different?
-    }
-    
     @Nullable
     static ManagedObject adapterFor(
             final @NonNull MetaModelContext mmc,

@@ -37,8 +37,10 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
+import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFactory;
+import org.apache.isis.persistence.jdo.integration.transaction.TxManFactory;
 
 import lombok.Getter;
 import lombok.val;
@@ -66,7 +68,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
      */
     protected final PersistenceManagerFactory jdoPersistenceManagerFactory;
     
-    _IsisTransactionManagerJdo transactionManager;
+    PersistenceCommandQueue commandQueue;
 
     /**
      * populated only when {@link #open()}ed.
@@ -109,7 +111,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.persistenceQueryFactory = PersistenceQueryFactory.of(
                 obj->this.adapterFor(obj), 
                 this.specificationLoader);
-        this.transactionManager = new _IsisTransactionManagerJdo(serviceRegistry, this);
+        this.commandQueue = TxManFactory.newCommandQueue(metaModelContext, this); 
 
         this.state = State.NOT_INITIALIZED;
     }
