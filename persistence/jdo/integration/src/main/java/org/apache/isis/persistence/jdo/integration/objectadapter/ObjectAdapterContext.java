@@ -18,19 +18,17 @@
  */
 package org.apache.isis.persistence.jdo.integration.objectadapter;
 
-import java.util.Objects;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -70,8 +68,6 @@ final public class ObjectAdapterContext {
         this.persistenceSession = persistenceSession;
         this.specificationLoader = mmc.getSpecificationLoader();
         this.serviceInjector = mmc.getServiceInjector();
-
-        this.objectAdapterFactories = new ObjectAdapterContext_Factories(specificationLoader);
     }
 
     // -- DEBUG
@@ -100,44 +96,6 @@ final public class ObjectAdapterContext {
         return newIdentifierMixin.createPersistentOid(pojo);
     }
 
-    // -- FACTORIES
-
-    // package private
-    static interface ObjectAdapterFactories {
-
-        /**
-         * Creates (but does not {@link #mapAndInjectServices(ObjectAdapter) map}) a new
-         * root {@link ObjectAdapter adapter} for the supplied domain object.
-         *
-         * @see #createStandaloneAdapter(Object)
-         * @see #createCollectionAdapter(Object, ParentedOid)
-         */
-        ObjectAdapter createRootAdapter(Object pojo, RootOid rootOid);
-
-        ObjectAdapter createCollectionAdapter(Object pojo, ParentedOid collectionOid);
-
-        /**
-         * Creates an {@link ObjectAdapter adapter} to represent a collection
-         * of the parent.
-         *
-         * <p>
-         * The returned adapter will have a {@link ParentedOid}; its version
-         * and its persistence are the same as its owning parent.
-         *
-         * <p>
-         * Should only be called if the pojo is known not to be
-         * {@link #lookupAdapterFor(Object) mapped}.
-         */
-        ObjectAdapter createCollectionAdapter(Object pojo, RootOid parentOid, OneToManyAssociation otma);
-    }
-
-    private final ObjectAdapterFactories objectAdapterFactories;
-
-    // package private
-    ObjectAdapterFactories getFactories() {
-        return objectAdapterFactories;
-    }
-
     // -- ADAPTER MANAGER LEGACY
 
     public ObjectAdapter fetchPersistent(final Object pojo) {
@@ -155,12 +113,13 @@ final public class ObjectAdapterContext {
     }
 
     // package private
-    ObjectAdapter injectServices(final ObjectAdapter adapter) {
-        Objects.requireNonNull(adapter);
-        if(adapter.getOid().isValue()) {
+    ObjectAdapter injectServices(final @NonNull ObjectAdapter adapter) {
+        val spec = adapter.getSpecification();
+        if(spec==null 
+                || spec.isValue()) {
             return adapter; // guard against value objects
         }
-        final Object pojo = adapter.getPojo();
+        val pojo = adapter.getPojo();
         serviceInjector.injectServicesInto(pojo);
         return adapter;
     }
@@ -170,10 +129,10 @@ final public class ObjectAdapterContext {
         final ObjectAdapter createdAdapter;
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;
-            createdAdapter = getFactories().createRootAdapter(pojo, rootOid);
+            createdAdapter = _Factories.createRootAdapter(pojo, rootOid, getSpecificationLoader());
         } else /*if (oid instanceof CollectionOid)*/ {
             final ParentedOid collectionOid = (ParentedOid) oid;
-            createdAdapter = getFactories().createCollectionAdapter(pojo, collectionOid);
+            createdAdapter = _Factories.createCollectionAdapter(pojo, collectionOid, getSpecificationLoader());
         }
         return createdAdapter;
     }

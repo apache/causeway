@@ -52,7 +52,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
 
         val adapter = objectManager.adapt(pojo);
         val rootOid = objectManager.identifyObject(adapter);
-        val newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
+        val newAdapter = _Factories.createRootAdapter(pojo, rootOid, objectAdapterContext.getSpecificationLoader());
         return objectAdapterContext.injectServices(newAdapter);
     }
 
