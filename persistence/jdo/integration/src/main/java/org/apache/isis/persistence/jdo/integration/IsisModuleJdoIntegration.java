@@ -18,11 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.integration;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -66,12 +61,5 @@ import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
 
 })
 public class IsisModuleJdoIntegration {
-    
-    // reserved for datanucleus' own config props
-    @ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
-    @Bean("dn-settings")
-    public Map<String, String> getAsMap() {
-        return new HashMap<>();
-    }
     
 }

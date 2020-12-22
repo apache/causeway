@@ -18,6 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -42,4 +47,11 @@ import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJd
 })
 public class IsisModuleJdoProviderDatanucleus {
 
+    // reserved for datanucleus' own config props
+    @ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
+    @Bean("dn-settings")
+    public Map<String, String> getAsMap() {
+        return new HashMap<>();
+    }
+    
 }
