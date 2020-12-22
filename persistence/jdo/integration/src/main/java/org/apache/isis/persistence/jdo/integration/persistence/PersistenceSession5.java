@@ -24,10 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-
-import static java.util.Objects.requireNonNull;
 
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
@@ -61,11 +58,11 @@ import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
-import org.apache.isis.persistence.jdo.integration.config.spi.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.integration.objectadapter.ObjectAdapterContext;
+import org.apache.isis.persistence.jdo.integration.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DestroyObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
@@ -81,6 +78,7 @@ import org.apache.isis.persistence.jdo.integration.persistence.query.Persistence
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -322,23 +320,32 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     // -- FETCHING
 
     @Override
-    public Object fetchPersistentPojo(final RootOid rootOid) {
-        Objects.requireNonNull(rootOid);
-        log.debug("getObject; oid={}", rootOid);
+    public ManagedObject fetchByIdentifier(
+            final @NonNull ObjectSpecification spec, 
+            final @NonNull String identifier) {
+
+        val rootOid = Oid.Factory.root(spec.getSpecId(), identifier);
+        
+        log.debug("fetchEntity; oid={}", rootOid);
+        
+        val entity = fetchEntity(spec, rootOid); // throws if null
+        
+        return ManagedObject.identified(spec, entity, rootOid);
+    }
+    
+    private Object fetchEntity(final ObjectSpecification spec, final RootOid rootOid) {
 
         Object result;
         try {
-            val specLoader = super.getSpecificationLoader();
-            val cls = clsOf(rootOid);
-            val jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(specLoader, rootOid);
+            val cls = spec.getCorrespondingClass();
+            val jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(spec, rootOid);
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
             result = persistenceManager.getObjectById(cls, jdoObjectId);
         } catch (final RuntimeException e) {
 
-            Class<ExceptionRecognizer> serviceClass = ExceptionRecognizer.class;
-            final Iterable<ExceptionRecognizer> exceptionRecognizers = lookupServices(serviceClass);
-            for (ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
+            //XXX this idiom could be delegated to a service
+            for (val exceptionRecognizer : lookupServices(ExceptionRecognizer.class)) {
                 val recognition = exceptionRecognizer.recognize(e).orElse(null);
                 if(recognition != null) {
                     if(recognition.getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
@@ -417,6 +424,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return pojoByOid;
     }
 
+    @Deprecated
     private Class<?> clsOf(final RootOid oid) {
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getObjectSpecId());
         return objectSpec.getCorrespondingClass();
@@ -589,11 +597,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public String identifierFor(final Object pojo) {
-        final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
-        requireNonNull(jdoOid, 
-                ()->String.format("Pojo of type '%s' is not recognized by JDO.", 
-                        pojo.getClass().getName()));
-        return JdoObjectIdSerializer.toOidIdentifier(jdoOid);
+        return JdoObjectIdSerializer.identifierForElseFail(getJdoPersistenceManager(), pojo);
     }
 
 

@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -52,10 +51,7 @@ public class JdoEntityFacet extends JdoEntityFacetAbstract {
         }
         
         val persistenceSession = super.getPersistenceSessionJdo();
-        val rootOid = Oid.Factory.root(spec.getSpecId(), identifier);
-        val pojo = persistenceSession.fetchPersistentPojo(rootOid);
-        
-        return ManagedObject.identified(spec, pojo, rootOid);
+        return persistenceSession.fetchByIdentifier(spec, identifier);
     }
     
     @Override

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
+import java.rmi.NoSuchObjectException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +29,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface PersistenceSession {
 
@@ -76,13 +78,11 @@ public interface PersistenceSession {
      * @since 2.0*/
     boolean isRecognized(Object pojo);
 
-    /**@since 2.0*/
-    Object fetchPersistentPojo(RootOid rootOid);
-
-    /**@since 2.0*/
-    default Object fetchPersistentPojoInTransaction(final RootOid oid) {
-        return getTransactionService().executeWithinTransaction(()->fetchPersistentPojo(oid));
-    }
+    /**
+     * @since 2.0
+     * @throws NoSuchObjectException if not found
+     */
+    ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier);
 
     /**@since 2.0*/
     Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
