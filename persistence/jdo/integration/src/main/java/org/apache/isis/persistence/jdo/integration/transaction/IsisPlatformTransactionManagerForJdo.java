@@ -152,9 +152,9 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         IsisTransactionAspectSupport.clearTransactionObject();
     }
     
-    private _IsisTransactionManagerJdo transactionManagerJdo() {
+    private _TxManagerInternal transactionManagerJdo() {
         return isisInteractionTracker.currentInteractionSession()
-                .map(interaction->interaction.getAttribute(_IsisTransactionManagerJdo.class))
+                .map(interaction->interaction.getAttribute(_TxManagerInternal.class))
                 .orElseThrow(()->_Exceptions.unrecoverable("no current _IsisTransactionManagerJdo available"));
     }
 

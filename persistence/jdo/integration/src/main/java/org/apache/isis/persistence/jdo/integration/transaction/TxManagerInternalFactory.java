@@ -25,19 +25,19 @@ import org.apache.isis.persistence.jdo.integration.persistence.command.Persisten
 
 import lombok.val;
 
-public class TxManFactory {
+public class TxManagerInternalFactory {
 
     public static PersistenceCommandQueue newCommandQueue(
             MetaModelContext mmc,
             HasPersistenceManager pmProvider) {
         
-        val txMan = new _IsisTransactionManagerJdo(mmc, pmProvider);
+        val txMan = new _TxManagerInternal(mmc, pmProvider);
         
         val isisInteractionTracker = mmc.getServiceRegistry()
                 .lookupServiceElseFail(InteractionTracker.class);
         
         isisInteractionTracker.currentInteractionSession()
-                .map(interaction->interaction.putAttribute(_IsisTransactionManagerJdo.class, txMan));
+                .map(interaction->interaction.putAttribute(_TxManagerInternal.class, txMan));
         
         return txMan;
         

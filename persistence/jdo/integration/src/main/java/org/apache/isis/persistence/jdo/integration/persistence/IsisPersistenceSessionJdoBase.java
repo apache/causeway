@@ -40,7 +40,7 @@ import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStat
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFactory;
-import org.apache.isis.persistence.jdo.integration.transaction.TxManFactory;
+import org.apache.isis.persistence.jdo.integration.transaction.TxManagerInternalFactory;
 
 import lombok.Getter;
 import lombok.val;
@@ -112,7 +112,7 @@ implements IsisPersistenceSessionJdo {
         this.persistenceQueryFactory = PersistenceQueryFactory.of(
                 obj->this.adapterFor(obj), 
                 this.specificationLoader);
-        this.commandQueue = TxManFactory.newCommandQueue(metaModelContext, this); 
+        this.commandQueue = TxManagerInternalFactory.newCommandQueue(metaModelContext, this); 
 
         this.state = State.NOT_INITIALIZED;
     }

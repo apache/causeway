@@ -39,7 +39,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
-class _IsisTransactionManagerJdo 
+class _TxManagerInternal 
 implements 
     PersistenceCommandQueue {
 
@@ -49,7 +49,7 @@ implements
     private final Supplier<InteractionContext> interactionContextProvider;
     private final _TxHelper txHelper;
 
-    _IsisTransactionManagerJdo(
+    _TxManagerInternal(
             MetaModelContext mmc, 
             HasPersistenceManager pmProvider) {
 
@@ -58,7 +58,7 @@ implements
         this.txHelper = _TxHelper.create(pmProvider);
     }
 
-    public IsisTransactionJdo beginTransaction() {
+    public _Tx beginTransaction() {
 
         val txInProgress = IsisTransactionAspectSupport.isTransactionInProgress();
         if (txInProgress) {
@@ -76,7 +76,7 @@ implements
                         nestingLevel);
             }
 
-            return (IsisTransactionJdo) txObject.getCurrentTransaction();
+            return (_Tx) txObject.getCurrentTransaction();
 
         } else {
 
@@ -85,7 +85,7 @@ implements
             val command = interaction.getCommand();
             val transactionId = command.getUniqueId();
 
-            val currentTransaction = new IsisTransactionJdo(
+            val currentTransaction = new _Tx(
                     mmc,
                     txHelper,
                     transactionId,
@@ -103,7 +103,7 @@ implements
     }
 
 
-    public void flushTransaction(IsisTransactionJdo transaction) {
+    public void flushTransaction(_Tx transaction) {
         if (transaction != null) {
             log.debug("flushTransaction");
             transaction.flush();
@@ -112,8 +112,8 @@ implements
 
     /**
      * Ends the transaction if nesting level is 0 (but will abort the transaction instead,
-     * even if nesting level is not 0, if an {@link IsisTransactionJdo#getAbortCause() abort cause}
-     * has been {@link IsisTransactionJdo#setAbortCause(IsisException) set}.
+     * even if nesting level is not 0, if an {@link _Tx#getAbortCause() abort cause}
+     * has been {@link _Tx#setAbortCause(IsisException) set}.
      *
      * <p>
      * If in the process of committing the transaction an exception is thrown, then this will
@@ -125,7 +125,7 @@ implements
      */
     public void commitTransaction(IsisTransactionObject txObject) {
 
-        val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction(); 
+        val transaction = (_Tx) txObject.getCurrentTransaction(); 
 
         if (transaction == null) {
             // allow this method to be called >1 with no adverse affects
@@ -157,7 +157,7 @@ implements
         try {
             endTransactionInternal(txObject);
         } finally {
-            val tx = (IsisTransactionJdo) txObject.getCurrentTransaction();
+            val tx = (_Tx) txObject.getCurrentTransaction();
             if(tx==null) {
                 log.error("race condition when ending the current transaction object");
             } else {
@@ -172,7 +172,7 @@ implements
 
     private void endTransactionInternal(IsisTransactionObject txObject) {
 
-        val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction();
+        val transaction = (_Tx) txObject.getCurrentTransaction();
 
         // terminate the transaction early if an abort cause was already set.
         RuntimeException abortCause = transaction.getAbortCause();
@@ -311,7 +311,7 @@ implements
     }
 
     public void abortTransaction(IsisTransactionObject txObject) {
-        val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction();
+        val transaction = (_Tx) txObject.getCurrentTransaction();
         if (transaction != null) {
             transaction.markAsAborted();
             txHelper.abortTransaction();
@@ -329,10 +329,10 @@ implements
 
     // -- HELPER
 
-    private IsisTransactionJdo getCurrentTransaction() {
+    private _Tx getCurrentTransaction() {
         return IsisTransactionAspectSupport.currentTransactionObject()
                 .map(IsisTransactionObject::getCurrentTransaction)
-                .map(IsisTransactionJdo.class::cast)
+                .map(_Tx.class::cast)
                 .orElse(null);
     }
 

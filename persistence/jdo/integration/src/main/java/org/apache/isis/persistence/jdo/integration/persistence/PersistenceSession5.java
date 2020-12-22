@@ -61,9 +61,7 @@ import org.apache.isis.persistence.jdo.integration.persistence.queries.Persisten
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.persistence.jdo.integration.transaction.IsisTransactionJdo;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -75,7 +73,7 @@ import lombok.extern.log4j.Log4j2;
 public class PersistenceSession5 extends IsisPersistenceSessionJdoBase
 implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
-    @Getter private final TransactionService transactionService;
+    private final TransactionService transactionService;
     private Runnable unregisterLifecycleListeners;
 
     /**
@@ -144,8 +142,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * Closes the subcomponents.
      *
      * <p>
-     * Automatically {@link _IsisTransactionManagerJdo#commitTransaction(IsisTransactionObject)
-     * ends (commits)} the current (Isis) {@link IsisTransactionJdo}. This in turn commits the underlying
+     * Automatically {@link _TxManagerInternal#commitTransaction(IsisTransactionObject)
+     * ends (commits)} the current (Isis) {@link _Tx}. This in turn commits the underlying
      * JDO transaction.
      *
      * <p>
