@@ -49,8 +49,8 @@ final class _Utils {
     
     @Nullable
     static ManagedObject adapterFor(
-            final MetaModelContext mmc,
-            final Object pojo) {
+            final @NonNull MetaModelContext mmc,
+            final @Nullable Object pojo) {
         
         if(pojo == null) {
             return null;
