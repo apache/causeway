@@ -45,11 +45,6 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-metamodel</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-transaction</artifactId>
-        </dependency>
 
 		<!--  TESTING -->
 
