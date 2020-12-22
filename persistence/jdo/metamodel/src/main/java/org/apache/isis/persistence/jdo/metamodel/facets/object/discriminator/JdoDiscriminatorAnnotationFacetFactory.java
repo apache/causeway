@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.Objec
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
+import lombok.Setter;
 import lombok.val;
 
 public class JdoDiscriminatorAnnotationFacetFactory
@@ -41,7 +42,7 @@ extends FacetFactoryAbstract
 implements ObjectSpecIdFacetFactory {
 
     @Inject private ClassSubstitutorRegistry classSubstitutorRegistry;
-    @Inject private JdoFacetContext jdoFacetContext;
+    @Inject @Setter private JdoFacetContext jdoFacetContext;
 
     public JdoDiscriminatorAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);

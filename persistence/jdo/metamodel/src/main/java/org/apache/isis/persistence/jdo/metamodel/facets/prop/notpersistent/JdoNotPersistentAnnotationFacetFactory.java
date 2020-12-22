@@ -27,10 +27,12 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
+import lombok.Setter;
+
 public class JdoNotPersistentAnnotationFacetFactory 
 extends FacetFactoryAbstract {
     
-    @Inject private JdoFacetContext jdoFacetContext;
+    @Inject @Setter private JdoFacetContext jdoFacetContext;
 
     public JdoNotPersistentAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);

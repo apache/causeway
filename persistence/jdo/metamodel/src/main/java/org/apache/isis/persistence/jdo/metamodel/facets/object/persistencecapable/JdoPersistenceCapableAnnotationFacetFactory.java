@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnn
 import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -43,7 +44,7 @@ public class JdoPersistenceCapableAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements ObjectSpecIdFacetFactory {
 
-    @Inject private JdoFacetContext jdoFacetContext;
+    @Inject @Setter private JdoFacetContext jdoFacetContext;
     
     public JdoPersistenceCapableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);

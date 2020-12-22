@@ -34,12 +34,14 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
+import lombok.Setter;
+
 public class JdoVersionAnnotationFacetFactory 
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
     
-    @Inject private JdoFacetContext jdoFacetContext;
-
+    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    
     public JdoVersionAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }

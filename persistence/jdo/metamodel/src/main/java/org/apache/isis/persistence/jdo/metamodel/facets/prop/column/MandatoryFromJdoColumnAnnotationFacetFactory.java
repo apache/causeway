@@ -45,6 +45,7 @@ import org.apache.isis.persistence.jdo.metamodel.facets.prop.notpersistent.JdoNo
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
+import lombok.Setter;
 import lombok.val;
 
 
@@ -52,8 +53,8 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
     
-    @Inject private JdoFacetContext jdoFacetContext;
-
+    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    
     public MandatoryFromJdoColumnAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
