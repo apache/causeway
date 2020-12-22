@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.persistence.jdo.integration.adapterfactory;
+package org.apache.isis.persistence.jdo.integration.testing;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

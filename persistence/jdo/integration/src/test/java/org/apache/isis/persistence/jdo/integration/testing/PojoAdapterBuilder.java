@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration;
+package org.apache.isis.persistence.jdo.integration.testing;
 
 import java.util.Iterator;
 
