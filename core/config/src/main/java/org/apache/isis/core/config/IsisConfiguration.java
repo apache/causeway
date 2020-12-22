@@ -1641,8 +1641,7 @@ public class IsisConfiguration {
         @Data
         public static class JdoDatanucleus {
             
-            @Deprecated
-            private String classMetadataLoadedListener = "org.apache.isis.legacy.jdo.datanucleus.config.CreateSchemaObjectFromClassMetadata";
+            private String classMetadataLoadedListener = "org.apache.isis.persistence.jdo.integration.config.CreateSchemaObjectFromClassMetadata";
 
             private final Impl impl = new Impl();
             @Data

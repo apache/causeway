@@ -23,7 +23,7 @@
 
 	<name>Apache Isis Persistence - JDO (integration)</name>
 	<description>
-        JPA integration (facets, mixins)
+        JDO Integration (powered by DataNucleus)
     </description>
 
 	<properties>
@@ -33,6 +33,26 @@
 
 	<dependencies>
 
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.isis.persistence</groupId> -->
+<!-- 			<artifactId>isis-persistence-jdo-provider</artifactId> -->
+<!-- 		</dependency> -->
+
+		<dependency>
+			<groupId>org.apache.isis.commons</groupId>
+			<artifactId>isis-commons</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtime</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jdo-applib</artifactId>
@@ -40,13 +60,14 @@
 		
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-provider</artifactId>
+			<artifactId>isis-persistence-jdo-metamodel</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
-		</dependency>
 
 		<!-- TESTING -->
 		

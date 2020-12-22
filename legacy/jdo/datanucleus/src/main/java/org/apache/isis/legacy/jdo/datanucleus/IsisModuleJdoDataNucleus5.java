@@ -33,16 +33,16 @@ import org.apache.isis.legacy.jdo.datanucleus.exceprecog.ExceptionRecognizerForJ
 import org.apache.isis.legacy.jdo.datanucleus.exceprecog.ExceptionRecognizerForJDOObjectNotFoundException;
 import org.apache.isis.legacy.jdo.datanucleus.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 import org.apache.isis.legacy.jdo.datanucleus.jdosupport.IsisJdoSupportDN5;
-import org.apache.isis.legacy.jdo.datanucleus.jdosupport.mixins.Persistable_datanucleusIdLong;
-import org.apache.isis.legacy.jdo.datanucleus.jdosupport.mixins.Persistable_datanucleusVersionLong;
-import org.apache.isis.legacy.jdo.datanucleus.jdosupport.mixins.Persistable_datanucleusVersionTimestamp;
-import org.apache.isis.legacy.jdo.datanucleus.jdosupport.mixins.Persistable_downloadJdoMetadata;
 import org.apache.isis.legacy.jdo.datanucleus.lifecycles.JdoPersistenceLifecycleService;
 import org.apache.isis.legacy.jdo.datanucleus.metamodel.JdoMetamodelMenu;
 import org.apache.isis.legacy.jdo.datanucleus.metamodel.JdoProgrammingModelPlugin;
 import org.apache.isis.legacy.jdo.datanucleus.persistence.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.legacy.jdo.datanucleus.persistence.PersistenceSessionFactory5;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
+import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusIdLong;
+import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
+import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
+import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
 
 @Configuration
 @Import({
@@ -66,11 +66,6 @@ import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
         PersistenceSessionFactory5.class,
         JdoMetamodelMenu.class,
 
-        // @Mixin's
-        Persistable_datanucleusIdLong.class,
-        Persistable_datanucleusVersionLong.class,
-        Persistable_datanucleusVersionTimestamp.class,
-        Persistable_downloadJdoMetadata.class,
 })
 public class IsisModuleJdoDataNucleus5 {
     

@@ -32,19 +32,15 @@ import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAn
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.legacy.jdo.datanucleus.IsisModuleJdoDataNucleus5;
+import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
     IsisModuleCoreRuntimeServices.class,
     
-//    IsisModuleJdoIntegration.class,
-//    IsisModuleJdoSpring.class,
-//    IsisModuleJdoProviderDataNucleus.class,
+    IsisModuleJdoIntegration.class,
     
-    IsisModuleJdoDataNucleus5.class,
-
     IsisModuleTestingFixturesApplib.class,
 
     IsisModuleExtModelAnnotation.class, // @Model support
