@@ -17,32 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.iactn;
+package org.apache.isis.core.runtime.test.dom;
 
-import java.util.UUID;
+public class TestObjectAsService {
 
-import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.isis.core.interaction.session.IsisInteraction;
-
-import lombok.val;
-
-public class InteractionDefaultTest_next {
-
-    @Test
-    public void test() {
-        val interaction = new IsisInteraction(UUID.randomUUID());
-
-        assertThat(interaction.next("foo"), is(0));
-        assertThat(interaction.next("foo"), is(1));
-        assertThat(interaction.next("bar"), is(0));
-        assertThat(interaction.next("bar"), is(1));
-        assertThat(interaction.next("foo"), is(2));
-        assertThat(interaction.next("bar"), is(2));
-        assertThat(interaction.next("bar"), is(3));
+    public String getId() {
+        return null;
     }
 
+    public void init() {
+    }
+
+    public void action() {
+    }
+
+    public String title() {
+        return null;
+    }
 }

@@ -17,8 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.system;
+package org.apache.isis.core.runtime.test.dom;
 
-public class TestDomainObject {
-
+public class TestObject {
 }

@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.systemusinginstallers.fixture.budget;
 
-public class SomeServiceToInclude {
+package org.apache.isis.core.runtime.test.dom;
+
+public interface Interface1 {
+
 }

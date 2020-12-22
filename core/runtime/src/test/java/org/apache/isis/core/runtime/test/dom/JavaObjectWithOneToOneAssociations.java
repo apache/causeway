@@ -17,19 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.system;
+package org.apache.isis.core.runtime.test.dom;
 
-public class JavaReferencedObject {
-    private static int next;
-    private final int id = next++;
+public class JavaObjectWithOneToOneAssociations {
+    boolean available = false;
+    private JavaReferencedObject object;
+    boolean valid = false;
+    boolean visible = false;
 
-    public JavaReferencedObject() {
-        super();
+    public String availableReferencedObject(final JavaReferencedObject object) {
+        return available ? null : "not available";
     }
 
-    @Override
-    public String toString() {
-        return "JavaReferencedObject#" + id;
+    public JavaReferencedObject getReferencedObject() {
+        return object;
     }
 
+    public void setReferencedObject(final JavaReferencedObject object) {
+        this.object = object;
+    }
+
+    public String validReferencedObject(final JavaReferencedObject object) {
+        return valid ? null : "not valid";
+    }
+
+    public boolean hideReferencedObject(final JavaReferencedObject object) {
+        return !visible;
+    }
 }

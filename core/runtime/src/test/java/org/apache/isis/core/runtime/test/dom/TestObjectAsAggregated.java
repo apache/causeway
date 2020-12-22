@@ -17,8 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.system;
+package org.apache.isis.core.runtime.test.dom;
 
-public interface Interface1 {
+// import org.apache.isis.applib.Aggregated;
 
+public class TestObjectAsAggregated { // implements Aggregated {
+
+    public Object getAggregate() {
+        return null;
+    }
 }

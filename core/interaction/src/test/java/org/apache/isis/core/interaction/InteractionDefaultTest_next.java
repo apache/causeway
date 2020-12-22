@@ -17,7 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.system;
+package org.apache.isis.core.interaction;
 
-public class TestObject {
+import java.util.UUID;
+
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.core.interaction.session.IsisInteraction;
+
+import lombok.val;
+
+public class InteractionDefaultTest_next {
+
+    @Test
+    public void test() {
+        val interaction = new IsisInteraction(UUID.randomUUID());
+
+        assertThat(interaction.next("foo"), is(0));
+        assertThat(interaction.next("foo"), is(1));
+        assertThat(interaction.next("bar"), is(0));
+        assertThat(interaction.next("bar"), is(1));
+        assertThat(interaction.next("foo"), is(2));
+        assertThat(interaction.next("bar"), is(2));
+        assertThat(interaction.next("bar"), is(3));
+    }
+
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.system;
+package org.apache.isis.core.runtime.test;
 
 import java.lang.reflect.Method;
 import java.util.List;

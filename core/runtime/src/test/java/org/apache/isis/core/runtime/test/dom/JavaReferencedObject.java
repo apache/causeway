@@ -16,36 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.adapterfactory.pojo;
 
-public class RuntimeTestPojo {
-    private static int nextId;
-    private final int id = nextId++;
-    private final String state = "pojo" + id;
+package org.apache.isis.core.runtime.test.dom;
+
+public class JavaReferencedObject {
+    private static int next;
+    private final int id = next++;
+
+    public JavaReferencedObject() {
+        super();
+    }
 
     @Override
     public String toString() {
-        return "Pojo#" + id;
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        if (other == null) {
-            return false;
-        }
-        if (other == this) {
-            return true;
-        }
-        if (other.getClass() == getClass()) {
-            final RuntimeTestPojo otherTestPojo = (RuntimeTestPojo) other;
-            return otherTestPojo.state.equals(state);
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return state.hashCode();
+        return "JavaReferencedObject#" + id;
     }
 
 }
