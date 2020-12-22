@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.objectadapter;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.RuntimeContext;
@@ -53,9 +54,11 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
 
         val adapter = objectManager.adapt(pojo);
         val rootOid = objectManager.identifyObject(adapter);
-        val newAdapter = PojoAdapter.of(pojo, rootOid, objectAdapterContext.getSpecificationLoader());
-        objectAdapterContext.injectServices(newAdapter);
-        return newAdapter;
+        //val newAdapter = PojoAdapter.of(pojo, rootOid, objectAdapterContext.getSpecificationLoader());
+        
+        _Assert.assertEquals(rootOid, adapter.getRootOid().orElse(null));
+        
+        return objectAdapterContext.injectServices(adapter);
     }
 
 

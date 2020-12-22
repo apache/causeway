@@ -23,6 +23,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
@@ -108,7 +109,10 @@ final public class ObjectAdapterContext {
     }
 
     public ManagedObject recreatePojo(RootOid oid, Object recreatedPojo) {
-        final ManagedObject createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
+        
+        val spec = getSpecificationLoader().loadSpecification(recreatedPojo.getClass());
+        
+        final ManagedObject createdAdapter = createRootOrAggregatedAdapter(spec, oid, recreatedPojo);
         return injectServices(createdAdapter);
     }
 
@@ -124,12 +128,16 @@ final public class ObjectAdapterContext {
         return adapter;
     }
 
-    private ManagedObject createRootOrAggregatedAdapter(final RootOid oid, final Object pojo) {
+    private ManagedObject createRootOrAggregatedAdapter(
+            final @NonNull ObjectSpecification spec,
+            final RootOid oid, 
+            final Object pojo) {
+        
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;
-            return PojoAdapter.of(pojo, rootOid, getSpecificationLoader());
+            return ManagedObject.identified(spec, pojo, rootOid);
         } 
-        throw _Exceptions.illegalArgument("Parented Oids are no longer supported.");
+        throw _Exceptions.illegalArgument("Parented Oids are no longer supported, or cannot use Value Oid.");
     }
 
     // -- OBJECT ADAPTER PROVIDER SUPPORT
