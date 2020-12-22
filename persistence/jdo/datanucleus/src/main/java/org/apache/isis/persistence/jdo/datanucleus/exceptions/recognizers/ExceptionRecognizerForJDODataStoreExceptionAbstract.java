@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.exceprecog;
+package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
 
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;

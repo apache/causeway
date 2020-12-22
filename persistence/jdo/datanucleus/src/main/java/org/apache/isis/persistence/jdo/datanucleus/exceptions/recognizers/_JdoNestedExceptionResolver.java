@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.exceprecog;
+package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
 
 import java.util.stream.Stream;
 
@@ -29,7 +29,7 @@ import lombok.val;
 /**
  * @since 2.0
  */
-final class JdoNestedExceptionResolver {
+final class _JdoNestedExceptionResolver {
 
     static Stream<Throwable> streamNestedExceptionsOf(Throwable throwable) {
         

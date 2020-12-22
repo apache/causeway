@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.exceprecog;
+package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
 
 import javax.inject.Named;
 
@@ -27,21 +27,17 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Service
-@Named("isisJdoDn.ExceptionRecognizerForJDODataStoreException")
+@Named("isisJdoDn.ExceptionRecognizerForJDOObjectNotFoundException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDODataStoreException 
+public class ExceptionRecognizerForJDOObjectNotFoundException 
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForJDODataStoreException() {
-        super(Category.SERVER_ERROR,
-                ofTypeExcluding(
-                        javax.jdo.JDODataStoreException.class,
-                        JdoNestedExceptionResolver::streamNestedExceptionsOf,
-                        "NOT NULL check constraint"),
-                prefix("Unable to save changes.  " +
-                        "Does similar data already exist, or has referenced data been deleted?"));
+    public ExceptionRecognizerForJDOObjectNotFoundException() {
+        super(Category.NOT_FOUND,
+                javax.jdo.JDOObjectNotFoundException.class,
+                prefix("Unable to load object.  " +
+                        "Has it been deleted by someone else?"));
     }
-
 
 }

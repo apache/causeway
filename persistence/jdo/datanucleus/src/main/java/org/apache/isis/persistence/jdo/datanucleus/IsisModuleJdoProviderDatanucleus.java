@@ -29,14 +29,14 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
+import org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreException;
+import org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException;
+import org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDOObjectNotFoundException;
+import org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusIdLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
-import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDODataStoreException;
-import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException;
-import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDOObjectNotFoundException;
-import org.apache.isis.persistence.jdo.integration.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 
 @Configuration
 @Import({
