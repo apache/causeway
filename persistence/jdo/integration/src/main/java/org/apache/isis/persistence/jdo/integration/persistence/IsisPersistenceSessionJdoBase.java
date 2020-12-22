@@ -66,7 +66,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
      */
     protected final PersistenceManagerFactory jdoPersistenceManagerFactory;
     
-    IsisTransactionManagerJdo transactionManager;
+    _IsisTransactionManagerJdo transactionManager;
 
     /**
      * populated only when {@link #open()}ed.
@@ -109,7 +109,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.persistenceQueryFactory = PersistenceQueryFactory.of(
                 obj->this.adapterFor(obj), 
                 this.specificationLoader);
-        this.transactionManager = new IsisTransactionManagerJdo(serviceRegistry, this);
+        this.transactionManager = new _IsisTransactionManagerJdo(serviceRegistry, this);
 
         this.state = State.NOT_INITIALIZED;
     }

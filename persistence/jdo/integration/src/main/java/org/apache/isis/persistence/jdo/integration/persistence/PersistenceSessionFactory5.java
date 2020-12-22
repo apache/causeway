@@ -68,7 +68,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
-    private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
+    private final _Lazy<_DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
     
     private MetaModelContext metaModelContext;
@@ -95,13 +95,13 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
         return this.configuration != null;
     }
 
-    private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
+    private _DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
         val dnSettings = metaModelContext.getServiceRegistry().lookupServiceElseFail(DnSettings.class);
         val datanucleusProps = addDataNucleusPropertiesAsRequired(dnSettings);
         val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(isisBeanTypeRegistry);
 
-        val dataNucleusApplicationComponents = new DataNucleusApplicationComponents5(
+        val dataNucleusApplicationComponents = new _DataNucleusApplicationComponents5(
                 configuration,
                 datanucleusProps, 
                 classesToBePersisted);
@@ -119,7 +119,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
                 .forEach(entityClassName->log.debug(" - {}", entityClassName));
         }
         
-        DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, 
+        _DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, 
                 metaModelContext.getSpecificationLoader());
     }
 

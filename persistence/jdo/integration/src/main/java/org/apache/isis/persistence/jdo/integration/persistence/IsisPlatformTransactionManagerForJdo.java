@@ -160,7 +160,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         IsisTransactionAspectSupport.clearTransactionObject();
     }
     
-    private IsisTransactionManagerJdo transactionManagerJdo() {
+    private _IsisTransactionManagerJdo transactionManagerJdo() {
         return isisInteractionTracker.currentInteractionSession()
                 .map(interaction->interaction.getAttribute(IsisPersistenceSessionJdo.class))
                 .map(IsisPersistenceSessionJdoBase.class::cast)

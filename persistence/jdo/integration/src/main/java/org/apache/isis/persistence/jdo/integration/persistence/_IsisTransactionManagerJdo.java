@@ -38,7 +38,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
-class IsisTransactionManagerJdo {
+class _IsisTransactionManagerJdo {
 
     // -- constructor, fields
 
@@ -48,7 +48,7 @@ class IsisTransactionManagerJdo {
     private final ServiceRegistry serviceRegistry;
     private final Supplier<InteractionContext> interactionContextProvider;
 
-    IsisTransactionManagerJdo(ServiceRegistry serviceRegistry, IsisPersistenceSessionJdo persistenceSession) {
+    _IsisTransactionManagerJdo(ServiceRegistry serviceRegistry, IsisPersistenceSessionJdo persistenceSession) {
 
         this.serviceRegistry = serviceRegistry;
         this.persistenceSession = persistenceSession;

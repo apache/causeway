@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Vetoed
 @Log4j2
-public class DataNucleusApplicationComponents5 {
+final class _DataNucleusApplicationComponents5 {
 
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration configuration;
@@ -63,7 +63,7 @@ public class DataNucleusApplicationComponents5 {
 
     @Getter private PersistenceManagerFactory persistenceManagerFactory;
 
-    public DataNucleusApplicationComponents5(
+    public _DataNucleusApplicationComponents5(
             final IsisConfiguration configuration,
             final Map<String, Object> datanucleusProps,
             final Set<String> persistableClassNameSet) {
@@ -106,7 +106,7 @@ public class DataNucleusApplicationComponents5 {
             final Set<String> persistableClassNameSet, 
             final Map<String, Object> datanucleusProps) {
 
-        final DNStoreManagerType dnStoreManagerType = DNStoreManagerType.typeOf(datanucleusProps);
+        final _DNStoreManagerType dnStoreManagerType = _DNStoreManagerType.typeOf(datanucleusProps);
 
         PersistenceManagerFactory persistenceManagerFactory;
 

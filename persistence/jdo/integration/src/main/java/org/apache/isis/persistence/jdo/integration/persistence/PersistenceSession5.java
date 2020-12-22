@@ -144,7 +144,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * Closes the subcomponents.
      *
      * <p>
-     * Automatically {@link IsisTransactionManagerJdo#commitTransaction(IsisTransactionObject)
+     * Automatically {@link _IsisTransactionManagerJdo#commitTransaction(IsisTransactionObject)
      * ends (commits)} the current (Isis) {@link IsisTransactionJdo}. This in turn commits the underlying
      * JDO transaction.
      *
