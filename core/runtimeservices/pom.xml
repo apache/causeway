@@ -76,6 +76,13 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
         </dependency>
+
+		<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-transaction</artifactId>
+        </dependency>
+
+        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-codegen-bytebuddy</artifactId>

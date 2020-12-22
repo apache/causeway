@@ -16,31 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.lifecycles;
-
-import javax.enterprise.inject.Vetoed;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.jdo.listener.InstanceLifecycleEvent;
-
-import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
+package org.apache.isis.core.transaction.integration;
 
 /**
- * To be registered with each JDO PersistenceManager instance, in order to collect
- * persistence related metrics
  * 
  * @since 2.0
  *
  */
-@Vetoed // managed by isis
-public class LoadLifecycleListenerForIsis 
-implements javax.jdo.listener.LoadLifecycleListener {
-    
-    @Inject private Provider<EntityChangeTracker> entityChangeTrackerProvider;
+public enum IsisTransactionPlaceholder {
+
+    NEW,
+    DELETED
+    ;
 
     @Override
-    public void postLoad(final InstanceLifecycleEvent event) {
-        entityChangeTrackerProvider.get().incrementLoaded();
+    public String toString() {
+        return "[" + name() + "]";
     }
 
 }

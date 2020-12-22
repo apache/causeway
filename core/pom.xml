@@ -693,6 +693,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-core-transaction</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-core-webapp</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -1798,6 +1803,7 @@
 		<module>metamodel</module>
 		<module>runtime</module>
 		<module>runtimeservices</module>
+		<module>transaction</module>
 		<module>webapp</module>
 
 		<module>security</module>

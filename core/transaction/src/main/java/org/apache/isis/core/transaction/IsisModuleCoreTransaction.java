@@ -16,35 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime;
+package org.apache.isis.core.transaction;
 
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
-import org.apache.isis.core.runtime.events.RuntimeEventService;
-import org.apache.isis.core.runtime.events.persistence.TimestampService;
-import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault;
 
 @Configuration
 @Import({
         // modules
-        IsisModuleCoreMetamodel.class,
+//        IsisModuleCoreMetamodel.class,
 
         // @Service's
-        RuntimeEventService.class,
-        TimestampService.class,
+//        RuntimeEventService.class,
+//        TimestampService.class,
+        EntityChangeTrackerDefault.class,
 
         // @Configuration's
 
 })
-public class IsisModuleCoreRuntime {
+public class IsisModuleCoreTransaction {
 
-    @Bean
-    public static BeanFactoryPostProcessor beanFactoryPostProcessor() {
-        return new IsisInteractionScopeBeanFactoryPostProcessor();
-    }
     
 }

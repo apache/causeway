@@ -36,8 +36,8 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.core.runtime.persistence.changetracking.EntityPropertyChangePublisher;
-import org.apache.isis.core.runtime.persistence.changetracking.HasEnlistedEntityPropertyChanges;
+import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
+import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityPropertyChanges;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

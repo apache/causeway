@@ -42,8 +42,8 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
-import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
+import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
+import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

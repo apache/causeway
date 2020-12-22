@@ -42,7 +42,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.runtime.iactn.InteractionFactory;
-import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
+import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;

@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterBeginEvent;
+import org.apache.isis.core.transaction.events.TransactionAfterBeginEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;

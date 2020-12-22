@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.persistence.changetracking.EntityChangeTracker;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFactory;

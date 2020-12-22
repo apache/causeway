@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
+import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
