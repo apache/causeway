@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -37,15 +36,10 @@ public interface PersistenceSession {
     // -- STABLE API (DRAFT)
     // -------------------------------------------------------------------------------------------------
 
-    TransactionService getTransactionService();
     MetaModelContext getMetaModelContext();
 
     void open();
     void close();
-
-    default void flush() {
-        getTransactionService().flushTransaction();
-    }
 
     default ManagedObject adapterFor(@Nullable Object pojo) {
         return _Utils.adapterFor(getMetaModelContext(), pojo);
@@ -56,16 +50,6 @@ public interface PersistenceSession {
      */
     void refreshRoot(Object domainObject);
 
-
-    /**
-     * Re-initializes the fields of an object. If the object is unresolved then
-     * the object's missing data should be retrieved from the persistence
-     * mechanism and be used to set up the value objects and associations.
-     * @since 2.0
-     */
-    default void refreshRootInTransaction(final Object domainObject) {
-        getTransactionService().executeWithinTransaction(()->refreshRoot(domainObject));
-    }
 
     /**
      * @param pojo a persistable object

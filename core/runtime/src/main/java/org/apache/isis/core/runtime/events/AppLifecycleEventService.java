@@ -77,13 +77,6 @@ public class AppLifecycleEventService {
                 IsisInteractionLifecycleEvent
                 .of(conversationId, interactionSession, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
     }
-
-	public void fireInteractionFlushRequest(InteractionSession interactionSession) {
-	    val conversationId = interactionTracker.getConversationId().orElse(null);
-	    eventBusService.post(
-	            IsisInteractionLifecycleEvent
-	            .of(conversationId, interactionSession, IsisInteractionLifecycleEvent.EventType.FLUSH_REQUEST));
-	}
 	
     // -- PERSISTENT OBJECT EVENTS
 

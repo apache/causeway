@@ -100,9 +100,6 @@ public class JdoPersistenceLifecycleService {
         case IS_ENDING:
             onInteractionEnding(interactionSession);
             break;
-        case FLUSH_REQUEST:
-            onInteractionFlushRequest(interactionSession);
-            break;
 
         default:
             throw _Exceptions.unmatchedCase(eventType);
@@ -122,11 +119,6 @@ public class JdoPersistenceLifecycleService {
     private void onInteractionEnding(final InteractionSession interactionSession) {
         currentSession(interactionSession)
         .ifPresent(PersistenceSession::close);
-    }
-
-    private void onInteractionFlushRequest(final InteractionSession interactionSession) {
-        currentSession(interactionSession)
-        .ifPresent(PersistenceSession::flush);
     }
 
     private Optional<IsisPersistenceSessionJdo> currentSession(final InteractionSession interactionSession) {

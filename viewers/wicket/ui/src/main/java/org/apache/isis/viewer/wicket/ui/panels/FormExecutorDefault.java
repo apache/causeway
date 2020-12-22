@@ -42,6 +42,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
@@ -52,7 +53,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.events.AppLifecycleEventService;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -141,8 +141,8 @@ implements FormExecutor {
                 val commonContext = targetEntityModel.getCommonContext();
                 commonContext.getInteractionTracker().currentInteractionSession()
                 .ifPresent(interaction->{
-                    commonContext.lookupServiceElseFail(AppLifecycleEventService.class)
-                    .fireInteractionFlushRequest(interaction);
+                    commonContext.lookupServiceElseFail(TransactionService.class)
+                    .flushTransaction();
                 });
             }
 
