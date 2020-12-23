@@ -78,7 +78,6 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 
@@ -953,12 +952,8 @@ implements ObjectSpecification {
         }
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return getMetaModelContext().getSpecificationLoader();
-    }
-    
     protected IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
-        return getMetaModelContext().getServiceRegistry()
+        return getServiceRegistry()
                 .lookupServiceElseFail(IsisBeanTypeRegistry.class);
     }
 

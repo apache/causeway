@@ -33,6 +33,7 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -50,7 +51,7 @@ import lombok.val;
  * @since 2.0
  *
  */
-public class IsisAppCommonContext implements MetaModelContext.Delegating {
+public class IsisAppCommonContext implements HasMetaModelContext {
 
     /**
      * Can be bootstrapped from a {@link MetaModelContext}

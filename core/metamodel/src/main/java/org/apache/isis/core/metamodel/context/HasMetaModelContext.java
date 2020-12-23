@@ -18,8 +18,124 @@
  */
 package org.apache.isis.core.metamodel.context;
 
+import java.util.stream.Stream;
+
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.execution.MemberExecutorService;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+
 public interface HasMetaModelContext {
 
+    // -- INTERFACE
+    
     MetaModelContext getMetaModelContext();
+    
+    // -- SHORTCUTS
+    
+    default IsisSystemEnvironment getSystemEnvironment() {
+        return getMetaModelContext().getSystemEnvironment();
+    }
+    
+    default IsisConfiguration getConfiguration() {
+        return getMetaModelContext().getConfiguration();
+    }
+
+    default ServiceInjector getServiceInjector() {
+        return getMetaModelContext().getServiceInjector();
+    }
+
+    default ServiceRegistry getServiceRegistry() {
+        return getMetaModelContext().getServiceRegistry();
+    }
+
+    default FactoryService getFactoryService() {
+        return getMetaModelContext().getFactoryService();
+    }
+    
+    default MemberExecutorService getMemberExecutor() {
+        return getMetaModelContext().getMemberExecutor();
+    }
+    
+    default SpecificationLoader getSpecificationLoader() {
+        return getMetaModelContext().getSpecificationLoader();
+    }
+
+    default TranslationService getTranslationService() {
+        return getMetaModelContext().getTranslationService();
+    }
+
+    default AuthorizationManager getAuthorizationManager() {
+        return getMetaModelContext().getAuthorizationManager();
+    }
+
+    default AuthenticationManager getAuthenticationManager() {
+        return getMetaModelContext().getAuthenticationManager();
+    }
+    
+    default AuthenticationContext getAuthenticationContext() {
+        return getMetaModelContext().getAuthenticationContext();
+    }
+
+    default TitleService getTitleService() {
+        return getMetaModelContext().getTitleService();
+    }
+
+    default ObjectSpecification getSpecification(Class<?> type) {
+        return getMetaModelContext().getSpecification(type);
+    }
+
+    default RepositoryService getRepositoryService() {
+        return getMetaModelContext().getRepositoryService();
+    }
+
+    default TransactionState getTransactionState() {
+        return getMetaModelContext().getTransactionState();
+    }
+
+    default ManagedObject getHomePageAdapter() {
+        return getMetaModelContext().getHomePageAdapter();
+    }
+
+    default TransactionService getTransactionService() {
+        return getMetaModelContext().getTransactionService();
+    }
+
+    default ObjectManager getObjectManager() {
+        return getMetaModelContext().getObjectManager();
+    }
+
+    default WrapperFactory getWrapperFactory() {
+        return getMetaModelContext().getWrapperFactory();
+    }
+    
+    // -- ADVANCED SHORTCUTS
+
+    default ManagedObject lookupServiceAdapterById(String serviceId) {
+        return getMetaModelContext().lookupServiceAdapterById(serviceId);
+    }
+    
+    default <T> T getSingletonElseFail(Class<T> type) {
+        return getMetaModelContext().getSingletonElseFail(type);
+    }
+    
+    default Stream<ManagedObject> streamServiceAdapters() {
+        return getMetaModelContext().streamServiceAdapters();
+    }
     
 }

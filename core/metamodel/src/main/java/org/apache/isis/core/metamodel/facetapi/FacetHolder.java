@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 
 import lombok.NonNull;
 import lombok.val;
@@ -33,7 +33,7 @@ import lombok.val;
  * Anything in the metamodel (which also includes peers in the reflector) that
  * can be extended.
  */
-public interface FacetHolder {
+public interface FacetHolder extends HasMetaModelContext {
 
     int getFacetCount();
 
@@ -116,59 +116,5 @@ public interface FacetHolder {
      * @since 2.0
      */
     void addOrReplaceFacet(Facet facet);
-    
-    /**
-     * 
-     * @since 2.0
-     */
-    MetaModelContext getMetaModelContext();
-
-    /**
-     * For those that implement through delegation.
-     * @since 2.0
-     *
-     */
-    public static interface Delegating extends FacetHolder {
-        
-        FacetHolder getFacetHolder();
-
-        @Override
-        default public int getFacetCount() {
-            return getFacetHolder().getFacetCount();
-        }
-
-        @Override
-        default public <T extends Facet> T getFacet(Class<T> cls) {
-            return getFacetHolder().getFacet(cls);
-        }
-
-        @Override
-        default public boolean containsFacet(Class<? extends Facet> facetType) {
-            return getFacetHolder().containsFacet(facetType);
-        }
-
-        @Override
-        default public Stream<Facet> streamFacets() {
-            return getFacetHolder().streamFacets();
-        }
-
-        @Override
-        default public void addFacet(Facet facet) {
-            getFacetHolder().addFacet(facet);
-        }
-
-        @Override
-        default public void addOrReplaceFacet(Facet facet) {
-            getFacetHolder().addOrReplaceFacet(facet);
-        }
-
-        @Override
-        default public MetaModelContext getMetaModelContext() {
-            return getFacetHolder().getMetaModelContext();
-        }
-        
-        
-    }
-    
 
 }

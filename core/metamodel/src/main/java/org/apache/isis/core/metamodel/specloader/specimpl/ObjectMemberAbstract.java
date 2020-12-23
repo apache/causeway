@@ -29,10 +29,11 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
@@ -57,12 +58,12 @@ import lombok.NonNull;
 import lombok.val;
 
 public abstract class ObjectMemberAbstract 
-implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
+implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     protected ObjectSpecification specificationOf(final Class<?> type) {
         return type != null 
                 ? getMetaModelContext().getSpecificationLoader().loadSpecification(type)
-                        : null;
+                : null;
     }
 
     // -- fields

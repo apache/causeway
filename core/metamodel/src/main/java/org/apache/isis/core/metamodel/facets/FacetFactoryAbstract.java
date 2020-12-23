@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -30,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public abstract class FacetFactoryAbstract 
-implements FacetFactory, MetaModelContextAware, MetaModelContext.Delegating {
+implements FacetFactory, MetaModelContextAware, HasMetaModelContext {
     
     @Getter(onMethod = @__({@Override})) @Setter(onMethod = @__({@Override}))
     private MetaModelContext metaModelContext;
