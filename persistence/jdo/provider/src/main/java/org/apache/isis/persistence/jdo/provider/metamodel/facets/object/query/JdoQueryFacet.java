@@ -18,10 +18,9 @@
  */
 package org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query;
 
-import java.util.List;
-
 import javax.jdo.annotations.Query;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
@@ -53,7 +52,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 public interface JdoQueryFacet extends Facet {
 
     /**
-     * Returns an immutable {@link List}.
+     * Returns an immutable {@link Can}.
      */
-    List<JdoNamedQuery> getNamedQueries();
+    Can<JdoNamedQuery> getNamedQueries();
 }

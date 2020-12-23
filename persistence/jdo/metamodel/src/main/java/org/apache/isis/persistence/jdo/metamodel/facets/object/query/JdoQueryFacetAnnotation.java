@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
 import javax.jdo.annotations.Query;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
@@ -27,10 +28,11 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.Jd
 public class JdoQueryFacetAnnotation extends JdoQueryFacetAbstract
 implements JdoQueryFacet {
 
-    public JdoQueryFacetAnnotation(final Query jdoNamedQuery,
+    public JdoQueryFacetAnnotation(
+            final Query jdoNamedQuery,
             final FacetHolder holder) {
-        super(holder);
-        add(jdoNamedQuery);
+        
+        super(holder, Can.ofSingleton(jdoNamedQuery));
     }
 
 

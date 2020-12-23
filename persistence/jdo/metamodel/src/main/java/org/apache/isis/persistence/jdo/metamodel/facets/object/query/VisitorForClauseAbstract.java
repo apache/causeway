@@ -18,8 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -27,7 +25,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
 import lombok.val;
@@ -58,12 +55,11 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
             final ObjectSpecification objectSpec,
             final MetaModelValidator validator) {
         
-        final JdoQueryFacet facet = objectSpec.getFacet(JdoQueryFacet.class);
-        if(facet == null) {
+        val jdoQueryFacet = objectSpec.getFacet(JdoQueryFacet.class);
+        if(jdoQueryFacet == null) {
             return;
         }
-        final List<JdoNamedQuery> namedQueries = facet.getNamedQueries();
-        for (final JdoNamedQuery namedQuery : namedQueries) {
+        for (val namedQuery : jdoQueryFacet.getNamedQueries()) {
             if(namedQuery.getLanguage().equals("JDOQL")) {
                 final String query = namedQuery.getQuery();
                 final String fromClassName = deriveClause(query);

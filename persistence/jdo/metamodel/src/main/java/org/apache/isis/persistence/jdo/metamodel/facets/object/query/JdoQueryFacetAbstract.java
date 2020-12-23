@@ -18,13 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import javax.jdo.annotations.Query;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,33 +30,33 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-public class JdoQueryFacetAbstract extends FacetAbstract implements
-JdoQueryFacet {
+public class JdoQueryFacetAbstract 
+extends FacetAbstract 
+implements JdoQueryFacet {
 
     public static Class<? extends Facet> type() {
         return JdoQueryFacet.class;
     }
 
-    private final List<JdoNamedQuery> namedQueries = new ArrayList<JdoNamedQuery>();
+    @Getter(onMethod_ = {@Override})
+    private final Can<JdoNamedQuery> namedQueries;
 
-    public JdoQueryFacetAbstract(final FacetHolder holder) {
+    public JdoQueryFacetAbstract(
+            final @NonNull FacetHolder holder, 
+            final @NonNull Can<Query> jdoNamedQueries) {
+        
         super(JdoQueryFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
+        
+        val objSpec = (ObjectSpecification) getFacetHolder();
+        this.namedQueries = jdoNamedQueries.map(jdoNamedQuery->new JdoNamedQuery(jdoNamedQuery, objSpec));
     }
 
-    protected void add(final Query... jdoNamedQueries) {
-        final ObjectSpecification objSpec = (ObjectSpecification) getFacetHolder();
-        for (final Query jdoNamedQuery : jdoNamedQueries) {
-            namedQueries.add(new JdoNamedQuery(jdoNamedQuery, objSpec));
-        }
-    }
-
-    @Override
-    public List<JdoNamedQuery> getNamedQueries() {
-        return Collections.unmodifiableList(namedQueries);
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("namedQueries", namedQueries);
     }

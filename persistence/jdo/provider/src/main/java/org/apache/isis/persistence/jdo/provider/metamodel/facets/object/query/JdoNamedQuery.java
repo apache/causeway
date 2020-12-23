@@ -18,10 +18,18 @@
  */
 package org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query;
 
+import javax.annotation.Nullable;
 import javax.jdo.annotations.Query;
 
 import org.apache.isis.core.metamodel.services.metamodel.MetaModelExportSupport;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * Value object that represents the information of a
@@ -29,79 +37,23 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  *
  * @see {@link JdoQueryFacet}.
  */
+@Getter 
+@AllArgsConstructor(access = AccessLevel.PRIVATE) 
+@ToString @EqualsAndHashCode
 public final class JdoNamedQuery implements MetaModelExportSupport {
 
-    private final String name;
-    private final String query;
-    private final String language;
-    private final ObjectSpecification objSpec;
-
-    private JdoNamedQuery(
-            final String name,
-            final String query,
-            final String language,
-            final ObjectSpecification noSpec) {
-        this.language = language;
-
-        assert name != null;
-        assert query != null;
-        assert noSpec != null;
-
-        this.name = name;
-        this.query = query;
-        this.objSpec = noSpec;
-    }
+    private final @NonNull  String name;
+    private final @NonNull  String query;
+    private final @Nullable String language;
+    
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private final @NonNull  ObjectSpecification objectSpecification;
 
     public JdoNamedQuery(
             final Query jdoNamedQuery,
             final ObjectSpecification objSpec) {
         this(jdoNamedQuery.name(), jdoNamedQuery.value(), jdoNamedQuery.language(), objSpec);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getQuery() {
-        return query;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public ObjectSpecification getObjectSpecification() {
-        return objSpec;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final JdoNamedQuery other = (JdoNamedQuery) obj;
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
