@@ -50,7 +50,7 @@ extends
     /**
      * Forces a reload (refresh in JDO terminology) of the domain object
      */
-    void refreshRoot(Object domainObject);
+    void refreshEntity(Object pojo);
 
 
     /**
@@ -75,8 +75,8 @@ extends
      */
     ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier);
 
-    Can<ManagedObject> allMatchingQuery(final Query<?> query);
-    Optional<ManagedObject> firstMatchingQuery(final Query<?> query);
+    Can<ManagedObject> allMatchingQuery(Query<?> query);
+    Optional<ManagedObject> firstMatchingQuery(Query<?> query);
 
     /**
      * Removes the specified object from the system. The specified object's data

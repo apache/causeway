@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
-import java.util.function.Supplier;
 
 import org.datanucleus.enhancement.Persistable;
 
@@ -27,7 +26,6 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -38,9 +36,8 @@ import lombok.val;
 public class JdoEntityFacet extends JdoEntityFacetAbstract {
 
     public JdoEntityFacet(
-            final FacetHolder holder, 
-            final Supplier<InteractionTracker> isisInteractionTracker) {
-        super(holder, isisInteractionTracker);
+            final FacetHolder holder) {
+        super(holder);
     }
 
     @Override
@@ -49,9 +46,7 @@ public class JdoEntityFacet extends JdoEntityFacetAbstract {
         if(!spec.isEntity()) {
             throw _Exceptions.unexpectedCodeReach();
         }
-        
-        val persistenceSession = super.getPersistenceSessionJdo();
-        return persistenceSession.fetchByIdentifier(spec, identifier);
+        return getJdoPersistenceSession().fetchByIdentifier(spec, identifier);
     }
     
     @Override
@@ -59,8 +54,7 @@ public class JdoEntityFacet extends JdoEntityFacetAbstract {
         if(!spec.isEntity()) {
             throw _Exceptions.unexpectedCodeReach();
         }
-        val persistenceSession = super.getPersistenceSessionJdo();
-        return persistenceSession.allMatchingQuery(query);
+        return getJdoPersistenceSession().allMatchingQuery(query);
     }
     
     @Override
@@ -78,7 +72,7 @@ public class JdoEntityFacet extends JdoEntityFacetAbstract {
                     pojo.getClass().getName());
         }
         
-        val persistenceSession = super.getPersistenceSessionJdo();
+        val persistenceSession = getJdoPersistenceSession();
         val isRecognized = persistenceSession.isRecognized(pojo);
         if(!isRecognized) {
             throw _Exceptions.illegalArgument(
@@ -99,31 +93,27 @@ public class JdoEntityFacet extends JdoEntityFacetAbstract {
             return; //noop
         }
         
-        val persistenceSession = super.getPersistenceSessionJdo();
-        persistenceSession.makePersistentInTransaction(ManagedObject.of(spec, pojo));
+        getJdoPersistenceSession().makePersistentInTransaction(ManagedObject.of(spec, pojo));
     }
     
     @Override
     public void delete(ObjectSpecification spec, Object pojo) {
-        val persistenceSession = super.getPersistenceSessionJdo();
-        persistenceSession.destroyObjectInTransaction(ManagedObject.of(spec, pojo));
+        getJdoPersistenceSession().destroyObjectInTransaction(ManagedObject.of(spec, pojo));
     }
     
     @Override
     public void refresh(Object pojo) {
-        val persistenceSession = super.getPersistenceSessionJdo();
-        persistenceSession.refreshRoot(pojo);
+        getJdoPersistenceSession().refreshEntity(pojo);
     }
     
     @Override
     public EntityState getEntityState(Object pojo) {
-        val persistenceSession = super.getPersistenceSessionJdo();
-        return persistenceSession.getEntityState(pojo);
+        return getJdoPersistenceSession().getEntityState(pojo);
     }
 
     @Override
     public <T> T detach(T pojo) {
-        return super.getPersistenceSessionJdo().getPersistenceManager().detachCopy(pojo);
+        return getJdoPersistenceSession().getPersistenceManager().detachCopy(pojo);
     }
 
     // -- HELPER

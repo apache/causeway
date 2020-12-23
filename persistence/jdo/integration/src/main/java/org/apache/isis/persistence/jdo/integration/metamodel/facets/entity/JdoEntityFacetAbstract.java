@@ -18,8 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
-import java.util.function.Supplier;
-
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -35,21 +34,23 @@ implements EntityFacet {
         return EntityFacet.class;
     }
 
-    private final Supplier<InteractionTracker> isisInteractionTracker;
-
     public JdoEntityFacetAbstract(
-            final FacetHolder holder,
-            final Supplier<InteractionTracker> isisInteractionTracker) {
+            final FacetHolder holder) {
         
         super(JdoEntityFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(EntityFacet.class);
-        this.isisInteractionTracker = isisInteractionTracker;
     }
     
-    protected JdoPersistenceSession getPersistenceSessionJdo() {
-        return isisInteractionTracker.get().currentInteractionSession()
-                .map(interaction->interaction.getAttribute(JdoPersistenceSession.class))
+    protected JdoPersistenceSession getJdoPersistenceSession() {
+        return isisInteractionTrackerLazy.get().currentInteractionSession()
+                .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
                 .orElse(null);
     }
+    
+    // -- INTERACTION TRACKER LAZY LOOKUP
+    
+    // memoizes the lookup, just an optimization 
+    private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
+            ()->getServiceRegistry().lookupServiceElseFail(InteractionTracker.class));
     
 }

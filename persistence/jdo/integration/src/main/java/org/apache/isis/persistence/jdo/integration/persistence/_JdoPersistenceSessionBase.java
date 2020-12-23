@@ -25,7 +25,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -112,49 +112,44 @@ implements JdoPersistenceSession {
         return persistenceManager;
     }
 
-    // -- ENUMS
-
-    protected enum Type {
-        TRANSIENT,
-        PERSISTENT
-    }
+    // -- STATE
 
     protected enum State {
         NOT_INITIALIZED, OPEN, CLOSED
-    }
+        ;
 
-    // -- STATE
-
-    protected State state;
-
-    protected void ensureNotOpened() {
-        if (state != State.NOT_INITIALIZED) {
-            throw new IllegalStateException("Persistence session has already been initialized");
+        protected void ensureNotOpened() {
+            if (this != State.NOT_INITIALIZED) {
+                throw new IllegalStateException("Persistence session has already been initialized");
+            }
         }
-    }
 
-    protected void ensureOpened() {
-        ensureStateIs(State.OPEN);
-    }
-
-    private void ensureStateIs(final State stateRequired) {
-        if (state == stateRequired) {
-            return;
+        protected void ensureOpened() {
+            ensureStateIs(State.OPEN);
         }
-        throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
+
+        private void ensureStateIs(final State stateRequired) {
+            if (this == stateRequired) {
+                return;
+            }
+            throw new IllegalStateException("State is: " + this + "; should be: " + stateRequired);
+        }
+        
     }
     
+    protected State state = State.NOT_INITIALIZED;
+
     // -- OID
     
     /**
      * @param pojo
      * @return oid for the given domain object 
      */
-    protected @Nullable Oid oidFor(@Nullable Object pojo) {
+    protected @Nullable RootOid oidFor(@Nullable Object pojo) {
         if(pojo==null) {
             return null;
         }
-        val spec = getMetaModelContext().getSpecificationLoader().loadSpecification(pojo.getClass());
+        val spec = getSpecificationLoader().loadSpecification(pojo.getClass());
         val adapter = ManagedObject.of(spec, pojo);
         return ManagedObjects.identify(adapter).orElse(null);
     }

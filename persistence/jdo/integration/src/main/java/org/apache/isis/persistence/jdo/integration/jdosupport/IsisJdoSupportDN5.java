@@ -70,7 +70,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     @Override
     public <T> T refresh(final T domainObject) {
         final ManagedObject adapter = getPersistenceSession().adapterFor(domainObject);
-        getPersistenceSession().refreshRoot(adapter);
+        getPersistenceSession().refreshEntity(adapter);
         return domainObject;
     }
 

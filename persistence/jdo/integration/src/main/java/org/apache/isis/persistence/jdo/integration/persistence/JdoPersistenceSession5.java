@@ -98,7 +98,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void open() {
-        ensureNotOpened();
+        state.ensureNotOpened();
 
         if (log.isDebugEnabled()) {
             log.debug("opening {}", this);
@@ -122,8 +122,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         val loadLifecycleListener = new LoadLifecycleListenerForIsis();
         val storeLifecycleListener = new JdoStoreLifecycleListenerForIsis();
         
-        getMetaModelContext().getServiceInjector().injectServicesInto(loadLifecycleListener);
-        getMetaModelContext().getServiceInjector().injectServicesInto(storeLifecycleListener);
+        getServiceInjector().injectServicesInto(loadLifecycleListener);
+        getServiceInjector().injectServicesInto(storeLifecycleListener);
             
         persistenceManager.addInstanceLifecycleListener(loadLifecycleListener, (Class[]) null);
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
@@ -219,7 +219,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     /**
      * Converts the {@link Query applib representation of a query} into the
-     * {@link PersistenceQuery NOF-internal representation}.
+     * {@link PersistenceQuery} framework-internal representation.
      */
     private final PersistenceQuery createPersistenceQueryFor(
             final Query<?> query,
@@ -303,7 +303,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     // -- REFRESH
 
     @Override
-    public void refreshRoot(final Object domainObject) {
+    public void refreshEntity(final Object domainObject) {
 
         val state = getEntityState(domainObject);
         val isRepresentingPersistent = state.isAttached() || state.isDestroyed();  
@@ -344,11 +344,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             throw new NotPersistableException("Can only persist entity beans: "+ adapter);
         }
         if (spec.getBeanSort().isCollection()) {
-            //(FIXME not a perfect match) 
-            //legacy of ... 
-            //getOid() instanceof ParentedOid;
-            //or should we just ignore this?
-            throw new NotPersistableException("Cannot persist parented collection: " + adapter);
+            //XXX not sure if we can do better than that, eg. traverse each element of the collection and persist individually
+            throw new NotPersistableException("Cannot persist a collection: " + adapter);
         }
         
         transactionService.executeWithinTransaction(()->{
@@ -396,7 +393,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     private CreateObjectCommand newCreateObjectCommand(final ManagedObject adapter) {
 
-        ensureOpened();
+        state.ensureOpened();
         
         val pojo = adapter.getPojo();
 
@@ -409,7 +406,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private DestroyObjectCommand newDestroyObjectCommand(final ManagedObject adapter) {
         
-        ensureOpened();
+        state.ensureOpened();
         
         val pojo = adapter.getPojo();
 

@@ -22,9 +22,7 @@ package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -80,22 +78,12 @@ implements ObjectSpecIdFacetFactory {
         if(embeddedOnly) {
             // suppress
         } else {
-            val jdoPersistenceCapableFacet = new JdoEntityFacet(
-                    facetHolder, 
-                    isisInteractionTrackerLazy);
+            val jdoPersistenceCapableFacet = new JdoEntityFacet(facetHolder);
             FacetUtil.addFacet(jdoPersistenceCapableFacet);
         }
 
         return;
     }
-    
-    // -- INTERACTION TRACKER LOOKUP
-    
-    private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(this::lookupIsisInteractionTracker); 
-    private InteractionTracker lookupIsisInteractionTracker() {
-        return super.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(InteractionTracker.class);        
-    }
-    
     
     
 }
