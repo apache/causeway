@@ -30,13 +30,11 @@ import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
-import org.apache.isis.persistence.jdo.provider.persistence.JdoTypedQuerySupport;
 
 public interface JdoPersistenceSession 
 extends 
     HasMetaModelContext,
-    HasPersistenceManager,
-    JdoTypedQuerySupport {
+    HasPersistenceManager {
 
     // -------------------------------------------------------------------------------------------------
     // -- STABLE API (DRAFT)

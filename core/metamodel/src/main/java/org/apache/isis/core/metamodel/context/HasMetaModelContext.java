@@ -40,6 +40,7 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
+@FunctionalInterface
 public interface HasMetaModelContext {
 
     // -- INTERFACE
