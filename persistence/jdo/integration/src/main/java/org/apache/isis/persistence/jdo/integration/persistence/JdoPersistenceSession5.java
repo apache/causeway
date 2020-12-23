@@ -18,7 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
-import java.text.MessageFormat;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -45,7 +44,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
-import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
@@ -55,12 +53,7 @@ import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObj
 import org.apache.isis.persistence.jdo.integration.persistence.command.DestroyObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.commands.DataNucleusDeleteObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 import lombok.NonNull;
 import lombok.val;
@@ -109,13 +102,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final IsisLifecycleListener.PersistenceSessionLifecycleManagement psLifecycleMgmt = this;
         final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(psLifecycleMgmt);
         persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[]) null);
-
-        persistenceQueryProcessorByClass.put(
-                PersistenceQueryFindAllInstances.class,
-                new PersistenceQueryFindAllInstancesProcessor(this));
-        persistenceQueryProcessorByClass.put(
-                PersistenceQueryFindUsingApplibQueryDefault.class,
-                new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
         // install JDO specific entity change listeners ...
         
@@ -201,17 +187,14 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             log.debug("findInstances using (applib) Query: {}", query);
         }
 
-        // TODO: unify PersistenceQuery and PersistenceQueryProcessor
-        final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
+        val persistenceQuery = createPersistenceQueryFor(query, cardinality);
         if (log.isDebugEnabled()) {
             log.debug("maps to (core runtime) PersistenceQuery: {}", persistenceQuery);
         }
 
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
-
         final Can<ManagedObject> instances = transactionService
                 .executeWithinTransaction(
-                        ()->processPersistenceQuery(processor, persistenceQuery) )
+                        ()->persistenceQuery.execute(this) )
                 .orElseFail();
         
         return instances;
@@ -232,23 +215,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         return persistenceQuery;
-    }
-
-    private PersistenceQueryProcessor<? extends PersistenceQuery> lookupProcessorFor(final PersistenceQuery persistenceQuery) {
-        final Class<? extends PersistenceQuery> persistenceQueryClass = persistenceQuery.getClass();
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
-                persistenceQueryProcessorByClass.get(persistenceQueryClass);
-        if (processor == null) {
-            throw new UnsupportedFindException(MessageFormat.format(
-                    "Unsupported PersistenceQuery class: {0}", persistenceQueryClass.getName()));
-        }
-        return processor;
-    }
-    @SuppressWarnings("unchecked")
-    private <Q extends PersistenceQuery> Can<ManagedObject> processPersistenceQuery(
-            final PersistenceQueryProcessor<Q> persistenceQueryProcessor,
-            final PersistenceQuery persistenceQuery) {
-        return persistenceQueryProcessor.process((Q) persistenceQuery);
     }
 
     // -- FETCHING

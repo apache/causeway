@@ -20,8 +20,12 @@
 package org.apache.isis.persistence.jdo.integration.persistence.query;
 
 import org.apache.isis.applib.query.AllInstancesQuery;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ToString;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
 
 /**
  * Corresponds to {@link AllInstancesQuery}
@@ -59,5 +63,10 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryAbstract  
         final ToString str = ToString.createAnonymous(this);
         str.append("spec", getSpecification().getShortIdentifier());
         return str.toString();
+    }
+
+    @Override
+    public Can<ManagedObject> execute(JdoPersistenceSession5 persistenceSession) {
+        return new PersistenceQueryFindAllInstancesProcessor(persistenceSession).process(this);
     }
 }

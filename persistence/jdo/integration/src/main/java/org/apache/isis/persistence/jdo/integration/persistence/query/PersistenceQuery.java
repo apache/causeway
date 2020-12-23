@@ -20,7 +20,10 @@
 package org.apache.isis.persistence.jdo.integration.persistence.query;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
 
 /**
  * Defines a criteria for including instances in set, corresponds to
@@ -43,4 +46,6 @@ public interface PersistenceQuery {
      * @return
      */
     public long getCount() ;
+
+    Can<ManagedObject> execute(JdoPersistenceSession5 persistenceSession);
 }

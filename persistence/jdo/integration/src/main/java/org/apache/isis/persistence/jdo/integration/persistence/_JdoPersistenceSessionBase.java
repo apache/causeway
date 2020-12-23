@@ -18,13 +18,10 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
-import java.util.Map;
-
 import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -32,7 +29,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFactory;
 import org.apache.isis.persistence.jdo.integration.transaction.TxManagerInternalFactory;
 
@@ -62,12 +58,6 @@ implements JdoPersistenceSession {
      * populated only when {@link #open()}ed.
      */
     protected PersistenceManager persistenceManager;
-
-    /**
-     * populated only when {@link #open()}ed.
-     */
-    protected final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = 
-            _Maps.newHashMap();
 
     // -- CONSTRUCTOR
 

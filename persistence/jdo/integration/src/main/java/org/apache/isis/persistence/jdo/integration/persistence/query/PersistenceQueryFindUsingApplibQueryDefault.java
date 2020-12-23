@@ -23,11 +23,14 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.
@@ -50,8 +53,6 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
         this.cardinality = cardinality;
         this.argumentsAdaptersByParameterName = argumentsAdaptersByParameterName;
     }
-
-
 
     public String getQueryName() {
         return queryName;
@@ -81,5 +82,10 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
 
     public boolean hasRange() {
         return getStart() != 0 || getCount() != 0;
+    }
+
+    @Override
+    public Can<ManagedObject> execute(JdoPersistenceSession5 persistenceSession) {
+        return new PersistenceQueryFindUsingApplibQueryProcessor(persistenceSession).process(this);
     }
 }
