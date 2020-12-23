@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.persistence.jdo.integration.oid.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 
 import lombok.NonNull;
 import lombok.val;

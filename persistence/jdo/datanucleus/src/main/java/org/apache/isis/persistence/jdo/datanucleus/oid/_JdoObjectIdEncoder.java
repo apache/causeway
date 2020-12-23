@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.oid;
+package org.apache.isis.persistence.jdo.datanucleus.oid;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

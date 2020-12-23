@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.oid;
+package org.apache.isis.persistence.jdo.datanucleus.oid;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -27,7 +27,7 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.integration.oid._JdoObjectIdDecoder.JdoObjectIdDecodingRequest;
+import org.apache.isis.persistence.jdo.datanucleus.oid._JdoObjectIdDecoder.JdoObjectIdDecodingRequest;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 import lombok.NonNull;

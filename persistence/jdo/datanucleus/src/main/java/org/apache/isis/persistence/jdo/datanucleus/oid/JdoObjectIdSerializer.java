@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.oid;
+package org.apache.isis.persistence.jdo.datanucleus.oid;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -44,7 +44,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.integration.oid._JdoObjectIdDecoder.JdoObjectIdDecodingRequest;
+import org.apache.isis.persistence.jdo.datanucleus.oid._JdoObjectIdDecoder.JdoObjectIdDecodingRequest;
 
 import lombok.NonNull;
 import lombok.val;
