@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 
-public abstract class JdoEntityFacetAbstract 
+abstract class _JdoEntityFacetAbstract 
 extends FacetAbstract 
 implements EntityFacet {
 
@@ -34,10 +34,10 @@ implements EntityFacet {
         return EntityFacet.class;
     }
 
-    public JdoEntityFacetAbstract(
+    public _JdoEntityFacetAbstract(
             final FacetHolder holder) {
         
-        super(JdoEntityFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
+        super(_JdoEntityFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(EntityFacet.class);
     }
     

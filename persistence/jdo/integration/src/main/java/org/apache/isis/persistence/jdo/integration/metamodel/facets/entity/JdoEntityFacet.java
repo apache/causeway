@@ -33,7 +33,7 @@ import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 
 import lombok.val;
 
-public class JdoEntityFacet extends JdoEntityFacetAbstract {
+public class JdoEntityFacet extends _JdoEntityFacetAbstract {
 
     public JdoEntityFacet(
             final FacetHolder holder) {
