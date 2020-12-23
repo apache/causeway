@@ -16,20 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey;
+package org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable;
 
-import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import javax.jdo.annotations.IdentityType;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**
- * Corresponds to the property with the {@link PrimaryKey} annotation.
- * <p>
- * The JDO {@link PrimaryKey} annotation is used internally the JDO object store to
- * create the {@link Oid}.
+ * Corresponds to annotating the class with the {@link javax.jdo.annotations.PersistenceCapable} annotation.
  */
-public interface JdoPrimaryKeyFacet extends Facet {
+public interface JdoPersistenceCapableFacet extends Facet {
+
+    IdentityType getIdentityType();
+
+    /**
+     * Corresponds to {@link javax.jdo.annotations.PersistenceCapable#schema()}, or null if not specified.
+     */
+    String getSchema();
+
+    /**
+     * Corresponds to {@link javax.jdo.annotations.PersistenceCapable#table()}, or to the
+     * class' {@link Class#getSimpleName() simple name} if no table specified.
+     */
+    String getTable();
 
 }

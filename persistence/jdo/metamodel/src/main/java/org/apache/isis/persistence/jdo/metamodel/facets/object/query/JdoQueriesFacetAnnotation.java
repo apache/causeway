@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 import javax.jdo.annotations.Query;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
 
 public class JdoQueriesFacetAnnotation extends JdoQueryFacetAbstract

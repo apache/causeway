@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 
 
 public abstract class JdoPrimaryKeyFacetAbstract 

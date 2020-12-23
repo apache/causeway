@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
+package org.apache.isis.persistence.jdo.provider.metamodel.facets.object.discriminator;
 
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 

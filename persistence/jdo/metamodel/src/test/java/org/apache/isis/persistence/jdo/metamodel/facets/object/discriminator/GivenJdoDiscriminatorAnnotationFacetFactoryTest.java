@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
 
 import lombok.val;
 

@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 
 import lombok.val;
 

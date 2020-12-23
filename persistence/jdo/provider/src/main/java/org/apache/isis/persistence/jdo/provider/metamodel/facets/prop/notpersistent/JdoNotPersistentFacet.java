@@ -16,19 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.object.datastoreidentity;
+package org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent;
 
+import javax.jdo.annotations.PrimaryKey;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**
- * Corresponds to annotating the class with the {@link DatastoreIdentity} annotation.
+ * Corresponds to the property with the {@link PrimaryKey} annotation.
+ * <p>
+ * The JDO {@link PrimaryKey} annotation is used internally the JDO object store to
+ * create the {@link Oid}.
  */
-public interface JdoDatastoreIdentityFacet extends Facet {
+public interface JdoNotPersistentFacet extends Facet {
 
-    IdGeneratorStrategy getStrategy();
 }

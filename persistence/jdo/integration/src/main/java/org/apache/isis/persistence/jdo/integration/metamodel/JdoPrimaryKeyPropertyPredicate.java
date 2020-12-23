@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 
 /**
  * Use to locate the property annotated with {@link PrimaryKey}.

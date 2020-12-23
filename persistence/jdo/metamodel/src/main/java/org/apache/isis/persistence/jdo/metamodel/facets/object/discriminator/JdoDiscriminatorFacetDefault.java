@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
 
 public class JdoDiscriminatorFacetDefault extends SingleValueFacetAbstract<String> implements JdoDiscriminatorFacet {
 

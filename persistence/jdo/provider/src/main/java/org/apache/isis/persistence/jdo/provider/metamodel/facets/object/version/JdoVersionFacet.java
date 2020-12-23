@@ -16,30 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable;
-
-
-import javax.jdo.annotations.IdentityType;
+package org.apache.isis.persistence.jdo.provider.metamodel.facets.object.version;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
-
-/**
- * Corresponds to annotating the class with the {@link javax.jdo.annotations.PersistenceCapable} annotation.
- */
-public interface JdoPersistenceCapableFacet extends Facet {
-
-    IdentityType getIdentityType();
-
-    /**
-     * Corresponds to {@link javax.jdo.annotations.PersistenceCapable#schema()}, or null if not specified.
-     */
-    String getSchema();
-
-    /**
-     * Corresponds to {@link javax.jdo.annotations.PersistenceCapable#table()}, or to the
-     * class' {@link Class#getSimpleName() simple name} if no table specified.
-     */
-    String getTable();
+public interface JdoVersionFacet extends Facet {
 
 }

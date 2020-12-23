@@ -16,10 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.object.version;
+package org.apache.isis.persistence.jdo.provider.metamodel.facets.object.datastoreidentity;
+
+
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
-public interface JdoVersionFacet extends Facet {
 
+/**
+ * Corresponds to annotating the class with the {@link DatastoreIdentity} annotation.
+ */
+public interface JdoDatastoreIdentityFacet extends Facet {
+
+    IdGeneratorStrategy getStrategy();
 }
