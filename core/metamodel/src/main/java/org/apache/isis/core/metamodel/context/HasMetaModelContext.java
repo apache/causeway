@@ -16,18 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.core.metamodel.context;
 
-import org.apache.isis.core.metamodel.context.MetaModelContext;
+public interface HasMetaModelContext {
 
-public interface PersistenceSessionFactory {
-
-    IsisPersistenceSessionJdo createPersistenceSession();
-
-    void init(MetaModelContext metaModelContext);
-
-    void catalogNamedQueries();
-
-    boolean isInitialized();
-
+    MetaModelContext getMetaModelContext();
+    
 }

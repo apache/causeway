@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionFlushException;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
-import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DestroyObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
@@ -359,10 +359,10 @@ class _Tx implements Transaction {
         txHelper.flushTransaction();
     }
 
-    protected IsisPersistenceSessionJdo getPersistenceSession() {
+    protected JdoPersistenceSession getPersistenceSession() {
         return isisInteractionTracker.currentInteractionSession()
-                .map(interaction->interaction.getAttribute(IsisPersistenceSessionJdo.class))
-                .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdo available"));
+                .map(interaction->interaction.getAttribute(JdoPersistenceSession.class))
+                .orElseThrow(()->_Exceptions.unrecoverable("no current JdoPersistenceSession available"));
     }
 
 

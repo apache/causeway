@@ -37,9 +37,8 @@ import org.apache.isis.core.interaction.events.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.events.AppLifecycleEvent;
-import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
-import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSession;
-import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSessionFactory;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSessionFactory;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -53,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
 public class JdoPersistenceLifecycleService {
 
     @Inject MetaModelContext metaModelContext;
-    @Inject PersistenceSessionFactory persistenceSessionFactory;
+    @Inject JdoPersistenceSessionFactory persistenceSessionFactory;
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     @PostConstruct
@@ -112,18 +111,18 @@ public class JdoPersistenceLifecycleService {
     private void onInteractionStarted(final InteractionSession interactionSession) {
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
-        interactionSession.putAttribute(IsisPersistenceSessionJdo.class, persistenceSession);
+        interactionSession.putAttribute(JdoPersistenceSession.class, persistenceSession);
         persistenceSession.open();
     }
 
     private void onInteractionEnding(final InteractionSession interactionSession) {
         currentSession(interactionSession)
-        .ifPresent(PersistenceSession::close);
+        .ifPresent(JdoPersistenceSession::close);
     }
 
-    private Optional<IsisPersistenceSessionJdo> currentSession(final InteractionSession interactionSession) {
+    private Optional<JdoPersistenceSession> currentSession(final InteractionSession interactionSession) {
         return Optional.ofNullable(interactionSession)
-                .map(session->session.getAttribute(IsisPersistenceSessionJdo.class));
+                .map(session->session.getAttribute(JdoPersistenceSession.class));
     }
     
     private void create() {

@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  *
- * Factory for {@link PersistenceSession}.
+ * Factory for {@link JdoPersistenceSession}.
  *
  */
 @Service
@@ -63,8 +63,8 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("JdoDN5")
 @Singleton
 @Log4j2
-public class PersistenceSessionFactory5
-implements PersistenceSessionFactory, FixturesInstalledStateHolder {
+public class JdoPersistenceSessionFactory5
+implements JdoPersistenceSessionFactory, FixturesInstalledStateHolder {
     
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
@@ -190,7 +190,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     }
 
     @Override
-    public PersistenceSession5 createPersistenceSession() {
+    public JdoPersistenceSession5 createPersistenceSession() {
 
         Objects.requireNonNull(applicationComponents.get(),
                 () -> "PersistenceSession5 requires initialization. "+this.hashCode());
@@ -198,7 +198,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
         val persistenceManagerFactory =
                 applicationComponents.get().getPersistenceManagerFactory();
 
-        return new PersistenceSession5(
+        return new JdoPersistenceSession5(
                 metaModelContext, 
                 persistenceManagerFactory,
                 this);

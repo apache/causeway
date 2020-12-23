@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoPropertyUtils;
-import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSession5;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 import lombok.val;
@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
 
-    public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceSession5 persistenceSession) {
+    public PersistenceQueryFindUsingApplibQueryProcessor(final JdoPersistenceSession5 persistenceSession) {
         super(persistenceSession);
     }
 

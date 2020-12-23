@@ -22,8 +22,8 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.isis.persistence.jdo.integration.persistence.HasPersistenceManager;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
+import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 import lombok.NonNull;
 

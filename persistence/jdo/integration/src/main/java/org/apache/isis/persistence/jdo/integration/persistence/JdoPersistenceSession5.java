@@ -70,7 +70,7 @@ import lombok.extern.log4j.Log4j2;
  * A wrapper around the JDO {@link PersistenceManager}.
  */
 @Vetoed @Log4j2
-public class PersistenceSession5 extends IsisPersistenceSessionJdoBase
+public class JdoPersistenceSession5 extends _JdoPersistenceSessionBase
 implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private final TransactionService transactionService;
@@ -81,7 +81,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * persisted objects and persist changes to the object that are saved.
      * @param storeLifecycleListener 
      */
-    public PersistenceSession5(
+    public JdoPersistenceSession5(
             final MetaModelContext metaModelContext,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledStateHolder stateHolder) {
@@ -122,8 +122,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         val loadLifecycleListener = new LoadLifecycleListenerForIsis();
         val storeLifecycleListener = new JdoStoreLifecycleListenerForIsis();
         
-        serviceInjector.injectServicesInto(loadLifecycleListener);
-        serviceInjector.injectServicesInto(storeLifecycleListener);
+        getMetaModelContext().getServiceInjector().injectServicesInto(loadLifecycleListener);
+        getMetaModelContext().getServiceInjector().injectServicesInto(storeLifecycleListener);
             
         persistenceManager.addInstanceLifecycleListener(loadLifecycleListener, (Class[]) null);
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
@@ -215,11 +215,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 .orElseFail();
         
         return instances;
-        
-        //XXX legacy of
-        //final ObjectSpecification specification = persistenceQuery.getSpecification();
-        //final FreeStandingList results = FreeStandingList.of(specification, instances);
-        //return adapterFor(results);
     }
 
     /**
@@ -256,46 +251,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return persistenceQueryProcessor.process((Q) persistenceQuery);
     }
 
-
-    // -- fixture installation
-
-//    @Override
-//    public FixturesInstalledState getFixturesInstalledState() {
-//        if (fixturesInstalledStateHolder.getFixturesInstalledState() == null) {
-//            val initialStateFromConfig = initialStateFromConfig();
-//            fixturesInstalledStateHolder.setFixturesInstalledState(initialStateFromConfig);
-//        }
-//        return fixturesInstalledStateHolder.getFixturesInstalledState();
-//    }
-//
-//    /**
-//     * Determine if the object store has been initialized with its set of start
-//     * up objects.
-//     *
-//     * <p>
-//     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
-//     * framework will run the fixtures to initialise the object store.
-//     *
-//     * <p>
-//     * Implementation looks for the {@link IsisConfiguration.Persistence.JdoDatanucleus#isInstallFixtures()} property
-//     * in the injected {@link #configuration configuration}.
-//     *
-//     * <p>
-//     * By default this is not expected to be there, but utilities can add in on
-//     * the fly during bootstrapping if required.
-//     */
-//    private FixturesInstalledState initialStateFromConfig() {
-//        val installFixtures = configuration.getPersistence().getJdoDatanucleus().isInstallFixtures();
-//        log.info("isFixturesInstalled: {} = {}", "'isis.persistence.jdo-datanucleus.install-fixtures'", installFixtures);
-//
-//        val objectStoreIsFixturesInstalled = !installFixtures;
-//        val initialStateFromConfig = objectStoreIsFixturesInstalled
-//                ? FixturesInstalledState.Installed
-//                        : FixturesInstalledState.not_Installed;
-//
-//        return initialStateFromConfig;
-//    }
-
     // -- FETCHING
 
     @Override
@@ -325,7 +280,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
             //XXX this idiom could be delegated to a service
             //or remodel the method to return a Result<T>
-            for (val exceptionRecognizer : lookupServices(ExceptionRecognizer.class)) {
+            for (val exceptionRecognizer : getMetaModelContext().getServiceRegistry()
+                    .select(ExceptionRecognizer.class)) {
                 val recognition = exceptionRecognizer.recognize(e).orElse(null);
                 if(recognition != null) {
                     if(recognition.getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
@@ -343,73 +299,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         return result;
     }
-
-//    @Override
-//    public Map<RootOid,Object> fetchPersistentPojos(final List<RootOid> rootOids) {
-//
-//        if(rootOids.isEmpty()) {
-//            return Collections.emptyMap();
-//        }
-//
-//        val specLoader = super.getSpecificationLoader();
-//        
-//        final List<Object> dnOids = new ArrayList<>(rootOids.size());
-//        for (val rootOid : rootOids) {
-//            final Object id = JdoObjectIdSerializer.toJdoObjectId(specLoader, rootOid);
-//            if(id instanceof SingleFieldIdentity) {
-//                dnOids.add(id);
-//            } else if (id instanceof String && ((String) id).contains("[OID]")) {
-//                final DatastoreIdImpl datastoreId = new DatastoreIdImpl((String)id);
-//                dnOids.add(datastoreId);
-//            } else {
-//                // application identity
-//                final DatastoreIdImpl datastoreId = new DatastoreIdImpl(clsOf(rootOid).getName(), id);
-//                dnOids.add(datastoreId);
-//            }
-//        }
-//        FetchPlan fetchPlan = persistenceManager.getFetchPlan();
-//        fetchPlan.addGroup(FetchGroup.DEFAULT);
-//        final List<Object> persistentPojos = new ArrayList<>(rootOids.size());
-//        try {
-//            final Collection<Object> pojos = uncheckedCast(persistenceManager.getObjectsById(dnOids, true));
-//            for (final Object pojo : pojos) {
-//                try {
-//                    persistentPojos.add(pojo);
-//                } catch(Exception ex) {
-//                    persistentPojos.add(null);
-//                }
-//            }
-//        } catch(NucleusObjectNotFoundException nonfe) {
-//            // at least one not found; fall back to loading one by one
-//            for (final Object dnOid : dnOids) {
-//                try {
-//                    final Object persistentPojo = persistenceManager.getObjectById(dnOid);
-//                    persistentPojos.add(persistentPojo);
-//                } catch(Exception ex) {
-//                    persistentPojos.add(null);
-//                }
-//            }
-//        }
-//        Map<RootOid, Object> pojoByOid = zip(rootOids, persistentPojos);
-//        return pojoByOid;
-//    }
-//
-//    private static Map<RootOid, Object> zip(final List<RootOid> rootOids, final Collection<Object> pojos) {
-//        final Map<RootOid,Object> pojoByOid = _Maps.newLinkedHashMap();
-//        int i = 0;
-//        for (final Object pojo : pojos) {
-//            final RootOid rootOid = rootOids.get(i++);
-//            pojoByOid.put(rootOid, pojo);
-//        }
-//        return pojoByOid;
-//    }
-//
-//    @Deprecated
-//    private Class<?> clsOf(final RootOid oid) {
-//        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getObjectSpecId());
-//        return objectSpec.getCorrespondingClass();
-//    }
-
 
     // -- REFRESH
 
@@ -566,7 +455,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
         if (getEntityState(pojo).isDetached()) {
-            val entity = ManagedObject.of(specificationLoader::loadSpecification, pojo);
+            val entity = ManagedObject.of(
+                    getMetaModelContext().getSpecificationLoader()::loadSpecification, 
+                    pojo);
 
             getEntityChangeTracker().recognizePersisting(entity);
 

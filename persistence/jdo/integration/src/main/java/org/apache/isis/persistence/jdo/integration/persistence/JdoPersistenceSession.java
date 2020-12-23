@@ -26,17 +26,21 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
+import org.apache.isis.persistence.jdo.provider.persistence.JdoTypedQuerySupport;
 
-public interface PersistenceSession {
+public interface JdoPersistenceSession 
+extends 
+    HasMetaModelContext,
+    HasPersistenceManager,
+    JdoTypedQuerySupport {
 
     // -------------------------------------------------------------------------------------------------
     // -- STABLE API (DRAFT)
     // -------------------------------------------------------------------------------------------------
-
-    MetaModelContext getMetaModelContext();
 
     void open();
     void close();
@@ -86,7 +90,7 @@ public interface PersistenceSession {
      * Makes an {@link ManagedObject} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have a
      * new and unique OID assigned to it. The object, should also be added to
-     * the {@link PersistenceSession} as the object is implicitly 'in use'.
+     * the {@link JdoPersistenceSession} as the object is implicitly 'in use'.
      *
      * <p>
      * If the object has any associations then each of these, where they aren't

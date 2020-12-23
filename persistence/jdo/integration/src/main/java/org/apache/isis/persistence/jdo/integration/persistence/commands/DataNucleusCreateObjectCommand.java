@@ -19,7 +19,7 @@
 package org.apache.isis.persistence.jdo.integration.persistence.commands;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 
 import lombok.val;
@@ -30,9 +30,9 @@ public class DataNucleusCreateObjectCommand
 extends AbstractDataNucleusObjectCommand 
 implements CreateObjectCommand {
 
-    private final IsisPersistenceSessionJdo persistenceSession;
+    private final JdoPersistenceSession persistenceSession;
 
-    public DataNucleusCreateObjectCommand(ManagedObject adapter, IsisPersistenceSessionJdo persistenceSession) {
+    public DataNucleusCreateObjectCommand(ManagedObject adapter, JdoPersistenceSession persistenceSession) {
         super(adapter, persistenceSession.getPersistenceManager());
         this.persistenceSession = persistenceSession;
     }

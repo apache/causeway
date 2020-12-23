@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.provider.persistence;
 
 /**
  * 
  * @since 2.0
  */
-public interface IsisPersistenceSessionJdo 
-extends PersistenceSession, HasPersistenceManager {
+public interface JdoTypedQuerySupport 
+extends HasPersistenceManager {
 
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}

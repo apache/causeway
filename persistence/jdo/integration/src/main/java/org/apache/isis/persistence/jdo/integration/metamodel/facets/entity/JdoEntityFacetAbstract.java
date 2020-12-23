@@ -25,8 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.persistence.jdo.integration.persistence.IsisPersistenceSessionJdo;
-
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 
 public abstract class JdoEntityFacetAbstract 
 extends FacetAbstract 
@@ -47,9 +46,9 @@ implements EntityFacet {
         this.isisInteractionTracker = isisInteractionTracker;
     }
     
-    protected IsisPersistenceSessionJdo getPersistenceSessionJdo() {
+    protected JdoPersistenceSession getPersistenceSessionJdo() {
         return isisInteractionTracker.get().currentInteractionSession()
-                .map(interaction->interaction.getAttribute(IsisPersistenceSessionJdo.class))
+                .map(interaction->interaction.getAttribute(JdoPersistenceSession.class))
                 .orElse(null);
     }
     

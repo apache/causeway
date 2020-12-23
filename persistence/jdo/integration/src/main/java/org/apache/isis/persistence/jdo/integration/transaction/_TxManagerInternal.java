@@ -31,9 +31,9 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
-import org.apache.isis.persistence.jdo.integration.persistence.HasPersistenceManager;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
+import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

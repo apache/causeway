@@ -19,22 +19,16 @@
 package org.apache.isis.persistence.jdo.integration.persistence;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
@@ -47,22 +41,15 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-abstract class IsisPersistenceSessionJdoBase 
-implements IsisPersistenceSessionJdo {
+abstract class _JdoPersistenceSessionBase 
+implements JdoPersistenceSession {
 
     // -- FIELDS
 
     protected final FixturesInstalledStateHolder fixturesInstalledStateHolder;
-
     protected final PersistenceQueryFactory persistenceQueryFactory;
-    protected final SpecificationLoader specificationLoader;
-
+    
     @Getter protected final MetaModelContext metaModelContext;
-    protected final ServiceInjector serviceInjector;
-    protected final ServiceRegistry serviceRegistry;
-    protected final IsisConfiguration configuration;
-
-    protected final Supplier<EntityChangeTracker> entityChangeTrackerProvider;
 
     /**
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
@@ -79,7 +66,8 @@ implements IsisPersistenceSessionJdo {
     /**
      * populated only when {@link #open()}ed.
      */
-    protected final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = _Maps.newHashMap();
+    protected final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = 
+            _Maps.newHashMap();
 
     // -- CONSTRUCTOR
 
@@ -87,7 +75,7 @@ implements IsisPersistenceSessionJdo {
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    protected IsisPersistenceSessionJdoBase(
+    protected _JdoPersistenceSessionBase(
             final MetaModelContext metaModelContext,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledStateHolder fixturesInstalledStateHolder) {
@@ -97,21 +85,13 @@ implements IsisPersistenceSessionJdo {
         }
 
         this.metaModelContext = metaModelContext;
-        this.serviceInjector = metaModelContext.getServiceInjector();
-        this.serviceRegistry = metaModelContext.getServiceRegistry();
         this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
         this.fixturesInstalledStateHolder = fixturesInstalledStateHolder;
-
-        // injected
-        this.configuration = metaModelContext.getConfiguration();
-        this.specificationLoader = metaModelContext.getSpecificationLoader();
-
-        this.entityChangeTrackerProvider = ()->lookupService(EntityChangeTracker.class);
 
         // sub-components
         this.persistenceQueryFactory = PersistenceQueryFactory.of(
                 obj->this.adapterFor(obj), 
-                this.specificationLoader);
+                metaModelContext.getSpecificationLoader());
         this.commandQueue = TxManagerInternalFactory.newCommandQueue(metaModelContext, this); 
 
         this.state = State.NOT_INITIALIZED;
@@ -119,12 +99,9 @@ implements IsisPersistenceSessionJdo {
 
     // -- GETTERS
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
     public EntityChangeTracker getEntityChangeTracker() {
-        return entityChangeTrackerProvider.get();
+        return metaModelContext.getServiceRegistry()
+                .lookupServiceElseFail(EntityChangeTracker.class);
     }
     
     /**
@@ -166,7 +143,6 @@ implements IsisPersistenceSessionJdo {
         }
         throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
     }
-
     
     // -- OID
     
@@ -178,31 +154,9 @@ implements IsisPersistenceSessionJdo {
         if(pojo==null) {
             return null;
         }
-        val adapter = ManagedObject.of(getSpecificationLoader().loadSpecification(pojo.getClass()), pojo);
+        val spec = getMetaModelContext().getSpecificationLoader().loadSpecification(pojo.getClass());
+        val adapter = ManagedObject.of(spec, pojo);
         return ManagedObjects.identify(adapter).orElse(null);
-    }
-
-    // -- HELPERS - SERVICE LOOKUP
-
-    private <T> T lookupService(Class<T> serviceType) {
-        T service = lookupServiceIfAny(serviceType);
-        if(service == null) {
-            throw new IllegalStateException("Could not locate service of type '" + serviceType + "'");
-        }
-        return service;
-    }
-
-    private <T> T lookupServiceIfAny(final Class<T> serviceType) {
-        return serviceRegistry.lookupService(serviceType).orElse(null);
-    }
-
-    protected <T> Iterable<T> lookupServices(final Class<T> serviceClass) {
-        return serviceRegistry.select(serviceClass);
-    }
-
-    @Override
-    public String toString() {
-        return new ToString(this).toString();
     }
 
 }

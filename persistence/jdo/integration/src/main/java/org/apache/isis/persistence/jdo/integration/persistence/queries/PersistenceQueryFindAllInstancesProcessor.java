@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.integration.persistence.queries;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.persistence.jdo.integration.persistence.PersistenceSession5;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindAllInstances;
 
 import lombok.val;
@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
-    public PersistenceQueryFindAllInstancesProcessor(final PersistenceSession5 persistenceSession) {
+    public PersistenceQueryFindAllInstancesProcessor(final JdoPersistenceSession5 persistenceSession) {
         super(persistenceSession);
     }
 
