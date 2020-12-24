@@ -26,7 +26,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class PersistenceQueryFindAllInstancesProcessor 
+public class PersistenceQueryProcessorForAllInstances 
 extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
     @Override

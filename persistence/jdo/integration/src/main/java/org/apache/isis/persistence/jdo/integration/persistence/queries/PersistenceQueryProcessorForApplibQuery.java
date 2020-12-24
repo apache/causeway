@@ -25,7 +25,6 @@ import javax.jdo.Query;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoPropertyUtils;
@@ -37,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
 @Log4j2
-public class PersistenceQueryFindUsingApplibQueryProcessor 
+public class PersistenceQueryProcessorForApplibQuery 
 extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
 
     @Override
@@ -100,7 +99,6 @@ extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDe
 
         val queryName = persistenceQuery.getQueryName();
         val queryParametersByName = persistenceQuery.getQueryParametersByName();
-        val cardinality = persistenceQuery.getCardinality();
         val spec = persistenceQuery.getSpecification();
         val cls = spec.getCorrespondingClass();
         
@@ -127,10 +125,8 @@ extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDe
                     || resultList.isEmpty()) {
                 return Collections.emptyList();
             }
-            // at this point we know the resultList is of size >= 1
-            return cardinality == QueryCardinality.SINGLE
-                    ? resultList.subList(0, 1)
-                    : resultList;
+            return resultList;
+            
         } finally {
             jdoQuery.closeAll();
         }

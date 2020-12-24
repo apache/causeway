@@ -24,12 +24,11 @@ import java.util.Map;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ToString;
-import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryProcessorForApplibQuery;
 
 import lombok.Getter;
 
@@ -39,19 +38,16 @@ import lombok.Getter;
 public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQueryAbstract {
 
     @Getter private final String queryName;
-    @Getter private final QueryCardinality cardinality;
     @Getter private final Map<String, Object> queryParametersByName;
 
     public PersistenceQueryFindUsingApplibQueryDefault(
             final ObjectSpecification specification,
             final String queryName,
             final Map<String, Object> queryParametersByName,
-            final QueryCardinality cardinality,
             final SpecificationLoader specificationLoader,
             final long... range) {
         super(specification, range);
         this.queryName = queryName;
-        this.cardinality = cardinality;
         this.queryParametersByName = queryParametersByName;
     }
 
@@ -75,6 +71,6 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
 
     @Override
     public Can<ManagedObject> execute(PersistenceQueryContext queryContext) {
-        return new PersistenceQueryFindUsingApplibQueryProcessor().process(queryContext, this);
+        return new PersistenceQueryProcessorForApplibQuery().process(queryContext, this);
     }
 }

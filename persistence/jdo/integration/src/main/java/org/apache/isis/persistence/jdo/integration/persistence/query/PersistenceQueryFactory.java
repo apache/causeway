@@ -31,7 +31,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -50,8 +49,7 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
      * {@link PersistenceQuery} internal representation}.
      */
     public final PersistenceQuery createPersistenceQueryFor(
-            final Query<?> query, 
-            final QueryCardinality cardinality) {
+            final Query<?> query) {
         
         if (log.isDebugEnabled()) {
             log.debug("createPersistenceQueryFor: {}", query.getDescription());
@@ -75,13 +73,14 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
                     queryResultTypeSpec, 
                     queryName, 
                     Collections.unmodifiableMap(parametersByName), 
-                    cardinality,
                     getSpecificationLoader(), 
                     namedQuery.getStart(), 
                     namedQuery.getCount());
         }
-        throw _Exceptions.unsupportedOperation("query type %s not supported by this persistence implementation",
-                query.getClass());
+        
+        throw _Exceptions.unsupportedOperation("query type %s (%s) not supported by this persistence implementation",
+                query.getClass(),
+                query.getDescription());
     }
 
     /**

@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
@@ -50,7 +49,6 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListe
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 
 import lombok.NonNull;
 import lombok.val;
@@ -161,57 +159,36 @@ implements
     
     @Override
     public Can<ManagedObject> allMatchingQuery(final Query<?> query) {
-        val instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
+        val instances = findInstancesInTransaction(query);
         return instances;
     }
     
     @Override
     public Optional<ManagedObject> firstMatchingQuery(final Query<?> query) {
-        val instances = findInstancesInTransaction(query, QueryCardinality.SINGLE);
+        val instances = findInstancesInTransaction(query.withCount(1));
         return instances.getFirst();
     }
 
     /**
      * Finds and returns instances that match the specified query.
      *
-     * <p>
-     * The {@link QueryCardinality} determines whether all instances or just the
-     * first matching instance is returned.
-     *
      * @throws org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException
      *             if the criteria is not support by this persistor
      */
     private Can<ManagedObject> findInstancesInTransaction(
-            final Query<?> query, 
-            final QueryCardinality cardinality) {
+            final Query<?> query) {
         
         if (log.isDebugEnabled()) {
             log.debug("findInstances using (applib) Query: {}", query);
         }
 
-        val persistenceQuery = createPersistenceQueryFor(query, cardinality);
+        val persistenceQuery = persistenceQueryFactory.createPersistenceQueryFor(query);
+        
         if (log.isDebugEnabled()) {
             log.debug("maps to (core runtime) PersistenceQuery: {}", persistenceQuery);
         }
 
         return txCommandProcessor.executeWithinTransaction(this, persistenceQuery);
-    }
-
-    /**
-     * Converts the {@link Query applib representation of a query} into the
-     * {@link PersistenceQuery} framework-internal representation.
-     */
-    private final PersistenceQuery createPersistenceQueryFor(
-            final Query<?> query,
-            final QueryCardinality cardinality) {
-
-        final PersistenceQuery persistenceQuery =
-                persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
-        if (persistenceQuery == null) {
-            throw new IllegalArgumentException("Unknown Query type: " + query.getDescription());
-        }
-
-        return persistenceQuery;
     }
 
     // -- FETCHING

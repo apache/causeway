@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryProcessorForAllInstances;
 
 /**
  * Corresponds to {@link AllInstancesQuery}
@@ -67,6 +67,6 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryAbstract  
 
     @Override
     public Can<ManagedObject> execute(PersistenceQueryContext queryContext) {
-        return new PersistenceQueryFindAllInstancesProcessor().process(queryContext, this);
+        return new PersistenceQueryProcessorForAllInstances().process(queryContext, this);
     }
 }
