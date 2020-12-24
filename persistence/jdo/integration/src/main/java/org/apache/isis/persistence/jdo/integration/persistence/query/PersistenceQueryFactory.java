@@ -18,8 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence.query;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
@@ -29,7 +32,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -67,12 +69,12 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
         } if (query instanceof NamedQuery) {
             val namedQuery = (NamedQuery<?>) query;
             val queryName = namedQuery.getName();
-            val parametersByName = wrap(namedQuery.getParametersByName());
+            val parametersByName = injectServicesInto(namedQuery.getParametersByName());
             
             return new PersistenceQueryFindUsingApplibQueryDefault(
                     queryResultTypeSpec, 
                     queryName, 
-                    parametersByName, 
+                    Collections.unmodifiableMap(parametersByName), 
                     cardinality,
                     getSpecificationLoader(), 
                     namedQuery.getStart(), 
@@ -87,14 +89,14 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
      * same param-name. 
      * @implNote we do this to ensure queryParameters have injection points resolved (might be redundant) 
      */
-    private Map<String, ManagedObject> wrap(
-            final Map<String, Object> queryParametersByName) {
+    private Map<String, Object> injectServicesInto(
+            final @Nullable Map<String, Object> queryParametersByName) {
         
-        val objMan = getObjectManager();
         val injector = getServiceInjector();
         
+        // not strictly necessary: creates a copy
         return _Maps.mapValues(queryParametersByName, HashMap::new, paramPojo->
-            objMan.adapt(injector.injectServicesInto(paramPojo))
+            injector.injectServicesInto(paramPojo)
         );
     }
 

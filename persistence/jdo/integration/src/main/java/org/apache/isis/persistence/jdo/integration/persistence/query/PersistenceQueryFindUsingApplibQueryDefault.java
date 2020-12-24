@@ -19,7 +19,6 @@
 
 package org.apache.isis.persistence.jdo.integration.persistence.query;
 
-import java.util.Collections;
 import java.util.Map;
 
 import org.apache.isis.applib.query.Query;
@@ -32,19 +31,21 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 
+import lombok.Getter;
+
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.
  */
 public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQueryAbstract {
 
-    private final String queryName;
-    private final QueryCardinality cardinality;
-    private final Map<String, ManagedObject> queryParametersByName;
+    @Getter private final String queryName;
+    @Getter private final QueryCardinality cardinality;
+    @Getter private final Map<String, Object> queryParametersByName;
 
     public PersistenceQueryFindUsingApplibQueryDefault(
             final ObjectSpecification specification,
             final String queryName,
-            final Map<String, ManagedObject> queryParametersByName,
+            final Map<String, Object> queryParametersByName,
             final QueryCardinality cardinality,
             final SpecificationLoader specificationLoader,
             final long... range) {
@@ -52,18 +53,6 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
         this.queryName = queryName;
         this.cardinality = cardinality;
         this.queryParametersByName = queryParametersByName;
-    }
-
-    public String getQueryName() {
-        return queryName;
-    }
-
-    public Map<String, ManagedObject> getArgumentsAdaptersByParameterName() {
-        return Collections.unmodifiableMap(queryParametersByName);
-    }
-
-    public QueryCardinality getCardinality() {
-        return cardinality;
     }
 
     @Override

@@ -20,17 +20,13 @@ package org.apache.isis.persistence.jdo.integration.persistence.queries;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.jdo.Query;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoPropertyUtils;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
@@ -48,17 +44,15 @@ extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDe
     public Can<ManagedObject> process(
             final PersistenceQueryContext queryContext,
             final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
-        final String queryName = persistenceQuery.getQueryName();
-        final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
+        
+        val queryName = persistenceQuery.getQueryName();
+        val objectSpec = persistenceQuery.getSpecification();
 
-        final List<?> results;
-        if((objectSpec.getFullIdentifier() + "#pk").equals(queryName)) {
-            results = getResultsPk(queryContext, persistenceQuery);
-        } else {
-            results = getResults(queryContext, persistenceQuery);
-        }
+        val resultList = (objectSpec.getFullIdentifier() + "#pk").equals(queryName)
+                ? getResultsPk(queryContext, persistenceQuery)
+                : getResults(queryContext, persistenceQuery);
 
-        return loadAdapters(queryContext, results);
+        return loadAdapters(queryContext, resultList);
     }
 
     // -- HELPER
@@ -69,11 +63,10 @@ extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDe
             final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
         val queryName = persistenceQuery.getQueryName();
-        final Map<String, Object> map = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
+        val queryParametersByName = persistenceQuery.getQueryParametersByName();
         val spec = persistenceQuery.getSpecification();
         
-        val serviceRegistry = spec.getMetaModelContext().getServiceRegistry();
-        val isisJdoSupport = isisJdoSupport(serviceRegistry);
+        val isisJdoSupport = isisJdoSupport(spec.getMetaModelContext().getServiceRegistry());
 
         val cls = spec.getCorrespondingClass();
         if(!JdoPropertyUtils.hasPrimaryKeyProperty(spec)) {
@@ -81,7 +74,7 @@ extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDe
         }
         final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(spec);
         final String pkOtoaId = pkOtoa.getId();
-        final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
+        final String filter = pkOtoaId + "==" + queryParametersByName.get(pkOtoaId);
 
         /* XXX[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
          * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead
@@ -106,9 +99,8 @@ extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDe
             final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
         val queryName = persistenceQuery.getQueryName();
-        final Map<String, Object> argumentsByParameterName = unwrap(
-                persistenceQuery.getArgumentsAdaptersByParameterName());
-        final QueryCardinality cardinality = persistenceQuery.getCardinality();
+        val queryParametersByName = persistenceQuery.getQueryParametersByName();
+        val cardinality = persistenceQuery.getCardinality();
         val spec = persistenceQuery.getSpecification();
         val cls = spec.getCorrespondingClass();
         
@@ -126,38 +118,22 @@ extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDe
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("{} # {} ( {} )", cls.getName(), queryName, argumentsByParameterName);
+            log.debug("{} # {} ( {} )", cls.getName(), queryName, queryParametersByName);
         }
 
         try {
-            final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
-            if(results == null) {
+            val resultList = (List<?>) jdoQuery.executeWithMap(queryParametersByName);
+            if(resultList == null
+                    || resultList.isEmpty()) {
                 return Collections.emptyList();
             }
-            final List<?> resultsToReturn =
-                    cardinality == QueryCardinality.MULTIPLE
-                    ? results
-                            : firstIfAnyOf(results);
-            return _Lists.newArrayList(resultsToReturn);
+            // at this point we know the resultList is of size >= 1
+            return cardinality == QueryCardinality.SINGLE
+                    ? resultList.subList(0, 1)
+                    : resultList;
         } finally {
             jdoQuery.closeAll();
         }
-    }
-
-    private List<?> firstIfAnyOf(final List<?> results) {
-        return results.isEmpty()
-                ? Collections.emptyList()
-                        : results.subList(0, 1);
-    }
-
-    private static Map<String, Object> unwrap(final Map<String, ManagedObject> argumentAdaptersByParameterName) {
-        final Map<String, Object> argumentsByParameterName = _Maps.newHashMap();
-        for (final String parameterName : argumentAdaptersByParameterName.keySet()) {
-            final ManagedObject argumentAdapter = argumentAdaptersByParameterName.get(parameterName);
-            final Object argument = ManagedObjects.UnwrapUtil.single(argumentAdapter);
-            argumentsByParameterName.put(parameterName, argument);
-        }
-        return argumentsByParameterName;
     }
 
 }
