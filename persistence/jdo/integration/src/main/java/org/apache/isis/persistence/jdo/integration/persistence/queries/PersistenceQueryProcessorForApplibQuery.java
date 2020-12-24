@@ -24,6 +24,7 @@ import java.util.List;
 import javax.jdo.Query;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -120,15 +121,20 @@ extends _PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryD
         if (log.isDebugEnabled()) {
             log.debug("{} # {} ( {} )", cls.getName(), queryName, queryParametersByName);
         }
-
+        
         try {
             val resultList = (List<?>) jdoQuery.executeWithMap(queryParametersByName);
             if(resultList == null
                     || resultList.isEmpty()) {
                 return Collections.emptyList();
             }
-            return resultList;
             
+            if(queryRangeModel.hasRange()) {
+                _Assert.assertTrue(resultList.size()<=queryRangeModel.getCount());
+            }
+            
+            // puzzler: needs a defensive copy, not sure why
+            return _Lists.newArrayList(resultList);
         } finally {
             jdoQuery.closeAll();
         }
