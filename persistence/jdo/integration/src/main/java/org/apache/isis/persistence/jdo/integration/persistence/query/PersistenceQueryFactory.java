@@ -56,13 +56,12 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
         }
         
         val queryResultTypeSpec = specFor(query);
+        val range = QueryRangeModel.of(query.getStart(), query.getCount());
         
         if (query instanceof AllInstancesQuery) {
-            val allInstancesQuery = (AllInstancesQuery<?>) query;
             return new PersistenceQueryFindAllInstances(
                     queryResultTypeSpec, 
-                    allInstancesQuery.getStart(), 
-                    allInstancesQuery.getCount());
+                    range);
 
         } if (query instanceof NamedQuery) {
             val namedQuery = (NamedQuery<?>) query;
@@ -74,8 +73,7 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
                     queryName, 
                     Collections.unmodifiableMap(parametersByName), 
                     getSpecificationLoader(), 
-                    namedQuery.getStart(), 
-                    namedQuery.getCount());
+                    range);
         }
         
         throw _Exceptions.unsupportedOperation("query type %s (%s) not supported by this persistence implementation",

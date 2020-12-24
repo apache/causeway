@@ -19,24 +19,20 @@
 
 package org.apache.isis.persistence.jdo.integration.persistence.query;
 
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
 
-/**
- * Defines a criteria for including instances in set, corresponds to
- * {@link Query} in the applib.
- */
-public interface PersistenceQuery {
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-    /**
-     * The type of instances in the resulting set.
-     */
-    ObjectSpecification getSpecification();
+@RequiredArgsConstructor 
+@Getter @EqualsAndHashCode
+abstract class _PersistenceQueryAbstract implements PersistenceQuery {
 
-    QueryRangeModel getQueryRangeModel() ;
+    // -- constructor, fields
 
-    Can<ManagedObject> execute(PersistenceQueryContext queryContext);
+    protected final @NonNull ObjectSpecification specification;
+    protected final @NonNull QueryRangeModel queryRangeModel;
+
 }

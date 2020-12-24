@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 public class PersistenceQueryProcessorForApplibQuery 
-extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
+extends _PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
 
     @Override
     public Can<ManagedObject> process(
@@ -111,8 +111,10 @@ extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDe
         final Query<?> jdoQuery = queryContext.newJdoNamedQuery(cls, queryName); 
         isisJdoSupport.disableMultivaluedFetch(jdoQuery);
 
-        if(persistenceQuery.hasRange()) {
-            jdoQuery.setRange(persistenceQuery.getStart(), persistenceQuery.getEnd());
+        val queryRangeModel = persistenceQuery.getQueryRangeModel();
+        
+        if(queryRangeModel.hasRange()) {
+            jdoQuery.setRange(queryRangeModel.getStart(), queryRangeModel.getEnd());
         }
 
         if (log.isDebugEnabled()) {

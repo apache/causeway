@@ -27,7 +27,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class PersistenceQueryProcessorForAllInstances 
-extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
+extends _PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
     @Override
     public Can<ManagedObject> process(

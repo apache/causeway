@@ -30,33 +30,13 @@ import org.apache.isis.persistence.jdo.integration.persistence.queries.Persisten
 /**
  * Corresponds to {@link AllInstancesQuery}
  */
-public class PersistenceQueryFindAllInstances extends PersistenceQueryAbstract  {
-
-//    protected long index;
-//    protected long countedSoFar;
+public class PersistenceQueryFindAllInstances extends _PersistenceQueryAbstract  {
 
     public PersistenceQueryFindAllInstances(
             final ObjectSpecification specification,
-            final long... range) {
+            final QueryRangeModel range) {
         super(specification, range);
-//        index=0;
-//        countedSoFar=0;
     }
-
-//TODO not used, remove?
-//    public boolean matches(final ManagedObject object) {
-//
-//        if (getCount() == 0 && getStart() == 0){
-//            return true;
-//        }
-//        if (index++ < start){
-//            return false;
-//        }
-//        if (countedSoFar++ < count){
-//            return true;
-//        }
-//        return false;
-//    }
 
     @Override
     public String toString() {

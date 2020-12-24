@@ -35,7 +35,7 @@ import lombok.Getter;
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.
  */
-public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQueryAbstract {
+public class PersistenceQueryFindUsingApplibQueryDefault extends _PersistenceQueryAbstract {
 
     @Getter private final String queryName;
     @Getter private final Map<String, Object> queryParametersByName;
@@ -45,7 +45,7 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
             final String queryName,
             final Map<String, Object> queryParametersByName,
             final SpecificationLoader specificationLoader,
-            final long... range) {
+            final QueryRangeModel range) {
         super(specification, range);
         this.queryName = queryName;
         this.queryParametersByName = queryParametersByName;
@@ -58,16 +58,7 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
         return str.toString();
     }
 
-    public long getEnd() {
-        // we default to Integer.MAX_VALUE because HSQLDB blows up
-        // (with a ClassCastException from Long to Integer)
-        // if we return Long.MAX_VALUE
-        return getCount() != 0? getStart() + getCount(): Integer.MAX_VALUE;
-    }
 
-    public boolean hasRange() {
-        return getStart() != 0 || getCount() != 0;
-    }
 
     @Override
     public Can<ManagedObject> execute(PersistenceQueryContext queryContext) {

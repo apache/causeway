@@ -35,7 +35,7 @@ import org.apache.isis.persistence.jdo.integration.persistence.query.Persistence
 
 import lombok.val;
 
-public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
+abstract class _PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
 implements PersistenceQueryProcessor<T> {
 
 
