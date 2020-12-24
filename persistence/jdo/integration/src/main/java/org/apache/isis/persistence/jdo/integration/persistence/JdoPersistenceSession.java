@@ -21,8 +21,6 @@ package org.apache.isis.persistence.jdo.integration.persistence;
 import java.rmi.NoSuchObjectException;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
@@ -41,10 +39,6 @@ extends
 
     void open();
     void close();
-
-    default ManagedObject adapterFor(@Nullable Object pojo) {
-        return _Utils.adapterFor(getMetaModelContext(), pojo);
-    }
     
     /**
      * Forces a reload (refresh in JDO terminology) of the domain object

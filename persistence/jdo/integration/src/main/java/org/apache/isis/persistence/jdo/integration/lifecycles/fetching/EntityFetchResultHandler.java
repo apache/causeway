@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence.queries;
+package org.apache.isis.persistence.jdo.integration.lifecycles.fetching;
 
-import org.apache.isis.commons.collections.Can;
+import org.datanucleus.enhancement.Persistable;
+
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 
-public interface PersistenceQueryProcessor<T extends PersistenceQuery> {
+public interface EntityFetchResultHandler {
     
-    Can<ManagedObject> process(PersistenceQueryContext queryContext, T query);
-}
+    ManagedObject initializeEntity(Persistable pojo);
 
+}

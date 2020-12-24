@@ -24,7 +24,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
 
 /**
@@ -66,7 +66,7 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryAbstract  
     }
 
     @Override
-    public Can<ManagedObject> execute(JdoPersistenceSession5 persistenceSession) {
-        return new PersistenceQueryFindAllInstancesProcessor(persistenceSession).process(this);
+    public Can<ManagedObject> execute(PersistenceQueryContext queryContext) {
+        return new PersistenceQueryFindAllInstancesProcessor().process(queryContext, this);
     }
 }

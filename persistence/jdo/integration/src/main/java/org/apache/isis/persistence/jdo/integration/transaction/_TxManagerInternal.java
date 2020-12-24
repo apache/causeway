@@ -25,14 +25,17 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommandQueue;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
+import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 import lombok.val;
@@ -41,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 @Vetoed @Log4j2
 class _TxManagerInternal 
 implements 
-    PersistenceCommandQueue {
+    TransactionalCommandProcessor {
 
     // -- constructor, fields
 
@@ -307,7 +310,6 @@ implements
             }
         }
 
-
     }
 
     public void abortTransaction(IsisTransactionObject txObject) {
@@ -320,11 +322,26 @@ implements
     }
 
     @Override
-    public void addCommand(PersistenceCommand command) {
-        val transaction = getCurrentTransaction();
-        if (transaction != null && command != null) {
-            transaction.addCommand(command);
-        }
+    public void executeWithinTransaction(PersistenceCommand command) {
+        mmc.getTransactionService().executeWithinTransaction(()->{
+        
+            val transaction = getCurrentTransaction();
+            if (transaction != null && command != null) {
+                transaction.addCommand(command);
+            }
+            
+        })
+        .nullableOrElseFail();
+    }
+    
+    @Override
+    public Can<ManagedObject> executeWithinTransaction(
+            PersistenceQueryContext queryContext, 
+            PersistenceQuery persistenceQuery) {
+        final Can<ManagedObject> instances = mmc.getTransactionService().executeWithinTransaction(
+                        ()->persistenceQuery.execute(queryContext) )
+                .orElseFail();
+        return instances;
     }
 
     // -- HELPER

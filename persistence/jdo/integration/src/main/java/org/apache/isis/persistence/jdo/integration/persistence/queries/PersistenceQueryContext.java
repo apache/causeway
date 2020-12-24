@@ -16,30 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.transaction;
+package org.apache.isis.persistence.jdo.integration.persistence.queries;
 
-import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.persistence.jdo.integration.lifecycles.fetching.EntityFetchResultHandler;
+import org.apache.isis.persistence.jdo.integration.lifecycles.fetching.ValueFetchResultHandler;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
-import lombok.val;
-
-public class TxManagerInternalFactory {
-
-    public static TransactionalCommandProcessor newCommandQueue(
-            MetaModelContext mmc,
-            HasPersistenceManager pmProvider) {
-        
-        val txMan = new _TxManagerInternal(mmc, pmProvider);
-        
-        val isisInteractionTracker = mmc.getServiceRegistry()
-                .lookupServiceElseFail(InteractionTracker.class);
-        
-        isisInteractionTracker.currentInteractionSession()
-                .map(interaction->interaction.putAttribute(_TxManagerInternal.class, txMan));
-        
-        return txMan;
-        
-    }
+public interface PersistenceQueryContext 
+extends
+    ValueFetchResultHandler,
+    EntityFetchResultHandler,
+    HasPersistenceManager {
 
 }

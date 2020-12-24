@@ -19,7 +19,6 @@
 
 package org.apache.isis.applib.services.xactn;
 
-import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import org.apache.isis.commons.functional.Result;
@@ -78,10 +77,9 @@ public interface TransactionService {
      *
      * @param runnable
      */
-    default Optional<Throwable> executeWithinTransaction(ThrowingRunnable runnable) {
+    default Result<Void> executeWithinTransaction(ThrowingRunnable runnable) {
         val callable = ThrowingRunnable.toCallable(runnable);
-        return executeWithinTransaction(callable)
-                .failure();
+        return executeWithinTransaction(callable);
     }
 
 

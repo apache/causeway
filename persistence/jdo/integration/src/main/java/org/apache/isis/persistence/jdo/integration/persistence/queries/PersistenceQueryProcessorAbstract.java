@@ -31,7 +31,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 
 import lombok.val;
@@ -40,19 +39,12 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
 implements PersistenceQueryProcessor<T> {
 
 
-    final JdoPersistenceSession5 persistenceSession;
-
-    protected PersistenceQueryProcessorAbstract(final JdoPersistenceSession5 persistenceSession) {
-        this.persistenceSession = persistenceSession;
-    }
-
-
     /**
      * Traversing the provided list causes (or should cause) the
      * {@link IsisLifecycleListener#postLoad(InstanceLifecycleEvent) {
      * to be called.
      */
-    protected Can<ManagedObject> loadAdapters(final List<?> pojos) {
+    protected Can<ManagedObject> loadAdapters(final PersistenceQueryContext queryContext, final List<?> pojos) {
         val adapters = _Lists.<ManagedObject>newArrayList();
         for (val pojo : pojos) {
             // ought not to be necessary, however for some queries it seems that the
@@ -60,11 +52,11 @@ implements PersistenceQueryProcessor<T> {
             ManagedObject adapter;
             if(pojo instanceof Persistable) {
                 // an entity
-                adapter = persistenceSession.initializeEntity((Persistable) pojo);
+                adapter = queryContext.initializeEntity((Persistable) pojo);
                 _Assert.assertNotNull(adapter);
             } else {
                 // a value type
-                adapter = persistenceSession.adapterFor(pojo);
+                adapter = queryContext.adapterFor(pojo);
                 _Assert.assertNotNull(adapter);
             }
             adapters.add(adapter);

@@ -19,6 +19,8 @@
 
 package org.apache.isis.persistence.jdo.integration.jdosupport;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -47,11 +49,11 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import lombok.val;
 
 
 /**
@@ -66,14 +68,14 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     @Inject private InteractionTracker isisInteractionTracker;
+    @Inject private MetaModelContext mmc;
     
     @Override
     public <T> T refresh(final T domainObject) {
-        final ManagedObject adapter = getPersistenceSession().adapterFor(domainObject);
+        val adapter = mmc.getObjectManager().adapt(domainObject); 
         getPersistenceSession().refreshEntity(adapter);
         return domainObject;
     }
-
 
     @Override
     public void ensureLoaded(final Collection<?> domainObjects) {

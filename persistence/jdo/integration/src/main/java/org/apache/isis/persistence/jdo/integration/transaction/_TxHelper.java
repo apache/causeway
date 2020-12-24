@@ -18,8 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.integration.transaction;
 
-import java.util.List;
-
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
@@ -79,14 +77,14 @@ interface _TxHelper extends HasPersistenceManager {
         }
     }
     
-    default void execute(final List<PersistenceCommand> commands) {
+    default void execute(final Iterable<PersistenceCommand> commands) {
 
         // previously we used to check that there were some commands, and skip processing otherwise.
         // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that
         // don't have commands wrapped around them...
 
         val pm = getPersistenceManager();
-        for (final PersistenceCommand command : commands) {
+        for (val command : commands) {
             command.execute(pm);
         }
         pm.flush();

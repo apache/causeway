@@ -26,25 +26,28 @@ import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "of") @Log4j2
-public class PersistenceQueryFactory {
+public class PersistenceQueryFactory implements HasMetaModelContext {
 
-    private final Function<Object, ManagedObject> adapterProvider;
-    private final SpecificationLoader specificationLoader;
+    @Getter(onMethod_ = {@Override})
+    private final MetaModelContext metaModelContext;
 
     /**
      * Converts the {@link org.apache.isis.applib.query.Query applib representation of a query} into the
      * {@link PersistenceQuery NOF-internal representation}.
      */
     public final PersistenceQuery createPersistenceQueryFor(
+            final Function<Object, ManagedObject> adapterProvider,
             final Query<?> query, 
             final QueryCardinality cardinality) {
         
@@ -60,9 +63,9 @@ public class PersistenceQueryFactory {
             final NamedQuery<?> queryDefault = (NamedQuery<?>) query;
             final String queryName = queryDefault.getName();
             final Map<String, ManagedObject> parametersByName = 
-                    wrap(queryDefault.getParametersByName());
+                    wrap(adapterProvider, queryDefault.getParametersByName());
             return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, parametersByName, cardinality,
-                    specificationLoader, queryDefault.getStart(), queryDefault.getCount());
+                    getSpecificationLoader(), queryDefault.getStart(), queryDefault.getCount());
         }
         throw _Exceptions.unsupportedOperation("query type %s not supported by this persistence implementation",
                 query.getClass());
@@ -72,7 +75,10 @@ public class PersistenceQueryFactory {
      * Converts a map of pojos keyed by string to a map of adapters keyed by the
      * same strings.
      */
-    private Map<String, ManagedObject> wrap(final Map<String, Object> argumentsByParameterName) {
+    private Map<String, ManagedObject> wrap(
+            final Function<Object, ManagedObject> adapterProvider,
+            final Map<String, Object> argumentsByParameterName) {
+        
         final Map<String, ManagedObject> argumentsAdaptersByParameterName = _Maps.newHashMap();
         for (final Map.Entry<String, Object> entry : argumentsByParameterName.entrySet()) {
             final String parameterName = entry.getKey();
@@ -84,7 +90,7 @@ public class PersistenceQueryFactory {
     }
 
     private ObjectSpecification specFor(final Query<?> query) {
-        return specificationLoader.loadSpecification(query.getResultType());
+        return getSpecificationLoader().loadSpecification(query.getResultType());
     }
 
 

@@ -25,14 +25,14 @@ import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvide
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor @ToString
 @Log4j2
 public class CreateObjectCommand implements PersistenceCommand {
 
-    //private final PersistenceManager persistenceManager;
     @Getter private final ManagedObject entity;
 
     @Override
@@ -50,11 +50,6 @@ public class CreateObjectCommand implements PersistenceCommand {
         }
 
         persistenceManager.makePersistent(domainObject);
-    }
-
-    @Override
-    public String toString() {
-        return "CreateObjectCommand [entity=" + entity + "]";
     }
 
 }

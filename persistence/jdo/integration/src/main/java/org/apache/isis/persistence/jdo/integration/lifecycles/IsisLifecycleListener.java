@@ -33,7 +33,7 @@ import javax.jdo.listener.StoreLifecycleListener;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.persistence.jdo.integration.lifecycles.fetching.EntityFetchResultHandler;
 
 public class IsisLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
@@ -42,9 +42,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     /**
      * The internal contract between PersistenceSession and this class.
      */
-    public interface PersistenceSessionLifecycleManagement {
-
-        ManagedObject initializeEntity(Persistable pojo);
+    public interface PersistenceSessionLifecycleManagement 
+    extends EntityFetchResultHandler {
 
         void invokeIsisPersistingCallback(Persistable pojo);
         void enlistCreatedAndInvokeIsisPersistedCallback(Persistable pojo);

@@ -22,6 +22,7 @@ package org.apache.isis.persistence.jdo.integration.transaction;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
+import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -33,20 +34,17 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.collections._Inbox;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionFlushException;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
-import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -62,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
  * the {@link _TxManagerInternal} to ensure that the underlying persistence
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
-@Vetoed @Log4j2
+@Vetoed @Log4j2 @ToString
 class _Tx implements Transaction {
 
     public enum State {
@@ -154,12 +152,15 @@ class _Tx implements Transaction {
     @Getter @Programmatic
     private final TransactionId id;
 
-    private final _Inbox<PersistenceCommand> persistenceCommands = new _Inbox<>();
-
+    @ToString.Exclude
     private final _TxHelper txHelper;
     
+    private final _CommandQueue commandQueue;
+    
+    @ToString.Exclude
     private final InteractionTracker isisInteractionTracker;
 
+    @ToString.Exclude
     private final Can<TransactionScopeListener> transactionScopeListeners;
 
     private IsisException abortCause;
@@ -173,6 +174,7 @@ class _Tx implements Transaction {
         id = TransactionId.of(interactionId, sequence);
         
         this.txHelper = txHelper;
+        this.commandQueue = new _CommandQueue();
         this.isisInteractionTracker = mmc.getServiceRegistry().lookupServiceElseFail(InteractionTracker.class);
         this.transactionScopeListeners = mmc.getServiceRegistry().select(TransactionScopeListener.class);
 
@@ -192,7 +194,10 @@ class _Tx implements Transaction {
 
     @Getter
     private State state;
-    private void setState(final State state) {
+    private void setState(final @NonNull State state) {
+        if(this.state == state) {
+            return;
+        }
         this.state = state;
         if(state.isComplete()) {
             countDownLatch.countDown();
@@ -206,12 +211,10 @@ class _Tx implements Transaction {
             return TransactionState.NONE;
         }
 
-        final TransactionState transactionState = getState().getTransactionState();
-        if (transactionState == null) {
-            return TransactionState.NONE;
-        }
-
-        return transactionState;
+        val transactionState = getState().getTransactionState();
+        return transactionState == null
+                ? TransactionState.NONE
+                : transactionState;
     }
 
     // -- commands
@@ -220,65 +223,8 @@ class _Tx implements Transaction {
      * Add the non-null command to the list of commands to execute at the end of
      * the transaction.
      */
-    public void addCommand(final PersistenceCommand command) {
-        if (command == null) {
-            return;
-        }
-
-        final ManagedObject onObject = command.getEntity();
-
-        // Destroys are ignored when preceded by a create, or another destroy
-        if (command instanceof DeleteObjectCommand) {
-            if (alreadyHasCreate(onObject)) {
-                removeCreate(onObject);
-                if (log.isDebugEnabled()) {
-                    log.debug("ignored both create and destroy command {}", command);
-                }
-                return;
-            }
-
-            if (alreadyHasDestroy(onObject)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("ignored command {} as command already recorded", command);
-                }
-                return;
-            }
-        }
-
-        log.debug("add command {}", command);
-        persistenceCommands.add(command);
-    }
-
-    private boolean alreadyHasCommand(final Class<?> commandClass, final ManagedObject onObject) {
-        return getCommand(commandClass, onObject) != null;
-    }
-
-    private boolean alreadyHasCreate(final ManagedObject onObject) {
-        return alreadyHasCommand(CreateObjectCommand.class, onObject);
-    }
-
-    private boolean alreadyHasDestroy(final ManagedObject onObject) {
-        return alreadyHasCommand(DeleteObjectCommand.class, onObject);
-    }
-
-    private PersistenceCommand getCommand(final Class<?> commandClass, final ManagedObject onObject) {
-        for (final PersistenceCommand command : persistenceCommands.snapshot()) {
-            if (command.getEntity().equals(onObject)) {
-                if (commandClass.isAssignableFrom(command.getClass())) {
-                    return command;
-                }
-            }
-        }
-        return null;
-    }
-
-    private void removeCommand(final Class<?> commandClass, final ManagedObject onObject) {
-        final PersistenceCommand toDelete = getCommand(commandClass, onObject);
-        persistenceCommands.remove(toDelete);
-    }
-
-    private void removeCreate(final ManagedObject onObject) {
-        removeCommand(CreateObjectCommand.class, onObject);
+    public void addCommand(final @Nullable PersistenceCommand command) {
+        commandQueue.append(command);
     }
 
     // -- flush
@@ -326,33 +272,7 @@ class _Tx implements Transaction {
      * </table>
      */
     private void flushCommands() {
-
-        //
-        // it's possible that in executing these commands that more will be created.
-        // so we keep flushing until no more are available (ISIS-533)
-        //
-        // this is a do...while rather than a while... just for backward compatibility
-        // with previous algorithm that always went through the execute phase at least once.
-        //
-        do {
-            // this algorithm ensures that we never execute the same command twice,
-            // and also allow new commands to be added to end
-            val pc_snapshot = persistenceCommands.snapshotThenClear();
-
-            if(!pc_snapshot.isEmpty()) {
-                try {
-                    
-                    txHelper.execute(pc_snapshot);
-                    
-                } catch (RuntimeException ex) {
-                    // if there's an exception, we want to make sure that
-                    // all commands are cleared and propagate
-                    persistenceCommands.clear();
-                    throw ex;
-                }
-            }
-        } while(!persistenceCommands.isEmpty());
-
+        commandQueue.drain(txHelper::execute);
     }
     
     private void flushTransaction() {
@@ -467,19 +387,6 @@ class _Tx implements Transaction {
     public void clearAbortCauseAndContinue() {
         setState(State.IN_PROGRESS);
         clearAbortCause();
-    }
-
-    // -- toString
-
-    @Override
-    public String toString() {
-        return appendTo(new ToString(this)).toString();
-    }
-
-    private ToString appendTo(final ToString str) {
-        str.append("state", state);
-        str.append("commands", persistenceCommands.size());
-        return str;
     }
     
 

@@ -16,12 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence.command;
+package org.apache.isis.persistence.jdo.integration.transaction;
 
-public interface PersistenceCommandQueue {
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
+import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 
-    void addCommand(PersistenceCommand persistenceCommand);
+public interface TransactionalCommandProcessor {
 
+    void executeWithinTransaction(PersistenceCommand persistenceCommand);
+
+    Can<ManagedObject> executeWithinTransaction(PersistenceQueryContext queryContext, PersistenceQuery persistenceQuery);
+    
     //void createObject(ManagedObject adapter);
     //void deleteObject(ManagedObject adapter);
     

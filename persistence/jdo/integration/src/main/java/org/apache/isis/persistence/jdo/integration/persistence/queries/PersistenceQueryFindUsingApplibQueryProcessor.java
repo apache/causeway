@@ -33,38 +33,40 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoPropertyUtils;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+@RequiredArgsConstructor
 @Log4j2
-public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
-
-    public PersistenceQueryFindUsingApplibQueryProcessor(final JdoPersistenceSession5 persistenceSession) {
-        super(persistenceSession);
-    }
+public class PersistenceQueryFindUsingApplibQueryProcessor 
+extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
 
     @Override
-    public Can<ManagedObject> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
+    public Can<ManagedObject> process(
+            final PersistenceQueryContext queryContext,
+            final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
         final String queryName = persistenceQuery.getQueryName();
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
 
         final List<?> results;
         if((objectSpec.getFullIdentifier() + "#pk").equals(queryName)) {
-            results = getResultsPk(persistenceQuery);
+            results = getResultsPk(queryContext, persistenceQuery);
         } else {
-            results = getResults(persistenceQuery);
+            results = getResults(queryContext, persistenceQuery);
         }
 
-        return loadAdapters(results);
+        return loadAdapters(queryContext, results);
     }
 
     // -- HELPER
 
     // special case handling
-    private List<?> getResultsPk(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
+    private List<?> getResultsPk(
+            final PersistenceQueryContext queryContext,
+            final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
         val queryName = persistenceQuery.getQueryName();
         final Map<String, Object> map = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
@@ -84,7 +86,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         /* XXX[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
          * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead
          */
-        final Query<?> jdoQuery = persistenceSession.newJdoQuery(cls, filter);
+        final Query<?> jdoQuery = queryContext.newJdoQuery(cls, filter);
         isisJdoSupport.disableMultivaluedFetch(jdoQuery); // fetch optimization
 
         if (log.isDebugEnabled()) {
@@ -99,7 +101,9 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         }
     }
 
-    private List<?> getResults(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
+    private List<?> getResults(
+            final PersistenceQueryContext queryContext,
+            final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
         val queryName = persistenceQuery.getQueryName();
         final Map<String, Object> argumentsByParameterName = unwrap(
@@ -114,7 +118,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         /* XXX[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
          * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead 
          */
-        final Query<?> jdoQuery = persistenceSession.newJdoNamedQuery(cls, queryName); 
+        final Query<?> jdoQuery = queryContext.newJdoNamedQuery(cls, queryName); 
         isisJdoSupport.disableMultivaluedFetch(jdoQuery);
 
         if(persistenceQuery.hasRange()) {

@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.integration.persistence;
 
 import java.util.Optional;
 
+import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
@@ -29,7 +30,6 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -49,6 +49,7 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleL
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 
 import lombok.NonNull;
@@ -60,9 +61,10 @@ import lombok.extern.log4j.Log4j2;
  */
 @Vetoed @Log4j2
 public class JdoPersistenceSession5 extends _JdoPersistenceSessionBase
-implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
+implements
+    PersistenceQueryContext,
+    IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
-    private final TransactionService transactionService;
     private Runnable unregisterLifecycleListeners;
 
     /**
@@ -76,7 +78,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             final FixturesInstalledStateHolder stateHolder) {
 
         super(metaModelContext, jdoPersistenceManagerFactory, stateHolder);
-        this.transactionService = metaModelContext.getTransactionService();
     }
 
     // -- open
@@ -154,6 +155,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
+    public ManagedObject adapterFor(final @Nullable Object pojo) {
+        return _Utils.adapterFor(getMetaModelContext(), pojo);
+    }
+    
+    @Override
     public Can<ManagedObject> allMatchingQuery(final Query<?> query) {
         val instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
         return instances;
@@ -188,12 +194,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             log.debug("maps to (core runtime) PersistenceQuery: {}", persistenceQuery);
         }
 
-        final Can<ManagedObject> instances = transactionService
-                .executeWithinTransaction(
-                        ()->persistenceQuery.execute(this) )
-                .orElseFail();
-        
-        return instances;
+        return txCommandProcessor.executeWithinTransaction(this, persistenceQuery);
     }
 
     /**
@@ -205,7 +206,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             final QueryCardinality cardinality) {
 
         final PersistenceQuery persistenceQuery =
-                persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
+                persistenceQueryFactory.createPersistenceQueryFor(this::adapterFor, query, cardinality);
         if (persistenceQuery == null) {
             throw new IllegalArgumentException("Unknown Query type: " + query.getDescription());
         }
@@ -294,45 +295,42 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
 
     @Override
-    public void makePersistentInTransaction(final ManagedObject adapter) {
+    public void makePersistentInTransaction(final ManagedObject entity) {
         
-        val pojo = adapter.getPojo();
+        log.debug("about to persist entity {}", entity);
+        state.ensureOpened();
+        
+        val pojo = entity.getPojo();
         
         if (DnEntityStateProvider.entityState(pojo).isAttached()) {
-            throw new NotPersistableException("Object already persistent: " + adapter);
+            throw new NotPersistableException("Object already persistent: " + entity);
         }
-        val spec = adapter.getSpecification();
+        val spec = entity.getSpecification();
         if (spec.isManagedBean()) {
-            throw new NotPersistableException("Can only persist entity beans: "+ adapter);
+            throw new NotPersistableException("Can only persist entity beans: "+ entity);
         }
         if (spec.getBeanSort().isCollection()) {
             //XXX not sure if we can do better than that, eg. traverse each element of the collection and persist individually
-            throw new NotPersistableException("Cannot persist a collection: " + adapter);
+            throw new NotPersistableException("Cannot persist a collection: " + entity);
         }
         
-        log.debug("persist {}", adapter);
-        state.ensureOpened();
-        
-        transactionService.executeWithinTransaction(()->{
-            commandQueue.addCommand(newCreateObjectCommand(adapter));
-        });
+        txCommandProcessor.executeWithinTransaction(newCreateObjectCommand(entity));
     }
     
     // -- destroyObjectInTransaction
 
     @Override
-    public void destroyObjectInTransaction(final ManagedObject adapter) {
-        val spec = adapter.getSpecification();
+    public void destroyObjectInTransaction(final ManagedObject entity) {
+        
+        val spec = entity.getSpecification();
         if (spec.isParented()) {
             return;
         }
         
-        log.debug("deleteObject {}", adapter);
+        log.debug("about to delete entity {}", entity);
         state.ensureOpened();
         
-        transactionService.executeWithinTransaction(()->{
-            commandQueue.addCommand(newDeleteObjectCommand(adapter));
-        });
+        txCommandProcessor.executeWithinTransaction(newDeleteObjectCommand(entity));
     }
 
     // -- newXxxCommand

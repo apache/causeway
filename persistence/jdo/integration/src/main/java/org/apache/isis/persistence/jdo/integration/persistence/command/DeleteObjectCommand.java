@@ -24,26 +24,21 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor @ToString
 @Log4j2
 public class DeleteObjectCommand implements PersistenceCommand {
 
-    //private final PersistenceManager persistenceManager;
     @Getter private final ManagedObject entity;
     
     @Override
     public void execute(PersistenceManager persistenceManager) {
         if (log.isDebugEnabled()) {
-            log.debug("destroy object - executing command for {}", entity);
+            log.debug("delete object - executing command for {}", entity);
         }
         persistenceManager.deletePersistent(entity.getPojo());
-    }
-
-    @Override
-    public String toString() {
-        return "DeleteObjectCommand [entity=" + entity + "]";
     }
 
 }

@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
+import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
 import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 
 /**
@@ -85,7 +85,7 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
     }
 
     @Override
-    public Can<ManagedObject> execute(JdoPersistenceSession5 persistenceSession) {
-        return new PersistenceQueryFindUsingApplibQueryProcessor(persistenceSession).process(this);
+    public Can<ManagedObject> execute(PersistenceQueryContext queryContext) {
+        return new PersistenceQueryFindUsingApplibQueryProcessor().process(queryContext, this);
     }
 }
