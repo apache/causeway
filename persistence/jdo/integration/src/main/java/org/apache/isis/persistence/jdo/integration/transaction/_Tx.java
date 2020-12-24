@@ -155,7 +155,7 @@ class _Tx implements Transaction {
     @ToString.Exclude
     private final _TxHelper txHelper;
     
-    private final _CommandQueue commandQueue;
+    private final _PersistenceCommandQueue commandQueue;
     
     @ToString.Exclude
     private final InteractionTracker isisInteractionTracker;
@@ -174,7 +174,7 @@ class _Tx implements Transaction {
         id = TransactionId.of(interactionId, sequence);
         
         this.txHelper = txHelper;
-        this.commandQueue = new _CommandQueue();
+        this.commandQueue = new _PersistenceCommandQueue();
         this.isisInteractionTracker = mmc.getServiceRegistry().lookupServiceElseFail(InteractionTracker.class);
         this.transactionScopeListeners = mmc.getServiceRegistry().select(TransactionScopeListener.class);
 

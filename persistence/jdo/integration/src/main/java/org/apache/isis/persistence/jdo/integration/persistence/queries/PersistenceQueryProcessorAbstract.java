@@ -52,11 +52,11 @@ implements PersistenceQueryProcessor<T> {
             ManagedObject adapter;
             if(pojo instanceof Persistable) {
                 // an entity
-                adapter = queryContext.initializeEntity((Persistable) pojo);
+                adapter = queryContext.initializeEntityAfterFetched((Persistable) pojo);
                 _Assert.assertNotNull(adapter);
             } else {
                 // a value type
-                adapter = queryContext.adapterFor(pojo);
+                adapter = queryContext.initializeValueAfterFetched(pojo);
                 _Assert.assertNotNull(adapter);
             }
             adapters.add(adapter);

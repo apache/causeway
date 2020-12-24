@@ -16,12 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.lifecycles.fetching;
+package org.apache.isis.persistence.jdo.integration.persistence.queries;
+
+import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public interface ValueFetchResultHandler {
-
-    ManagedObject adapterFor(Object pojo);
+public interface FetchResultHandler {
     
+    ManagedObject initializeEntityAfterFetched(Persistable pojo);
+    ManagedObject initializeValueAfterFetched(Object pojo);
+
 }

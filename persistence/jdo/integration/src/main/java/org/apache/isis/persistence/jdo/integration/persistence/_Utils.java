@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -36,13 +37,12 @@ import lombok.val;
 
 final class _Utils {
 
-    @Nullable
-    static ManagedObject adapterFor(
+    static ManagedObject adaptNullableAndInjectServices(
             final @NonNull MetaModelContext mmc,
             final @Nullable Object pojo) {
         
         if(pojo == null) {
-            return null;
+            return ManagedObject.unspecified();
         }
         
         val objectManager = mmc.getObjectManager();
@@ -50,10 +50,20 @@ final class _Utils {
         return injectServices(mmc, adapter);
     }
     
-    @Nullable
+    static ManagedObject adaptEntityAndInjectServices(
+            final @NonNull MetaModelContext mmc,
+            final @NonNull Object entityPojo) {
+        
+        val objectManager = mmc.getObjectManager();
+        val entity = objectManager.adapt(entityPojo);
+        _Assert.assertTrue(entity.getSpecification().isEntity());
+        return injectServices(mmc, entity);
+    }
+
+    
     static ManagedObject injectServices(
             final @NonNull MetaModelContext mmc,
-            final @Nullable ManagedObject adapter) {
+            final @NonNull ManagedObject adapter) {
         
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             return adapter; 

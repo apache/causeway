@@ -18,8 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence.query;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "of") @Log4j2
@@ -43,50 +44,58 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
     private final MetaModelContext metaModelContext;
 
     /**
-     * Converts the {@link org.apache.isis.applib.query.Query applib representation of a query} into the
-     * {@link PersistenceQuery NOF-internal representation}.
+     * Converts the {@link org.apache.isis.applib.query.Query} applib representation of a query into the
+     * {@link PersistenceQuery} internal representation}.
      */
     public final PersistenceQuery createPersistenceQueryFor(
-            final Function<Object, ManagedObject> adapterProvider,
             final Query<?> query, 
             final QueryCardinality cardinality) {
         
         if (log.isDebugEnabled()) {
             log.debug("createPersistenceQueryFor: {}", query.getDescription());
         }
-        final ObjectSpecification noSpec = specFor(query);
+        
+        val queryResultTypeSpec = specFor(query);
+        
         if (query instanceof AllInstancesQuery) {
-            final AllInstancesQuery<?> queryFindAllInstances = (AllInstancesQuery<?>) query;
-            return new PersistenceQueryFindAllInstances(noSpec, queryFindAllInstances.getStart(), queryFindAllInstances.getCount());
+            val allInstancesQuery = (AllInstancesQuery<?>) query;
+            return new PersistenceQueryFindAllInstances(
+                    queryResultTypeSpec, 
+                    allInstancesQuery.getStart(), 
+                    allInstancesQuery.getCount());
 
         } if (query instanceof NamedQuery) {
-            final NamedQuery<?> queryDefault = (NamedQuery<?>) query;
-            final String queryName = queryDefault.getName();
-            final Map<String, ManagedObject> parametersByName = 
-                    wrap(adapterProvider, queryDefault.getParametersByName());
-            return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, parametersByName, cardinality,
-                    getSpecificationLoader(), queryDefault.getStart(), queryDefault.getCount());
+            val namedQuery = (NamedQuery<?>) query;
+            val queryName = namedQuery.getName();
+            val parametersByName = wrap(namedQuery.getParametersByName());
+            
+            return new PersistenceQueryFindUsingApplibQueryDefault(
+                    queryResultTypeSpec, 
+                    queryName, 
+                    parametersByName, 
+                    cardinality,
+                    getSpecificationLoader(), 
+                    namedQuery.getStart(), 
+                    namedQuery.getCount());
         }
         throw _Exceptions.unsupportedOperation("query type %s not supported by this persistence implementation",
                 query.getClass());
     }
 
     /**
-     * Converts a map of pojos keyed by string to a map of adapters keyed by the
-     * same strings.
+     * Converts a map of param-pojos keyed by param-name to a map of adapters keyed by the
+     * same param-name. 
+     * @implNote we do this to ensure queryParameters have injection points resolved (might be redundant) 
      */
     private Map<String, ManagedObject> wrap(
-            final Function<Object, ManagedObject> adapterProvider,
-            final Map<String, Object> argumentsByParameterName) {
+            final Map<String, Object> queryParametersByName) {
         
-        final Map<String, ManagedObject> argumentsAdaptersByParameterName = _Maps.newHashMap();
-        for (final Map.Entry<String, Object> entry : argumentsByParameterName.entrySet()) {
-            final String parameterName = entry.getKey();
-            final Object argument = argumentsByParameterName.get(parameterName);
-            final ManagedObject argumentAdapter = argument != null ? adapterProvider.apply(argument) : null;
-            argumentsAdaptersByParameterName.put(parameterName, argumentAdapter);
-        }
-        return argumentsAdaptersByParameterName;
+        val objMan = getObjectManager();
+        val injector = getServiceInjector();
+        
+        return _Maps.mapValues(queryParametersByName, HashMap::new, paramPojo->
+            objMan.adapt(injector.injectServicesInto(paramPojo))
+        );
     }
 
     private ObjectSpecification specFor(final Query<?> query) {

@@ -18,14 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence.queries;
 
-import org.apache.isis.persistence.jdo.integration.lifecycles.fetching.EntityFetchResultHandler;
-import org.apache.isis.persistence.jdo.integration.lifecycles.fetching.ValueFetchResultHandler;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 public interface PersistenceQueryContext 
 extends
-    ValueFetchResultHandler,
-    EntityFetchResultHandler,
+    FetchResultHandler,
     HasPersistenceManager {
 
 }

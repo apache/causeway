@@ -39,19 +39,19 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
 
     private final String queryName;
     private final QueryCardinality cardinality;
-    private final Map<String, ManagedObject> argumentsAdaptersByParameterName;
+    private final Map<String, ManagedObject> queryParametersByName;
 
     public PersistenceQueryFindUsingApplibQueryDefault(
             final ObjectSpecification specification,
             final String queryName,
-            final Map<String, ManagedObject> argumentsAdaptersByParameterName,
+            final Map<String, ManagedObject> queryParametersByName,
             final QueryCardinality cardinality,
             final SpecificationLoader specificationLoader,
             final long... range) {
         super(specification, range);
         this.queryName = queryName;
         this.cardinality = cardinality;
-        this.argumentsAdaptersByParameterName = argumentsAdaptersByParameterName;
+        this.queryParametersByName = queryParametersByName;
     }
 
     public String getQueryName() {
@@ -59,7 +59,7 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
     }
 
     public Map<String, ManagedObject> getArgumentsAdaptersByParameterName() {
-        return Collections.unmodifiableMap(argumentsAdaptersByParameterName);
+        return Collections.unmodifiableMap(queryParametersByName);
     }
 
     public QueryCardinality getCardinality() {

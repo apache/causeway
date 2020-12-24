@@ -34,7 +34,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-final class _CommandQueue {
+final class _PersistenceCommandQueue {
 
     private final _Inbox<PersistenceCommand> persistenceCommands = new _Inbox<>();
 

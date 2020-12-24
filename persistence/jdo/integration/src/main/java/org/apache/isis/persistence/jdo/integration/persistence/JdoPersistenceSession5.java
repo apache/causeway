@@ -63,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
 public class JdoPersistenceSession5 extends _JdoPersistenceSessionBase
 implements
     PersistenceQueryContext,
-    IsisLifecycleListener.PersistenceSessionLifecycleManagement {
+    IsisLifecycleListener.EntityChangeEmitter {
 
     private Runnable unregisterLifecycleListeners;
 
@@ -96,7 +96,7 @@ implements
 
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
 
-        final IsisLifecycleListener.PersistenceSessionLifecycleManagement psLifecycleMgmt = this;
+        final IsisLifecycleListener.EntityChangeEmitter psLifecycleMgmt = this;
         final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(psLifecycleMgmt);
         persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[]) null);
 
@@ -155,8 +155,8 @@ implements
     }
 
     @Override
-    public ManagedObject adapterFor(final @Nullable Object pojo) {
-        return _Utils.adapterFor(getMetaModelContext(), pojo);
+    public ManagedObject adaptEntityAndInjectServices(final @NonNull Persistable pojo) {
+        return _Utils.adaptEntityAndInjectServices(getMetaModelContext(), pojo);
     }
     
     @Override
@@ -206,7 +206,7 @@ implements
             final QueryCardinality cardinality) {
 
         final PersistenceQuery persistenceQuery =
-                persistenceQueryFactory.createPersistenceQueryFor(this::adapterFor, query, cardinality);
+                persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
         if (persistenceQuery == null) {
             throw new IllegalArgumentException("Unknown Query type: " + query.getDescription());
         }
@@ -288,7 +288,7 @@ implements
         // possibly redundant because also called in the post-load event
         // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
-        initializeEntity((Persistable) domainObject);
+        initializeEntityAfterFetched((Persistable) domainObject);
     }
 
     // -- makePersistent
@@ -380,12 +380,12 @@ implements
 
     @Override
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
-        val entity = adapterFor(pojo);
+        val entity = adaptEntityAndInjectServices(pojo);
         getEntityChangeTracker().enlistDeleting(entity);
     }
 
     @Override
-    public ManagedObject initializeEntity(final Persistable pojo) {
+    public ManagedObject initializeEntityAfterFetched(final Persistable pojo) {
 
         final ManagedObject entity = _Utils
                 .identify(getMetaModelContext(), getPersistenceManager(), pojo);
@@ -393,6 +393,11 @@ implements
         getEntityChangeTracker().recognizeLoaded(entity);
 
         return entity;
+    }
+    
+    @Override
+    public ManagedObject initializeValueAfterFetched(final @Nullable Object pojo) {
+        return _Utils.adaptNullableAndInjectServices(getMetaModelContext(), pojo);
     }
 
     @Override
@@ -436,7 +441,7 @@ implements
      */
     @Override
     public void enlistCreatedAndInvokeIsisPersistedCallback(final Persistable pojo) {
-        val entity = adapterFor(pojo);
+        val entity = adaptEntityAndInjectServices(pojo);
         getEntityChangeTracker().enlistCreated(entity);
     }
 

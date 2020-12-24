@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -166,6 +167,23 @@ public final class _Maps {
     
     // -- TRANSFORMATIONS
     
+    public static <K, V0, V1> Map<K, V1> mapValues(
+            @Nullable Map<K, V0> input,
+            @NonNull Supplier<Map<K, V1>> mapFactory,
+            @NonNull Function<V0, V1> valueMapper) {
+        
+        val resultMap = mapFactory.get();
+        
+        if(input==null
+                || input.isEmpty()) {
+            return resultMap;
+        }
+        
+        input.forEach((k, v)->resultMap.put(k, valueMapper.apply(v)));
+        return resultMap;
+    }
+            
+    
     public static <K, V> Map<K, V> filterKeys(
             @Nullable Map<K, V> input,
             Predicate<K> keyFilter, 
@@ -198,6 +216,8 @@ public final class _Maps {
         return result;
     }
 
+    // -- FACTORIES ...
+    
     // -- HASH MAP
 
     public static <K, V> HashMap<K, V> newHashMap() {
