@@ -20,7 +20,6 @@ package org.apache.isis.persistence.jdo.integration.persistence;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
@@ -30,10 +29,8 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
@@ -45,14 +42,13 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
+import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.command.DestroyObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.commands.DataNucleusCreateObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.commands.DataNucleusDeleteObjectCommand;
+import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
 
 import lombok.NonNull;
@@ -271,7 +267,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void refreshEntity(final Object domainObject) {
 
-        val state = getEntityState(domainObject);
+        val state = DnEntityStateProvider.entityState(domainObject);
         val isRepresentingPersistent = state.isAttached() || state.isDestroyed();  
 
         if(!isRepresentingPersistent) {
@@ -302,7 +298,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         
         val pojo = adapter.getPojo();
         
-        if (getEntityState(pojo).isAttached()) {
+        if (DnEntityStateProvider.entityState(pojo).isAttached()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
         val spec = adapter.getSpecification();
@@ -316,8 +312,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         
         transactionService.executeWithinTransaction(()->{
             log.debug("persist {}", adapter);               
-            val createObjectCommand = newCreateObjectCommand(adapter);
-            commandQueue.addCommand(createObjectCommand);
+            commandQueue.addCommand(newCreateObjectCommand(adapter));
         });
     }
     
@@ -329,10 +324,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (spec.isParented()) {
             return;
         }
-        log.debug("destroyObject {}", adapter);
+        log.debug("deleteObject {}", adapter);
         transactionService.executeWithinTransaction(()->{
-            val destroyObjectCommand = newDestroyObjectCommand(adapter);
-            commandQueue.addCommand(destroyObjectCommand);
+            commandQueue.addCommand(newDeleteObjectCommand(adapter));
         });
     }
 
@@ -364,23 +358,23 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         val pojo = adapter.getPojo();
 
         log.debug("create object - creating command for: {}", adapter);
-        if (getEntityState(pojo).isAttached()) {
+        if (DnEntityStateProvider.entityState(pojo).isAttached()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
-        return new DataNucleusCreateObjectCommand(adapter, this);
+        return new CreateObjectCommand(getPersistenceManager(), adapter);
     }
 
-    private DestroyObjectCommand newDestroyObjectCommand(final ManagedObject adapter) {
+    private DeleteObjectCommand newDeleteObjectCommand(final ManagedObject adapter) {
         
         state.ensureOpened();
         
         val pojo = adapter.getPojo();
 
         log.debug("destroy object - creating command for: {}", adapter);
-        if (!getEntityState(pojo).isAttached()) {
+        if (!DnEntityStateProvider.entityState(pojo).isAttached()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
-        return new DataNucleusDeleteObjectCommand(adapter, persistenceManager);
+        return new DeleteObjectCommand(getPersistenceManager(), adapter);
     }
 
     // -- FrameworkSynchronizer delegate methods
@@ -417,7 +411,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
-        if (getEntityState(pojo).isDetached()) {
+        if (DnEntityStateProvider.entityState(pojo).isDetached()) {
             val entity = ManagedObject.of(
                     getMetaModelContext().getSpecificationLoader()::loadSpecification, 
                     pojo);
@@ -459,29 +453,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         // the callback and transaction.enlist are done in the preStore callback
         // (can't be done here, as the enlist requires to capture the 'before' values)
         getEntityChangeTracker().recognizeUpdating(entity);
-    }
-
-    @Override //XXX also provided by 'provider' module
-    public EntityState getEntityState(@Nullable Object pojo) {
-
-        // guard against misuse
-        if(pojo instanceof ManagedObject) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
-
-        if (pojo!=null && pojo instanceof Persistable) {
-            val persistable = (Persistable) pojo;
-            val isDeleted = persistable.dnIsDeleted();
-            if(isDeleted) {
-                return EntityState.PERSISTABLE_DESTROYED;
-            }
-            val isPersistent = persistable.dnIsPersistent();
-            if(isPersistent) {
-                return EntityState.PERSISTABLE_ATTACHED;
-            }
-            return EntityState.PERSISTABLE_DETACHED;
-        }
-        return EntityState.NOT_PERSISTABLE;
     }
 
     @Override

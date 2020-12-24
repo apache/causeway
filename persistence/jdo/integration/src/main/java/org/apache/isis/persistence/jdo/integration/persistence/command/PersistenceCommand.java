@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.persistence.jdo.integration.persistence.command;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-/** captures entity creation and deletion */
 public interface PersistenceCommand {
-    
+
     void execute();
-    ManagedObject onManagedObject();
-    
+    ManagedObject getEntity();
+
 }

@@ -24,7 +24,6 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -52,7 +51,6 @@ extends
      */
     void refreshEntity(Object pojo);
 
-
     /**
      * @param pojo a persistable object
      * @return String representing an object's id.
@@ -60,11 +58,6 @@ extends
      */
     String identifierFor(Object pojo);
     
-    /**
-     * @since 2.0
-     */
-    EntityState getEntityState(Object pojo);
-
     /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
      * @since 2.0*/
     boolean isRecognized(Object pojo);
@@ -101,5 +94,6 @@ extends
      * recursively calling this method.
      */
     void makePersistentInTransaction(ManagedObject adapter);
+
 
 }

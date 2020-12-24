@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 
 import lombok.val;
@@ -108,7 +109,7 @@ public class JdoEntityFacet extends _JdoEntityFacetAbstract {
     
     @Override
     public EntityState getEntityState(Object pojo) {
-        return getJdoPersistenceSession().getEntityState(pojo);
+        return DnEntityStateProvider.entityState(pojo);
     }
 
     @Override

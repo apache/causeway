@@ -16,9 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.persistence.jdo.integration.persistence.command;
 
-public interface DestroyObjectCommand extends PersistenceCommand {
+import javax.jdo.PersistenceManager;
+
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+
+@RequiredArgsConstructor
+@Log4j2
+public class DeleteObjectCommand implements PersistenceCommand {
+
+    private final PersistenceManager persistenceManager;
+    @Getter private final ManagedObject entity;
+    
+    @Override
+    public void execute() {
+        if (log.isDebugEnabled()) {
+            log.debug("destroy object - executing command for {}", entity);
+        }
+        persistenceManager.deletePersistent(entity.getPojo());
+    }
+
+    @Override
+    public String toString() {
+        return "DeleteObjectCommand [entity=" + entity + "]";
+    }
 
 }

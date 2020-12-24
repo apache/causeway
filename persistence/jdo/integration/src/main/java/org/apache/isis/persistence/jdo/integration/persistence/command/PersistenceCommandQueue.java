@@ -20,6 +20,9 @@ package org.apache.isis.persistence.jdo.integration.persistence.command;
 
 public interface PersistenceCommandQueue {
 
-    void addCommand(PersistenceCommand command);
+    void addCommand(PersistenceCommand persistenceCommand);
+
+    //void createObject(ManagedObject adapter);
+    //void deleteObject(ManagedObject adapter);
     
 }

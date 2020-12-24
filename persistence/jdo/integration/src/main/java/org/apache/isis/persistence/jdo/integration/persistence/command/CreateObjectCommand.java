@@ -16,9 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.persistence.jdo.integration.persistence.command;
 
-public interface CreateObjectCommand extends PersistenceCommand {
+import javax.jdo.PersistenceManager;
+
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
+@RequiredArgsConstructor
+@Log4j2
+public class CreateObjectCommand implements PersistenceCommand {
+
+    private final PersistenceManager persistenceManager;
+    @Getter private final ManagedObject entity;
+
+    @Override
+    public void execute() {
+        if (log.isDebugEnabled()) {
+            log.debug("create object - executing command for: {}", entity);
+        }
+        
+        val domainObject = entity.getPojo();
+        if(!DnEntityStateProvider.entityState(domainObject).isDetached()) {
+            // this could happen if DN's persistence-by-reachability has already caused the domainobject
+            // to be persisted.  It's Isis adapter will have been updated as a result of the postStore
+            // lifecycle callback, so in essence there's nothing to be done.
+            return;
+        }
+
+        persistenceManager.makePersistent(domainObject);
+    }
+
+    @Override
+    public String toString() {
+        return "CreateObjectCommand [entity=" + entity + "]";
+    }
 
 }

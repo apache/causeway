@@ -43,7 +43,7 @@ import org.apache.isis.core.transaction.integration.IsisTransactionFlushExceptio
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.command.DestroyObjectCommand;
+import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 
 import lombok.Getter;
@@ -225,10 +225,10 @@ class _Tx implements Transaction {
             return;
         }
 
-        final ManagedObject onObject = command.onManagedObject();
+        final ManagedObject onObject = command.getEntity();
 
         // Destroys are ignored when preceded by a create, or another destroy
-        if (command instanceof DestroyObjectCommand) {
+        if (command instanceof DeleteObjectCommand) {
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
                 if (log.isDebugEnabled()) {
@@ -258,12 +258,12 @@ class _Tx implements Transaction {
     }
 
     private boolean alreadyHasDestroy(final ManagedObject onObject) {
-        return alreadyHasCommand(DestroyObjectCommand.class, onObject);
+        return alreadyHasCommand(DeleteObjectCommand.class, onObject);
     }
 
     private PersistenceCommand getCommand(final Class<?> commandClass, final ManagedObject onObject) {
         for (final PersistenceCommand command : persistenceCommands.snapshot()) {
-            if (command.onManagedObject().equals(onObject)) {
+            if (command.getEntity().equals(onObject)) {
                 if (commandClass.isAssignableFrom(command.getClass())) {
                     return command;
                 }

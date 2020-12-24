@@ -38,24 +38,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
 
     @Override
     public EntityState getEntityState(Object pojo) {
-
-        if(pojo==null) {
-            return EntityState.NOT_PERSISTABLE;
-        }
-        
-        if (pojo!=null && pojo instanceof Persistable) {
-            val persistable = (Persistable) pojo;
-            val isDeleted = persistable.dnIsDeleted();
-            if(isDeleted) {
-                return EntityState.PERSISTABLE_DESTROYED;
-            }
-            val isPersistent = persistable.dnIsPersistent();
-            if(isPersistent) {
-                return EntityState.PERSISTABLE_ATTACHED;
-            }
-            return EntityState.PERSISTABLE_DETACHED;
-        }
-        return EntityState.NOT_PERSISTABLE;
+        return entityState(pojo);
     }
     
     @Override
@@ -74,6 +57,27 @@ public class DnEntityStateProvider implements JdoFacetContext {
         ensureInit();
         return /*methodStartsWith(method, "jdo") || */ 
                 jdoMethodsProvidedByEnhancement.contains(method.toString());
+    }
+    
+    public static EntityState entityState(Object pojo) {
+
+        if(pojo==null) {
+            return EntityState.NOT_PERSISTABLE;
+        }
+        
+        if (pojo!=null && pojo instanceof Persistable) {
+            val persistable = (Persistable) pojo;
+            val isDeleted = persistable.dnIsDeleted();
+            if(isDeleted) {
+                return EntityState.PERSISTABLE_DESTROYED;
+            }
+            val isPersistent = persistable.dnIsPersistent();
+            if(isPersistent) {
+                return EntityState.PERSISTABLE_ATTACHED;
+            }
+            return EntityState.PERSISTABLE_DETACHED;
+        }
+        return EntityState.NOT_PERSISTABLE;
     }
     
     // -- HELPER
