@@ -32,11 +32,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CreateObjectCommand implements PersistenceCommand {
 
-    private final PersistenceManager persistenceManager;
+    //private final PersistenceManager persistenceManager;
     @Getter private final ManagedObject entity;
 
     @Override
-    public void execute() {
+    public void execute(PersistenceManager persistenceManager) {
         if (log.isDebugEnabled()) {
             log.debug("create object - executing command for: {}", entity);
         }

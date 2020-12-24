@@ -26,6 +26,7 @@ import org.apache.isis.persistence.jdo.integration.persistence.command.Persisten
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 import lombok.NonNull;
+import lombok.val;
 
 interface _TxHelper extends HasPersistenceManager {
     
@@ -84,10 +85,11 @@ interface _TxHelper extends HasPersistenceManager {
         // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that
         // don't have commands wrapped around them...
 
+        val pm = getPersistenceManager();
         for (final PersistenceCommand command : commands) {
-            command.execute();
+            command.execute(pm);
         }
-        getPersistenceManager().flush();
+        pm.flush();
     }
     
 }

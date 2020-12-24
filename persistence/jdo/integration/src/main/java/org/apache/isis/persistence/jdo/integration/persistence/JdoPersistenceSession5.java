@@ -310,8 +310,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             throw new NotPersistableException("Cannot persist a collection: " + adapter);
         }
         
+        log.debug("persist {}", adapter);
+        state.ensureOpened();
+        
         transactionService.executeWithinTransaction(()->{
-            log.debug("persist {}", adapter);               
             commandQueue.addCommand(newCreateObjectCommand(adapter));
         });
     }
@@ -324,7 +326,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (spec.isParented()) {
             return;
         }
+        
         log.debug("deleteObject {}", adapter);
+        state.ensureOpened();
+        
         transactionService.executeWithinTransaction(()->{
             commandQueue.addCommand(newDeleteObjectCommand(adapter));
         });
@@ -353,20 +358,16 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     private CreateObjectCommand newCreateObjectCommand(final ManagedObject adapter) {
 
-        state.ensureOpened();
-        
         val pojo = adapter.getPojo();
 
         log.debug("create object - creating command for: {}", adapter);
         if (DnEntityStateProvider.entityState(pojo).isAttached()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
-        return new CreateObjectCommand(getPersistenceManager(), adapter);
+        return new CreateObjectCommand(adapter);
     }
 
     private DeleteObjectCommand newDeleteObjectCommand(final ManagedObject adapter) {
-        
-        state.ensureOpened();
         
         val pojo = adapter.getPojo();
 
@@ -374,7 +375,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (!DnEntityStateProvider.entityState(pojo).isAttached()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
-        return new DeleteObjectCommand(getPersistenceManager(), adapter);
+        return new DeleteObjectCommand(adapter);
     }
 
     // -- FrameworkSynchronizer delegate methods

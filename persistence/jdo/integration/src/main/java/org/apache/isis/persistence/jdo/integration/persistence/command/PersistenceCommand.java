@@ -18,11 +18,13 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence.command;
 
+import javax.jdo.PersistenceManager;
+
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface PersistenceCommand {
 
-    void execute();
+    void execute(PersistenceManager persistenceManager);
     ManagedObject getEntity();
 
 }
