@@ -20,12 +20,15 @@ package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
 
+import javax.jdo.FetchGroup;
+
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -34,6 +37,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
@@ -44,6 +49,7 @@ import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -95,12 +101,49 @@ implements EntityFacet {
     }
     
     @Override
-    public ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier) {
+    public ManagedObject fetchByIdentifier(
+            final @NonNull ObjectSpecification entitySpec, 
+            final @NonNull String identifier) {
         
-        if(!spec.isEntity()) {
-            throw _Exceptions.unexpectedCodeReach();
+        _Assert.assertTrue(entitySpec.isEntity());
+        
+        val rootOid = Oid.Factory.root(entitySpec.getSpecId(), identifier);
+        
+        log.debug("fetchEntity; rootOid={}", rootOid);
+
+        Object entityPojo;
+        try {
+            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, rootOid);
+            val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
+            val entityClass = entitySpec.getCorrespondingClass();
+            val fetchPlan = persistenceManager.getFetchPlan();
+            fetchPlan.addGroup(FetchGroup.DEFAULT);
+            entityPojo = persistenceManager.getObjectById(entityClass, primaryKey);
+            
+        } catch (final RuntimeException e) {
+
+            //XXX this idiom could be delegated to a service
+            //or remodel the method to return a Result<T>
+            for (val exceptionRecognizer : getMetaModelContext().getServiceRegistry()
+                    .select(ExceptionRecognizer.class)) {
+                val recognition = exceptionRecognizer.recognize(e).orElse(null);
+                if(recognition != null) {
+                    if(recognition.getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
+                        throw new ObjectNotFoundException(rootOid, e);
+                    }
+                }
+            }
+
+            throw e;
         }
-        return getJdoPersistenceSession().fetchByIdentifier(spec, identifier);
+
+        if (entityPojo == null) {
+            throw new ObjectNotFoundException(rootOid);
+        }
+        
+        val actualEntitySpec = getSpecificationLoader().loadSpecification(entityPojo.getClass());
+        getServiceInjector().injectServicesInto(entityPojo); // might be redundant
+        return ManagedObject.identified(actualEntitySpec, entityPojo, rootOid);
     }
     
     @Override
@@ -131,7 +174,7 @@ implements EntityFacet {
             
             val resultList = getJdoPersistenceSession()
                    .getTransactionalProcessor()
-                   .executeWithinTransaction(typedQuery::executeList);
+                   .fetchWithinTransaction(typedQuery::executeList);
             
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
@@ -171,7 +214,7 @@ implements EntityFacet {
             
             val resultList = getJdoPersistenceSession()
                     .getTransactionalProcessor()
-                    .executeWithinTransaction(namedQuery::executeList);
+                    .fetchWithinTransaction(namedQuery::executeList);
             
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
@@ -186,18 +229,43 @@ implements EntityFacet {
     }
 
     @Override
-    public void persist(ObjectSpecification spec, Object pojo) {
+    public void persist(final ObjectSpecification spec, final Object pojo) {
 
         if(pojo==null || !isPersistableType(pojo.getClass())) {
             return; //noop
         }
         
-        getJdoPersistenceSession().makePersistentInTransaction(ManagedObject.of(spec, pojo));
+        if (DnEntityStateProvider.entityState(pojo).isAttached()) {
+            return; //noop
+        }
+        
+        val pm = getJdoPersistenceSession().getPersistenceManager();
+        
+        log.debug("about to persist entity {}", pojo);
+        
+        getJdoPersistenceSession()
+        .getTransactionalProcessor().doWithinTransaction(()->pm.makePersistent(pojo));
+        
     }
     
     @Override
-    public void delete(ObjectSpecification spec, Object pojo) {
-        getJdoPersistenceSession().destroyObjectInTransaction(ManagedObject.of(spec, pojo));
+    public void delete(final ObjectSpecification spec, final Object pojo) {
+        
+        if(pojo==null || !isPersistableType(pojo.getClass())) {
+            return; //noop
+        }
+        
+        if (!DnEntityStateProvider.entityState(pojo).isAttached()) {
+            throw _Exceptions.illegalArgument("can only delete an attached entity");
+        }
+        
+        val pm = getJdoPersistenceSession().getPersistenceManager();
+        
+        log.debug("about to delete entity {}", pojo);
+        
+        getJdoPersistenceSession()
+        .getTransactionalProcessor().doWithinTransaction(()->pm.deletePersistent(pojo));
+        
     }
     
     @Override

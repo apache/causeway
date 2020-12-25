@@ -18,11 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
-import java.rmi.NoSuchObjectException;
-
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
@@ -44,36 +40,5 @@ extends
      * Forces a reload (refresh in JDO terminology) of the domain object
      */
     void refreshEntity(Object pojo);
-
-    /**
-     * @since 2.0
-     * @throws NoSuchObjectException if not found
-     */
-    ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier);
-
-    /**
-     * Removes the specified object from the system. The specified object's data
-     * should be removed from the persistence mechanism.
-     */
-    void destroyObjectInTransaction(ManagedObject adapter);
-    
-    /**
-     * Makes an {@link ManagedObject} persistent. The specified object should be
-     * stored away via this object store's persistence mechanism, and have a
-     * new and unique OID assigned to it. The object, should also be added to
-     * the {@link JdoPersistenceSession} as the object is implicitly 'in use'.
-     *
-     * <p>
-     * If the object has any associations then each of these, where they aren't
-     * already persistent, should also be made persistent by recursively calling
-     * this method.
-     *
-     * <p>
-     * If the object to be persisted is a collection, then each element of that
-     * collection, that is not already persistent, should be made persistent by
-     * recursively calling this method.
-     */
-    void makePersistentInTransaction(ManagedObject adapter);
-
 
 }

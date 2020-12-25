@@ -16,15 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence.command;
+package org.apache.isis.persistence.jdo.integration.lifecycles;
 
-import javax.jdo.PersistenceManager;
+import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public interface PersistenceCommand {
-
-    void execute(PersistenceManager persistenceManager);
-    ManagedObject getEntity();
+public interface FetchResultHandler {
+    
+    ManagedObject initializeEntityAfterFetched(Persistable pojo);
+    ManagedObject initializeValueAfterFetched(Object pojo);
 
 }

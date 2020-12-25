@@ -20,31 +20,22 @@ package org.apache.isis.persistence.jdo.integration.persistence;
 
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
-import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
-import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
-import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.command.FetchResultHandler;
 import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 
 import lombok.NonNull;
@@ -159,55 +150,6 @@ implements
         return txCommandProcessor;
     }
 
-    // -- FETCHING
-
-    @Override
-    public ManagedObject fetchByIdentifier(
-            final @NonNull ObjectSpecification spec, 
-            final @NonNull String identifier) {
-
-        val rootOid = Oid.Factory.root(spec.getSpecId(), identifier);
-        
-        log.debug("fetchEntity; oid={}", rootOid);
-        
-        val entity = fetchEntity(spec, rootOid); // throws if null
-        
-        return ManagedObject.identified(spec, entity, rootOid);
-    }
-    
-    private Object fetchEntity(final ObjectSpecification spec, final RootOid rootOid) {
-
-        Object result;
-        try {
-            val cls = spec.getCorrespondingClass();
-            val jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(spec, rootOid);
-            val fetchPlan = persistenceManager.getFetchPlan();
-            fetchPlan.addGroup(FetchGroup.DEFAULT);
-            result = persistenceManager.getObjectById(cls, jdoObjectId);
-        } catch (final RuntimeException e) {
-
-            //XXX this idiom could be delegated to a service
-            //or remodel the method to return a Result<T>
-            for (val exceptionRecognizer : getMetaModelContext().getServiceRegistry()
-                    .select(ExceptionRecognizer.class)) {
-                val recognition = exceptionRecognizer.recognize(e).orElse(null);
-                if(recognition != null) {
-                    if(recognition.getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
-                        throw new ObjectNotFoundException(rootOid, e);
-                    }
-                }
-            }
-
-            throw e;
-        }
-
-        if (result == null) {
-            throw new ObjectNotFoundException(rootOid);
-        }
-
-        return result;
-    }
-
     // -- REFRESH
 
     @Override
@@ -234,91 +176,6 @@ implements
         // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
         initializeEntityAfterFetched((Persistable) domainObject);
-    }
-
-    // -- makePersistent
-
-
-    @Override
-    public void makePersistentInTransaction(final ManagedObject entity) {
-        
-        log.debug("about to persist entity {}", entity);
-        state.ensureOpened();
-        
-        val pojo = entity.getPojo();
-        
-        if (DnEntityStateProvider.entityState(pojo).isAttached()) {
-            throw new NotPersistableException("Object already persistent: " + entity);
-        }
-        val spec = entity.getSpecification();
-        if (spec.isManagedBean()) {
-            throw new NotPersistableException("Can only persist entity beans: "+ entity);
-        }
-        if (spec.getBeanSort().isCollection()) {
-            //XXX not sure if we can do better than that, eg. traverse each element of the collection and persist individually
-            throw new NotPersistableException("Cannot persist a collection: " + entity);
-        }
-        
-        txCommandProcessor.executeWithinTransaction(newCreateObjectCommand(entity));
-    }
-    
-    // -- destroyObjectInTransaction
-
-    @Override
-    public void destroyObjectInTransaction(final ManagedObject entity) {
-        
-        val spec = entity.getSpecification();
-        if (spec.isParented()) {
-            return;
-        }
-        
-        log.debug("about to delete entity {}", entity);
-        state.ensureOpened();
-        
-        txCommandProcessor.executeWithinTransaction(newDeleteObjectCommand(entity));
-    }
-
-    // -- newXxxCommand
-    /**
-     * Makes an {@link ObjectAdapter} persistent. The specified object should be
-     * stored away via this object store's persistence mechanism, and have an
-     * new and unique OID assigned to it (by calling the object's
-     * <code>setOid</code> method). The object, should also be added to the
-     * cache as the object is implicitly 'in use'.
-     *
-     * <p>
-     * If the object has any associations then each of these, where they aren't
-     * already persistent, should also be made persistent by recursively calling
-     * this method.
-     * </p>
-     *
-     * <p>
-     * If the object to be persisted is a collection, then each element of that
-     * collection, that is not already persistent, should be made persistent by
-     * recursively calling this method.
-     * </p>
-     *
-     */
-    private CreateObjectCommand newCreateObjectCommand(final ManagedObject adapter) {
-
-        val pojo = adapter.getPojo();
-
-        log.debug("create object - creating command for: {}", adapter);
-        if (DnEntityStateProvider.entityState(pojo).isAttached()) {
-            throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
-        }
-        return new CreateObjectCommand(adapter);
-    }
-
-    private DeleteObjectCommand newDeleteObjectCommand(final ManagedObject adapter) {
-        
-        val pojo = adapter.getPojo();
-
-        log.debug("destroy object - creating command for: {}", adapter);
-        if (!DnEntityStateProvider.entityState(pojo).isAttached()) {
-            throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
-        }
-        return new DeleteObjectCommand(adapter);
     }
 
     // -- FrameworkSynchronizer delegate methods

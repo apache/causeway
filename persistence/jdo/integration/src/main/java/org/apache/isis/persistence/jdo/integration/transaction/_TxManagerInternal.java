@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -37,8 +38,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
-import org.apache.isis.persistence.jdo.integration.persistence.command.FetchResultHandler;
-import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
+import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 import lombok.val;
@@ -326,22 +326,15 @@ implements
             txObject.clear();
         }
     }
-
+    
     @Override
-    public void executeWithinTransaction(PersistenceCommand command) {
-        mmc.getTransactionService().executeWithinTransaction(()->{
-        
-            val transaction = getCurrentTransaction();
-            if (transaction != null && command != null) {
-                transaction.addCommand(command);
-            }
-            
-        })
-        .nullableOrElseFail();
+    public void doWithinTransaction(ThrowingRunnable runnable) {
+        mmc.getTransactionService().executeWithinTransaction(runnable)
+                .nullableOrElseFail();
     }
     
     @Override
-    public Can<ManagedObject> executeWithinTransaction(Supplier<List<?>> fetcher) {
+    public Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher) {
         final Can<ManagedObject> instances = mmc.getTransactionService().executeWithinTransaction(
                 ()->_NullSafe.stream(fetcher.get())
                     .map(this::adopt)
@@ -373,7 +366,6 @@ implements
                 .map(_Tx.class::cast)
                 .orElse(null);
     }
-
 
 
 

@@ -22,17 +22,13 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 
 public interface TransactionalProcessor {
 
-    void executeWithinTransaction(PersistenceCommand persistenceCommand);
+    Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher);
 
-    Can<ManagedObject> executeWithinTransaction(Supplier<List<?>> fetcher);
-    
-    
-    //void createObject(ManagedObject adapter);
-    //void deleteObject(ManagedObject adapter);
+    void doWithinTransaction(ThrowingRunnable runnable);
     
 }

@@ -22,7 +22,6 @@ package org.apache.isis.persistence.jdo.integration.transaction;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
-import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.integration.IsisTransactionFlushException;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
-import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -155,8 +153,6 @@ class _Tx implements Transaction {
     @ToString.Exclude
     private final _TxHelper txHelper;
     
-    private final _PersistenceCommandQueue commandQueue;
-    
     @ToString.Exclude
     private final InteractionTracker isisInteractionTracker;
 
@@ -174,7 +170,6 @@ class _Tx implements Transaction {
         id = TransactionId.of(interactionId, sequence);
         
         this.txHelper = txHelper;
-        this.commandQueue = new _PersistenceCommandQueue();
         this.isisInteractionTracker = mmc.getServiceRegistry().lookupServiceElseFail(InteractionTracker.class);
         this.transactionScopeListeners = mmc.getServiceRegistry().select(TransactionScopeListener.class);
 
@@ -217,16 +212,6 @@ class _Tx implements Transaction {
                 : transactionState;
     }
 
-    // -- commands
-
-    /**
-     * Add the non-null command to the list of commands to execute at the end of
-     * the transaction.
-     */
-    public void addCommand(final @Nullable PersistenceCommand command) {
-        commandQueue.append(command);
-    }
-
     // -- flush
 
     @Override
@@ -242,37 +227,11 @@ class _Tx implements Transaction {
         log.debug("flush transaction {}", this);
 
         try {
-            flushCommands();
             flushTransaction();
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionFlushException(ex));
             throw ex;
         }
-    }
-
-    /**
-     * Called by {@link #preCommit()} and {@link #flush()}:
-     * <p>
-     * <table>
-     * <tr>
-     * <th>called from</th>
-     * <th>next {@link #getState() state} if ok</th>
-     * <th>next {@link #getState() state} if exception</th>
-     * </tr>
-     * <tr>
-     * <td>{@link #commit()}</td>
-     * <td>{@link State#COMMITTED}</td>
-     * <td>{@link State#ABORTED}</td>
-     * </tr>
-     * <tr>
-     * <td>{@link #flush()}</td>
-     * <td>{@link State#IN_PROGRESS}</td>
-     * <td>{@link State#MUST_ABORT}</td>
-     * </tr>
-     * </table>
-     */
-    private void flushCommands() {
-        commandQueue.drain(txHelper::execute);
     }
     
     private void flushTransaction() {
@@ -301,7 +260,6 @@ class _Tx implements Transaction {
 
         try {
             
-            flushCommands();
             flushTransaction();
             
             notifyPreCommit(PreCommitPhase.PRE_PUBLISHING);
