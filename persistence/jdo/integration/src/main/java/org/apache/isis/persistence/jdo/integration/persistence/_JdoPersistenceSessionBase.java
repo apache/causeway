@@ -43,9 +43,9 @@ implements JdoPersistenceSession {
     // -- FIELDS
 
     protected final FixturesInstalledStateHolder fixturesInstalledStateHolder;
-    protected final TransactionalProcessor txCommandProcessor;
     
-    @Getter protected final MetaModelContext metaModelContext;
+    @Getter(onMethod_ = {@Override}) protected final TransactionalProcessor transactionalProcessor;
+    @Getter(onMethod_ = {@Override}) protected final MetaModelContext metaModelContext;
 
     /**
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
@@ -77,7 +77,7 @@ implements JdoPersistenceSession {
         this.fixturesInstalledStateHolder = fixturesInstalledStateHolder;
 
         // sub-components
-        this.txCommandProcessor = TxManagerInternalFactory.newCommandQueue(
+        this.transactionalProcessor = TxManagerInternalFactory.newCommandQueue(
                 metaModelContext, 
                 this,
                 (FetchResultHandler)this); 

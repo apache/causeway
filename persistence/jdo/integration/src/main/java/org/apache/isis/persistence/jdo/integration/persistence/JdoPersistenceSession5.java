@@ -36,7 +36,6 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
-import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 
 import lombok.NonNull;
 import lombok.val;
@@ -144,11 +143,6 @@ implements
     public ManagedObject adaptEntityAndInjectServices(final @NonNull Persistable pojo) {
         return _Utils.adaptEntityAndInjectServices(getMetaModelContext(), pojo);
     }
-    
-    @Override
-    public TransactionalProcessor getTransactionalProcessor() {
-        return txCommandProcessor;
-    }
 
     // -- REFRESH
 
@@ -168,8 +162,7 @@ implements
         try {
             persistenceManager.refresh(domainObject);
         } catch (final RuntimeException e) {
-            final Oid oid = oidFor(domainObject);
-            throw new PojoRefreshException(oid, e);
+            throw new PojoRefreshException(oidFor(domainObject), e);
         }
 
         // possibly redundant because also called in the post-load event
@@ -177,8 +170,6 @@ implements
         // get an eager left-outer-join as the result of a refresh (sounds possible).
         initializeEntityAfterFetched((Persistable) domainObject);
     }
-
-    // -- FrameworkSynchronizer delegate methods
 
     @Override
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
