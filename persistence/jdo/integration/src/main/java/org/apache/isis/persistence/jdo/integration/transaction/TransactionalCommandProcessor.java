@@ -18,17 +18,19 @@
  */
 package org.apache.isis.persistence.jdo.integration.transaction;
 
+import java.util.List;
+import java.util.function.Supplier;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryContext;
 
 public interface TransactionalCommandProcessor {
 
     void executeWithinTransaction(PersistenceCommand persistenceCommand);
 
-    Can<ManagedObject> executeWithinTransaction(PersistenceQueryContext queryContext, PersistenceQuery persistenceQuery);
+    Can<ManagedObject> executeWithinTransaction(Supplier<List<?>> fetcher);
+    
     
     //void createObject(ManagedObject adapter);
     //void deleteObject(ManagedObject adapter);

@@ -19,15 +19,16 @@
 package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 
 import org.datanucleus.enhancement.Persistable;
+import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,9 +36,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryContext;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -70,8 +68,6 @@ public class JdoEntityFacet extends _JdoEntityFacetAbstract {
         }
         
         val range = query.getRange();
-        final long rangeLower = range.getStart();
-        final long rangeUpper = range.getEnd();
         
         if(query instanceof AllInstancesQuery) {
 
@@ -80,22 +76,22 @@ public class JdoEntityFacet extends _JdoEntityFacetAbstract {
             
             val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
             
-            val typedQuery = persistenceManager.newJDOQLTypedQuery(queryEntityType)
-                    .range(rangeLower, rangeUpper);
+            val typedQuery = persistenceManager.newJDOQLTypedQuery(queryEntityType);
+            typedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
             
-            val persistenceQuery = new PersistenceQueryFindAllInstances(
-                    getSpecification(queryEntityType), 
-                    query.getRange());
+            if(!range.isUnconstrained()) {
+                typedQuery.range(range.getStart(), range.getEnd());
+            }
             
-            return getJdoPersistenceSession()
+            val resultList = getJdoPersistenceSession()
                    .getTransactionalProcessor()
-                   .executeWithinTransaction((PersistenceQueryContext) getJdoPersistenceSession(), persistenceQuery);
-
-//TODO more simplification options ...             
-//            return _NullSafe.stream(typedQuery.executeList())
-//                .peek(this::injectServicesInto)
-//                .map(entity->ManagedObject.of(spec, entity))
-//                .collect(Can.toCan());
+                   .executeWithinTransaction(typedQuery::executeList);
+            
+            if(range.hasLimit()) {
+                _Assert.assertTrue(resultList.size()<=range.getLimit());
+            }
+            
+            return resultList;
             
         } else if(query instanceof NamedQuery) {
             
@@ -106,9 +102,12 @@ public class JdoEntityFacet extends _JdoEntityFacetAbstract {
             
             val namedParams = _Maps.<String, Object>newHashMap();
             val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
-                    .setNamedParameters(namedParams)
-                    .range(rangeLower, rangeUpper);
+                    .setNamedParameters(namedParams);
+            namedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
             
+            if(!range.isUnconstrained()) {
+                namedQuery.range(range.getStart(), range.getEnd());
+            }
             
             // inject services into query params; not sure if required (might be redundant)
             {
@@ -124,25 +123,15 @@ public class JdoEntityFacet extends _JdoEntityFacetAbstract {
                 .getParametersByName()
                 .forEach(namedParams::put);
             
-            val queryName = applibNamedQuery.getName();
-            val parametersByName = applibNamedQuery.getParametersByName();
-            
-            val persistenceQuery = new PersistenceQueryFindUsingApplibQueryDefault(
-                    getSpecification(queryResultType), 
-                    queryName, 
-                    Collections.unmodifiableMap(parametersByName), 
-                    range);
-            
-            return getJdoPersistenceSession()
+            val resultList = getJdoPersistenceSession()
                     .getTransactionalProcessor()
-                    .executeWithinTransaction((PersistenceQueryContext) getJdoPersistenceSession(), persistenceQuery);
-
-//TODO more simplification options ...            
-//            return _NullSafe.stream(namedQuery.executeList())
-//                    .peek(this::injectServicesInto)
-//                    .map(entity->ManagedObject.of(spec, entity))
-//                    .collect(Can.toCan());
+                    .executeWithinTransaction(namedQuery::executeList);
             
+            if(range.hasLimit()) {
+                _Assert.assertTrue(resultList.size()<=range.getLimit());
+            }
+            
+            return resultList;
         }
         
         throw _Exceptions.unsupportedOperation("query type %s (%s) not supported by this persistence implementation",

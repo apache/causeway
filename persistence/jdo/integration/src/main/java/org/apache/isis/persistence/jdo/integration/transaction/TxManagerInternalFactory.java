@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.integration.transaction;
 
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.persistence.jdo.integration.persistence.command.FetchResultHandler;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 import lombok.val;
@@ -28,9 +29,10 @@ public class TxManagerInternalFactory {
 
     public static TransactionalCommandProcessor newCommandQueue(
             MetaModelContext mmc,
-            HasPersistenceManager pmProvider) {
+            HasPersistenceManager pmProvider,
+            FetchResultHandler fetchResultHandler) {
         
-        val txMan = new _TxManagerInternal(mmc, pmProvider);
+        val txMan = new _TxManagerInternal(mmc, pmProvider, fetchResultHandler);
         
         val isisInteractionTracker = mmc.getServiceRegistry()
                 .lookupServiceElseFail(InteractionTracker.class);

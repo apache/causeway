@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
+import org.apache.isis.persistence.jdo.integration.persistence.command.FetchResultHandler;
 import org.apache.isis.persistence.jdo.integration.transaction.TransactionalCommandProcessor;
 import org.apache.isis.persistence.jdo.integration.transaction.TxManagerInternalFactory;
 
@@ -76,7 +77,10 @@ implements JdoPersistenceSession {
         this.fixturesInstalledStateHolder = fixturesInstalledStateHolder;
 
         // sub-components
-        this.txCommandProcessor = TxManagerInternalFactory.newCommandQueue(metaModelContext, this); 
+        this.txCommandProcessor = TxManagerInternalFactory.newCommandQueue(
+                metaModelContext, 
+                this,
+                (FetchResultHandler)this); 
 
         this.state = State.NOT_INITIALIZED;
     }

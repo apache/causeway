@@ -44,7 +44,7 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleL
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryContext;
+import org.apache.isis.persistence.jdo.integration.persistence.command.FetchResultHandler;
 import org.apache.isis.persistence.jdo.integration.transaction.TransactionalCommandProcessor;
 
 import lombok.NonNull;
@@ -57,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
 @Vetoed @Log4j2
 public class JdoPersistenceSession5 extends _JdoPersistenceSessionBase
 implements
-    PersistenceQueryContext,
+    FetchResultHandler,
     IsisLifecycleListener.EntityChangeEmitter {
 
     private Runnable unregisterLifecycleListeners;
