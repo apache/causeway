@@ -18,8 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
-import java.util.Optional;
-
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.FetchGroup;
@@ -28,10 +26,7 @@ import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
@@ -50,6 +45,7 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListe
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryContext;
+import org.apache.isis.persistence.jdo.integration.transaction.TransactionalCommandProcessor;
 
 import lombok.NonNull;
 import lombok.val;
@@ -159,37 +155,8 @@ implements
     }
     
     @Override
-    public Can<ManagedObject> allMatchingQuery(final Query<?> query) {
-        val instances = findInstancesInTransaction(query);
-        return instances;
-    }
-    
-    @Override
-    public Optional<ManagedObject> firstMatchingQuery(final Query<?> query) {
-        val instances = findInstancesInTransaction(query.withRange(QueryRange.limit(1L)));
-        return instances.getFirst();
-    }
-
-    /**
-     * Finds and returns instances that match the specified query.
-     *
-     * @throws org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException
-     *             if the criteria is not support by this persistor
-     */
-    private Can<ManagedObject> findInstancesInTransaction(
-            final Query<?> query) {
-        
-        if (log.isDebugEnabled()) {
-            log.debug("findInstances using (applib) Query: {}", query);
-        }
-
-        val persistenceQuery = persistenceQueryFactory.createPersistenceQueryFor(query);
-        
-        if (log.isDebugEnabled()) {
-            log.debug("maps to (core runtime) PersistenceQuery: {}", persistenceQuery);
-        }
-
-        return txCommandProcessor.executeWithinTransaction(this, persistenceQuery);
+    public TransactionalCommandProcessor getTransactionalProcessor() {
+        return txCommandProcessor;
     }
 
     // -- FETCHING
@@ -463,6 +430,10 @@ implements
             log.debug("refresh immediately; oid={}", oid.enString());
         }
     }
+
+
+
+
 
 }
 

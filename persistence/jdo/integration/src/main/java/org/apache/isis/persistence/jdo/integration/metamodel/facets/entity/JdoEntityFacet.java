@@ -19,21 +19,30 @@
 package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.applib.query.AllInstancesQuery;
+import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryContext;
+import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class JdoEntityFacet extends _JdoEntityFacetAbstract {
 
     public JdoEntityFacet(
@@ -55,7 +64,93 @@ public class JdoEntityFacet extends _JdoEntityFacetAbstract {
         if(!spec.isEntity()) {
             throw _Exceptions.unexpectedCodeReach();
         }
-        return getJdoPersistenceSession().allMatchingQuery(query);
+        
+        if (log.isDebugEnabled()) {
+            log.debug("about to execute Query: {}", query.getDescription());
+        }
+        
+        val range = query.getRange();
+        final long rangeLower = range.getStart();
+        final long rangeUpper = range.getEnd();
+        
+        if(query instanceof AllInstancesQuery) {
+
+            val queryFindAllInstances = (AllInstancesQuery<?>) query;
+            val queryEntityType = queryFindAllInstances.getResultType();
+            
+            val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
+            
+            val typedQuery = persistenceManager.newJDOQLTypedQuery(queryEntityType)
+                    .range(rangeLower, rangeUpper);
+            
+            val persistenceQuery = new PersistenceQueryFindAllInstances(
+                    getSpecification(queryEntityType), 
+                    query.getRange());
+            
+            return getJdoPersistenceSession()
+                   .getTransactionalProcessor()
+                   .executeWithinTransaction((PersistenceQueryContext) getJdoPersistenceSession(), persistenceQuery);
+
+//TODO more simplification options ...             
+//            return _NullSafe.stream(typedQuery.executeList())
+//                .peek(this::injectServicesInto)
+//                .map(entity->ManagedObject.of(spec, entity))
+//                .collect(Can.toCan());
+            
+        } else if(query instanceof NamedQuery) {
+            
+            val applibNamedQuery = (NamedQuery<?>) query;
+            val queryResultType = applibNamedQuery.getResultType();
+            
+            val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
+            
+            val namedParams = _Maps.<String, Object>newHashMap();
+            val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
+                    .setNamedParameters(namedParams)
+                    .range(rangeLower, rangeUpper);
+            
+            
+            // inject services into query params; not sure if required (might be redundant)
+            {
+                val injector = getServiceInjector();
+                
+                applibNamedQuery
+                .getParametersByName()
+                .values()
+                .forEach(injector::injectServicesInto);
+            }
+            
+            applibNamedQuery
+                .getParametersByName()
+                .forEach(namedParams::put);
+            
+            val queryName = applibNamedQuery.getName();
+            val parametersByName = applibNamedQuery.getParametersByName();
+            
+            val persistenceQuery = new PersistenceQueryFindUsingApplibQueryDefault(
+                    getSpecification(queryResultType), 
+                    queryName, 
+                    Collections.unmodifiableMap(parametersByName), 
+                    range);
+            
+            return getJdoPersistenceSession()
+                    .getTransactionalProcessor()
+                    .executeWithinTransaction((PersistenceQueryContext) getJdoPersistenceSession(), persistenceQuery);
+
+//TODO more simplification options ...            
+//            return _NullSafe.stream(namedQuery.executeList())
+//                    .peek(this::injectServicesInto)
+//                    .map(entity->ManagedObject.of(spec, entity))
+//                    .collect(Can.toCan());
+            
+        }
+        
+        throw _Exceptions.unsupportedOperation("query type %s (%s) not supported by this persistence implementation",
+                query.getClass(),
+                query.getDescription());
+        
+        
+        //return getJdoPersistenceSession().allMatchingQuery(query);
     }
     
     @Override

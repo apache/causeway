@@ -19,13 +19,11 @@
 package org.apache.isis.persistence.jdo.integration.persistence;
 
 import java.rmi.NoSuchObjectException;
-import java.util.Optional;
 
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.integration.transaction.TransactionalCommandProcessor;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 public interface JdoPersistenceSession 
@@ -62,9 +60,6 @@ extends
      */
     ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier);
 
-    Can<ManagedObject> allMatchingQuery(Query<?> query);
-    Optional<ManagedObject> firstMatchingQuery(Query<?> query);
-
     /**
      * Removes the specified object from the system. The specified object's data
      * should be removed from the persistence mechanism.
@@ -88,6 +83,8 @@ extends
      * recursively calling this method.
      */
     void makePersistentInTransaction(ManagedObject adapter);
+    
+    TransactionalCommandProcessor getTransactionalProcessor();
 
 
 }
