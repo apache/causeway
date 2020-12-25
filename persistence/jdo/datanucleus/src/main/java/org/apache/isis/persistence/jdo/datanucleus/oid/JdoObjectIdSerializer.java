@@ -72,10 +72,8 @@ public final class JdoObjectIdSerializer {
         return Optional.ofNullable(jdoOid)       
                 .map(JdoObjectIdSerializer::toOidIdentifier);
     }
-    
-    // -- LOW LEVEL
 
-    private static String toOidIdentifier(final Object jdoOid) {
+    public static String toOidIdentifier(final Object jdoOid) {
 
         return encodingChain.handle(jdoOid)
         .orElseGet(()->

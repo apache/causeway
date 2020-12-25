@@ -29,25 +29,71 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
+import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class JdoEntityFacet extends _JdoEntityFacetAbstract {
+public class JdoEntityFacet 
+extends FacetAbstract
+implements EntityFacet {
 
     public JdoEntityFacet(
             final FacetHolder holder) {
-        super(holder);
+        super(EntityFacet.class, holder, Derivation.NOT_DERIVED);
+        super.setFacetAliasType(EntityFacet.class);
     }
 
+    @Override
+    public String identifierFor(ObjectSpecification spec, Object pojo) {
+
+        if(pojo==null) {
+            throw _Exceptions.illegalArgument(
+                    "The persistence layer cannot identify a pojo that is null (given type %s)",
+                    spec.getCorrespondingClass().getName());
+        }
+        
+        if(!isPersistableType(pojo.getClass())) {
+            throw _Exceptions.illegalArgument(
+                    "The persistence layer does not recognize given type %s",
+                    pojo.getClass().getName());
+        }
+        
+        val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
+        val primaryKey = persistenceManager.getObjectId(pojo);
+        
+        if(primaryKey==null) {
+            throw _Exceptions.illegalArgument(
+                    "The persistence layer does not recognize given object of type %s, "
+                    + "meaning the object has no identifier that associates it with the persistence layer. "
+                    + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)", 
+                    pojo.getClass().getName());
+        }
+        
+        final String identifier = JdoObjectIdSerializer.toOidIdentifier(primaryKey);
+        if(_Strings.isEmpty(identifier)) {
+            throw _Exceptions.illegalArgument(
+                    "JdoObjectIdSerializer failed to convert primary key %s to a String.", 
+                    primaryKey.getClass().getName());
+        }
+        
+        return identifier;
+    }
+    
     @Override
     public ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier) {
         
@@ -137,38 +183,6 @@ public class JdoEntityFacet extends _JdoEntityFacetAbstract {
         throw _Exceptions.unsupportedOperation("query type %s (%s) not supported by this persistence implementation",
                 query.getClass(),
                 query.getDescription());
-        
-        
-        //return getJdoPersistenceSession().allMatchingQuery(query);
-    }
-    
-    @Override
-    public String identifierFor(ObjectSpecification spec, Object pojo) {
-
-        if(pojo==null) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    spec.getCorrespondingClass().getName());
-        }
-        
-        if(!isPersistableType(pojo.getClass())) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given type %s",
-                    pojo.getClass().getName());
-        }
-        
-        val persistenceSession = getJdoPersistenceSession();
-        val isRecognized = persistenceSession.isRecognized(pojo);
-        if(!isRecognized) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given object of type %s, "
-                    + "meaning the object has no identifier that associates it with the persistence layer. "
-                    + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)", 
-                    pojo.getClass().getName());
-        }
-        
-        final String identifier = persistenceSession.identifierFor(pojo);
-        return identifier;
     }
 
     @Override
@@ -212,5 +226,16 @@ public class JdoEntityFacet extends _JdoEntityFacetAbstract {
         return JdoMetamodelUtil.isMethodProvidedByEnhancement(method);
     }
 
+    // -- INTERACTION TRACKER LAZY LOOKUP
+    
+    // memoizes the lookup, just an optimization 
+    private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
+            ()->getServiceRegistry().lookupServiceElseFail(InteractionTracker.class));
+    
+    private JdoPersistenceSession getJdoPersistenceSession() {
+        return isisInteractionTrackerLazy.get().currentInteractionSession()
+                .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
+                .orElse(null);
+    }
 
 }

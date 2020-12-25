@@ -45,7 +45,7 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListe
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.FetchResultHandler;
-import org.apache.isis.persistence.jdo.integration.transaction.TransactionalCommandProcessor;
+import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 
 import lombok.NonNull;
 import lombok.val;
@@ -155,7 +155,7 @@ implements
     }
     
     @Override
-    public TransactionalCommandProcessor getTransactionalProcessor() {
+    public TransactionalProcessor getTransactionalProcessor() {
         return txCommandProcessor;
     }
 
@@ -345,11 +345,6 @@ implements
         return _Utils.adaptNullableAndInjectServices(getMetaModelContext(), pojo);
     }
 
-    @Override
-    public String identifierFor(final Object pojo) {
-        return JdoObjectIdSerializer.identifierForElseFail(getPersistenceManager(), pojo);
-    }
-
     /**
      * Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
      * lifecycle callback.
@@ -402,17 +397,6 @@ implements
         // the callback and transaction.enlist are done in the preStore callback
         // (can't be done here, as the enlist requires to capture the 'before' values)
         getEntityChangeTracker().recognizeUpdating(entity);
-    }
-
-    @Override
-    public boolean isRecognized(Object pojo) {
-        if (pojo!=null && pojo instanceof Persistable) {
-            final Object jdoOid = getPersistenceManager().getObjectId(pojo);
-            if(jdoOid!=null) {
-                return true;
-            }
-        }
-        return false;
     }
     
     // -- HELPER

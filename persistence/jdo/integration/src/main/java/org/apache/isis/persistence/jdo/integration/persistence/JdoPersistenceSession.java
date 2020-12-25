@@ -23,7 +23,7 @@ import java.rmi.NoSuchObjectException;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.integration.transaction.TransactionalCommandProcessor;
+import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 public interface JdoPersistenceSession 
@@ -38,21 +38,12 @@ extends
     void open();
     void close();
     
+    TransactionalProcessor getTransactionalProcessor();
+    
     /**
      * Forces a reload (refresh in JDO terminology) of the domain object
      */
     void refreshEntity(Object pojo);
-
-    /**
-     * @param pojo a persistable object
-     * @return String representing an object's id.
-     * @since 2.0
-     */
-    String identifierFor(Object pojo);
-    
-    /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
-     * @since 2.0*/
-    boolean isRecognized(Object pojo);
 
     /**
      * @since 2.0
@@ -83,8 +74,6 @@ extends
      * recursively calling this method.
      */
     void makePersistentInTransaction(ManagedObject adapter);
-    
-    TransactionalCommandProcessor getTransactionalProcessor();
 
 
 }

@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
 @Vetoed @Log4j2
 class _TxManagerInternal 
 implements 
-    TransactionalCommandProcessor {
+    TransactionalProcessor {
 
     // -- constructor, fields
 

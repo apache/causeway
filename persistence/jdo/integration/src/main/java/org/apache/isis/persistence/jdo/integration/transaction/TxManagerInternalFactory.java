@@ -27,7 +27,7 @@ import lombok.val;
 
 public class TxManagerInternalFactory {
 
-    public static TransactionalCommandProcessor newCommandQueue(
+    public static TransactionalProcessor newCommandQueue(
             MetaModelContext mmc,
             HasPersistenceManager pmProvider,
             FetchResultHandler fetchResultHandler) {

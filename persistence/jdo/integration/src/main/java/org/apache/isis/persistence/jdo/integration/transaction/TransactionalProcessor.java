@@ -25,7 +25,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
 
-public interface TransactionalCommandProcessor {
+public interface TransactionalProcessor {
 
     void executeWithinTransaction(PersistenceCommand persistenceCommand);
 

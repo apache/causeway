@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.integration.persistence.command.FetchResultHandler;
-import org.apache.isis.persistence.jdo.integration.transaction.TransactionalCommandProcessor;
+import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 import org.apache.isis.persistence.jdo.integration.transaction.TxManagerInternalFactory;
 
 import lombok.Getter;
@@ -43,7 +43,7 @@ implements JdoPersistenceSession {
     // -- FIELDS
 
     protected final FixturesInstalledStateHolder fixturesInstalledStateHolder;
-    protected final TransactionalCommandProcessor txCommandProcessor;
+    protected final TransactionalProcessor txCommandProcessor;
     
     @Getter protected final MetaModelContext metaModelContext;
 
