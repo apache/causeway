@@ -19,12 +19,27 @@
 
 package org.apache.isis.persistence.jdo.integration.persistence.query;
 
+import java.util.List;
+
+import javax.jdo.listener.InstanceLifecycleEvent;
+
+import org.datanucleus.enhancement.Persistable;
+
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.commons.ToString;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
+import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor 
 @Getter @EqualsAndHashCode
@@ -34,5 +49,43 @@ abstract class _PersistenceQueryAbstract implements PersistenceQuery {
 
     protected final @NonNull ObjectSpecification specification;
     protected final @NonNull QueryRangeModel queryRangeModel;
+    
+    @Override
+    public String toString() {
+        final ToString str = ToString.createAnonymous(this);
+        str.append("spec", getSpecification().getShortIdentifier());
+        return str.toString();
+    }
+
+    // -- HELPER
+    
+    /**
+     * Traversing the provided list causes (or should cause) the
+     * {@link IsisLifecycleListener#postLoad(InstanceLifecycleEvent) {
+     * to be called.
+     */
+    protected Can<ManagedObject> loadAdapters(final PersistenceQueryContext queryContext, final List<?> pojos) {
+        val adapters = _Lists.<ManagedObject>newArrayList();
+        for (val pojo : pojos) {
+            // ought not to be necessary, however for some queries it seems that the
+            // lifecycle listener is not called
+            ManagedObject adapter;
+            if(pojo instanceof Persistable) {
+                // an entity
+                adapter = queryContext.initializeEntityAfterFetched((Persistable) pojo);
+                _Assert.assertNotNull(adapter);
+            } else {
+                // a value type
+                adapter = queryContext.initializeValueAfterFetched(pojo);
+                _Assert.assertNotNull(adapter);
+            }
+            adapters.add(adapter);
+        }
+        return Can.ofCollection(adapters);
+    }
+
+    protected static IsisJdoSupport_v3_2 isisJdoSupport(ServiceRegistry serviceRegistry) { 
+        return serviceRegistry.lookupServiceElseFail(IsisJdoSupport_v3_2.class);
+    }
 
 }

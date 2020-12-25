@@ -21,15 +21,16 @@ package org.apache.isis.persistence.jdo.integration.persistence.query;
 
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryProcessorForAllInstances;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Corresponds to {@link AllInstancesQuery}
  */
+@Log4j2
 public class PersistenceQueryFindAllInstances extends _PersistenceQueryAbstract  {
 
     public PersistenceQueryFindAllInstances(
@@ -39,14 +40,26 @@ public class PersistenceQueryFindAllInstances extends _PersistenceQueryAbstract 
     }
 
     @Override
-    public String toString() {
-        final ToString str = ToString.createAnonymous(this);
-        str.append("spec", getSpecification().getShortIdentifier());
-        return str.toString();
-    }
-
-    @Override
     public Can<ManagedObject> execute(PersistenceQueryContext queryContext) {
-        return new PersistenceQueryProcessorForAllInstances().process(queryContext, this);
+
+        val persistenceQuery = this;
+        
+        val spec = persistenceQuery.getSpecification();
+        val cls = spec.getCorrespondingClass();
+        
+        val serviceRegistry = spec.getMetaModelContext().getServiceRegistry();
+        val isisJdoSupport = isisJdoSupport(serviceRegistry);
+
+        val typesafeQuery = isisJdoSupport.newTypesafeQuery(cls);
+        isisJdoSupport.disableMultivaluedFetch(typesafeQuery); // fetch optimization
+
+        if (log.isDebugEnabled()) {
+            log.debug("allInstances(): class={}", spec.getFullIdentifier());
+        }
+
+        val pojos = isisJdoSupport.executeQuery(cls);
+        return loadAdapters(queryContext, pojos);
+
     }
+    
 }

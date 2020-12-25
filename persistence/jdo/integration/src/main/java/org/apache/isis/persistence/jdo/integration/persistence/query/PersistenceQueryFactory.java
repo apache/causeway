@@ -72,7 +72,6 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
                     queryResultTypeSpec, 
                     queryName, 
                     Collections.unmodifiableMap(parametersByName), 
-                    getSpecificationLoader(), 
                     range);
         }
         

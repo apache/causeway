@@ -21,8 +21,8 @@ package org.apache.isis.persistence.jdo.integration.transaction;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.integration.persistence.command.PersistenceCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
 import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQuery;
+import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryContext;
 
 public interface TransactionalCommandProcessor {
 

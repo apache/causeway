@@ -48,7 +48,7 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleL
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.integration.persistence.command.DeleteObjectCommand;
-import org.apache.isis.persistence.jdo.integration.persistence.queries.PersistenceQueryContext;
+import org.apache.isis.persistence.jdo.integration.persistence.query.PersistenceQueryContext;
 
 import lombok.NonNull;
 import lombok.val;
