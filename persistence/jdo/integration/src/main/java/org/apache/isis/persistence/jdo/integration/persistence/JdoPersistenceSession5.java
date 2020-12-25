@@ -29,6 +29,7 @@ import javax.jdo.PersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
@@ -165,7 +166,7 @@ implements
     
     @Override
     public Optional<ManagedObject> firstMatchingQuery(final Query<?> query) {
-        val instances = findInstancesInTransaction(query.withCount(1));
+        val instances = findInstancesInTransaction(query.withRange(QueryRange.limit(1L)));
         return instances.getFirst();
     }
 

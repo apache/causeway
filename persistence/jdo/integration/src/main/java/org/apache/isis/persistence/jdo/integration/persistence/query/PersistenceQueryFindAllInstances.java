@@ -20,6 +20,7 @@
 package org.apache.isis.persistence.jdo.integration.persistence.query;
 
 import org.apache.isis.applib.query.AllInstancesQuery;
+import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -35,7 +36,7 @@ public class PersistenceQueryFindAllInstances extends _PersistenceQueryAbstract 
 
     public PersistenceQueryFindAllInstances(
             final ObjectSpecification specification,
-            final QueryRangeModel range) {
+            final QueryRange range) {
         super(specification, range);
     }
 

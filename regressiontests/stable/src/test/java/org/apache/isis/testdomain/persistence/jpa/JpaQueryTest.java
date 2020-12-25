@@ -18,6 +18,10 @@
  */
 package org.apache.isis.testdomain.persistence.jpa;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.SortedSet;
@@ -34,10 +38,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -102,7 +102,7 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
         
         assertInventoryHasBooks(repository
                 .allMatches(Query.allInstances(JpaBook.class)
-                        .withCount(2)), 
+                        .withLimit(2)), 
                 1, 2);
     }
     
@@ -118,8 +118,7 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
         
         assertInventoryHasBooks(repository
                 .allMatches(Query.allInstances(JpaBook.class)
-                        .withStart(1)
-                        .withCount(1)), 
+                        .withRange(1, 1)), 
                 2);
     }
     

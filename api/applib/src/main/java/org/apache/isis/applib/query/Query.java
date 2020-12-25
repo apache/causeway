@@ -51,9 +51,6 @@ import lombok.NonNull;
  */
 public interface Query<T> extends Serializable {
     
-    public static long UNLIMITED_COUNT = 0L;
-    
-
     /**
      * The {@link Class} of the objects returned by this query.
      */
@@ -65,31 +62,37 @@ public interface Query<T> extends Serializable {
     String getDescription();
 
     /**
-     * The start index into the set table
+     * Returns a model with start index into the set table and maximal number of items to return.
      */
-    long getStart();
-
-    /**
-     * The number of items to return, starting at {@link #getStart()}
-     */
-    long getCount();
+    QueryRange getRange();
     
     // -- WITHERS
     
-    Query<T> withStart(long start);
-    Query<T> withCount(long count);
+    Query<T> withRange(@NonNull QueryRange range);
+    
+    default Query<T> withRange(long ...range) {
+        return withRange(QueryRange.of(range));
+    }
+    
+    default Query<T> withStart(long start) {
+        return withRange(start);
+    }
+    
+    default Query<T> withLimit(long limit) {
+        return withRange(0L, limit);
+    }
     
     // -- FACTORIES
     
     public static <T> Query<T> allInstances(
             final @NonNull Class<T> resultType) {
-        return new _AllInstancesQueryDefault<>(resultType, 0, UNLIMITED_COUNT);
+        return new _AllInstancesQueryDefault<>(resultType, QueryRange.unconstrained());
     }
     
     public static <T> NamedQuery<T> named(
             final @NonNull Class<T> resultType, 
             final @NonNull String queryName) {
-        return new _NamedQueryDefault<>(resultType, queryName, 0, UNLIMITED_COUNT, null);
+        return new _NamedQueryDefault<>(resultType, queryName, QueryRange.unconstrained(), null);
     }
 
 }

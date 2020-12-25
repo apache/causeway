@@ -41,6 +41,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -246,15 +247,19 @@ public class CommandJdoRepository {
     private List<CommandJdo> findSince(
             final Timestamp timestamp,
             final Integer batchSize) {
-        val q = Query.named(CommandJdo.class, "findSince")
-                .withParameter("timestamp", timestamp);
-
+        
         // DN generates incorrect SQL for SQL Server if count set to 1; so we set to 2 and then trim
-        if(batchSize != null) {
-            q.withCount(batchSize == 1 ? 2 : batchSize);
-        }
+        // XXX that's a historic workaround, should rather be fixed upstream 
+        val needsTrimFix = batchSize != null && batchSize == 1;
+        
+        val q = Query.named(CommandJdo.class, "findSince")
+                .withParameter("timestamp", timestamp)
+                .withRange(QueryRange.limit(
+                        needsTrimFix ? 2L : batchSize
+                ));
+        
         final List<CommandJdo> commandJdos = repositoryService.allMatches(q);
-        return batchSize != null && batchSize == 1 && commandJdos.size() > 1
+        return needsTrimFix && commandJdos.size() > 1
                     ? commandJdos.subList(0,1)
                     : commandJdos;
     }

@@ -18,16 +18,21 @@
  */
 package org.apache.isis.applib.query;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import lombok.val;
 
 class NamedQueryTest_withStart_or_withCount {
 
     private NamedQuery<Customer> namedQuery;
+    private final static long UNLIMITED = 0L;
 
 
     static class Customer {}
@@ -40,61 +45,105 @@ class NamedQueryTest_withStart_or_withCount {
 
     @Test
     public void defaults() throws Exception {
-        assertThat(namedQuery.getStart(), is(0L));
-        assertThat(namedQuery.getCount(), is(Query.UNLIMITED_COUNT));
+        
+        val range = namedQuery.getRange();
+        
+        assertThat(range.getStart(), is(0L));
+        assertThat(range.getLimit(), is(UNLIMITED));
+        
+        assertTrue(range.isUnconstrained());
+        assertFalse(range.hasOffset());
+        assertFalse(range.hasLimit());
     }
 
     @Test
     public void typicalHappyCase() throws Exception {
-        final Query<Customer> q = namedQuery
-                .withStart(10L)
-                .withCount(5L);
 
-        assertThat(q.getStart(), is(10L));
-        assertThat(q.getCount(), is(5L));
+        val range = namedQuery
+                .withRange(QueryRange.start(10L).withLimit(5L))
+                .getRange();
+
+        assertThat(range.getStart(), is(10L));
+        assertThat(range.getLimit(), is(5L));
+        
+        assertFalse(range.isUnconstrained());
+        assertTrue(range.hasOffset());
+        assertTrue(range.hasLimit());
     }
 
     @Test
     public void happyCase_startOnly() throws Exception {
-        final NamedQuery<Customer> q = namedQuery.withStart(10L);
 
-        assertThat(q.getStart(), is(10L));
-        assertThat(q.getCount(), is(Query.UNLIMITED_COUNT));
+        val range = namedQuery
+                .withRange(QueryRange.start(10L))
+                .getRange();
+
+        assertThat(range.getStart(), is(10L));
+        assertThat(range.getLimit(), is(UNLIMITED));
+        
+        assertFalse(range.isUnconstrained());
+        assertTrue(range.hasOffset());
+        assertFalse(range.hasLimit());
     }
 
     @Test
     public void happyCase_startZero() throws Exception {
-        final NamedQuery<Customer> q = namedQuery.withStart(0);
+        
+        val range = namedQuery
+                .withRange(QueryRange.start(0L))
+                .getRange();
 
-        assertThat(q.getStart(), is(0L));
+        assertThat(range.getStart(), is(0L));
+        assertThat(range.getLimit(), is(UNLIMITED));
+        
+        assertTrue(range.isUnconstrained());
+        assertFalse(range.hasOffset());
+        assertFalse(range.hasLimit());
     }
 
     @Test
     public void startNegative() throws Exception {
         assertThrows(IllegalArgumentException.class, ()->{
-            namedQuery.withStart(-1);
+            QueryRange.start(-1L);
         });
     }
 
     @Test
     public void happyCase_countOnly() throws Exception {
-        final NamedQuery<Customer> q = namedQuery.withCount(20L);
+        
+        val range = namedQuery
+                .withRange(QueryRange.limit(10L))
+                .getRange();
 
-        assertThat(q.getStart(), is(0L));
-        assertThat(q.getCount(), is(20L));
+        assertThat(range.getStart(), is(0L));
+        assertThat(range.getLimit(), is(10L));
+        
+        assertFalse(range.isUnconstrained());
+        assertFalse(range.hasOffset());
+        assertTrue(range.hasLimit());
     }
 
     @Test
     public void countNegative() throws Exception {
         assertThrows(IllegalArgumentException.class, ()->{
-            namedQuery.withCount(-1);
+            QueryRange.limit(-1L);
         });
     }
 
     @Test
     public void countUnlimited() throws Exception {
-        final NamedQuery<Customer> q = namedQuery.withCount(Query.UNLIMITED_COUNT);
-        assertThat(q.getCount(), is(Query.UNLIMITED_COUNT));
+        
+        val range = namedQuery
+                .withRange(QueryRange.limit(UNLIMITED))
+                .getRange();
+
+        assertThat(range.getStart(), is(0L));
+        assertThat(range.getLimit(), is(UNLIMITED));
+        
+        assertTrue(range.isUnconstrained());
+        assertFalse(range.hasOffset());
+        assertFalse(range.hasLimit());
+        
     }
 
 

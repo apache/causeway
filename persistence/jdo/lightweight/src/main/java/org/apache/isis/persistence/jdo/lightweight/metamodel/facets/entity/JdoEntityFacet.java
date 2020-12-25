@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.lightweight.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -34,7 +33,6 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.primitives._Longs;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -52,8 +50,6 @@ public class JdoEntityFacet
 extends FacetAbstract
 implements EntityFacet {
     
-    private final static _Longs.Range NON_NEGATIVE_INTS = _Longs.rangeClosed(0L, Integer.MAX_VALUE);
-
     private final Class<?> entityClass;
     private final MetaModelContext metaModelContext;
     private final JdoFacetContext jdoFacetContext;
@@ -125,13 +121,8 @@ implements EntityFacet {
     @Override
     public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
         
-        final long rangeLower = query.getStart();
-        final long rangeUpper = query.getCount() == Query.UNLIMITED_COUNT
-                ? (long) Integer.MAX_VALUE
-                : (long) NON_NEGATIVE_INTS.bounded(
-                    BigInteger.valueOf(query.getStart())
-                    .add(BigInteger.valueOf(query.getCount()))
-                    .longValueExact());
+        final long rangeLower = query.getRange().getStart();
+        final long rangeUpper = query.getRange().getEnd();
         
         if(query instanceof AllInstancesQuery) {
 

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -49,7 +50,7 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends _PersistenceQue
             final ObjectSpecification specification,
             final String queryName,
             final Map<String, Object> queryParametersByName,
-            final QueryRangeModel range) {
+            final QueryRange range) {
         super(specification, range);
         this.queryName = queryName;
         this.queryParametersByName = queryParametersByName;
@@ -129,10 +130,10 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends _PersistenceQue
         val jdoQuery = queryContext.newJdoNamedQuery(cls, queryName); 
         isisJdoSupport.disableMultivaluedFetch(jdoQuery);
 
-        val queryRangeModel = persistenceQuery.getQueryRangeModel();
+        val range = persistenceQuery.getQueryRange();
         
-        if(queryRangeModel.hasRange()) {
-            jdoQuery.setRange(queryRangeModel.getStart(), queryRangeModel.getEnd());
+        if(!range.isUnconstrained()) {
+            jdoQuery.setRange(range.getStart(), range.getEnd());
         }
 
         if (log.isDebugEnabled()) {
@@ -146,8 +147,8 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends _PersistenceQue
                 return Collections.emptyList();
             }
             
-            if(queryRangeModel.hasRange()) {
-                _Assert.assertTrue(resultList.size()<=queryRangeModel.getCount());
+            if(range.hasLimit()) {
+                _Assert.assertTrue(resultList.size()<=range.getLimit());
             }
             
             // puzzler: needs a defensive copy, not sure why

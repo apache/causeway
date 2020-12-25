@@ -42,7 +42,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.commons.internal.primitives._Longs;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -86,7 +85,6 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
 
         private final Class<?> entityClass;
         private final ServiceRegistry serviceRegistry;
-        private final static _Longs.Range NON_NEGATIVE_INTS = _Longs.rangeClosed(0L, Integer.MAX_VALUE);
         
         protected JpaEntityFacet(
                 final FacetHolder holder,
@@ -150,9 +148,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         @Override
         public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
             
-            final int start = Math.toIntExact(query.getStart());
-            final int count = Math.toIntExact(
-                    NON_NEGATIVE_INTS.bounded(query.getCount()));
+            val range = query.getRange();
             
             if(query instanceof AllInstancesQuery) {
 
@@ -172,9 +168,14 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 cr.select(_Casts.uncheckedCast(cr.from(entityClass)));
                 
                 val typedQuery = entityManager
-                        .createQuery(cr)
-                        .setFirstResult(start)
-                        .setMaxResults(count);
+                        .createQuery(cr);
+                
+                if(range.hasOffset()) {
+                    typedQuery.setFirstResult(range.getStartAsInt());
+                }
+                if(range.hasLimit()) {
+                    typedQuery.setMaxResults(range.getLimitAsInt());
+                }
                 
                 return Can.ofStream(
                     typedQuery.getResultStream()
@@ -188,9 +189,14 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 val entityManager = getEntityManager();
                 
                 val namedQuery = entityManager
-                        .createNamedQuery(applibNamedQuery.getName(), queryResultType)
-                        .setFirstResult(start)
-                        .setMaxResults(count);
+                        .createNamedQuery(applibNamedQuery.getName(), queryResultType);
+                
+                if(range.hasOffset()) {
+                    namedQuery.setFirstResult(range.getStartAsInt());
+                }
+                if(range.hasLimit()) {
+                    namedQuery.setMaxResults(range.getLimitAsInt());
+                }
                 
                 applibNamedQuery
                     .getParametersByName()

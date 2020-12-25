@@ -45,10 +45,9 @@ implements NamedQuery<T> {
     protected _NamedQueryDefault(
             final @NonNull Class<T> resultType, 
             final @NonNull String queryName, 
-            final long start,
-            final long count,
+            final @NonNull QueryRange range,
             final @Nullable Map<String, Object> parametersByName) {
-        super(resultType, start, count);
+        super(resultType, range);
         this.name = queryName;
         this.parametersByName = parametersByName==null 
                 ? Collections.emptyMap()
@@ -63,19 +62,8 @@ implements NamedQuery<T> {
     // -- WITHERS
     
     @Override
-    public _NamedQueryDefault<T> withStart(final long start) {
-        if(start<0) {
-            throw _Exceptions.illegalArgument("require start>=0, got %d", start);
-        }
-        return new _NamedQueryDefault<>(getResultType(), getName(), start, getCount(), getParametersByName());
-    }
-
-    @Override
-    public _NamedQueryDefault<T> withCount(final long count) {
-        if(count<0) {
-            throw _Exceptions.illegalArgument("require count>=0, got %d", count);
-        }
-        return new _NamedQueryDefault<>(getResultType(), getName(), getStart(), count, getParametersByName());
+    public _NamedQueryDefault<T> withRange(final @NonNull QueryRange range) {
+        return new _NamedQueryDefault<>(getResultType(),  getName(), range, getParametersByName());
     }
 
     @Override
@@ -89,7 +77,7 @@ implements NamedQuery<T> {
                 ? new HashMap<String, Object>()
                 : new HashMap<String, Object>(getParametersByName());
         params.put(parameterName, parameterValue);
-        return new _NamedQueryDefault<>(getResultType(), getName(), getStart(), getCount(), params);
+        return new _NamedQueryDefault<>(getResultType(), getName(), getRange(), params);
     }
 
 }

@@ -25,6 +25,7 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -48,7 +49,7 @@ abstract class _PersistenceQueryAbstract implements PersistenceQuery {
     // -- constructor, fields
 
     protected final @NonNull ObjectSpecification specification;
-    protected final @NonNull QueryRangeModel queryRangeModel;
+    protected final @NonNull QueryRange queryRange;
     
     @Override
     public String toString() {

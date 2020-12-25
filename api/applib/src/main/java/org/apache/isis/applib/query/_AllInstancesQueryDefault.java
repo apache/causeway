@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.query;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-
 import lombok.NonNull;
 
 final class _AllInstancesQueryDefault<T> 
@@ -31,9 +29,8 @@ implements AllInstancesQuery<T> {
 
     protected _AllInstancesQueryDefault(
             final @NonNull Class<T> type, 
-            final long start, 
-            final long count) {
-        super(type, start, count);
+            final @NonNull QueryRange range) {
+        super(type, range);
     }
 
     @Override
@@ -44,19 +41,9 @@ implements AllInstancesQuery<T> {
     // -- WITHERS
     
     @Override
-    public _AllInstancesQueryDefault<T> withStart(final long start) {
-        if(start<0) {
-            throw _Exceptions.illegalArgument("require start>=0, got %d", start);
-        }
-        return new _AllInstancesQueryDefault<>(getResultType(), start, getCount());
+    public _AllInstancesQueryDefault<T> withRange(final @NonNull QueryRange range) {
+        return new _AllInstancesQueryDefault<>(getResultType(), range);
     }
 
-    @Override
-    public _AllInstancesQueryDefault<T> withCount(final long count) {
-        if(count<0) {
-            throw _Exceptions.illegalArgument("require count>=0, got %d", count);
-        }
-        return new _AllInstancesQueryDefault<>(getResultType(), getStart(), count);
-    }
 
 }

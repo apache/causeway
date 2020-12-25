@@ -34,8 +34,7 @@ public interface NamedQuery<T> extends Query<T> {
 
     // -- WITHERS
     
-    @Override NamedQuery<T> withStart(long start);
-    @Override NamedQuery<T> withCount(long count);
+    @Override NamedQuery<T> withRange(@NonNull QueryRange range);
     
     NamedQuery<T> withParameter(@NonNull String parameterName, @Nullable Object parameterValue);
     

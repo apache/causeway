@@ -46,7 +46,7 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
 
     /**
      * Converts the {@link org.apache.isis.applib.query.Query} applib representation of a query into the
-     * {@link PersistenceQuery} internal representation}.
+     * {@link PersistenceQuery} internal representation.
      */
     public final PersistenceQuery createPersistenceQueryFor(
             final Query<?> query) {
@@ -56,7 +56,7 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
         }
         
         val queryResultTypeSpec = specFor(query);
-        val range = QueryRangeModel.of(query.getStart(), query.getCount());
+        val range = query.getRange();
         
         if (query instanceof AllInstancesQuery) {
             return new PersistenceQueryFindAllInstances(
@@ -81,9 +81,7 @@ public class PersistenceQueryFactory implements HasMetaModelContext {
     }
 
     /**
-     * Converts a map of param-pojos keyed by param-name to a map of adapters keyed by the
-     * same param-name. 
-     * @implNote we do this to ensure queryParameters have injection points resolved (might be redundant) 
+     * Ensure queryParameters have injection points resolved (might be redundant). 
      */
     private Map<String, Object> injectServicesInto(
             final @Nullable Map<String, Object> queryParametersByName) {

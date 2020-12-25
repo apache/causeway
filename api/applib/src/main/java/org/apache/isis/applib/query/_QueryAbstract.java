@@ -20,23 +20,15 @@
 package org.apache.isis.applib.query;
 
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 abstract class _QueryAbstract<T> implements Query<T> {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter(onMethod_ = {@Override}) private final long start;
-    @Getter(onMethod_ = {@Override}) private final long count;
     @Getter(onMethod_ = {@Override}) private final Class<T> resultType;
-
-    protected _QueryAbstract(
-            final @NonNull Class<T> resultType, 
-            final long start, 
-            final long count) {
-        this.resultType = resultType;
-        this.start = start;
-        this.count = count;
-    }
+    @Getter(onMethod_ = {@Override}) private final QueryRange range;
+    
     
 }
