@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.integration.IsisTransactionFlushException;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
+import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -46,18 +47,6 @@ import lombok.ToString;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-/**
- * Used by the {@link _TxManagerInternal} to captures a set of changes to be
- * applied.
- *
- * <p>
- * Note that methods such as <tt>flush()</tt>, <tt>commit()</tt> and
- * <tt>abort()</tt> are not part of the API. The place to control transactions
- * is through the {@link _TxManagerInternal transaction manager}, because
- * some implementations may support nesting and such like. It is also the job of
- * the {@link _TxManagerInternal} to ensure that the underlying persistence
- * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
- */
 @Vetoed @Log4j2 @ToString
 class _Tx implements Transaction {
 
@@ -151,7 +140,7 @@ class _Tx implements Transaction {
     private final TransactionId id;
 
     @ToString.Exclude
-    private final _TxHelper txHelper;
+    private final HasPersistenceManager pmProvider;
     
     @ToString.Exclude
     private final InteractionTracker isisInteractionTracker;
@@ -163,13 +152,13 @@ class _Tx implements Transaction {
 
     public _Tx(
             final MetaModelContext mmc,
-            final _TxHelper txHelper,
+            final HasPersistenceManager pmProvider,
             final UUID interactionId,
             final int sequence) {
 
         id = TransactionId.of(interactionId, sequence);
         
-        this.txHelper = txHelper;
+        this.pmProvider = pmProvider;
         this.isisInteractionTracker = mmc.getServiceRegistry().lookupServiceElseFail(InteractionTracker.class);
         this.transactionScopeListeners = mmc.getServiceRegistry().select(TransactionScopeListener.class);
 
@@ -235,7 +224,7 @@ class _Tx implements Transaction {
     }
     
     private void flushTransaction() {
-        txHelper.flushTransaction();
+        pmProvider.flushTransaction();
     }
 
     protected JdoPersistenceSession getPersistenceSession() {

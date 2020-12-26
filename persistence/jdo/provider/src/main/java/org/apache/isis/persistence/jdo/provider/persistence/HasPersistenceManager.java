@@ -25,7 +25,7 @@ public interface HasPersistenceManager {
     
     javax.jdo.PersistenceManager getPersistenceManager();
     
-    // -- SHURTCUTS
+    // -- QUERY SHURTCUTS
     
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
@@ -54,5 +54,48 @@ public interface HasPersistenceManager {
      */
     default <T> javax.jdo.Query<T> newJdoQuery(Class<T> cls, String filter){
         return getPersistenceManager().newQuery(cls, filter);
+    }
+    
+    // -- TX SHURTCUTS
+    
+    /**
+     * to tell the underlying object store to start a transaction.
+     */
+    default void startTransaction() {
+        final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
+        if (transaction.isActive()) {
+            throw new IllegalStateException("Transaction already active");
+        }
+        transaction.begin();
+    }
+    
+    /**
+     * to tell the underlying object store to commit a transaction.
+     */
+    default void endTransaction() {
+        final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
+        if (transaction.isActive()) {
+            transaction.commit();
+        }
+    }
+
+    /**
+     * to tell the underlying object store to abort a transaction.
+     */
+    default void abortTransaction() {
+        final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
+        if (transaction.isActive()) {
+            transaction.rollback();
+        }
+    }
+    
+    /**
+     * to tell the underlying object store to flush a transaction.
+     */
+    default void flushTransaction() {
+        final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
+        if (transaction.isActive()) {
+            transaction.getPersistenceManager().flush();
+        }
     }
 }

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
-import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
-
 public interface HasFetchResultHandler {
 
     FetchResultHandler getFetchResultHandler();

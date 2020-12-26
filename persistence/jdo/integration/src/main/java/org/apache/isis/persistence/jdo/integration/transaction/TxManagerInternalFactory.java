@@ -31,13 +31,13 @@ public class TxManagerInternalFactory {
             MetaModelContext mmc,
             HasPersistenceManager pmProvider) {
         
-        val txMan = new _TxManagerInternal(mmc, pmProvider);
+        val txMan = new _TxProcessor(mmc, pmProvider);
         
         val isisInteractionTracker = mmc.getServiceRegistry()
                 .lookupServiceElseFail(InteractionTracker.class);
         
         isisInteractionTracker.currentInteractionSession()
-                .map(interaction->interaction.putAttribute(_TxManagerInternal.class, txMan));
+                .map(interaction->interaction.putAttribute(_TxProcessor.class, txMan));
         
         return txMan;
         

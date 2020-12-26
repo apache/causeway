@@ -26,7 +26,6 @@ import org.datanucleus.enhancement.Persistable;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
-import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
 
 import lombok.RequiredArgsConstructor;
 

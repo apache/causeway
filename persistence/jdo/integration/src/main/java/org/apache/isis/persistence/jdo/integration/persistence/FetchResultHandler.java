@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.lifecycles;
+package org.apache.isis.persistence.jdo.integration.persistence;
 
 import org.datanucleus.enhancement.Persistable;
 

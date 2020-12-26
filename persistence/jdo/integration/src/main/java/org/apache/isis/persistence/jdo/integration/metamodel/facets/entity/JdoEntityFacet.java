@@ -51,8 +51,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
-import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.integration.persistence.FetchResultHandler;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 
 import lombok.NonNull;

@@ -40,7 +40,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
-class _TxManagerInternal 
+class _TxProcessor 
 implements 
     TransactionalProcessor {
 
@@ -48,15 +48,15 @@ implements
 
     private final MetaModelContext mmc;
     private final Supplier<InteractionContext> interactionContextProvider;
-    private final _TxHelper txHelper;
+    private final HasPersistenceManager pmProvider;
 
-    _TxManagerInternal(
+    _TxProcessor(
             MetaModelContext mmc, 
             HasPersistenceManager pmProvider) {
 
         this.mmc = mmc;
         this.interactionContextProvider = ()->mmc.getServiceRegistry().lookupServiceElseFail(InteractionContext.class);
-        this.txHelper = _TxHelper.create(pmProvider);
+        this.pmProvider = pmProvider;
     }
 
     public _Tx beginTransaction() {
@@ -88,11 +88,11 @@ implements
 
             val currentTransaction = new _Tx(
                     mmc,
-                    txHelper,
+                    pmProvider,
                     transactionId,
                     interaction.next(Interaction.Sequence.TRANSACTION.id()));
 
-            txHelper.startTransaction();
+            pmProvider.startTransaction();
 
             if (log.isDebugEnabled()) {
                 log.debug("startTransaction: top-level");
@@ -263,7 +263,7 @@ implements
         if(abortCause == null) {
             try {
                 
-                txHelper.endTransaction();
+                pmProvider.endTransaction();
             } catch(Exception ex) {
                 // just in case any new exception was raised...
                 abortCause = ex instanceof RuntimeException ? (RuntimeException) ex : new RuntimeException(ex);
@@ -314,7 +314,7 @@ implements
         val transaction = (_Tx) txObject.getCurrentTransaction();
         if (transaction != null) {
             transaction.markAsAborted();
-            txHelper.abortTransaction();
+            pmProvider.abortTransaction();
             txObject.clear();
         }
     }
