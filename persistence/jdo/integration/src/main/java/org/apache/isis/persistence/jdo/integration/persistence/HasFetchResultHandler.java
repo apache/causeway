@@ -18,26 +18,10 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
-import org.apache.isis.core.interaction.session.InteractionSession;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
-import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
+import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
 
-public interface JdoPersistenceSession 
-extends 
-    HasMetaModelContext,
-    HasPersistenceManager,
-    HasTransactionalProcessor,
-    HasFetchResultHandler {
+public interface HasFetchResultHandler {
 
-    /**
-     * Binds this {@link JdoPersistenceSession} to the current {@link InteractionSession}.
-     */
-    void open();
+    FetchResultHandler getFetchResultHandler();
     
-    /**
-     * Commits the current transaction and unbinds this 
-     * {@link JdoPersistenceSession} from the current {@link InteractionSession}.
-     */
-    void close();
-
 }

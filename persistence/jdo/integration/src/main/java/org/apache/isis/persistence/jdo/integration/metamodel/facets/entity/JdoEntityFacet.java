@@ -245,7 +245,7 @@ implements EntityFacet {
         log.debug("about to persist entity {}", pojo);
         
         getTransactionalProcessor()
-        .executeWithinTransaction(()->pm.makePersistent(pojo))
+        .executeWithinTransaction(()->{pm.makePersistent(pojo);})
         .nullableOrElseFail();
         
         //TODO integrate with entity change tracking
@@ -267,7 +267,7 @@ implements EntityFacet {
         log.debug("about to delete entity {}", pojo);
         
         getTransactionalProcessor()
-        .executeWithinTransaction(()->pm.deletePersistent(pojo))
+        .executeWithinTransaction(()->{pm.deletePersistent(pojo);})
         .nullableOrElseFail();
         
         //TODO integrate with entity change tracking
@@ -287,7 +287,7 @@ implements EntityFacet {
         log.debug("about to refresh entity {}", pojo);
         
         getTransactionalProcessor()
-        .executeWithinTransaction(()->pm.refresh(pojo))
+        .executeWithinTransaction(()->{pm.refresh(pojo);})
         .nullableOrElseFail();
         
         //TODO integrate with entity change tracking
@@ -331,7 +331,7 @@ implements EntityFacet {
     }
     
     private FetchResultHandler getFetchResultHandler() {
-        return (FetchResultHandler) getJdoPersistenceSession();
+        return getJdoPersistenceSession().getFetchResultHandler();
     }
     
     private JdoPersistenceSession getJdoPersistenceSession() {
