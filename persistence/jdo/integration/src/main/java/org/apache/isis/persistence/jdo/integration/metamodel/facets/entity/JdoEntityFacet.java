@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 import java.lang.reflect.Method;
 
 import javax.jdo.FetchGroup;
+import javax.jdo.PersistenceManager;
 
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
@@ -48,6 +49,7 @@ import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvide
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
+import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 
 import lombok.NonNull;
 import lombok.val;
@@ -79,7 +81,7 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
         
-        val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
+        val persistenceManager = getPersistenceManager();
         val primaryKey = persistenceManager.getObjectId(pojo);
         
         if(primaryKey==null) {
@@ -114,7 +116,7 @@ implements EntityFacet {
         Object entityPojo;
         try {
             val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, rootOid);
-            val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
+            val persistenceManager = getPersistenceManager();
             val entityClass = entitySpec.getCorrespondingClass();
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
@@ -163,7 +165,7 @@ implements EntityFacet {
             val queryFindAllInstances = (AllInstancesQuery<?>) query;
             val queryEntityType = queryFindAllInstances.getResultType();
             
-            val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
+            val persistenceManager = getPersistenceManager();
             
             val typedQuery = persistenceManager.newJDOQLTypedQuery(queryEntityType);
             typedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
@@ -172,8 +174,7 @@ implements EntityFacet {
                 typedQuery.range(range.getStart(), range.getEnd());
             }
             
-            val resultList = getJdoPersistenceSession()
-                   .getTransactionalProcessor()
+            val resultList = getTransactionalProcessor()
                    .fetchWithinTransaction(typedQuery::executeList);
             
             if(range.hasLimit()) {
@@ -187,7 +188,7 @@ implements EntityFacet {
             val applibNamedQuery = (NamedQuery<?>) query;
             val queryResultType = applibNamedQuery.getResultType();
             
-            val persistenceManager = getJdoPersistenceSession().getPersistenceManager();
+            val persistenceManager = getPersistenceManager();
             
             val namedParams = _Maps.<String, Object>newHashMap();
             val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
@@ -212,8 +213,7 @@ implements EntityFacet {
                 .getParametersByName()
                 .forEach(namedParams::put);
             
-            val resultList = getJdoPersistenceSession()
-                    .getTransactionalProcessor()
+            val resultList = getTransactionalProcessor()
                     .fetchWithinTransaction(namedQuery::executeList);
             
             if(range.hasLimit()) {
@@ -231,20 +231,17 @@ implements EntityFacet {
     @Override
     public void persist(final ObjectSpecification spec, final Object pojo) {
 
-        if(pojo==null || !isPersistableType(pojo.getClass())) {
-            return; //noop
+        if(pojo==null 
+                || !isPersistableType(pojo.getClass())
+                || DnEntityStateProvider.entityState(pojo).isAttached()) {
+            return; // nothing to do
         }
         
-        if (DnEntityStateProvider.entityState(pojo).isAttached()) {
-            return; //noop
-        }
-        
-        val pm = getJdoPersistenceSession().getPersistenceManager();
+        val pm = getPersistenceManager();
         
         log.debug("about to persist entity {}", pojo);
         
-        getJdoPersistenceSession()
-        .getTransactionalProcessor().doWithinTransaction(()->pm.makePersistent(pojo));
+        getTransactionalProcessor().doWithinTransaction(()->pm.makePersistent(pojo));
         
     }
     
@@ -252,25 +249,35 @@ implements EntityFacet {
     public void delete(final ObjectSpecification spec, final Object pojo) {
         
         if(pojo==null || !isPersistableType(pojo.getClass())) {
-            return; //noop
+            return; // nothing to do
         }
         
         if (!DnEntityStateProvider.entityState(pojo).isAttached()) {
             throw _Exceptions.illegalArgument("can only delete an attached entity");
         }
         
-        val pm = getJdoPersistenceSession().getPersistenceManager();
+        val pm = getPersistenceManager();
         
         log.debug("about to delete entity {}", pojo);
         
-        getJdoPersistenceSession()
-        .getTransactionalProcessor().doWithinTransaction(()->pm.deletePersistent(pojo));
+        getTransactionalProcessor().doWithinTransaction(()->pm.deletePersistent(pojo));
         
     }
     
     @Override
     public void refresh(Object pojo) {
-        getJdoPersistenceSession().refreshEntity(pojo);
+        
+        if(pojo==null
+                || !isPersistableType(pojo.getClass())
+                || !DnEntityStateProvider.entityState(pojo).isPersistable()) {
+            return; // nothing to do
+        }
+        
+        val pm = getPersistenceManager();
+        
+        log.debug("about to refresh entity {}", pojo);
+        
+        getTransactionalProcessor().doWithinTransaction(()->pm.refresh(pojo));
     }
     
     @Override
@@ -280,7 +287,7 @@ implements EntityFacet {
 
     @Override
     public <T> T detach(T pojo) {
-        return getJdoPersistenceSession().getPersistenceManager().detachCopy(pojo);
+        return getPersistenceManager().detachCopy(pojo);
     }
 
     // -- HELPER
@@ -300,10 +307,26 @@ implements EntityFacet {
     private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
             ()->getServiceRegistry().lookupServiceElseFail(InteractionTracker.class));
     
+    // -- DEPENDENCIES
+    
+    private PersistenceManager getPersistenceManager() {
+        return getJdoPersistenceSession().getPersistenceManager();
+    }
+    
+    private TransactionalProcessor getTransactionalProcessor() {
+        return getJdoPersistenceSession().getTransactionalProcessor();
+    }
+    
+//    private FetchResultHandler getFetchResultHandler() {
+//        return (FetchResultHandler) getJdoPersistenceSession();
+//    }
+    
     private JdoPersistenceSession getJdoPersistenceSession() {
         return isisInteractionTrackerLazy.get().currentInteractionSession()
                 .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
                 .orElse(null);
     }
+    
+    
 
 }

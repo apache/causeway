@@ -46,10 +46,5 @@ extends
     void close();
     
     TransactionalProcessor getTransactionalProcessor();
-    
-    /**
-     * Forces a reload (refresh in JDO terminology) of the domain object
-     */
-    void refreshEntity(Object pojo);
 
 }

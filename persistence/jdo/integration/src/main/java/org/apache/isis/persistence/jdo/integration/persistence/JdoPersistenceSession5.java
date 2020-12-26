@@ -26,11 +26,8 @@ import javax.jdo.PersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
@@ -186,33 +183,6 @@ implements
         return _Utils.adaptEntityAndInjectServices(getMetaModelContext(), pojo);
     }
 
-    // -- REFRESH
-
-    @Override
-    public void refreshEntity(final Object domainObject) {
-
-        val state = DnEntityStateProvider.entityState(domainObject);
-        val isRepresentingPersistent = state.isAttached() || state.isDestroyed();  
-
-        if(!isRepresentingPersistent) {
-            debugLogNotPersistentIgnoring(domainObject);
-            return; // only resolve object that is representing persistent
-        }
-
-        debugLogRefreshImmediately(domainObject);
-
-        try {
-            persistenceManager.refresh(domainObject);
-        } catch (final RuntimeException e) {
-            throw new PojoRefreshException(oidFor(domainObject), e);
-        }
-
-        // possibly redundant because also called in the post-load event
-        // listener, but (with JPA impl) found it was required if we were ever to
-        // get an eager left-outer-join as the result of a refresh (sounds possible).
-        initializeEntityAfterFetched((Persistable) domainObject);
-    }
-
     @Override
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         val entity = adaptEntityAndInjectServices(pojo);
@@ -291,36 +261,10 @@ implements
     
     // -- DEPENDENCIES
     
-    public EntityChangeTracker getEntityChangeTracker() {
+    private EntityChangeTracker getEntityChangeTracker() {
         return metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(EntityChangeTracker.class);
     }
-    
-    // -- DEBUG
-
-    private RootOid oidFor(Object pojo) {
-        val spec = getSpecificationLoader().loadSpecification(pojo.getClass());
-        val adapter = ManagedObject.of(spec, pojo);
-        return ManagedObjects.identify(adapter).orElse(null);
-    }
-    
-    private void debugLogNotPersistentIgnoring(@Nullable Object domainObject) {
-        if (log.isDebugEnabled() && domainObject!=null) {
-            val oid = oidFor(domainObject);
-            log.debug("; oid={} not persistent - ignoring", oid.enString());
-        }     
-    }
-
-    private void debugLogRefreshImmediately(@Nullable Object domainObject) {
-        if (log.isDebugEnabled() && domainObject!=null) {
-            val oid = oidFor(domainObject);
-            log.debug("refresh immediately; oid={}", oid.enString());
-        }
-    }
-
-
-
-
 
 }
 

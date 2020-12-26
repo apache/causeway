@@ -504,11 +504,6 @@ public class FacetedMethodsBuilder {
         return explicitAnnotationsForActions;
     }
 
-    private boolean loadParamSpecs(final Method actionMethod) {
-        return getSpecificationLoader().loadSpecifications(actionMethod.getParameterTypes());
-    }
-
-
     // ////////////////////////////////////////////////////////////////////////////
     // Helpers for finding and removing methods.
     // ////////////////////////////////////////////////////////////////////////////

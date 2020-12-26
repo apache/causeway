@@ -72,8 +72,9 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     
     @Override
     public <T> T refresh(final T domainObject) {
-        val adapter = mmc.getObjectManager().adapt(domainObject); 
-        getPersistenceSession().refreshEntity(adapter);
+        val objectManager = mmc.getObjectManager();
+        val adapter = mmc.getObjectManager().adapt(domainObject);
+        objectManager.refreshObject(adapter);
         return domainObject;
     }
 
