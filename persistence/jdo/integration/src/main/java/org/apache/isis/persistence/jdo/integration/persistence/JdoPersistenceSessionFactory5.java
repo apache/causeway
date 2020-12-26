@@ -41,13 +41,9 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledState;
-import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.integration.config.JdoEntityTypeRegistry;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -64,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
 @Singleton
 @Log4j2
 public class JdoPersistenceSessionFactory5
-implements JdoPersistenceSessionFactory, FixturesInstalledStateHolder {
+implements JdoPersistenceSessionFactory {
     
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
@@ -74,10 +70,6 @@ implements JdoPersistenceSessionFactory, FixturesInstalledStateHolder {
     private MetaModelContext metaModelContext;
     private IsisConfiguration configuration;
     private final JdoEntityTypeRegistry jdoEntityTypeRegistry = new JdoEntityTypeRegistry();
-
-    @Getter(onMethod=@__({@Override})) 
-    @Setter(onMethod=@__({@Override})) 
-    FixturesInstalledState fixturesInstalledState;
 
     @Override
     public void init(MetaModelContext metaModelContext) {
@@ -200,8 +192,7 @@ implements JdoPersistenceSessionFactory, FixturesInstalledStateHolder {
 
         return new JdoPersistenceSession5(
                 metaModelContext, 
-                persistenceManagerFactory,
-                this);
+                persistenceManagerFactory);
     }
 
 

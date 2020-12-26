@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.integration.persistence;
 
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
@@ -27,11 +28,21 @@ extends
     HasMetaModelContext,
     HasPersistenceManager {
 
-    // -------------------------------------------------------------------------------------------------
-    // -- STABLE API (DRAFT)
-    // -------------------------------------------------------------------------------------------------
-
+    /**
+     * Injects components, calls open on subcomponents, and then creates service
+     * adapters.
+     */
     void open();
+    
+    /**
+     * Closes the subcomponents.
+     * <p>
+     * Automatically {@link _TxManagerInternal#commitTransaction(IsisTransactionObject)
+     * ends (commits)} the current (Isis) {@link _Tx}. This in turn commits the underlying
+     * JDO transaction.
+     * <p>
+     * The corresponding DataNucleus entity is then closed.
+     */
     void close();
     
     TransactionalProcessor getTransactionalProcessor();

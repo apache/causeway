@@ -27,16 +27,20 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.transaction.integration.IsisTransactionObject;
-import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
+import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
+import org.apache.isis.persistence.jdo.integration.transaction.TxManagerInternalFactory;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -45,32 +49,81 @@ import lombok.extern.log4j.Log4j2;
  * A wrapper around the JDO {@link PersistenceManager}.
  */
 @Vetoed @Log4j2
-public class JdoPersistenceSession5 extends _JdoPersistenceSessionBase
+public class JdoPersistenceSession5
 implements
+    JdoPersistenceSession,
     FetchResultHandler,
     IsisLifecycleListener.EntityChangeEmitter {
 
+    // -- FIELDS
+
+    /**
+     * populated only when {@link #open()}ed.
+     */
+    @Getter(onMethod_ = {@Override}) private PersistenceManager persistenceManager;
+    
+    @Getter(onMethod_ = {@Override}) private final TransactionalProcessor transactionalProcessor;
+    @Getter(onMethod_ = {@Override}) private final MetaModelContext metaModelContext;
+
+    /**
+     * Used to create the {@link #persistenceManager} when {@link #open()}ed.
+     */
+    private final PersistenceManagerFactory jdoPersistenceManagerFactory;
+    
     private Runnable unregisterLifecycleListeners;
 
+    // -- CONSTRUCTOR
+    
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
-     * @param storeLifecycleListener 
      */
     public JdoPersistenceSession5(
             final MetaModelContext metaModelContext,
-            final PersistenceManagerFactory jdoPersistenceManagerFactory,
-            final FixturesInstalledStateHolder stateHolder) {
+            final PersistenceManagerFactory jdoPersistenceManagerFactory) {
 
-        super(metaModelContext, jdoPersistenceManagerFactory, stateHolder);
+        if (log.isDebugEnabled()) {
+            log.debug("creating {}", this);
+        }
+
+        this.metaModelContext = metaModelContext;
+        this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
+
+        // sub-components
+        this.transactionalProcessor = TxManagerInternalFactory.newCommandQueue(
+                metaModelContext, 
+                this,
+                (FetchResultHandler)this); 
+
+        this.state = State.NOT_INITIALIZED;
     }
 
-    // -- open
+    // -- STATE
 
-    /**
-     * Injects components, calls open on subcomponents, and then creates service
-     * adapters.
-     */
+    protected enum State {
+        NOT_INITIALIZED, OPEN, CLOSED
+        ;
+        protected void ensureNotOpened() {
+            if (this != State.NOT_INITIALIZED) {
+                throw new IllegalStateException("Persistence session has already been initialized");
+            }
+        }
+        protected void ensureOpened() {
+            ensureStateIs(State.OPEN);
+        }
+        private void ensureStateIs(final State stateRequired) {
+            if (this == stateRequired) {
+                return;
+            }
+            throw new IllegalStateException("State is: " + this + "; should be: " + stateRequired);
+        }
+    }
+    
+    protected State state = State.NOT_INITIALIZED;
+
+    // -- OPEN
+
+
     @Override
     public void open() {
         state.ensureNotOpened();
@@ -104,19 +157,8 @@ implements
         this.state = State.OPEN;
     }
 
-    // -- close
+    // -- CLOSE
 
-    /**
-     * Closes the subcomponents.
-     *
-     * <p>
-     * Automatically {@link _TxManagerInternal#commitTransaction(IsisTransactionObject)
-     * ends (commits)} the current (Isis) {@link _Tx}. This in turn commits the underlying
-     * JDO transaction.
-     *
-     * <p>
-     * The corresponding DataNucleus entity is then closed.
-     */
     @Override
     public void close() {
 
@@ -247,17 +289,30 @@ implements
         getEntityChangeTracker().recognizeUpdating(entity);
     }
     
-    // -- HELPER
+    // -- DEPENDENCIES
     
-    private void debugLogNotPersistentIgnoring(Object domainObject) {
+    public EntityChangeTracker getEntityChangeTracker() {
+        return metaModelContext.getServiceRegistry()
+                .lookupServiceElseFail(EntityChangeTracker.class);
+    }
+    
+    // -- DEBUG
+
+    private RootOid oidFor(Object pojo) {
+        val spec = getSpecificationLoader().loadSpecification(pojo.getClass());
+        val adapter = ManagedObject.of(spec, pojo);
+        return ManagedObjects.identify(adapter).orElse(null);
+    }
+    
+    private void debugLogNotPersistentIgnoring(@Nullable Object domainObject) {
         if (log.isDebugEnabled() && domainObject!=null) {
             val oid = oidFor(domainObject);
             log.debug("; oid={} not persistent - ignoring", oid.enString());
         }     
     }
 
-    private void debugLogRefreshImmediately(Object domainObject) {
-        if (log.isDebugEnabled()) {
+    private void debugLogRefreshImmediately(@Nullable Object domainObject) {
+        if (log.isDebugEnabled() && domainObject!=null) {
             val oid = oidFor(domainObject);
             log.debug("refresh immediately; oid={}", oid.enString());
         }
