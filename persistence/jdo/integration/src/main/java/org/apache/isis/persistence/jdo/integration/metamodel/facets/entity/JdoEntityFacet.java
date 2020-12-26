@@ -19,6 +19,8 @@
 package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.function.Supplier;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
@@ -31,9 +33,11 @@ import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.repository.EntityState;
+import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -47,9 +51,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
-import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 
 import lombok.NonNull;
 import lombok.val;
@@ -145,6 +149,7 @@ implements EntityFacet {
         
         val actualEntitySpec = getSpecificationLoader().loadSpecification(entityPojo.getClass());
         getServiceInjector().injectServicesInto(entityPojo); // might be redundant
+        //TODO integrate with entity change tracking
         return ManagedObject.identified(actualEntitySpec, entityPojo, rootOid);
     }
     
@@ -174,8 +179,7 @@ implements EntityFacet {
                 typedQuery.range(range.getStart(), range.getEnd());
             }
             
-            val resultList = getTransactionalProcessor()
-                   .fetchWithinTransaction(typedQuery::executeList);
+            val resultList = fetchWithinTransaction(typedQuery::executeList);
             
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
@@ -213,8 +217,7 @@ implements EntityFacet {
                 .getParametersByName()
                 .forEach(namedParams::put);
             
-            val resultList = getTransactionalProcessor()
-                    .fetchWithinTransaction(namedQuery::executeList);
+            val resultList = fetchWithinTransaction(namedQuery::executeList);
             
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
@@ -241,8 +244,11 @@ implements EntityFacet {
         
         log.debug("about to persist entity {}", pojo);
         
-        getTransactionalProcessor().doWithinTransaction(()->pm.makePersistent(pojo));
+        getTransactionalProcessor()
+        .executeWithinTransaction(()->pm.makePersistent(pojo))
+        .nullableOrElseFail();
         
+        //TODO integrate with entity change tracking
     }
     
     @Override
@@ -260,8 +266,11 @@ implements EntityFacet {
         
         log.debug("about to delete entity {}", pojo);
         
-        getTransactionalProcessor().doWithinTransaction(()->pm.deletePersistent(pojo));
+        getTransactionalProcessor()
+        .executeWithinTransaction(()->pm.deletePersistent(pojo))
+        .nullableOrElseFail();
         
+        //TODO integrate with entity change tracking
     }
     
     @Override
@@ -277,7 +286,11 @@ implements EntityFacet {
         
         log.debug("about to refresh entity {}", pojo);
         
-        getTransactionalProcessor().doWithinTransaction(()->pm.refresh(pojo));
+        getTransactionalProcessor()
+        .executeWithinTransaction(()->pm.refresh(pojo))
+        .nullableOrElseFail();
+        
+        //TODO integrate with entity change tracking
     }
     
     @Override
@@ -317,9 +330,9 @@ implements EntityFacet {
         return getJdoPersistenceSession().getTransactionalProcessor();
     }
     
-//    private FetchResultHandler getFetchResultHandler() {
-//        return (FetchResultHandler) getJdoPersistenceSession();
-//    }
+    private FetchResultHandler getFetchResultHandler() {
+        return (FetchResultHandler) getJdoPersistenceSession();
+    }
     
     private JdoPersistenceSession getJdoPersistenceSession() {
         return isisInteractionTrackerLazy.get().currentInteractionSession()
@@ -327,6 +340,31 @@ implements EntityFacet {
                 .orElse(null);
     }
     
+    // -- HELPER
+    
+    private Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher) {
+        val fetchResultHandler = getFetchResultHandler();
+        return getTransactionalProcessor().executeWithinTransaction(
+                ()->_NullSafe.stream(fetcher.get())
+                    .map(fetchedObject->adopt(fetchResultHandler, fetchedObject))
+                    .collect(Can.toCan()))
+                .orElseFail();
+    }
+    
+    private ManagedObject adopt(final FetchResultHandler fetchResultHandler, final Object fetchedObject) {
+        // handles lifecycle callbacks and injects services
+        
+        // ought not to be necessary, however for some queries it seems that the
+        // lifecycle listener is not called
+        if(fetchedObject instanceof Persistable) {
+            // an entity
+            return fetchResultHandler.initializeEntityAfterFetched((Persistable) fetchedObject);
+            
+        } else {
+            // a value type
+            return fetchResultHandler.initializeValueAfterFetched(fetchedObject);
+        }
+    }
     
 
 }

@@ -25,6 +25,7 @@ import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -34,7 +35,6 @@ import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
-import org.apache.isis.persistence.jdo.integration.transaction.TransactionalProcessor;
 import org.apache.isis.persistence.jdo.integration.transaction.TxManagerInternalFactory;
 
 import lombok.Getter;
@@ -87,10 +87,9 @@ implements
         this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
 
         // sub-components
-        this.transactionalProcessor = TxManagerInternalFactory.newCommandQueue(
+        this.transactionalProcessor = TxManagerInternalFactory.newTransactionalProcessor(
                 metaModelContext, 
-                this,
-                (FetchResultHandler)this); 
+                this); 
 
         this.state = State.NOT_INITIALIZED;
     }

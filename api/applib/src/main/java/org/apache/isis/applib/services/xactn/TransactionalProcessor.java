@@ -16,19 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.transaction;
+package org.apache.isis.applib.services.xactn;
 
-import java.util.List;
-import java.util.function.Supplier;
+import java.util.concurrent.Callable;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.functional.ThrowingRunnable;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 public interface TransactionalProcessor {
-
-    Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher);
-
-    void doWithinTransaction(ThrowingRunnable runnable);
     
+    /**
+     * Runs given {@code callable} within an existing transactional boundary, or in the absence of such a
+     * boundary creates a new one.
+     *
+     * @param callable
+     */
+    <T> Result<T> executeWithinTransaction(Callable<T> callable);
+    
+    /**
+     * Runs given {@code runnable} within an existing transactional boundary, or in the absence of such a
+     * boundary creates a new one.
+     *
+     * @param runnable
+     */
+    default Result<Void> executeWithinTransaction(ThrowingRunnable runnable) {
+        val callable = ThrowingRunnable.toCallable(runnable);
+        return executeWithinTransaction(callable);
+    }
+
 }

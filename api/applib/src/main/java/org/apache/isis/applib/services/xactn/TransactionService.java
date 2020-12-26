@@ -19,19 +19,12 @@
 
 package org.apache.isis.applib.services.xactn;
 
-import java.util.concurrent.Callable;
-
-import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.functional.ThrowingRunnable;
-
-import lombok.val;
-
 /**
  * Handles <i>global</i> transactions. 
  * Global transactions enable you to work with multiple transactional resources, typically relational databases.
  * @since 2.0 {@index}
  */
-public interface TransactionService {
+public interface TransactionService extends TransactionalProcessor {
 
     /**
      * When called within an existing transactional boundary returns the unique identifier to the transaction,
@@ -62,25 +55,6 @@ public interface TransactionService {
      * If there is no current transaction, then is a no-op.
      */
     void nextTransaction();
-
-    /**
-     * Runs given {@code callable} within an existing transactional boundary, or in the absence of such a
-     * boundary creates a new one.
-     *
-     * @param callable
-     */
-    <T> Result<T> executeWithinTransaction(Callable<T> callable);
-    
-    /**
-     * Runs given {@code runnable} within an existing transactional boundary, or in the absence of such a
-     * boundary creates a new one.
-     *
-     * @param runnable
-     */
-    default Result<Void> executeWithinTransaction(ThrowingRunnable runnable) {
-        val callable = ThrowingRunnable.toCallable(runnable);
-        return executeWithinTransaction(callable);
-    }
 
 
 }

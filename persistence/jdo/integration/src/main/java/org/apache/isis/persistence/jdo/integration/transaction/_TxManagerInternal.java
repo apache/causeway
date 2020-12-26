@@ -19,26 +19,21 @@
 
 package org.apache.isis.persistence.jdo.integration.transaction;
 
-import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import javax.enterprise.inject.Vetoed;
 
-import org.datanucleus.enhancement.Persistable;
-
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.functional.ThrowingRunnable;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
 import org.apache.isis.core.transaction.integration.IsisTransactionManagerException;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
-import org.apache.isis.persistence.jdo.integration.lifecycles.FetchResultHandler;
 import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManager;
 
 import lombok.val;
@@ -54,17 +49,14 @@ implements
     private final MetaModelContext mmc;
     private final Supplier<InteractionContext> interactionContextProvider;
     private final _TxHelper txHelper;
-    private final FetchResultHandler fetchResultHandler;
 
     _TxManagerInternal(
             MetaModelContext mmc, 
-            HasPersistenceManager pmProvider,
-            FetchResultHandler fetchResultHandler) {
+            HasPersistenceManager pmProvider) {
 
         this.mmc = mmc;
         this.interactionContextProvider = ()->mmc.getServiceRegistry().lookupServiceElseFail(InteractionContext.class);
         this.txHelper = _TxHelper.create(pmProvider);
-        this.fetchResultHandler = fetchResultHandler;
     }
 
     public _Tx beginTransaction() {
@@ -328,37 +320,11 @@ implements
     }
     
     @Override
-    public void doWithinTransaction(ThrowingRunnable runnable) {
-        mmc.getTransactionService().executeWithinTransaction(runnable)
-                .nullableOrElseFail();
+    public <T> Result<T> executeWithinTransaction(Callable<T> callable) {
+        return mmc.getTransactionService().executeWithinTransaction(callable);
     }
     
-    @Override
-    public Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher) {
-        final Can<ManagedObject> instances = mmc.getTransactionService().executeWithinTransaction(
-                ()->_NullSafe.stream(fetcher.get())
-                    .map(this::adopt)
-                    .collect(Can.toCan()))
-                .orElseFail();
-        return instances;
-    }
-
     // -- HELPER
-
-    private ManagedObject adopt(final Object fetchedObject) {
-        // handles lifecycle callbacks and injects services
-        
-        // ought not to be necessary, however for some queries it seems that the
-        // lifecycle listener is not called
-        if(fetchedObject instanceof Persistable) {
-            // an entity
-            return fetchResultHandler.initializeEntityAfterFetched((Persistable) fetchedObject);
-            
-        } else {
-            // a value type
-            return fetchResultHandler.initializeValueAfterFetched(fetchedObject);
-        }
-    }
     
     private _Tx getCurrentTransaction() {
         return IsisTransactionAspectSupport.currentTransactionObject()
@@ -366,7 +332,5 @@ implements
                 .map(_Tx.class::cast)
                 .orElse(null);
     }
-
-
 
 }
