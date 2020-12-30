@@ -21,7 +21,7 @@ package org.apache.isis.core.transaction.changetracking;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.isis.core.transaction.integration.IsisTransactionPlaceholder;
+import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 
 import lombok.val;
 import lombok.experimental.PackagePrivate;

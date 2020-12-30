@@ -20,10 +20,10 @@ package org.apache.isis.core.transaction.changetracking;
 
 import org.junit.Test;
 
+import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import org.apache.isis.core.transaction.integration.IsisTransactionPlaceholder;
 
 public class PreAndPostValues_shouldAudit_Test {
 

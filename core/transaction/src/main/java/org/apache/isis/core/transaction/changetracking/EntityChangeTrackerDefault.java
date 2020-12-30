@@ -70,7 +70,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.transaction.integration.IsisTransactionPlaceholder;
+import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 
 import lombok.AccessLevel;
 import lombok.Getter;
