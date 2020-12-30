@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,6 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.transaction.events.TransactionAfterBeginEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -61,11 +59,8 @@ public abstract class IsisIntegrationTestAbstract {
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class InteractionSupport {
 
+        @SuppressWarnings("unused")
         private final Provider<InteractionContext> interactionContextProvider;
-
-        @EventListener
-        public void on(final TransactionAfterBeginEvent event) {
-        }
 
     }
 
