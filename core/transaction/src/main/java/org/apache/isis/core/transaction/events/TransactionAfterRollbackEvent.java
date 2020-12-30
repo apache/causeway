@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.transaction.events;
 
-import org.apache.isis.core.transaction.integration.IsisTransactionObject;
+import org.springframework.transaction.TransactionStatus;
 
 public class TransactionAfterRollbackEvent extends TransactionEventAbstract {
 
     private static final long serialVersionUID = 1L;
     
-    public TransactionAfterRollbackEvent(final IsisTransactionObject source) {
+    public TransactionAfterRollbackEvent(final TransactionStatus source) {
         super(source, Type.AFTER_ROLLBACK);
     }
 }

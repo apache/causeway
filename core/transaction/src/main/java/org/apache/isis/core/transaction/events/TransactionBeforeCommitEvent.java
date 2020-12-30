@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.transaction.events;
 
-import org.apache.isis.core.transaction.integration.IsisTransactionObject;
+import org.springframework.transaction.TransactionStatus;
 
 public class TransactionBeforeCommitEvent extends TransactionEventAbstract {
 
     private static final long serialVersionUID = 1L;
     
-    public TransactionBeforeCommitEvent(final IsisTransactionObject source) {
+    public TransactionBeforeCommitEvent(final TransactionStatus source) {
         super(source, Type.BEFORE_COMMIT);
     }
 }

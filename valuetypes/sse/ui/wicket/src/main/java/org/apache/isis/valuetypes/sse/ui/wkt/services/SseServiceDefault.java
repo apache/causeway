@@ -40,9 +40,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
@@ -69,7 +69,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SseServiceDefault implements SseService {
 
-    //@Inject private TransactionService transactionService;
+    @Inject private TransactionService transactionService;
     @Inject private InteractionFactory isisInteractionFactory;
 
     private final EventStreamPool eventStreamPool = new EventStreamPool();
@@ -95,15 +95,12 @@ public class SseServiceDefault implements SseService {
             break; // fall through
         }
 
-        val callingThread_TransactionLatch = IsisTransactionAspectSupport.transactionLatch();
-
         // spawn a new thread that gets its own session
         CompletableFuture.runAsync(()->{
 
-            // wait for calling thread to commit its current transaction 
-            callingThread_TransactionLatch.await();
-
-            isisInteractionFactory.runAnonymous(()->run(task));
+            isisInteractionFactory.runAnonymous(()->{
+                transactionService.runWithinCurrentTransactionElseCreateNew(()->run(task));                    
+            });
 
         }, executor);
 

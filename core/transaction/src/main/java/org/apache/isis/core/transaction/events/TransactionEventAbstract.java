@@ -20,7 +20,7 @@ package org.apache.isis.core.transaction.events;
 
 import java.util.EventObject;
 
-import org.apache.isis.core.transaction.integration.IsisTransactionObject;
+import org.springframework.transaction.TransactionStatus;
 
 import lombok.Getter;
 
@@ -41,16 +41,16 @@ public abstract class TransactionEventAbstract extends EventObject {
      * Same as {@link #getSource()}.
      */
     @Getter
-    private final IsisTransactionObject isisTransactionObject;
+    private final TransactionStatus transactionStatus;
 
     @Getter
     private final Type type;
 
     public TransactionEventAbstract(
-            final IsisTransactionObject source,
+            final TransactionStatus source,
             final Type type) {
         super(source);
-        this.isisTransactionObject = source;
+        this.transactionStatus = source;
         this.type = type;
     }
 

@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.transaction.events;
 
-import org.apache.isis.core.transaction.integration.IsisTransactionObject;
+import org.springframework.transaction.TransactionStatus;
 
 public class TransactionAfterBeginEvent extends TransactionEventAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public TransactionAfterBeginEvent(final IsisTransactionObject source) {
+    public TransactionAfterBeginEvent(final TransactionStatus source) {
         super(source, Type.AFTER_BEGIN);
     }
 
