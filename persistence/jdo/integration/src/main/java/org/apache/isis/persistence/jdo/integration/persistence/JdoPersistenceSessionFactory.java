@@ -18,16 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-
 public interface JdoPersistenceSessionFactory {
 
     JdoPersistenceSession createPersistenceSession();
-
-    void init(MetaModelContext metaModelContext);
-
-    void catalogNamedQueries();
-
-    boolean isInitialized();
 
 }

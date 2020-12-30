@@ -37,6 +37,8 @@ import org.apache.isis.core.interaction.events.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.events.AppLifecycleEvent;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
+import org.apache.isis.persistence.jdo.integration.persistence.DnApplication;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSessionFactory;
 
@@ -54,6 +56,7 @@ public class JdoPersistenceLifecycleService {
     @Inject MetaModelContext metaModelContext;
     @Inject JdoPersistenceSessionFactory persistenceSessionFactory;
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject DnSettings dnSettings;
 
     @PostConstruct
     public void postConstr() {
@@ -70,10 +73,9 @@ public class JdoPersistenceLifecycleService {
 
         switch (event) {
         case PRE_METAMODEL:
-            create();
             break;
         case POST_METAMODEL:
-            init();
+            new DnApplication(metaModelContext, dnSettings); // creates schema
             break;
 
         default:
@@ -123,14 +125,6 @@ public class JdoPersistenceLifecycleService {
     private Optional<JdoPersistenceSession> currentSession(final InteractionSession interactionSession) {
         return Optional.ofNullable(interactionSession)
                 .map(session->session.getAttribute(JdoPersistenceSession.class));
-    }
-    
-    private void create() {
-        persistenceSessionFactory.init(metaModelContext);
-    }
-
-    private void init() {
-        persistenceSessionFactory.catalogNamedQueries();
     }
 
 

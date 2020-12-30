@@ -150,7 +150,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         copyStartedAtFromInteractionExecution(commandUpdater);
 
-        val result = transactionService.executeWithinTransaction(
+        val result = transactionService.callWithinCurrentTransactionElseCreateNew(
             () -> sudoPolicy == SudoPolicy.SWITCH
                 ? sudoService.call(
                         context->context.withUser(UserMemento.ofName(dto.getUser())),

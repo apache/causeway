@@ -578,7 +578,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
                 childCommand.updater().setParent(parentCommand);
                 return transactionService
-                        .executeWithinTransaction(() -> {
+                        .callWithinCurrentTransactionElseCreateNew(() -> {
                         val bookmark = commandExecutorService.executeCommand(commandDto, CommandOutcomeHandler.NULL);
                         if (bookmark == null) {
                             return null;

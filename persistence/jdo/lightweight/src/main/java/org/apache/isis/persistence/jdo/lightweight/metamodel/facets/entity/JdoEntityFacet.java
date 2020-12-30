@@ -28,11 +28,11 @@ import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
-import org.apache.isis.persistence.jdo.lightweight.metamodel.facets.entity.JdoEntityFacetFactory.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.NonNull;
@@ -102,7 +102,7 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
         
-        return getObjectIdSerializer().stringify(primaryKey);
+        return JdoObjectIdSerializer.toOidIdentifier(primaryKey);
 
     }
 
@@ -111,7 +111,11 @@ implements EntityFacet {
             final @NonNull ObjectSpecification entitySpec, 
             final @NonNull String identifier) {
         
-        val primaryKey = getObjectIdSerializer().parse(identifier);
+        _Assert.assertTrue(entitySpec.isEntity());
+        
+        val rootOid = Oid.Factory.root(entitySpec.getSpecId(), identifier);
+        
+        val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, rootOid);
         val persistenceManager = getPersistenceManager();
         val entity = persistenceManager.getObjectById(entityClass, primaryKey); 
 
@@ -252,17 +256,6 @@ implements EntityFacet {
     
     // -- OBJECT ID SERIALIZATION
     
-    private final _Lazy<JdoObjectIdSerializer<Object>> objectIdSerializerRef = _Lazy.threadSafe(this::createObjectIdSerializer);
-    
-    protected JdoObjectIdSerializer<Object> getObjectIdSerializer() {
-        return objectIdSerializerRef.get();
-    }
-    
-    protected JdoObjectIdSerializer<Object> createObjectIdSerializer() {
-        final Class<?> primaryKeyType = getPersistenceManager().getObjectIdClass(entityClass);
-        return _Casts.uncheckedCast(JdoEntityFacetFactory
-                .createJdoObjectIdSerializer(primaryKeyType, metaModelContext.getServiceRegistry()));
-    }
     
     // -- DEPENDENCIES
     

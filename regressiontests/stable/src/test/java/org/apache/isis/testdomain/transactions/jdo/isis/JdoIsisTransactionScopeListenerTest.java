@@ -88,7 +88,7 @@ class JdoIsisTransactionScopeListenerTest {
             assertEquals(0, repository.allInstances(JdoBook.class).size());
         
             // new transaction (#3)
-            transactionService.executeWithinTransaction(()->{
+            transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 
                 fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
                 

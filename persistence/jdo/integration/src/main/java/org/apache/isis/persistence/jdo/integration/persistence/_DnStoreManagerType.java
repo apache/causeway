@@ -35,14 +35,14 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
  * 
  * @since 2.0.0-M2
  */
-enum _DNStoreManagerType {
+enum _DnStoreManagerType {
 
     SchemaAware,
     Federated, // [ahuber] not used by now
     Other
     ;
 
-    public static _DNStoreManagerType typeOf(Map<String, Object> datanucleusProps) {
+    public static _DnStoreManagerType typeOf(Map<String, Object> datanucleusProps) {
 
         if(hasSecondaryDataStore(datanucleusProps)) {
             return Federated; 
@@ -108,14 +108,14 @@ enum _DNStoreManagerType {
         return false;
     }
 
-    private static _DNStoreManagerType probe(
+    private static _DnStoreManagerType probe(
             Map<String, Object> datanucleusProps, 
-            Function<StoreManager, _DNStoreManagerType> categorizer) {
+            Function<StoreManager, _DnStoreManagerType> categorizer) {
 
         // we create a throw-away instance of PMF so that we can probe whether DN has
         // been configured with a schema-aware store manager or not.
         final JDOPersistenceManagerFactory probePmf = (JDOPersistenceManagerFactory) 
-                _DataNucleusApplicationComponents5.newPersistenceManagerFactory(datanucleusProps);
+                _DnApplicationComponents.newPersistenceManagerFactory(datanucleusProps);
 
         try {
             final PersistenceNucleusContext nucleusContext = probePmf.getNucleusContext();

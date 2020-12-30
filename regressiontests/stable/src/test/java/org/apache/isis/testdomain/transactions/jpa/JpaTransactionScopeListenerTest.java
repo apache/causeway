@@ -90,7 +90,7 @@ class JpaTransactionScopeListenerTest {
             assertEquals(0, repository.allInstances(JpaBook.class).size());
         
             // new transaction (#3)
-            transactionService.executeWithinTransaction(()->{
+            transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 
                 fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
                 

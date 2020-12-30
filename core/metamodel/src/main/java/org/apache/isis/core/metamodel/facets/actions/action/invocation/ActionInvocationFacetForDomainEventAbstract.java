@@ -25,10 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 
-import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
@@ -39,7 +36,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
-import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InternalInteraction;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -57,6 +53,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
@@ -108,7 +105,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val executionResult = 
-                getTransactionService().executeWithinTransaction(()->
+                getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
                     doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy));
 
         //PersistableTypeGuard.instate(executionResult);
@@ -231,10 +228,11 @@ implements ImperativeFacet {
         private final ManagedObject mixinElseRegularAdapter;
         private final ManagedObject mixedInAdapter;
 
+        @SneakyThrows
         @Override
         public Object execute(final ActionInvocation currentExecution) {
 
-            try {
+//            try {
                 // it's possible that an event handler changes these en-route
                 // so we take a non-final copy
                 Can<ManagedObject> argumentAdapters = this.argumentAdapters;
@@ -283,27 +281,27 @@ implements ImperativeFacet {
                 }
                 return UnwrapUtil.single(resultAdapterPossiblyCloned);
 
-            } catch (Exception e) {
-
-                final Consumer<RecoverableException> recovery = recoverableException->{
-
-                    if (!getTransactionState().canCommit()) {
-                        // something severe has happened to the underlying transaction;
-                        // so escalate this exception to be non-recoverable
-                        final Throwable recoverableExceptionCause = recoverableException.getCause();
-                        Throwable nonRecoverableCause = recoverableExceptionCause != null
-                                ? recoverableExceptionCause
-                                        : recoverableException;
-
-                        // trim to first 300 chars
-                        final String message = trim(nonRecoverableCause.getMessage(), 300);
-
-                        throw new NonRecoverableException(message, nonRecoverableCause);
-                    }
-                };
-
-                return ThrowableExtensions.handleInvocationException(e, method.toString(), recovery);
-            }
+//            } catch (Exception e) {
+//
+//                final Consumer<RecoverableException> recovery = recoverableException->{
+//
+//                    if (!getTransactionState().canCommit()) {
+//                        // something severe has happened to the underlying transaction;
+//                        // so escalate this exception to be non-recoverable
+//                        final Throwable recoverableExceptionCause = recoverableException.getCause();
+//                        Throwable nonRecoverableCause = recoverableExceptionCause != null
+//                                ? recoverableExceptionCause
+//                                        : recoverableException;
+//
+//                        // trim to first 300 chars
+//                        final String message = trim(nonRecoverableCause.getMessage(), 300);
+//
+//                        throw new NonRecoverableException(message, nonRecoverableCause);
+//                    }
+//                };
+//
+//                return ThrowableExtensions.handleInvocationException(e, method.toString(), recovery);
+//            }
         }
     }
 

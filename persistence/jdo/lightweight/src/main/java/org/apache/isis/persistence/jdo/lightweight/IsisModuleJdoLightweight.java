@@ -18,7 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.lightweight;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Named;
@@ -85,7 +84,7 @@ public class IsisModuleJdoLightweight {
         
         val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);
-        tapmfProxy.setAllowCreate(true);
+        tapmfProxy.setAllowCreate(false);
         return tapmfProxy;
     }
     
@@ -93,17 +92,14 @@ public class IsisModuleJdoLightweight {
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
             final DnSettings dnSettings) {
         
-        val jdoPropertyMap = new HashMap<String, Object>();
-        dnSettings.getAsMap().forEach(jdoPropertyMap::put);
-        
         val lpmfBean = new LocalPersistenceManagerFactoryBean();
-        lpmfBean.setJdoPropertyMap(jdoPropertyMap);
+        lpmfBean.setJdoPropertyMap(dnSettings.getAsProperties());
         return lpmfBean; 
     }
 
     @Bean @Primary
-    public JdoTransactionManager getJdoTransactionManager(TransactionAwarePersistenceManagerFactoryProxy tapmfProxy) {
-        return new JdoTransactionManager(tapmfProxy.getPersistenceManagerFactory());
+    public JdoTransactionManager getJdoTransactionManager(LocalPersistenceManagerFactoryBean localPmf) {
+        return new JdoTransactionManager(localPmf.getObject());
     }
     
 }

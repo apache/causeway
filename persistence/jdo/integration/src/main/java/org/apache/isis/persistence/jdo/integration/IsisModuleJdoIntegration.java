@@ -18,18 +18,25 @@
  */
 package org.apache.isis.persistence.jdo.integration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoPersistenceLifecycleService;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSessionFactory5;
-import org.apache.isis.persistence.jdo.integration.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
+import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
+import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
+
+import lombok.val;
 
 @Configuration
 @Import({
@@ -43,11 +50,26 @@ import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
         JdoIntegrationProgrammingModel.class,
         
         IsisJdoSupportDN5.class,
-        IsisPlatformTransactionManagerForJdo.class,
+        //IsisPlatformTransactionManagerForJdo.class,
         JdoPersistenceLifecycleService.class,
         JdoPersistenceSessionFactory5.class,
 
 })
 public class IsisModuleJdoIntegration {
+    
+    @Bean 
+    public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
+            final MetaModelContext metaModelContext,
+            final DnSettings dnSettings) {
+        
+        val lpmfBean = new LocalPersistenceManagerFactoryBean();
+        lpmfBean.setJdoPropertyMap(dnSettings.getAsProperties());
+        return lpmfBean; 
+    }
+
+    @Bean @Primary
+    public JdoTransactionManager getJdoTransactionManager(LocalPersistenceManagerFactoryBean localPmfBean) {
+        return new JdoTransactionManager(localPmfBean.getObject());
+    }
     
 }

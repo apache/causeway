@@ -18,6 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -40,14 +42,12 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.persistence.jdo.integration.config.DataNucleusPropertiesAware;
 import org.apache.isis.persistence.jdo.integration.lifecycles.DataNucleusLifeCycleHelper;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
 import lombok.val;
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Vetoed
 @Log4j2
-final class _DataNucleusApplicationComponents5 {
+final class _DnApplicationComponents {
 
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration configuration;
@@ -63,7 +63,7 @@ final class _DataNucleusApplicationComponents5 {
 
     @Getter private PersistenceManagerFactory persistenceManagerFactory;
 
-    public _DataNucleusApplicationComponents5(
+    public _DnApplicationComponents(
             final IsisConfiguration configuration,
             final Map<String, Object> datanucleusProps,
             final Set<String> persistableClassNameSet) {
@@ -93,7 +93,6 @@ final class _DataNucleusApplicationComponents5 {
         try {
             // this is where DN will throw an exception if we pass it any config props it doesn't like the look of.
             // we want to fail, but let's make sure that the error is visible to help the developer
-            
             return JDOHelper.getPersistenceManagerFactory(datanucleusProps, _Context.getDefaultClassLoader());
         } catch(JDOUserException ex) {
             log.fatal(ex);
@@ -106,7 +105,7 @@ final class _DataNucleusApplicationComponents5 {
             final Set<String> persistableClassNameSet, 
             final Map<String, Object> datanucleusProps) {
 
-        final _DNStoreManagerType dnStoreManagerType = _DNStoreManagerType.typeOf(datanucleusProps);
+        final _DnStoreManagerType dnStoreManagerType = _DnStoreManagerType.typeOf(datanucleusProps);
 
         PersistenceManagerFactory persistenceManagerFactory;
 
@@ -224,11 +223,13 @@ final class _DataNucleusApplicationComponents5 {
     }
 
     static void catalogNamedQueries(
-            Set<String> persistableClassNames, SpecificationLoader specificationLoader) {
+            final MetaModelContext metaModelContext,
+            final Set<String> persistableClassNames) {
         
         val namedQueryByName = _Maps.<String, JdoNamedQuery>newHashMap();
         for (val persistableClassName: persistableClassNames) {
-            val spec = specificationLoader.loadSpecification(ObjectSpecId.of(persistableClassName));
+            val spec = metaModelContext.getSpecificationLoader()
+                    .loadSpecification(ObjectSpecId.of(persistableClassName));
             val jdoQueryFacet = spec.getFacet(JdoQueryFacet.class);
             if (jdoQueryFacet == null) {
                 continue;

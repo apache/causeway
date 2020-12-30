@@ -64,7 +64,7 @@ class JdoIsisTransactionRollbackTest_usingTransactionService extends IsisIntegra
         assertEquals(0, repository.allInstances(JdoBook.class).size());
 
 
-        transactionService.executeWithinTransaction(()->{
+        transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
@@ -81,7 +81,7 @@ class JdoIsisTransactionRollbackTest_usingTransactionService extends IsisIntegra
         // expected pre condition
         assertEquals(0, repository.allInstances(JdoBook.class).size());
 
-        val result = transactionService.executeWithinTransaction(()->{
+        val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 

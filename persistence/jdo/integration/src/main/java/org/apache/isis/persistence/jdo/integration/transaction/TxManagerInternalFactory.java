@@ -39,7 +39,7 @@ public class TxManagerInternalFactory {
         isisInteractionTracker.currentInteractionSession()
                 .map(interaction->interaction.putAttribute(_TxProcessor.class, txMan));
         
-        return txMan;
+        return mmc.getTransactionService();
         
     }
 

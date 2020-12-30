@@ -245,7 +245,7 @@ implements EntityFacet {
         log.debug("about to persist entity {}", pojo);
         
         getTransactionalProcessor()
-        .executeWithinTransaction(()->{pm.makePersistent(pojo);})
+        .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
         .nullableOrElseFail();
         
         //TODO integrate with entity change tracking
@@ -267,7 +267,7 @@ implements EntityFacet {
         log.debug("about to delete entity {}", pojo);
         
         getTransactionalProcessor()
-        .executeWithinTransaction(()->{pm.deletePersistent(pojo);})
+        .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
         .nullableOrElseFail();
         
         //TODO integrate with entity change tracking
@@ -287,7 +287,7 @@ implements EntityFacet {
         log.debug("about to refresh entity {}", pojo);
         
         getTransactionalProcessor()
-        .executeWithinTransaction(()->{pm.refresh(pojo);})
+        .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
         .nullableOrElseFail();
         
         //TODO integrate with entity change tracking
@@ -337,14 +337,14 @@ implements EntityFacet {
     private JdoPersistenceSession getJdoPersistenceSession() {
         return isisInteractionTrackerLazy.get().currentInteractionSession()
                 .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
-                .orElse(null);
+                .orElseThrow(()->_Exceptions.illegalState("no JdoPersistenceSession on current thread"));
     }
     
     // -- HELPER
     
     private Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher) {
         val fetchResultHandler = getFetchResultHandler();
-        return getTransactionalProcessor().executeWithinTransaction(
+        return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
                     .map(fetchedObject->adopt(fetchResultHandler, fetchedObject))
                     .collect(Can.toCan()))

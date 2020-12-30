@@ -149,7 +149,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return getTransactionService()
-                .executeWithinTransaction(() ->
+                .callWithinCurrentTransactionElseCreateNew(() ->
                     doSetOrClearProperty(
                             style, 
                             owningProperty, 

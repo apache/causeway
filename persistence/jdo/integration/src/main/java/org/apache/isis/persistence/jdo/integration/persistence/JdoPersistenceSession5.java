@@ -28,7 +28,6 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
-import org.apache.isis.persistence.jdo.integration.transaction.TxManagerInternalFactory;
 
 import lombok.Getter;
 import lombok.val;
@@ -49,7 +48,7 @@ implements
     @Getter(onMethod_ = {@Override}) private final MetaModelContext metaModelContext;
     @Getter(onMethod_ = {@Override}) private FetchResultHandler fetchResultHandler;
 
-    private final PersistenceManagerFactory jdoPersistenceManagerFactory;
+    private final PersistenceManagerFactory pmf;
     private Runnable unregisterLifecycleListeners;
 
     // -- CONSTRUCTOR
@@ -57,23 +56,22 @@ implements
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
+     * @param pmf 
      */
     public JdoPersistenceSession5(
-            final MetaModelContext metaModelContext,
-            final PersistenceManagerFactory jdoPersistenceManagerFactory) {
+            final MetaModelContext metaModelContext, 
+            final PersistenceManagerFactory pmf) {
 
         if (log.isDebugEnabled()) {
             log.debug("creating {}", this);
         }
 
         this.metaModelContext = metaModelContext;
-        this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
+        this.pmf = pmf;
 
         // sub-components
-        this.transactionalProcessor = TxManagerInternalFactory.newTransactionalProcessor(
-                metaModelContext, 
-                this); 
-
+        this.transactionalProcessor = metaModelContext.getTransactionService();
+                
         this.state = State.NOT_INITIALIZED;
     }
 
@@ -102,7 +100,6 @@ implements
 
     // -- OPEN
 
-
     @Override
     public void open() {
         state.ensureNotOpened();
@@ -111,8 +108,8 @@ implements
             log.debug("opening {}", this);
         }
 
-        persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
-
+        this.persistenceManager = pmf.getPersistenceManager();
+        
         val entityChangeTracker = metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(EntityChangeTracker.class);
         
@@ -158,6 +155,17 @@ implements
         unregisterLifecycleListeners = null;
         
         try {
+            
+//            if (!participate) {
+//                
+//                val pmf = pmf;
+//                
+//                PersistenceManagerHolder pmHolder = (PersistenceManagerHolder)
+//                        TransactionSynchronizationManager.unbindResource(pmf);
+//                log.debug("Closing JDO PersistenceManager in PersistenceSession");
+//                PersistenceManagerFactoryUtils.releasePersistenceManager(pmHolder.getPersistenceManager(), pmf);
+//            }
+            
             persistenceManager.close();
         } catch(final Throwable ex) {
             // ignore

@@ -18,19 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.integration.transaction;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -46,24 +38,23 @@ import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport
 import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 import org.apache.isis.core.transaction.integration.IsisTransactionObject.IsisInteractionScopeType;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service
-@Named("isisJdoDn5.IsisPlatformTransactionManagerForJdo")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
-@Qualifier("JdoDN5")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+//@Service
+//@Named("isisJdoDn5.IsisPlatformTransactionManagerForJdo")
+//@Order(OrderPrecedence.MIDPOINT)
+//@Primary
+//@Qualifier("JdoDN5")
+//@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransactionManager {
+public class IsisPlatformTransactionManagerForJdoNoMore extends AbstractPlatformTransactionManager {
 
     private static final long serialVersionUID = 1L;
 
-    private final InteractionFactory isisInteractionFactory;
-    private final EventBusService eventBusService;
-    private final InteractionTracker isisInteractionTracker;
+    private InteractionFactory isisInteractionFactory;
+    private EventBusService eventBusService;
+    private InteractionTracker isisInteractionTracker;
 
     @Override
     protected Object doGetTransaction() throws TransactionException {

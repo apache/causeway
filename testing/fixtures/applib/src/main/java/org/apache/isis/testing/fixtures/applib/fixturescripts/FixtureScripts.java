@@ -351,7 +351,7 @@ public class FixtureScripts {
     	String parameters = null;
     	
     	isisInteractionFactory.runAnonymous(()->{
-    	    transactionService.executeWithinTransaction(()->{
+    	    transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 runScript(singleScript, parameters);
             });    
     	});
@@ -386,7 +386,7 @@ public class FixtureScripts {
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
         
         return isisInteractionFactory.callAnonymous(()->
-            transactionService.executeWithinTransaction(()->
+            transactionService.callWithinCurrentTransactionElseCreateNew(()->
                 runBuilderScriptNonTransactional(builderScript)
             )
         )

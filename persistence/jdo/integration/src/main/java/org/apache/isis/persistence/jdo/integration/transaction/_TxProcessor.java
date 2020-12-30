@@ -16,19 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.persistence.jdo.integration.transaction;
 
-import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
@@ -40,9 +36,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
-class _TxProcessor 
-implements 
-    TransactionalProcessor {
+class _TxProcessor {
 
     // -- constructor, fields
 
@@ -317,11 +311,6 @@ implements
             pmProvider.abortTransaction();
             txObject.clear();
         }
-    }
-    
-    @Override
-    public <T> Result<T> executeWithinTransaction(Callable<T> callable) {
-        return mmc.getTransactionService().executeWithinTransaction(callable);
     }
     
     // -- HELPER

@@ -190,7 +190,7 @@ public class ApplicationLayerTestFactory {
 
         preCommitListener.setVerifier(verifier);
         
-        transactionService.executeWithinTransaction(()->{
+        transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             // when - direct change (circumventing the framework)
             book.setName("Book #2");
