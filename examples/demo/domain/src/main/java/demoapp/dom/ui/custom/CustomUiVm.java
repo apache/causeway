@@ -18,6 +18,8 @@
  */
 package demoapp.dom.ui.custom;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,11 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.CustomUiVm")
-public class CustomUiVm implements HasAsciiDocDescription {
-
-    public String title() {
-        return "Custom UI";
-    }
+public class CustomUiVm implements HasAsciiDocDescription, Serializable {
 
     @Latitude
     @Getter @Setter

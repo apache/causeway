@@ -34,7 +34,7 @@ public class CustomUiMenu {
             cssClassFa="fa-globe",
             describedAs="Opens a Custom UI page displaying a map"
     )
-    public CustomUiVm whereInTheWorld(
+    public CustomUiVm customUiVm(
             @Latitude final String latitude,
             @Longitude final String longitude,
             @PositiveNumber final int scale
