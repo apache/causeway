@@ -30,13 +30,12 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class JdoFetchResultHandler implements FetchResultHandler {
+public class JdoFetchResultHandler {
 
     private final MetaModelContext metaModelContext;
     private final PersistenceManager persistenceManager;
     private final EntityChangeTracker entityChangeTracker;
     
-    @Override
     public ManagedObject initializeEntityAfterFetched(final Persistable pojo) {
 
         final ManagedObject entity = _Utils
@@ -47,7 +46,6 @@ public class JdoFetchResultHandler implements FetchResultHandler {
         return entity;
     }
     
-    @Override
     public ManagedObject initializeValueAfterFetched(final @Nullable Object pojo) {
         return _Utils.adaptNullableAndInjectServices(metaModelContext, pojo);
     }

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,6 +44,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
                 Configuration_usingJdoIsis.class,
                 InteractionBoundaryProbe.class
         })
+@Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 /**
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)

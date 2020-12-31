@@ -25,9 +25,7 @@ import org.apache.isis.persistence.jdo.provider.persistence.HasPersistenceManage
 public interface JdoPersistenceSession 
 extends 
     HasMetaModelContext,
-    HasPersistenceManager,
-    HasTransactionalProcessor,
-    HasFetchResultHandler {
+    HasPersistenceManager {
 
     /**
      * Binds this {@link JdoPersistenceSession} to the current {@link InteractionSession}.

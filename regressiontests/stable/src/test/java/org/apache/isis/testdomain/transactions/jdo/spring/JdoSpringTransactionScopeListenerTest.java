@@ -18,15 +18,14 @@
  */
 package org.apache.isis.testdomain.transactions.jdo.spring;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -78,7 +77,7 @@ class JdoSpringTransactionScopeListenerTest {
         
     }
     
-    @Test @Disabled("wip")
+    @Test
     void sessionScopedProbe_shouldBeReused_andBeAwareofTransactionBoundaries() {
         
         // new IsisInteractionScope

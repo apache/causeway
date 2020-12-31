@@ -40,7 +40,8 @@ import org.apache.isis.core.runtime.events.AppLifecycleEvent;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.integration.persistence.DnApplication;
 import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSessionFactory;
+import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
+import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -54,12 +55,14 @@ import lombok.extern.log4j.Log4j2;
 public class JdoPersistenceLifecycleService {
 
     @Inject MetaModelContext metaModelContext;
-    @Inject JdoPersistenceSessionFactory persistenceSessionFactory;
+    //@Inject LocalPersistenceManagerFactoryBean localPmfBean;
+    @Inject TransactionAwarePersistenceManagerFactoryProxy txAwarePmfProxy;
+    
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
     @Inject DnSettings dnSettings;
 
     @PostConstruct
-    public void postConstr() {
+    public void init() {
         if(log.isDebugEnabled()) {
             log.debug("init entity types {}", 
                     isisBeanTypeRegistry.getEntityTypesJdo());
@@ -111,8 +114,7 @@ public class JdoPersistenceLifecycleService {
     // -- HELPER
 
     private void onInteractionStarted(final InteractionSession interactionSession) {
-        val persistenceSession =
-                persistenceSessionFactory.createPersistenceSession();
+        val persistenceSession = new JdoPersistenceSession5(metaModelContext, txAwarePmfProxy.getObject());
         interactionSession.putAttribute(JdoPersistenceSession.class, persistenceSession);
         persistenceSession.open();
     }

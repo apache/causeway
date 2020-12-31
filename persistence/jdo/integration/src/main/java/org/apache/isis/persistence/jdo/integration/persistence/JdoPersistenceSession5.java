@@ -22,7 +22,6 @@ import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
@@ -44,9 +43,7 @@ implements
     // -- FIELDS
 
     @Getter(onMethod_ = {@Override}) private PersistenceManager persistenceManager;
-    @Getter(onMethod_ = {@Override}) private final TransactionalProcessor transactionalProcessor;
     @Getter(onMethod_ = {@Override}) private final MetaModelContext metaModelContext;
-    @Getter(onMethod_ = {@Override}) private FetchResultHandler fetchResultHandler;
 
     private final PersistenceManagerFactory pmf;
     private Runnable unregisterLifecycleListeners;
@@ -68,9 +65,6 @@ implements
 
         this.metaModelContext = metaModelContext;
         this.pmf = pmf;
-
-        // sub-components
-        this.transactionalProcessor = metaModelContext.getTransactionService();
                 
         this.state = State.NOT_INITIALIZED;
     }
@@ -115,9 +109,6 @@ implements
         
         val entityChangeEmitter = 
                 new JdoEntityChangeEmitter(getMetaModelContext(), persistenceManager, entityChangeTracker);
-        
-        fetchResultHandler = 
-                new JdoFetchResultHandler(getMetaModelContext(), persistenceManager, entityChangeTracker);
         
         val isisLifecycleListener = new IsisLifecycleListener(entityChangeEmitter);
         persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[]) null);
@@ -166,7 +157,8 @@ implements
 //                PersistenceManagerFactoryUtils.releasePersistenceManager(pmHolder.getPersistenceManager(), pmf);
 //            }
             
-            persistenceManager.close();
+            persistenceManager = null; // detach
+            
         } catch(final Throwable ex) {
             // ignore
             log.error(

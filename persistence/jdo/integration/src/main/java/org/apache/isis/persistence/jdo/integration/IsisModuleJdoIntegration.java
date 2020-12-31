@@ -18,6 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.integration;
 
+import javax.inject.Named;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -31,10 +33,10 @@ import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoPersistenceLifecycleService;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSessionFactory5;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
+import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.val;
 
@@ -50,17 +52,42 @@ import lombok.val;
         JdoIntegrationProgrammingModel.class,
         
         IsisJdoSupportDN5.class,
-        //IsisPlatformTransactionManagerForJdo.class,
         JdoPersistenceLifecycleService.class,
-        JdoPersistenceSessionFactory5.class,
 
 })
 public class IsisModuleJdoIntegration {
+    
+    /**
+     * {@link TransactionAwarePersistenceManagerFactoryProxy} was retired by the Spring Framework, recommended usage is still online [1].
+     * Sources have been recovered from [2].
+     * @see [1] https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html
+     * @see [2] https://github.com/spring-projects/spring-framework/tree/2b3445df8134e2b0c4e4a4c4136cbaf9d58b7fc4/spring-orm/src/main/java/org/springframework/orm/jdo
+     */
+    @Bean @Named("transaction-aware-pmf-proxy")
+    public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
+            final LocalPersistenceManagerFactoryBean localPmfBean) {
+        
+        val pmf = localPmfBean.getObject(); // created once per application lifecycle
+        
+        val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        tapmfProxy.setTargetPersistenceManagerFactory(pmf);
+        tapmfProxy.setAllowCreate(false);
+        return tapmfProxy;
+    }
     
     @Bean 
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
             final MetaModelContext metaModelContext,
             final DnSettings dnSettings) {
+
+        //final IsisBeanTypeRegistry beanTypeRegistry,
+        // final DnSettings dnSettings,
+        //final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners
+        
+//      _NullSafe.stream(jdoEntityDiscoveryListeners)
+//      .forEach(listener->{
+//          listener.onEntitiesDiscovered(pmf, beanTypeRegistry.getEntityTypesJdo(), dnSettings.getAsMap());    
+//      });
         
         val lpmfBean = new LocalPersistenceManagerFactoryBean();
         lpmfBean.setJdoPropertyMap(dnSettings.getAsProperties());
@@ -69,7 +96,10 @@ public class IsisModuleJdoIntegration {
 
     @Bean @Primary
     public JdoTransactionManager getJdoTransactionManager(LocalPersistenceManagerFactoryBean localPmfBean) {
-        return new JdoTransactionManager(localPmfBean.getObject());
+        
+        val pmf = localPmfBean.getObject(); // created once per application lifecycle
+        
+        return new JdoTransactionManager(pmf);
     }
     
 }

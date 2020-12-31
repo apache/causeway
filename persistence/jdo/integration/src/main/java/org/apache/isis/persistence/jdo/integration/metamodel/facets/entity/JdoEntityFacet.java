@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
 
@@ -33,27 +34,27 @@ import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.repository.EntityState;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
-import org.apache.isis.persistence.jdo.integration.persistence.FetchResultHandler;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
+import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.NonNull;
 import lombok.val;
@@ -63,6 +64,11 @@ import lombok.extern.log4j.Log4j2;
 public class JdoEntityFacet 
 extends FacetAbstract
 implements EntityFacet {
+    
+    @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
+    @Inject private TransactionService txService;
+    @Inject private EntityChangeTracker entityChangeTracker;
+    @Inject private ObjectManager objectManager;
 
     public JdoEntityFacet(
             final FacetHolder holder) {
@@ -317,52 +323,55 @@ implements EntityFacet {
     // -- INTERACTION TRACKER LAZY LOOKUP
     
     // memoizes the lookup, just an optimization 
-    private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
-            ()->getServiceRegistry().lookupServiceElseFail(InteractionTracker.class));
+//    private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
+//            ()->getServiceRegistry().lookupServiceElseFail(InteractionTracker.class));
     
     // -- DEPENDENCIES
     
     private PersistenceManager getPersistenceManager() {
-        return getJdoPersistenceSession().getPersistenceManager();
+        if(pmf==null) {
+            getFacetHolder().getServiceInjector().injectServicesInto(this);
+        }
+        return pmf.getPersistenceManager();
     }
     
     private TransactionalProcessor getTransactionalProcessor() {
-        return getJdoPersistenceSession().getTransactionalProcessor();
+        if(txService==null) {
+            getFacetHolder().getServiceInjector().injectServicesInto(this);
+        }
+        return txService;
     }
     
-    private FetchResultHandler getFetchResultHandler() {
-        return getJdoPersistenceSession().getFetchResultHandler();
-    }
-    
-    private JdoPersistenceSession getJdoPersistenceSession() {
-        return isisInteractionTrackerLazy.get().currentInteractionSession()
-                .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
-                .orElseThrow(()->_Exceptions.illegalState("no JdoPersistenceSession on current thread"));
-    }
+//    private JdoPersistenceSession getJdoPersistenceSession() {
+//        return isisInteractionTrackerLazy.get().currentInteractionSession()
+//                .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
+//                .orElseThrow(()->_Exceptions.illegalState("no JdoPersistenceSession on current thread"));
+//    }
     
     // -- HELPER
     
     private Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher) {
-        val fetchResultHandler = getFetchResultHandler();
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
-                    .map(fetchedObject->adopt(fetchResultHandler, fetchedObject))
+                    .map(fetchedObject->adopt(fetchedObject))
                     .collect(Can.toCan()))
                 .orElseFail();
     }
     
-    private ManagedObject adopt(final FetchResultHandler fetchResultHandler, final Object fetchedObject) {
+    private ManagedObject adopt(final Object fetchedObject) {
         // handles lifecycle callbacks and injects services
         
         // ought not to be necessary, however for some queries it seems that the
         // lifecycle listener is not called
         if(fetchedObject instanceof Persistable) {
             // an entity
-            return fetchResultHandler.initializeEntityAfterFetched((Persistable) fetchedObject);
-            
+            val entity = objectManager.adapt(fetchedObject); 
+                    //fetchResultHandler.initializeEntityAfterFetched((Persistable) fetchedObject);
+            entityChangeTracker.recognizeLoaded(entity);
+            return entity;
         } else {
             // a value type
-            return fetchResultHandler.initializeValueAfterFetched(fetchedObject);
+            return objectManager.adapt(fetchedObject);
         }
     }
     
