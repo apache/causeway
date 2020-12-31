@@ -20,53 +20,64 @@ package org.apache.isis.testdomain.util.interaction;
 
 import java.util.function.Supplier;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
-import org.springframework.stereotype.Component;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
-import org.apache.isis.applib.services.TransactionScopeListener;
+import org.apache.isis.core.interaction.events.InteractionLifecycleEvent;
+import org.apache.isis.core.transaction.events.TransactionBeginEvent;
+import org.apache.isis.core.transaction.events.TransactionEndingEvent;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-@Component
-@IsisInteractionScope
-public class InteractionBoundaryProbe implements TransactionScopeListener {
+@Service
+@Log4j2
+public class InteractionBoundaryProbe {
 
     @Inject private KVStoreForTesting kvStoreForTesting;
-
-    /** INTERACTION BEGIN BOUNDARY */
-    @PostConstruct
-    public void init() {
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
-    }
-
-    /** INTERACTION END BOUNDARY */
-    @PreDestroy
-    public void destroy() {
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
-    }
-
-    /** TRANSACTION BEGIN BOUNDARY */
-    @Override
-    public void onTransactionStarted() {
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txStarted");
-    }
-
-    /** TRANSACTION END BOUNDARY */
-    @Override
-    public void onPreCommit(PreCommitPhase preCommitPhase) {
-        switch (preCommitPhase) {
-        case POST_PUBLISHING:
-            kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
+    
+    
+    @EventListener(InteractionLifecycleEvent.class)
+    public void onIsisInteractionLifecycleEvent(InteractionLifecycleEvent event) {
+        switch(event.getEventType()) {
+        case HAS_STARTED:
+            onIaStarted();
+            break;
+        case IS_ENDING:
+            onIaEnded();
             break;
         default:
             break;
         }
+    }
+
+    /** INTERACTION BEGIN BOUNDARY */
+    public void onIaStarted() {
+        log.debug("iaStarted");
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
+    }
+
+    /** INTERACTION END BOUNDARY */
+    public void onIaEnded() {
+        log.debug("iaEnded");
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
+    }
+
+    /** TRANSACTION BEGIN BOUNDARY */
+    @EventListener(TransactionBeginEvent.class)
+    public void onTransactionStarted(TransactionBeginEvent event) {
+        log.debug("txStarted");
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txStarted");
+    }
+
+    /** TRANSACTION END BOUNDARY */
+    @EventListener(TransactionEndingEvent.class)
+    public void onPreCommit(TransactionEndingEvent event) {
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
     }
     
     // -- ACCESS TO COUNTERS

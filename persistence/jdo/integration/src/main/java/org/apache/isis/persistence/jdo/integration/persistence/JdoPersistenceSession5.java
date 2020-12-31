@@ -18,15 +18,23 @@
  */
 package org.apache.isis.persistence.jdo.integration.persistence;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
+
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
+import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.Getter;
 import lombok.val;
@@ -45,8 +53,10 @@ implements
     @Getter(onMethod_ = {@Override}) private PersistenceManager persistenceManager;
     @Getter(onMethod_ = {@Override}) private final MetaModelContext metaModelContext;
 
-    private final PersistenceManagerFactory pmf;
-    private Runnable unregisterLifecycleListeners;
+    private final PlatformTransactionManager txManager;
+    private final TransactionAwarePersistenceManagerFactoryProxy pmf;
+    private final List<Runnable> onCloseTasks = new ArrayList<>();
+    private TransactionStatus nonParticipatingTransactionalBoundary;
 
     // -- CONSTRUCTOR
     
@@ -57,13 +67,15 @@ implements
      */
     public JdoPersistenceSession5(
             final MetaModelContext metaModelContext, 
-            final PersistenceManagerFactory pmf) {
+            final PlatformTransactionManager txManager,
+            final TransactionAwarePersistenceManagerFactoryProxy pmf) {
 
         if (log.isDebugEnabled()) {
             log.debug("creating {}", this);
         }
 
         this.metaModelContext = metaModelContext;
+        this.txManager = txManager;
         this.pmf = pmf;
                 
         this.state = State.NOT_INITIALIZED;
@@ -102,7 +114,67 @@ implements
             log.debug("opening {}", this);
         }
 
-        this.persistenceManager = pmf.getPersistenceManager();
+        val txTemplate = new TransactionTemplate(txManager);
+        txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+        // either reuse existing or create new
+        val txStatus = txManager.getTransaction(txTemplate);
+        if(txStatus.isNewTransaction()) {
+            // we have created a new transaction, 
+            nonParticipatingTransactionalBoundary = txStatus;
+        } else {
+            // we are participating in an exiting transaction
+        }
+        
+        this.persistenceManager = integrateWithApplicationLayer(pmf.getPersistenceManager());
+        
+        this.state = State.OPEN;
+    }
+
+    // -- CLOSE
+
+
+
+    @Override
+    public void close() {
+
+        if (state == State.CLOSED) {
+            // nothing to do
+            return;
+        }
+
+        try {
+            
+            if (nonParticipatingTransactionalBoundary!=null) {
+                
+                if(nonParticipatingTransactionalBoundary.isRollbackOnly()) {
+                    txManager.rollback(nonParticipatingTransactionalBoundary);
+                } else {
+                    txManager.commit(nonParticipatingTransactionalBoundary);
+                }
+            }
+        
+            onCloseTasks.removeIf(task->{
+                if(!persistenceManager.isClosed()) {
+                    task.run();    
+                }
+                return true; 
+             });
+            
+        } catch(final Throwable ex) {
+            // ignore
+            log.error(
+                    "close: failed to close JDO persistenceManager; continuing to avoid memory leakage", ex);
+        }
+        
+        persistenceManager = null; // detach
+
+        this.state = State.CLOSED;
+    }
+    
+    // -- HELPER
+    
+    private PersistenceManager integrateWithApplicationLayer(final PersistenceManager persistenceManager) {
         
         val entityChangeTracker = metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(EntityChangeTracker.class);
@@ -124,48 +196,12 @@ implements
         persistenceManager.addInstanceLifecycleListener(loadLifecycleListener, (Class[]) null);
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
         
-        this.unregisterLifecycleListeners = ()->{
+        onCloseTasks.add(()->{
             persistenceManager.removeInstanceLifecycleListener(loadLifecycleListener);
             persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
-        };
-
-        this.state = State.OPEN;
-    }
-
-    // -- CLOSE
-
-    @Override
-    public void close() {
-
-        if (state == State.CLOSED) {
-            // nothing to do
-            return;
-        }
-
-        unregisterLifecycleListeners.run();
-        unregisterLifecycleListeners = null;
+        });
         
-        try {
-            
-//            if (!participate) {
-//                
-//                val pmf = pmf;
-//                
-//                PersistenceManagerHolder pmHolder = (PersistenceManagerHolder)
-//                        TransactionSynchronizationManager.unbindResource(pmf);
-//                log.debug("Closing JDO PersistenceManager in PersistenceSession");
-//                PersistenceManagerFactoryUtils.releasePersistenceManager(pmHolder.getPersistenceManager(), pmf);
-//            }
-            
-            persistenceManager = null; // detach
-            
-        } catch(final Throwable ex) {
-            // ignore
-            log.error(
-                    "close: failed to close JDO persistenceManager; continuing to avoid memory leakage");
-        }
-
-        this.state = State.CLOSED;
+        return persistenceManager;
     }
 
 

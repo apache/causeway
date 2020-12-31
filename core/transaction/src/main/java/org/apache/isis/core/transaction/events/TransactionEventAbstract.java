@@ -16,38 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.interaction.integration;
+package org.apache.isis.core.transaction.events;
 
-import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.security.authentication.Authentication;
+import java.util.EventObject;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.TransactionStatus;
 
-/**
- * 
- * @since 2.0
- */
-@RequiredArgsConstructor(staticName = "next")
-public class IsisRequestCycle {
+import lombok.Getter;
 
-    private final InteractionFactory isisInteractionFactory;
+public abstract class TransactionEventAbstract extends EventObject {
 
-    // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
+    private static final long serialVersionUID = 1L;
+    
+    /**
+     * Same as {@link #getSource()}.
+     */
+    @Getter private final TransactionStatus transactionStatus;
 
-    public void onBeginRequest(Authentication authentication) {
-
-        isisInteractionFactory.openInteraction(authentication);
+    public TransactionEventAbstract(final TransactionStatus source) {
+        super(source);
+        this.transactionStatus = source;
     }
-
-    public void onRequestHandlerExecuted() {
-
-    }
-
-    public void onEndRequest() {
-
-        isisInteractionFactory.closeSessionStack();
-
-    }
-
 
 }

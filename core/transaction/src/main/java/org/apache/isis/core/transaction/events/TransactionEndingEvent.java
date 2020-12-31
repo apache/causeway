@@ -16,24 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.interaction.events;
+package org.apache.isis.core.transaction.events;
 
-import org.apache.isis.core.interaction.session.InteractionSession;
+import org.springframework.transaction.TransactionStatus;
 
-import lombok.Getter;
-import lombok.ToString;
-import lombok.Value;
+public class TransactionEndingEvent extends TransactionEventAbstract {
 
-@Value(staticConstructor="of") @ToString(of = "eventType")
-public class IsisInteractionLifecycleEvent {
-
-    public enum EventType {
-        HAS_STARTED,
-        IS_ENDING,
+    private static final long serialVersionUID = 1L;
+    
+    public TransactionEndingEvent(final TransactionStatus source) {
+        super(source);
     }
-
-    @Getter String conversationId;
-    @Getter InteractionSession interactionSession;
-    @Getter EventType eventType;
-
 }

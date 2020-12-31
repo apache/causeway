@@ -92,6 +92,10 @@ public enum TransactionState {
         return this == COMMITTED || this == ABORTED;
     }
 
+    public boolean isInProgress() {
+        return this == IN_PROGRESS;
+    }
+    
     public boolean mustAbort() {
         return this == MUST_ABORT;
     }

@@ -16,13 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.interaction.scope;
+package org.apache.isis.core.transaction.events;
 
-/**
- * @since 2.0
- */
-public interface IsisInteractionScopeCloseListener {
+import org.springframework.transaction.TransactionStatus;
 
-    void preTopLevelIsisInteractionClose();
+public class TransactionEndedEvent extends TransactionEventAbstract {
+
+    private static final long serialVersionUID = 1L;
     
+    public TransactionEndedEvent(final TransactionStatus source) {
+        super(source);
+    }
 }

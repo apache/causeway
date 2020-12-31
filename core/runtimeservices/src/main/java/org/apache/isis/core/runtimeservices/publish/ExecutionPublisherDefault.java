@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
+import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
@@ -48,7 +48,7 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@IsisInteractionScope
+@InteractionScope
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class ExecutionPublisherDefault 

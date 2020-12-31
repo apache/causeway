@@ -32,12 +32,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
-import org.apache.isis.applib.annotation.IsisInteractionScope;
+import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
-import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -71,6 +71,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
+import org.apache.isis.core.transaction.events.TransactionEndedEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -86,11 +87,10 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@IsisInteractionScope
+@InteractionScope
 @Log4j2
 public class EntityChangeTrackerDefault
 implements
-    TransactionScopeListener,
     MetricsService,
     EntityChangeTracker,
     HasEnlistedEntityPropertyChanges,
@@ -175,26 +175,28 @@ implements
     /**
      * @apiNote intended to be called during pre-commit of a transaction by the framework internally
      */
-    @Override
-    public void onPreCommit(PreCommitPhase preCommitPhase) {
-        switch (preCommitPhase) {
-        case WHILE_PUBLISHING:
-            log.debug("about to publish entity changes");
-            prepareCommandPublishing();
-            entityPropertyChangePublisher.publishChangedProperties(this);
-            entityChangesPublisher.publishChangingEntities(this);
-            break;
-        case POST_PUBLISHING:
-            log.debug("purging entity change records");
-            enlistedEntityPropertiesForAuditing.clear();
-            changeKindByEnlistedAdapter.clear();
-            changedObjectPropertiesRef.clear();
-            entityChangeEventCount.reset();
-            numberEntitiesLoaded.reset();
-            break;
-        default:
-            break;
-        }
+
+    /** TRANSACTION END BOUNDARY */
+    @TransactionalEventListener(TransactionEndedEvent.class)
+    public void onPreCommit(TransactionEndedEvent event) {
+        whilePublishing();
+        postPublishing();
+    }
+
+    private void whilePublishing() {
+        log.debug("about to publish entity changes");
+        prepareCommandPublishing();
+        entityPropertyChangePublisher.publishChangedProperties(this);
+        entityChangesPublisher.publishChangingEntities(this);
+    }
+
+    private void postPublishing() {
+        log.debug("purging entity change records");
+        enlistedEntityPropertiesForAuditing.clear();
+        changeKindByEnlistedAdapter.clear();
+        changedObjectPropertiesRef.clear();
+        entityChangeEventCount.reset();
+        numberEntitiesLoaded.reset();
     }
 
     private void prepareCommandPublishing() {
@@ -416,8 +418,8 @@ implements
             final TransactionId txId) {
 
         return getPropertyChangeRecords().stream()
-        .map(propertyChangeRecord->EntityPropertyChangeFactory
-                .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord));
+                .map(propertyChangeRecord->EntityPropertyChangeFactory
+                        .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord));
     }
 
 }

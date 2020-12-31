@@ -38,7 +38,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.interaction.events.IsisInteractionLifecycleEvent;
+import org.apache.isis.core.interaction.events.InteractionLifecycleEvent;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
@@ -59,45 +59,6 @@ import lombok.RequiredArgsConstructor;
 })
 public class Configuration_headless {
 
-//    @Bean @Singleton
-//    public TransactionService transactionService() {
-//        return new TransactionService() {
-//
-//            @Override
-//            public TransactionId currentTransactionId() {
-//                return null;
-//            }
-//
-//            @Override
-//            public void flushTransaction() {
-//            }
-//
-//            @Override
-//            public TransactionState currentTransactionState() {
-//                return null;
-//            }
-//
-//            @Override
-//            public void executeWithinTransaction(Runnable task) {
-//            }
-//
-//            @Override
-//            public <T> T executeWithinTransaction(Supplier<T> task) {
-//                return null;
-//            }
-//
-//            @Override
-//            public void executeWithinNewTransaction(Runnable task) {
-//            }
-//
-//            @Override
-//            public <T> T executeWithinNewTransaction(Supplier<T> task) {
-//                return null;
-//            }
-//
-//        };
-//    }
-    
     @Service
     @Order(OrderPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -107,8 +68,8 @@ public class Configuration_headless {
 //        private final CommandDispatcher commandDispatcher;
 
 
-        @EventListener(IsisInteractionLifecycleEvent.class)
-        public void onIsisInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
+        @EventListener(InteractionLifecycleEvent.class)
+        public void onIsisInteractionLifecycleEvent(InteractionLifecycleEvent event) {
             switch(event.getEventType()) {
             case HAS_STARTED:
                 _Probe.errOut("Interaction HAS_STARTED conversationId=%s", event.getConversationId());

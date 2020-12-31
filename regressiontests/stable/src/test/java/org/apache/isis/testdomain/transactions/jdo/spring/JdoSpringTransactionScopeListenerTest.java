@@ -26,7 +26,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -42,13 +44,19 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
         classes = { 
                 Configuration_usingJdoSpring.class,
                 InteractionBoundaryProbe.class
+        },
+        properties = {
+                "logging.level.org.apache.isis.testdomain.util.interaction.InteractionBoundaryProbe=DEBUG",
+                "logging.level.org.apache.isis.core.interaction.scope.IsisInteractionScope=DEBUG",
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
+@Transactional
 /**
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
  */
 class JdoSpringTransactionScopeListenerTest {
     
+    @Inject private ServiceRegistry serviceRegistry;
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
@@ -66,6 +74,9 @@ class JdoSpringTransactionScopeListenerTest {
     
     @BeforeEach
     void setUp() {
+        
+        // request a InteractionBoundaryProbe for the current interaction
+        serviceRegistry.lookupServiceElseFail(InteractionBoundaryProbe.class);
         
         // new IsisInteractionScope with a new transaction (#1)
         isisInteractionFactory.runAnonymous(()->{

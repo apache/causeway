@@ -27,13 +27,13 @@ import java.lang.annotation.Target;
 import org.springframework.context.annotation.Scope;
 
 /**
- * {@code @IsisInteractionScope} is a specialization of {@link Scope @Scope} for a
- * component whose lifecycle is bound to the current top-level IsisInteraction.
+ * {@code @InteractionScope} is a specialization of {@link Scope @Scope} for a
+ * component whose lifecycle is bound to the current top-level Interaction.
  *
- * <p>Specifically, {@code @IsisInteractionScope} is a <em>composed annotation</em> that
- * acts as a shortcut for {@code @Scope("isis-interaction")}.
+ * <p>Specifically, {@code @InteractionScope} is a <em>composed annotation</em> that
+ * acts as a shortcut for {@code @Scope("interaction")}.
  *
- * <p>{@code @IsisInteractionScope} may be used as a meta-annotation to create custom
+ * <p>{@code @InteractionScope} may be used as a meta-annotation to create custom
  * composed annotations.
  *
  * @since 2.0 {@index}
@@ -46,7 +46,7 @@ import org.springframework.context.annotation.Scope;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Scope("isis-interaction")
-public @interface IsisInteractionScope {
+@Scope("interaction")
+public @interface InteractionScope {
 
 }

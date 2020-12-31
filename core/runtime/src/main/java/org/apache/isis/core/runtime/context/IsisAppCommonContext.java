@@ -22,9 +22,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -101,11 +98,6 @@ public class IsisAppCommonContext implements HasMetaModelContext {
     
     public <T> T injectServicesInto(T pojo) {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
-    }
-    
-    public TransactionTemplate createTransactionTemplate() {
-        val txMan = lookupServiceElseFail(PlatformTransactionManager.class);
-        return new TransactionTemplate(txMan);
     }
     
     public ObjectMemento mementoFor(ManagedObject adapter) {

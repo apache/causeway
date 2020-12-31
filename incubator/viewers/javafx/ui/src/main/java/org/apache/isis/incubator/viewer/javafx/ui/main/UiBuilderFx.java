@@ -27,19 +27,18 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.interaction.events.IsisInteractionLifecycleEvent;
+import org.apache.isis.core.interaction.events.InteractionLifecycleEvent;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
-
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -66,8 +65,8 @@ public class UiBuilderFx {
         stage.show();
     }
 
-    @EventListener(IsisInteractionLifecycleEvent.class)
-    public void onIsisInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
+    @EventListener(InteractionLifecycleEvent.class)
+    public void onInteractionLifecycleEvent(InteractionLifecycleEvent event) {
         switch(event.getEventType()) {
         case HAS_STARTED:
             //TODO this would be the place to indicate to the user, that a long running task has started  

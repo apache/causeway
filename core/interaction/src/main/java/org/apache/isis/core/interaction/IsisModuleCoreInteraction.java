@@ -3,12 +3,12 @@ package org.apache.isis.core.interaction;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.interaction.scope.IsisInteractionScopeBeanFactoryPostProcessor;
+import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 
 @Configuration
 @Import({
     
-    IsisInteractionScopeBeanFactoryPostProcessor.class
+    InteractionScopeBeanFactoryPostProcessor.class
     
 })
 public class IsisModuleCoreInteraction {

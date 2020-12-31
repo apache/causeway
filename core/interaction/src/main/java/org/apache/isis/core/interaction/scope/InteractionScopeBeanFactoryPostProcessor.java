@@ -33,21 +33,21 @@ import lombok.val;
  * @since 2.0
  */
 @Component
-public class IsisInteractionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+public class InteractionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        val isisInteractionScope = new IsisInteractionScope();
-        // scope name as defined in annotation @IsisInteractionScope
-        beanFactory.registerScope("isis-interaction", isisInteractionScope);
-        _Context.put(IsisInteractionScope.class, isisInteractionScope, true);
+        val interactionScope = new InteractionScope();
+        // scope name as defined in annotation @InteractionScope
+        beanFactory.registerScope("interaction", interactionScope);
+        _Context.put(InteractionScope.class, interactionScope, true);
     }
 
-    public static IsisInteractionScopeCloseListener initIsisInteractionScopeSupport(
+    public static InteractionScopeLifecycleHandler initIsisInteractionScopeSupport(
             @NonNull final ServiceInjector serviceInjector) {
-        val isisInteractionScope = _Context.getElseFail(IsisInteractionScope.class);
-        serviceInjector.injectServicesInto(isisInteractionScope);
-        _Context.remove(IsisInteractionScope.class); // cleanup
-        return isisInteractionScope;
+        val interactionScope = _Context.getElseFail(InteractionScope.class);
+        serviceInjector.injectServicesInto(interactionScope);
+        _Context.remove(InteractionScope.class); // cleanup
+        return interactionScope;
     }
 }

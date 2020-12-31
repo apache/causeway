@@ -16,35 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.applib.services;
-
-import org.apache.isis.applib.annotation.IsisInteractionScope;
+package org.apache.isis.core.interaction.scope;
 
 /**
- * Domain services that need to be aware of transaction boundaries can
- * implement this interface.
- * 
- * @apiNote Implementing services most likely need to be scoped in a way that
- * binds the scope to the current thread (eg. {@link IsisInteractionScope})
- *  
- * @since 2.0 (renamed from WithTransactionScope) {@index}
+ * @since 2.0
  */
-public interface TransactionScopeListener {
-    
-    enum PreCommitPhase {
-        PRE_PUBLISHING,
-        WHILE_PUBLISHING,
-        POST_PUBLISHING
-    }
-    
-    default void onTransactionStarted() {
-        // default: do nothing
-    }
+public interface InteractionScopeLifecycleHandler {
 
-    /** triggered during the pre-commit phase in a transaction*/
-    default void onPreCommit(PreCommitPhase preCommitPhase) {
-        // default: do nothing
-    }
+    void onTopLevelInteractionOpened();
+    void onTopLevelInteractionClosing();
     
 }

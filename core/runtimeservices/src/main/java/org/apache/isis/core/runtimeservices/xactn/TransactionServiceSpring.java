@@ -87,6 +87,7 @@ public class TransactionServiceSpring implements TransactionService {
     public void nextTransaction() {
         
         val txManager = singletonTransactionManagerElseFail(); 
+        
         val txTemplate = new TransactionTemplate(txManager);
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
@@ -126,19 +127,15 @@ public class TransactionServiceSpring implements TransactionService {
         return currentTransactionStatus()
         .map(txStatus->{
         
-            if(txStatus.isNewTransaction()) {
-                return txStatus.isRollbackOnly()
-                        ? TransactionState.MUST_ABORT
-                        : TransactionState.IN_PROGRESS;
-            }
-
             if(txStatus.isCompleted()) {
                 return txStatus.isRollbackOnly()
                         ? TransactionState.ABORTED
                         : TransactionState.COMMITTED;
             }
             
-            throw _Exceptions.unexpectedCodeReach();
+            return txStatus.isRollbackOnly()
+                    ? TransactionState.MUST_ABORT
+                    : TransactionState.IN_PROGRESS;
             
         })
         .orElse(TransactionState.NONE);

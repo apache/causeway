@@ -18,6 +18,11 @@
  */
 package org.apache.isis.testdomain.persistence.jdo.spring;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Optional;
@@ -37,11 +42,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -99,7 +99,7 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
     void platformTransactionManager_shouldBeAvailable() {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
-            assertEquals("JdoTransactionManager", ptm.getClass().getSimpleName());
+            assertEquals("ApplicationLayerAwareTransactionManager", ptm.getClass().getSimpleName());
         });
     }
     

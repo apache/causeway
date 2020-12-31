@@ -29,11 +29,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.interaction.events.IsisInteractionLifecycleEvent;
+import org.apache.isis.core.interaction.events.InteractionLifecycleEvent;
 import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.events.AppLifecycleEvent;
@@ -57,6 +58,9 @@ public class JdoPersistenceLifecycleService {
     @Inject MetaModelContext metaModelContext;
     //@Inject LocalPersistenceManagerFactoryBean localPmfBean;
     @Inject TransactionAwarePersistenceManagerFactoryProxy txAwarePmfProxy;
+    
+    @Named("jdo-platform-transaction-manager")
+    @Inject PlatformTransactionManager txManager;
     
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
     @Inject DnSettings dnSettings;
@@ -87,8 +91,8 @@ public class JdoPersistenceLifecycleService {
 
     }
 
-    @EventListener(IsisInteractionLifecycleEvent.class)
-    public void onInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
+    @EventListener(InteractionLifecycleEvent.class)
+    public void onInteractionLifecycleEvent(InteractionLifecycleEvent event) {
 
         val eventType = event.getEventType();
         val interactionSession = event.getInteractionSession();
@@ -114,7 +118,7 @@ public class JdoPersistenceLifecycleService {
     // -- HELPER
 
     private void onInteractionStarted(final InteractionSession interactionSession) {
-        val persistenceSession = new JdoPersistenceSession5(metaModelContext, txAwarePmfProxy.getObject());
+        val persistenceSession = new JdoPersistenceSession5(metaModelContext, txManager, txAwarePmfProxy);
         interactionSession.putAttribute(JdoPersistenceSession.class, persistenceSession);
         persistenceSession.open();
     }

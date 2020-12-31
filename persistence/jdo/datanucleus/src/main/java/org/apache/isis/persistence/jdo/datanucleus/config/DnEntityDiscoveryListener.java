@@ -33,6 +33,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.persistence.jdo.provider.config.JdoEntityDiscoveryListener;
 
+import lombok.NonNull;
 import lombok.val;
 
 @Component
@@ -40,9 +41,9 @@ public class DnEntityDiscoveryListener implements JdoEntityDiscoveryListener {
 
     @Override
     public void onEntitiesDiscovered(
-            final PersistenceManagerFactory persistenceManagerFactory, 
-            final Set<Class<?>> entityTypes,
-            final Map<String, String> dnSettings) {
+            final @NonNull PersistenceManagerFactory persistenceManagerFactory, 
+            final @NonNull Set<Class<?>> entityTypes,
+            final @NonNull Map<String, String> dnSettings) {
 
         if(_NullSafe.isEmpty(entityTypes)) {
             return; // skip

@@ -38,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Log4j2
-class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
+class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     
     @Inject private InteractionTracker isisInteractionTracker;
 
@@ -61,13 +61,13 @@ class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
     public Object get(String name, ObjectFactory<?> objectFactory) {
         
         if(isisInteractionTracker==null) {
-            throw _Exceptions.illegalState("Creation of bean %s with @IsisInteractionScope requires the "
-                    + "IsisInteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
+            throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
+                    + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
         
         if(!isisInteractionTracker.isInInteractionSession()) {
-            throw _Exceptions.illegalState("Creation of bean %s with @IsisInteractionScope requires the "
-                    + "calling %s to have an open IsisInteraction on the thread-local stack. Running into "
+            throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
+                    + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
                     + "... @Inject Provider<MyScopedBean> provider ...", name, _Probe.currentThreadId());
         }
@@ -113,11 +113,12 @@ class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
     }
     
     @Override
-    public void preTopLevelIsisInteractionClose() {
-        removeAll();
+    public void onTopLevelInteractionOpened() {
+        // nothing to do
     }
-    
-    private void removeAll() {
+
+    @Override
+    public void onTopLevelInteractionClosing() {
         try {
             scopedObjects.get().values().forEach(ScopedObject::preDestroy);
         } finally {

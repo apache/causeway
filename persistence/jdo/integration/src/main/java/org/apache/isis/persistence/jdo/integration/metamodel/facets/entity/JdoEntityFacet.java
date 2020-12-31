@@ -67,7 +67,6 @@ implements EntityFacet {
     
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private TransactionService txService;
-    @Inject private EntityChangeTracker entityChangeTracker;
     @Inject private ObjectManager objectManager;
 
     public JdoEntityFacet(
@@ -351,14 +350,17 @@ implements EntityFacet {
     // -- HELPER
     
     private Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher) {
+        
+        val entityChangeTracker = getFacetHolder().getServiceRegistry().lookupServiceElseFail(EntityChangeTracker.class); 
+        
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
-                    .map(fetchedObject->adopt(fetchedObject))
+                    .map(fetchedObject->adopt(entityChangeTracker, fetchedObject))
                     .collect(Can.toCan()))
                 .orElseFail();
     }
     
-    private ManagedObject adopt(final Object fetchedObject) {
+    private ManagedObject adopt(final EntityChangeTracker entityChangeTracker, final Object fetchedObject) {
         // handles lifecycle callbacks and injects services
         
         // ought not to be necessary, however for some queries it seems that the

@@ -16,38 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.interaction.integration;
+package org.apache.isis.core.interaction.events;
 
-import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.interaction.session.InteractionSession;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.Value;
 
-/**
- * 
- * @since 2.0
- */
-@RequiredArgsConstructor(staticName = "next")
-public class IsisRequestCycle {
+@Value(staticConstructor="of") @ToString(of = "eventType")
+public class InteractionLifecycleEvent {
 
-    private final InteractionFactory isisInteractionFactory;
-
-    // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
-
-    public void onBeginRequest(Authentication authentication) {
-
-        isisInteractionFactory.openInteraction(authentication);
+    public enum EventType {
+        HAS_STARTED,
+        IS_ENDING,
     }
 
-    public void onRequestHandlerExecuted() {
-
-    }
-
-    public void onEndRequest() {
-
-        isisInteractionFactory.closeSessionStack();
-
-    }
-
+    @Getter String conversationId;
+    @Getter InteractionSession interactionSession;
+    @Getter EventType eventType;
 
 }
