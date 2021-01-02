@@ -117,7 +117,7 @@ public class JdoPersistenceLifecycleService {
     // -- HELPER
 
     private void onInteractionStarted(final InteractionSession interactionSession) {
-        val persistenceSession = new JdoPersistenceSession5(metaModelContext, txManager, txAwarePmfProxy);
+        val persistenceSession = new JdoPersistenceSession5(metaModelContext, txAwarePmfProxy);
         interactionSession.putAttribute(JdoPersistenceSession.class, persistenceSession);
         persistenceSession.open();
     }

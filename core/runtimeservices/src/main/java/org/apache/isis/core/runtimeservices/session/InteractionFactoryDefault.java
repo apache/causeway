@@ -52,6 +52,7 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
@@ -97,6 +98,7 @@ implements InteractionFactory, InteractionTracker {
     @Inject IsisConfiguration configuration;
     @Inject ServiceInjector serviceInjector;
     
+    @Inject InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     @Inject ClockService clockService;
     @Inject CommandPublisher commandPublisher;
 
@@ -302,6 +304,7 @@ implements InteractionFactory, InteractionTracker {
     
     private void postSessionOpened(InteractionSession session) {
         conversationId.set(UUID.randomUUID());
+        txBoundaryHandler.onOpen(session);
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
         runtimeEventService.fireInteractionHasStarted(session); // only fire on top-level session
     }
@@ -310,6 +313,7 @@ implements InteractionFactory, InteractionTracker {
         completeAndPublishCurrentCommand();
         runtimeEventService.fireInteractionIsEnding(session); // only fire on top-level session 
         interactionScopeLifecycleHandler.onTopLevelInteractionClosing(); // cleanup the isis-session scope
+        txBoundaryHandler.onClose(session);
         session.close(); // do this last
     }
     

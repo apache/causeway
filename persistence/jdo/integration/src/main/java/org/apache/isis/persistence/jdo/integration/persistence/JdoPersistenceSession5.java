@@ -24,11 +24,6 @@ import java.util.List;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManager;
 
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
@@ -53,10 +48,8 @@ implements
     @Getter(onMethod_ = {@Override}) private PersistenceManager persistenceManager;
     @Getter(onMethod_ = {@Override}) private final MetaModelContext metaModelContext;
 
-    private final PlatformTransactionManager txManager;
     private final TransactionAwarePersistenceManagerFactoryProxy pmf;
     private final List<Runnable> onCloseTasks = new ArrayList<>();
-    private TransactionStatus nonParticipatingTransactionalBoundary;
 
     // -- CONSTRUCTOR
     
@@ -67,7 +60,6 @@ implements
      */
     public JdoPersistenceSession5(
             final MetaModelContext metaModelContext, 
-            final PlatformTransactionManager txManager,
             final TransactionAwarePersistenceManagerFactoryProxy pmf) {
 
         if (log.isDebugEnabled()) {
@@ -75,7 +67,6 @@ implements
         }
 
         this.metaModelContext = metaModelContext;
-        this.txManager = txManager;
         this.pmf = pmf;
                 
         this.state = State.NOT_INITIALIZED;
@@ -113,18 +104,6 @@ implements
         if (log.isDebugEnabled()) {
             log.debug("opening {}", this);
         }
-
-        val txTemplate = new TransactionTemplate(txManager);
-        txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-
-        // either reuse existing or create new
-        val txStatus = txManager.getTransaction(txTemplate);
-        if(txStatus.isNewTransaction()) {
-            // we have created a new transaction, 
-            nonParticipatingTransactionalBoundary = txStatus;
-        } else {
-            // we are participating in an exiting transaction
-        }
         
         this.persistenceManager = integrateWithApplicationLayer(pmf.getPersistenceManager());
         
@@ -144,15 +123,6 @@ implements
         }
 
         try {
-            
-            if (nonParticipatingTransactionalBoundary!=null) {
-                
-                if(nonParticipatingTransactionalBoundary.isRollbackOnly()) {
-                    txManager.rollback(nonParticipatingTransactionalBoundary);
-                } else {
-                    txManager.commit(nonParticipatingTransactionalBoundary);
-                }
-            }
         
             onCloseTasks.removeIf(task->{
                 if(!persistenceManager.isClosed()) {
