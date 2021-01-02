@@ -63,11 +63,11 @@ class JdoSpringTransactionScopeListenerTest {
     @Inject private KVStoreForTesting kvStoreForTesting;
     
     /* Expectations:
-     * 1. for each IsisInteractionScope there should be a new InteractionBoundaryProbe instance
+     * 1. for each InteractionScope there should be a new InteractionBoundaryProbe instance
      * 2. for each Transaction the current InteractionBoundaryProbe should get notified
      * 
-     * first we have 1 IsisInteractionScope with 1 expected Transaction during 'setUp'
-     * then we have 1 IsisInteractionScope with 3 expected Transactions within the test method
+     * first we have 1 InteractionScope with 1 expected Transaction during 'setUp'
+     * then we have 1 InteractionScope with 1 expected Transaction within the test method
      *  
      */
     
@@ -90,17 +90,17 @@ class JdoSpringTransactionScopeListenerTest {
     @Test
     void sessionScopedProbe_shouldBeReused_andBeAwareofTransactionBoundaries() {
         
-        // new IsisInteractionScope
+        // new IsisInteractionScope with a new transaction (#2)
         isisInteractionFactory.runAnonymous(()->{
             
             // request an InteractionBoundaryProbe for the current interaction
             serviceRegistry.lookupServiceElseFail(InteractionBoundaryProbe.class);
             
             // expected pre condition
-            // new transaction (#2)
+            // reuse existing transaction (#2)
             assertEquals(0, repository.allInstances(JdoBook.class).size());
         
-            // new transaction (#3)
+            // reuse existing transaction (#2)
             transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 
                 fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
@@ -108,15 +108,15 @@ class JdoSpringTransactionScopeListenerTest {
             });
             
             // expected post condition
-            // new transaction (#4)
+            // reuse existing transaction (#2)
             assertEquals(1, repository.allInstances(JdoBook.class).size());
             
         });
         
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(1, InteractionBoundaryProbe.totalTransactionsStarted(kvStoreForTesting));
-        assertEquals(1, InteractionBoundaryProbe.totalTransactionsEnded(kvStoreForTesting));
+        assertEquals(2, InteractionBoundaryProbe.totalTransactionsStarted(kvStoreForTesting));
+        assertEquals(2, InteractionBoundaryProbe.totalTransactionsEnded(kvStoreForTesting));
 
     }
     

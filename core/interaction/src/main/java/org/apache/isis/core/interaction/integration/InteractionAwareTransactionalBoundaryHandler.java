@@ -46,7 +46,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisInteraction.TransactionalBoundary")
+@Named("isisInteraction.InteractionAwareTransactionalBoundaryHandler")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -121,10 +121,11 @@ public class InteractionAwareTransactionalBoundaryHandler {
         val txTemplate = new TransactionTemplate(txManager);
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
-        // either reuse existing or create new
+        // either participate in existing or create new transaction
         val txStatus = txManager.getTransaction(txTemplate);
-        if(!txStatus.isNewTransaction()) {
-            // we are participating in an exiting transaction, nothing to do
+        if(txStatus==null // in support of JUnit testing (TransactionManagers might be mocked or hollow stubs)
+                || !txStatus.isNewTransaction()) {
+            // we are participating in an exiting transaction (or testing), nothing to do
             return;
         }
         
