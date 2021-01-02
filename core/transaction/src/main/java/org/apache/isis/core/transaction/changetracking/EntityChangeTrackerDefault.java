@@ -71,7 +71,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
-import org.apache.isis.core.transaction.events.TransactionEndedEvent;
+import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -177,8 +177,8 @@ implements
      */
 
     /** TRANSACTION END BOUNDARY */
-    @TransactionalEventListener(TransactionEndedEvent.class)
-    public void onPreCommit(TransactionEndedEvent event) {
+    @TransactionalEventListener(TransactionBeforeCompletionEvent.class)
+    public void onPreCommit(TransactionBeforeCompletionEvent event) {
         whilePublishing();
         postPublishing();
     }

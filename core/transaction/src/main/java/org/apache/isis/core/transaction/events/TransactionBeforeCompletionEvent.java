@@ -18,13 +18,15 @@
  */
 package org.apache.isis.core.transaction.events;
 
-import org.springframework.transaction.TransactionStatus;
+import lombok.Value;
 
-public class TransactionEndingEvent extends TransactionEventAbstract {
-
-    private static final long serialVersionUID = 1L;
+@Value
+public class TransactionBeforeCompletionEvent {
     
-    public TransactionEndingEvent(final TransactionStatus source) {
-        super(source);
+    private final static TransactionBeforeCompletionEvent INSTANCE = new TransactionBeforeCompletionEvent(); 
+    
+    public static TransactionBeforeCompletionEvent instance() {
+        return INSTANCE;
     }
+
 }

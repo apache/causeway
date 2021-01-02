@@ -103,8 +103,8 @@ class JdoIsisTransactionScopeListenerTest {
         
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalTransactionsStarted(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalTransactionsEnded(kvStoreForTesting));
+        assertEquals(2, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
+        assertEquals(2, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
 
     }
     

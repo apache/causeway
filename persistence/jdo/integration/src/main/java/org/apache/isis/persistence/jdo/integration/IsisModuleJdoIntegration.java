@@ -25,10 +25,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
-import org.apache.isis.core.transaction.manager.ApplicationLayerAwareTransactionManager;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
@@ -97,14 +95,12 @@ public class IsisModuleJdoIntegration {
     }
 
     @Bean @Primary @Named("jdo-platform-transaction-manager")
-    public ApplicationLayerAwareTransactionManager getApplicationLayerAwareTransactionManager(
-            LocalPersistenceManagerFactoryBean localPmfBean,
-            EventBusService eventBusService) {
+    public JdoTransactionManager getTransactionManager(
+            LocalPersistenceManagerFactoryBean localPmfBean) {
         
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
         
-        return new ApplicationLayerAwareTransactionManager(
-                new JdoTransactionManager(pmf), eventBusService);    
+        return new JdoTransactionManager(pmf);    
     }
     
 }

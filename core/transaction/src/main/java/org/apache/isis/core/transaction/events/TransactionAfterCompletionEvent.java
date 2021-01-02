@@ -18,14 +18,38 @@
  */
 package org.apache.isis.core.transaction.events;
 
-import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionSynchronization;
 
-public class TransactionBeginEvent extends TransactionEventAbstract {
+/**
+ * @since 2.0 {@index}
+ * @see {@link TransactionSynchronization}
+ */
+public enum TransactionAfterCompletionEvent {
 
-    private static final long serialVersionUID = 1L;
+    /** Completion status in case of proper commit. */
+    COMMITTED,
 
-    public TransactionBeginEvent(final TransactionStatus source) {
-        super(source);
+    /** Completion status in case of proper rollback. */
+    ROLLED_BACK,
+    
+    /** Completion status in case of heuristic mixed completion or system errors. */
+    UNKNOWN,
+    ;
+    
+    public static TransactionAfterCompletionEvent forStatus(int status) {
+        return TransactionAfterCompletionEvent.values()[status];
     }
-
+    
+    public boolean isCommitted() {
+        return this == COMMITTED;
+    }
+    
+    public boolean isRolledBack() {
+        return this == ROLLED_BACK;
+    }
+    
+    public boolean isUnknown() {
+        return this == UNKNOWN;
+    }
+    
 }

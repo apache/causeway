@@ -16,15 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.events;
+package org.apache.isis.applib.interaction;
 
-import org.springframework.transaction.TransactionStatus;
+public interface InteractionScopeAware {
 
-public class TransactionEndedEvent extends TransactionEventAbstract {
-
-    private static final long serialVersionUID = 1L;
-    
-    public TransactionEndedEvent(final TransactionStatus source) {
-        super(source);
+    default void beforeEnteringTransactionalBoundary() {
+        
     }
+    
+    default void afterEnteringTransactionalBoundary(boolean isSynchronizationActive) {
+        
+    }
+    
+    default void beforeLeavingTransactionalBoundary(boolean isSynchronizationActive) {
+        
+    }
+    
+    default void afterLeavingTransactionalBoundary() {
+        
+    }
+    
 }

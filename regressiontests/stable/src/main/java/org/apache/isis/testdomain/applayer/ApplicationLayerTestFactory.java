@@ -49,7 +49,7 @@ import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.transaction.events.TransactionEndingEvent;
+import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -88,8 +88,8 @@ public class ApplicationLayerTestFactory {
         @Setter private Consumer<VerificationStage> verifier;
         
         /** TRANSACTION END BOUNDARY */
-        @EventListener(TransactionEndingEvent.class)
-        public void onPreCommit(TransactionEndingEvent event) {
+        @EventListener(TransactionBeforeCompletionEvent.class)
+        public void onPreCommit(TransactionBeforeCompletionEvent event) {
             if(verifier!=null) {
                 verifier.accept(VerificationStage.PRE_COMMIT);
             }
