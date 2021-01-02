@@ -56,7 +56,6 @@ import lombok.extern.log4j.Log4j2;
 public class JdoPersistenceLifecycleService {
 
     @Inject MetaModelContext metaModelContext;
-    //@Inject LocalPersistenceManagerFactoryBean localPmfBean;
     @Inject TransactionAwarePersistenceManagerFactoryProxy txAwarePmfProxy;
     
     @Named("jdo-platform-transaction-manager")

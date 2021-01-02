@@ -97,7 +97,7 @@ public class JdoMetamodelMenu {
     }
 
     private PersistenceManagerFactory getPersistenceManagerFactory() {
-        return jdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
+        return jdoSupport.getPersistenceManager().getPersistenceManagerFactory();
     }
 
 }

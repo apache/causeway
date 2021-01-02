@@ -51,7 +51,7 @@ import lombok.Setter;
  */
 public class InteractionSession {
 
-    @Getter private final long lifecycleStartedAtSystemNanos;
+    @Getter private final long startedAtSystemNanos;
     
     /**
      * The {@link MessageBroker} that holds messages for this session.
@@ -67,7 +67,7 @@ public class InteractionSession {
             @NonNull final MetaModelContext mmc) {
 
         this.metaModelContext = mmc;
-        this.lifecycleStartedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
+        this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.interaction = new IsisInteraction(UUID.randomUUID());
     }
 

@@ -63,7 +63,7 @@ public interface IsisJdoSupport {
     void ensureLoaded(Collection<?> collectionOfDomainObjects);
 
     @Programmatic
-    PersistenceManager getJdoPersistenceManager();
+    PersistenceManager getPersistenceManager();
 
     @Programmatic
     List<Map<String, Object>> executeSql(String sql);

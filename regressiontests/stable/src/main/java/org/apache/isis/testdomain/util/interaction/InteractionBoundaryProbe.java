@@ -76,7 +76,7 @@ public class InteractionBoundaryProbe {
 
     /** TRANSACTION END BOUNDARY */
     @EventListener(TransactionEndingEvent.class)
-    public void onPreCommit(TransactionEndingEvent event) {
+    public void onTransactionEnding(TransactionEndingEvent event) {
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
     }
     

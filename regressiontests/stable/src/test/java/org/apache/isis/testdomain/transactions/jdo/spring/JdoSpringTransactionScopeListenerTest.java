@@ -26,7 +26,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -50,7 +49,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
                 "logging.level.org.apache.isis.core.interaction.scope.IsisInteractionScope=DEBUG",
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Transactional
+//@Transactional
 /**
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
  */
@@ -75,11 +74,11 @@ class JdoSpringTransactionScopeListenerTest {
     @BeforeEach
     void setUp() {
         
-        // request a InteractionBoundaryProbe for the current interaction
-        serviceRegistry.lookupServiceElseFail(InteractionBoundaryProbe.class);
-        
         // new IsisInteractionScope with a new transaction (#1)
         isisInteractionFactory.runAnonymous(()->{
+            
+            // request an InteractionBoundaryProbe for the current interaction
+            serviceRegistry.lookupServiceElseFail(InteractionBoundaryProbe.class);
         
             // cleanup
             fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
@@ -93,6 +92,9 @@ class JdoSpringTransactionScopeListenerTest {
         
         // new IsisInteractionScope
         isisInteractionFactory.runAnonymous(()->{
+            
+            // request an InteractionBoundaryProbe for the current interaction
+            serviceRegistry.lookupServiceElseFail(InteractionBoundaryProbe.class);
             
             // expected pre condition
             // new transaction (#2)
@@ -113,8 +115,8 @@ class JdoSpringTransactionScopeListenerTest {
         
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(4, InteractionBoundaryProbe.totalTransactionsStarted(kvStoreForTesting));
-        assertEquals(4, InteractionBoundaryProbe.totalTransactionsEnded(kvStoreForTesting));
+        assertEquals(1, InteractionBoundaryProbe.totalTransactionsStarted(kvStoreForTesting));
+        assertEquals(1, InteractionBoundaryProbe.totalTransactionsEnded(kvStoreForTesting));
 
     }
     

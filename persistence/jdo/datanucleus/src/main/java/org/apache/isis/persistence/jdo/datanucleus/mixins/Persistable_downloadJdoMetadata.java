@@ -77,7 +77,7 @@ public class Persistable_downloadJdoMetadata {
     }
 
     private PersistenceManagerFactory getPersistenceManagerFactory() {
-        return jdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
+        return jdoSupport.getPersistenceManager().getPersistenceManagerFactory();
     }
 
 }

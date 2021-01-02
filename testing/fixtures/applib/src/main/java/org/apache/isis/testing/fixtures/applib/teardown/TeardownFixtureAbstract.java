@@ -28,8 +28,8 @@ import javax.jdo.metadata.TypeMetadata;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 @Programmatic
 public abstract class TeardownFixtureAbstract extends FixtureScript {
@@ -41,7 +41,7 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
 
         final String value = discriminatorValueOf(cls);
         if(value == null) {
-            final TypeMetadata metadata = isisJdoSupport.getJdoPersistenceManager()
+            final TypeMetadata metadata = isisJdoSupport.getPersistenceManager()
                             .getPersistenceManagerFactory().getMetadata(cls.getName());
             if(metadata == null) {
                 // fall-back
@@ -173,7 +173,7 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
     }
 
     private PersistenceManagerFactory getPersistenceManagerFactory() {
-        return isisJdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
+        return isisJdoSupport.getPersistenceManager().getPersistenceManagerFactory();
     }
 
     @Inject private IsisJdoSupport isisJdoSupport;

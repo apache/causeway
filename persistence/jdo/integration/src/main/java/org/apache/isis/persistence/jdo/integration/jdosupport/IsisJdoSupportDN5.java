@@ -47,11 +47,10 @@ import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
+import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.val;
 
@@ -67,8 +66,13 @@ import lombok.val;
 @Qualifier("DN5")
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
-    @Inject private InteractionTracker isisInteractionTracker;
+    @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private MetaModelContext mmc;
+    
+    @Override
+    public PersistenceManager getPersistenceManager() {
+        return pmf.getPersistenceManager();
+    }
     
     @Override
     public <T> T refresh(final T domainObject) {
@@ -80,7 +84,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     @Override
     public void ensureLoaded(final Collection<?> domainObjects) {
-        getPersistenceSession().getPersistenceManager().retrieveAll(domainObjects);
+        getPersistenceManager().retrieveAll(domainObjects);
     }
 
     // //////////////////////////////////////
@@ -88,7 +92,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     @Override
     public List<Map<String, Object>> executeSql(final String sql) {
-        final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
+        final JDOConnection dataStoreConnection = getPersistenceManager().getDataStoreConnection();
         try {
             final Object connectionObj = dataStoreConnection.getNativeConnection();
             if(!(connectionObj instanceof java.sql.Connection)) {
@@ -104,7 +108,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     @Override
     public Integer executeUpdate(final String sql) {
-        final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
+        final JDOConnection dataStoreConnection = getPersistenceManager().getDataStoreConnection();
         try {
             final Object connectionObj = dataStoreConnection.getNativeConnection();
             if(!(connectionObj instanceof java.sql.Connection)) {
@@ -158,11 +162,11 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     @Override
     public void deleteAll(final Class<?>... pcClasses) {
         for (final Class<?> pcClass : pcClasses) {
-            final Extent<?> extent = getJdoPersistenceManager().getExtent(pcClass);
+            final Extent<?> extent = getPersistenceManager().getExtent(pcClass);
             final List<Object> instances = stream(extent).collect(Collectors.toList());
 
             try {
-                getJdoPersistenceManager().deletePersistentAll(instances);
+                getPersistenceManager().deletePersistentAll(instances);
             } catch (final Exception ex) {
                 throw new FatalException(ex);
             }
@@ -194,7 +198,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     @Override
     public <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls) {
-        return getJdoPersistenceManager().newJDOQLTypedQuery(cls);
+        return getPersistenceManager().newJDOQLTypedQuery(cls);
     }
 
     private static <T> List<T> executeListAndClose(final JDOQLTypedQuery<T> query) {
@@ -216,16 +220,5 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         }
     }
 
-    // //////////////////////////////////////
 
-    protected JdoPersistenceSession getPersistenceSession() {
-        return isisInteractionTracker.currentInteractionSession()
-                .map(interaction->interaction.getAttribute(JdoPersistenceSession.class))
-                .orElse(null);
-    }
-
-    @Override
-    public PersistenceManager getJdoPersistenceManager() {
-        return getPersistenceSession().getPersistenceManager();
-    }
 }

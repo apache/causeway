@@ -1,5 +1,7 @@
 package org.apache.isis.persistence.jdo.lightweight.services;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -26,8 +28,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 @Service
 @Named("isisJdoLightweight.LightweightJdoSupport")
 public class LightweightJdoSupport implements IsisJdoSupport_v3_2 {
@@ -37,14 +37,14 @@ public class LightweightJdoSupport implements IsisJdoSupport_v3_2 {
     
     @Override
     public <T> T refresh(final T domainObject) {
-        getJdoPersistenceManager().refresh(domainObject);
+        getPersistenceManager().refresh(domainObject);
         return domainObject;
     }
 
 
     @Override
     public void ensureLoaded(final Collection<?> domainObjects) {
-        getJdoPersistenceManager().retrieveAll(domainObjects);
+        getPersistenceManager().retrieveAll(domainObjects);
     }
 
     // //////////////////////////////////////
@@ -52,7 +52,7 @@ public class LightweightJdoSupport implements IsisJdoSupport_v3_2 {
 
     @Override
     public List<Map<String, Object>> executeSql(final String sql) {
-        final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
+        final JDOConnection dataStoreConnection = getPersistenceManager().getDataStoreConnection();
         try {
             final Object connectionObj = dataStoreConnection.getNativeConnection();
             if(!(connectionObj instanceof java.sql.Connection)) {
@@ -68,7 +68,7 @@ public class LightweightJdoSupport implements IsisJdoSupport_v3_2 {
 
     @Override
     public Integer executeUpdate(final String sql) {
-        final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
+        final JDOConnection dataStoreConnection = getPersistenceManager().getDataStoreConnection();
         try {
             final Object connectionObj = dataStoreConnection.getNativeConnection();
             if(!(connectionObj instanceof java.sql.Connection)) {
@@ -122,11 +122,11 @@ public class LightweightJdoSupport implements IsisJdoSupport_v3_2 {
     @Override
     public void deleteAll(final Class<?>... pcClasses) {
         for (final Class<?> pcClass : pcClasses) {
-            final Extent<?> extent = getJdoPersistenceManager().getExtent(pcClass);
+            final Extent<?> extent = getPersistenceManager().getExtent(pcClass);
             final List<Object> instances = stream(extent).collect(Collectors.toList());
 
             try {
-                getJdoPersistenceManager().deletePersistentAll(instances);
+                getPersistenceManager().deletePersistentAll(instances);
             } catch (final Exception ex) {
                 throw new FatalException(ex);
             }
@@ -158,7 +158,7 @@ public class LightweightJdoSupport implements IsisJdoSupport_v3_2 {
 
     @Override
     public <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls) {
-        return getJdoPersistenceManager().newJDOQLTypedQuery(cls);
+        return getPersistenceManager().newJDOQLTypedQuery(cls);
     }
 
     private static <T> List<T> executeListAndClose(final JDOQLTypedQuery<T> query) {
@@ -183,7 +183,7 @@ public class LightweightJdoSupport implements IsisJdoSupport_v3_2 {
     // //////////////////////////////////////
 
     @Override
-    public PersistenceManager getJdoPersistenceManager() {
+    public PersistenceManager getPersistenceManager() {
         return pmf.getPersistenceManager();
     }
 

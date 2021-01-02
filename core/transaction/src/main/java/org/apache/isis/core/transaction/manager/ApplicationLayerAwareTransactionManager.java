@@ -41,6 +41,8 @@ implements PlatformTransactionManager {
     @Override
     public TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
        val txStatus = txManager.getTransaction(definition);
+       
+       // don't post events when participating in existing transaction
        if(txStatus.isNewTransaction()) {
            eventBusService.post(new TransactionBeginEvent(txStatus));
        }
