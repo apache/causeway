@@ -89,7 +89,7 @@ implements InteractionScopeAware {
     }
     
     @Override
-    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+    public void afterEnteringTransactionalBoundary(InteractionSession interactionSession, boolean sync) {
         val persistenceSession = new JdoInteractionSession(metaModelContext, txAwarePmfProxy);
         interactionSession.putAttribute(JdoInteractionSession.class, persistenceSession);
         persistenceSession.open();
