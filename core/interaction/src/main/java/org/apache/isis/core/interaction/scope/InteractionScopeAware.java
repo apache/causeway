@@ -16,23 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.interaction;
+package org.apache.isis.core.interaction.scope;
+
+import org.apache.isis.core.interaction.session.InteractionSession;
 
 public interface InteractionScopeAware {
 
-    default void beforeEnteringTransactionalBoundary() {
+    default void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
         
     }
     
-    default void afterEnteringTransactionalBoundary(boolean isSynchronizationActive) {
+    default void afterEnteringTransactionalBoundary(InteractionSession interactionSession, boolean isSynchronizationActive) {
         
     }
     
-    default void beforeLeavingTransactionalBoundary(boolean isSynchronizationActive) {
+    default void beforeLeavingTransactionalBoundary(InteractionSession interactionSession, boolean isSynchronizationActive) {
         
     }
     
-    default void afterLeavingTransactionalBoundary() {
+    default void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
         
     }
     

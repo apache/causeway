@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.session;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -33,6 +33,7 @@ import javax.jdo.PersistenceManagerFactory;
 import org.datanucleus.PersistenceNucleusContext;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.enhancer.EnhancementHelper;
 import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
@@ -45,7 +46,6 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.persistence.jdo.integration.config.DataNucleusPropertiesAware;
-import org.apache.isis.persistence.jdo.integration.lifecycles.DataNucleusLifeCycleHelper;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
@@ -79,12 +79,23 @@ final class _DnApplicationComponents {
     /**
      * Marks the end of DataNucleus' life-cycle. Purges any state associated with DN.
      * Subsequent calls have no effect.
-     *
+     * <p>
+     * (requires datanucleus-core 4 or 5 >= 5.1.5)
      * @since 2.0.0
      */
     public void shutdown() {
         if(persistenceManagerFactory != null) {
-            DataNucleusLifeCycleHelper.cleanUp(persistenceManagerFactory);
+            
+            try {
+                final ClassLoader cl = _Context.getDefaultClassLoader();
+                persistenceManagerFactory.close();
+                // for info, on why we do this see
+                // https://github.com/datanucleus/datanucleus-core/issues/272
+                EnhancementHelper.getInstance().unregisterClasses(cl);
+            } catch (Exception e) {
+                // ignore, since it only affects re-deploy-ability, which is nice to have but not critical
+            }
+            
             persistenceManagerFactory = null;
         }
     }

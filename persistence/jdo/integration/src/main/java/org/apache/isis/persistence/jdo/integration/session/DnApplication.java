@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.session;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;

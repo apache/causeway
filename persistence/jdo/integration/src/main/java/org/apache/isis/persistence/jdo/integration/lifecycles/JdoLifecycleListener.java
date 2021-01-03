@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.integration.lifecycles;
 
 import java.util.Map;
 
+import javax.enterprise.inject.Vetoed;
 import javax.jdo.listener.AttachLifecycleListener;
 import javax.jdo.listener.ClearLifecycleListener;
 import javax.jdo.listener.CreateLifecycleListener;
@@ -34,10 +35,17 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.events.AppLifecycleEventService;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
+import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-public class IsisLifecycleListener
+@Vetoed // managed by isis
+@RequiredArgsConstructor
+public class JdoLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
 DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener {
 
@@ -58,12 +66,9 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     }
 
-    private final EntityChangeEmitter entityChangeEmitter;
-
-    public IsisLifecycleListener(final @NonNull EntityChangeEmitter entityChangeEmitter) {
-        this.entityChangeEmitter = entityChangeEmitter;
-    }
-
+    private final @NonNull EntityChangeEmitter entityChangeEmitter;
+    private final @NonNull EntityChangeTracker entityChangeTracker;
+    private final @NonNull AppLifecycleEventService appLifecycleEventService;
 
     /////////////////////////////////////////////////////////////////////////
     // callbacks
@@ -90,25 +95,47 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     public void postLoad(final InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
         entityChangeEmitter.adaptEntityAndInjectServices(pojo);
+        entityChangeTracker.incrementLoaded();
     }
 
     @Override
     public void preStore(InstanceLifecycleEvent event) {
+
+        val persistableObject = event.getPersistentInstance();
+
+        if(persistableObject!=null 
+                && JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
+
+            appLifecycleEventService.firePreStoreEvent(persistableObject);
+        }
+        
         final Persistable pojo = _Utils.persistableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
             entityChangeEmitter.invokeIsisPersistingCallback(pojo);
         }
+        
     }
 
     @Override
     public void postStore(InstanceLifecycleEvent event) {
+
+        val persistableObject = event.getPersistentInstance();
+
+        if(persistableObject!=null && 
+                JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
+
+            appLifecycleEventService.firePostStoreEvent(persistableObject);
+        }
+        
         final Persistable pojo = _Utils.persistableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
             entityChangeEmitter.enlistCreatedAndInvokeIsisPersistedCallback(pojo);
         } else {
             entityChangeEmitter.invokeIsisUpdatedCallback(pojo);
         }
+        
     }
+    
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {

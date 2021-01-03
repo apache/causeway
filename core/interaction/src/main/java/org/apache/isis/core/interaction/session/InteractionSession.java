@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
@@ -49,7 +50,8 @@ import lombok.Setter;
  *
  * @see InteractionFactory
  */
-public class InteractionSession {
+public class InteractionSession
+implements HasUniqueId {
 
     @Getter private final long startedAtSystemNanos;
     
@@ -152,6 +154,10 @@ public class InteractionSession {
                 : attributes;
     }
     
+    @Override
+    public UUID getUniqueId() {
+        return getInteraction().getUniqueId();
+    }
     
     // -- TO STRING
     

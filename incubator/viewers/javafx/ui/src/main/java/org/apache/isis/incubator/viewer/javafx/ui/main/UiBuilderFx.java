@@ -27,7 +27,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.interaction.events.InteractionLifecycleEvent;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
@@ -43,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class UiBuilderFx {
+public class UiBuilderFx implements InteractionScopeAware {
     
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;
@@ -65,23 +66,18 @@ public class UiBuilderFx {
         stage.show();
     }
 
-    @EventListener(InteractionLifecycleEvent.class)
-    public void onInteractionLifecycleEvent(InteractionLifecycleEvent event) {
-        switch(event.getEventType()) {
-        case HAS_STARTED:
-            //TODO this would be the place to indicate to the user, that a long running task has started  
-            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", event.getConversationId());
-            //scene.getRoot().cursorProperty().set(Cursor.WAIT);
-            break;
-        case IS_ENDING:
-            //TODO this would be the place to indicate to the user, that a long running task has ended
-            _Probe.errOut("Interaction IS_ENDING conversationId=%s", event.getConversationId());
-            //scene.getRoot().cursorProperty().set(Cursor.DEFAULT);
-            break;
-        default:
-            break;
-        }
-        
+    @Override
+    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+        //TODO this would be the place to indicate to the user, that a long running task has started
+        //scene.getRoot().cursorProperty().set(Cursor.WAIT);
+        _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interactionSession.getUniqueId());
+    }
+    
+    @Override
+    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+        //TODO this would be the place to indicate to the user, that a long running task has ended
+        //scene.getRoot().cursorProperty().set(Cursor.DEFAULT);
+        _Probe.errOut("Interaction IS_ENDING conversationId=%s", interactionSession.getUniqueId());
     }
     
     // -- HELPER

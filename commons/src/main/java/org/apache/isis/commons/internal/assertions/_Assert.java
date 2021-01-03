@@ -22,6 +22,8 @@ package org.apache.isis.commons.internal.assertions;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.primitives._Ints;
@@ -182,6 +184,32 @@ public final class _Assert {
             throw _Exceptions.assertionError(String.format(
                     "unexpected type: <%s> is not an instance of <%s> ", ""+type, ""+requiredType));
         }
+    }
+    
+    // -- OPEN/CLOSE STATE
+
+    public enum OpenCloseState {
+
+        NOT_INITIALIZED, 
+        OPEN, 
+        CLOSED
+        ;
+
+        public boolean isNotInitialized() { return this == NOT_INITIALIZED; }
+        public boolean isOpen() { return this == OPEN; }
+        public boolean isClosed() { return this == CLOSED; }
+        
+        /**
+         * @param expected - nullable
+         * @throws IllegalArgumentException if {@code this} not equal to {@code expected} 
+         */
+        public void assertEquals(
+                final @Nullable OpenCloseState expected) {
+            if (expected != this) {
+                throw new IllegalStateException("State is: " + this + "; should be: " + expected);    
+            }
+        }
+        
     }
 
     // -- HELPER

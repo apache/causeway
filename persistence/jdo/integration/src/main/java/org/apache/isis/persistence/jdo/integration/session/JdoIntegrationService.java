@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.lifecycles;
+package org.apache.isis.persistence.jdo.integration.session;
 
 import java.util.Optional;
 
@@ -34,26 +34,24 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.interaction.events.InteractionLifecycleEvent;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.events.AppLifecycleEvent;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
-import org.apache.isis.persistence.jdo.integration.persistence.DnApplication;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession;
-import org.apache.isis.persistence.jdo.integration.persistence.JdoPersistenceSession5;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisJdoDn5.JdoPersistenceLifecycleService")
+@Named("isisJdoIntegration.JdoIntegrationService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class JdoPersistenceLifecycleService {
+public class JdoIntegrationService 
+implements InteractionScopeAware {
 
     @Inject MetaModelContext metaModelContext;
     @Inject TransactionAwarePersistenceManagerFactoryProxy txAwarePmfProxy;
@@ -89,47 +87,25 @@ public class JdoPersistenceLifecycleService {
         }
 
     }
-
-    @EventListener(InteractionLifecycleEvent.class)
-    public void onInteractionLifecycleEvent(InteractionLifecycleEvent event) {
-
-        val eventType = event.getEventType();
-        val interactionSession = event.getInteractionSession();
-
-        if(log.isDebugEnabled()) {
-            log.debug("received session event {}", eventType);
-        }
-
-        switch (eventType) {
-        case HAS_STARTED:
-            onInteractionStarted(interactionSession);
-            break;
-        case IS_ENDING:
-            onInteractionEnding(interactionSession);
-            break;
-
-        default:
-            throw _Exceptions.unmatchedCase(eventType);
-        }
-
+    
+    @Override
+    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+        val persistenceSession = new JdoInteractionSession(metaModelContext, txAwarePmfProxy);
+        interactionSession.putAttribute(JdoInteractionSession.class, persistenceSession);
+        persistenceSession.open();
+    }
+    
+    @Override
+    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+        currentJdoSession(interactionSession)
+            .ifPresent(JdoInteractionSession::close);
     }
 
     // -- HELPER
 
-    private void onInteractionStarted(final InteractionSession interactionSession) {
-        val persistenceSession = new JdoPersistenceSession5(metaModelContext, txAwarePmfProxy);
-        interactionSession.putAttribute(JdoPersistenceSession.class, persistenceSession);
-        persistenceSession.open();
-    }
-
-    private void onInteractionEnding(final InteractionSession interactionSession) {
-        currentSession(interactionSession)
-        .ifPresent(JdoPersistenceSession::close);
-    }
-
-    private Optional<JdoPersistenceSession> currentSession(final InteractionSession interactionSession) {
+    private Optional<JdoInteractionSession> currentJdoSession(final InteractionSession interactionSession) {
         return Optional.ofNullable(interactionSession)
-                .map(session->session.getAttribute(JdoPersistenceSession.class));
+                .map(session->session.getAttribute(JdoInteractionSession.class));
     }
 
 

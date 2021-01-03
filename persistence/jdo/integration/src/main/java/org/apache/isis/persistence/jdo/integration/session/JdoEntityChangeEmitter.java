@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.session;
 
 import javax.jdo.PersistenceManager;
 
@@ -27,14 +27,14 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
+import org.apache.isis.persistence.jdo.integration.lifecycles.JdoLifecycleListener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public class JdoEntityChangeEmitter implements IsisLifecycleListener.EntityChangeEmitter {
+public class JdoEntityChangeEmitter implements JdoLifecycleListener.EntityChangeEmitter {
 
     private final MetaModelContext metaModelContext;
     private final PersistenceManager persistenceManager;

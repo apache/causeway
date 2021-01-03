@@ -60,7 +60,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisJdoDn5.IsisJdoSupportDN5")
+@Named("isisJdoIntegration.IsisJdoSupport_v3_2")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("DN5")

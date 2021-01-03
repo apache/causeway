@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.persistence;
+package org.apache.isis.persistence.jdo.integration.session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +24,13 @@ import java.util.List;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManager;
 
+import org.apache.isis.commons.internal.assertions._Assert.OpenCloseState;
+import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.events.AppLifecycleEventService;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
-import org.apache.isis.persistence.jdo.integration.lifecycles.IsisLifecycleListener;
-import org.apache.isis.persistence.jdo.integration.lifecycles.JdoStoreLifecycleListenerForIsis;
-import org.apache.isis.persistence.jdo.integration.lifecycles.LoadLifecycleListenerForIsis;
+import org.apache.isis.persistence.jdo.integration.lifecycles.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.Getter;
@@ -39,17 +41,18 @@ import lombok.extern.log4j.Log4j2;
  * A wrapper around the JDO {@link PersistenceManager}.
  */
 @Vetoed @Log4j2
-public class JdoPersistenceSession5
-implements
-    JdoPersistenceSession {
+public class JdoInteractionSession
+implements HasMetaModelContext {
 
     // -- FIELDS
-
-    @Getter(onMethod_ = {@Override}) private PersistenceManager persistenceManager;
+    
     @Getter(onMethod_ = {@Override}) private final MetaModelContext metaModelContext;
 
+    private PersistenceManager persistenceManager;
     private final TransactionAwarePersistenceManagerFactoryProxy pmf;
     private final List<Runnable> onCloseTasks = new ArrayList<>();
+    
+    private OpenCloseState state = OpenCloseState.NOT_INITIALIZED;
 
     // -- CONSTRUCTOR
     
@@ -58,7 +61,7 @@ implements
      * persisted objects and persist changes to the object that are saved.
      * @param pmf 
      */
-    public JdoPersistenceSession5(
+    public JdoInteractionSession(
             final MetaModelContext metaModelContext, 
             final TransactionAwarePersistenceManagerFactoryProxy pmf) {
 
@@ -68,38 +71,16 @@ implements
 
         this.metaModelContext = metaModelContext;
         this.pmf = pmf;
-                
-        this.state = State.NOT_INITIALIZED;
     }
-
-    // -- STATE
-
-    protected enum State {
-        NOT_INITIALIZED, OPEN, CLOSED
-        ;
-        protected void ensureNotOpened() {
-            if (this != State.NOT_INITIALIZED) {
-                throw new IllegalStateException("Persistence session has already been initialized");
-            }
-        }
-        protected void ensureOpened() {
-            ensureStateIs(State.OPEN);
-        }
-        private void ensureStateIs(final State stateRequired) {
-            if (this == stateRequired) {
-                return;
-            }
-            throw new IllegalStateException("State is: " + this + "; should be: " + stateRequired);
-        }
-    }
-    
-    protected State state = State.NOT_INITIALIZED;
 
     // -- OPEN
 
-    @Override
+    /**
+     * Binds this {@link JdoInteractionSession} to the current {@link InteractionSession}.
+     */
     public void open() {
-        state.ensureNotOpened();
+        
+        state.assertEquals(OpenCloseState.NOT_INITIALIZED);
 
         if (log.isDebugEnabled()) {
             log.debug("opening {}", this);
@@ -107,20 +88,23 @@ implements
         
         this.persistenceManager = integrateWithApplicationLayer(pmf.getPersistenceManager());
         
-        this.state = State.OPEN;
+        this.state = OpenCloseState.OPEN;
     }
 
     // -- CLOSE
 
-
-
-    @Override
+    /**
+     * Commits the current transaction and unbinds this 
+     * {@link JdoInteractionSession} from the current {@link InteractionSession}.
+     */
     public void close() {
 
-        if (state == State.CLOSED) {
+        if (state.isClosed()) {
             // nothing to do
             return;
         }
+        
+        this.state = OpenCloseState.CLOSED;
 
         try {
         
@@ -133,18 +117,19 @@ implements
             
         } catch(final Throwable ex) {
             // ignore
-            log.error(
-                    "close: failed to close JDO persistenceManager; continuing to avoid memory leakage", ex);
+            log.error("close: failed to close JDO persistenceManager; continuing to avoid memory leakage", ex);
         }
         
         persistenceManager = null; // detach
-
-        this.state = State.CLOSED;
+        
     }
     
     // -- HELPER
     
     private PersistenceManager integrateWithApplicationLayer(final PersistenceManager persistenceManager) {
+        
+        val appLifecycleEventService = metaModelContext.getServiceRegistry()
+                .lookupServiceElseFail(AppLifecycleEventService.class);
         
         val entityChangeTracker = metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(EntityChangeTracker.class);
@@ -152,23 +137,14 @@ implements
         val entityChangeEmitter = 
                 new JdoEntityChangeEmitter(getMetaModelContext(), persistenceManager, entityChangeTracker);
         
-        val isisLifecycleListener = new IsisLifecycleListener(entityChangeEmitter);
-        persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[]) null);
-
         // install JDO specific entity change listeners ...
         
-        val loadLifecycleListener = new LoadLifecycleListenerForIsis();
-        val storeLifecycleListener = new JdoStoreLifecycleListenerForIsis();
-        
-        getServiceInjector().injectServicesInto(loadLifecycleListener);
-        getServiceInjector().injectServicesInto(storeLifecycleListener);
-            
-        persistenceManager.addInstanceLifecycleListener(loadLifecycleListener, (Class[]) null);
-        persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
+        val jdoLifecycleListener = new JdoLifecycleListener(
+                entityChangeEmitter, entityChangeTracker, appLifecycleEventService);
+        persistenceManager.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
         
         onCloseTasks.add(()->{
-            persistenceManager.removeInstanceLifecycleListener(loadLifecycleListener);
-            persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
+            persistenceManager.removeInstanceLifecycleListener(jdoLifecycleListener);
         });
         
         return persistenceManager;

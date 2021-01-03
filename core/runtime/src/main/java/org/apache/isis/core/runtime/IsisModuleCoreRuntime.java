@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.interaction.IsisModuleCoreInteraction;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.events.AppLifecycleEventService;
+import org.apache.isis.core.runtime.events.TransactionEventEmitter;
 import org.apache.isis.core.transaction.IsisModuleCoreTransaction;
 
 @Configuration
@@ -35,6 +36,7 @@ import org.apache.isis.core.transaction.IsisModuleCoreTransaction;
 
         // @Service's
         AppLifecycleEventService.class,
+        TransactionEventEmitter.class,
 
         // @Configuration's
 

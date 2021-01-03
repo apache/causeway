@@ -32,6 +32,4 @@ final class _Utils {
         return pojo!=null; // why would a Persistable ever be something different?
     }
     
-  
-    
 }

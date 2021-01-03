@@ -23,13 +23,11 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault;
 import org.apache.isis.core.transaction.changetracking.events.TimestampService;
-import org.apache.isis.core.transaction.events.TransactionEventEmitter;
 
 @Configuration
 @Import({
         // @Service's
         TimestampService.class,
-        TransactionEventEmitter.class,
         EntityChangeTrackerDefault.class,
 })
 public class IsisModuleCoreTransaction {

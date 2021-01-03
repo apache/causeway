@@ -43,7 +43,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.interaction.InteractionScopeAware;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
@@ -56,6 +55,7 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
@@ -308,22 +308,20 @@ implements InteractionFactory, InteractionTracker {
     
     private void postSessionOpened(InteractionSession session) {
         conversationId.set(UUID.randomUUID());
-        interactionScopeAwareBeans.forEach(InteractionScopeAware::beforeEnteringTransactionalBoundary);
+        interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(session));
         txBoundaryHandler.onOpen(session);
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        interactionScopeAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(isSynchronizationActive));
+        interactionScopeAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(session, isSynchronizationActive));
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
-        runtimeEventService.fireInteractionHasStarted(session); // only fire on top-level session
     }
     
     private void preSessionClosed(InteractionSession session) {
         completeAndPublishCurrentCommand();
-        runtimeEventService.fireInteractionIsEnding(session); // only fire on top-level session 
         interactionScopeLifecycleHandler.onTopLevelInteractionClosing(); // cleanup the isis-session scope
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        interactionScopeAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(isSynchronizationActive));
+        interactionScopeAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(session, isSynchronizationActive));
         txBoundaryHandler.onClose(session);
-        interactionScopeAwareBeans.forEach(InteractionScopeAware::afterLeavingTransactionalBoundary);
+        interactionScopeAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(session));
         session.close(); // do this last
     }
     

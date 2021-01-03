@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.events;
+package org.apache.isis.core.runtime.events;
 
 import javax.inject.Inject;
 
@@ -24,8 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import org.apache.isis.applib.interaction.InteractionScopeAware;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
+import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,7 +50,9 @@ implements TransactionSynchronization, InteractionScopeAware {
     }
     
     @Override
-    public void afterEnteringTransactionalBoundary(boolean isSynchronizationActive) {
+    public void afterEnteringTransactionalBoundary(
+            InteractionSession interactionSession, 
+            boolean isSynchronizationActive) {
         if(isSynchronizationActive) {
             TransactionSynchronizationManager.registerSynchronization(this);
         }

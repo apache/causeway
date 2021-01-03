@@ -26,7 +26,8 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.interaction.events.InteractionLifecycleEvent;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -36,33 +37,20 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class InteractionBoundaryProbe {
+public class InteractionBoundaryProbe implements InteractionScopeAware {
 
     @Inject private KVStoreForTesting kvStoreForTesting;
     
-    
-    @EventListener(InteractionLifecycleEvent.class)
-    public void onIsisInteractionLifecycleEvent(InteractionLifecycleEvent event) {
-        switch(event.getEventType()) {
-        case HAS_STARTED:
-            onIaStarted();
-            break;
-        case IS_ENDING:
-            onIaEnded();
-            break;
-        default:
-            break;
-        }
-    }
-
     /** INTERACTION BEGIN BOUNDARY */
-    public void onIaStarted() {
+    @Override
+    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
         log.debug("iaStarted");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
     }
-
+    
     /** INTERACTION END BOUNDARY */
-    public void onIaEnded() {
+    @Override
+    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
         log.debug("iaEnded");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
     }

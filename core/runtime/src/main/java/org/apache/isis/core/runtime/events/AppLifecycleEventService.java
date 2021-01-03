@@ -28,14 +28,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.interaction.events.InteractionLifecycleEvent;
-import org.apache.isis.core.interaction.session.InteractionSession;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
-
-import lombok.val;
 
 /**
  * 
@@ -44,14 +38,13 @@ import lombok.val;
  * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
-@Named("isisRuntime.RuntimeEventService")
+@Named("isisRuntime.AppLifecycleEventService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class AppLifecycleEventService {
     
     @Inject private EventBusService eventBusService;
-    @Inject private InteractionTracker interactionTracker;
 
    // -- APP
 
@@ -63,28 +56,6 @@ public class AppLifecycleEventService {
         eventBusService.post(AppLifecycleEvent.POST_METAMODEL);
     }
 
-    // -- INTERACTION
-
-    public void fireInteractionHasStarted(InteractionSession interactionSession) {
-        
-        _Probe.errOut("fireInteractionHasStarted");
-        
-        val conversationId = interactionTracker.getConversationId().orElse(null);
-        eventBusService.post(
-                InteractionLifecycleEvent
-                .of(conversationId, interactionSession, InteractionLifecycleEvent.EventType.HAS_STARTED));
-    }
-
-    public void fireInteractionIsEnding(InteractionSession interactionSession) {
-        
-        _Probe.errOut("fireInteractionIsEnding");
-        
-        val conversationId = interactionTracker.getConversationId().orElse(null);
-        eventBusService.post(
-                InteractionLifecycleEvent
-                .of(conversationId, interactionSession, InteractionLifecycleEvent.EventType.IS_ENDING));
-    }
-	
     // -- PERSISTENT OBJECT EVENTS
 
     public void firePreStoreEvent(Object persistableObject) {
