@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ui.custom;
+package demoapp.dom.ui.custom.vm;
 
 import java.io.Serializable;
 
@@ -27,18 +27,27 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Title;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.ui.custom.latlng.LatLng;
+import demoapp.dom.ui.custom.latlng.LatLngUtils;
+import demoapp.dom.ui.custom.latlng.Latitude;
+import demoapp.dom.ui.custom.latlng.Longitude;
+import demoapp.dom.ui.custom.latlng.PositiveNumber;
 
 @XmlRootElement(name = "demo.CustomUiVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.CustomUiVm")
 public class CustomUiVm implements HasAsciiDocDescription, Serializable {
+
+    @Title
+    @Getter @Setter
+    private String address;
 
     @Latitude
     @Getter @Setter
@@ -52,33 +61,15 @@ public class CustomUiVm implements HasAsciiDocDescription, Serializable {
     @Getter @Setter
     private int scale;
 
-    @Data
-    public static class BoundingBox {
-        @Getter
-        private final String minimumLatitude;
-        @Getter
-        private final String minimumLongitude;
-        @Getter
-        private final String maximumLatitude;
-        @Getter
-        private final String maximumLongitude;
-
-        public final String toUrl(String divider) {
-            return getMinimumLongitude() + divider + getMinimumLatitude() + divider + getMaximumLongitude() + divider + getMaximumLatitude();
-        }
-        public final String toUrl() {
-            return toUrl("%2C");
-        }
-    }
     /**
      * @link https://wiki.openstreetmap.org/wiki/Bounding_Box
      */
     public BoundingBox getBoundingBox() {
-        String minLat = LatLng.add(getLatitude(), -getScale());
-        String maxLat = LatLng.add(getLatitude(), +getScale());
-        String minLng = LatLng.add(getLongitude(), -getScale());
-        String maxLng = LatLng.add(getLongitude(), +getScale());
-        return new BoundingBox(minLat, minLng, maxLat, maxLng);
+        String minLat = LatLngUtils.add(getLatitude(), -getScale());
+        String maxLat = LatLngUtils.add(getLatitude(), +getScale());
+        String minLng = LatLngUtils.add(getLongitude(), -getScale());
+        String maxLng = LatLngUtils.add(getLongitude(), +getScale());
+        return new BoundingBox(new LatLng(minLat, minLng), new LatLng(maxLat, maxLng));
     }
 
 }

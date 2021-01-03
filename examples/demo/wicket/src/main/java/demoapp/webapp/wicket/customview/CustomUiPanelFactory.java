@@ -9,7 +9,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
-import demoapp.dom.ui.custom.CustomUiVm;
+import demoapp.dom.ui.custom.vm.CustomUiVm;
 
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.EARLY)

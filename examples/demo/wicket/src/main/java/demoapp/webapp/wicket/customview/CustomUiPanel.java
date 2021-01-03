@@ -29,7 +29,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
 
-import demoapp.dom.ui.custom.CustomUiVm;
+import demoapp.dom.ui.custom.vm.CustomUiVm;
 
 public class CustomUiPanel extends PanelAbstract<EntityModel>  {
 
@@ -51,18 +51,21 @@ public class CustomUiPanel extends PanelAbstract<EntityModel>  {
         return null;
     }
 
-
     /**
      * Build UI only after added to parent.
      */
     @Override
     public void onInitialize() {
         super.onInitialize();
+        buildGui();
+    }
 
+    private void buildGui() {
         val managedObject = (ManagedObject) getModelObject();
         val customUiVm = (CustomUiVm) managedObject.getPojo();
 
         val iframe = new InlineFrame("iframe", getPage()) {
+
             @Override
             protected CharSequence getURL() {
                 val boundingBox = customUiVm.getBoundingBox();
@@ -72,11 +75,15 @@ public class CustomUiPanel extends PanelAbstract<EntityModel>  {
                         , url
                         , "mapnik");
             }
+
         };
 
         addOrReplace(iframe);
     }
 
-
-
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        buildGui();
+    }
 }

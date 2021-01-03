@@ -1,4 +1,4 @@
-package demoapp.dom.ui.custom;
+package demoapp.dom.ui.custom.latlng;
 
 
 import java.lang.annotation.ElementType;

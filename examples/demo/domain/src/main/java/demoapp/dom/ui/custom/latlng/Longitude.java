@@ -1,4 +1,4 @@
-package demoapp.dom.ui.custom;
+package demoapp.dom.ui.custom.latlng;
 
 
 import java.lang.annotation.ElementType;
@@ -6,21 +6,17 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
 
-import lombok.val;
-
 @Property(
-        regexPattern = Latitude.PATTERN
-        , regexPatternReplacement = "Does not match format of latitude"
+        regexPattern = Longitude.PATTERN
+        , regexPatternReplacement = "Does not match format of longitude"
 )
 @Parameter(
-        regexPattern = Latitude.PATTERN
-        , regexPatternReplacement = "Does not match format of latitude"
+        regexPattern = Longitude.PATTERN
+        , regexPatternReplacement = "Does not match format of longitude"
 )
 @Inherited
 @Target({
@@ -30,8 +26,8 @@ import lombok.val;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Latitude {
+public @interface Longitude {
 
-    String PATTERN = "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)$";
+    String PATTERN = "^[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$";
 
 }

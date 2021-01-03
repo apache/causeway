@@ -5,11 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import lombok.val;
 
-class LatLngTest {
+import demoapp.dom.ui.custom.latlng.LatLngUtils;
+
+class LatLngUtilsTest {
 
     @Test
     void add() {
-        val add = LatLng.add("51.753500", 1);
+        val add = LatLngUtils.add("51.753500", 1);
         Assertions.assertThat(add).isEqualTo("51.763500");
     }
 }

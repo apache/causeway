@@ -1,4 +1,4 @@
-package demoapp.dom.ui.custom;
+package demoapp.dom.ui.custom.latlng;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -8,7 +8,7 @@ import lombok.experimental.UtilityClass;
 
 
 @UtilityClass
-public class LatLng {
+public class LatLngUtils {
 
     public static BigDecimal toBigDecimal(final String val) {
         return new BigDecimal(val);

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.ui.custom;
+package demoapp.dom.ui.custom.vm;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -24,10 +24,17 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import demoapp.dom.ui.custom.geocoding.GeocoderClient;
+import demoapp.dom.ui.custom.latlng.PositiveNumber;
+
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.CustomUiMenu")
+@RequiredArgsConstructor
 public class CustomUiMenu {
+
+    private final GeocoderClient geocoderClient;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
@@ -35,25 +42,24 @@ public class CustomUiMenu {
             describedAs="Opens a Custom UI page displaying a map"
     )
     public CustomUiVm customUiVm(
-            @Latitude final String latitude,
-            @Longitude final String longitude,
+            final String address,
             @PositiveNumber final int scale
     ){
         val vm = new CustomUiVm();
-        vm.setLatitude(latitude);
-        vm.setLongitude(longitude);
+
+        val latLng = geocoderClient.geocode(address);
+        vm.setAddress(address);
+        vm.setLatitude(latLng.getLatitude());
+        vm.setLongitude(latLng.getLongitude());
         vm.setScale(scale);
 
         return vm;
     }
 
     public String default0CustomUiVm() {
-        return "51.753500";
+        return "London,UK";
     }
-    public String default1CustomUiVm() {
-        return "-1.253640";
-    }
-    public int default2CustomUiVm() {
+    public int default1CustomUiVm() {
         return 1;
     }
 
