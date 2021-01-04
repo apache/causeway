@@ -47,6 +47,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
@@ -188,7 +189,7 @@ public final class CommonDtoUtils {
 
         switch (valueType) {
         case COLLECTION: {
-            final CollectionDto collectionDto = asCollectionDto(pojo, ValueType.REFERENCE, bookmarkService);
+            final CollectionDto collectionDto = asCollectionDto(pojo, ValueType.VOID, bookmarkService);
             valueDto.setCollection(collectionDto);
             return valueDto;
         }
@@ -364,22 +365,45 @@ public final class CommonDtoUtils {
         val collectionDto = new CollectionDto();
         collectionDto.setType(commonElementValueType);
         
+        val needsCommonElementValueTypeAutodetect = commonElementValueType==ValueType.VOID;
+        
+        val commonElementValueTypeRef = _Refs.<ValueType>objectRef(null);
+        
         _NullSafe.streamAutodetect(iterableOrArray)
         .forEach(element->{
             val valueDto = new ValueDto();
-            
-            val elementValueType = element!=null
-                    ? asValueType(element.getClass())
-                    : ValueType.REFERENCE;
-            
-            setValueOn(valueDto, elementValueType, element, bookmarkService);
+            if(element==null) {
+                setValueOn(valueDto, ValueType.VOID, element, bookmarkService);
+            } else {
+                val elementValueType = asValueType(element.getClass()); 
+                setValueOn(valueDto, elementValueType, element, bookmarkService);
+                
+                if(needsCommonElementValueTypeAutodetect) {
+                    commonElementValueTypeRef.update(acc->reduce(acc, elementValueType));
+                }
+                
+            }
             collectionDto.getValue().add(valueDto);
         });
+        
+        if(needsCommonElementValueTypeAutodetect) {
+            collectionDto.setType(commonElementValueTypeRef.getValueElseDefault(ValueType.VOID));
+        }
         
         return collectionDto;
     }
 
     // -- getValue (from valueDto)
+
+    private static ValueType reduce(ValueType acc, ValueType next) {
+        if(acc==null) {
+            return next;    
+        }
+        if(acc==next) {
+            return acc;    
+        }
+        throw _Exceptions.unsupportedOperation("mixing types within a collection is not supported yet");    
+    }
 
     public static <T> T getValue(
             final ValueDto valueDto,

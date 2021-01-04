@@ -429,16 +429,11 @@ public final class InteractionDtoUtils {
 
 
     // -- getParameterArgValue
-    public static <T> T getParameterArgValue(final ActionInvocationDto ai, int paramNum, Class<T> inferClass) {
-        final ParamDto paramDto = getParameter(ai, paramNum);
-        return CommonDtoUtils.getValue(paramDto);
-    }
+
     public static <T> T getParameterArgValue(final ActionInvocationDto ai, int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return CommonDtoUtils.getValue(paramDto);
     }
-
-
 
     // -- debugging (dump)
     public static void dump(final InteractionDto ixnDto, final PrintStream out) throws JAXBException {

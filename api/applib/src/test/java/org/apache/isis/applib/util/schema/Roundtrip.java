@@ -47,10 +47,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.cmd.v2.ParamDto;
-import org.apache.isis.schema.common.v2.CollectionDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidDto;
-import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
@@ -119,7 +117,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(valueType));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
         
-        val actualValue = InteractionDtoUtils.getParameterArgValue(invocationDto, param, type);
+        val actualValue = InteractionDtoUtils.getParameterArgValue(invocationDto, param);
         
         // equals test, some types need special checks ...
         if(expectedValue instanceof OidDto) {
@@ -134,10 +132,7 @@ public class Roundtrip {
         } else if(expectedValue instanceof Iterable
                 || expectedValue.getClass().isArray()) {
             
-            val actualAsCan = ((CollectionDto) actualValue).getValue().stream()
-            .map(ValueDto::getLong)
-            .collect(Can.toCan());
-            
+            val actualAsCan = Can.ofStream(_NullSafe.streamAutodetect(actualValue));
             val expectedAsCan = Can.ofStream(_NullSafe.streamAutodetect(expectedValue));
             
             assertThat(actualAsCan, is(expectedAsCan));
