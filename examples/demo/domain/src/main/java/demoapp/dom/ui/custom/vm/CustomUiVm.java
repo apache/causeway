@@ -33,11 +33,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.ui.custom.latlng.LatLng;
-import demoapp.dom.ui.custom.latlng.LatLngUtils;
 import demoapp.dom.ui.custom.latlng.Latitude;
 import demoapp.dom.ui.custom.latlng.Longitude;
-import demoapp.dom.ui.custom.latlng.PositiveNumber;
+import demoapp.dom.ui.custom.latlng.Zoom;
 
 @XmlRootElement(name = "demo.CustomUiVm")
 @XmlType
@@ -57,19 +55,8 @@ public class CustomUiVm implements HasAsciiDocDescription, Serializable {
     @Getter @Setter
     private String longitude;
 
-    @PositiveNumber
+    @Zoom
     @Getter @Setter
-    private int scale;
-
-    /**
-     * @link https://wiki.openstreetmap.org/wiki/Bounding_Box
-     */
-    public BoundingBox getBoundingBox() {
-        String minLat = LatLngUtils.add(getLatitude(), -getScale());
-        String maxLat = LatLngUtils.add(getLatitude(), +getScale());
-        String minLng = LatLngUtils.add(getLongitude(), -getScale());
-        String maxLng = LatLngUtils.add(getLongitude(), +getScale());
-        return new BoundingBox(new LatLng(minLat, minLng), new LatLng(maxLat, maxLng));
-    }
+    private int zoom;
 
 }

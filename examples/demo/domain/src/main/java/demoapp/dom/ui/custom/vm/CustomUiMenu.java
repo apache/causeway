@@ -27,14 +27,14 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom.ui.custom.geocoding.GeocoderClient;
-import demoapp.dom.ui.custom.latlng.PositiveNumber;
+import demoapp.dom.ui.custom.geocoding.GeoapifyClient;
+import demoapp.dom.ui.custom.latlng.Zoom;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.CustomUiMenu")
 @RequiredArgsConstructor
 public class CustomUiMenu {
 
-    private final GeocoderClient geocoderClient;
+    private final GeoapifyClient geoapifyClient;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
@@ -43,24 +43,24 @@ public class CustomUiMenu {
     )
     public CustomUiVm customUiVm(
             final String address,
-            @PositiveNumber final int scale
+            @Zoom final int zoom
     ){
         val vm = new CustomUiVm();
 
-        val latLng = geocoderClient.geocode(address);
+        val latLng = geoapifyClient.geocode(address);
         vm.setAddress(address);
         vm.setLatitude(latLng.getLatitude());
         vm.setLongitude(latLng.getLongitude());
-        vm.setScale(scale);
+        vm.setZoom(zoom);
 
         return vm;
     }
 
     public String default0CustomUiVm() {
-        return "London,UK";
+        return "London, UK";
     }
     public int default1CustomUiVm() {
-        return 1;
+        return 14;
     }
 
 }

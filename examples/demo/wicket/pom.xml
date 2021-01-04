@@ -134,6 +134,12 @@
 									<artifactId>asciidoctorj</artifactId>
 								</dependency>
 							</requiresUnpack>
+							<excludes>
+								<exclude>
+									<groupId>org.springframework.boot</groupId>
+									<artifactId>spring-boot-configuration-processor</artifactId>
+								</exclude>
+							</excludes>
 						</configuration>
 						<executions>
 							<execution>

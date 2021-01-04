@@ -110,6 +110,10 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>Apache Isis Extensions</mb3:named>
                 <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="asciiDocs"/>
                 <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="markdowns"/>
+                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
+                    <cpt:named>SSE</cpt:named>
+                    <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
+                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
 
@@ -118,6 +122,12 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:section>
                 <mb3:named>@DomainObject</mb3:named>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="entityChangePublishing"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful">
+                    <cpt:describedAs>@DomainObject(nature=VIEW_MODEL) for a Stateful View Model</cpt:describedAs>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity">
+                    <cpt:describedAs>@DomainObject(nature=VIEW_MODEL) for a Stateful View Model referencing an entity</cpt:describedAs>
+                </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
                 <mb3:named>@Action</mb3:named>
@@ -143,6 +153,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="mementoSerialization"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="optionality"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="projecting"/>
@@ -173,77 +184,55 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Services</mb3:named>
+            <mb3:named>Prog Model</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
-                <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>View Models</mb3:named>
-            <mb3:section>
-                <mb3:serviceAction objectType="demo.ViewModelMenu" id="stateful"/>
-                <mb3:serviceAction objectType="demo.ViewModelMenu" id="statefulRefsEntity"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Actions</mb3:named>
-            <mb3:section>
+                <mb3:named>Actions</mb3:named>
                 <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
-                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
-                    <cpt:named>Background (Async) Actions</cpt:named>
-                </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
                     <cpt:named>Dependent Arguments</cpt:named>
                 </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Mixins</mb3:named>
                 <mb3:serviceAction objectType="demo.MixinMenu" id="mixinDemo">
                     <cpt:named>Mixins</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.MixinLegacyMenu" id="mixinLegacyDemo">
-                    <cpt:named>Mixins (Legacy)</cpt:named>
-                </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Services</mb3:named>
+            <mb3:section>
+                <mb3:named>Core</mb3:named>
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Extensions - SecMan</mb3:named>
+                <mb3:serviceAction objectType="demo.IsisExtSecManMenu" id="appTenancy"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
             <mb3:named>Misc</mb3:named>
             <mb3:section>
-                <mb3:named>Tooltips</mb3:named>
                 <mb3:serviceAction objectType="demo.TooltipMenu" id="tooltipDemo"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Events</mb3:named>
                 <mb3:serviceAction objectType="demo.EventsDemoMenu" id="eventsDemo" />
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Error Handling</mb3:named>
                 <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling" />
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Tabs</mb3:named>
                 <mb3:serviceAction objectType="demo.TabMenu" id="tabDemo" />
             </mb3:section>
             <mb3:section>
-                <mb3:named>Custom UI</mb3:named>
-                <mb3:serviceAction objectType="demo.CustomUiMenu" id="customUiVm" />
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Extensions</mb3:named>
-            <mb3:section>
-                <mb3:named>SecMan</mb3:named>
-                <mb3:serviceAction objectType="demo.IsisExtSecManMenu" id="appTenancy"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Experimental</mb3:named>
-            <mb3:section>
+                <mb3:named>Experimental</mb3:named>
             	<mb3:serviceAction objectType="demo.TupleDemoMenu" id="tupleDemo"/>
                 <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo" />
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>UI</mb3:named>
+            <mb3:section>
+                <mb3:named>Custom UI</mb3:named>
+                <mb3:serviceAction objectType="demo.CustomUiMenu" id="customUiVm" />
             </mb3:section>
         </mb3:menu>
 

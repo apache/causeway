@@ -20,23 +20,13 @@ package demoapp.dom.annotDomain.DomainObject.entityChangePublishing;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.annotLayout.PropertyLayout.cssClass.CssClassRedMetaAnnotation;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -44,12 +34,12 @@ import demoapp.dom.annotLayout.PropertyLayout.cssClass.CssClassRedMetaAnnotation
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.DomainObjectAuditingVm"
+        objectType = "demo.DomainObjectEntityChangePublishingVm"
 )
 public class DomainObjectEntityChangePublishingVm implements HasAsciiDocDescription {
 
     public String title() {
-        return "DomainObject#publishing";
+        return "DomainObject#entityChangePublishing";
     }
 
 

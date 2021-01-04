@@ -118,6 +118,13 @@
 			<artifactId>isis-extensions-command-log-jdo</artifactId>
 		</dependency>
 
+		<!-- DEV TIME -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 
 </project>

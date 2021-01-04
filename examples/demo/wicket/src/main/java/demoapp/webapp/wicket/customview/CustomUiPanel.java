@@ -19,7 +19,8 @@
 
 package demoapp.webapp.wicket.customview;
 
-import org.apache.wicket.markup.html.link.InlineFrame;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -27,21 +28,25 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
+import demoapp.dom.ui.custom.geocoding.GeoapifyClient;
 import demoapp.dom.ui.custom.vm.CustomUiVm;
 
 public class CustomUiPanel extends PanelAbstract<EntityModel>  {
 
-
     private static final long serialVersionUID = 1L;
 
+    private final GeoapifyClient geoapifyClient;
 
     public CustomUiPanel(
             final String id,
             final EntityModel model,
-            final ComponentFactory componentFactory) {
+            final ComponentFactory componentFactory,
+            final GeoapifyClient geoapifyClient) {
         super(id, model);
+        this.geoapifyClient = geoapifyClient;
     }
 
 
@@ -60,30 +65,18 @@ public class CustomUiPanel extends PanelAbstract<EntityModel>  {
         buildGui();
     }
 
+
+    @SneakyThrows
     private void buildGui() {
         val managedObject = (ManagedObject) getModelObject();
         val customUiVm = (CustomUiVm) managedObject.getPojo();
 
-        val iframe = new InlineFrame("iframe", getPage()) {
+        val bytes = geoapifyClient.toJpeg(customUiVm.getLatitude(), customUiVm.getLongitude(), customUiVm.getZoom());
 
-            @Override
-            protected CharSequence getURL() {
-                val boundingBox = customUiVm.getBoundingBox();
-                val url = boundingBox.toUrl();
-                return String.format(
-                        "https://www.openstreetmap.org/export/embed.html?bbox=%s&layer=%s"
-                        , url
-                        , "mapnik");
-            }
+        val img = new Image("img", new ByteArrayResource("image/jpeg", bytes));
 
-        };
-
-        addOrReplace(iframe);
+        addOrReplace(img);
     }
 
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        buildGui();
-    }
+
 }

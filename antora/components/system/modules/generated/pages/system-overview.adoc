@@ -52,7 +52,7 @@ package "Base\n[Software System]" {
 .Projects/Modules (Base)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis (Aggregator)
 [source,yaml]
@@ -62,7 +62,7 @@ Artifact: isis-all
 Type: pom
 Folder: /
 ----
-|Convenience aggregator POM that references all modules, some explicitely, 
+|Convenience aggregator POM that references all modules, some explicitely,
         others via profiles, that are not activiated per default.
         The parent POM of the core framework is isis-parent/pom.xml.
 
@@ -94,9 +94,9 @@ Artifact: supplemental-model
 Type: jar
 Folder: \supplemental-model
 ----
-|For example, the templates used by many Apache distributions assemble a listing of project dependencies 
-  	according to their organization name (and URL), along with the URL each project's website. When dependency 
-  	POMs are missing this information, the dependency notice file that the Remote Resources Plugin renders can 
+|For example, the templates used by many Apache distributions assemble a listing of project dependencies
+  	according to their organization name (and URL), along with the URL each project's website. When dependency
+  	POMs are missing this information, the dependency notice file that the Remote Resources Plugin renders can
   	be invalid.
 	To compensate for incomplete dependency POMs, we use the supplemental models support.
 |===
@@ -130,7 +130,7 @@ package "Commons\n[Software System]" {
 .Projects/Modules (Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Commons
 [source,yaml]
@@ -283,7 +283,7 @@ package "Core\n[Software System]" {
 .Projects/Modules (Core)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Core
 [source,yaml]
@@ -597,7 +597,7 @@ Artifact: isis-core-transaction
 Type: jar
 Folder: \core\transaction
 ----
-|Provides transaction integration with Spring and also 
+|Provides transaction integration with Spring and also
     	entity change tracking, with associated publishing and pre/post value events.
 
 _Components_
@@ -652,9 +652,9 @@ Type: pom
 Folder: \core\jdk-supplemental
 ----
 |Defines a module to bring in dependencies that were part of JDK 8 but
-        had been removed with later JDK versions. 
-        
-        Will be removed once the framework migrates to Java 11 as the required 
+        had been removed with later JDK versions.
+
+        Will be removed once the framework migrates to Java 11 as the required
         minimum version.
 
 _Dependencies_
@@ -714,7 +714,7 @@ package "App\n[Software System]" {
 .Projects/Modules (App)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Starter Parent
 [source,yaml]
@@ -806,7 +806,7 @@ package "Mavendeps\n[Software System]" {
 .Projects/Modules (Mavendeps)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Maven Deps
 [source,yaml]
@@ -859,7 +859,7 @@ Type: pom
 Folder: \mavendeps\jdk11
 ----
 |Defines a module to bring in dependencies that were part of JDK 8 but
-        had been removed with JDK 11+. These dependencies are activated when the 
+        had been removed with JDK 11+. These dependencies are activated when the
         consuming project is built with JDK 11 or higher.
 
 |Apache Isis Maven Deps - JDO
@@ -870,7 +870,7 @@ Artifact: isis-mavendeps-jdo
 Type: pom
 Folder: \mavendeps\jdo
 ----
-|Defines a module that provides the default JDO persistence layer integration 
+|Defines a module that provides the default JDO persistence layer integration
         for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
 
 _Dependencies_
@@ -887,7 +887,7 @@ Artifact: isis-mavendeps-jpa
 Type: pom
 Folder: \mavendeps\jpa
 ----
-|Defines a module that provides the default JPA persistence layer integration 
+|Defines a module that provides the default JPA persistence layer integration
         for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
 
 _Dependencies_
@@ -920,9 +920,9 @@ Artifact: isis-mavendeps-webapp
 Type: pom
 Folder: \mavendeps\webapp
 ----
-|Defines a module that can be almost used as a single dependency for running 
+|Defines a module that can be almost used as a single dependency for running
         an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
-        
+
         Note: Also requires a persistence provider.
 
 _Dependencies_
@@ -1005,7 +1005,7 @@ package "Mappings\n[Software System]" {
 .Projects/Modules (Mappings)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Mappings
 [source,yaml]
@@ -1188,7 +1188,7 @@ package "Persistence\n[Software System]" {
 .Projects/Modules (Persistence)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Persistence - JDO
 [source,yaml]
@@ -1467,7 +1467,7 @@ package "Security\n[Software System]" {
 .Projects/Modules (Security)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Security - Bypass
 [source,yaml]
@@ -1703,7 +1703,7 @@ package "Valuetypes\n[Software System]" {
 .Projects/Modules (Valuetypes)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Value types
 [source,yaml]
@@ -2109,7 +2109,7 @@ package "Viewer\n[Software System]" {
 .Projects/Modules (Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Viewer - Common Model
 [source,yaml]
@@ -2497,7 +2497,7 @@ package "Testing\n[Software System]" {
 .Projects/Modules (Testing)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Testing
 [source,yaml]
@@ -2785,7 +2785,7 @@ package "Regression Tests\n[Software System]" {
 .Projects/Modules (Regression Tests)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis - Regression Tests
 [source,yaml]
@@ -3083,7 +3083,7 @@ package "Extensions\n[Software System]" {
 .Projects/Modules (Extensions)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Extensions
 [source,yaml]
@@ -3721,7 +3721,7 @@ package "Subdomains\n[Software System]" {
 .Projects/Modules (Subdomains)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Subdomains
 [source,yaml]
@@ -4099,7 +4099,7 @@ package "Tooling\n[Software System]" {
 .Projects/Modules (Tooling)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis - Tooling
 [source,yaml]
@@ -4109,7 +4109,7 @@ Artifact: isis-tooling
 Type: pom
 Folder: \tooling
 ----
-|Libraries and tools not depending on the _Apache Isis Core_ ecosystem, 
+|Libraries and tools not depending on the _Apache Isis Core_ ecosystem,
         eg. code mining, automated documentation.
         (Targeted for JVM 11+)
 
@@ -4132,8 +4132,8 @@ Artifact: isis-tooling-c4modeling
 Type: jar
 Folder: \tooling\c4modeling
 ----
-|Library for programmatic C4 Model generation. 
-        
+|Library for programmatic C4 Model generation.
+
         See https://c4model.com/
 
 _Dependencies_
@@ -4203,13 +4203,13 @@ Artifact: isis-tooling-model4adoc
 Type: jar
 Folder: \tooling\model4adoc
 ----
-|Library for programmatic AsciiDoc generation. 
-        
+|Library for programmatic AsciiDoc generation.
+
         The AsciiDoc name is trademarked by the Eclipse Foundation (https://www.eclipse.org/).
-		This project is *not* part of the specification effort for _AsciiDoc_ under the 
+		This project is *not* part of the specification effort for _AsciiDoc_ under the
 		AsciiDoc Working Group. See https://projects.eclipse.org/proposals/asciidoc-language
-		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
-		help with transfer of source code, if any project (under the umbrella of the 
+		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to
+		help with transfer of source code, if any project (under the umbrella of the
 		AsciiDoc Working Group) is willing to take over.
 
 _Dependencies_
@@ -4298,7 +4298,7 @@ package "Examples\n[Software System]" {
 .Projects/Modules (Examples)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Demo - Parent
 [source,yaml]
@@ -4370,16 +4370,16 @@ Folder: \examples\demo\domain
 * demoapp.dom.annotDomain._interactions.ExecutionListenerToCaptureInteractionsInMemory
 * demoapp.dom.annotLayout.PropertyLayout.navigable.FileTreeNodeService
 * demoapp.dom.annotLayout.PropertyLayout.repainting.PdfJsViewerAdvisorFallback
-* demoapp.dom.error.service.DemoErrorReportingService
-* demoapp.dom.events.DemoEventSubscriber
-* demoapp.dom.events.EventLogRepository
-* demoapp.dom.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo
-* demoapp.dom.extensions.secman.apptenancy.entities.TenantedJdoEntities
-* demoapp.dom.extensions.secman.apptenancy.entities.seed.TenantedJdoSeedService
-* demoapp.dom.jee.DemoRequestScopedBean
-* demoapp.dom.jee.JeeDemoService
-* demoapp.dom.services.wrapperFactory.WrapperFactoryJdoEntities
-* demoapp.dom.services.wrapperFactory.WrapperFactoryJdoSeedService
+* demoapp.dom.misc.error.service.DemoErrorReportingService
+* demoapp.dom.misc.events.DemoEventSubscriber
+* demoapp.dom.misc.events.EventLogRepository
+* demoapp.dom.services.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo
+* demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdoEntities
+* demoapp.dom.services.extensions.secman.apptenancy.entities.seed.TenantedJdoSeedService
+* demoapp.dom.misc.experimental.jee.DemoRequestScopedBean
+* demoapp.dom.misc.experimental.jee.JeeDemoService
+* demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoEntities
+* demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoSeedService
 * demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities
 * demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoSeedService
 * demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples
@@ -4493,9 +4493,9 @@ Folder: \examples\demo\domain
 * demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoSeedService
 * demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities
 * demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoSeedService
-* demoapp.dom.types.tuple.NumberConstantRepository
-* demoapp.dom.viewmodels.jaxbrefentity.ChildJdoEntities
-* demoapp.dom.viewmodels.jaxbrefentity.seed.ChildJdoSeedService
+* demoapp.dom.misc.experimental.tuple.NumberConstantRepository
+* demoapp.dom.annotDomain.DomainObject.nature.viewmodels.jaxbrefentity.ChildJdoEntities
+* demoapp.dom.annotDomain.DomainObject.nature.viewmodels.jaxbrefentity.seed.ChildJdoSeedService
 
 _Dependencies_
 
@@ -4689,7 +4689,7 @@ package "Incubator\n[Software System]" {
 .Projects/Modules (Incubator)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Incubator
 [source,yaml]
@@ -4923,7 +4923,7 @@ package "Legacy\n[Software System]" {
 .Projects/Modules (Legacy)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Legacy
 [source,yaml]

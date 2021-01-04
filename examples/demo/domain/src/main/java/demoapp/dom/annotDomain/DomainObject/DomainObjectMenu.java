@@ -27,8 +27,11 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import demoapp.dom.annotDomain.DomainObject.nature.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
+import demoapp.dom.annotDomain.DomainObject.nature.viewmodels.usingjaxb.StatefulVmUsingJaxb;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DomainObjectMenu")
 //@Log4j2
@@ -40,5 +43,28 @@ public class DomainObjectMenu {
     public DomainObjectEntityChangePublishingVm entityChangePublishing(){
         return new DomainObjectEntityChangePublishingVm();
     }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa = "gamepad")
+    public StatefulVmUsingJaxb natureStateful(final String message) {
+        val viewModel = new StatefulVmUsingJaxb();
+        viewModel.setMessage(message);
+        return viewModel;
+    }
+    public String default0NatureStateful() {
+        return "Some initial state";
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa = "gamepad")
+    public StatefulVmJaxbRefsEntity natureStatefulRefsEntity(final String message) {
+        val viewModel = new StatefulVmJaxbRefsEntity();
+        viewModel.setMessage(message);
+        return viewModel;
+    }
+    public String default0NatureStatefulRefsEntity() {
+        return "Some initial state";
+    }
+
 
 }
