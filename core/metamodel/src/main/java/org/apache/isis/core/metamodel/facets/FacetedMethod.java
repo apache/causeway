@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
-import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 
 /**
  * non-final only so it can be mocked if need be.
@@ -114,7 +114,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
             final Type genericParameterType = genericParameterTypes[paramNum];
 
             final FeatureType featureType =
-                    CollectionUtils.isParamCollection(parameterType, genericParameterType)
+                    _Collections.inferElementTypeFromArrayOrCollection(parameterType, genericParameterType).isPresent()
                         ? FeatureType.ACTION_PARAMETER_COLLECTION
                         : FeatureType.ACTION_PARAMETER_SCALAR;
 

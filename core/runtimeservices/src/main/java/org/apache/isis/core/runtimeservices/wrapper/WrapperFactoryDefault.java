@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
+import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
+import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -45,7 +48,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
-import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -102,9 +104,6 @@ import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-
-import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
-import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -579,7 +578,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 childCommand.updater().setParent(parentCommand);
                 return transactionService
                         .callWithinCurrentTransactionElseCreateNew(() -> {
-                        val bookmark = commandExecutorService.executeCommand(commandDto, CommandOutcomeHandler.NULL);
+                        val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
                         if (bookmark == null) {
                             return null;
                         }

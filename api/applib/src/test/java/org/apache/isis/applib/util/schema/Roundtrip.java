@@ -16,6 +16,9 @@
  */
 package org.apache.isis.applib.util.schema;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
 import java.math.BigDecimal;
@@ -31,19 +34,23 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.cmd.v2.ParamDto;
+import org.apache.isis.schema.common.v2.CollectionDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidDto;
+import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
@@ -124,6 +131,17 @@ public class Roundtrip {
             
             assertThat( actualValue.toString(), is(expectedValue.toString()) );
             
+        } else if(expectedValue instanceof Iterable
+                || expectedValue.getClass().isArray()) {
+            
+            val actualAsCan = ((CollectionDto) actualValue).getValue().stream()
+            .map(ValueDto::getLong)
+            .collect(Can.toCan());
+            
+            val expectedAsCan = Can.ofStream(_NullSafe.streamAutodetect(expectedValue));
+            
+            assertThat(actualAsCan, is(expectedAsCan));
+            
         } else {
             assertThat(actualValue, is(expectedValue));    
         }
@@ -170,6 +188,12 @@ public class Roundtrip {
         final org.joda.time.LocalDate jodaLocalDate = new org.joda.time.LocalDate(2015, 5, 23);
         final org.joda.time.LocalDateTime jodaLocalDateTime = new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1);
         final org.joda.time.LocalTime jodaLocalTime = new org.joda.time.LocalTime(9, 54, 1);
+        
+        // iterables
+        final List<Long> list = _Lists.of(1L, 2L, 3L);
+        final Set<Long> set = _Sets.of(1L, 2L, 3L);
+        final Can<Long> can = Can.of(1L, 2L, 3L);
+        final long[] array = {1L, 2L, 3L};
 
     }
     
@@ -223,6 +247,12 @@ public class Roundtrip {
         addArg(interactionDto, sampleValues.jodaLocalDate);
         addArg(interactionDto, sampleValues.jodaLocalDateTime);
         addArg(interactionDto, sampleValues.jodaLocalTime);
+        
+        // iterables
+        addArg(interactionDto, sampleValues.list);
+        addArg(interactionDto, sampleValues.set);
+        addArg(interactionDto, sampleValues.can);
+        addArg(interactionDto, sampleValues.array);
 
         // when
         final CharArrayWriter caw = new CharArrayWriter();
@@ -271,9 +301,12 @@ public class Roundtrip {
         testArg(invocationDto, paramIndex, ValueType.JODA_LOCAL_DATE_TIME, sampleValues.jodaLocalDateTime);
         testArg(invocationDto, paramIndex, ValueType.JODA_LOCAL_TIME, sampleValues.jodaLocalTime);
         
-
+        // iterables
+        testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.list);
+        testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.set);
+        testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.can);
+        testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.array);
     }
-
 
 
 }
