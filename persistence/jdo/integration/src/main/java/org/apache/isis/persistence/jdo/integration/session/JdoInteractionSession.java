@@ -24,11 +24,11 @@ import java.util.List;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManager;
 
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.assertions._Assert.OpenCloseState;
 import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.events.AppLifecycleEventService;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.integration.lifecycles.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -128,8 +128,8 @@ implements HasMetaModelContext {
     
     private PersistenceManager integrateWithApplicationLayer(final PersistenceManager persistenceManager) {
         
-        val appLifecycleEventService = metaModelContext.getServiceRegistry()
-                .lookupServiceElseFail(AppLifecycleEventService.class);
+        val eventBusService = metaModelContext.getServiceRegistry()
+                .lookupServiceElseFail(EventBusService.class);
         
         val entityChangeTracker = metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(EntityChangeTracker.class);
@@ -140,7 +140,7 @@ implements HasMetaModelContext {
         // install JDO specific entity change listeners ...
         
         val jdoLifecycleListener = new JdoLifecycleListener(
-                entityChangeEmitter, entityChangeTracker, appLifecycleEventService);
+                entityChangeEmitter, entityChangeTracker, eventBusService);
         persistenceManager.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
         
         onCloseTasks.add(()->{

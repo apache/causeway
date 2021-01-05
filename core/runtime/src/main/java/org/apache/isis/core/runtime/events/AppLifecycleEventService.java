@@ -28,8 +28,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
-import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 
 /**
  * 
@@ -55,16 +53,5 @@ public class AppLifecycleEventService {
     public void fireAppPostMetamodel() {
         eventBusService.post(AppLifecycleEvent.POST_METAMODEL);
     }
-
-    // -- PERSISTENT OBJECT EVENTS
-
-    public void firePreStoreEvent(Object persistableObject) {
-        eventBusService.post(PreStoreEvent.of(persistableObject));
-    }
-    
-    public void firePostStoreEvent(Object persistableObject) {
-        eventBusService.post(PostStoreEvent.of(persistableObject));
-    }
-    
 
 }

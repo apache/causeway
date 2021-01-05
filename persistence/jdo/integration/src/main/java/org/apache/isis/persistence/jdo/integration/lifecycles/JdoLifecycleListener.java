@@ -33,10 +33,12 @@ import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.events.AppLifecycleEventService;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
+import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
+import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 
 import lombok.NonNull;
@@ -68,7 +70,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     private final @NonNull EntityChangeEmitter entityChangeEmitter;
     private final @NonNull EntityChangeTracker entityChangeTracker;
-    private final @NonNull AppLifecycleEventService appLifecycleEventService;
+    private final @NonNull EventBusService eventBusService;
 
     /////////////////////////////////////////////////////////////////////////
     // callbacks
@@ -81,14 +83,12 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preAttach(final InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistableFor(event);
-        _Utils.ensureRootObject(pojo);
+        // no-op
     }
 
     @Override
     public void postAttach(final InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistableFor(event);
-        _Utils.ensureRootObject(pojo);
+        // no-op
     }
 
     @Override
@@ -106,7 +106,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         if(persistableObject!=null 
                 && JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
 
-            appLifecycleEventService.firePreStoreEvent(persistableObject);
+            eventBusService.post(PreStoreEvent.of(persistableObject));
         }
         
         final Persistable pojo = _Utils.persistableFor(event);
@@ -124,7 +124,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         if(persistableObject!=null && 
                 JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
 
-            appLifecycleEventService.firePostStoreEvent(persistableObject);
+            eventBusService.post(PostStoreEvent.of(persistableObject));
         }
         
         final Persistable pojo = _Utils.persistableFor(event);
@@ -157,8 +157,6 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     public void preDelete(InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
         entityChangeEmitter.enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
-
-
     }
 
     @Override
@@ -190,14 +188,12 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preDetach(InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistableFor(event);
-        _Utils.ensureRootObject(pojo);
+        // no-op
     }
 
     @Override
     public void postDetach(InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistableFor(event);
-        _Utils.ensureRootObject(pojo);
+        // no-op
     }
 
     // /////////////////////////////////////////////////////////
@@ -227,5 +223,6 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     //        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
     //        return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
     //    }
+            
 
 }
