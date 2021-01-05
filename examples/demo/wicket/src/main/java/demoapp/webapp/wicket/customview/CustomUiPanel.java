@@ -19,13 +19,21 @@
 
 package demoapp.webapp.wicket.customview;
 
+import java.io.IOException;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.SneakyThrows;
@@ -71,11 +79,30 @@ public class CustomUiPanel extends PanelAbstract<EntityModel>  {
         val managedObject = (ManagedObject) getModelObject();
         val customUiVm = (CustomUiVm) managedObject.getPojo();
 
+        val latitude = new Label("latitude", customUiVm.getLatitude());
+        val longitude = new Label("longitude", customUiVm.getLongitude());
+        val address = new Label("address", customUiVm.getAddress());
+        val map = createMapComponent("map", customUiVm);
+        val sourcesComponent = createPropertyComponent(managedObject, "sources");
+        val descriptionComponent = createPropertyComponent(managedObject, "description");
+
+        addOrReplace(latitude, longitude, address, map, sourcesComponent, descriptionComponent);
+    }
+
+    private Image createMapComponent(String id, CustomUiVm customUiVm) throws IOException {
         val bytes = geoapifyClient.toJpeg(customUiVm.getLatitude(), customUiVm.getLongitude(), customUiVm.getZoom());
+        val map = new Image(id, new ByteArrayResource("image/jpeg", bytes));
+        return map;
+    }
 
-        val img = new Image("img", new ByteArrayResource("image/jpeg", bytes));
+    private Component createPropertyComponent(ManagedObject managedObject, String propertyId) {
+        val spec = managedObject.getSpecification();
+        val descriptionAssoc = (OneToOneAssociation) spec.getAssociationElseFail(propertyId);
+        val descriptionPm = new PropertyMemento(descriptionAssoc);
 
-        addOrReplace(img);
+        val entityModel = EntityModel.ofAdapter(getCommonContext(), managedObject);
+        val descriptionModel = entityModel.getPropertyModel(descriptionPm, ObjectUiModel.Mode.VIEW, ObjectUiModel.RenderingHint.REGULAR);
+        return getComponentFactoryRegistry().createComponent(ComponentType.SCALAR_NAME_AND_VALUE, propertyId, descriptionModel);
     }
 
 

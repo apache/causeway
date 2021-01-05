@@ -22,8 +22,46 @@
 <wicket:panel>
     <div class="customUiPanel">
         <div>
-            <p>Where in the world?</p>
-            <img wicket:id="img" width="800px" height="600px"/>
+            <div class="row">
+                <div class="col-lg-10">
+                    <h2>Where in the world?</h2>
+                </div>
+                <div class="col-lg-2">
+                    <div class="fieldSets">
+                        <fieldset class="memberGroup" id="fieldSet-sources">
+                            <div class="panel panel-default">
+                                <div class="properties panel-body">
+                                    <div>
+                                        <div class="property sources" wicket:id="sources"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <label wicket:id="address"></label>
+                    <br/>
+                    (<label wicket:id="latitude"></label>,<label wicket:id="longitude"></label>)
+                    <img wicket:id="map" width="800px" height="600px"/>
+                </div>
+                <div class="col-lg-6">
+                    <fieldset class="memberGroup" id="fieldSet-description">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <span class="panel-title">Description</span>
+                            </div>
+                            <div class="properties panel-body">
+                                <div>
+                                    <div class="property description" wicket:id="description"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
         </div>
     </div>
 </wicket:panel>
