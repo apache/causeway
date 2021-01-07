@@ -35,12 +35,15 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.integration.session.JdoEntityChangeEmitter;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -68,8 +71,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     }
 
-    private final @NonNull EntityChangeEmitter entityChangeEmitter;
-    private final @NonNull EntityChangeTracker entityChangeTracker;
+    private final @NonNull MetaModelContext metaModelContext;
     private final @NonNull EventBusService eventBusService;
 
     /////////////////////////////////////////////////////////////////////////
@@ -94,8 +96,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
-        entityChangeEmitter.adaptEntityAndInjectServices(pojo);
-        entityChangeTracker.incrementLoaded();
+        getEntityChangeEmitter().adaptEntityAndInjectServices(pojo);
+        getEntityChangeTracker().incrementLoaded();
     }
 
     @Override
@@ -111,7 +113,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         
         final Persistable pojo = _Utils.persistableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
-            entityChangeEmitter.invokeIsisPersistingCallback(pojo);
+            getEntityChangeEmitter().invokeIsisPersistingCallback(pojo);
         }
         
     }
@@ -129,9 +131,9 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         
         final Persistable pojo = _Utils.persistableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
-            entityChangeEmitter.enlistCreatedAndInvokeIsisPersistedCallback(pojo);
+            getEntityChangeEmitter().enlistCreatedAndInvokeIsisPersistedCallback(pojo);
         } else {
-            entityChangeEmitter.invokeIsisUpdatedCallback(pojo);
+            getEntityChangeEmitter().invokeIsisUpdatedCallback(pojo);
         }
         
     }
@@ -140,7 +142,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
-        entityChangeEmitter.enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
+        getEntityChangeEmitter().enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
     }
 
     @Override
@@ -156,7 +158,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
-        entityChangeEmitter.enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
+        getEntityChangeEmitter().enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
     }
 
     @Override
@@ -224,5 +226,15 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     //        return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
     //    }
             
+    // -- DEPENDENCIES
+    
+    @Getter(lazy = true)
+    private final EntityChangeEmitter entityChangeEmitter = 
+        new JdoEntityChangeEmitter(metaModelContext, getEntityChangeTracker());
+    
+    @Getter(lazy = true)
+    private final EntityChangeTracker entityChangeTracker = 
+        metaModelContext.getServiceRegistry()
+            .lookupServiceElseFail(EntityChangeTracker.class);
 
 }

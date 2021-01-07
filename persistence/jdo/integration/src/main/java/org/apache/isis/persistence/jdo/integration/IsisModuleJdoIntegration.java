@@ -19,18 +19,21 @@
 package org.apache.isis.persistence.jdo.integration;
 
 import javax.inject.Named;
+import javax.jdo.PersistenceManagerFactory;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5;
+import org.apache.isis.persistence.jdo.integration.lifecycles.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel;
 import org.apache.isis.persistence.jdo.integration.session.JdoIntegrationService;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
@@ -78,7 +81,8 @@ public class IsisModuleJdoIntegration {
     @Bean 
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
             final MetaModelContext metaModelContext,
-            final DnSettings dnSettings) {
+            final DnSettings dnSettings,
+            final EventBusService eventBusService) {
 
         //final IsisBeanTypeRegistry beanTypeRegistry,
         // final DnSettings dnSettings,
@@ -89,7 +93,20 @@ public class IsisModuleJdoIntegration {
 //          listener.onEntitiesDiscovered(pmf, beanTypeRegistry.getEntityTypesJdo(), dnSettings.getAsMap());    
 //      });
         
-        val lpmfBean = new LocalPersistenceManagerFactoryBean();
+        val lpmfBean = new LocalPersistenceManagerFactoryBean() {
+            @Override
+            protected PersistenceManagerFactory newPersistenceManagerFactory(java.util.Map<?,?> props) {
+                val pmf = super.newPersistenceManagerFactory(props);
+                integrateWithApplicationLayer(metaModelContext, eventBusService, pmf);
+                return pmf;
+            }
+            @Override
+            protected PersistenceManagerFactory newPersistenceManagerFactory(String name) {
+                val pmf = super.newPersistenceManagerFactory(name);
+                integrateWithApplicationLayer(metaModelContext, eventBusService, pmf);
+                return pmf;
+            }
+        };
         lpmfBean.setJdoPropertyMap(dnSettings.getAsProperties());
         return lpmfBean; 
     }
@@ -101,6 +118,20 @@ public class IsisModuleJdoIntegration {
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
         
         return new JdoTransactionManager(pmf);    
+    }
+    
+    // -- HELPER
+    
+    private static void integrateWithApplicationLayer(
+            final MetaModelContext metaModelContext,
+            final EventBusService eventBusService, 
+            final PersistenceManagerFactory pmf) {
+        
+        // install JDO specific entity change listeners ...
+        
+        val jdoLifecycleListener = new JdoLifecycleListener(metaModelContext, eventBusService);
+        pmf.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
+        
     }
     
 }

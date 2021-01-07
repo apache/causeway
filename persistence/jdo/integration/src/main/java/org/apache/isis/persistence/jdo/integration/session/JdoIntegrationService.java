@@ -18,8 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.integration.session;
 
-import java.util.Optional;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,14 +32,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.events.AppLifecycleEvent;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -50,8 +45,7 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class JdoIntegrationService 
-implements InteractionScopeAware {
+public class JdoIntegrationService {
 
     @Inject MetaModelContext metaModelContext;
     @Inject TransactionAwarePersistenceManagerFactoryProxy txAwarePmfProxy;
@@ -86,26 +80,6 @@ implements InteractionScopeAware {
             throw _Exceptions.unmatchedCase(event);
         }
 
-    }
-    
-    @Override
-    public void afterEnteringTransactionalBoundary(InteractionSession interactionSession, boolean sync) {
-        val persistenceSession = new JdoInteractionSession(metaModelContext, txAwarePmfProxy);
-        interactionSession.putAttribute(JdoInteractionSession.class, persistenceSession);
-        persistenceSession.open();
-    }
-    
-    @Override
-    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
-        currentJdoSession(interactionSession)
-            .ifPresent(JdoInteractionSession::close);
-    }
-
-    // -- HELPER
-
-    private Optional<JdoInteractionSession> currentJdoSession(final InteractionSession interactionSession) {
-        return Optional.ofNullable(interactionSession)
-                .map(session->session.getAttribute(JdoInteractionSession.class));
     }
 
 
