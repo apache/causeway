@@ -27,12 +27,14 @@ import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscr
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.Timeout;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -63,7 +65,9 @@ class JdoIsisEntityChangesPublishingTest extends IsisIntegrationTestAbstract {
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
 
-    @TestFactory @DisplayName("Application Layer")
+    @DisplayName("Application Layer")
+    @TestFactory
+    @Timeout(value = 1, unit = TimeUnit.DAYS)
     List<DynamicTest> generateTests() {
         return testFactory.generateTests(this::given, this::verify);
     }

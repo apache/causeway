@@ -18,8 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.integration.session;
 
-import javax.jdo.PersistenceManager;
-
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -37,7 +35,6 @@ import lombok.val;
 public class JdoEntityChangeEmitter implements JdoLifecycleListener.EntityChangeEmitter {
 
     private final MetaModelContext metaModelContext;
-    private final PersistenceManager persistenceManager;
     private final EntityChangeTracker entityChangeTracker;
     
     @Override
@@ -93,13 +90,17 @@ public class JdoEntityChangeEmitter implements JdoLifecycleListener.EntityChange
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        val entity = _Utils.fetchEntityElseFail(metaModelContext, persistenceManager, pojo);
+        val entity = ManagedObject.of(
+                metaModelContext.getSpecificationLoader()::loadSpecification, 
+                pojo);
         entityChangeTracker.enlistUpdating(entity);
     }
 
     @Override
     public void invokeIsisUpdatedCallback(Persistable pojo) {
-        val entity = _Utils.fetchEntityElseFail(metaModelContext, persistenceManager, pojo);
+        val entity = ManagedObject.of(
+                metaModelContext.getSpecificationLoader()::loadSpecification, 
+                pojo);
         // the callback and transaction.enlist are done in the preStore callback
         // (can't be done here, as the enlist requires to capture the 'before' values)
         entityChangeTracker.recognizeUpdating(entity);

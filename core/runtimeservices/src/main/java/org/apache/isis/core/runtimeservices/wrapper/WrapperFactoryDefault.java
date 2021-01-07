@@ -77,7 +77,6 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
@@ -562,7 +561,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         private final ServiceInjector serviceInjector;
 
         @Inject InteractionFactory isisInteractionFactory;
-        @Inject TransactionService transactionService;
+        //@Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
         @Inject Provider<InteractionContext> interactionContextProvider;
         @Inject BookmarkService bookmarkService;
@@ -576,8 +575,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             return isisInteractionFactory.callAuthenticated(authentication, () -> {
                 val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
                 childCommand.updater().setParent(parentCommand);
-                return transactionService
-                        .callWithinCurrentTransactionElseCreateNew(() -> {
+                //return transactionService.callWithinCurrentTransactionElseCreateNew(() -> {
                         val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
                         if (bookmark == null) {
                             return null;
@@ -587,8 +585,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
                             entity = repositoryService.detach(entity);
                         }
                         return entity;
-                    })
-                        .nullableOrElseFail();
+//                    })
+//                        .nullableOrElseFail();
             });
         }
     }

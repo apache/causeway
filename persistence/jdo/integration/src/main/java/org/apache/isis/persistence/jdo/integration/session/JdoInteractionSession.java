@@ -18,11 +18,9 @@
  */
 package org.apache.isis.persistence.jdo.integration.session;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.assertions._Assert.OpenCloseState;
@@ -48,9 +46,7 @@ implements HasMetaModelContext {
     
     @Getter(onMethod_ = {@Override}) private final MetaModelContext metaModelContext;
 
-    private PersistenceManager persistenceManager;
-    private final TransactionAwarePersistenceManagerFactoryProxy pmf;
-    private final List<Runnable> onCloseTasks = new ArrayList<>();
+    private final TransactionAwarePersistenceManagerFactoryProxy pmfFactoryProxy;
     
     private OpenCloseState state = OpenCloseState.NOT_INITIALIZED;
 
@@ -63,14 +59,14 @@ implements HasMetaModelContext {
      */
     public JdoInteractionSession(
             final MetaModelContext metaModelContext, 
-            final TransactionAwarePersistenceManagerFactoryProxy pmf) {
+            final TransactionAwarePersistenceManagerFactoryProxy pmfFactoryProxy) {
 
         if (log.isDebugEnabled()) {
             log.debug("creating {}", this);
         }
 
         this.metaModelContext = metaModelContext;
-        this.pmf = pmf;
+        this.pmfFactoryProxy = pmfFactoryProxy;
     }
 
     // -- OPEN
@@ -86,7 +82,7 @@ implements HasMetaModelContext {
             log.debug("opening {}", this);
         }
         
-        this.persistenceManager = integrateWithApplicationLayer(pmf.getPersistenceManager());
+        integrateWithApplicationLayer(pmfFactoryProxy.getObject());
         
         this.state = OpenCloseState.OPEN;
     }
@@ -105,28 +101,11 @@ implements HasMetaModelContext {
         }
         
         this.state = OpenCloseState.CLOSED;
-
-        try {
-        
-            onCloseTasks.removeIf(task->{
-                if(!persistenceManager.isClosed()) {
-                    task.run();    
-                }
-                return true; 
-             });
-            
-        } catch(final Throwable ex) {
-            // ignore
-            log.error("close: failed to close JDO persistenceManager; continuing to avoid memory leakage", ex);
-        }
-        
-        persistenceManager = null; // detach
-        
     }
     
     // -- HELPER
     
-    private PersistenceManager integrateWithApplicationLayer(final PersistenceManager persistenceManager) {
+    private void integrateWithApplicationLayer(final PersistenceManagerFactory pmf) {
         
         val eventBusService = metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(EventBusService.class);
@@ -135,19 +114,14 @@ implements HasMetaModelContext {
                 .lookupServiceElseFail(EntityChangeTracker.class);
         
         val entityChangeEmitter = 
-                new JdoEntityChangeEmitter(getMetaModelContext(), persistenceManager, entityChangeTracker);
+                new JdoEntityChangeEmitter(getMetaModelContext(), entityChangeTracker);
         
         // install JDO specific entity change listeners ...
         
         val jdoLifecycleListener = new JdoLifecycleListener(
                 entityChangeEmitter, entityChangeTracker, eventBusService);
-        persistenceManager.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
+        pmf.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
         
-        onCloseTasks.add(()->{
-            persistenceManager.removeInstanceLifecycleListener(jdoLifecycleListener);
-        });
-        
-        return persistenceManager;
     }
 
 

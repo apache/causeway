@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.applayer.publishing.jdo.isis;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -50,6 +52,7 @@ import lombok.val;
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
+                "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG"
         })
 @TestPropertySource({
@@ -61,7 +64,9 @@ class JdoIsisEntityPropertyChangePublishingTest extends IsisIntegrationTestAbstr
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
 
-    @TestFactory @DisplayName("Application Layer")
+    @DisplayName("Application Layer")
+    @TestFactory
+    @Timeout(value = 1, unit = TimeUnit.DAYS)
     List<DynamicTest> generateTests() {
         return testFactory.generateTests(this::given, this::verify);
     }

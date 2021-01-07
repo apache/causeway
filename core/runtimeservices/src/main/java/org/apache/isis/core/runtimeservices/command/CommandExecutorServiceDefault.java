@@ -51,6 +51,7 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -60,6 +61,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -238,6 +240,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 final Object targetObject = bookmarkService.lookup(bookmark);
 
                 val targetAdapter = adapterFor(targetObject);
+                
+                if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
+                    throw _Exceptions.unrecoverableFormatted("cannot recreate ManagedObject from bookmark %s", bookmark);
+                }
 
                 final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
 
