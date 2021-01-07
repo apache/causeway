@@ -19,6 +19,8 @@
 package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import javax.annotation.Nullable;
+import javax.jdo.JDOHelper;
+import javax.jdo.ObjectState;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
@@ -47,7 +49,14 @@ final class _Utils {
     }
     
     static String debug(InstanceLifecycleEvent event) {
-        return String.format("entity: %s", persistableFor(event));
+        // try to be side-effect free here ...
+        final Persistable pojo = _Utils.persistableFor(event);
+        ObjectState state = JDOHelper.getObjectState(pojo);
+        if(state == ObjectState.PERSISTENT_CLEAN) {
+            return String.format("entity: %s", pojo);
+        } else {
+            return String.format("entity: %s", pojo.getClass().getSimpleName());
+        }
     }
     
     static ManagedObject adaptEntity(

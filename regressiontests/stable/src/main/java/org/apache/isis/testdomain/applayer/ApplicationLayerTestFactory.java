@@ -150,12 +150,12 @@ public class ApplicationLayerTestFactory {
             final InteractionTestRunner interactionTestRunner) {
         return dynamicTest(displayName, ()->{
             
-            val isSuccesfulRun = isisInteractionFactory.callAnonymous(()->
+            val isSuccessfulRun = isisInteractionFactory.callAnonymous(()->
                         interactionTestRunner.run(given, verifier));
                     
             isisInteractionFactory.closeSessionStack();
             
-            if(isSuccesfulRun) {
+            if(isSuccessfulRun) {
                 verifier.accept(VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC);
             }
 

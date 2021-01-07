@@ -53,7 +53,8 @@ import lombok.val;
         }, 
         properties = {
                 "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG"
+                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
