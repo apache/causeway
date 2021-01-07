@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.session;
+package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.session;
+package org.apache.isis.persistence.jdo.integration.schema;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
@@ -28,12 +28,12 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class DnApplication {
+public class _DnApplication {
     
     private _DnApplicationComponents dnApplicationComponents;
     private final JdoEntityTypeRegistry jdoEntityTypeRegistry = new JdoEntityTypeRegistry();
     
-    public DnApplication(
+    public _DnApplication(
             final MetaModelContext metaModelContext,
             final DnSettings dnSettings) {
         

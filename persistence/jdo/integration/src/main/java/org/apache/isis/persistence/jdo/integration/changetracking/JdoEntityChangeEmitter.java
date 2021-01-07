@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.session;
+package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import org.datanucleus.enhancement.Persistable;
 
@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.integration.lifecycles.JdoLifecycleListener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

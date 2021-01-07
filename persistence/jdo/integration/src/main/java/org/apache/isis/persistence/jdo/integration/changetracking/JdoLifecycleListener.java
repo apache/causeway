@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.lifecycles;
+package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import java.util.Map;
 
@@ -41,7 +41,6 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
-import org.apache.isis.persistence.jdo.integration.session.JdoEntityChangeEmitter;
 
 import lombok.Getter;
 import lombok.NonNull;

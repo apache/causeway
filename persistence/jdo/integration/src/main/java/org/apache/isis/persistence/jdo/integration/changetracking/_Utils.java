@@ -16,10 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.session;
+package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;
+import javax.jdo.listener.InstanceLifecycleEvent;
+
+import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -37,6 +40,10 @@ import lombok.val;
 
 final class _Utils {
 
+    static Persistable persistableFor(InstanceLifecycleEvent event) {
+        return (Persistable)event.getSource();
+    }
+    
     static ManagedObject adaptNullableAndInjectServices(
             final @NonNull MetaModelContext mmc,
             final @Nullable Object pojo) {
@@ -111,6 +118,5 @@ final class _Utils {
         final ManagedObject createdAdapter = ManagedObject.identified(spec, pojo, rootOid);
         return injectServices(mmc, createdAdapter);
     }
-
     
 }

@@ -32,10 +32,10 @@ import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
+import org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5;
-import org.apache.isis.persistence.jdo.integration.lifecycles.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel;
-import org.apache.isis.persistence.jdo.integration.session.JdoIntegrationService;
+import org.apache.isis.persistence.jdo.integration.schema.JdoSchemaService;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
@@ -55,7 +55,7 @@ import lombok.val;
         JdoIntegrationProgrammingModel.class,
         
         IsisJdoSupportDN5.class,
-        JdoIntegrationService.class,
+        JdoSchemaService.class,
 
 })
 public class IsisModuleJdoIntegration {
