@@ -72,6 +72,7 @@ public class JdoBook extends JdoProduct {
         this.myService = myService;
     }
     public boolean hasInjectionPointsResolved() {
+        getAuthor(); // seems to have the required side-effect to actually trigger injection
         return myService != null;
     }
     // --

@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import javax.enterprise.inject.Vetoed;
+import javax.inject.Provider;
 import javax.jdo.listener.AttachLifecycleListener;
 import javax.jdo.listener.ClearLifecycleListener;
 import javax.jdo.listener.CreateLifecycleListener;
@@ -41,49 +42,53 @@ import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Vetoed // managed by isis
 @RequiredArgsConstructor
+@Log4j2
 public class JdoLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
 DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener {
 
     private final @NonNull MetaModelContext metaModelContext;
     private final @NonNull EventBusService eventBusService;
+    private final @NonNull Provider<EntityChangeTracker> entityChangeTrackerProvider;
 
-    /////////////////////////////////////////////////////////////////////////
-    // callbacks
-    /////////////////////////////////////////////////////////////////////////
+    // -- CALLBACKS
 
     @Override
     public void postCreate(final InstanceLifecycleEvent event) {
-        // no-op
+        log.debug("postCreate {}", ()->_Utils.debug(event));
+        _Utils.resolveInjectionPoints(metaModelContext, event);
     }
 
     @Override
     public void preAttach(final InstanceLifecycleEvent event) {
-        // no-op
+        log.debug("preAttach {}", ()->_Utils.debug(event));
     }
 
     @Override
     public void postAttach(final InstanceLifecycleEvent event) {
-        // no-op
+        log.debug("postAttach {}", ()->_Utils.debug(event));
+        _Utils.resolveInjectionPoints(metaModelContext, event);
     }
 
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
-        final Persistable pojo = _Utils.persistableFor(event);
-        adaptEntityAndInjectServices(pojo);
+        log.debug("postLoad {}", ()->_Utils.debug(event));
+        _Utils.resolveInjectionPoints(metaModelContext, event);
         getEntityChangeTracker().incrementLoaded();
     }
 
     @Override
     public void preStore(InstanceLifecycleEvent event) {
 
+        log.debug("preStore {}", ()->_Utils.debug(event));
+        
         val persistableObject = event.getPersistentInstance();
 
         if(persistableObject!=null 
@@ -101,6 +106,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void postStore(InstanceLifecycleEvent event) {
+        
+        log.debug("postStore {}", ()->_Utils.debug(event));
 
         val persistableObject = event.getPersistentInstance();
 
@@ -122,12 +129,18 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
+        
+        log.debug("preDirty {}", ()->_Utils.debug(event));
+        
         final Persistable pojo = _Utils.persistableFor(event);
         enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
     }
 
     @Override
     public void postDirty(InstanceLifecycleEvent event) {
+        
+        log.debug("postDirty {}", ()->_Utils.debug(event));
+        
         // cannot assert on the frameworks being in agreement, due to the scenario documented
         // in the FrameworkSynchronizer#preDirtyProcessing(...)
         //
@@ -138,12 +151,17 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
+        
+        log.debug("preDelete {}", ()->_Utils.debug(event));
+        
         final Persistable pojo = _Utils.persistableFor(event);
         enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
     }
 
     @Override
     public void postDelete(InstanceLifecycleEvent event) {
+        
+        log.debug("postDelete {}", ()->_Utils.debug(event));
 
         // previously we called the PersistenceSession to invoke the removed callback (if any).
         // however, this is almost certainly incorrect, because DN will not allow us
@@ -159,6 +177,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void preClear(InstanceLifecycleEvent event) {
         // ignoring, not important to us
+        log.debug("preClear {}", ()->_Utils.debug(event));
     }
 
     /**
@@ -167,16 +186,18 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void postClear(InstanceLifecycleEvent event) {
         // ignoring, not important to us
+        log.debug("postClear {}", ()->_Utils.debug(event));
     }
 
     @Override
     public void preDetach(InstanceLifecycleEvent event) {
-        // no-op
+        log.debug("preDetach {}", ()->_Utils.debug(event));
     }
 
     @Override
     public void postDetach(InstanceLifecycleEvent event) {
-        // no-op
+        log.debug("postDetach {}", ()->_Utils.debug(event));
+        _Utils.resolveInjectionPoints(metaModelContext, event);
     }
     
     // -- HELPER
@@ -246,9 +267,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
             
     // -- DEPENDENCIES
     
-    @Getter(lazy = true)
-    private final EntityChangeTracker entityChangeTracker = 
-        metaModelContext.getServiceRegistry()
-            .lookupServiceElseFail(EntityChangeTracker.class);
+    private EntityChangeTracker getEntityChangeTracker() {
+        return entityChangeTrackerProvider.get(); 
+    }
 
 }
