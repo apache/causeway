@@ -18,8 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.integration.changetracking;
 
-import java.util.Map;
-
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.listener.AttachLifecycleListener;
 import javax.jdo.listener.ClearLifecycleListener;
@@ -34,12 +32,13 @@ import javax.jdo.listener.StoreLifecycleListener;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
+import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 
 import lombok.Getter;
@@ -52,23 +51,6 @@ import lombok.val;
 public class JdoLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
 DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener {
-
-    /**
-     * The internal contract between PersistenceSession and this class.
-     */
-    public interface EntityChangeEmitter {
-        
-        ManagedObject adaptEntityAndInjectServices(Persistable pojo);
-
-        void invokeIsisPersistingCallback(Persistable pojo);
-        void enlistCreatedAndInvokeIsisPersistedCallback(Persistable pojo);
-
-        void enlistUpdatingAndInvokeIsisUpdatingCallback(Persistable pojo);
-        void invokeIsisUpdatedCallback(Persistable pojo);
-
-        void enlistDeletingAndInvokeIsisRemovingCallbackFacet(Persistable pojo);
-
-    }
 
     private final @NonNull MetaModelContext metaModelContext;
     private final @NonNull EventBusService eventBusService;
@@ -95,7 +77,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
-        getEntityChangeEmitter().adaptEntityAndInjectServices(pojo);
+        adaptEntityAndInjectServices(pojo);
         getEntityChangeTracker().incrementLoaded();
     }
 
@@ -112,7 +94,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         
         final Persistable pojo = _Utils.persistableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
-            getEntityChangeEmitter().invokeIsisPersistingCallback(pojo);
+            invokeIsisPersistingCallback(pojo);
         }
         
     }
@@ -130,9 +112,9 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         
         final Persistable pojo = _Utils.persistableFor(event);
         if(pojo.dnGetStateManager().isNew(pojo)) {
-            getEntityChangeEmitter().enlistCreatedAndInvokeIsisPersistedCallback(pojo);
+            enlistCreatedAndInvokeIsisPersistedCallback(pojo);
         } else {
-            getEntityChangeEmitter().invokeIsisUpdatedCallback(pojo);
+            invokeIsisUpdatedCallback(pojo);
         }
         
     }
@@ -141,7 +123,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
-        getEntityChangeEmitter().enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
+        enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
     }
 
     @Override
@@ -157,7 +139,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
-        getEntityChangeEmitter().enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
+        enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
     }
 
     @Override
@@ -196,40 +178,73 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     public void postDetach(InstanceLifecycleEvent event) {
         // no-op
     }
-
-    // /////////////////////////////////////////////////////////
-    // Logging
-    // /////////////////////////////////////////////////////////
-
-    //    private enum Phase {
-    //        PRE, POST
-    //    }
-
-    private static Map<Integer, LifecycleEventType> events = _Maps.newHashMap();
-
-    private enum LifecycleEventType {
-        CREATE(0), LOAD(1), STORE(2), CLEAR(3), DELETE(4), DIRTY(5), DETACH(6), ATTACH(7);
-
-        private LifecycleEventType(int code) {
-            events.put(code, this);
-        }
-
-        //        public static LifecycleEventType lookup(int code) {
-        //            return events.get(code);
-        //        }
+    
+    // -- HELPER
+    
+    private ManagedObject adaptEntityAndInjectServices(final @NonNull Persistable pojo) {
+        return _Utils.adaptEntityAndInjectServices(metaModelContext, pojo);
     }
 
-    //    private String logString(Phase phase, LoggingLocation location, InstanceLifecycleEvent event) {
-    //        final Persistable pojo = Utils.persistenceCapableFor(event);
-    //        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
-    //        return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
-    //    }
+    private void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
+        val entity = adaptEntityAndInjectServices(pojo);
+        getEntityChangeTracker().enlistDeleting(entity);
+    }
+
+    /**
+     * Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
+     * lifecycle callback.
+     *
+     * <p>
+     * The implementation therefore uses Isis' {@link Oid#isTransient() oid}
+     * to determine which callback to fire.
+     */
+    private void invokeIsisPersistingCallback(final Persistable pojo) {
+        if (DnEntityStateProvider.entityState(pojo).isDetached()) {
+            val entity = ManagedObject.of(
+                    metaModelContext.getSpecificationLoader()::loadSpecification, 
+                    pojo);
+
+            getEntityChangeTracker().recognizePersisting(entity);
+
+        } else {
+            // updating
+
+            // don't call here, already called in preDirty.
+
+            // CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+        }
+    }
+
+    /**
+     * Called either when an entity is initially persisted, or when an entity is updated;
+     * fires the appropriate lifecycle callback
+     *
+     * <p>
+     * The implementation therefore uses Isis' {@link Oid#isTransient() oid}
+     * to determine which callback to fire.
+     */
+    private void enlistCreatedAndInvokeIsisPersistedCallback(final Persistable pojo) {
+        val entity = adaptEntityAndInjectServices(pojo);
+        getEntityChangeTracker().enlistCreated(entity);
+    }
+
+    private void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
+        val entity = ManagedObject.of(
+                metaModelContext.getSpecificationLoader()::loadSpecification, 
+                pojo);
+        getEntityChangeTracker().enlistUpdating(entity);
+    }
+
+    private void invokeIsisUpdatedCallback(Persistable pojo) {
+        val entity = ManagedObject.of(
+                metaModelContext.getSpecificationLoader()::loadSpecification, 
+                pojo);
+        // the callback and transaction.enlist are done in the preStore callback
+        // (can't be done here, as the enlist requires to capture the 'before' values)
+        getEntityChangeTracker().recognizeUpdating(entity);
+    }
             
     // -- DEPENDENCIES
-    
-    @Getter(lazy = true)
-    private final EntityChangeEmitter entityChangeEmitter = 
-        new JdoEntityChangeEmitter(metaModelContext, getEntityChangeTracker());
     
     @Getter(lazy = true)
     private final EntityChangeTracker entityChangeTracker = 
