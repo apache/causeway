@@ -41,7 +41,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
@@ -103,9 +102,9 @@ public class TransactionServiceSpring implements TransactionService {
         } else {
             txManager.commit(txStatus);
         }
-        // begins a new transaction
-        val txStatus2 = txManager.getTransaction(txTemplate);
-        _Assert.assertTrue(txStatus2.isNewTransaction()); //XXX remove once known to be always correct
+        
+        // begin a new transaction
+        txManager.getTransaction(txTemplate);
     }
     
     @Override

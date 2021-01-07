@@ -364,6 +364,7 @@ implements
     public void recognizeLoaded(ManagedObject entity) {
         CallbackFacet.Util.callCallback(entity, LoadedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
+        numberEntitiesLoaded.increment();
     }
 
     @Override
@@ -380,11 +381,6 @@ implements
 
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
-
-    @Override
-    public void incrementLoaded() {
-        numberEntitiesLoaded.increment();
-    }
 
     //  -- HELPER
 

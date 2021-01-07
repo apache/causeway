@@ -44,6 +44,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * <ul>
+ * <li>enlistCreated <-> postStore (when NEW)</li>
+ * <li>enlistDeleting <-> preDelete</li>
+ * <li>enlistUpdating <-> preDirty</li>
+ * <li>recognizeLoaded <-> postLoad</li>
+ * <li>recognizePersisting <-> preStore (when NEW)</li>
+ * <li>recognizeUpdating <-> postStore (when NOT NEW)</li>
+ * </ul>
+ */
 @Vetoed // managed by isis
 @RequiredArgsConstructor
 @Log4j2
@@ -77,8 +87,9 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
         log.debug("postLoad {}", ()->_Utils.debug(event));
-        _Utils.resolveInjectionPoints(metaModelContext, event);
-        getEntityChangeTracker().incrementLoaded();
+        final Persistable pojo = _Utils.persistableFor(event);
+        val entity = adaptEntityAndInjectServices(pojo);
+        getEntityChangeTracker().recognizeLoaded(entity);
     }
 
     @Override
