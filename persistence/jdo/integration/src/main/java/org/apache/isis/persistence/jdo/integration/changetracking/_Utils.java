@@ -36,7 +36,7 @@ import lombok.val;
 final class _Utils {
 
     static Persistable persistableFor(InstanceLifecycleEvent event) {
-        return (Persistable)event.getSource();
+        return (Persistable)event.getPersistentInstance();
     }
     
     static void resolveInjectionPoints(
