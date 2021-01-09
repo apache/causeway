@@ -18,34 +18,39 @@
  */
 package demoapp.dom.ui.custom.vm;
 
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import demoapp.dom.ui.custom.geocoding.GeoapifyClient;
 import demoapp.dom.ui.custom.latlng.Zoom;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.CustomUiMenu")
-@RequiredArgsConstructor
-public class CustomUiMenu {
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.WhereInTheWorldMenu")
+public class WhereInTheWorldMenu {
 
-    private final GeoapifyClient geoapifyClient;
+//tag::action[]
+    @Inject
+    private GeoapifyClient geoapifyClient;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
             cssClassFa="fa-globe",
-            describedAs="Opens a Custom UI page displaying a map"
+            describedAs="Opens a Custom UI page displaying a map for the provided address"
     )
-    public CustomUiVm customUiVm(
+    public WhereInTheWorldVm whereInTheWorld(
             final String address,
             @Zoom final int zoom
     ){
-        val vm = new CustomUiVm();
+        val vm = new WhereInTheWorldVm();
 
         val latLng = geoapifyClient.geocode(address);
         vm.setAddress(address);
@@ -55,11 +60,15 @@ public class CustomUiMenu {
 
         return vm;
     }
+//end::action[]
 
-    public String default0CustomUiVm() {
-        return "London, UK";
+    public List<String> choices0WhereInTheWorld() {
+        return Arrays.asList("Malvern, UK", "Vienna, Austria", "Leeuwarden, Netherlands", "Dublin, Ireland");
     }
-    public int default1CustomUiVm() {
+    public String default0WhereInTheWorld() {
+        return "Malvern, UK";
+    }
+    public int default1WhereInTheWorld() {
         return 14;
     }
 

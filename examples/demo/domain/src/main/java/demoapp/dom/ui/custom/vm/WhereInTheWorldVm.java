@@ -37,11 +37,12 @@ import demoapp.dom.ui.custom.latlng.Latitude;
 import demoapp.dom.ui.custom.latlng.Longitude;
 import demoapp.dom.ui.custom.latlng.Zoom;
 
+//tag::class[]
 @XmlRootElement(name = "demo.CustomUiVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.CustomUiVm")
-public class CustomUiVm implements HasAsciiDocDescription, Serializable {
+public class WhereInTheWorldVm implements HasAsciiDocDescription, Serializable {
 
     @Title
     @Getter @Setter
@@ -58,5 +59,5 @@ public class CustomUiVm implements HasAsciiDocDescription, Serializable {
     @Zoom
     @Getter @Setter
     private int zoom;
-
 }
+//end::class[]

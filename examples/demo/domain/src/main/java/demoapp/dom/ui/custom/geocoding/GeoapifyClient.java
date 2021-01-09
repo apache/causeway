@@ -23,9 +23,11 @@ import lombok.val;
 
 import demoapp.dom.AppConfiguration;
 
+//tag::class[]
 @Service
 public class GeoapifyClient implements Serializable {
 
+//end::class[]
     private final static ObjectMapper objectMapper =
                 new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -37,10 +39,40 @@ public class GeoapifyClient implements Serializable {
         this.apiKey = appConfiguration.getGeoapify().getApiKey();
     }
 
+
+//tag::class[]
+    @Data
+    public class GeocodeResponse {
+        @Getter
+        private final String latitude;
+        @Getter
+        private final String longitude;
+    }
+
+    @SneakyThrows
+    public GeocodeResponse geocode(final String address) {
+        //...
+//end::class[]
+
+        val url = new URL(String.format(
+                "https://api.geoapify.com/v1/geocode/search?text=%s&apiKey=%s"
+                , URLEncoder.encode(address, "UTF-8")
+                , apiKey));
+
+        val response = objectMapper.readValue(url, Response.class);
+
+        return new GeocodeResponse(
+                response.getFeatures().get(0).getProperties().getLat(),
+                response.getFeatures().get(0).getProperties().getLon()
+        );
+//tag::class[]
+    }
+
+//end::class[]
+
     @Data
     @Builder
     public static class JpegRequest {
-
         String latitude;
         String longitude;
         int zoom;
@@ -48,9 +80,14 @@ public class GeoapifyClient implements Serializable {
         @Builder.Default int height = 600;
     }
 
+//tag::class[]
     public byte[] toJpeg(final String latitude, final String longitude, int zoom) throws IOException {
+        //...
+//end::class[]
         return toJpeg(JpegRequest.builder().latitude(latitude).longitude(longitude).zoom(zoom).build());
+//tag::class[]
     }
+//end::class[]
 
     public byte[] toJpeg(final JpegRequest request) throws IOException {
         val urlStr = String.format(
@@ -80,28 +117,5 @@ public class GeoapifyClient implements Serializable {
         List<Feature> features;
     }
 
-    @Data
-    public class GeocodeResponse {
-        @Getter
-        private final String latitude;
-        @Getter
-        private final String longitude;
-    }
-
-    @SneakyThrows
-    public GeocodeResponse geocode(final String address) {
-
-        val url = new URL(String.format(
-                "https://api.geoapify.com/v1/geocode/search?text=%s&apiKey=%s"
-                , URLEncoder.encode(address, "UTF-8")
-                , apiKey));
-
-        val response = objectMapper.readValue(url, Response.class);
-
-        return new GeocodeResponse(
-                response.getFeatures().get(0).getProperties().getLat(),
-                response.getFeatures().get(0).getProperties().getLon()
-        );
-    }
-
 }
+//end::class[]

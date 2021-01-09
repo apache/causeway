@@ -33,7 +33,6 @@ import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifest;
-import demoapp.webapp.wicket.customview.CustomUiPanelFactory;
 
 /**
  * Bootstrap the application.
@@ -55,9 +54,6 @@ import demoapp.webapp.wicket.customview.CustomUiPanelFactory;
     // Persistence (JDO/DN5)
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
-
-    // @Component's
-    CustomUiPanelFactory.class
 })
 //@Log4j2
 public class DemoAppWicket extends SpringBootServletInitializer {
