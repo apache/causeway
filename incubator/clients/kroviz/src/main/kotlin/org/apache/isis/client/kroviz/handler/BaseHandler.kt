@@ -34,21 +34,18 @@ import org.apache.isis.client.kroviz.ui.kv.Constants
  * @item setting Objects and Aggregators into LogEntry.
  */
 abstract class BaseHandler {
-    var successor:BaseHandler? = null
-    protected var logEntry =LogEntry("")
+    var successor: BaseHandler? = null
+    protected var logEntry = LogEntry("")
 
     /**
      * @see https://en.wikipedia.org/wiki/Template_method_pattern
      */
     open fun handle(logEntry: LogEntry) {
         this.logEntry = logEntry
-        val response: String? = logEntry.getResponse()
-        if (null !== response) {
-            if (canHandle(response)) {
-                doHandle()
-            } else {
-                successor!!.handle(logEntry)
-            }
+        if (canHandle(logEntry.response)) {
+            doHandle()
+        } else {
+            successor!!.handle(logEntry)
         }
     }
 
@@ -75,7 +72,7 @@ abstract class BaseHandler {
     /**
      * Must be overridden in subclasses
      */
-    open fun parse(response: String):TransferObject? {
+    open fun parse(response: String): TransferObject? {
         throw Exception("Subclass Responsibility")
     }
 

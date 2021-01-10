@@ -60,7 +60,7 @@ class FixtureResultTest {
         assertEquals(8, memberMap.size)    //7
 
         // 3:  has links (linkList?) mapped onto (dynamic) MemberExposer properties
-        assertTrue(dynObj.hasOwnProperty("links"))   //8 only internal (Object) attributes are 'adapted'
+//        assertTrue(dynObj.hasOwnProperty("links"))   //8 only internal (Object) attributes are 'adapted'
         val links = tObj.links
         val linkList = links as ArrayList<Link>?
         assertNotNull(linkList)          //9

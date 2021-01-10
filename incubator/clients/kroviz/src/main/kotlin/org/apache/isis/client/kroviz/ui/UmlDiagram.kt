@@ -18,14 +18,15 @@
  */
 package org.apache.isis.client.kroviz.ui
 
+import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.core.model.meta.MetaClass
 import org.apache.isis.client.kroviz.core.model.meta.MetaPackage
 import org.apache.isis.client.kroviz.to.DomainType
 
-object ClassDiagram {
+object UmlDiagram {
 
-    fun buildDiagramCode(dd: DiagramDM): String {
+    fun buildClass(dd: DiagramDM): String {
         val domainTypeList: Set<DomainType> = dd.classes
         //TODO properties needed to set type
         //val properties: Set<Property> = dd.properties
@@ -43,6 +44,16 @@ object ClassDiagram {
             }
         }
         return PumlBuilder().with(packages)
+    }
+
+    fun buildSequence(logEntries: List<LogEntry>): String? {
+        val first: LogEntry? = logEntries.find { le ->
+            le.url.endsWith("/restful/")
+        }
+        if (first != null) {
+            return PumlBuilder().withLogEntry(first)
+        }
+        return null
     }
 
 }

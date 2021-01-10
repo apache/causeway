@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.PropertyHandler
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_DOMAIN_TYPES_PROPERTY
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_PROPERTY
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_PROPERTY_DESCRIPTION
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.FR_OBJECT_PROPERTY_
@@ -77,6 +78,16 @@ class PropertyTest {
         val p = PropertyHandler().parse(jsonStr) as Property
         val actual = p.disabledReason!!
         val expected = "Non-cloneable view models are read-only; Immutable"
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun testDemoDomainProperty() {
+        val jsonStr = DEMO_DOMAIN_TYPES_PROPERTY.str
+        val p = PropertyHandler().parse(jsonStr) as Property
+        val e: Extensions = p.extensions!!
+        val actual = e.friendlyName
+        val expected = "Read Only Property Derived Render Day Not Specified"
         assertEquals(expected, actual)
     }
 

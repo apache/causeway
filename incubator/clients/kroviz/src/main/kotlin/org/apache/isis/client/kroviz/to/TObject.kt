@@ -21,13 +21,13 @@ package org.apache.isis.client.kroviz.to
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TObject(val links: List<Link> = emptyList(),
+data class TObject(override val links: List<Link> = emptyList(),
                    val extensions: Extensions,
                    val title: String = "",
                    val domainType: String = "",
                    val instanceId: String? = null,
                    val members: Map<String, Member> = emptyMap()
-) : TransferObject {
+) : TransferObject, HasLinks {
 
     fun getProperties(): MutableList<Member> {
         return getMembersOfType(MemberType.PROPERTY.type)

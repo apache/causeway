@@ -20,12 +20,8 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
-import org.apache.isis.client.kroviz.to.DomainType
-import org.apache.isis.client.kroviz.to.DomainTypes
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Property
+import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.ui.kv.RoStatusBar
-
 
 class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
@@ -38,6 +34,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
             is DomainTypes -> handleDomainTypes(obj)
             is DomainType -> handleDomainType(obj)
             is Property -> handleProperty(obj)
+            is Action -> handleAction(obj)
             else -> log(logEntry)
         }
 
@@ -49,6 +46,12 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
     private fun handleProperty(obj: Property) {
         dsp.addData(obj)
+    }
+
+    private fun handleAction(obj: Action) {
+        //dsp.addData(obj)
+        console.log("[DomainTypesAggregator.handleAction] TBD: what shall we do with the action object?")
+        console.log(obj)
     }
 
     private fun handleDomainType(obj: DomainType) {
@@ -69,16 +72,19 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
     private fun handleDomainTypes(obj: DomainTypes) {
         val domainTypeLinkList = mutableListOf<Link>()
         obj.values.forEach { link ->
+            val it = link.href
             when {
-                link.href.contains("/org.apache.isis") -> {}
-                link.href.contains("/isisApplib") -> {}
-                link.href.contains("/java") -> {}
-                link.href.contains("/void") -> {}
-                link.href.contains("/boolean") -> {}
-                link.href.contains("fixture") -> {}
-                link.href.contains("service") -> {}
-                link.href.contains("/homepage") -> {}
-                link.href.endsWith("Menu") -> {}
+                it.contains("/org.apache.isis") -> {}
+                it.contains("/isisApplib") -> {}
+                it.contains("/java") -> {}
+                it.contains("/void") -> {}
+                it.contains("/boolean") -> {}
+                it.contains("fixture") -> {}
+                it.contains("service") -> {}
+                it.contains("/homepage") -> {}
+                it.endsWith("Menu") -> {}
+                it.startsWith("demoapp.dom.annot") -> {}
+                it.startsWith("demoapp.dom.types.javatime") -> {}
                 else -> {
                     domainTypeLinkList.add(link)
                 }

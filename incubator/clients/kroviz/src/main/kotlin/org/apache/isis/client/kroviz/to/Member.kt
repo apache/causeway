@@ -23,7 +23,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Member(val id: String,
                   val memberType: String,
-                  val links: List<Link> = emptyList(),
+                  override val links: List<Link> = emptyList(),
         //IMROVE: make value immutable (again) and handle property edits eg. via a wrapper
         // members of type property have a value, those of type action don't
                   var value: Value? = null,
@@ -31,7 +31,7 @@ data class Member(val id: String,
                   val extensions: Extensions? = null,
                   val disabledReason: String = "",
                   val optional: Boolean = false
-) : TransferObject {
+) : TransferObject, HasLinks {
 
     var type: String? = ValueType.TEXT.type
 

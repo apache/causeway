@@ -132,7 +132,7 @@ class RoDialog(
 
     @Deprecated("remove once leaflet/svg is fully operational")
     private fun hasScalableContent(): Boolean {
-        val scalable = items.firstOrNull { it.type == ValueType.IMAGE.type }
+        val scalable = items.firstOrNull { it.type == ValueType.IMAGE }
         return scalable != null
     }
 

@@ -18,13 +18,14 @@
  */
 package org.apache.isis.client.kroviz.ui
 
+import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
 class BrowserWindow(val url: String) : Command() {
 
     fun open() {
         val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("URL", "IFrame", url))
+        formItems.add(FormItem("URL", ValueType.IFRAME, url))
         RoDialog(
                 caption = url,
                 items = formItems,

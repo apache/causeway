@@ -19,8 +19,7 @@
 package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.ui.Command
-import org.apache.isis.client.kroviz.ui.FormItem
+import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
 class UndefinedDialog(val logEntry: LogEntry) : Command() {
@@ -35,9 +34,9 @@ class UndefinedDialog(val logEntry: LogEntry) : Command() {
 
     fun open() {
         val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("Instructions", "TextArea", instruction, size = 7))
-        formItems.add(FormItem("URL", "Text", logEntry.url))
-        formItems.add(FormItem("JSON", "TextArea", logEntry.response, 10))
+        formItems.add(FormItem("Instructions", ValueType.TEXT_AREA, instruction, size = 7))
+        formItems.add(FormItem("URL", ValueType.TEXT, logEntry.url))
+        formItems.add(FormItem("JSON", ValueType.TEXT_AREA, logEntry.response, 10))
         val label = "TransferObject has no Handler"
         RoDialog(
                 caption = label,

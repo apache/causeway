@@ -18,9 +18,15 @@
  */
 package org.apache.isis.client.kroviz.ui
 
+import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.meta.MetaClass
 import org.apache.isis.client.kroviz.core.model.meta.MetaPackage
 import org.apache.isis.client.kroviz.to.DomainType
+import org.apache.isis.client.kroviz.to.HasLinks
+import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.RelType
 
 class PumlBuilder {
 
@@ -36,14 +42,7 @@ class PumlBuilder {
         return code
     }
 
-    fun with(pkg:MetaPackage): String {
-        var code = "$Q@startuml$NL"
-        code += amendByPackage(pkg)
-        code += "@enduml$Q"
-        return code
-    }
-
-    private fun amendByPackage(pkg:MetaPackage): String {
+    private fun amendByPackage(pkg: MetaPackage): String {
         val packageName = pkg.name
         var code = "package $packageName {$NL"
         pkg.classes.forEach { cls ->
@@ -53,7 +52,7 @@ class PumlBuilder {
         return code
     }
 
-    private fun amendByClass(cls:MetaClass): String {
+    private fun amendByClass(cls: MetaClass): String {
         val className = cls.name
         var code = "class $className$NL"
         cls.properties.forEach { p ->
@@ -84,4 +83,43 @@ class PumlBuilder {
         return pumlCode
     }
 
+    fun withLogEntry(rootLE: LogEntry): String {
+        var code = "$Q@startuml$NL"
+        code += iterateOverChildren(rootLE)
+        code += "@enduml$Q"
+        console.log("[PumlBuilder.withLogEntry]")
+        console.log(code)
+        return code
+    }
+
+    private fun iterateOverChildren(logEntry: LogEntry): String {
+        var code = ""
+        val tObj = logEntry.obj
+        val parentUrl = logEntry.url
+        if (tObj is HasLinks) {
+            tObj.getLinks().forEach { l ->
+                val rel = l.rel
+                if (rel != RelType.UP.type && rel != RelType.SELF.type) {
+                    code += amendWithChild(parentUrl, l)
+                }
+            }
+        }
+        return code
+    }
+
+    private fun amendWithChild(parentUrl: String, child: Link): String {
+        val childUrl = child.href
+        val source = parentUrl.replace("http://localhost:8080/restful", "")
+        val target = childUrl.replace("http://localhost:8080/restful", "")
+        var code = "$Q$source$Q -> $Q$target$Q $NL"
+
+        val rs = ResourceSpecification(childUrl)
+        val childLE = EventStore.find(rs)
+        if (childLE != null) {
+            code += iterateOverChildren(childLE)
+        }
+        return code
+    }
+
 }
+

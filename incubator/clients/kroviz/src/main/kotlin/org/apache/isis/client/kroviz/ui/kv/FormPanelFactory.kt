@@ -58,20 +58,20 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             margin = 10.px
             for (fi: FormItem in items) {
                 when (fi.type) {
-                    ValueType.TEXT.type -> add(createText(fi))
-                    ValueType.PASSWORD.type -> add(createPassword(fi))
-                    ValueType.TEXT_AREA.type -> add(createTextArea(fi))
-                    ValueType.SIMPLE_SELECT.type -> add(createSelect(fi))
-                    ValueType.HTML.type -> add(createHtml(fi))
-                    ValueType.NUMERIC.type -> add(createNumeric(fi))
-                    ValueType.DATE.type -> add(createDate(fi))
-                    ValueType.TIME.type -> add(createTime(fi))
-                    ValueType.BOOLEAN.type -> add(createBoolean(fi))
-                    ValueType.IMAGE.type -> add(createImage(fi))
-                    ValueType.SLIDER.type -> add(createSlider(fi))
-                    ValueType.IFRAME.type -> add(createIFrame(fi))
-                    ValueType.SVG_INLINE.type -> add(createSvgInline(fi))
-                    ValueType.SVG_MAPPED.type -> add(createSvgMap(fi))
+                    ValueType.TEXT -> add(createText(fi))
+                    ValueType.PASSWORD -> add(createPassword(fi))
+                    ValueType.TEXT_AREA -> add(createTextArea(fi))
+                    ValueType.SIMPLE_SELECT -> add(createSelect(fi))
+                    ValueType.HTML -> add(createHtml(fi))
+                    ValueType.NUMERIC -> add(createNumeric(fi))
+                    ValueType.DATE -> add(createDate(fi))
+                    ValueType.TIME -> add(createTime(fi))
+                    ValueType.BOOLEAN -> add(createBoolean(fi))
+                    ValueType.IMAGE -> add(createImage(fi))
+                    ValueType.SLIDER -> add(createSlider(fi))
+                    ValueType.IFRAME -> add(createIFrame(fi))
+                    ValueType.SVG_INLINE -> add(createSvgInline(fi))
+                    ValueType.SVG_MAPPED -> add(createSvgMap(fi))
                 }
             }
         }

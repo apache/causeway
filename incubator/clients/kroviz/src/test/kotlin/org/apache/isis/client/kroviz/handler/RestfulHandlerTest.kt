@@ -31,7 +31,7 @@ class RestfulHandlerTest {
     @Test
     fun testParse() {
         val jsonStr = RESTFUL.str
-        val ro =RestfulHandler().parse(jsonStr) as Restful
+        val ro = RestfulHandler().parse(jsonStr) as Restful
         assertNotNull(ro)
 
         assertEquals(6, ro.links.size)

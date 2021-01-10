@@ -41,7 +41,7 @@ class SvgInline : Command() {
         val callBack = UUID()
         val fiImg = FormItem(
                 label = "svg",
-                type = ValueType.SVG_INLINE.type,
+                type = ValueType.SVG_INLINE,
                 callBack = callBack)
         formItems.add(fiImg)
         dialog = RoDialog(

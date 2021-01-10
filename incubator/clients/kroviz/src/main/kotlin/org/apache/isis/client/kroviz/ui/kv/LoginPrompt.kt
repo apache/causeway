@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.Command
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.utils.Point
@@ -30,15 +31,16 @@ class LoginPrompt : Command() {
     private lateinit var form: RoDialog
 
     //Default values
-    private var url = "http://localhost:8080/"
+//    private var url = "http://localhost:8080/"
+    private var url = "https://demo-wicket.isis.incode.work/"
     private var username = "sven"
     private var password = "pass"
 
     fun open(at: Point) {
         val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("Url", "Text", url))
-        formItems.add(FormItem("User", "Text", username))
-        formItems.add(FormItem("Password", "Password", password))
+        formItems.add(FormItem("Url", ValueType.TEXT, url))
+        formItems.add(FormItem("User", ValueType.TEXT, username))
+        formItems.add(FormItem("Password", ValueType.PASSWORD, password))
         form = RoDialog(caption = "Connect", items = formItems, command = this)
         form.open(at)
     }

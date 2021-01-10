@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.ui.builder
 
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.TypeMapper
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.bs3.FieldSet
 import org.apache.isis.client.kroviz.ui.FormItem
@@ -50,7 +51,7 @@ class FieldSetBuilder {
 
                 val fi = FormItem(
                         label = label,
-                        type = member.type!!,
+                        type = TypeMapper().forType(member.type!!),
                         content = member.value?.content,
                         size = size,
                         description = p.describedAs,

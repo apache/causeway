@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.to.Action
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Parameter
+import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.Command
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.utils.Point
@@ -57,10 +58,10 @@ class ActionPrompt(val action: Action) : Command() {
         val parameterList: Collection<Parameter> = action.parameters.values
         for (p in parameterList) {
             val v = p.name
-            var type = "TextArea"
+            var type = ValueType.TEXT_AREA
             var content: Any = ""
             if (p.choices.isNotEmpty()) {
-                type = "SimpleSelect"
+                type = ValueType.SIMPLE_SELECT
                 content = buildSelectionList(p)
             }
             val fi = FormItem(v, type, content)

@@ -35,33 +35,44 @@ import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
+    val tabulator: Tabulator<LogEntry>
 
     private val columns = listOf(
             ColumnDefinition(
+                    download = false,
                     title = "",
                     field = "state",
                     width = "50",
+                    headerMenu = EventLogTableMgr().buildTableMenu(this),
                     hozAlign = Align.CENTER,
                     formatterComponentFunction = { _, _, data ->
-                        Button("", icon = "fa fa-ellipsis-v", style = data.state.style).onClick {
-                            EventLogDetail(data).open()
-                        }.apply { margin = CssSize(-10, UNIT.px) }
-                    }),
+                        buildActionButton(data).onClick { EventLogDetail(data).open() }.apply {
+                            margin = CssSize(-10, UNIT.px)
+                        }
+                    }
+            ),
             ColumnDefinition<LogEntry>(
+                    download = false,
                     title = "Title",
                     field = "title",
                     headerFilter = Editor.INPUT,
                     width = "450",
-                    formatterComponentFunction = { _, _, data ->
-                        buildButton(data)
-                    }),
-            ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT),
-            ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT),
-            ColumnDefinition("req.len", field = "requestLength", width = "100", hozAlign = Align.RIGHT),
-            ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT),
-            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT),
-            ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT),
+                    formatterComponentFunction = { _, _, data -> buildObjectButton(data) }
+            ),
+            ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT, download = false),
+            ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT, download = false),
+            ColumnDefinition<LogEntry>(
+                    download = false,
+                    title = "# of Agg.",
+                    field = "nOfAggregators",
+                    headerFilter = Editor.INPUT,
+                    width = "20"),
+            ColumnDefinition("req.len", field = "requestLength", width = "100", hozAlign = Align.RIGHT, download = false),
+            ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT, download = false),
+            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT, download = false),
+            ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT, download = false),
             ColumnDefinition(
+                    download = false,
                     title = "Created",
                     field = "createdAt",
                     sorter = Sorter.DATETIME,
@@ -69,6 +80,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
                     width = "100"),
             ColumnDefinition(
+                    download = false,
                     title = "Updated",
                     field = "updatedAt",
                     sorter = Sorter.DATETIME,
@@ -77,14 +89,23 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     width = "100")
     )
 
-    private fun buildButton(data: LogEntry): Button {
+    private fun buildObjectButton(data: LogEntry): Button {
         val b = Button(
-                data.title,
+                text = data.title,
                 icon = data.state.iconName,
-                style = ButtonStyle.LINK).onClick {
+                style = ButtonStyle.LINK)
+        b.onClick {
             console.log(data)
         }
         if (data.obj is TObject) b.setDragDropData(Constants.stdMimeType, data.url)
+        return b
+    }
+
+    private fun buildActionButton(data: LogEntry): Button {
+        val b = Button(
+                text = "",
+                icon = "fa fa-ellipsis-v",
+                style = data.state.style)
         return b
     }
 
@@ -103,7 +124,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 persistenceMode = false
         )
 
-        tabulator(model, options = options) {
+        tabulator = tabulator(model, options = options) {
             setEventListener<Tabulator<LogEntry>> {
                 tabulatorRowClick = {
                 }
