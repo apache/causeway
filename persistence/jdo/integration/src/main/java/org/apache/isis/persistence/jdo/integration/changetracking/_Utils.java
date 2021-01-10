@@ -52,11 +52,11 @@ final class _Utils {
         // try to be side-effect free here ...
         final Persistable pojo = _Utils.persistableFor(event);
         ObjectState state = JDOHelper.getObjectState(pojo);
-        if(state == ObjectState.PERSISTENT_CLEAN) {
-            return String.format("entity: %s", pojo);
-        } else {
-            return String.format("entity: %s", pojo.getClass().getSimpleName());
-        }
+        //if(state == ObjectState.PERSISTENT_CLEAN) {
+            //return String.format("entity: %s", pojo);
+        //} else {
+            return String.format("entity: %s (%s)", pojo.getClass().getSimpleName(), state);
+        //}
     }
     
     static ManagedObject adaptEntity(
