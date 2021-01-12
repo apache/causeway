@@ -16,13 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.runtimeservices.xactn;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,8 +30,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
@@ -42,11 +42,7 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.transaction.integration.IsisTransactionAspectSupport;
-import org.apache.isis.core.transaction.integration.IsisTransactionObject;
 
-import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -58,129 +54,136 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TransactionServiceSpring implements TransactionService {
 
-    private final PlatformTransactionManager platformTransactionManager;
-
-    // single TransactionTemplate shared amongst all methods in this instance
-    private final TransactionTemplate transactionTemplate;
+    private final Can<PlatformTransactionManager> platformTransactionManagers;
 
     @Inject
     public TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers) {
-        this.platformTransactionManager = 
-                _GlobalPlatformTransactionManager.of(Can.ofCollection(platformTransactionManagers));
-        
-        log.info("platformTransactionManagers: {}", platformTransactionManager);
-        
-        this.transactionTemplate = new TransactionTemplate(platformTransactionManager);
+        this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
+        log.info("PlatformTransactionManagers: {}", platformTransactionManagers);
     }
 
+    // -- SPRING INTEGRATION
+    
     @Override
-    public void flushTransaction() {
+    public <T> Result<T> callTransactional(TransactionDefinition def, Callable<T> callable) {
 
-        val txObject = currentTransactionObject(WarnIfNonePolicy.IGNORE);
+        val txManager = transactionManagerForElseFail(def);
+        
+        val tx = txManager.getTransaction(def);
 
-        if(txObject==null) {
-            return;
+        val result = Result.ofNullable(callable);
+        
+        if(result.isFailure()) {
+            txManager.rollback(tx);
+        } else {
+            txManager.commit(tx);
         }
 
+        return result;
+    }
+    
+    @Override
+    public void nextTransaction() {
+        
+        val txManager = singletonTransactionManagerElseFail(); 
+        
+        val txTemplate = new TransactionTemplate(txManager);
+        txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+        // either reuse existing or create new
+        val txStatus = txManager.getTransaction(txTemplate);
+        if(txStatus.isNewTransaction()) {
+            // we have created a new transaction, so we are done
+            return;
+        }
+        // we are reusing an exiting transaction, so end it and create a new one afterwards
+        if(txStatus.isRollbackOnly()) {
+            txManager.rollback(txStatus);
+        } else {
+            txManager.commit(txStatus);
+        }
+        
+        // begin a new transaction
+        txManager.getTransaction(txTemplate);
+    }
+    
+    @Override
+    public void flushTransaction() {
         log.debug("about to flush tx");
-        txObject.flush();
+        currentTransactionStatus()
+            .ifPresent(TransactionStatus::flush);
     }
 
     @Override
     public TransactionId currentTransactionId() {
-
-        val txObject = currentTransactionObject(WarnIfNonePolicy.IGNORE);
-
-        if(txObject==null) {
-            return null;
-        }
-
-        log.debug("about to get current tx-id");
-        return txObject.getTransactionId();
+        System.err.println("currentTransactionId:" + currentTransactionStatus().getClass().getName());
+        return TransactionId.empty();
     }
 
-    @Override @Nonnull
+    @Override
     public TransactionState currentTransactionState() {
 
-        val txObject = currentTransactionObject(WarnIfNonePolicy.IGNORE);
-
-        if(txObject==null || txObject.getCurrentTransaction()==null) {
-            return TransactionState.NONE;
-        }
-
-        val state = txObject.getCurrentTransaction().getTransactionState();
-        return state != null
-                ? state
-                        : TransactionState.NONE;
-    }
-
-    @Override
-    public void nextTransaction() {
-        val status = platformTransactionManager.getTransaction(transactionTemplate);
-        if(status.isCompleted()) {
-            return;
-        }
-        if(status.isRollbackOnly()) {
-            platformTransactionManager.rollback(status);
-        } else {
-            platformTransactionManager.commit(status);
-        }
-        // begins a new transaction
-        platformTransactionManager.getTransaction(transactionTemplate);
-    }
-
-    @Override
-    public <T> Result<T> executeWithinTransaction(final @NonNull Callable<T> callable) {
-
-        return Result.ofNullable(()->{
-
-            if(currentTransactionState() != TransactionState.NONE) {
-                val t = callable.call();
-                flushTransaction();
-                return t;
+        return currentTransactionStatus()
+        .map(txStatus->{
+        
+            if(txStatus.isCompleted()) {
+                return txStatus.isRollbackOnly()
+                        ? TransactionState.ABORTED
+                        : TransactionState.COMMITTED;
             }
             
-            return executeWithinNewTransaction(callable);
+            return txStatus.isRollbackOnly()
+                    ? TransactionState.MUST_ABORT
+                    : TransactionState.IN_PROGRESS;
             
-        });
-    }
-
-    // -- HELPER
-
-    enum WarnIfNonePolicy {
-        IGNORE,
-        LOG
-    }
-
-    private <T> T executeWithinNewTransaction(Callable<T> callable) {
-
-        return transactionTemplate.execute(new TransactionCallback<T>() {
-            // the code in this method executes in a transactional context
-            @SneakyThrows
-            @Override
-            public T doInTransaction(TransactionStatus status) {
-                return callable.call();
-            }
-        });
+        })
+        .orElse(TransactionState.NONE);
     }
     
-    private IsisTransactionObject currentTransactionObject(WarnIfNonePolicy warnIfNonePolicy) {
-
-        val txObject = IsisTransactionAspectSupport.currentTransactionObject().orElse(null);
-
-        if(txObject==null) {
-            if(warnIfNonePolicy == WarnIfNonePolicy.LOG) {
-                log.warn("no current txStatus present");
-                _Exceptions.dumpStackTrace(System.out, 0, 1000);
+    // -- HELPER
+    
+    private PlatformTransactionManager transactionManagerForElseFail(TransactionDefinition def) {
+        if(def instanceof TransactionTemplate) {
+            val txManager = ((TransactionTemplate)def).getTransactionManager();
+            if(txManager!=null) {
+                return txManager;
             }
-            return null;
         }
-
-        return txObject;
-
+        return platformTransactionManagers.getSingleton()
+                .orElseThrow(()->
+                    platformTransactionManagers.getCardinality().isMultiple()
+                        ? _Exceptions.illegalState("Multiple PlatformTransactionManagers are configured, "
+                                + "make sure a PlatformTransactionManager is provided via the TransactionTemplate argument.")
+                        : _Exceptions.illegalState("Needs a PlatformTransactionManager."));
+    }
+    
+    private PlatformTransactionManager singletonTransactionManagerElseFail() {
+        return platformTransactionManagers.getSingleton()
+                .orElseThrow(()->
+                    platformTransactionManagers.getCardinality().isMultiple()
+                        ? _Exceptions.illegalState("Multiple PlatformTransactionManagers are configured, "
+                                + "cannot reason about which one to use.")
+                        : _Exceptions.illegalState("Needs a PlatformTransactionManager."));
     }
 
+    private Optional<TransactionStatus> currentTransactionStatus() {
+        
+        val txManager = singletonTransactionManagerElseFail();
+        val txTemplate = new TransactionTemplate(txManager);
+        txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_MANDATORY);
 
+        // not strictly required, but to prevent stack-trace creation later on
+        if(!TransactionSynchronizationManager.isActualTransactionActive()) {
+            return Optional.empty();
+        }
+        
+        // get current transaction else throw an exception
+        return Result.of(()->
+                //XXX creating stack-traces is expensive
+                txManager.getTransaction(txTemplate))
+                .value();
+        
+    }
 
 
 }

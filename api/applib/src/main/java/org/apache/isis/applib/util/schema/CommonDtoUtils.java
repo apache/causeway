@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.util.schema;
 
+import static org.apache.isis.commons.internal.collections._Maps.entry;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -26,12 +28,15 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
@@ -41,6 +46,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
@@ -56,8 +63,7 @@ import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
-import static org.apache.isis.commons.internal.collections._Maps.entry;
-
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -114,12 +120,16 @@ public final class CommonDtoUtils {
 
     private static final Set<Class<?>> VALUE_TYPES = valueTypeByClass.keySet();
 
-    public static ValueType asValueType(final Class<?> type) {
+    public static ValueType asValueType(final @NonNull Class<?> type) {
+        if(Iterable.class.isAssignableFrom(type)
+                        || type.isArray()) {
+            return ValueType.COLLECTION;
+        }
         final ValueType valueType = valueTypeByClass.get(type);
         if (valueType != null) {
             return valueType;
         }
-        if (type!=null && type.isEnum()) {
+        if (type.isEnum()) {
             return ValueType.ENUM;
         }
         // assume reference otherwise
@@ -131,31 +141,43 @@ public final class CommonDtoUtils {
 
     public static ValueDto newValueDto(
             final ValueType valueType,
-            final Object val,
+            final Object value,
             final BookmarkService bookmarkService) {
 
-        if(val == null) {
+        if(value == null) {
             return null;
         }
 
         final ValueDto valueDto = new ValueDto();
-        return setValueOn(valueDto, valueType, val, bookmarkService);
+        return setValueOn(valueDto, valueType, value, bookmarkService);
     }
 
     public static <T extends ValueWithTypeDto> T setValueOn(
             final T valueWithTypeDto,
             final ValueType valueType,
-            final Object val,
+            final Object value,
             final BookmarkService bookmarkService) {
+        
         valueWithTypeDto.setType(valueType);
 
-        setValueOn((ValueDto)valueWithTypeDto, valueType, val, bookmarkService);
-        valueWithTypeDto.setNull(val == null);
+        setValueOn((ValueDto)valueWithTypeDto, valueType, value, bookmarkService);
+        valueWithTypeDto.setNull(value == null);
 
-        if(val instanceof Collection) {
-            // TODO: this is probably irrelevant
-            valueWithTypeDto.setType(ValueType.COLLECTION);
-        }
+        return valueWithTypeDto;
+    }
+    
+    public static <T extends ValueWithTypeDto> T setValueOnNonScalar(
+            final T valueWithTypeDto,
+            final ValueType elementValueType,
+            final Object value,
+            final BookmarkService bookmarkService) {
+        
+        valueWithTypeDto.setType(ValueType.COLLECTION);
+        
+        val collectionDto = asCollectionDto(value, elementValueType, bookmarkService);
+        valueWithTypeDto.setCollection(collectionDto);
+        valueWithTypeDto.setNull(value == null);
+
         return valueWithTypeDto;
     }
 
@@ -164,13 +186,13 @@ public final class CommonDtoUtils {
             final ValueType valueType,
             final Object pojo,
             final BookmarkService bookmarkService) {
-        if(pojo instanceof Collection) {
-            final Collection<?> collection = (Collection<?>) pojo;
-            final CollectionDto collectionDto = asCollectionDto(collection, valueType, bookmarkService);
+
+        switch (valueType) {
+        case COLLECTION: {
+            final CollectionDto collectionDto = asCollectionDto(pojo, ValueType.VOID, bookmarkService);
             valueDto.setCollection(collectionDto);
             return valueDto;
         }
-        switch (valueType) {
         case STRING: {
             final String argValue = (String) pojo;
             valueDto.setString(argValue);
@@ -336,21 +358,52 @@ public final class CommonDtoUtils {
     }
 
     private static CollectionDto asCollectionDto(
-            final Iterable<?> iterable,
-            final ValueType valueType,
-            final BookmarkService bookmarkService) {
-        final CollectionDto collectionDto = new CollectionDto();
-        collectionDto.setType(valueType);
-        for (Object o : iterable) {
-            final ValueDto valueDto = new ValueDto();
-            setValueOn(valueDto, valueType, o, bookmarkService);
+            final @Nullable Object iterableOrArray,
+            final @NonNull  ValueType commonElementValueType,
+            final @Nullable BookmarkService bookmarkService) {
+
+        val collectionDto = new CollectionDto();
+        collectionDto.setType(commonElementValueType);
+        
+        val needsCommonElementValueTypeAutodetect = commonElementValueType==ValueType.VOID;
+        
+        val commonElementValueTypeRef = _Refs.<ValueType>objectRef(null);
+        
+        _NullSafe.streamAutodetect(iterableOrArray)
+        .forEach(element->{
+            val valueDto = new ValueDto();
+            if(element==null) {
+                setValueOn(valueDto, ValueType.VOID, element, bookmarkService);
+            } else {
+                val elementValueType = asValueType(element.getClass()); 
+                setValueOn(valueDto, elementValueType, element, bookmarkService);
+                
+                if(needsCommonElementValueTypeAutodetect) {
+                    commonElementValueTypeRef.update(acc->reduce(acc, elementValueType));
+                }
+                
+            }
             collectionDto.getValue().add(valueDto);
+        });
+        
+        if(needsCommonElementValueTypeAutodetect) {
+            collectionDto.setType(commonElementValueTypeRef.getValueElseDefault(ValueType.VOID));
         }
+        
         return collectionDto;
     }
 
-
     // -- getValue (from valueDto)
+
+    private static ValueType reduce(ValueType acc, ValueType next) {
+        if(acc==null) {
+            return next;    
+        }
+        if(acc==next) {
+            return acc;    
+        }
+        throw _Exceptions.unsupportedOperation("mixing types within a collection is not supported yet");    
+    }
 
     public static <T> T getValue(
             final ValueDto valueDto,
@@ -418,7 +471,24 @@ public final class CommonDtoUtils {
         case REFERENCE:
             return valueDto.getReference();
         case COLLECTION:
-            return valueDto.getCollection();
+            val collectionDto = valueDto.getCollection();
+            if(_NullSafe.isEmpty(collectionDto.getValue())) {
+                return Collections.emptyList();
+            }
+            val list = new ArrayList<Object>();
+            
+            val elementValueType = collectionDto.getType();
+            
+            for(val elementValueDto : collectionDto.getValue()) {
+                
+                if(elementValueDto instanceof ValueWithTypeDto) {
+                    list.add(getValueAsObject(elementValueDto, ((ValueWithTypeDto)elementValueDto).getType()));
+                } else {
+                    list.add(getValueAsObject(elementValueDto, elementValueType));    
+                }
+                
+            }
+            return list;
         case BLOB:
             final BlobDto blobDto = valueDto.getBlob();
             return new Blob(blobDto.getName(), blobDto.getMimeType(), blobDto.getBytes());
@@ -488,8 +558,7 @@ public final class CommonDtoUtils {
             final Object arg,
             final BookmarkService bookmarkService) {
 
-        final ParamDto paramDto = new ParamDto();
-
+        val paramDto = new ParamDto();
         paramDto.setName(parameterName);
 
         ValueType valueType = CommonDtoUtils.asValueType(parameterType);
@@ -502,6 +571,22 @@ public final class CommonDtoUtils {
         paramDto.setType(valueType);
 
         CommonDtoUtils.setValueOn(paramDto, valueType, arg, bookmarkService);
+
+        return paramDto;
+    }
+    
+    public static ParamDto newParamDtoNonScalar(
+            final String parameterName,
+            final Class<?> parameterElementType,
+            final Object arg,
+            final BookmarkService bookmarkService) {
+
+        val paramDto = new ParamDto();
+        paramDto.setName(parameterName);
+        paramDto.setType(ValueType.COLLECTION);
+
+        val elementValueType = CommonDtoUtils.asValueType(parameterElementType);
+        CommonDtoUtils.setValueOnNonScalar(paramDto, elementValueType, arg, bookmarkService);
 
         return paramDto;
     }

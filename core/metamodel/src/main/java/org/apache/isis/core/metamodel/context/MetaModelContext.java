@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
@@ -89,8 +88,6 @@ public interface MetaModelContext {
     MemberExecutorService getMemberExecutor();
 
     TransactionService getTransactionService();
-
-    TransactionState getTransactionState();
 
     ManagedObject getHomePageAdapter();
 

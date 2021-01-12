@@ -29,6 +29,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -42,6 +43,8 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._With;
+
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -68,7 +71,7 @@ public final class _Collections {
     public static boolean isCollectionType(@Nullable final Class<?> cls) {
         return cls!=null ? java.util.Collection.class.isAssignableFrom(cls) : false;
     }
-    
+
     public static boolean isCanType(@Nullable final Class<?> cls) {
         return cls!=null ? Can.class.isAssignableFrom(cls) : false;
     }
@@ -93,7 +96,7 @@ public final class _Collections {
                 || _Arrays.isArrayType(cls)
                 || Can.class.isAssignableFrom(cls);
     }
-    
+
     // -- COLLECTION UNMODIFIABLE ADAPTERS (FOR LIST)
 
     /**
@@ -311,6 +314,25 @@ public final class _Collections {
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @param parameterType
+     * @param genericParameterType
+     * @return optionally the inferred element type, 
+     * based on whether parameter is a (collection or array) and has an infer-able element type
+     */
+    public static Optional<Class<?>> inferElementTypeFromArrayOrCollection(
+            @Nullable final Class<?> collectionType,
+            @Nullable final Type genericType) {
+
+        val fromArray = Optional.ofNullable(_Arrays.inferComponentTypeIfAny(collectionType));
+        if(fromArray.isPresent()) {
+            return fromArray;
+        }
+        val fromCollection = Optional.ofNullable(_Collections.inferElementTypeIfAny(collectionType, genericType));
+        return fromCollection;
     }
 
     /**

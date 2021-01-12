@@ -56,5 +56,4 @@ public interface TransactionService extends TransactionalProcessor {
      */
     void nextTransaction();
 
-
 }

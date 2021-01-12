@@ -18,16 +18,10 @@
  */
 package org.apache.isis.core.interaction.integration;
 
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * 
@@ -36,55 +30,23 @@ import lombok.val;
 @RequiredArgsConstructor(staticName = "next")
 public class IsisRequestCycle {
 
-    // -- SUPPORTING ISIS TRANSACTION FILTER FOR RESTFUL OBJECTS ...
-
     private final InteractionFactory isisInteractionFactory;
-    private final TransactionTemplate transactionTemplate;
-    private TransactionStatus txStatus;
 
     // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
 
     public void onBeginRequest(Authentication authentication) {
 
         isisInteractionFactory.openInteraction(authentication);
-
-        txStatus = getTransactionManager().getTransaction(null);
-
     }
 
     public void onRequestHandlerExecuted() {
 
-        if(txStatus==null) {
-            return;    
-        }
-
-        txStatus.flush();
     }
 
     public void onEndRequest() {
 
-        if(txStatus==null) {
-            return;    
-        }
+        isisInteractionFactory.closeSessionStack();
 
-        try {
-
-            getTransactionManager().commit(txStatus);
-
-        } finally {
-            isisInteractionFactory.closeSessionStack();
-        }
-
-    }
-    
-    // -- HELPER
-    
-    private PlatformTransactionManager getTransactionManager() {
-        val txMan = transactionTemplate.getTransactionManager();
-        if(txMan == null) {
-            throw _Exceptions.illegalState("IsisRequestCycle needs a PlatformTransactionManager (Spring)");
-        }
-        return txMan;
     }
 
 

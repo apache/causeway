@@ -20,52 +20,55 @@ package org.apache.isis.testdomain.util.interaction;
 
 import java.util.function.Supplier;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
-import org.springframework.stereotype.Component;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
-import org.apache.isis.applib.services.TransactionScopeListener;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
+import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-@Component
-@IsisInteractionScope
-public class InteractionBoundaryProbe implements TransactionScopeListener {
+@Service
+@Log4j2
+public class InteractionBoundaryProbe implements InteractionScopeAware {
 
     @Inject private KVStoreForTesting kvStoreForTesting;
-
+    
     /** INTERACTION BEGIN BOUNDARY */
-    @PostConstruct
-    public void init() {
+    @Override
+    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+        log.debug("iaStarted");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
     }
-
+    
     /** INTERACTION END BOUNDARY */
-    @PreDestroy
-    public void destroy() {
+    @Override
+    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+        log.debug("iaEnded");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
     }
 
     /** TRANSACTION BEGIN BOUNDARY */
-    @Override
-    public void onTransactionStarted() {
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txStarted");
+    @EventListener(TransactionBeforeCompletionEvent.class)
+    public void onTransactionEnding(TransactionBeforeCompletionEvent event) {
+        log.debug("txStarted");
+        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
     }
 
     /** TRANSACTION END BOUNDARY */
-    @Override
-    public void onPreCommit(PreCommitPhase preCommitPhase) {
-        switch (preCommitPhase) {
-        case POST_PUBLISHING:
-            kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
-            break;
-        default:
-            break;
+    @EventListener(TransactionAfterCompletionEvent.class)
+    public void onTransactionEnded(TransactionAfterCompletionEvent event) {
+        if(event.isRolledBack()) {
+            kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txRolledBack");
+        } else if(event.isCommitted()) {
+            kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txCommitted");
         }
     }
     
@@ -79,12 +82,16 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iaEnded");
     }
 
-    public static long totalTransactionsStarted(KVStoreForTesting kvStoreForTesting) {
-        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txStarted");
+    public static long totalTransactionsEnding(KVStoreForTesting kvStoreForTesting) {
+        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnding");
     }
     
-    public static long totalTransactionsEnded(KVStoreForTesting kvStoreForTesting) {
-        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnding");
+    public static long totalTransactionsCommitted(KVStoreForTesting kvStoreForTesting) {
+        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txCommitted");
+    }
+    
+    public static long totalTransactionsRolledBack(KVStoreForTesting kvStoreForTesting) {
+        return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txRolledBack");
     }
 
     // -- ASSERTIONS (INTERACTIONAL)
@@ -115,13 +122,10 @@ public class InteractionBoundaryProbe implements TransactionScopeListener {
     
     public static <T> T assertTransactional(KVStoreForTesting kvStoreForTesting, Supplier<T> supplier) {
 
-        final long txStartCountBefore = totalTransactionsStarted(kvStoreForTesting);
-        final long txEndCountBefore = totalTransactionsEnded(kvStoreForTesting);
+        final long txEndCountBefore = totalTransactionsEnding(kvStoreForTesting);
         val result = supplier.get();
-        final long txStartCountAfter = totalTransactionsStarted(kvStoreForTesting);
-        final long txEndCountAfter = totalTransactionsEnded(kvStoreForTesting);
+        final long txEndCountAfter = totalTransactionsEnding(kvStoreForTesting);
 
-        Assertions.assertEquals(1, txStartCountAfter - txStartCountBefore);
         Assertions.assertEquals(1, txEndCountAfter - txEndCountBefore);
         
         return result;

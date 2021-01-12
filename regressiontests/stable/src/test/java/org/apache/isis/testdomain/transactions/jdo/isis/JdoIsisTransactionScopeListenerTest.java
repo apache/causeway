@@ -18,14 +18,14 @@
  */
 package org.apache.isis.testdomain.transactions.jdo.isis;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -43,6 +43,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
                 Configuration_usingJdoIsis.class,
                 InteractionBoundaryProbe.class
         })
+//@Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 /**
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
@@ -56,18 +57,18 @@ class JdoIsisTransactionScopeListenerTest {
     @Inject private KVStoreForTesting kvStoreForTesting;
     
     /* Expectations:
-     * 1. for each IsisInteractionScope there should be a new InteractionBoundaryProbe instance
+     * 1. for each InteractionScope there should be a new InteractionBoundaryProbe instance
      * 2. for each Transaction the current InteractionBoundaryProbe should get notified
      * 
-     * first we have 1 IsisInteractionScope with 1 expected Transaction during 'setUp'
-     * then we have 1 IsisInteractionScope with 3 expected Transactions within the test method
+     * first we have 1 InteractionScope with 1 expected Transaction during 'setUp'
+     * then we have 1 InteractionScope with 3 expected Transactions within the test method
      *  
      */
     
     @BeforeEach
     void setUp() {
         
-        // new IsisInteractionScope with a new transaction (#1)
+        // new InteractionScope with a new transaction (#1)
         isisInteractionFactory.runAnonymous(()->{
         
             // cleanup
@@ -80,30 +81,30 @@ class JdoIsisTransactionScopeListenerTest {
     @Test
     void sessionScopedProbe_shouldBeReused_andBeAwareofTransactionBoundaries() {
         
-        // new IsisInteractionScope
+        // new InteractionScope with a new transaction (#2)
         isisInteractionFactory.runAnonymous(()->{
             
             // expected pre condition
-            // new transaction (#2)
+            // reuse transaction (#2)
             assertEquals(0, repository.allInstances(JdoBook.class).size());
         
-            // new transaction (#3)
-            transactionService.executeWithinTransaction(()->{
+            // reuse transaction (#2)
+            transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 
                 fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
                 
             });
             
             // expected post condition
-            // new transaction (#4)
+            // reuse transaction (#2)
             assertEquals(1, repository.allInstances(JdoBook.class).size());
             
         });
         
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(4, InteractionBoundaryProbe.totalTransactionsStarted(kvStoreForTesting));
-        assertEquals(4, InteractionBoundaryProbe.totalTransactionsEnded(kvStoreForTesting));
+        assertEquals(2, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
+        assertEquals(2, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
 
     }
     

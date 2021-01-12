@@ -42,7 +42,7 @@ class PrototypingMessageProvider {
     public static String getTookTimingMessageModel() {
         return isPrototyping()
                 ? getTookTimingMessage()
-                        : "";
+                : "";
     }
 
     // -- HELPER
@@ -61,7 +61,7 @@ class PrototypingMessageProvider {
 
         commonContext().getInteractionTracker().currentInteractionSession()
         .ifPresent(interaction->{
-            val stopWatch = _Timing.atSystemNanos(interaction.getLifecycleStartedAtSystemNanos());    
+            val stopWatch = _Timing.atSystemNanos(interaction.getStartedAtSystemNanos());    
             tookTimingMessage.append(String.format(Locale.US, "... took %.2f seconds", stopWatch.getSeconds()));
         });
 

@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.restfulobjects.viewer.webmodule;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -52,8 +54,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.webapp.modules.templresources.TemplateResourceCachingFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyDefault;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -382,13 +382,10 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
                         authentication,
                         ()->{
                             
-                            transactionService.executeWithinTransaction(()->{
-                                try {
-                                    chain.doFilter(request, response);
-                                } catch (IOException | ServletException e) {
-                                    throw new TransactionalException("", e);
-                                }
-                            });
+                            transactionService.runWithinCurrentTransactionElseCreateNew(()->
+                                chain.doFilter(request, response))
+                            .mapFailure(e->new TransactionalException("", e))
+                            .nullableOrElseFail();
                             
                         });
                                 

@@ -27,12 +27,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
+import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.commons.internal.collections._Maps;
-
-import lombok.extern.log4j.Log4j2;
 
 /**
  * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
@@ -49,8 +47,8 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@IsisInteractionScope
-@Log4j2
+@InteractionScope
+//@Log4j2
 public class ScratchpadDefault implements Scratchpad {
 
     /**

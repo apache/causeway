@@ -28,13 +28,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.interaction.events.IsisInteractionLifecycleEvent;
-import org.apache.isis.core.interaction.session.InteractionSession;
-import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
-import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
-
-import lombok.val;
 
 /**
  * 
@@ -43,14 +36,13 @@ import lombok.val;
  * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
-@Named("isisRuntime.RuntimeEventService")
+@Named("isisRuntime.AppLifecycleEventService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class AppLifecycleEventService {
     
     @Inject private EventBusService eventBusService;
-    @Inject private InteractionTracker interactionTracker;
 
    // -- APP
 
@@ -61,32 +53,5 @@ public class AppLifecycleEventService {
     public void fireAppPostMetamodel() {
         eventBusService.post(AppLifecycleEvent.POST_METAMODEL);
     }
-
-    // -- INTERACTION
-
-    public void fireInteractionHasStarted(InteractionSession interactionSession) {
-        val conversationId = interactionTracker.getConversationId().orElse(null);
-        eventBusService.post(
-                IsisInteractionLifecycleEvent
-                .of(conversationId, interactionSession, IsisInteractionLifecycleEvent.EventType.HAS_STARTED));
-    }
-
-    public void fireInteractionIsEnding(InteractionSession interactionSession) {
-        val conversationId = interactionTracker.getConversationId().orElse(null);
-        eventBusService.post(
-                IsisInteractionLifecycleEvent
-                .of(conversationId, interactionSession, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
-    }
-	
-    // -- PERSISTENT OBJECT EVENTS
-
-    public void firePreStoreEvent(Object persistableObject) {
-        eventBusService.post(PreStoreEvent.of(persistableObject));
-    }
-    
-    public void firePostStoreEvent(Object persistableObject) {
-        eventBusService.post(PostStoreEvent.of(persistableObject));
-    }
-    
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.transactions.jpa;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -29,15 +31,13 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.
@@ -47,11 +47,18 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 @SpringBootTest(
         classes = { 
                 Configuration_usingJpa.class,
-        })
+        },
+        properties = {
+                "logging.level.org.apache.isis.core.runtimeservices.session.InteractionFactoryDefault=DEBUG",
+                "logging.level.org.apache.isis.persistence.*=DEBUG",
+                "logging.level.org.springframework.test.context.transaction.*=DEBUG"
+        })  
 @Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JpaTransactionRollbackTest_usingTransactional extends IsisIntegrationTestAbstract {
+class JpaTransactionRollbackTest_usingTransactional 
+//extends IsisIntegrationTestAbstract 
+{
     
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
@@ -67,15 +74,19 @@ class JpaTransactionRollbackTest_usingTransactional extends IsisIntegrationTestA
         
         // expected pre condition
         assertEquals(0, repository.allInstances(JpaBook.class).size());
+        
+        _Probe.errOut("before fixture");
             
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
+        
+        _Probe.errOut("after fixture");
         
         // expected post condition
         assertEquals(1, repository.allInstances(JpaBook.class).size());
         
     }
     
-    @Test @Order(3) //@Disabled("wip")
+    @Test @Order(3)
     void previousTest_shouldHaveBeenRolledBack() {
         
         // expected condition

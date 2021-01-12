@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.transactions.jdo.isis;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -26,18 +28,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.
@@ -46,40 +45,69 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
  */
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoIsis.class,
+                Configuration_usingJdoIsis.class
+        },
+        properties = {
+                "logging.level.org.apache.isis.persistence.jdo.*=DEBUG",
+                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
+                "logging.level.org.datanucleus.*=DEBUG",
+                "logging.config=log4j2-debug-persistence.xml"
+                
         })
 @Transactional
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+//@TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoIsisTransactionRollbackTest_usingTransactional extends IsisIntegrationTestAbstract {
+class JdoIsisTransactionRollbackTest_usingTransactional 
+// extends IsisIntegrationTestAbstract 
+{
     
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
+    @Inject private InteractionFactory interactionFactory;
     
     @Test @Order(1) @Commit
     void cleanup_justInCase() {
+   
         // cleanup just in case
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
     }
     
     @Test @Order(2)
     void happyCaseTx_shouldCommit() {
+   
+        _Probe.errOut("before interaction");
         
-        // expected pre condition
-        assertEquals(0, repository.allInstances(JdoBook.class).size());
+        interactionFactory.runAnonymous(()->{
             
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+            // expected pre condition
+            assertEquals(0, repository.allInstances(JdoBook.class).size());
+                
+            _Probe.errOut("before fixture");
+            
+            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+            
+            _Probe.errOut("after fixture");
+            
+            // expected post condition
+            assertEquals(1, repository.allInstances(JdoBook.class).size());
+            
+            
+        });
         
-        // expected post condition
-        assertEquals(1, repository.allInstances(JdoBook.class).size());
+        _Probe.errOut("after interaction");
         
     }
     
     @Test @Order(3)
     void previousTest_shouldHaveBeenRolledBack() {
+
+        interactionFactory.runAnonymous(()->{
+
+            // expected condition
+            assertEquals(0, repository.allInstances(JdoBook.class).size());
         
-        // expected condition
-        assertEquals(0, repository.allInstances(JdoBook.class).size());
+        });
+
     }
 
 }

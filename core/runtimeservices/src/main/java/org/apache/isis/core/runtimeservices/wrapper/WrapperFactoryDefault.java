@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
+import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
+import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -45,7 +48,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
-import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -75,7 +77,6 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
@@ -102,9 +103,6 @@ import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-
-import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
-import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -563,7 +561,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         private final ServiceInjector serviceInjector;
 
         @Inject InteractionFactory isisInteractionFactory;
-        @Inject TransactionService transactionService;
+        //@Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
         @Inject Provider<InteractionContext> interactionContextProvider;
         @Inject BookmarkService bookmarkService;
@@ -577,9 +575,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
             return isisInteractionFactory.callAuthenticated(authentication, () -> {
                 val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
                 childCommand.updater().setParent(parentCommand);
-                return transactionService
-                        .executeWithinTransaction(() -> {
-                        val bookmark = commandExecutorService.executeCommand(commandDto, CommandOutcomeHandler.NULL);
+                //return transactionService.callWithinCurrentTransactionElseCreateNew(() -> {
+                        val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
                         if (bookmark == null) {
                             return null;
                         }
@@ -588,8 +585,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
                             entity = repositoryService.detach(entity);
                         }
                         return entity;
-                    })
-                        .nullableOrElseFail();
+//                    })
+//                        .nullableOrElseFail();
             });
         }
     }

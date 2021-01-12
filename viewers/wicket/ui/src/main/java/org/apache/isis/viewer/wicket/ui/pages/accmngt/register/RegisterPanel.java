@@ -142,7 +142,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
             final UserDetails userDetails = getModelObject();
 
             isisInteractionFactory.runAnonymous(() -> {
-                transactionService.executeWithinTransaction(() -> {
+                transactionService.runWithinCurrentTransactionElseCreateNew(() -> {
                     userRegistrationService.registerUser(userDetails);
                     removeAccountConfirmation();
                 });

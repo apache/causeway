@@ -105,8 +105,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         }
 
         val isisRequestCycle = IsisRequestCycle.next(
-                commonContext.lookupServiceElseFail(InteractionFactory.class),
-                commonContext.createTransactionTemplate());
+                commonContext.lookupServiceElseFail(InteractionFactory.class));
         
         requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, isisRequestCycle);
 

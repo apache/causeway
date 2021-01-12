@@ -32,7 +32,6 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._IocContainer;
@@ -128,10 +127,10 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     getSingletonElseFail(MemberExecutorService.class);
     
     
-    @Override
-    public final TransactionState getTransactionState() {
-        return getTransactionService().currentTransactionState();
-    }
+//    @Override
+//    public final TransactionState getTransactionState() {
+//        return getTransactionService().currentTransactionState();
+//    }
 
     @Override
     public final ManagedObject getHomePageAdapter() {

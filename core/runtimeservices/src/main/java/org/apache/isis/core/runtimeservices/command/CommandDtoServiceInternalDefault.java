@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.command;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -37,6 +36,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -47,8 +47,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.cmd.v2.ParamDto;
-import org.apache.isis.schema.cmd.v2.ParamsDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidsDto;
@@ -114,16 +112,29 @@ public class CommandDtoServiceInternalDefault implements CommandDtoFactory {
         val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
             final ObjectActionParameter actionParameter = actionParameters.getElseFail(paramNum);
-            final String parameterName = actionParameter.getName();
-            final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
-            final ManagedObject argAdapter = argAdapters.getElseFail(paramNum);
-            final Object arg = argAdapter != null? argAdapter.getPojo(): null;
-            final ParamsDto parameters = CommandDtoUtils.parametersFor(actionDto);
-            final List<ParamDto> parameterList = parameters.getParameter();
+            
+            final Object arg = argAdapters.get(paramNum)
+                    .map(argAdapter->argAdapter != null? argAdapter.getPojo(): null)
+                    .orElse(null);
+            
+            // in case of non-scalar params returns the element type
+            val paramTypeOrElementType = actionParameter.getSpecification().getCorrespondingClass();
+            
+            val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
+                    ? CommonDtoUtils.newParamDtoNonScalar(
+                            actionParameter.getName(), 
+                            paramTypeOrElementType, 
+                            arg, 
+                            bookmarkService)
+                    : CommonDtoUtils.newParamDto(
+                            actionParameter.getName(), 
+                            paramTypeOrElementType, 
+                            arg, 
+                            bookmarkService);
 
-            ParamDto paramDto = CommonDtoUtils.newParamDto(
-                    parameterName, paramType, arg, bookmarkService);
-            parameterList.add(paramDto);
+            CommandDtoUtils.parametersFor(actionDto)
+                .getParameter()
+                .add(paramDto);
         }
     }
 

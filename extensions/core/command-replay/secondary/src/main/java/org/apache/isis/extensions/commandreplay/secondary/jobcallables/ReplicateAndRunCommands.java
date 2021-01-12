@@ -107,7 +107,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                 val commandDtos = commandFetcher.fetchCommand(hwm);
                 commandsToReplay = commandDtos.stream()
                         .map(dto ->
-                                transactionService.executeWithinTransaction(
+                                transactionService.callWithinCurrentTransactionElseCreateNew(
                                     () -> commandJdoRepository.saveForReplay(dto))
                                 .nullableOrElseFail()
                         ).collect(Collectors.toList());
@@ -147,7 +147,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             //
             val parent = commandJdo;
             val childCommands =
-                    transactionService.executeWithinTransaction(
+                    transactionService.callWithinCurrentTransactionElseCreateNew(
                             () -> commandJdoRepository.findByParent(parent))
                     .nullableOrElseFail();
             for (val childCommand : childCommands) {
@@ -164,13 +164,13 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
     }
 
     private ReplayState executeCommandInTranAndAnalyse(final CommandJdo commandJdo) {
-        transactionService.executeWithinTransaction(
+        transactionService.runWithinCurrentTransactionElseCreateNew(
                 () -> {
                     commandExecutorService.executeCommand(
                         CommandExecutorService.SudoPolicy.SWITCH, commandJdo.getCommandDto(), commandJdo.outcomeHandler());
                 });
 
-        transactionService.executeWithinTransaction(() -> {
+        transactionService.runWithinCurrentTransactionElseCreateNew(() -> {
             analysisService.analyse(commandJdo);
         });
 
@@ -180,7 +180,9 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
 
     private boolean isRunning() {
         return controller
-                .map( control -> transactionService.executeWithinTransaction(control::getState).nullableOrElseFail())
+                .map( control -> transactionService
+                        .callWithinCurrentTransactionElseCreateNew(control::getState)
+                        .nullableOrElseFail())
                 .map(state -> state == ReplayCommandExecutionController.State.RUNNING)
             // if no controller implementation provided, then just continue
             .orElse(true);

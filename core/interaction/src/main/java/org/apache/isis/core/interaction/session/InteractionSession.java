@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
@@ -49,9 +50,10 @@ import lombok.Setter;
  *
  * @see InteractionFactory
  */
-public class InteractionSession {
+public class InteractionSession
+implements HasUniqueId {
 
-    @Getter private final long lifecycleStartedAtSystemNanos;
+    @Getter private final long startedAtSystemNanos;
     
     /**
      * The {@link MessageBroker} that holds messages for this session.
@@ -67,7 +69,7 @@ public class InteractionSession {
             @NonNull final MetaModelContext mmc) {
 
         this.metaModelContext = mmc;
-        this.lifecycleStartedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
+        this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.interaction = new IsisInteraction(UUID.randomUUID());
     }
 
@@ -152,6 +154,10 @@ public class InteractionSession {
                 : attributes;
     }
     
+    @Override
+    public UUID getUniqueId() {
+        return getInteraction().getUniqueId();
+    }
     
     // -- TO STRING
     

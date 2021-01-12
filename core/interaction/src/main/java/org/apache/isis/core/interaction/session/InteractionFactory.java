@@ -64,11 +64,6 @@ public interface InteractionFactory {
      * @return whether the calling thread is within the context of an open {@link InteractionSession} 
      */
     boolean isInInteractionSession();
-
-    /**
-     * @return whether the calling thread is within the context of an open IsisTransactionSession
-     */
-    boolean isInTransaction();
     
     /**
      * Executes a block of code with a new or reused {@link InteractionSession} using a new or 

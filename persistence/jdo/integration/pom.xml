@@ -68,6 +68,10 @@
 			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-spring</artifactId>
+		</dependency>
 
 		<!-- TESTING -->
 		

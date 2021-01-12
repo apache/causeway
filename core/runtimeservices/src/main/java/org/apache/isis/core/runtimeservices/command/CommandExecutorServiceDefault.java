@@ -51,17 +51,17 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -150,7 +150,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         copyStartedAtFromInteractionExecution(commandUpdater);
 
-        val result = transactionService.executeWithinTransaction(
+        val result = transactionService.callWithinCurrentTransactionElseCreateNew(
             () -> sudoPolicy == SudoPolicy.SWITCH
                 ? sudoService.call(
                         context->context.withUser(UserMemento.ofName(dto.getUser())),
@@ -240,6 +240,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 final Object targetObject = bookmarkService.lookup(bookmark);
 
                 val targetAdapter = adapterFor(targetObject);
+                
+                if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
+                    throw _Exceptions.unrecoverableFormatted("cannot recreate ManagedObject from bookmark %s", bookmark);
+                }
 
                 final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
 
@@ -399,12 +403,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private ManagedObject adapterFor(final RootOid oid) {
         val objectSpec = specificationLoader.loadSpecification(oid.getObjectSpecId());
         val loadRequest = ObjectLoader.Request.of(objectSpec, oid.getIdentifier());
-
-        return isisInteractionTracker.currentInteractionSession()
-                .map(InteractionSession::getMetaModelContext)
-                .map(MetaModelContext::getObjectManager)
-                .map(objectManager -> objectManager.loadObject(loadRequest))
-                .orElse(null);
+        return objectSpec.getMetaModelContext().getObjectManager().loadObject(loadRequest);
     }
 
 

@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -38,7 +37,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.interaction.events.IsisInteractionLifecycleEvent;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
@@ -59,67 +59,24 @@ import lombok.RequiredArgsConstructor;
 })
 public class Configuration_headless {
 
-//    @Bean @Singleton
-//    public TransactionService transactionService() {
-//        return new TransactionService() {
-//
-//            @Override
-//            public TransactionId currentTransactionId() {
-//                return null;
-//            }
-//
-//            @Override
-//            public void flushTransaction() {
-//            }
-//
-//            @Override
-//            public TransactionState currentTransactionState() {
-//                return null;
-//            }
-//
-//            @Override
-//            public void executeWithinTransaction(Runnable task) {
-//            }
-//
-//            @Override
-//            public <T> T executeWithinTransaction(Supplier<T> task) {
-//                return null;
-//            }
-//
-//            @Override
-//            public void executeWithinNewTransaction(Runnable task) {
-//            }
-//
-//            @Override
-//            public <T> T executeWithinNewTransaction(Supplier<T> task) {
-//                return null;
-//            }
-//
-//        };
-//    }
-    
     @Service
     @Order(OrderPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
-    public static class HeadlessCommandSupport {
+    public static class HeadlessCommandSupport
+    implements InteractionScopeAware {
 
-//        private final Provider<InteractionContext> interactionContextProvider;
-//        private final CommandDispatcher commandDispatcher;
-
-
-        @EventListener(IsisInteractionLifecycleEvent.class)
-        public void onIsisInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
-            switch(event.getEventType()) {
-            case HAS_STARTED:
-                _Probe.errOut("Interaction HAS_STARTED conversationId=%s", event.getConversationId());
-                setupCommandCreateIfMissing();
-                break;
-            case IS_ENDING:
-                _Probe.errOut("Interaction IS_ENDING conversationId=%s", event.getConversationId());
-                break;
-            default:
-                break;
-            }
+//      private final Provider<InteractionContext> interactionContextProvider;
+//      private final CommandDispatcher commandDispatcher;
+        
+        @Override
+        public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interactionSession.getUniqueId());
+            setupCommandCreateIfMissing();
+        }
+        
+        @Override
+        public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interactionSession.getUniqueId());
         }
         
         public void setupCommandCreateIfMissing() {

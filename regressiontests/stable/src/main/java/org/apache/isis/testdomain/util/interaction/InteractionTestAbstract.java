@@ -18,6 +18,10 @@
  */
 package org.apache.isis.testdomain.util.interaction;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
@@ -27,10 +31,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -56,10 +56,10 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
     @Inject protected InteractionFactory interactionFactory;
     @Inject protected WrapperFactory wrapper;
     @Inject protected KVStoreForTesting kvStoreForTesting;
-    @Inject private javax.inject.Provider<EntityChangeTrackerDefault> changedObjectsServiceProvider;
+    @Inject private javax.inject.Provider<EntityChangeTracker> entityChangeTrackerProvider;
     
-    protected EntityChangeTrackerDefault getChangedObjectsService() {
-        return changedObjectsServiceProvider.get();
+    protected EntityChangeTracker getEntityChangeTracker() {
+        return entityChangeTrackerProvider.get();
     }
     
     // -- INTERACTION STARTERS

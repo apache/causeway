@@ -18,9 +18,12 @@
  */
 package org.apache.isis.testdomain.transactions.jdo.spring;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.HashSet;
+
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -30,15 +33,14 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoSpring;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.isis.testdomain.jdo.entities.JdoInventory;
+import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+
+import lombok.val;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.
@@ -48,37 +50,59 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoSpring.class,
+        },
+        properties = {
+                "logging.level.org.apache.isis.persistence.jdo.*=DEBUG",
+                "logging.level.org.springframework.test.context.transaction.*=DEBUG"
         })
 @Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoSpringTransactionRollbackTest_usingTransactional extends IsisIntegrationTestAbstract {
-    
-    @Inject private FixtureScripts fixtureScripts;
+class JdoSpringTransactionRollbackTest_usingTransactional 
+//extends IsisIntegrationTestAbstract 
+{
+
     @Inject private RepositoryService repository;
-    
+
     @Test @Order(1) @Commit
     void cleanup_justInCase() {
         // cleanup just in case
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+        repository.removeAll(JdoProduct.class);
+        repository.removeAll(JdoInventory.class);
     }
-    
+
     @Test @Order(2)
     void happyCaseTx_shouldCommit() {
-        
+
+        System.err.println("== ENTER TEST");
+
         // expected pre condition
         assertEquals(0, repository.allInstances(JdoBook.class).size());
-            
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-        
+
+        val products = new HashSet<JdoProduct>();
+
+        products.add(JdoBook.of(
+                "Sample Book", "A sample book for testing.", 99.,
+                "Sample Author", "Sample ISBN", "Sample Publisher"));
+
+        val inventory = JdoInventory.of("Sample Inventory", products);
+
+        System.err.println("== ENTER PERSIST");
+
+        repository.persist(inventory);
+
+        System.err.println("== EXIT PERSIST");
+
         // expected post condition
         assertEquals(1, repository.allInstances(JdoBook.class).size());
-        
+
+        System.err.println("== EXIT TEST");
+
     }
-    
-    @Test @Order(3) @Disabled("wip")
+
+    @Test @Order(3)
     void previousTest_shouldHaveBeenRolledBack() {
-        
+
         // expected condition
         assertEquals(0, repository.allInstances(JdoBook.class).size());
     }

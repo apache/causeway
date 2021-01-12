@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.runtimeservices.session;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
@@ -51,8 +54,10 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.interaction.scope.IsisInteractionScopeBeanFactoryPostProcessor;
-import org.apache.isis.core.interaction.scope.IsisInteractionScopeCloseListener;
+import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
+import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionSession;
@@ -64,8 +69,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.AppLifecycleEventService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -98,14 +101,17 @@ implements InteractionFactory, InteractionTracker {
     @Inject IsisConfiguration configuration;
     @Inject ServiceInjector serviceInjector;
     
+    @Inject InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     @Inject ClockService clockService;
     @Inject CommandPublisher commandPublisher;
+    @Inject List<InteractionScopeAware> interactionScopeAwareBeans;
 
-    private IsisInteractionScopeCloseListener isisInteractionScopeCloseListener;
+    private InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
 
     @PostConstruct
     public void initIsisInteractionScopeSupport() {
-        this.isisInteractionScopeCloseListener = IsisInteractionScopeBeanFactoryPostProcessor.initIsisInteractionScopeSupport(serviceInjector);        
+        this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor
+                .initIsisInteractionScopeSupport(serviceInjector);        
     }
     
     //@PostConstruct .. too early, needs services to be provisioned first
@@ -221,23 +227,6 @@ implements InteractionFactory, InteractionTracker {
         return !authenticationStack.get().isEmpty();
     }
 
-    @Override
-    public boolean isInTransaction() {
-        
-        return TransactionSynchronizationManager.isActualTransactionActive();
-
-//        return currentInteractionSession().map(isisInteraction->{
-//            if (isisInteraction.getCurrentTransactionId() != null) {
-//                if (!isisInteraction.getCurrentTransactionState().isComplete()) {
-//                    return true;
-//                }
-//            }
-//            return false;
-//        })
-//        .orElse(false);
-
-    }
-
     // -- AUTHENTICATED EXECUTION
     
     @Override
@@ -319,13 +308,20 @@ implements InteractionFactory, InteractionTracker {
     
     private void postSessionOpened(InteractionSession session) {
         conversationId.set(UUID.randomUUID());
-        runtimeEventService.fireInteractionHasStarted(session); // only fire on top-level session
+        interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(session));
+        txBoundaryHandler.onOpen(session);
+        val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
+        interactionScopeAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(session, isSynchronizationActive));
+        interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
     
     private void preSessionClosed(InteractionSession session) {
         completeAndPublishCurrentCommand();
-        runtimeEventService.fireInteractionIsEnding(session); // only fire on top-level session 
-        isisInteractionScopeCloseListener.preTopLevelIsisInteractionClose(); // cleanup the isis-session scope
+        interactionScopeLifecycleHandler.onTopLevelInteractionClosing(); // cleanup the isis-session scope
+        val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
+        interactionScopeAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(session, isSynchronizationActive));
+        txBoundaryHandler.onClose(session);
+        interactionScopeAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(session));
         session.close(); // do this last
     }
     

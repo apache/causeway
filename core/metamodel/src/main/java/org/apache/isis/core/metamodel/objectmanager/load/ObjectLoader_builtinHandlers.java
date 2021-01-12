@@ -223,9 +223,6 @@ final class ObjectLoader_builtinHandlers {
             val identifier = objectLoadRequest.getObjectIdentifier();
             val entity = entityFacet.fetchByIdentifier(spec, identifier);
             
-            //TODO injection should have already be done by DataNucleus
-            metaModelContext.getServiceInjector().injectServicesInto(entity.getPojo());
-            
             return entity;
         }
 
