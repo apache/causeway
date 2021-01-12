@@ -118,18 +118,6 @@
 			<artifactId>isis-extensions-command-log-jdo</artifactId>
 		</dependency>
 
-		<!-- custom ui -->
-        <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-wicket-model</artifactId>
-			<optional>true</optional>	<!-- to avoid polluting the classpath -->
-        </dependency>
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
-			<optional>true</optional>	<!-- to avoid polluting the classpath -->
-		</dependency>
-
 		<!-- DEV TIME -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

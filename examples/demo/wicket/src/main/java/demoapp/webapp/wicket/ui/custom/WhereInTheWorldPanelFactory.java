@@ -1,4 +1,4 @@
-package demoapp.dom.ui.custom.wicket;
+package demoapp.webapp.wicket.ui.custom;
 
 import javax.inject.Inject;
 

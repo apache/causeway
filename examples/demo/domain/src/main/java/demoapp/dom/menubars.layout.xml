@@ -232,7 +232,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>UI</mb3:named>
             <mb3:section>
                 <mb3:named>Custom UI</mb3:named>
-                <mb3:serviceAction objectType="demo.WhereInTheWorldUiMenu" id="whereInTheWorld" />
+                <mb3:serviceAction objectType="demo.WhereInTheWorldMenu" id="whereInTheWorld" />
             </mb3:section>
         </mb3:menu>
 

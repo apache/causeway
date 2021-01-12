@@ -33,6 +33,7 @@ import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifest;
+import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
 
 /**
  * Bootstrap the application.
@@ -50,6 +51,9 @@ import demoapp.web.DemoAppManifest;
     IsisModuleValAsciidocUiWkt.class,
     IsisModuleValMarkdownUiWkt.class,
     IsisModuleExtPdfjsUi.class,
+    
+    // Custom Demo UI (Wicket Viewer)
+    WhereInTheWorldPanelFactory.class,
 
     // Persistence (JDO/DN5)
     IsisModuleValAsciidocPersistenceJdoDn5.class,
