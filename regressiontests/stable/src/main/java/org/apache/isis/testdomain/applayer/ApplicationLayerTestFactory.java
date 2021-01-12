@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -30,12 +31,17 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManagerFactory;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -44,14 +50,18 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
+import org.apache.isis.testdomain.jdo.entities.JdoInventory;
+import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.RequiredArgsConstructor;
@@ -72,6 +82,10 @@ public class ApplicationLayerTestFactory {
     private final FixtureScripts fixtureScripts;
     private final PreCommitListener preCommitListener;
     private final InteractionFactory isisInteractionFactory;
+    private final Provider<EntityChangeTrackerDefault> entityChangeTrackerProvider;
+    
+    @Named("transaction-aware-pmf-proxy")
+    private final PersistenceManagerFactory pmf;
     
     public static enum VerificationStage {
         PRE_COMMIT,
@@ -183,11 +197,14 @@ public class ApplicationLayerTestFactory {
 
         preCommitListener.setVerifier(verifier);
         
-        transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+        transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
 
             // when - direct change (circumventing the framework)
             book.setName("Book #2");
             repository.persist(book);
+            
+            // trigger publishing of entity changes (flush queue)
+            entityChangeTrackerProvider.get().onPreCommit(null);
             
         });
         
@@ -337,13 +354,55 @@ public class ApplicationLayerTestFactory {
     // -- TEST SETUP
 
     private JdoBook setupForJdo() {
-        // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
         
-        // given Inventory with 1 Book
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+        transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+            val pm = pmf.getPersistenceManager();
+            
+            // cleanup
+            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+            
+            // given Inventory with 1 Book
+            
+            val products = new HashSet<JdoProduct>();
+            
+            products.add(JdoBook.of(
+                    "Sample Book", "A sample book for testing.", 99.,
+                    "Sample Author", "Sample ISBN", "Sample Publisher"));
+    
+            val inventory = JdoInventory.of("Sample Inventory", products);
+            pm.makePersistent(inventory);
+            
+            inventory.getProducts().forEach(product->{
+                val prod = pm.makePersistent(product);
+                
+                _Probe.errOut("PROD ID: %s", JDOHelper.getObjectId(prod));
+                
+            });
+            
+            //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+            
+            pm.flush();
+            
+            // trigger publishing of entity changes (flush queue)
+            entityChangeTrackerProvider.get().onPreCommit(null);
+            
+        });
         
-        return repository.allInstances(JdoBook.class).listIterator().next();
+        return transactionService.callTransactional(Propagation.REQUIRES_NEW, ()->{
+            return repository.allInstances(JdoBook.class).listIterator().next();
+        })
+        .orElseFail();
+        
     }
+    
+//    private JdoBook setupForJdo() {
+//        // cleanup
+//        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+//        
+//        // given Inventory with 1 Book
+//        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+//        
+//        return repository.allInstances(JdoBook.class).listIterator().next();
+//    }
 
 }

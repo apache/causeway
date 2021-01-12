@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.xactn;
 import java.util.concurrent.Callable;
 
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import org.apache.isis.commons.functional.Result;
@@ -38,9 +39,7 @@ public interface TransactionalProcessor {
      * @return {@link Result} of calling given {@code callable} 
      */
     <T> Result<T> callTransactional(TransactionDefinition def, Callable<T> callable);
-    
-    // -- SHORTCUTS
-    
+
     /**
      * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior 
      * is governed by given {@link TransactionDefinition} {@code def}.
@@ -48,6 +47,34 @@ public interface TransactionalProcessor {
     default Result<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable) {
         return callTransactional(def, ThrowingRunnable.toCallable(runnable));
     }
+    
+    // -- SHORTCUTS - WITH PROPAGATION CONTROL
+
+    /**
+     * Runs given {@code callable} with a transactional boundary, where the detailed transactional behavior 
+     * is governed by given {@link Propagation} {@code propagation}.
+     * <p>
+     * More fine grained control is given via {@link #callTransactional(TransactionDefinition, Callable)}
+     * @return {@link Result} of calling given {@code callable} 
+     */
+    default <T> Result<T> callTransactional(Propagation propagation, Callable<T> callable) {
+        val def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(propagation.value());
+        return callTransactional(def, callable);
+    }
+
+    /**
+     * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior 
+     * is governed by given {@link Propagation} {@code propagation}.
+     * <p>
+     * More fine grained control is given via {@link #runTransactional(TransactionDefinition, Callable)}
+     */
+    default Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable) {
+        return callTransactional(propagation, ThrowingRunnable.toCallable(runnable));
+    }
+    
+    
+    // -- SHORTCUTS - MOST FREQUENT USAGE
     
     /**
      * Runs given {@code callable} within an existing transactional boundary, or in the absence of such a
@@ -73,7 +100,5 @@ public interface TransactionalProcessor {
     default Result<Void> runWithinCurrentTransactionElseCreateNew(ThrowingRunnable runnable) {
         return callWithinCurrentTransactionElseCreateNew(ThrowingRunnable.toCallable(runnable));
     }
-    
-    
 
 }

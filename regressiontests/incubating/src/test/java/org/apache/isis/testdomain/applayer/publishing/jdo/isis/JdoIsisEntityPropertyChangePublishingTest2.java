@@ -32,9 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -44,7 +42,6 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefaul
 import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -98,8 +95,7 @@ class JdoIsisEntityPropertyChangePublishingTest2 extends IsisIntegrationTestAbst
         EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
         _Probe.errOut("BEFORE BOOK UPDATE");
         
-        transactionService.runTransactional(
-                new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW),
+        transactionService.runTransactional(Propagation.REQUIRES_NEW,
                 ()->{
 
             // when - direct change (circumventing the framework)
@@ -130,9 +126,7 @@ class JdoIsisEntityPropertyChangePublishingTest2 extends IsisIntegrationTestAbst
         // given Inventory with 1 Book
         //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
         
-        transactionService.runTransactional(
-                new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW),
-                ()->{
+        transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
         
             val pm = pmf.getPersistenceManager();
             
