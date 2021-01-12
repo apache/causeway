@@ -14,19 +14,19 @@ Implementations are expected to implement the _#getStart()_ and _#getCount()_ me
 ----
 interface Query {
 
-  public static long UNLIMITED_COUNT;
-
   Class<T> getResultType() // <.>
 
   String getDescription() // <.>
 
-  long getStart() // <.>
+  QueryRange getRange() // <.>
 
-  long getCount() // <.>
+  Query<T> withRange(QueryRange range)
+
+  Query<T> withRange(long... range)
 
   Query<T> withStart(long start)
 
-  Query<T> withCount(long count)
+  Query<T> withLimit(long limit)
 
   Query<T> allInstances(final Class<T> resultType)
 
@@ -44,14 +44,9 @@ The _Class_ of the objects returned by this query.
 --
 A human-readable representation of this query and its values.
 --
-<.> `[teal]#*getStart*#()` : `long`
+<.> `[teal]#*getRange*#()` : `xref:system:generated:index/applib/query/QueryRange.adoc[QueryRange]`
 +
 --
-The start index into the set table
---
-<.> `[teal]#*getCount*#()` : `long`
-+
---
-The number of items to return, starting at _#getStart()_
+Returns a model with start index into the set table and maximal number of items to return.
 --
 

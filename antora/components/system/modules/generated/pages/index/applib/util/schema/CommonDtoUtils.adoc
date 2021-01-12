@@ -14,9 +14,11 @@ class CommonDtoUtils {
 
   ValueType asValueType(final Class<?> type)
 
-  ValueDto newValueDto(final ValueType valueType, final Object val, final BookmarkService bookmarkService)
+  ValueDto newValueDto(final ValueType valueType, final Object value, final BookmarkService bookmarkService)
 
-  T setValueOn(final T valueWithTypeDto, final ValueType valueType, final Object val, final BookmarkService bookmarkService)
+  T setValueOn(final T valueWithTypeDto, final ValueType valueType, final Object value, final BookmarkService bookmarkService)
+
+  T setValueOnNonScalar(final T valueWithTypeDto, final ValueType elementValueType, final Object value, final BookmarkService bookmarkService)
 
   T setValueOn(final T valueDto, final ValueType valueType, final Object pojo, final BookmarkService bookmarkService)
 
@@ -27,6 +29,8 @@ class CommonDtoUtils {
   T getValue(final ValueWithTypeDto valueWithTypeDto)
 
   ParamDto newParamDto(final String parameterName, final Class<?> parameterType, final Object arg, final BookmarkService bookmarkService)
+
+  ParamDto newParamDtoNonScalar(final String parameterName, final Class<?> parameterElementType, final Object arg, final BookmarkService bookmarkService)
 
   T getValue(final ParamDto paramDto)
 

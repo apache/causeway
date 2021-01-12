@@ -15,10 +15,6 @@ interface TransactionService {
   void flushTransaction() // <.>
 
   void nextTransaction() // <.>
-
-  Result<T> executeWithinTransaction(Callable<T> callable) // <.>
-
-  Optional<Throwable> executeWithinTransaction(ThrowingRunnable runnable) // <.>
 }
 ----
 
@@ -39,15 +35,5 @@ Occasionally useful to ensure that newly persisted domain objects are flushed to
 +
 --
 Commits the current transaction (if there is one), and begins a new one. If there is no current transaction, then is a no-op.
---
-<.> `[teal]#*executeWithinTransaction*#<T>(Callable<T> callable)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<T>`
-+
---
-Runs given _callable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
---
-<.> `[teal]#*executeWithinTransaction*#(ThrowingRunnable runnable)` : `Optional<Throwable>`
-+
---
-Runs given _runnable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
 --
 

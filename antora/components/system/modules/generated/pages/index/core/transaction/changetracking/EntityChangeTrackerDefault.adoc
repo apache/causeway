@@ -6,7 +6,7 @@
 ----
 class EntityChangeTrackerDefault {
 
-  void onPreCommit(PreCommitPhase preCommitPhase) // <.>
+  void onPreCommit(TransactionBeforeCompletionEvent event) // <.>
 
   EntityChanges getEntityChanges(final java.sql.Timestamp timestamp, final String userName)
 
@@ -32,11 +32,13 @@ class EntityChangeTrackerDefault {
 
   void recognizeUpdating(ManagedObject entity)
 
-  void incrementLoaded()
-
   Stream<EntityPropertyChange> streamPropertyChanges(final java.sql.Timestamp timestamp, final String userName, final TransactionId txId)
 }
 ----
 
-<.> `[teal]#*onPreCommit*#(PreCommitPhase preCommitPhase)` : `void`
+<.> `[teal]#*onPreCommit*#(TransactionBeforeCompletionEvent event)` : `void`
++
+--
+TRANSACTION END BOUNDARY
+--
 

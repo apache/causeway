@@ -52,7 +52,7 @@ package "Base\n[Software System]" {
 .Projects/Modules (Base)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis (Aggregator)
 [source,yaml]
@@ -62,7 +62,7 @@ Artifact: isis-all
 Type: pom
 Folder: /
 ----
-|Convenience aggregator POM that references all modules, some explicitely,
+|Convenience aggregator POM that references all modules, some explicitely, 
         others via profiles, that are not activiated per default.
         The parent POM of the core framework is isis-parent/pom.xml.
 
@@ -94,9 +94,9 @@ Artifact: supplemental-model
 Type: jar
 Folder: \supplemental-model
 ----
-|For example, the templates used by many Apache distributions assemble a listing of project dependencies
-  	according to their organization name (and URL), along with the URL each project's website. When dependency
-  	POMs are missing this information, the dependency notice file that the Remote Resources Plugin renders can
+|For example, the templates used by many Apache distributions assemble a listing of project dependencies 
+  	according to their organization name (and URL), along with the URL each project's website. When dependency 
+  	POMs are missing this information, the dependency notice file that the Remote Resources Plugin renders can 
   	be invalid.
 	To compensate for incomplete dependency POMs, we use the supplemental models support.
 |===
@@ -130,7 +130,7 @@ package "Commons\n[Software System]" {
 .Projects/Modules (Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Commons
 [source,yaml]
@@ -283,7 +283,7 @@ package "Core\n[Software System]" {
 .Projects/Modules (Core)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Core
 [source,yaml]
@@ -335,7 +335,7 @@ _Dependencies_
 
 _Document Index Entries_
 
-xref:system:generated:index/applib/AbstractViewModel.adoc[AbstractViewModel], xref:system:generated:index/applib/ApplicationException.adoc[ApplicationException], xref:system:generated:index/applib/FatalException.adoc[FatalException], xref:system:generated:index/applib/Identifier.adoc[Identifier], xref:system:generated:index/applib/NonRecoverableException.adoc[NonRecoverableException], xref:system:generated:index/applib/PersistFailedException.adoc[PersistFailedException], xref:system:generated:index/applib/RecoverableException.adoc[RecoverableException], xref:system:generated:index/applib/RecreatableDomainObject.adoc[RecreatableDomainObject], xref:system:generated:index/applib/RepositoryException.adoc[RepositoryException], xref:system:generated:index/applib/ViewModel.adoc[ViewModel], xref:system:generated:index/applib/adapters/AbstractValueSemanticsProvider.adoc[AbstractValueSemanticsProvider], xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider], xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecoder], xref:system:generated:index/applib/adapters/EncodingException.adoc[EncodingException], xref:system:generated:index/applib/adapters/Parser.adoc[Parser], xref:system:generated:index/applib/adapters/ParsingException.adoc[ParsingException], xref:system:generated:index/applib/adapters/ValueSemanticsProvider.adoc[ValueSemanticsProvider], xref:system:generated:index/applib/annotation/Action.adoc[Action], xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout], xref:system:generated:index/applib/annotation/BookmarkPolicy.adoc[BookmarkPolicy], xref:system:generated:index/applib/annotation/Bounding.adoc[Bounding], xref:system:generated:index/applib/annotation/Collection.adoc[Collection], xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout], xref:system:generated:index/applib/annotation/Defaulted.adoc[Defaulted], xref:system:generated:index/applib/annotation/DomainObject.adoc[DomainObject], xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout], xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService], xref:system:generated:index/applib/annotation/DomainServiceLayout.adoc[DomainServiceLayout], xref:system:generated:index/applib/annotation/Editing.adoc[Editing], xref:system:generated:index/applib/annotation/EntityChangeKind.adoc[EntityChangeKind], xref:system:generated:index/applib/annotation/EqualByContent.adoc[EqualByContent], xref:system:generated:index/applib/annotation/Facets.adoc[Facets], xref:system:generated:index/applib/annotation/HomePage.adoc[HomePage], xref:system:generated:index/applib/annotation/IsisInteractionScope.adoc[IsisInteractionScope], xref:system:generated:index/applib/annotation/LabelPosition.adoc[LabelPosition], xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder], xref:system:generated:index/applib/annotation/MementoSerialization.adoc[MementoSerialization], xref:system:generated:index/applib/annotation/MinLength.adoc[MinLength], xref:system:generated:index/applib/annotation/Module.adoc[Module], xref:system:generated:index/applib/annotation/Nature.adoc[Nature], xref:system:generated:index/applib/annotation/NatureOfService.adoc[NatureOfService], xref:system:generated:index/applib/annotation/Navigable.adoc[Navigable], xref:system:generated:index/applib/annotation/Optionality.adoc[Optionality], xref:system:generated:index/applib/annotation/OrderPrecedence.adoc[OrderPrecedence], xref:system:generated:index/applib/annotation/Parameter.adoc[Parameter], xref:system:generated:index/applib/annotation/ParameterLayout.adoc[ParameterLayout], xref:system:generated:index/applib/annotation/Programmatic.adoc[Programmatic], xref:system:generated:index/applib/annotation/Projecting.adoc[Projecting], xref:system:generated:index/applib/annotation/PromptStyle.adoc[PromptStyle], xref:system:generated:index/applib/annotation/Property.adoc[Property], xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout], xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing], xref:system:generated:index/applib/annotation/Redirect.adoc[Redirect], xref:system:generated:index/applib/annotation/RenderDay.adoc[RenderDay], xref:system:generated:index/applib/annotation/Repainting.adoc[Repainting], xref:system:generated:index/applib/annotation/RestrictTo.adoc[RestrictTo], xref:system:generated:index/applib/annotation/SemanticsOf.adoc[SemanticsOf], xref:system:generated:index/applib/annotation/Title.adoc[Title], xref:system:generated:index/applib/annotation/Value.adoc[Value], xref:system:generated:index/applib/annotation/Where.adoc[Where], xref:system:generated:index/applib/client/SuppressionType.adoc[SuppressionType], xref:system:generated:index/applib/clock/VirtualClock.adoc[VirtualClock], xref:system:generated:index/applib/events/EventObjectBase.adoc[EventObjectBase], xref:system:generated:index/applib/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent], xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent], xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent], xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent], xref:system:generated:index/applib/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent], xref:system:generated:index/applib/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent], xref:system:generated:index/applib/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent], xref:system:generated:index/applib/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent], xref:system:generated:index/applib/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent], xref:system:generated:index/applib/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent], xref:system:generated:index/applib/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent], xref:system:generated:index/applib/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent], xref:system:generated:index/applib/events/ui/AbstractUiEvent.adoc[AbstractUiEvent], xref:system:generated:index/applib/events/ui/CssClassUiEvent.adoc[CssClassUiEvent], xref:system:generated:index/applib/events/ui/LayoutUiEvent.adoc[LayoutUiEvent], xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc[TitleUiEvent], xref:system:generated:index/applib/graph/Edge.adoc[Edge], xref:system:generated:index/applib/graph/SimpleEdge.adoc[SimpleEdge], xref:system:generated:index/applib/graph/Vertex.adoc[Vertex], xref:system:generated:index/applib/graph/tree/TreeAdapter.adoc[TreeAdapter], xref:system:generated:index/applib/graph/tree/TreeNode.adoc[TreeNode], xref:system:generated:index/applib/graph/tree/TreePath.adoc[TreePath], xref:system:generated:index/applib/graph/tree/TreeState.adoc[TreeState], xref:system:generated:index/applib/jaxb/JavaSqlJaxbAdapters.adoc[JavaSqlJaxbAdapters], xref:system:generated:index/applib/jaxb/JavaTimeJaxbAdapters.adoc[JavaTimeJaxbAdapters], xref:system:generated:index/applib/jaxb/JavaUtilJaxbAdapters.adoc[JavaUtilJaxbAdapters], xref:system:generated:index/applib/jaxb/PersistentEntitiesAdapter.adoc[PersistentEntitiesAdapter], xref:system:generated:index/applib/jaxb/PersistentEntityAdapter.adoc[PersistentEntityAdapter], xref:system:generated:index/applib/layout/component/ActionLayoutData.adoc[ActionLayoutData], xref:system:generated:index/applib/layout/component/HasBookmarking.adoc[HasBookmarking], xref:system:generated:index/applib/layout/component/HasCssClass.adoc[HasCssClass], xref:system:generated:index/applib/layout/component/HasCssClassFa.adoc[HasCssClassFa], xref:system:generated:index/applib/layout/component/HasDescribedAs.adoc[HasDescribedAs], xref:system:generated:index/applib/layout/component/HasHidden.adoc[HasHidden], xref:system:generated:index/applib/layout/grid/bootstrap3/HasCssId.adoc[HasCssId], xref:system:generated:index/applib/mixins/timestamp/HoldsUpdatedAt.adoc[HoldsUpdatedAt], xref:system:generated:index/applib/mixins/timestamp/HoldsUpdatedBy.adoc[HoldsUpdatedBy], xref:system:generated:index/applib/query/AllInstancesQuery.adoc[AllInstancesQuery], xref:system:generated:index/applib/query/NamedQuery.adoc[NamedQuery], xref:system:generated:index/applib/query/Query.adoc[Query], xref:system:generated:index/applib/services/DomainChangeRecord.adoc[DomainChangeRecord], xref:system:generated:index/applib/services/MethodReferences.adoc[MethodReferences], xref:system:generated:index/applib/services/RepresentsInteractionMemberExecution.adoc[RepresentsInteractionMemberExecution], xref:system:generated:index/applib/services/TransactionScopeListener.adoc[TransactionScopeListener], xref:system:generated:index/applib/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService], xref:system:generated:index/applib/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository], xref:system:generated:index/applib/services/appfeat/ApplicationMemberType.adoc[ApplicationMemberType], xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark], xref:system:generated:index/applib/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], xref:system:generated:index/applib/services/bookmark/BookmarkService.adoc[BookmarkService], xref:system:generated:index/applib/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService], xref:system:generated:index/applib/services/clock/ClockService.adoc[ClockService], xref:system:generated:index/applib/services/command/Command.adoc[Command], xref:system:generated:index/applib/services/command/CommandExecutorService.adoc[CommandExecutorService], xref:system:generated:index/applib/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler], xref:system:generated:index/applib/services/commanddto/HasCommandDto.adoc[HasCommandDto], xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto], xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto], xref:system:generated:index/applib/services/commanddto/conmap/UserDataKeys.adoc[UserDataKeys], xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor], xref:system:generated:index/applib/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService], xref:system:generated:index/applib/services/commanddto/processor/spi/CommandDtoProcessorServiceIdentity.adoc[CommandDtoProcessorServiceIdentity], xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc[ConfigurationProperty], xref:system:generated:index/applib/services/confview/ConfigurationViewService.adoc[ConfigurationViewService], xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[ContentMappingService], xref:system:generated:index/applib/services/email/EmailService.adoc[EmailService], xref:system:generated:index/applib/services/error/ErrorDetails.adoc[ErrorDetails], xref:system:generated:index/applib/services/error/ErrorReportingService.adoc[ErrorReportingService], xref:system:generated:index/applib/services/error/Ticket.adoc[Ticket], xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[EventBusService], xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer], xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService], xref:system:generated:index/applib/services/exceprecog/TranslatableException.adoc[TranslatableException], xref:system:generated:index/applib/services/factory/FactoryService.adoc[FactoryService], xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService], xref:system:generated:index/applib/services/grid/GridService.adoc[GridService], xref:system:generated:index/applib/services/grid/GridSystemService.adoc[GridSystemService], xref:system:generated:index/applib/services/health/Health.adoc[Health], xref:system:generated:index/applib/services/health/HealthCheckService.adoc[HealthCheckService], xref:system:generated:index/applib/services/hint/HintStore.adoc[HintStore], xref:system:generated:index/applib/services/homepage/HomePageResolverService.adoc[HomePageResolverService], xref:system:generated:index/applib/services/i18n/LocaleProvider.adoc[LocaleProvider], xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString], xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService], xref:system:generated:index/applib/services/i18n/TranslationsResolver.adoc[TranslationsResolver], xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext], xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction], xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[InteractionContext], xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[ServiceInjector], xref:system:generated:index/applib/services/jaxb/JaxbService.adoc[JaxbService], xref:system:generated:index/applib/services/layout/LayoutService.adoc[LayoutService], xref:system:generated:index/applib/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu], xref:system:generated:index/applib/services/linking/DeepLinkService.adoc[DeepLinkService], xref:system:generated:index/applib/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService], xref:system:generated:index/applib/services/message/MessageService.adoc[MessageService], xref:system:generated:index/applib/services/metamodel/BeanSort.adoc[BeanSort], xref:system:generated:index/applib/services/metamodel/DomainMember.adoc[DomainMember], xref:system:generated:index/applib/services/metamodel/DomainModel.adoc[DomainModel], xref:system:generated:index/applib/services/metamodel/MetaModelService.adoc[MetaModelService], xref:system:generated:index/applib/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu], xref:system:generated:index/applib/services/metrics/MetricsService.adoc[MetricsService], xref:system:generated:index/applib/services/publishing/log/CommandLogger.adoc[CommandLogger], xref:system:generated:index/applib/services/publishing/log/EntityChangesLogger.adoc[EntityChangesLogger], xref:system:generated:index/applib/services/publishing/log/EntityPropertyChangeLogger.adoc[EntityPropertyChangeLogger], xref:system:generated:index/applib/services/publishing/log/ExecutionLogger.adoc[ExecutionLogger], xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber], xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges], xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber], xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange], xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber], xref:system:generated:index/applib/services/queryresultscache/QueryResultCacheControl.adoc[QueryResultCacheControl], xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], xref:system:generated:index/applib/services/registry/ServiceRegistry.adoc[ServiceRegistry], xref:system:generated:index/applib/services/repository/EntityState.adoc[EntityState], xref:system:generated:index/applib/services/repository/RepositoryService.adoc[RepositoryService], xref:system:generated:index/applib/services/routing/RoutingService.adoc[RoutingService], xref:system:generated:index/applib/services/scratchpad/Scratchpad.adoc[Scratchpad], xref:system:generated:index/applib/services/session/SessionLoggingService.adoc[SessionLoggingService], xref:system:generated:index/applib/services/session/SessionLoggingServiceLogging.adoc[SessionLoggingServiceLogging], xref:system:generated:index/applib/services/sudo/SudoService.adoc[SudoService], xref:system:generated:index/applib/services/swagger/SwaggerService.adoc[SwaggerService], xref:system:generated:index/applib/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService], xref:system:generated:index/applib/services/title/TitleService.adoc[TitleService], xref:system:generated:index/applib/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService], xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento], xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento], xref:system:generated:index/applib/services/user/UserService.adoc[UserService], xref:system:generated:index/applib/services/userprof/UserProfileService.adoc[UserProfileService], xref:system:generated:index/applib/services/userreg/EmailNotificationService.adoc[EmailNotificationService], xref:system:generated:index/applib/services/userreg/UserDetails.adoc[UserDetails], xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[UserRegistrationService], xref:system:generated:index/applib/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent], xref:system:generated:index/applib/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent], xref:system:generated:index/applib/services/wrapper/DisabledException.adoc[DisabledException], xref:system:generated:index/applib/services/wrapper/HiddenException.adoc[HiddenException], xref:system:generated:index/applib/services/wrapper/InvalidException.adoc[InvalidException], xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory], xref:system:generated:index/applib/services/wrapper/WrappingObject.adoc[WrappingObject], xref:system:generated:index/applib/services/wrapper/control/AsyncControl.adoc[AsyncControl], xref:system:generated:index/applib/services/wrapper/control/ControlAbstract.adoc[ControlAbstract], xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler], xref:system:generated:index/applib/services/wrapper/control/ExecutionMode.adoc[ExecutionMode], xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl], xref:system:generated:index/applib/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent], xref:system:generated:index/applib/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent], xref:system:generated:index/applib/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent], xref:system:generated:index/applib/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionAddToEvent.adoc[CollectionAddToEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionRemoveFromEvent.adoc[CollectionRemoveFromEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent], xref:system:generated:index/applib/services/wrapper/events/InteractionEvent.adoc[InteractionEvent], xref:system:generated:index/applib/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent], xref:system:generated:index/applib/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent], xref:system:generated:index/applib/services/wrapper/events/ObjectVisibilityEvent.adoc[ObjectVisibilityEvent], xref:system:generated:index/applib/services/wrapper/events/ParseValueEvent.adoc[ParseValueEvent], xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent], xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent], xref:system:generated:index/applib/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent], xref:system:generated:index/applib/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent], xref:system:generated:index/applib/services/wrapper/events/ProposedHolderEvent.adoc[ProposedHolderEvent], xref:system:generated:index/applib/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent], xref:system:generated:index/applib/services/wrapper/events/ValidityEvent.adoc[ValidityEvent], xref:system:generated:index/applib/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent], xref:system:generated:index/applib/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter], xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener], xref:system:generated:index/applib/services/xactn/Transaction.adoc[Transaction], xref:system:generated:index/applib/services/xactn/TransactionId.adoc[TransactionId], xref:system:generated:index/applib/services/xactn/TransactionService.adoc[TransactionService], xref:system:generated:index/applib/services/xactn/TransactionState.adoc[TransactionState], xref:system:generated:index/applib/services/xml/XmlService.adoc[XmlService], xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService], xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[XmlSnapshotService.Snapshot], xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService~Snapshot~Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:system:generated:index/applib/snapshot/SnapshottableWithInclusions.adoc[SnapshottableWithInclusions], xref:system:generated:index/applib/spec/AbstractSpecification.adoc[AbstractSpecification], xref:system:generated:index/applib/spec/AbstractSpecification2.adoc[AbstractSpecification2], xref:system:generated:index/applib/spec/Specification.adoc[Specification], xref:system:generated:index/applib/spec/Specification2.adoc[Specification2], xref:system:generated:index/applib/spec/SpecificationAnd.adoc[SpecificationAnd], xref:system:generated:index/applib/spec/SpecificationNot.adoc[SpecificationNot], xref:system:generated:index/applib/spec/SpecificationOr.adoc[SpecificationOr], xref:system:generated:index/applib/util/Enums.adoc[Enums], xref:system:generated:index/applib/util/Equality.adoc[Equality], xref:system:generated:index/applib/util/Hashing.adoc[Hashing], xref:system:generated:index/applib/util/JaxbUtil.adoc[JaxbUtil], xref:system:generated:index/applib/util/ToString.adoc[ToString], xref:system:generated:index/applib/util/schema/ChangesDtoUtils.adoc[ChangesDtoUtils], xref:system:generated:index/applib/util/schema/CommandDtoUtils.adoc[CommandDtoUtils], xref:system:generated:index/applib/util/schema/CommonDtoUtils.adoc[CommonDtoUtils], xref:system:generated:index/applib/value/Blob.adoc[Blob], xref:system:generated:index/applib/value/Clob.adoc[Clob], xref:system:generated:index/applib/value/HasHtml.adoc[HasHtml], xref:system:generated:index/applib/value/LocalResourcePath.adoc[LocalResourcePath], xref:system:generated:index/applib/value/Markup.adoc[Markup], xref:system:generated:index/applib/value/NamedWithMimeType.adoc[NamedWithMimeType], xref:system:generated:index/applib/value/Password.adoc[Password]
+xref:system:generated:index/applib/AbstractViewModel.adoc[AbstractViewModel], xref:system:generated:index/applib/ApplicationException.adoc[ApplicationException], xref:system:generated:index/applib/FatalException.adoc[FatalException], xref:system:generated:index/applib/Identifier.adoc[Identifier], xref:system:generated:index/applib/NonRecoverableException.adoc[NonRecoverableException], xref:system:generated:index/applib/PersistFailedException.adoc[PersistFailedException], xref:system:generated:index/applib/RecoverableException.adoc[RecoverableException], xref:system:generated:index/applib/RecreatableDomainObject.adoc[RecreatableDomainObject], xref:system:generated:index/applib/RepositoryException.adoc[RepositoryException], xref:system:generated:index/applib/ViewModel.adoc[ViewModel], xref:system:generated:index/applib/adapters/AbstractValueSemanticsProvider.adoc[AbstractValueSemanticsProvider], xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider], xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecoder], xref:system:generated:index/applib/adapters/EncodingException.adoc[EncodingException], xref:system:generated:index/applib/adapters/Parser.adoc[Parser], xref:system:generated:index/applib/adapters/ParsingException.adoc[ParsingException], xref:system:generated:index/applib/adapters/ValueSemanticsProvider.adoc[ValueSemanticsProvider], xref:system:generated:index/applib/annotation/Action.adoc[Action], xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout], xref:system:generated:index/applib/annotation/BookmarkPolicy.adoc[BookmarkPolicy], xref:system:generated:index/applib/annotation/Bounding.adoc[Bounding], xref:system:generated:index/applib/annotation/Collection.adoc[Collection], xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout], xref:system:generated:index/applib/annotation/Defaulted.adoc[Defaulted], xref:system:generated:index/applib/annotation/DomainObject.adoc[DomainObject], xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout], xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService], xref:system:generated:index/applib/annotation/DomainServiceLayout.adoc[DomainServiceLayout], xref:system:generated:index/applib/annotation/Editing.adoc[Editing], xref:system:generated:index/applib/annotation/EntityChangeKind.adoc[EntityChangeKind], xref:system:generated:index/applib/annotation/EqualByContent.adoc[EqualByContent], xref:system:generated:index/applib/annotation/Facets.adoc[Facets], xref:system:generated:index/applib/annotation/HomePage.adoc[HomePage], xref:system:generated:index/applib/annotation/InteractionScope.adoc[InteractionScope], xref:system:generated:index/applib/annotation/LabelPosition.adoc[LabelPosition], xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder], xref:system:generated:index/applib/annotation/MementoSerialization.adoc[MementoSerialization], xref:system:generated:index/applib/annotation/MinLength.adoc[MinLength], xref:system:generated:index/applib/annotation/Module.adoc[Module], xref:system:generated:index/applib/annotation/Nature.adoc[Nature], xref:system:generated:index/applib/annotation/NatureOfService.adoc[NatureOfService], xref:system:generated:index/applib/annotation/Navigable.adoc[Navigable], xref:system:generated:index/applib/annotation/Optionality.adoc[Optionality], xref:system:generated:index/applib/annotation/OrderPrecedence.adoc[OrderPrecedence], xref:system:generated:index/applib/annotation/Parameter.adoc[Parameter], xref:system:generated:index/applib/annotation/ParameterLayout.adoc[ParameterLayout], xref:system:generated:index/applib/annotation/Programmatic.adoc[Programmatic], xref:system:generated:index/applib/annotation/Projecting.adoc[Projecting], xref:system:generated:index/applib/annotation/PromptStyle.adoc[PromptStyle], xref:system:generated:index/applib/annotation/Property.adoc[Property], xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout], xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing], xref:system:generated:index/applib/annotation/Redirect.adoc[Redirect], xref:system:generated:index/applib/annotation/RenderDay.adoc[RenderDay], xref:system:generated:index/applib/annotation/Repainting.adoc[Repainting], xref:system:generated:index/applib/annotation/RestrictTo.adoc[RestrictTo], xref:system:generated:index/applib/annotation/SemanticsOf.adoc[SemanticsOf], xref:system:generated:index/applib/annotation/Title.adoc[Title], xref:system:generated:index/applib/annotation/Value.adoc[Value], xref:system:generated:index/applib/annotation/Where.adoc[Where], xref:system:generated:index/applib/client/SuppressionType.adoc[SuppressionType], xref:system:generated:index/applib/clock/VirtualClock.adoc[VirtualClock], xref:system:generated:index/applib/events/EventObjectBase.adoc[EventObjectBase], xref:system:generated:index/applib/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent], xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent], xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent], xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent], xref:system:generated:index/applib/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent], xref:system:generated:index/applib/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent], xref:system:generated:index/applib/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent], xref:system:generated:index/applib/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent], xref:system:generated:index/applib/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent], xref:system:generated:index/applib/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent], xref:system:generated:index/applib/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent], xref:system:generated:index/applib/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent], xref:system:generated:index/applib/events/ui/AbstractUiEvent.adoc[AbstractUiEvent], xref:system:generated:index/applib/events/ui/CssClassUiEvent.adoc[CssClassUiEvent], xref:system:generated:index/applib/events/ui/LayoutUiEvent.adoc[LayoutUiEvent], xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc[TitleUiEvent], xref:system:generated:index/applib/graph/Edge.adoc[Edge], xref:system:generated:index/applib/graph/SimpleEdge.adoc[SimpleEdge], xref:system:generated:index/applib/graph/Vertex.adoc[Vertex], xref:system:generated:index/applib/graph/tree/TreeAdapter.adoc[TreeAdapter], xref:system:generated:index/applib/graph/tree/TreeNode.adoc[TreeNode], xref:system:generated:index/applib/graph/tree/TreePath.adoc[TreePath], xref:system:generated:index/applib/graph/tree/TreeState.adoc[TreeState], xref:system:generated:index/applib/jaxb/JavaSqlJaxbAdapters.adoc[JavaSqlJaxbAdapters], xref:system:generated:index/applib/jaxb/JavaTimeJaxbAdapters.adoc[JavaTimeJaxbAdapters], xref:system:generated:index/applib/jaxb/JavaUtilJaxbAdapters.adoc[JavaUtilJaxbAdapters], xref:system:generated:index/applib/jaxb/PersistentEntitiesAdapter.adoc[PersistentEntitiesAdapter], xref:system:generated:index/applib/jaxb/PersistentEntityAdapter.adoc[PersistentEntityAdapter], xref:system:generated:index/applib/layout/component/ActionLayoutData.adoc[ActionLayoutData], xref:system:generated:index/applib/layout/component/HasBookmarking.adoc[HasBookmarking], xref:system:generated:index/applib/layout/component/HasCssClass.adoc[HasCssClass], xref:system:generated:index/applib/layout/component/HasCssClassFa.adoc[HasCssClassFa], xref:system:generated:index/applib/layout/component/HasDescribedAs.adoc[HasDescribedAs], xref:system:generated:index/applib/layout/component/HasHidden.adoc[HasHidden], xref:system:generated:index/applib/layout/grid/bootstrap3/HasCssId.adoc[HasCssId], xref:system:generated:index/applib/mixins/timestamp/HoldsUpdatedAt.adoc[HoldsUpdatedAt], xref:system:generated:index/applib/mixins/timestamp/HoldsUpdatedBy.adoc[HoldsUpdatedBy], xref:system:generated:index/applib/query/AllInstancesQuery.adoc[AllInstancesQuery], xref:system:generated:index/applib/query/NamedQuery.adoc[NamedQuery], xref:system:generated:index/applib/query/Query.adoc[Query], xref:system:generated:index/applib/query/QueryRange.adoc[QueryRange], xref:system:generated:index/applib/services/DomainChangeRecord.adoc[DomainChangeRecord], xref:system:generated:index/applib/services/MethodReferences.adoc[MethodReferences], xref:system:generated:index/applib/services/RepresentsInteractionMemberExecution.adoc[RepresentsInteractionMemberExecution], xref:system:generated:index/applib/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService], xref:system:generated:index/applib/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository], xref:system:generated:index/applib/services/appfeat/ApplicationMemberType.adoc[ApplicationMemberType], xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark], xref:system:generated:index/applib/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], xref:system:generated:index/applib/services/bookmark/BookmarkService.adoc[BookmarkService], xref:system:generated:index/applib/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService], xref:system:generated:index/applib/services/clock/ClockService.adoc[ClockService], xref:system:generated:index/applib/services/command/Command.adoc[Command], xref:system:generated:index/applib/services/command/CommandExecutorService.adoc[CommandExecutorService], xref:system:generated:index/applib/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler], xref:system:generated:index/applib/services/commanddto/HasCommandDto.adoc[HasCommandDto], xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto], xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto], xref:system:generated:index/applib/services/commanddto/conmap/UserDataKeys.adoc[UserDataKeys], xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor], xref:system:generated:index/applib/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService], xref:system:generated:index/applib/services/commanddto/processor/spi/CommandDtoProcessorServiceIdentity.adoc[CommandDtoProcessorServiceIdentity], xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc[ConfigurationProperty], xref:system:generated:index/applib/services/confview/ConfigurationViewService.adoc[ConfigurationViewService], xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[ContentMappingService], xref:system:generated:index/applib/services/email/EmailService.adoc[EmailService], xref:system:generated:index/applib/services/error/ErrorDetails.adoc[ErrorDetails], xref:system:generated:index/applib/services/error/ErrorReportingService.adoc[ErrorReportingService], xref:system:generated:index/applib/services/error/Ticket.adoc[Ticket], xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[EventBusService], xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer], xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService], xref:system:generated:index/applib/services/exceprecog/TranslatableException.adoc[TranslatableException], xref:system:generated:index/applib/services/factory/FactoryService.adoc[FactoryService], xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService], xref:system:generated:index/applib/services/grid/GridService.adoc[GridService], xref:system:generated:index/applib/services/grid/GridSystemService.adoc[GridSystemService], xref:system:generated:index/applib/services/health/Health.adoc[Health], xref:system:generated:index/applib/services/health/HealthCheckService.adoc[HealthCheckService], xref:system:generated:index/applib/services/hint/HintStore.adoc[HintStore], xref:system:generated:index/applib/services/homepage/HomePageResolverService.adoc[HomePageResolverService], xref:system:generated:index/applib/services/i18n/LocaleProvider.adoc[LocaleProvider], xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString], xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService], xref:system:generated:index/applib/services/i18n/TranslationsResolver.adoc[TranslationsResolver], xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext], xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction], xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[InteractionContext], xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[ServiceInjector], xref:system:generated:index/applib/services/jaxb/JaxbService.adoc[JaxbService], xref:system:generated:index/applib/services/layout/LayoutService.adoc[LayoutService], xref:system:generated:index/applib/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu], xref:system:generated:index/applib/services/linking/DeepLinkService.adoc[DeepLinkService], xref:system:generated:index/applib/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService], xref:system:generated:index/applib/services/message/MessageService.adoc[MessageService], xref:system:generated:index/applib/services/metamodel/BeanSort.adoc[BeanSort], xref:system:generated:index/applib/services/metamodel/DomainMember.adoc[DomainMember], xref:system:generated:index/applib/services/metamodel/DomainModel.adoc[DomainModel], xref:system:generated:index/applib/services/metamodel/MetaModelService.adoc[MetaModelService], xref:system:generated:index/applib/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu], xref:system:generated:index/applib/services/metrics/MetricsService.adoc[MetricsService], xref:system:generated:index/applib/services/publishing/log/CommandLogger.adoc[CommandLogger], xref:system:generated:index/applib/services/publishing/log/EntityChangesLogger.adoc[EntityChangesLogger], xref:system:generated:index/applib/services/publishing/log/EntityPropertyChangeLogger.adoc[EntityPropertyChangeLogger], xref:system:generated:index/applib/services/publishing/log/ExecutionLogger.adoc[ExecutionLogger], xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber], xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges], xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber], xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange], xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber], xref:system:generated:index/applib/services/queryresultscache/QueryResultCacheControl.adoc[QueryResultCacheControl], xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], xref:system:generated:index/applib/services/registry/ServiceRegistry.adoc[ServiceRegistry], xref:system:generated:index/applib/services/repository/EntityState.adoc[EntityState], xref:system:generated:index/applib/services/repository/RepositoryService.adoc[RepositoryService], xref:system:generated:index/applib/services/routing/RoutingService.adoc[RoutingService], xref:system:generated:index/applib/services/scratchpad/Scratchpad.adoc[Scratchpad], xref:system:generated:index/applib/services/session/SessionLoggingService.adoc[SessionLoggingService], xref:system:generated:index/applib/services/session/SessionLoggingServiceLogging.adoc[SessionLoggingServiceLogging], xref:system:generated:index/applib/services/sudo/SudoService.adoc[SudoService], xref:system:generated:index/applib/services/swagger/SwaggerService.adoc[SwaggerService], xref:system:generated:index/applib/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService], xref:system:generated:index/applib/services/title/TitleService.adoc[TitleService], xref:system:generated:index/applib/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService], xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento], xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento], xref:system:generated:index/applib/services/user/UserService.adoc[UserService], xref:system:generated:index/applib/services/userprof/UserProfileService.adoc[UserProfileService], xref:system:generated:index/applib/services/userreg/EmailNotificationService.adoc[EmailNotificationService], xref:system:generated:index/applib/services/userreg/UserDetails.adoc[UserDetails], xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[UserRegistrationService], xref:system:generated:index/applib/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent], xref:system:generated:index/applib/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent], xref:system:generated:index/applib/services/wrapper/DisabledException.adoc[DisabledException], xref:system:generated:index/applib/services/wrapper/HiddenException.adoc[HiddenException], xref:system:generated:index/applib/services/wrapper/InvalidException.adoc[InvalidException], xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory], xref:system:generated:index/applib/services/wrapper/WrappingObject.adoc[WrappingObject], xref:system:generated:index/applib/services/wrapper/control/AsyncControl.adoc[AsyncControl], xref:system:generated:index/applib/services/wrapper/control/ControlAbstract.adoc[ControlAbstract], xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler], xref:system:generated:index/applib/services/wrapper/control/ExecutionMode.adoc[ExecutionMode], xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl], xref:system:generated:index/applib/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent], xref:system:generated:index/applib/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent], xref:system:generated:index/applib/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent], xref:system:generated:index/applib/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionAddToEvent.adoc[CollectionAddToEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionRemoveFromEvent.adoc[CollectionRemoveFromEvent], xref:system:generated:index/applib/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent], xref:system:generated:index/applib/services/wrapper/events/InteractionEvent.adoc[InteractionEvent], xref:system:generated:index/applib/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent], xref:system:generated:index/applib/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent], xref:system:generated:index/applib/services/wrapper/events/ObjectVisibilityEvent.adoc[ObjectVisibilityEvent], xref:system:generated:index/applib/services/wrapper/events/ParseValueEvent.adoc[ParseValueEvent], xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent], xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent], xref:system:generated:index/applib/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent], xref:system:generated:index/applib/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent], xref:system:generated:index/applib/services/wrapper/events/ProposedHolderEvent.adoc[ProposedHolderEvent], xref:system:generated:index/applib/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent], xref:system:generated:index/applib/services/wrapper/events/ValidityEvent.adoc[ValidityEvent], xref:system:generated:index/applib/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent], xref:system:generated:index/applib/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter], xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener], xref:system:generated:index/applib/services/xactn/TransactionId.adoc[TransactionId], xref:system:generated:index/applib/services/xactn/TransactionService.adoc[TransactionService], xref:system:generated:index/applib/services/xactn/TransactionState.adoc[TransactionState], xref:system:generated:index/applib/services/xml/XmlService.adoc[XmlService], xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService], xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[XmlSnapshotService.Snapshot], xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService~Snapshot~Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:system:generated:index/applib/snapshot/SnapshottableWithInclusions.adoc[SnapshottableWithInclusions], xref:system:generated:index/applib/spec/AbstractSpecification.adoc[AbstractSpecification], xref:system:generated:index/applib/spec/AbstractSpecification2.adoc[AbstractSpecification2], xref:system:generated:index/applib/spec/Specification.adoc[Specification], xref:system:generated:index/applib/spec/Specification2.adoc[Specification2], xref:system:generated:index/applib/spec/SpecificationAnd.adoc[SpecificationAnd], xref:system:generated:index/applib/spec/SpecificationNot.adoc[SpecificationNot], xref:system:generated:index/applib/spec/SpecificationOr.adoc[SpecificationOr], xref:system:generated:index/applib/util/Enums.adoc[Enums], xref:system:generated:index/applib/util/Equality.adoc[Equality], xref:system:generated:index/applib/util/Hashing.adoc[Hashing], xref:system:generated:index/applib/util/JaxbUtil.adoc[JaxbUtil], xref:system:generated:index/applib/util/ToString.adoc[ToString], xref:system:generated:index/applib/util/schema/ChangesDtoUtils.adoc[ChangesDtoUtils], xref:system:generated:index/applib/util/schema/CommandDtoUtils.adoc[CommandDtoUtils], xref:system:generated:index/applib/util/schema/CommonDtoUtils.adoc[CommonDtoUtils], xref:system:generated:index/applib/value/Blob.adoc[Blob], xref:system:generated:index/applib/value/Clob.adoc[Clob], xref:system:generated:index/applib/value/HasHtml.adoc[HasHtml], xref:system:generated:index/applib/value/LocalResourcePath.adoc[LocalResourcePath], xref:system:generated:index/applib/value/Markup.adoc[Markup], xref:system:generated:index/applib/value/NamedWithMimeType.adoc[NamedWithMimeType], xref:system:generated:index/applib/value/Password.adoc[Password]
 
 |Apache Isis Core - Code Gen (ByteBuddy)
 [source,yaml]
@@ -597,7 +597,7 @@ Artifact: isis-core-transaction
 Type: jar
 Folder: \core\transaction
 ----
-|Provides transaction integration with Spring and also
+|Provides transaction integration with Spring and also 
     	entity change tracking, with associated publishing and pre/post value events.
 
 _Components_
@@ -612,7 +612,7 @@ _Dependencies_
 
 _Document Index Entries_
 
-xref:system:generated:index/core/transaction/changetracking/EntityChangeTrackerDefault.adoc[EntityChangeTrackerDefault]
+xref:system:generated:index/core/transaction/changetracking/EntityChangeTrackerDefault.adoc[EntityChangeTrackerDefault], xref:system:generated:index/core/transaction/events/TransactionAfterCompletionEvent.adoc[TransactionAfterCompletionEvent]
 
 |Apache Isis Core - WebApp
 [source,yaml]
@@ -652,9 +652,9 @@ Type: pom
 Folder: \core\jdk-supplemental
 ----
 |Defines a module to bring in dependencies that were part of JDK 8 but
-        had been removed with later JDK versions.
-
-        Will be removed once the framework migrates to Java 11 as the required
+        had been removed with later JDK versions. 
+        
+        Will be removed once the framework migrates to Java 11 as the required 
         minimum version.
 
 _Dependencies_
@@ -714,7 +714,7 @@ package "App\n[Software System]" {
 .Projects/Modules (App)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Starter Parent
 [source,yaml]
@@ -806,7 +806,7 @@ package "Mavendeps\n[Software System]" {
 .Projects/Modules (Mavendeps)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Maven Deps
 [source,yaml]
@@ -859,7 +859,7 @@ Type: pom
 Folder: \mavendeps\jdk11
 ----
 |Defines a module to bring in dependencies that were part of JDK 8 but
-        had been removed with JDK 11+. These dependencies are activated when the
+        had been removed with JDK 11+. These dependencies are activated when the 
         consuming project is built with JDK 11 or higher.
 
 |Apache Isis Maven Deps - JDO
@@ -870,7 +870,7 @@ Artifact: isis-mavendeps-jdo
 Type: pom
 Folder: \mavendeps\jdo
 ----
-|Defines a module that provides the default JDO persistence layer integration
+|Defines a module that provides the default JDO persistence layer integration 
         for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
 
 _Dependencies_
@@ -887,7 +887,7 @@ Artifact: isis-mavendeps-jpa
 Type: pom
 Folder: \mavendeps\jpa
 ----
-|Defines a module that provides the default JPA persistence layer integration
+|Defines a module that provides the default JPA persistence layer integration 
         for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
 
 _Dependencies_
@@ -920,9 +920,9 @@ Artifact: isis-mavendeps-webapp
 Type: pom
 Folder: \mavendeps\webapp
 ----
-|Defines a module that can be almost used as a single dependency for running
+|Defines a module that can be almost used as a single dependency for running 
         an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
-
+        
         Note: Also requires a persistence provider.
 
 _Dependencies_
@@ -1005,7 +1005,7 @@ package "Mappings\n[Software System]" {
 .Projects/Modules (Mappings)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Mappings
 [source,yaml]
@@ -1188,7 +1188,7 @@ package "Persistence\n[Software System]" {
 .Projects/Modules (Persistence)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Persistence - JDO
 [source,yaml]
@@ -1276,6 +1276,11 @@ _Dependencies_
 * org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-metamodel:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-spring:jar:<managed>
+
+_Document Index Entries_
+
+xref:system:generated:index/persistence/jdo/integration/schema/JdoSchemaService.adoc[JdoSchemaService]
 
 |Apache Isis Persistence - JDO (lightweight integration)
 [source,yaml]
@@ -1336,6 +1341,7 @@ Folder: \persistence\jdo\provider
 
 _Dependencies_
 
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
 
 |Apache Isis Persistence - JDO (Spring)
@@ -1467,7 +1473,7 @@ package "Security\n[Software System]" {
 .Projects/Modules (Security)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Security - Bypass
 [source,yaml]
@@ -1551,12 +1557,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1646,12 +1652,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1703,7 +1709,7 @@ package "Valuetypes\n[Software System]" {
 .Projects/Modules (Valuetypes)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Value types
 [source,yaml]
@@ -2109,7 +2115,7 @@ package "Viewer\n[Software System]" {
 .Projects/Modules (Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Viewer - Common Model
 [source,yaml]
@@ -2497,7 +2503,7 @@ package "Testing\n[Software System]" {
 .Projects/Modules (Testing)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Testing
 [source,yaml]
@@ -2785,7 +2791,7 @@ package "Regression Tests\n[Software System]" {
 .Projects/Modules (Regression Tests)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis - Regression Tests
 [source,yaml]
@@ -3083,7 +3089,7 @@ package "Extensions\n[Software System]" {
 .Projects/Modules (Extensions)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Extensions
 [source,yaml]
@@ -3561,22 +3567,22 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<11>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<23>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3721,7 +3727,7 @@ package "Subdomains\n[Software System]" {
 .Projects/Modules (Subdomains)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Subdomains
 [source,yaml]
@@ -4099,7 +4105,7 @@ package "Tooling\n[Software System]" {
 .Projects/Modules (Tooling)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis - Tooling
 [source,yaml]
@@ -4109,7 +4115,7 @@ Artifact: isis-tooling
 Type: pom
 Folder: \tooling
 ----
-|Libraries and tools not depending on the _Apache Isis Core_ ecosystem,
+|Libraries and tools not depending on the _Apache Isis Core_ ecosystem, 
         eg. code mining, automated documentation.
         (Targeted for JVM 11+)
 
@@ -4132,8 +4138,8 @@ Artifact: isis-tooling-c4modeling
 Type: jar
 Folder: \tooling\c4modeling
 ----
-|Library for programmatic C4 Model generation.
-
+|Library for programmatic C4 Model generation. 
+        
         See https://c4model.com/
 
 _Dependencies_
@@ -4203,13 +4209,13 @@ Artifact: isis-tooling-model4adoc
 Type: jar
 Folder: \tooling\model4adoc
 ----
-|Library for programmatic AsciiDoc generation.
-
+|Library for programmatic AsciiDoc generation. 
+        
         The AsciiDoc name is trademarked by the Eclipse Foundation (https://www.eclipse.org/).
-		This project is *not* part of the specification effort for _AsciiDoc_ under the
+		This project is *not* part of the specification effort for _AsciiDoc_ under the 
 		AsciiDoc Working Group. See https://projects.eclipse.org/proposals/asciidoc-language
-		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to
-		help with transfer of source code, if any project (under the umbrella of the
+		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
+		help with transfer of source code, if any project (under the umbrella of the 
 		AsciiDoc Working Group) is willing to take over.
 
 _Dependencies_
@@ -4298,7 +4304,7 @@ package "Examples\n[Software System]" {
 .Projects/Modules (Examples)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Demo - Parent
 [source,yaml]
@@ -4336,6 +4342,7 @@ Folder: \examples\demo\domain
 ----
 |_Components_
 
+* demoapp.dom.AppConfiguration
 * demoapp.dom._infra.DefaultTitleProvider
 * demoapp.dom._infra.LibraryPreloadingService
 * demoapp.dom._infra.fixtures.DemoFixtureScriptSpecificationProvider
@@ -4359,6 +4366,8 @@ Folder: \examples\demo\domain
 * demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoSeedService
 * demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities
 * demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoSeedService
+* demoapp.dom.annotDomain.DomainObject.nature.viewmodels.jaxbrefentity.ChildJdoEntities
+* demoapp.dom.annotDomain.DomainObject.nature.viewmodels.jaxbrefentity.seed.ChildJdoSeedService
 * demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoEntities
 * demoapp.dom.annotDomain.Property.commandPublishing.PropertyCommandPublishingJdoSeedService
 * demoapp.dom.annotDomain.Property.executionPublishing.PropertyExecutionPublishingJdoEntities
@@ -4373,13 +4382,14 @@ Folder: \examples\demo\domain
 * demoapp.dom.misc.error.service.DemoErrorReportingService
 * demoapp.dom.misc.events.DemoEventSubscriber
 * demoapp.dom.misc.events.EventLogRepository
+* demoapp.dom.misc.experimental.jee.DemoRequestScopedBean
+* demoapp.dom.misc.experimental.jee.JeeDemoService
+* demoapp.dom.misc.experimental.tuple.NumberConstantRepository
+* demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoEntities
+* demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoSeedService
 * demoapp.dom.services.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo
 * demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdoEntities
 * demoapp.dom.services.extensions.secman.apptenancy.entities.seed.TenantedJdoSeedService
-* demoapp.dom.misc.experimental.jee.DemoRequestScopedBean
-* demoapp.dom.misc.experimental.jee.JeeDemoService
-* demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoEntities
-* demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoSeedService
 * demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities
 * demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoSeedService
 * demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples
@@ -4493,9 +4503,7 @@ Folder: \examples\demo\domain
 * demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoSeedService
 * demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities
 * demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoSeedService
-* demoapp.dom.misc.experimental.tuple.NumberConstantRepository
-* demoapp.dom.annotDomain.DomainObject.nature.viewmodels.jaxbrefentity.ChildJdoEntities
-* demoapp.dom.annotDomain.DomainObject.nature.viewmodels.jaxbrefentity.seed.ChildJdoSeedService
+* demoapp.dom.ui.custom.geocoding.GeoapifyClient
 
 _Dependencies_
 
@@ -4512,6 +4520,7 @@ _Dependencies_
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
 * org.assertj:assertj-core:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
+* org.springframework.boot:spring-boot-configuration-processor:jar:<managed>
 
 |Demo - JavaFX
 [source,yaml]
@@ -4588,7 +4597,11 @@ Artifact: demo-wicket
 Type: jar
 Folder: \examples\demo\wicket
 ----
-|_Dependencies_
+|_Components_
+
+* demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory
+
+_Dependencies_
 
 * org.apache.isis.examples.apps:demo-web:jar:${project.version}
 * org.apache.isis.extensions:isis-extensions-pdfjs-ui:jar:<managed>
@@ -4596,6 +4609,8 @@ Folder: \examples\demo\wicket
 * org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt:jar:<managed>
+* org.apache.isis.viewer:isis-viewer-wicket-ui:jar:2.0.0-SNAPSHOT
+* org.apache.isis.viewer:isis-viewer-wicket-viewer:jar:2.0.0-SNAPSHOT
 |===
 
 == Incubator
@@ -4689,7 +4704,7 @@ package "Incubator\n[Software System]" {
 .Projects/Modules (Incubator)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Incubator
 [source,yaml]
@@ -4923,7 +4938,7 @@ package "Legacy\n[Software System]" {
 .Projects/Modules (Legacy)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Legacy
 [source,yaml]

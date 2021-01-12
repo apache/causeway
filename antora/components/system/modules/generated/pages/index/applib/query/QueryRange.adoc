@@ -1,0 +1,71 @@
+= QueryRange : _interface_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Java Sources
+[source,java]
+----
+interface QueryRange {
+
+  boolean isUnconstrained()
+
+  boolean hasOffset()
+
+  boolean hasLimit()
+
+  long getStart() // <.>
+
+  long getLimit() // <.>
+
+  long getEnd() // <.>
+
+  int getStartAsInt() // <.>
+
+  int getLimitAsInt() // <.>
+
+  int getEndAsInt() // <.>
+
+  QueryRange unconstrained()
+
+  QueryRange start(long start)
+
+  QueryRange limit(long limit)
+
+  QueryRange of(long... range)
+
+  QueryRange withStart(long start)
+
+  QueryRange withLimit(long limit)
+}
+----
+
+<.> `[teal]#*getStart*#()` : `long`
++
+--
+The start index into the set table. (non-negative)
+--
+<.> `[teal]#*getLimit*#()` : `long`
++
+--
+The maximum number of items to return, starting at _#getStart()_ (non-negative)
+--
+<.> `[teal]#*getEnd*#()` : `long`
++
+--
+The end index into the set table. Overflow is ignored. (non-negative)
+--
+<.> `[teal]#*getStartAsInt*#()` : `int`
++
+--
+The start index into the set table (as java int primitive)
+--
+<.> `[teal]#*getLimitAsInt*#()` : `int`
++
+--
+The maximum number of items to return (as java int primitive) if _limit_ overflows an int, _Integer#MAX_VALUE_ is returned.
+--
+<.> `[teal]#*getEndAsInt*#()` : `int`
++
+--
+The end index into the set table. Overflow is ignored. (as java int primitive) if _end_ overflows an int, _Integer#MAX_VALUE_ is returned.
+--
+

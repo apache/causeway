@@ -24,6 +24,8 @@ enum TransactionState {
 
   boolean isComplete() // <.>
 
+  boolean isInProgress()
+
   boolean mustAbort()
 }
 ----

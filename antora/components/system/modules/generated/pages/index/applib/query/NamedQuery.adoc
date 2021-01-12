@@ -10,9 +10,7 @@ interface NamedQuery {
 
   Map<String, Object> getParametersByName()
 
-  NamedQuery<T> withStart(long start)
-
-  NamedQuery<T> withCount(long count)
+  NamedQuery<T> withRange(QueryRange range)
 
   NamedQuery<T> withParameter(String parameterName, Object parameterValue)
 }
