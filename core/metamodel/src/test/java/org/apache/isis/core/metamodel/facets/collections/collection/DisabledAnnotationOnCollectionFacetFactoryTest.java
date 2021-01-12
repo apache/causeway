@@ -50,17 +50,17 @@ public class DisabledAnnotationOnCollectionFacetFactoryTest extends AbstractFace
         facetFactory = null;
         super.tearDown();
     }
-    
+
     private static void processEditing(
             CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
-        facetFactory.processEditing(processMethodContext, collectionIfAny);
+        facetFactory.processEditing(processMethodContext);
     }
 
 
-    public void testDisabledAnnotationPickedUpOnCollection() {
+    public void testDisabledFacetPickedUpOnCollection() {
         class Customer {
-            @org.apache.isis.applib.annotation.Collection(editing = Editing.DISABLED)
+            @org.apache.isis.applib.annotation.Collection()
             public java.util.Collection<?> getOrders() {
                 return null;
             }

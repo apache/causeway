@@ -143,8 +143,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     @javax.jdo.annotations.Persistent(mappedBy = "parent")
     @Collection(
-            domainEvent = ChildrenDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = ChildrenDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table"

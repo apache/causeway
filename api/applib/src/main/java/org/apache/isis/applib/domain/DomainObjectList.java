@@ -164,8 +164,7 @@ public class DomainObjectList {
     private List<Object> objects = new ArrayList<>();
 
     @Collection(
-            domainEvent = ObjectsDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = ObjectsDomainEvent.class
             )
     public List<Object> getObjects() {
         return objects;

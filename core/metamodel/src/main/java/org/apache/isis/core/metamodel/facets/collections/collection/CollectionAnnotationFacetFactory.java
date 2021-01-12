@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
@@ -73,7 +73,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         processModify(processMethodContext, collectionIfAny);
         processHidden(processMethodContext, collectionIfAny);
-        processEditing(processMethodContext, collectionIfAny);
+        processEditing(processMethodContext);
         processTypeOf(processMethodContext, collectionIfAny);
     }
 
@@ -208,11 +208,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         super.addFacet(facet);
     }
 
-    void processEditing(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
+    void processEditing(final ProcessMethodContext processMethodContext) {
         val holder = processMethodContext.getFacetHolder();
-
-        // check for @Collection(editing=...)
-        val facet = DisabledFacetForCollectionAnnotation.create(collectionIfAny, holder);
+        val facet = DisabledFacetForCollection.create(holder);
 
         super.addFacet(facet);
     }

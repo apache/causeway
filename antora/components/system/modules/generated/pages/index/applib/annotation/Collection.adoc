@@ -10,10 +10,6 @@ Domain semantics for domain object collection.
 
   Class<? extends CollectionDomainEvent<?, ?>> domainEvent() default CollectionDomainEvent.Default.class; // <.>
 
-  Editing editing() default Editing.NOT_SPECIFIED; // <.>
-
-  String editingDisabledReason() default ""; // <.>
-
   Where hidden() default Where.NOT_SPECIFIED; // <.>
 
   Class<?> typeOf() default Object.class; // <.>
@@ -38,18 +34,6 @@ public class Order {
 ----
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_editing_*#` : `xref:system:generated:index/applib/annotation/Editing.adoc[Editing]`
-+
---
-Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
-
-Note that non-editable objects can nevertheless have actions invoked upon them.
---
-<.> `[teal]#*_editingDisabledReason_*#` : `String`
-+
---
-If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
 --
 <.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
 +

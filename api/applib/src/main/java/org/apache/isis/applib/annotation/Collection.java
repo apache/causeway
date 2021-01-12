@@ -29,7 +29,7 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 
 /**
  * Domain semantics for domain object collection.
- * 
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -75,14 +75,6 @@ public @interface Collection {
      */
     Editing editing()
             default Editing.NOT_SPECIFIED;
-
-    /**
-     * If {@link #editing()} is set to {@link Editing#DISABLED},
-     * then the reason to provide to the user as to why this property cannot be edited.
-     */
-    String editingDisabledReason()
-            default "";
-
     /**
      * Indicates when the collection is not visible to the user.
      */
