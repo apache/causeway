@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.transactions.jdo.isis;
+package org.apache.isis.testdomain.transactions.jdo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -45,7 +45,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
  */
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoIsis.class
+                Configuration_usingJdo.class
         },
         properties = {
                 "logging.level.org.apache.isis.persistence.jdo.*=DEBUG",
@@ -57,8 +57,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 @Transactional
 //@TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoIsisTransactionRollbackTest_usingTransactional 
-// extends IsisIntegrationTestAbstract 
+class JdoTransactionRollbackTest_usingTransactional
 {
     
     @Inject private FixtureScripts fixtureScripts;

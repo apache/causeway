@@ -16,7 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing.jdo.isis;
+package org.apache.isis.testdomain.applayer.publishing.jdo;
+
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.clearPublishedEntries;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getCreated;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getDeleted;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getLoaded;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getModified;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getUpdated;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
@@ -24,41 +32,33 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
-import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
-import org.apache.isis.testdomain.util.CollectionAssertions;
+import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityChangesPublishing;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import lombok.val;
-
 @SpringBootTest(
         classes = {
-                Configuration_usingJdoIsis.class,
-                Configuration_usingEntityPropertyChangePublishing.class,
+                Configuration_usingJdo.class,
+                Configuration_usingEntityChangesPublishing.class,
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
-                "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
+                "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoIsisEntityPropertyChangePublishingTest extends IsisIntegrationTestAbstract {
+class JdoEntityChangesPublishingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
@@ -70,31 +70,30 @@ class JdoIsisEntityPropertyChangePublishingTest extends IsisIntegrationTestAbstr
     }
 
     private void given() {
-        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
+        clearPublishedEntries(kvStore);
     }
-
+    
     private void verify(VerificationStage verificationStage) {
         switch(verificationStage) {
         case PRE_COMMIT:
         case FAILURE_CASE:
-            assertHasPropertyChangeEntries(Can.empty());
+            assertEquals(0, getCreated(kvStore));
+            assertEquals(0, getDeleted(kvStore));
+            assertEquals(0, getLoaded(kvStore));
+            assertEquals(0, getUpdated(kvStore));
+            assertEquals(0, getModified(kvStore));
             break;
         case POST_COMMIT_WHEN_PROGRAMMATIC:
         case POST_COMMIT:
-            assertHasPropertyChangeEntries(Can.of(
-                    "Jdo Book/name: 'Sample Book' -> 'Book #2'"));
+            assertEquals(0, getCreated(kvStore));
+            assertEquals(0, getDeleted(kvStore));
+            //assertEquals(1, getLoaded()); // not reproducible
+            assertEquals(1, getUpdated(kvStore));
+            assertEquals(1, getModified(kvStore));
             break;
         default:
             // ignore ... no checks
         }
     }
-
-    // -- HELPER
-
-    private void assertHasPropertyChangeEntries(Can<String> expectedAuditEntries) {
-        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
-        CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
-    }
-
 
 }

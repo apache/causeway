@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.persistence.jdo.isis;
+package org.apache.isis.testdomain.persistence.jdo;
 
 import javax.inject.Inject;
 
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -41,14 +41,14 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 IsisBeanFactoryPostProcessorForSpring.class,
-                Configuration_usingJdoIsis.class, 
+                Configuration_usingJdo.class, 
         }, 
         properties = {
                 "logging.config=log4j2-debug-persistence.xml",
                 //IsisPresets.DebugPersistence,
         })
 @Transactional
-class JdoIsisBootstrappingTest_usingFixtures extends IsisIntegrationTestAbstract {
+class JdoBootstrappingTest_usingFixtures extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;

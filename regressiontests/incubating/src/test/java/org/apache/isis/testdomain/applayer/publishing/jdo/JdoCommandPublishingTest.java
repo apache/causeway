@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing.jdo.isis;
+package org.apache.isis.testdomain.applayer.publishing.jdo;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -29,16 +30,16 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.Interaction.Execution;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.ExecutionSubscriberForTesting;
-import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingExecutionPublishing;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.applayer.publishing.CommandSubscriberForTesting;
+import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingCommandPublishing;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -47,8 +48,8 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdoIsis.class,
-                Configuration_usingExecutionPublishing.class,
+                Configuration_usingJdo.class,
+                Configuration_usingCommandPublishing.class,
                 ApplicationLayerTestFactory.class
         }, 
         properties = {
@@ -59,7 +60,7 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoIsisExecutionPublishingTest extends IsisIntegrationTestAbstract {
+class JdoCommandPublishingTest extends IsisIntegrationTestAbstract {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
@@ -70,27 +71,36 @@ class JdoIsisExecutionPublishingTest extends IsisIntegrationTestAbstract {
     }
 
     private void given() {
-        ExecutionSubscriberForTesting.clearPublishedEntries(kvStore);
+        CommandSubscriberForTesting.clearPublishedCommands(kvStore);
     }
     
     private void verify(VerificationStage verificationStage) {
         switch(verificationStage) {
         
         case FAILURE_CASE:
-            assertHasExecutionEntries(Can.empty());
+            assertHasCommandEntries(Can.empty());
             break;
-        case POST_COMMIT:
+        case POST_INTERACTION:
         
             
-            Interaction interaction = null;
-            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
-            Object target = null;
-            Object argValue = "Book #2";
-            String targetMemberName = "name???";
-            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
-            assertHasExecutionEntries(Can.of(
-                    new Interaction.PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass)
-                    ));
+//            Interaction interaction = null;
+//            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
+//            Object target = null;
+//            Object argValue = "Book #2";
+//            String targetMemberName = "name???";
+//            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
+            
+            val propertyDto = new PropertyDto();
+            propertyDto.setLogicalMemberIdentifier("testdomain.jdo.Book#name");
+            
+            val command = new Command(UUID.randomUUID());
+            val commandDto = new CommandDto();
+            commandDto.setTransactionId(command.getUniqueId().toString());
+            commandDto.setMember(propertyDto);
+
+            command.updater().setCommandDto(commandDto);
+            
+            assertHasCommandEntries(Can.of(command));
             break;
         default:
             // ignore ... no checks
@@ -99,46 +109,24 @@ class JdoIsisExecutionPublishingTest extends IsisIntegrationTestAbstract {
     
     // -- HELPER
 
-    private void assertHasExecutionEntries(Can<Execution<?, ?>> expectedExecutions) {
-        val actualExecutions = ExecutionSubscriberForTesting.getPublishedExecutions(kvStore);
+    private void assertHasCommandEntries(Can<Command> expectedCommands) {
+        val actualCommands = CommandSubscriberForTesting.getPublishedCommands(kvStore);
         CollectionAssertions.assertComponentWiseEquals(
-                expectedExecutions, actualExecutions, this::executionDifference);
+                expectedCommands, actualCommands, this::commandDifference);
     }
     
-    private String executionDifference(Execution<?, ?> a, Execution<?, ?> b) {
-        if(!Objects.equals(a.getMemberIdentifier(), b.getMemberIdentifier())) {
+    private String commandDifference(Command a, Command b) {
+        if(!Objects.equals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier())) {
             return String.format("differing member identifier %s != %s", 
-                    a.getMemberIdentifier(), b.getMemberIdentifier());
+                    a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
         }
-        if(!Objects.equals(a.getInteractionType(), b.getInteractionType())) {
-            return String.format("differing interaction type %s != %s", 
-                    a.getInteractionType(), b.getInteractionType());
+        if(!Objects.equals(a.getResult(), b.getResult())) {
+            return String.format("differing results %s != %s", 
+                    a.getResult(), b.getResult());
         }
-        
-        switch(a.getInteractionType()) {
-        case ACTION_INVOCATION:
-            return actionInvocationDifference(
-                    (Interaction.ActionInvocation)a, (Interaction.ActionInvocation)b);
-        case PROPERTY_EDIT:
-            return porpertyEditDifference(
-                    (Interaction.PropertyEdit)a, (Interaction.PropertyEdit)b);
-        default:
-            throw _Exceptions.unexpectedCodeReach();
-        }
-    }
-    
-    private String actionInvocationDifference(Interaction.ActionInvocation a, Interaction.ActionInvocation b) {
         return null; // no difference
     }
     
-    
-    private String porpertyEditDifference(Interaction.PropertyEdit a, Interaction.PropertyEdit b) {
-        if(!Objects.equals(a.getNewValue(), b.getNewValue())) {
-            return String.format("differing new value %s != %s", 
-                    a.getNewValue(), b.getNewValue());
-        }
-        
-        return null; // no difference
-    }
+
 
 }

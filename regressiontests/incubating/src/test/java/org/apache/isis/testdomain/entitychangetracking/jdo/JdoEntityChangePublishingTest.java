@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.entitychangetracking.jdo.isis;
+package org.apache.isis.testdomain.entitychangetracking.jdo;
 
 import javax.inject.Inject;
 
@@ -33,7 +33,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityChangesPublishing;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
@@ -46,7 +46,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdoIsis.class,
+                Configuration_usingJdo.class,
                 Configuration_usingEntityPropertyChangePublishing.class,
                 Configuration_usingEntityChangesPublishing.class,
                 InteractionBoundaryProbe.class,
@@ -59,7 +59,7 @@ import lombok.val;
     IsisPresets.SilenceWicket
     ,IsisPresets.UseLog4j2Test
 })
-class JdoIsisEntityChangePublishingTest extends InteractionTestAbstract {
+class JdoEntityChangePublishingTest extends InteractionTestAbstract {
 
     @Inject protected FixtureScripts fixtureScripts;
 
@@ -74,7 +74,7 @@ class JdoIsisEntityChangePublishingTest extends InteractionTestAbstract {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
         // each test runs in its own interaction context (check)
-        val testRunNr = (long)kvStoreForTesting.incrementCounter(JdoIsisEntityChangePublishingTest.class, "test-run");
+        val testRunNr = (long)kvStoreForTesting.incrementCounter(JdoEntityChangePublishingTest.class, "test-run");
         assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
 
         assertJdoBookCreatePropertyChanges();

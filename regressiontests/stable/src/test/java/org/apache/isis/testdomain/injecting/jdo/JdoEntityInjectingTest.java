@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.injecting.jdo.isis;
+package org.apache.isis.testdomain.injecting.jdo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.primitives._Longs.Bound;
 import org.apache.isis.commons.internal.primitives._Longs.Range;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -50,18 +50,18 @@ import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoIsis.class,
+                Configuration_usingJdo.class,
         },
         properties = {
 //                "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
-//                "logging.level.org.apache.isis.testdomain.injecting.jdo.isis.JdoIsisEntityInjectingTest=DEBUG"
+//                "logging.level.org.apache.isis.testdomain.injecting.jdo.JdoEntityInjectingTest=DEBUG"
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Log4j2
-class JdoIsisEntityInjectingTest extends IsisIntegrationTestAbstract {
+class JdoEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.transactions.jdo.isis;
+package org.apache.isis.testdomain.transactions.jdo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.interaction.InteractionBoundaryProbe;
@@ -40,7 +40,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoIsis.class,
+                Configuration_usingJdo.class,
                 InteractionBoundaryProbe.class
         })
 //@Transactional
@@ -48,7 +48,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 /**
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
  */
-class JdoIsisTransactionScopeListenerTest {
+class JdoTransactionScopeListenerTest {
     
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;

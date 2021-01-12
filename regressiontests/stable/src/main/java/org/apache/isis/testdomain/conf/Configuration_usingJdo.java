@@ -26,7 +26,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jdo.lightweight.IsisModuleJdoLightweight;
+import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
@@ -38,7 +38,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     MyService.class, // testing injection into entities 
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
-    IsisModuleJdoLightweight.class,
+    IsisModuleJdoIntegration.class,
     IsisModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
@@ -51,7 +51,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
     @PropertySource(IsisPresets.NoTranslations),
 })
-public class Configuration_usingJdoSpring {
+public class Configuration_usingJdo {
     
 
 }

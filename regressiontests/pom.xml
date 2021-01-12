@@ -364,11 +364,6 @@
         </dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-lightweight</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-fixtures-applib</artifactId>
 		</dependency>

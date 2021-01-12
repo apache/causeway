@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing.jdo.isis;
+package org.apache.isis.testdomain.applayer.publishing.jdo;
 
 import java.util.HashSet;
 
@@ -41,7 +41,7 @@ import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault;
 import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -54,7 +54,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdoIsis.class,
+                Configuration_usingJdo.class,
                 Configuration_usingEntityPropertyChangePublishing.class,
         }, 
         properties = {
@@ -66,7 +66,7 @@ import lombok.val;
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoIsisEntityPropertyChangePublishingTest2 extends IsisIntegrationTestAbstract {
+class JdoEntityPropertyChangePublishingTest2 extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private KVStoreForTesting kvStore;

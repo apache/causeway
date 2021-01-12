@@ -53,8 +53,6 @@ import lombok.extern.log4j.Log4j2;
                 Configuration_usingJpa.class
         },
         properties = {
-//                "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
-//                "logging.level.org.apache.isis.testdomain.injecting.jdo.isis.JdoIsisEntityInjectingTest=DEBUG"
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)

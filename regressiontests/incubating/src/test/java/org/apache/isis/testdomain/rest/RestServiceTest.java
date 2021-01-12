@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoSpring;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
@@ -45,7 +45,7 @@ import lombok.val;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Import({
-    Configuration_usingJdoSpring.class,
+    Configuration_usingJdo.class,
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class
 })
 class RestServiceTest {

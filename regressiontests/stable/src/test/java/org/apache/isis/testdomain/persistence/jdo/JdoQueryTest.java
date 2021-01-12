@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.persistence.jdo.isis;
+package org.apache.isis.testdomain.persistence.jdo;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +43,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -53,11 +53,11 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoIsis.class,
+                Configuration_usingJdo.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoIsisQueryTest extends IsisIntegrationTestAbstract {
+class JdoQueryTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
  //   @Inject private JdoSupportService jdoSupport;

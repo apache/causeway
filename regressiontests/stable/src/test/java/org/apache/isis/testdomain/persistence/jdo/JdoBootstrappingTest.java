@@ -16,16 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.persistence.jdo.spring;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+package org.apache.isis.testdomain.persistence.jdo;
 
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -39,15 +33,14 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoSpring;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -57,15 +50,14 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoSpring.class,
-        })
+                Configuration_usingJdo.class,
+        }
+)
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
+class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
 
-    @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
     @Inject private RepositoryService repository;
-    @Inject private SpecificationLoader specLoader;
     //@Inject private TransactionService transactionService;
 
     @BeforeAll
@@ -85,6 +77,7 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
     }
 
     void setUp() {
+
         // setup sample Inventory
         Set<JdoProduct> products = new HashSet<>();
 
@@ -95,40 +88,8 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
         repository.persist(inventory);
     }
 
-    @Test @Order(0) 
-    void platformTransactionManager_shouldBeAvailable() {
-        assertTrue(platformTransactionManager.isPresent());
-        platformTransactionManager.ifPresent(ptm->{
-            assertEquals("JdoTransactionManager", ptm.getClass().getSimpleName());
-        });
-    }
-    
-    @Test @Order(0) 
-    void transactionalAnnotation_shouldBeSupported() {
-        assertTrue(platformTransactionManager.isPresent());
-        platformTransactionManager.ifPresent(ptm->{
-            
-            val txDef = new DefaultTransactionDefinition();
-            txDef.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_MANDATORY);
-                    
-            val txStatus = ptm.getTransaction(txDef);
-            
-            assertNotNull(txStatus);
-            assertFalse(txStatus.isCompleted());
-
-        });
-    }
-
-    @Test @Order(0) 
-    void jdoEntities_shouldBeRecognisedAsSuch() {
-        val spec = specLoader.loadSpecification(JdoInventory.class);
-        assertTrue(spec.isEntity());
-        assertNotNull(spec.getFacet(EntityFacet.class));
-    }
-     
     @Test @Order(1) @Rollback(false) 
     void sampleInventoryShouldBeSetUp() {
-
 
         // given - expected pre condition: no inventories
 
@@ -153,11 +114,10 @@ class JdoSpringBootstrappingTest extends IsisIntegrationTestAbstract {
         assertEquals("Sample Book", product.getName());
 
     }
-     
-    @Test @Order(2) @Rollback(false) 
+
+    @Test @Order(2) @Rollback(false)
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();
     }
-
 
 }

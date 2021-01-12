@@ -16,28 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.wrapper.jdo.isis;
-
-import java.util.concurrent.ExecutionException;
+package org.apache.isis.testdomain.timestamping.jdo;
 
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
-import org.apache.isis.testdomain.jdo.JdoInventoryManager;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.jdo.entities.JdoProductComment;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
@@ -45,19 +39,21 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoIsis.class,
-        }
-)
-@TestPropertySource(IsisPresets.UseLog4j2Test)
-class JdoIsisWrapperSyncTest extends IsisIntegrationTestAbstract {
+                Configuration_usingJdo.class
+        }, 
+        properties = {
+//                "logging.config=log4j2-debug-persistence.xml",
+//                IsisPresets.DebugPersistence,
+        })
+@Transactional
+class JdoTimestampingTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
-    @Inject private FactoryService facoryService;
-    @Inject private WrapperFactory wrapper;
 
     @BeforeEach
     void setUp() {
+
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
@@ -66,19 +62,20 @@ class JdoIsisWrapperSyncTest extends IsisIntegrationTestAbstract {
     }
 
     @Test
-    void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
-
-        val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
-        val product = repository.allInstances(JdoProduct.class).get(0);
-
-        assertEquals(99d, product.getPrice(), 1E-6);
+    void updatedByAt_shouldBeFilledInByTheTimestampingService() {
         
-        val products = wrapper.wrap(inventoryManager).listAllProducts();
+        val product = repository.allInstances(JdoProduct.class).listIterator().next();
+        assertNotNull(product);
+
+        val comment = new JdoProductComment();
+        comment.setProduct(product);
+        comment.setComment("Awesome Book!");
+
+        repository.persist(comment);
+            
+        assertNotNull(comment.getUpdatedAt());
+        assertNotNull(comment.getUpdatedBy());
         
-        assertEquals(1, products.size());
-        assertEquals(JdoBook.class, products.get(0).getClass());
     }
-
-
 
 }

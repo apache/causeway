@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.domainmodel.jdo.isis;
+package org.apache.isis.testdomain.domainmodel.jdo;
 
 import javax.inject.Inject;
 
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testdomain.conf.Configuration_usingJdoIsis;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
@@ -39,7 +39,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdoIsis.class,
+                Configuration_usingJdo.class,
                 Configuration_usingValidDomain.class,
                 
         }, 
@@ -53,7 +53,7 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class DomainModelTest_jdoIsisMixins {
+class DomainModelTest_jdoMixins {
     
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
