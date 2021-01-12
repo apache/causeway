@@ -18,22 +18,31 @@
  */
 package org.apache.isis.testdomain.jpa.entities;
 
+import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Transient;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.testdomain.model.stereotypes.MyService;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Entity
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DiscriminatorValue("Book")
 @DomainObject(
         objectType = "testdomain.jpa.Book",
@@ -41,8 +50,25 @@ import lombok.ToString;
         entityChangePublishing = Publishing.ENABLED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
+@Log4j2
 public class JpaBook extends JpaProduct {
 
+    @Inject @Transient private KVStoreForTesting kvStore;
+    
+    // -- ENTITY SERVICE INJECTION TEST
+    @Transient private MyService myService;
+    @Inject 
+    public void setMyService(MyService myService) {
+        val count = kvStore.incrementCounter(JpaBook.class, "injection-count");
+        log.debug("INJECTION " + count);
+        this.myService = myService;
+    }
+    public boolean hasInjectionPointsResolved() {
+        getAuthor(); // seems to have the required side-effect to actually trigger injection
+        return myService != null;
+    }
+    // --
+    
     @Override
     public String title() {
         return toString();
@@ -86,4 +112,5 @@ public class JpaBook extends JpaProduct {
         this.isbn = isbn;
         this.publisher = publisher;
     }
+
 }

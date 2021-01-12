@@ -225,6 +225,7 @@ public final class _Exceptions {
      *
      */
     public static void throwNotImplemented() {
+        dumpStackTrace();
         throw notImplemented();
     }
 

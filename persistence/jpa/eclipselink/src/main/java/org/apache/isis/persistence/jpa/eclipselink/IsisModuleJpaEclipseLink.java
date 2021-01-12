@@ -21,6 +21,8 @@ package org.apache.isis.persistence.jpa.eclipselink;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.sql.DataSource;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
@@ -33,6 +35,8 @@ import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.persistence.jpa.eclipselink.inject.BeanManagerForEntityListeners;
 import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
 
 /**
@@ -47,6 +51,8 @@ import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
 })
 public class IsisModuleJpaEclipseLink extends JpaBaseConfiguration { 
 
+    @Inject private Provider<ServiceInjector> serviceInjectorProvider;
+    
     protected IsisModuleJpaEclipseLink(
             DataSource dataSource, 
             JpaProperties properties,
@@ -59,12 +65,13 @@ public class IsisModuleJpaEclipseLink extends JpaBaseConfiguration {
         return new EclipseLinkJpaVendorAdapter(); 
     }
 
-    //TODO[2033] this is application specific configuration that belongs to application.yaml
+    //TODO[2033] partly application specific configuration that belongs to application.yaml
     @Override
     protected Map<String, Object> getVendorProperties() {
         HashMap<String, Object> map = new HashMap<>();
         map.put(PersistenceUnitProperties.WEAVING, "false");
         map.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
+        map.put(PersistenceUnitProperties.CDI_BEANMANAGER, new BeanManagerForEntityListeners(serviceInjectorProvider));
         return map;
     }
 

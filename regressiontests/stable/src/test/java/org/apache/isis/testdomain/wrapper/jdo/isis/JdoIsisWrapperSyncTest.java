@@ -23,7 +23,6 @@ import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -50,7 +49,6 @@ import lombok.val;
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-//@Incubating("wrapper.wrap(inventoryManager) throws NPE")
 class JdoIsisWrapperSyncTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
@@ -67,7 +65,7 @@ class JdoIsisWrapperSyncTest extends IsisIntegrationTestAbstract {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
-    @Test @Tag("Incubating")
+    @Test
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
